@@ -1,0 +1,21 @@
+.middle-content {
+    margin: 30px 20px;
+}
+.section-title{
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.heading-with-cta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    .section-title{
+        margin-bottom: 0;
+    }
+    .btn-primary, .btn-primary:hover{
+        color: #fff;
+        background-color: #34495E;
+        border-color: #34495E;
+    }
+}

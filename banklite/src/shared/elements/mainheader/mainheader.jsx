@@ -1,0 +1,81 @@
+import * as React from 'react';
+import { Link} from 'react-router-dom';
+import {Fragment} from "react";
+import Navbar from 'react-bootstrap/Navbar'
+import NavDropdown from 'react-bootstrap/NavDropdown'
+import Nav from 'react-bootstrap/Nav'
+import Form from 'react-bootstrap/Form'
+// import Button from 'react-bootstrap/Button'
+import FormControl from 'react-bootstrap/FormControl'
+// import {Nav, NavDropdown, Navbar, Form, Button, FormControl} from 'react-bootstrap'
+import "./mainheader.scss"; 
+class MainHeader extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state={
+            user:''
+        }
+       
+    }
+
+
+    renderHeadingWrap(){
+        return(
+            <div className="mainheader-wrap">
+                
+                <Navbar  expand="lg">
+                    <Navbar.Brand as={Link} to="/">BankLite</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="mr-auto">
+                        <Nav.Link href="/">Home</Nav.Link>
+                        <Nav.Link href="/">Some Link</Nav.Link>
+                        </Nav>
+                        <Form inline>
+                        <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input" />
+                        <NavDropdown title={this.props.user.name} id="basic-nav-dropdown">
+                            <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
+                            <NavDropdown.Item href="#action">Account settings</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item href="#action">Logout</NavDropdown.Item>
+                        </NavDropdown>
+                        {/* <Button variant="outline-success">Search</Button> */}
+                        </Form>
+                    </Navbar.Collapse>
+                </Navbar>
+                {/* <ul>
+                    <li><NavLink to="/">Banklite</NavLink></li>
+                    <li><NavLink to="/profile">Segun Owa</NavLink></li>
+                </ul> */}
+            </div>
+        )
+    }
+
+  
+    componentDidMount() {
+    }
+
+
+    render() {
+        
+        
+        return (
+            <Fragment>
+                
+                <div className="mainheading">
+                    <div className="container">
+                        <div className="row">
+                            {this.renderHeadingWrap()}
+
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        );
+    }
+}
+
+
+
+
+export default MainHeader;

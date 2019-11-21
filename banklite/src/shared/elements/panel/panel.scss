@@ -1,0 +1,27 @@
+.panel-container{
+    border-radius: 5px;
+    .panel-heading{
+        background: #34495E;
+        color: #ffffff;
+        padding: 6px 10px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    .panel-content {
+        border: 1px solid #7FB3D5;
+        border-top: none;
+        padding: 7px 10px;
+    }
+    ul{
+        list-style: none;
+        padding-left: 0;
+        li{
+            margin-bottom: 5px;
+            border-bottom: 1px solid #D6EAF8;
+            padding-bottom: 7px;
+            a{
+                font-size: 13px;
+            }
+        }
+    }
+}

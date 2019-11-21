@@ -1,0 +1,30 @@
+@import "../../../assets/scss/shared/colors";
+@import "../../../assets/scss/shared/formhelpers";
+
+.mainheading{
+    background: $brand-color;
+    .navbar-light .navbar-nav .nav-link, .nav-link{
+        color: $white-color;
+        &:hover{
+            color: $white-color;
+        }
+    }
+    .navbar-light .navbar-brand {
+        color: $white-color;
+        &:hover{
+            color: $white-color;
+        }
+    }
+    .dropdown-item{
+        font-size: 13px;
+    }
+    .dropdown-toggle{
+        font-size: 14px;
+    }
+}
+.mainheader-wrap{
+    width: 100%;
+}
+.form-control.noborder-input{
+    border: none;
+}
