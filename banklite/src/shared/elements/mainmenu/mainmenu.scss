@@ -27,25 +27,32 @@
         }
        
     }
-    .nav-link, .nav-item a {
-        display: block;
-        padding: 10px 6px;
-        font-size: 12px;
-        color: #5D6D7E;
-        font-weight: 600;
-        &.active{
-            background: #7FB3D5;
-            text-decoration: none;
-            color: #fff;
-            &:hover{
+    .nav-link, .nav-item{
+        a{
+            display: block;
+            padding: 10px 6px;
+            font-size: 12px;
+            color: #5D6D7E;
+            font-weight: 600;
+            &.active{
                 background: #7FB3D5;
                 text-decoration: none;
                 color: #fff;
+                &:hover{
+                    background: #7FB3D5;
+                    text-decoration: none;
+                    color: #fff;
+                }
+            }
+            &:hover{
+                background: #D4E6F1;
+                text-decoration: none;
             }
         }
-        &:hover{
-            background: #D4E6F1;
-            text-decoration: none;
+        &:first-of-type{
+            a{
+                padding-left: 0;
+            }
         }
     }
     .nav-item>ul{

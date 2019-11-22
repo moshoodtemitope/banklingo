@@ -24,7 +24,7 @@ class MainHeader extends React.Component{
             <div className="mainheader-wrap">
                 
                 <Navbar  expand="lg">
-                    <Navbar.Brand as={Link} to="/">BankLite</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/">Empire Trust</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
@@ -62,12 +62,10 @@ class MainHeader extends React.Component{
         return (
             <Fragment>
                 
-                <div className="mainheading">
-                    <div className="container">
-                        <div className="row">
-                            {this.renderHeadingWrap()}
+                <div className="mainheading content-container">
+                    <div className="row">
+                        {this.renderHeadingWrap()}
 
-                        </div>
                     </div>
                 </div>
             </Fragment>

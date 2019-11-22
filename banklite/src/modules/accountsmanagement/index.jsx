@@ -3,9 +3,8 @@ import * as React from "react";
 
 import {Fragment} from "react";
 
-// import { NavLink} from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-import AccountsSidebar from './accountssidebar'
 import  TableComponent from '../../shared/elements/table'
 import Button from 'react-bootstrap/Button'
 import "./accountsmanagement.scss"; 
@@ -27,7 +26,7 @@ class AccountManagement extends React.Component {
                     <div className="content-wrapper">
                         <div className="module-heading">
                             <div className="module-title">
-                                <div className="container">
+                                <div className="content-container">
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
@@ -37,13 +36,51 @@ class AccountManagement extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div className="module-submenu">
+                                <div className="content-container">
+                                    <ul className="nav">
+                                        <li>
+                                            <NavLink to={'/accounts/balancesheet'}>Balance Sheet</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/accounts/profit-loss'}>Profit & Loss</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/accounts/trial-balance'}>Trial Balance</NavLink>
+                                        </li>
+                                        <li>
+                                            {/* <NavLink to={'/accounts/journal'}>Journal Entries</NavLink> */}
+                                            <NavLink to={'/journals'}>Journal Entries</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/accounts'}>Charts of Accounts</NavLink>
+                                            {/* <ul>
+                                                <li>
+                                                    <NavLink to={'/accounts/charts/all'}>All</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to={'/accounts/charts/liabilities'}>Liabilities</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to={'/accounts/charts/equity'}>Equity</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to={'/accounts/charts/income'}>Income</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to={'/accounts/charts/expenses'}>Expenses</NavLink>
+                                                </li>
+                                            </ul> */}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div className="module-content">
-                                <div className="container">
+                                <div className="content-container">
                                     <div className="row">
-                                        <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div>
-                                        <div className="col-sm-9">
+                                        
+                                        <div className="col-sm-12">
                                             <div className="middle-content">
                                                 <div className="heading-with-cta">
                                                     <h3 className="section-title">Chart of Accounts</h3>

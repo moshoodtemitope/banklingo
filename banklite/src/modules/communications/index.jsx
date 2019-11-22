@@ -5,7 +5,6 @@ import {Fragment} from "react";
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-import  SidebarElement from '../../shared/elements/sidebar'
 import "./communications.scss"; 
 class CommunicationsManagement extends React.Component {
     constructor(props) {
@@ -35,24 +34,18 @@ class CommunicationsManagement extends React.Component {
                                 </div>
                             </div>
                             <div className="module-submenu">
-                                <div className="container">
-                                    <div className="row">
-                                        <div className="col-sm-3">
-                                            <SidebarElement>
-                                                <ul>
-                                                    <li>
-                                                        <NavLink to={'/communications/emails'}>Emails</NavLink>
-                                                    </li>
-                                                    <li>
-                                                        <NavLink to={'/communications/sms'}>SMS</NavLink>
-                                                    </li>
-                                                    <li>
-                                                        <NavLink to={'/communications/webhooks'}>Webhooks</NavLink>
-                                                    </li>
-                                                </ul>
-                                            </SidebarElement>
-                                        </div>
-                                    </div>
+                                <div className="content-container">
+                                    <ul className="nav">
+                                    <li>
+                                        <NavLink to={'/communications/emails'}>Emails</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to={'/communications/sms'}>SMS</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to={'/communications/webhooks'}>Webhooks</NavLink>
+                                    </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

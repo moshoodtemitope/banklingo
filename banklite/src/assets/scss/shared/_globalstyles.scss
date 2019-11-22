@@ -1,5 +1,11 @@
 .middle-content {
-    margin: 30px 20px;
+    margin: 30px 0px;
+}
+.content-container{
+    padding: 0 10px;
+    .container{
+        max-width: initial;
+    }
 }
 .section-title{
     font-size: 24px;
@@ -17,5 +23,31 @@
         color: #fff;
         background-color: #34495E;
         border-color: #34495E;
+    }
+}
+.module-submenu{
+    margin-top: 10px;
+    .nav{
+        >li{
+            margin-right: 10px;
+            >a{
+                display: block;
+                background: #F8F9F9;
+                color: #1A5276;
+                font-size: 12px;
+                padding: 5px 8px;
+                border: 1px solid#7FB3D5;
+                border-radius: 3px;
+                &:hover{
+                    text-decoration: none;
+                    border-color: #5D6D7E;
+                }
+                &.active{
+                    border-color: #5D6D7E;
+                    background: #5D6D7E;
+                    color: #ffffff;
+                }
+            }
+        }
     }
 }

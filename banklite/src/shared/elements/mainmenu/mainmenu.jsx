@@ -144,7 +144,7 @@ class MainMenu extends React.Component{
             <Fragment>
                 
                 <div className="menu-container">
-                    <div className="container">
+                    <div className="content-container">
                         <div className="row">
                             {this.renderMainNav()}
 
