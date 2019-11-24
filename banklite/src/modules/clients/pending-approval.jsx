@@ -6,15 +6,17 @@ import {Fragment} from "react";
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import "./clients.scss"; 
 
-import "./loantransactions.scss"; 
-class LoanTransactions extends React.Component {
+class ClientsPendingApproval extends React.Component {
     constructor(props) {
         super(props);
         this.state={
             user:''
         }
+
         
     }
 
@@ -29,7 +31,7 @@ class LoanTransactions extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Loan Transactions</h2>
+                                                <h2>Pending Approval</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -43,9 +45,23 @@ class LoanTransactions extends React.Component {
                                         </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <div className="heading-with-cta">
+                                            <div className="heading-with-cta">
                                                     {/* <h3 className="section-title">Journal Entries</h3> */}
-                                                    <div className="filter-wrap"></div>
+                                                    <Form className="one-liner">
+                                                        <Form.Group controlId="periodOptionChosen">
+                                                            <Form.Label>Account Officer</Form.Label>
+                                                                <Form.Control type="text" size="sm" />
+                                                        </Form.Group>
+                                                        <Form.Group controlId="filterDropdown">
+                                                        <Form.Label> </Form.Label>
+                                                            <Form.Control as="select" size="sm">
+                                                                <option>No Filter</option>
+                                                                <option>Add New Filter</option>
+                                                                <option>Custom Filter</option>
+                                                            </Form.Control>
+                                                        </Form.Group>
+                                                        <Button variant="primary" type="submit">Filter</Button>
+                                                    </Form>
                                                     <Button>Edit Columns</Button>
                                                 </div>
                                                 <div className="pagination-wrap">
@@ -78,14 +94,14 @@ class LoanTransactions extends React.Component {
                                                 <TableComponent classnames="striped bordered hover">
                                                     <thead>
                                                         <tr>
-                                                        <th>Creation Date</th>
+                                                        <th>Full Name</th>
                                                         <th>ID</th>
-                                                        <th>User</th>
-                                                        <th>Type</th>
-                                                        <th>Account ID</th>
-                                                        <th>Account Name</th>
-                                                        <th>Account Holder Name</th>
-                                                        <th>Amount</th>
+                                                        <th>Customer State</th>
+                                                        <th>Account Officer</th>
+                                                        <th>Total Balance</th>
+                                                        <th>Pending Loan Amount</th>
+                                                        <th>Approved Loan Amount</th>
+                                                        <th>Last modified</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -144,4 +160,4 @@ class LoanTransactions extends React.Component {
     }
 }
 
-export default LoanTransactions;
+export default ClientsPendingApproval;

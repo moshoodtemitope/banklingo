@@ -23,38 +23,39 @@ class MainMenu extends React.Component{
                         <NavLink to={'/dashboard'}>Dashboard</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/clients'}>Clients</NavLink>
+                        <span>Clients</span>
                         <ul>
                             <li>
-                                <NavLink to="/dsdsd">Active</NavLink>
+                                <NavLink to="/active-clients">Active</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/dsds">Inactive</NavLink>
+                                <NavLink to="/inactive-clients">Inactive</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/ewr">Pending approval</NavLink>
+                                <NavLink to="/clients-pending-approval">Pending approval</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/fdds">Exited</NavLink>
+                                <NavLink to="/clients-exited">Exited</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/fdfd">Blacklisted</NavLink>
+                                <NavLink to="/clients-blacklisted">Blacklisted</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/fdrer">All customers</NavLink>
+                                <NavLink to="/clients">All customers</NavLink>
                             </li>
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/loans'}>Loans</NavLink>
+                        <span>Loans</span>
+                       
                         <ul>
                             <li>
-                                <NavLink to="/dsdsd">All Loans</NavLink>
+                                <NavLink to="/all-loans">All Loans</NavLink>
                             </li>
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/deposits'}>Deposits</NavLink>
+                        <span>Deposits</span>
                         <ul>
                             <li>
                                 <NavLink to="/deposits">All Deposits</NavLink>
@@ -62,7 +63,7 @@ class MainMenu extends React.Component{
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/disbursements'}>Disbursement</NavLink>
+                        <span>Disbursement</span>
                         <ul>
                             <li>
                                 <NavLink to="/disbursements">All Disbursements</NavLink>
@@ -71,7 +72,7 @@ class MainMenu extends React.Component{
 
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/loan-transactions'}>Loan Transactions</NavLink>
+                        <span>Loan Transactions</span>
                         <ul>
                             <li>
                                 <NavLink to="/loan-transactions">All Loan Transactions</NavLink>
@@ -79,7 +80,7 @@ class MainMenu extends React.Component{
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/deposit-transactions'}>Deposit Transactions</NavLink>
+                        <span>Deposit Transactions</span>
                         <ul>
                             <li>
                                 <NavLink to="/deposit-transactions">All Deposit Transactions</NavLink>
@@ -87,7 +88,7 @@ class MainMenu extends React.Component{
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/activities'}>Activities</NavLink>
+                        <span>Activities</span>
                         <ul>
                             <li>
                                 <NavLink to="/activities">All Activities</NavLink>
@@ -95,7 +96,7 @@ class MainMenu extends React.Component{
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/branches'}>Branches</NavLink>
+                        <span>Branches</span>
                         <ul>
                             <li>
                                 <NavLink to="/branches">All Branches</NavLink>
@@ -103,7 +104,7 @@ class MainMenu extends React.Component{
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/user-management'}>Users</NavLink>
+                        <span>Users</span>
                         <ul>
                             <li>
                                 <NavLink to="/user-management">All Users</NavLink>
@@ -111,7 +112,7 @@ class MainMenu extends React.Component{
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/communications'}>Communications</NavLink>
+                        <span>Communications</span>
                         <ul>
                             <li>
                                 <NavLink to="/communications">All Communications</NavLink>

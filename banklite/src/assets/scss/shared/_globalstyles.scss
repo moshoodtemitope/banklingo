@@ -11,7 +11,7 @@
     font-size: 24px;
     margin-bottom: 20px;
 }
-.heading-with-cta {
+.heading-with-cta, .footer-with-cta {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,10 +19,16 @@
     .section-title{
         margin-bottom: 0;
     }
-    .btn-primary, .btn-primary:hover{
+    .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:not(:disabled):not(.disabled):active{
         color: #fff;
         background-color: #34495E;
         border-color: #34495E;
+        padding-bottom: 4px;
+        padding-top: 4px;
+        font-size: 13px;
+    }
+    &.toleft{
+        justify-content: flex-end;
     }
 }
 .module-submenu{
@@ -46,8 +52,170 @@
                     border-color: #5D6D7E;
                     background: #5D6D7E;
                     color: #ffffff;
+                    font-weight: 600;
                 }
             }
         }
     }
+
+    .lowerlevel-menu .nav > li > a.active {
+        border-color: rgba(93, 109, 126, 0.5);
+        background: rgba(93, 109, 126, 0.5);
+        color: #ffffff;
+        font-weight: 600;
+    }
+}
+.one-liner{
+    display: flex;
+    align-items: center;
+    .form-group{
+        margin-right: 12px;
+        label{
+            margin-bottom: 0;
+            font-size: 13px;
+        }
+    }
+    .btn{
+        margin-top: 8px;
+    }
+    &.space-between{
+        justify-content: space-between;
+    }
+}
+.heading-actions{
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .btn{
+        margin-right: 10px;
+    }
+    .btn-primary, .btn-primary:hover{
+        color: #fff;
+        background-color: #34495E;
+        border-color: #34495E;
+        padding-bottom: 4px;
+        padding-top: 4px;
+        font-size: 13px;
+        margin-top: 8px;
+    }
+    .btn-secondary, .btn-secondary:hover{
+        // color: #fff;
+        // background-color: #34495E;
+        // border-color: #34495E;
+        padding-bottom: 4px;
+        padding-top: 4px;
+        font-size: 13px;
+        margin-top: 8px;
+    }
+    .action-icon{
+        padding: 1px 4px;
+        border-color: rgba(93, 109, 126, 0.5);
+        &:hover{
+            background: unset;
+            border-color: rgba(93, 109, 126, 1);
+        }
+    }
+    .react-datepicker-wrapper{
+        display: block;
+    }
+}
+
+.block-level{
+    display: block;
+    margin-bottom: 0;
+    font-size: 13px;
+}
+.form-row{
+    margin-bottom: 1rem;
+}
+.form-content {
+    margin: 0 auto;
+    margin-top: 30px;
+    
+}
+
+//Pagination
+.pagination-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    label{
+        margin-bottom: 0;
+        margin-right: 7px;
+        font-size: 13px;
+    }
+    .countdropdown{
+        width: 48px;
+        font-size: 12px;
+    }
+    .move-page-actions {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        margin-left: 15px;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    .each-page-action,.page-count {
+        margin-right: 5px;
+    }
+    
+}
+
+//Modal
+.modal{
+    .withcentered-heading{
+        .modal-title{
+            text-align: center;
+            width: 100%;
+        }
+    }
+    .modal-60w{
+        width: 60%;
+    }
+    .modal-inputprefix {
+        background: #e9ecef;
+        border-top-left-radius: .25rem;
+        border-bottom-left-radius: .25rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        display: flex;
+        align-items: center;
+        padding: 5px 12px;
+        font-weight: 600;
+        border-bottom: 0;
+        height: calc(1.5em + .75rem + 2px);
+        font-size: 13px;
+    }
+}
+
+//Form helpers
+.with-prefix.form-group {
+    display: flex;
+    input{
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+}
+.form-ctas{
+    margin-top: 10px;
+}
+
+.mr-20px{
+    margin-right: 20px;
+}
+.w-40{
+    width: 40%;
+}
+.card{
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    padding: 30px;
+    background: #fff;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border: none!important;
 }

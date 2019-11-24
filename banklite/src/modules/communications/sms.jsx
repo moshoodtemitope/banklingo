@@ -3,18 +3,19 @@ import * as React from "react";
 
 import {Fragment} from "react";
 
-
+import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import Button from 'react-bootstrap/Button'
 
-import "./loantransactions.scss"; 
-class LoanTransactions extends React.Component {
+import "./communications.scss"; 
+class SMSCommunications extends React.Component {
     constructor(props) {
         super(props);
         this.state={
             user:''
         }
+
         
     }
 
@@ -29,24 +30,36 @@ class LoanTransactions extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Loan Transactions</h2>
+                                                <h2>SMS</h2>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div className="module-submenu">
+                                <div className="content-container">
+                                    <ul className="nav">
+                                    <li>
+                                        <NavLink to={'/communications/emails'}>Emails</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to={'/communications/sms'}>SMS</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to={'/communications/webhooks'}>Webhooks</NavLink>
+                                    </li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div className="module-content">
                                 <div className="content-container">
                                     <div className="row">
-                                        {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
+                                        
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                 <div className="heading-with-cta">
-                                                    {/* <h3 className="section-title">Journal Entries</h3> */}
-                                                    <div className="filter-wrap"></div>
-                                                    <Button>Edit Columns</Button>
+                                                    <div></div>
+                                                    <Button >Edit Column</Button>
                                                 </div>
                                                 <div className="pagination-wrap">
                                                     <label htmlFor="toshow">Show</label>
@@ -78,29 +91,19 @@ class LoanTransactions extends React.Component {
                                                 <TableComponent classnames="striped bordered hover">
                                                     <thead>
                                                         <tr>
-                                                        <th>Creation Date</th>
-                                                        <th>ID</th>
-                                                        <th>User</th>
-                                                        <th>Type</th>
-                                                        <th>Account ID</th>
-                                                        <th>Account Name</th>
-                                                        <th>Account Holder Name</th>
-                                                        <th>Amount</th>
+                                                        <th>Sent Date</th>
+                                                        <th>Sent By</th>
+                                                        <th>Sent To(Customer)</th>
+                                                        <th>Sent To(Group)</th>
+                                                        <th>Sent To(User)</th>
+                                                        <th>State</th>
+                                                        <th>Failure Reason</th>
+                                                        <th>Destination</th>
+                                                        <th>Message</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>some text</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
                                                             <td>023839</td>
                                                             <td>Debit</td>
                                                             <td>text text</td>
@@ -108,9 +111,10 @@ class LoanTransactions extends React.Component {
                                                             <td>30</td>
                                                             <td>30</td>
                                                             <td>30</td>
+                                                            <td>30</td>
+                                                            <td>30</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>1</td>
                                                             <td>023839</td>
                                                             <td>Debit</td>
                                                             <td>text text</td>
@@ -118,13 +122,27 @@ class LoanTransactions extends React.Component {
                                                             <td>30</td>
                                                             <td>30</td>
                                                             <td>30</td>
+                                                            <td>30</td>
+                                                            <td>30</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>1</td>
                                                             <td>023839</td>
                                                             <td>Debit</td>
                                                             <td>text text</td>
                                                             <td>Yes</td>
+                                                            <td>30</td>
+                                                            <td>30</td>
+                                                            <td>30</td>
+                                                            <td>30</td>
+                                                            <td>30</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>023839</td>
+                                                            <td>Debit</td>
+                                                            <td>text text</td>
+                                                            <td>Yes</td>
+                                                            <td>30</td>
+                                                            <td>30</td>
                                                             <td>30</td>
                                                             <td>30</td>
                                                             <td>30</td>
@@ -144,4 +162,4 @@ class LoanTransactions extends React.Component {
     }
 }
 
-export default LoanTransactions;
+export default SMSCommunications;

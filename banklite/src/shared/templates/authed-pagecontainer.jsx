@@ -2,6 +2,7 @@ import * as React from 'react';
 import MainHeader from "../elements/mainheader/mainheader";
 import MainMenu from "../elements/mainmenu/mainmenu";
 
+
 class InnerPageContainer extends React.Component{
     
     render() {
