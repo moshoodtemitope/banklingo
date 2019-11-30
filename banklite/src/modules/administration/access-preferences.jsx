@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
-class GeneralOrganization extends React.Component {
+class AccessPreferences extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -63,24 +63,16 @@ class GeneralOrganization extends React.Component {
                                     <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>
-                                                {/* <NavLink to={'/administration-generalorganization'}>Organization</NavLink> */}
-                                                <NavLink to={'/administration/general'}>Organization</NavLink>
+                                                <NavLink exact to={'/administration/access'}>Loans</NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to={'/administration/general/currency'}>Currency</NavLink>
-                                                {/* <NavLink to={'/administration/administration-generalcurrency'}>Currency</NavLink> */}
+                                                <NavLink to={'/administration/access/users'}>Users</NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to={'/administration/general/txt-channels'}>Transaction Channels</NavLink>
+                                                <NavLink to={'/administration/access/preferences'}>Preferences</NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to={'/administration/general/customer-types'}>Customer Types</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/control'}>Internal Control</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/branding'}>Branding</NavLink>
+                                                <NavLink to={'/administration/access/authentication'}>Federated Authentication</NavLink>
                                             </li>
                                         </ul>
                                     </div>
@@ -89,73 +81,62 @@ class GeneralOrganization extends React.Component {
                             <div className="module-content">
                                 <div className="content-container">
                                     <div className="row">
+                                        
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <Form className="form-content w-40 card">
+                                               
+                                                
+                                                <Form className="form-content w-60 card">
 
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Timeout Session </Form.Label>
+                                                            <Form.Control type="text" value="60" /> 
+                                                            <span className="hinttext">minutes</span>
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Min Password Length</Form.Label>
+                                                            <Form.Control type="text"  value="8"/>
+                                                            <span className="hinttext">characters</span>
+                                                        </Col>
+                                                        
+                                                    </Form.Row>
+                                                    
+                                                    <div className="table-helper">
+                                                        <input type="checkbox" name="" id="showAutoLock" checked/>
+                                                        <label htmlFor="showAutoLock">Lock User After Failed Logins</label>
+                                                    </div>
+                                                    <Form.Row>
+                                                        <Col className="one-liner login-attempts">
+                                                            <Form.Control type="text"  />
+                                                            <span className="hinttext"> failed login attempts </span>
+                                                            <Form.Control type="text"  />
+                                                            <span className="hinttext">minutes</span>
+                                                        </Col>
+                                                        {/* <Col>
+                                                            
+                                                        </Col> */}
+                                                    </Form.Row>
+                                                    
+                                                    <Form.Row>
+                                                        <Col className="checked-wrap">
+                                                            <Form.Label className="block-level">IP Access Restrictions</Form.Label>
+                                                            <input type="checkbox" name="" id="showIpRestriction" checked/>
+                                                            <label htmlFor="showIpRestriction">Restrict User Access by IP Address</label>
+                                                        </Col>
+                                                        <Col className="checked-wrap">
+                                                            <Form.Label className="block-level">Critical Actions Re-Authentication</Form.Label>
+                                                            <input type="checkbox" name="" id="showReAuth" checked/>
+                                                            <label htmlFor="showReAuth">Require Admin Password</label>
+                                                        </Col>
+                                                    </Form.Row>
+                      
 
-                                                    <Form.Group controlId="institutionName">
-                                                        <Form.Label className="block-level">Institution Name</Form.Label>
-                                                        <Form.Control type="text" />
-                                                    </Form.Group>
-                                                    <Form.Group controlId="streetAddress">
-                                                        <Form.Label className="block-level">Street Address - Line 1</Form.Label>
-                                                        <Form.Control type="text" />
-                                                    </Form.Group>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">City</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">State/Province/Region</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                    </Form.Row>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Zip Postal Code</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Country</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                    </Form.Row>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Mobile Phone</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Email</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                    </Form.Row>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Currency</Form.Label>
-                                                            <span className="form-text">Nigerian naira (NGN)</span>
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Time Zone</Form.Label>
-                                                            <span className="form-text">Africa/Lagos</span>
-                                                        </Col>
-                                                    </Form.Row>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Local Date Format</Form.Label>
-                                                            <Form.Control type="text" placeholder="dd-MM-yyyy" />
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Local Date/Time Format </Form.Label>
-                                                            <Form.Control type="text" placeholder="dd-MM-yyyy HH:mm:ss" />
-                                                        </Col>
-                                                    </Form.Row>
                                                     <div className="form-ctas horizontal">
                                                         <Button variant="success" className="mr-20px" type="submit"> Save Changes</Button>
                                                         <Button variant="light" type="button"> Cancel</Button>
                                                     </div>
+
                                                 </Form>
                                             </div>
                                         </div>
@@ -170,4 +151,4 @@ class GeneralOrganization extends React.Component {
     }
 }
 
-export default GeneralOrganization;
+export default AccessPreferences;

@@ -5,9 +5,9 @@ import {Fragment} from "react";
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-import Form from 'react-bootstrap/Form'
+// import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Col from 'react-bootstrap/Col'
+// import Col from 'react-bootstrap/Col'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
 import logo from '../../assets/img/emipire.png'

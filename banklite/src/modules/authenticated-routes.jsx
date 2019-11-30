@@ -53,6 +53,11 @@ import EmailSettings from './administration/email-settings'
 import ProductLoans from './administration/products-loans'
 import ProductDeposits from './administration/products-deposits'
 
+import AccessRoles from './administration/access-roles'
+import AccessUsers from './administration/access-users'
+import AccessPreferences from './administration/access-preferences'
+import AccessAuth from './administration/access-authentication'
+
 import PageNotFound from './pagenot-found'
 
 
@@ -127,6 +132,11 @@ class AuthenticatedRoutes extends React.Component {
                         
                         <Route exact path='/administration/products'  render={(props) => <ProductLoans {...this.props} />} />
                         <Route exact path='/administration/products/deposits'  render={(props) => <ProductDeposits {...this.props} />} />
+                        
+                        <Route exact path='/administration/access'  render={(props) => <AccessRoles {...this.props} />} />
+                        <Route exact path='/administration/access/users'  render={(props) => <AccessUsers {...this.props} />} />
+                        <Route exact path='/administration/access/preferences'  render={(props) => <AccessPreferences {...this.props} />} />
+                        <Route exact path='/administration/access/authentication'  render={(props) => <AccessAuth {...this.props} />} />
                         
                         {/* <Route exact path='/administration/administration-generalcurrency'  render={(props) => <GeneralCurrency {...this.props} />} /> */}
                         

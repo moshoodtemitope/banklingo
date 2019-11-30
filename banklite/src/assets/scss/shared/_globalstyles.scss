@@ -245,6 +245,9 @@ select, select.form-control{
 .w-60{
     width: 60%;
 }
+.w-65{
+    width: 65%;
+}
 .card{
     box-shadow: 0 5px 20px rgba(0,0,0,.08);
     padding: 30px;
@@ -303,12 +306,31 @@ button.accordion-headingLink.btn.btn-link {
     label{
         font-size: 13px;
         margin-left: 6px;
+        margin-bottom: 0;
     }
+}
+.login-attempts input{
+    flex-basis: 35%;
+    margin-right: 10px;
+}
+span.hinttext {
+    font-size: 11px;
+    margin-right: 10px;
 }
 .sameline-label.form-group {
     display: flex;
     align-items: center;
     select{
         margin-left: 7px;
+    }
+}
+
+.checked-wrap{
+    font-size: 12px;
+    label{
+        &:not(:first-of-type){
+            margin-left: 5px;
+        }
+        
     }
 }
