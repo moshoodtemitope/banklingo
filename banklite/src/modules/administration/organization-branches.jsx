@@ -142,7 +142,7 @@ class OrganizationBranches extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/organization/newbranch'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="1">Set Holidays</Dropdown.Item>
                                                                 </DropdownButton>
@@ -162,7 +162,7 @@ class OrganizationBranches extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/organization/newbranch'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="1">Set Holidays</Dropdown.Item>
                                                                 </DropdownButton>
@@ -182,7 +182,7 @@ class OrganizationBranches extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/organization/newbranch'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="1">Set Holidays</Dropdown.Item>
                                                                 </DropdownButton>
@@ -191,7 +191,7 @@ class OrganizationBranches extends React.Component {
                                                     </tbody>
                                                 </TableComponent>
                                                 <div className="footer-with-cta toleft">
-                                                    <Button>New Branch</Button>
+                                                    <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
                                                 </div>
                                             </div>
                                         </div>

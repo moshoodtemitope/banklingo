@@ -143,7 +143,7 @@ class OrganizationCenters extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/organization/new-centers'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="1">Set Holidays</Dropdown.Item>
                                                                 </DropdownButton>
@@ -163,7 +163,7 @@ class OrganizationCenters extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/organization/new-centers'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="1">Set Holidays</Dropdown.Item>
                                                                 </DropdownButton>
@@ -183,7 +183,7 @@ class OrganizationCenters extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/organization/new-centers'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="1">Set Holidays</Dropdown.Item>
                                                                 </DropdownButton>
@@ -192,7 +192,7 @@ class OrganizationCenters extends React.Component {
                                                     </tbody>
                                                 </TableComponent>
                                                 <div className="footer-with-cta toleft">
-                                                    <Button >New Centre</Button>
+                                                    <NavLink to={'/administration/organization/new-centers'} className="btn btn-primary">New Center</NavLink>
                                                 </div>
                                             </div>
                                         </div>

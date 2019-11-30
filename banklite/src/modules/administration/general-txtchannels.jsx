@@ -122,7 +122,8 @@ class GeneralTxtChannels extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
+                                                                    {/* <Dropdown.Item href="/administration/general/new-txt-channels">Edit</Dropdown.Item> */}
                                                                 </DropdownButton>
                                                             </td>
                                                         </tr>
@@ -138,7 +139,25 @@ class GeneralTxtChannels extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
+                                                                    <Dropdown.Item href="/administration/general/new-txt-channels">Deactivate</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
+                                                                </DropdownButton>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>INTERSWITCH DISBURSEMENT CHANNEL</td>
+                                                            <td>29-11-2017</td>
+                                                            <td>Bayonle Amzat</td>
+                                                            <td>Activated</td>
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    key="activeCurrency"
+                                                                    className="customone"
+                                                                >
+                                                                    <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="2">Deactivate</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
                                                                 </DropdownButton>
@@ -156,25 +175,7 @@ class GeneralTxtChannels extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="2">Deactivate</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
-                                                                </DropdownButton>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>INTERSWITCH DISBURSEMENT CHANNEL</td>
-                                                            <td>29-11-2017</td>
-                                                            <td>Bayonle Amzat</td>
-                                                            <td>Activated</td>
-                                                            <td>
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="activeCurrency"
-                                                                    className="customone"
-                                                                >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                   <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="2">Deactivate</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
                                                                 </DropdownButton>
@@ -184,7 +185,8 @@ class GeneralTxtChannels extends React.Component {
                                                 </TableComponent>
                                                 <div className="footer-with-cta toleft">
                                                     <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
+                                                    <NavLink to={'/administration/general/new-txt-channels'} className="btn btn-primary">Add Channel</NavLink>
+                                                    {/* <Button href="/administration/general/new-txt-channels">Add Channel</Button> */}
                                                 </div>
                                             </div>
                                         </div>

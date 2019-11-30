@@ -15,6 +15,9 @@ select, select.form-control{
     -webkit-appearance: none;
     appearance: none;
     font-size: 12px;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAFCAYAAACXU8ZrAAAAPElEQ…yrApA4AzKYevIxioIpJx6jKoCB3qMPwQpANAM+MP3UEwwFAMEtTW0sEqrQAAAAAElFTkSuQmCC) -0px -0px no-repeat;
+    background-repeat: no-repeat;
+    background-position: 97% center;
 }
 .section-title{
     font-size: 24px;
@@ -25,6 +28,11 @@ select, select.form-control{
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    label{
+        margin-bottom: 0;
+        margin-left: 6px;
+        font-size: 13px;
+    }
     .section-title{
         margin-bottom: 0;
     }
@@ -207,6 +215,9 @@ select, select.form-control{
     .modal-60w{
         width: 60%;
     }
+    .modal-40w{
+        width: 40%;
+    }
     .modal-inputprefix {
         background: #e9ecef;
         border-top-left-radius: .25rem;
@@ -281,6 +292,11 @@ button.accordion-headingLink.btn.btn-link {
             border-bottom: 1px solid #E5E8E8;
         }
     }
+    .dropdown-item.active, .dropdown-item:active {
+        color: unset;
+        text-decoration: none;
+        background-color: unset;
+    }
     .dropdown-menu{
         padding: 0;
     }
@@ -332,5 +348,37 @@ span.hinttext {
             margin-left: 5px;
         }
         
+    }
+}
+
+//Forms
+.full-pageforms{
+    margin: 0 auto;
+    .form-heading {
+        margin: -30px -30px 30px -30px;
+        padding: 15px 20px;
+        border-bottom: 1px solid #D6DBDF;
+        h3{
+            color: #34495E;
+            font-size: 25px;
+            margin-bottom: 0;
+        }
+    }
+    .each-formsection{
+        margin: 20px 0;
+        &.two-sided{
+            display: flex;
+            flex-wrap: wrap;
+            >div{
+                flex: 1 1 0;
+            }
+        }
+        
+    }
+}
+.checkbox-wrap{
+    label{
+        font-size: 13px;
+        margin-left: 8px;
     }
 }

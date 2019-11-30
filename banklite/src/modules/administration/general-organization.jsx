@@ -91,7 +91,7 @@ class GeneralOrganization extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <Form className="form-content w-40 card">
+                                                <Form className="form-content w-60 card">
 
 
                                                     <Form.Group controlId="institutionName">

@@ -6,6 +6,7 @@ import {Fragment} from "react";
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
@@ -16,16 +17,71 @@ class GeneralCustomerTypes extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            show:false,
         }
 
         
+    }
+
+    handleClose = () => this.setState({show:false});
+    
+    handleShow = () => this.setState({show:true});
+
+    customerTypePopUp = () =>{
+       
+        const {show} = this.state;
+        return(
+            <Modal show={show} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+                <Modal.Header>
+                    <Modal.Title>Add Currency</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="customerTypeName">
+                            <Form.Label className="block-level">Name</Form.Label>
+                            <Form.Control type="text" />
+                        </Form.Group>
+                        <Form.Group controlId="customerTypeId">
+                            <Form.Label className="block-level">Id</Form.Label>
+                            <Form.Control type="text" />
+                        </Form.Group>
+                        <Form.Label className="block-level">Usage</Form.Label>
+                            <div className="checkbox-wrap">
+                                <input type="checkbox" name="" id="pick-1" />
+                                <label htmlFor="pick-1">Allow opening accounts</label>
+                            </div>
+                            <div className="checkbox-wrap">
+                                <input type="checkbox" name="" id="pick-2" />
+                                <label htmlFor="pick-2">Allow as guarantor</label>
+                            </div>
+                            <div className="checkbox-wrap">
+                                <input type="checkbox" name="" id="pick-3" />
+                                <label htmlFor="pick-3">Require identification documents</label>
+                            </div>
+                            <div className="checkbox-wrap">
+                                <input type="checkbox" name="" id="pick-3" />
+                                <label htmlFor="pick-3">Show default address fields</label>
+                            </div>
+                        <Form.Group controlId="customerTypeDesc">
+                            <Form.Label className="block-level">Description</Form.Label>
+                            <Form.Control as="textarea" rows="3" />
+                        </Form.Group>
+                        <div className="footer-with-cta toleft">
+                            <Button variant="secondary" className="grayed-out" onClick={this.handleClose}>Cancel</Button>
+                            <Button>Save Changes</Button>
+                        </div>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+        )
     }
 
     render() {
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
+                    {this.customerTypePopUp()}
                     <div className="content-wrapper">
                         <div className="module-heading">
                             <div className="module-title">
@@ -107,7 +163,6 @@ class GeneralCustomerTypes extends React.Component {
                                                             </Form.Control>
                                                         </Form.Group>
                                                     </Form>
-                                                    <Button>Edit Columns</Button>
                                                 </div>
                                                 
                                                 <TableComponent classnames="striped bordered hover">
@@ -131,7 +186,7 @@ class GeneralCustomerTypes extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1" onClick={this.handleShow}>Edit</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
                                                         </tr>
@@ -146,7 +201,7 @@ class GeneralCustomerTypes extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1" onClick={this.handleShow}>Edit</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -162,7 +217,7 @@ class GeneralCustomerTypes extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1" onClick={this.handleShow}>Edit</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -178,7 +233,7 @@ class GeneralCustomerTypes extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1" onClick={this.handleShow}>Edit</Dropdown.Item>
                                                                     <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -187,7 +242,7 @@ class GeneralCustomerTypes extends React.Component {
                                                 </TableComponent>
                                                 <div className="footer-with-cta toleft">
                                                     <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Type</Button>
+                                                    <Button onClick={this.handleShow}>Add Type</Button>
                                                 </div>
                                             </div>
                                         </div>

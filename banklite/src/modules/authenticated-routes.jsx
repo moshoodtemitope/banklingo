@@ -40,12 +40,15 @@ import AdminManagement from './administration'
 import GeneralOrganization from './administration/general-organization'
 import GeneralCurrency from './administration/general-currency'
 import GeneralTxtChannels from './administration/general-txtchannels'
+import NewTxtChannels from './administration/general-txtchannels-new'
 import GeneralCustomerTypes from './administration/general-customertypes'
 import GeneralInternalControl from './administration/general-internalcontrol'
 import GeneralBranding from './administration/general-branding'
 
 import OrganizationBranches from './administration/organization-branches'
+import NewBranch from './administration/organization-branches-new'
 import OrganizationCenters from './administration/organization-centers'
+import NewCenter from './administration/organization-centers-new'
 
 import SMSSettings from './administration/sms-settings'
 import EmailSettings from './administration/email-settings'
@@ -79,6 +82,7 @@ class AuthenticatedRoutes extends React.Component {
                
                 <Fragment>
                     <Switch>
+                        <Route exact path='/' render={(props) => <DashboardLanding {...this.props} />} /> 
                         <Route exact path='/dashboard' render={(props) => <DashboardLanding {...this.props} />} /> 
 
                         <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} />
@@ -118,6 +122,7 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/administration/general'  render={(props) => <GeneralOrganization {...this.props} />} />
                         <Route exact path='/administration/general/currency'  render={(props) => <GeneralCurrency {...this.props} />} />
                         <Route exact path='/administration/general/txt-channels'  render={(props) => <GeneralTxtChannels {...this.props} />} />
+                        <Route exact path='/administration/general/new-txt-channels'  render={(props) => <NewTxtChannels {...this.props} />} />
                         <Route exact path='/administration/general/customer-types'  render={(props) => <GeneralCustomerTypes {...this.props} />} />
                         <Route exact path='/administration/general/control'  render={(props) => <GeneralInternalControl {...this.props} />} />
                         <Route exact path='/administration/general/branding'  render={(props) => <GeneralBranding {...this.props} />} />
@@ -125,7 +130,9 @@ class AuthenticatedRoutes extends React.Component {
                         
                         {/* <Route exact path='/administration-generalorganization'  render={(props) => <GeneralOrganization {...this.props} />} /> */}
                         <Route exact path='/administration/organization'  render={(props) => <OrganizationBranches {...this.props} />} />
+                        <Route exact path='/administration/organization/newbranch'  render={(props) => <NewBranch {...this.props} />} />
                         <Route exact path='/administration/organization/centers'  render={(props) => <OrganizationCenters {...this.props} />} />
+                        <Route exact path='/administration/organization/new-centers'  render={(props) => <NewCenter {...this.props} />} />
                         
                         <Route exact path='/administration/sms'  render={(props) => <SMSSettings {...this.props} />} />
                         <Route exact path='/administration/email'  render={(props) => <EmailSettings {...this.props} />} />
