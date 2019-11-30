@@ -3,19 +3,33 @@ import { Link} from 'react-router-dom';
 import {Fragment} from "react";
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import Nav from 'react-bootstrap/Nav'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+// import Nav from 'react-bootstrap/Nav'
 import Form from 'react-bootstrap/Form'
 // import Button from 'react-bootstrap/Button'
 import FormControl from 'react-bootstrap/FormControl'
+import {NavLink} from 'react-router-dom';
 // import {Nav, NavDropdown, Navbar, Form, Button, FormControl} from 'react-bootstrap'
 import "./mainheader.scss"; 
 class MainHeader extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            activeBranch:'Head Office',
+            showDropdown: false
         }
        
+    }
+
+    handleCurrentBranchClicked = () =>{
+        
+        this.setState({showDropdown: true})
+    }
+
+    chooseBranch = (e)=>{
+        console.log('value is', e.target.value)
+        this.setState({showDropdown: false, activeBranch: e.target.value})
     }
 
 
@@ -26,21 +40,74 @@ class MainHeader extends React.Component{
                 <Navbar  expand="lg">
                     <Navbar.Brand as={Link} to="/">Empire Trust</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                        <Nav.Link href="/">Home</Nav.Link>
-                        <Nav.Link href="/">Some Link</Nav.Link>
-                        </Nav>
-                        <Form inline>
-                        <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input" />
-                        <NavDropdown title={this.props.user.name} id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
-                            <NavDropdown.Item href="#action">Account settings</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action">Logout</NavDropdown.Item>
-                        </NavDropdown>
-                        {/* <Button variant="outline-success">Search</Button> */}
-                        </Form>
+                    <Navbar.Collapse id="basic-navbar-nav" className="heading-nav">
+                        {/* <Nav className="">
+                            <Nav.Link href="/"></Nav.Link>
+                        </Nav> */}
+                        <div className="user-branch">
+                            {this.state.showDropdown===false && 
+                                <div className="branch-text" 
+                                    onClick={this.handleCurrentBranchClicked}> <div className="activebranch"></div>  {this.state.activeBranch}</div>
+                            }
+                            { this.state.showDropdown &&
+                                    <div className="branch-dropdown">
+                                        <select name="" id="" onChange={this.chooseBranch}>
+                                            <option value="Epe">Epe</option>
+                                            <option value="Ikorodu">Ikorodu</option>
+                                            <option value="Lagos Island">Lagos Island</option>
+                                            <option value="Badagry">Badagry</option>
+                                            <option value="Surulere">Surulere</option>
+                                        </select>
+                                    </div>
+                                }
+                        </div>
+                        <div className="other-headingitems">
+                            <DropdownButton
+                                size="sm"
+                                variant="secondary"
+                                title="View"
+                                className="headingmenu-dropdown"
+                            >
+                                <NavLink to={'/dashboard'}>Customers</NavLink>
+                                <NavLink to={'/dashboard'}>Groups</NavLink>
+                                <NavLink to={'/dashboard'}>Credit Arrangements</NavLink>
+                                <NavLink to={'/dashboard'}>Loan Accounts</NavLink>
+                                <NavLink to={'/dashboard'}>Loan Transactions</NavLink>
+                                <NavLink to={'/dashboard'}>Installments</NavLink>
+                                <NavLink to={'/dashboard'}>Deposit Accounts</NavLink>
+                                <NavLink to={'/dashboard'}>Deposit Transactions</NavLink>
+                                <NavLink to={'/dashboard'}>System Activities</NavLink>
+                                <NavLink to={'/dashboard'}>Branches</NavLink>
+                                <NavLink to={'/dashboard'}>Centers</NavLink>
+                                <NavLink to={'/dashboard'}>Users</NavLink>
+                                <NavLink to={'/dashboard'}>Communications</NavLink>
+                            </DropdownButton>
+                            <DropdownButton
+                                size="sm"
+                                variant="secondary"
+                                title="Create"
+                                className="headingmenu-dropdown"
+                            >
+                                <NavLink to={'/dashboard'}>Customer</NavLink>
+                                <NavLink to={'/dashboard'}>Investment Customer</NavLink>
+                                <NavLink to={'/dashboard'}>MoneyPal-Nano Customer</NavLink>
+                                <NavLink to={'/dashboard'}>Payrolla Customer</NavLink>
+                                <NavLink to={'/dashboard'}>Group</NavLink>
+                                <NavLink to={'/dashboard'}>Loan Account</NavLink>
+                                <NavLink to={'/dashboard'}>Deposit Account</NavLink>
+                                <NavLink to={'/dashboard'}>User</NavLink>
+                            </DropdownButton>
+                            <Form inline>
+                                <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" />
+                                <NavDropdown title={this.props.user.name} id="basic-nav-dropdown">
+                                    <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
+                                    <NavDropdown.Item href="#action">Account settings</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="#action">Logout</NavDropdown.Item>
+                                </NavDropdown>
+                                {/* <Button variant="outline-success">Search</Button> */}
+                            </Form>
+                        </div>
                     </Navbar.Collapse>
                 </Navbar>
                 {/* <ul>
