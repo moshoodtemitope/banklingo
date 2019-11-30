@@ -6,6 +6,7 @@ import {Fragment} from "react";
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import "./branches.scss"; 
 class BranchesManagement extends React.Component {
@@ -43,8 +44,18 @@ class BranchesManagement extends React.Component {
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                 <div className="heading-with-cta">
-                                                    {/* <h3 className="section-title">Journal Entries</h3> */}
-                                                    <div className="filter-wrap"></div>
+                                                    <Form className="one-liner">
+                                                        
+                                                        <Form.Group controlId="filterDropdown">
+                                                        <Form.Label> </Form.Label>
+                                                            <Form.Control as="select" size="sm">
+                                                                <option>No Filter</option>
+                                                                <option>Add New Filter</option>
+                                                                <option>Custom Filter</option>
+                                                            </Form.Control>
+                                                        </Form.Group>
+                                                        <Button variant="primary" type="submit">Filter</Button>
+                                                    </Form>
                                                     <Button>Edit Columns</Button>
                                                 </div>
                                                 

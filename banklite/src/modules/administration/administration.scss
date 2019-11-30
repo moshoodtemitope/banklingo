@@ -1,6 +1,41 @@
 @import "../../assets/scss/shared/colors";
+@import "../../assets/scss/shared/globalstyles";
 
 .module-title {
     background: #F4F6F7;
     padding: 20px 0;
+}
+.admin-logowrap.card{
+    margin-top: 20px!important;
+    flex-direction: unset;
+    justify-content: space-between;
+    .logo-heading {
+        font-size: 16px;
+        text-align: center;
+        font-weight: 500;
+    }
+    .existing-logo img {
+        width: 100px;
+    }
+    .existing-icon img {
+        width: 40px;
+    }
+    .org-logo,.org-icon{
+        text-align: center;
+    }
+    .grayed-out.btn.btn-secondary {
+        font-size: 11px;
+        padding: 3px 5px;
+        margin-top: 8px;
+    }
+}
+.each-settingitem{
+    input{
+        font-size: 12px;
+    }
+    label{
+        font-size: 12px;
+        margin-left: 8px;
+        margin-bottom: 0;
+    }
 }

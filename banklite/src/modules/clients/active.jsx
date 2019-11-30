@@ -98,9 +98,7 @@ class ActiveClients extends React.Component {
                                                         <th>ID</th>
                                                         <th>Customer State</th>
                                                         <th>Account Officer</th>
-                                                        <th>Total Balance</th>
-                                                        <th>Pending Loan Amount</th>
-                                                        <th>Approved Loan Amount</th>
+                                                        <th>Created</th>
                                                         <th>Last modified</th>
                                                         </tr>
                                                     </thead>
@@ -112,8 +110,7 @@ class ActiveClients extends React.Component {
                                                             <td>text text</td>
                                                             <td>Yes</td>
                                                             <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            
                                                         </tr>
                                                         <tr>
                                                             <td>1</td>
@@ -122,8 +119,7 @@ class ActiveClients extends React.Component {
                                                             <td>text text</td>
                                                             <td>Yes</td>
                                                             <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            
                                                         </tr>
                                                         <tr>
                                                             <td>1</td>
@@ -132,8 +128,6 @@ class ActiveClients extends React.Component {
                                                             <td>text text</td>
                                                             <td>Yes</td>
                                                             <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
                                                         </tr>
                                                         <tr>
                                                             <td>1</td>
@@ -141,8 +135,6 @@ class ActiveClients extends React.Component {
                                                             <td>Debit</td>
                                                             <td>text text</td>
                                                             <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
                                                             <td>30</td>
                                                         </tr>
                                                     </tbody>

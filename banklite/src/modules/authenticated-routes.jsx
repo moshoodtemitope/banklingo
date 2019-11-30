@@ -10,7 +10,12 @@ import ClientsExited from './clients/clients-exited'
 import ClientsBlacklisted from './clients/blacklisted'
 
 import LoansManagement from './loanmanagement'
+
 import DisbursementManagement from './disbursements'
+import InitiateDisbursement from './disbursements/initiate-disbursements'
+import DisbursementPendingApproval from './disbursements/pending-approval'
+import NipRequests from './disbursements/nip-request'
+
 import DepositManagement from './depositmanagement'
 import LoanTransactions from './loantransactions'
 import DepositTransactions from './deposittransactions'
@@ -29,7 +34,25 @@ import JournalEntries from './accountsmanagement/journal-entries'
 import ProfitAndLoss from './accountsmanagement/profit-loss'
 import BalanceSheet from './accountsmanagement/balance-sheet'
 
+
 import AdminManagement from './administration'
+
+import GeneralOrganization from './administration/general-organization'
+import GeneralCurrency from './administration/general-currency'
+import GeneralTxtChannels from './administration/general-txtchannels'
+import GeneralCustomerTypes from './administration/general-customertypes'
+import GeneralInternalControl from './administration/general-internalcontrol'
+import GeneralBranding from './administration/general-branding'
+
+import OrganizationBranches from './administration/organization-branches'
+import OrganizationCenters from './administration/organization-centers'
+
+import SMSSettings from './administration/sms-settings'
+import EmailSettings from './administration/email-settings'
+
+import ProductLoans from './administration/products-loans'
+import ProductDeposits from './administration/products-deposits'
+
 import PageNotFound from './pagenot-found'
 
 
@@ -61,7 +84,12 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/clients-blacklisted' render={(props) => <ClientsBlacklisted {...this.props} />} />
 
                         <Route exact path='/all-loans' render={(props) => <LoansManagement {...this.props} />} />
+
                         <Route exact path='/disbursements' render={(props) => <DisbursementManagement {...this.props} />} />
+                        <Route  path='/disbursements-initiate' render={(props) => <InitiateDisbursement {...this.props} />} />
+                        <Route  path='/disbursements-pending-approval' render={(props) => <DisbursementPendingApproval {...this.props} />} />
+                        <Route  path='/disbursements-nip-requests' render={(props) => <NipRequests {...this.props} />} />
+
                         <Route exact path='/deposits' render={(props) => <DepositManagement {...this.props} />} />
                         <Route exact path='/loan-transactions' render={(props) => <LoanTransactions {...this.props} />} />
                         <Route exact path='/deposit-transactions' render={(props) => <DepositTransactions {...this.props} />} />
@@ -81,6 +109,27 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/balancesheet' render={(props) => <BalanceSheet {...this.props} />} />
                         
                         <Route exact path='/administration'  render={(props) => <AdminManagement {...this.props} />} />
+                        {/* <Route exact path='/administration-generalorganization'  render={(props) => <GeneralOrganization {...this.props} />} /> */}
+                        <Route exact path='/administration/general'  render={(props) => <GeneralOrganization {...this.props} />} />
+                        <Route exact path='/administration/general/currency'  render={(props) => <GeneralCurrency {...this.props} />} />
+                        <Route exact path='/administration/general/txt-channels'  render={(props) => <GeneralTxtChannels {...this.props} />} />
+                        <Route exact path='/administration/general/customer-types'  render={(props) => <GeneralCustomerTypes {...this.props} />} />
+                        <Route exact path='/administration/general/control'  render={(props) => <GeneralInternalControl {...this.props} />} />
+                        <Route exact path='/administration/general/branding'  render={(props) => <GeneralBranding {...this.props} />} />
+
+                        
+                        {/* <Route exact path='/administration-generalorganization'  render={(props) => <GeneralOrganization {...this.props} />} /> */}
+                        <Route exact path='/administration/organization'  render={(props) => <OrganizationBranches {...this.props} />} />
+                        <Route exact path='/administration/organization/centers'  render={(props) => <OrganizationCenters {...this.props} />} />
+                        
+                        <Route exact path='/administration/sms'  render={(props) => <SMSSettings {...this.props} />} />
+                        <Route exact path='/administration/email'  render={(props) => <EmailSettings {...this.props} />} />
+                        
+                        <Route exact path='/administration/products'  render={(props) => <ProductLoans {...this.props} />} />
+                        <Route exact path='/administration/products/deposits'  render={(props) => <ProductDeposits {...this.props} />} />
+                        
+                        {/* <Route exact path='/administration/administration-generalcurrency'  render={(props) => <GeneralCurrency {...this.props} />} /> */}
+                        
                         <Route  render={(props) => <PageNotFound {...this.props} />} />
                     </Switch>
                     {/* <Route  path='/clients' component={ClientsManagement} /> */}

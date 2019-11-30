@@ -6,6 +6,7 @@ import {Fragment} from "react";
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+// import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import "./accountsmanagement.scss"; 
 
@@ -82,8 +83,14 @@ class AccountManagement extends React.Component {
                                         
                                         <div className="col-sm-12">
                                             <div className="middle-content">
+                                                <div className="sub-tabpills">
+                                                    <span className="sub-tabpill">All</span>
+                                                    <span className="sub-tabpill">Test</span>
+                                                    <span className="sub-tabpill">Test3</span>
+                                                </div>
                                                 <div className="heading-with-cta">
-                                                    <h3 className="section-title">Chart of Accounts</h3>
+                                                    {/* <h3 className="section-title">Chart of Accounts</h3> */}
+                                                    
                                                 </div>
                                                 <div className="pagination-wrap">
                                                     <label htmlFor="toshow">Show</label>

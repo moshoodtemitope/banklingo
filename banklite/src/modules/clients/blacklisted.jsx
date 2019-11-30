@@ -99,8 +99,7 @@ class ClientsBlacklisted extends React.Component {
                                                         <th>Customer State</th>
                                                         <th>Account Officer</th>
                                                         <th>Total Balance</th>
-                                                        <th>Pending Loan Amount</th>
-                                                        <th>Approved Loan Amount</th>
+                                                        <th>Completed Loan Cycles</th>
                                                         <th>Last modified</th>
                                                         </tr>
                                                     </thead>
@@ -113,6 +112,14 @@ class ClientsBlacklisted extends React.Component {
                                                             <td>Yes</td>
                                                             <td>30</td>
                                                             <td>30</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>023839</td>
+                                                            <td>Debit</td>
+                                                            <td>text text</td>
+                                                            <td>Yes</td>
+                                                            <td>30</td>
                                                             <td>30</td>
                                                         </tr>
                                                         <tr>
@@ -123,7 +130,6 @@ class ClientsBlacklisted extends React.Component {
                                                             <td>Yes</td>
                                                             <td>30</td>
                                                             <td>30</td>
-                                                            <td>30</td>
                                                         </tr>
                                                         <tr>
                                                             <td>1</td>
@@ -131,17 +137,6 @@ class ClientsBlacklisted extends React.Component {
                                                             <td>Debit</td>
                                                             <td>text text</td>
                                                             <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
                                                             <td>30</td>
                                                             <td>30</td>
                                                         </tr>

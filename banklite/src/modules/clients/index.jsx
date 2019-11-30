@@ -90,55 +90,50 @@ class ClientsManagement extends React.Component {
                                                 <TableComponent classnames="striped bordered hover">
                                                     <thead>
                                                         <tr>
+                                                        <th></th>
                                                         <th>Full Name</th>
                                                         <th>ID</th>
                                                         <th>Customer State</th>
                                                         <th>Account Officer</th>
                                                         <th>Total Balance</th>
-                                                        <th>Pending Loan Amount</th>
-                                                        <th>Approved Loan Amount</th>
                                                         <th>Last modified</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
+                                                            <td><input type="checkbox"/></td>
                                                             <td>1</td>
                                                             <td>023839</td>
                                                             <td>some text</td>
                                                             <td>text text</td>
                                                             <td>Yes</td>
                                                             <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
                                                         </tr>
                                                         <tr>
+                                                            <td><input type="checkbox"/></td>
                                                             <td>1</td>
                                                             <td>023839</td>
                                                             <td>Debit</td>
                                                             <td>text text</td>
                                                             <td>Yes</td>
                                                             <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
                                                         </tr>
                                                         <tr>
+                                                            <td><input type="checkbox"/></td>
                                                             <td>1</td>
                                                             <td>023839</td>
                                                             <td>Debit</td>
                                                             <td>text text</td>
                                                             <td>Yes</td>
                                                             <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
                                                         </tr>
                                                         <tr>
+                                                            <td><input type="checkbox"/></td>
                                                             <td>1</td>
                                                             <td>023839</td>
                                                             <td>Debit</td>
                                                             <td>text text</td>
                                                             <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
                                                             <td>30</td>
                                                         </tr>
                                                     </tbody>
