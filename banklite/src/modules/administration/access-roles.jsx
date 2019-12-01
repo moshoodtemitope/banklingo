@@ -107,7 +107,7 @@ class AccessRoles extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/access/edit-role'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -122,7 +122,7 @@ class AccessRoles extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/access/edit-role'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -137,7 +137,7 @@ class AccessRoles extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/access/edit-role'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -152,7 +152,7 @@ class AccessRoles extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/access/edit-role'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -160,7 +160,7 @@ class AccessRoles extends React.Component {
                                                     </tbody>
                                                 </TableComponent>
                                                 <div className="footer-with-cta toleft">
-                                                    <Button>Add Role</Button>
+                                                    <NavLink to={'/administration/access/new-role'} className="btn btn-primary">Add Role</NavLink>
                                                 </div>
                                             </div>
                                         </div>

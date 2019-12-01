@@ -61,7 +61,13 @@ import NewDepositsProduct from './administration/products-newdeposits-product'
 import EditADepositsProduct from './administration/products-editdeposits-product'
 
 import AccessRoles from './administration/access-roles'
+import CreateNewRole from './administration/access-newrole'
+import EditRole from './administration/access-editrole'
+
 import AccessUsers from './administration/access-users'
+import CreateNewUser from './administration/access-newuser'
+import EditUser from './administration/access-edituser'
+
 import AccessPreferences from './administration/access-preferences'
 import AccessAuth from './administration/access-authentication'
 
@@ -151,7 +157,13 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/administration/products/editloan-product'  render={(props) => <EditLoanProduct {...this.props} />} />
                         
                         <Route exact path='/administration/access'  render={(props) => <AccessRoles {...this.props} />} />
+                        <Route exact path='/administration/access/new-role'  render={(props) => <CreateNewRole {...this.props} />} />
+                        <Route exact path='/administration/access/edit-role'  render={(props) => <EditRole {...this.props} />} />
+                        
                         <Route exact path='/administration/access/users'  render={(props) => <AccessUsers {...this.props} />} />
+                        <Route exact path='/administration/access/new-user'  render={(props) => <CreateNewUser {...this.props} />} />
+                        <Route exact path='/administration/access/edit-user'  render={(props) => <EditUser {...this.props} />} />
+                        
                         <Route exact path='/administration/access/preferences'  render={(props) => <AccessPreferences {...this.props} />} />
                         <Route exact path='/administration/access/authentication'  render={(props) => <AccessAuth {...this.props} />} />
                         

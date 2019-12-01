@@ -65,7 +65,7 @@ class AccessUsers extends React.Component {
                                     <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>
-                                                <NavLink exact to={'/administration/access'}>Loans</NavLink>
+                                                <NavLink exact to={'/administration/access'}>Roles</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to={'/administration/access/users'}>Users</NavLink>
@@ -164,7 +164,7 @@ class AccessUsers extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Activate</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/access/edit-user'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -198,7 +198,7 @@ class AccessUsers extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Activate</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/access/edit-user'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -232,7 +232,7 @@ class AccessUsers extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    <Dropdown.Item eventKey="1">Activate</Dropdown.Item>
+                                                                    <NavLink className="dropdown-item" to={'/administration/access/edit-user'}>Edit</NavLink>
                                                                     <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
@@ -240,7 +240,7 @@ class AccessUsers extends React.Component {
                                                     </tbody>
                                                 </TableComponent>
                                                 <div className="footer-with-cta toleft">
-                                                    <Button>Create New User</Button>
+                                                <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
                                                 </div>
                                             </div>
                                         </div>

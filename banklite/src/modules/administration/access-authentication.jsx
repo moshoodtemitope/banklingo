@@ -64,7 +64,7 @@ class AccessAuth extends React.Component {
                                     <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>
-                                                <NavLink exact to={'/administration/access'}>Loans</NavLink>
+                                                <NavLink exact to={'/administration/access'}>Roles</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to={'/administration/access/users'}>Users</NavLink>

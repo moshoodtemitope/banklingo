@@ -425,3 +425,29 @@ span.hinttext {
         margin-left: 8px;
     }
 }
+
+.each-permissiongroup{
+    display: flex;
+    align-items: center;
+    input[type=checkbox]{
+        margin-left: 3px;
+        font-size: 13px;
+    }
+    label{
+        margin-bottom: 0;
+        margin-left: 5px;
+    }
+    .inner-permissions{
+        margin-left: 40px;
+        font-size: 13px;
+        .checkbox-wrap{
+            margin-bottom: 3px;
+        }
+    }
+    .accordion>.btn-link{
+        padding-right: 0;
+    }
+    .accordion>label{
+        font-size: 13px;
+    }
+}
