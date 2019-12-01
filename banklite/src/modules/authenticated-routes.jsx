@@ -57,6 +57,7 @@ import ProductLoans from './administration/products-loans'
 import NewLoanProduct from './administration/products-newloans'
 import EditLoanProduct from './administration/products-editloan'
 import ProductDeposits from './administration/products-deposits'
+import NewDepositsProduct from './administration/products-newdeposits-product'
 
 import AccessRoles from './administration/access-roles'
 import AccessUsers from './administration/access-users'
@@ -141,6 +142,7 @@ class AuthenticatedRoutes extends React.Component {
                         
                         <Route exact path='/administration/products'  render={(props) => <ProductLoans {...this.props} />} />
                         <Route exact path='/administration/products/deposits'  render={(props) => <ProductDeposits {...this.props} />} />
+                        <Route exact path='/administration/products/newdeposits-product'  render={(props) => <NewDepositsProduct {...this.props} />} />
                         <Route exact path='/administration/products/newloan-product'  render={(props) => <NewLoanProduct {...this.props} />} />
                         <Route exact path='/administration/products/editloan-product'  render={(props) => <EditLoanProduct {...this.props} />} />
                         

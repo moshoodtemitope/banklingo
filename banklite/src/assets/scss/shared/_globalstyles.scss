@@ -32,6 +32,12 @@ select, select.form-control{
     padding-top: 4px;
     margin-left: 10px;
 }
+.hint-text {
+    font-size: 11px;
+}
+.center-aligned{
+    align-items: center;
+}
 .heading-with-cta, .footer-with-cta {
     display: flex;
     justify-content: space-between;

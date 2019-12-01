@@ -8,7 +8,7 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
-import Select from 'react-select';
+// import Select from 'react-select';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import "./administration.scss"; 
@@ -203,70 +203,70 @@ class EditLoanProduct extends React.Component {
                                                         </Accordion.Toggle>
                                                         <Accordion.Collapse eventKey="0">
                                                             <div>
-                                                            <Form.Row>
-                                                                <Col>
-                                                                    <Form.Label className="block-level">Interest Calculation Method</Form.Label>
-                                                                    <span>Flat</span>
-                                                                </Col>
-                                                                <Col>
-                                                                    <Form.Label className="block-level">Accrued Interest Posting Frequency</Form.Label>
-                                                                    <span>On Repayment</span>
-                                                                </Col>
-                                                            </Form.Row>
                                                                 <Form.Row>
-                                                                    
                                                                     <Col>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-11" />
-                                                                            <label htmlFor="pick-11">Accrue Interest After Maturity</label>
-                                                                        </div>
+                                                                        <Form.Label className="block-level">Interest Calculation Method</Form.Label>
+                                                                        <span>Flat</span>
                                                                     </Col>
                                                                     <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                How is the Interest rate charged?
-                                                                            </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option>% per year</option>
-                                                                                <option>% per month</option>
-                                                                                <option>% per 4 weeks</option>
-                                                                                <option>% per week</option>
-                                                                                <option>% per day</option>
-                                                                            </Form.Control>
-                                                                        </div></Col>
+                                                                        <Form.Label className="block-level">Accrued Interest Posting Frequency</Form.Label>
+                                                                        <span>On Repayment</span>
+                                                                    </Col>
                                                                 </Form.Row>
+                                                                    <Form.Row>
+                                                                        
+                                                                        <Col>
+                                                                            <div className="checkbox-wrap">
+                                                                                <input type="checkbox" name="" id="pick-11" />
+                                                                                <label htmlFor="pick-11">Accrue Interest After Maturity</label>
+                                                                            </div>
+                                                                        </Col>
+                                                                        <Col>
+                                                                            <div className="each-formsection no-margins">
+                                                                                <Form.Label>
+                                                                                    How is the Interest rate charged?
+                                                                                </Form.Label>
+                                                                                <Form.Control as="select" size="sm">
+                                                                                    <option>% per year</option>
+                                                                                    <option>% per month</option>
+                                                                                    <option>% per 4 weeks</option>
+                                                                                    <option>% per week</option>
+                                                                                    <option>% per day</option>
+                                                                                </Form.Control>
+                                                                            </div></Col>
+                                                                    </Form.Row>
 
-                                                                <Form.Label>Interest Rate Constraints (%)</Form.Label>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Default</Form.Label>
-                                                                                <Form.Control type="text" value="1" />
-                                                                        </Form.Group>
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Min</Form.Label>
-                                                                                <Form.Control type="text" value="1"  />
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Max</Form.Label>
-                                                                                <Form.Control type="text" value="1"  />
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                                
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Days In Year</Form.Label>
-                                                                        <span>30E/360 ISDA (30/360 German)</span>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Repayments Interest Calculation</Form.Label>
-                                                                        <span>Using Repayment Periodicity</span>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                            </div>
+                                                                    <Form.Label>Interest Rate Constraints (%)</Form.Label>
+                                                                    <Form.Row>
+                                                                        <Col>
+                                                                            <Form.Group>
+                                                                                <Form.Label className="block-level">Default</Form.Label>
+                                                                                    <Form.Control type="text" value="1" />
+                                                                            </Form.Group>
+                                                                            <Form.Group>
+                                                                                <Form.Label className="block-level">Min</Form.Label>
+                                                                                    <Form.Control type="text" value="1"  />
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                        <Col>
+                                                                            <Form.Group>
+                                                                                <Form.Label className="block-level">Max</Form.Label>
+                                                                                    <Form.Control type="text" value="1"  />
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                    </Form.Row>
+                                                                    
+                                                                    <Form.Row>
+                                                                        <Col>
+                                                                            <Form.Label className="block-level">Days In Year</Form.Label>
+                                                                            <span>30E/360 ISDA (30/360 German)</span>
+                                                                        </Col>
+                                                                        <Col>
+                                                                            <Form.Label className="block-level">Repayments Interest Calculation</Form.Label>
+                                                                            <span>Using Repayment Periodicity</span>
+                                                                        </Col>
+                                                                    </Form.Row>
+                                                                </div>
                                                         </Accordion.Collapse>
                                                     </Accordion>
 
