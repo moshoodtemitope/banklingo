@@ -3,7 +3,7 @@ import * as React from "react";
 
 import {Fragment} from "react";
 
-import { NavLink} from 'react-router-dom';
+// import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 import Accordion from 'react-bootstrap/Accordion'
@@ -99,7 +99,7 @@ class NewTxtChannels extends React.Component {
                                                         </Accordion.Toggle>
                                                         <Accordion.Collapse eventKey="3">
                                                             <div>
-                                                                <div className="each-formsection two-sided">
+                                                                <div className="each-formsection ">
                                                                     <div className="checkbox-wrap">
                                                                         <input type="checkbox" name="" id="pick-1" />
                                                                         <label htmlFor="pick-1">All Users</label>

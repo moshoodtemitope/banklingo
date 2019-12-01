@@ -39,3 +39,34 @@
         margin-bottom: 0;
     }
 }
+.each-formsection.branchselection{
+    display: flex;
+    // flex-wrap: wrap;
+    align-items: center;
+    margin-top: 0;
+    select{
+        flex-basis: 70%;
+    }
+}
+.addedbranches {
+    border: 1px dashed #AED6F1;
+    padding: 10px;
+    .eachbranch{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #F2F4F4;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    .branchname {
+        font-size: 13px;
+    }
+    .removebranch {
+        width: 20px;
+        height: 9px;
+        padding: 1px 3px;
+        border: 5px solid #E74C3C;
+        background: #fff;
+    }
+}
