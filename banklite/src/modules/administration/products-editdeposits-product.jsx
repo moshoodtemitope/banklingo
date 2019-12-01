@@ -13,7 +13,7 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import "./administration.scss"; 
-class NewDepositsProduct extends React.Component {
+class EditADepositsProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -38,26 +38,20 @@ class NewDepositsProduct extends React.Component {
                                             <div className="full-pageforms w-60">
                                                 <Form className="form-content card">
                                                     <div className="form-heading">
-                                                        <h3>Creating A New Deposit Product</h3>
+                                                        <h3>Editing NIGTB 02-SEP-2019</h3>
                                                     </div>
                                                     <Form.Group>
                                                         <Form.Label className="block-level">Product</Form.Label>
-                                                            <Form.Control type="text" />
+                                                            <Form.Control type="text" value="NIGTB 02-SEP-2019" />
                                                     </Form.Group>
                                                     <Form.Row>
                                                         <Col>
                                                             <Form.Label className="block-level">ID</Form.Label>
-                                                            <Form.Control type="text" />
+                                                            <Form.Control type="text" value="NIGTB 02-SEP-2019" />
                                                         </Col>
                                                         <Col>
                                                             <Form.Label className="block-level">Product Type</Form.Label>
-                                                            <Form.Control as="select" size="sm">
-                                                                <option>Current Account</option>
-                                                                <option>Savings Account</option>
-                                                                <option>Fixed Deposit</option>
-                                                                <option>Savings Plan</option>
-                                                                <option>Funding Account</option>
-                                                            </Form.Control>
+                                                            <span>Fixed Depoisit</span>
                                                         </Col>
                                                     </Form.Row>
                                                     <Form.Label className="block-level">State</Form.Label>
@@ -65,7 +59,7 @@ class NewDepositsProduct extends React.Component {
                                                         <input type="checkbox" name="" id="pick-1" />
                                                         <label htmlFor="pick-1">Active</label>
                                                         <div className="hint-text">
-                                                            A transactional account where a customer may perform regular deposit and withdrawals, accrue interest and may optionally be allowed to go into overdraft.
+                                                            A type of deposit where an account is being opened with a certain balance and is fixed for a certain time period with a given interest rate after which point the customer may withdraw their money.
                                                         </div>
                                                     </div>
                                                     
@@ -77,6 +71,7 @@ class NewDepositsProduct extends React.Component {
                                                             <div className="each-formsection">
                                                                <Form.Group>
                                                                     <Form.Control as="textarea" rows="3" 
+                                                                        value="Simulation of TBills"
                                                                     />
                                                                </Form.Group>
                                                             </div>
@@ -137,20 +132,13 @@ class NewDepositsProduct extends React.Component {
                                                                 <Form.Row>
                                                                     <Col>
                                                                         <Form.Label className="block-level">ID Type</Form.Label>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option>Incremental Number</option>
-                                                                            <option>Random Pattern</option>
-                                                                        </Form.Control>
+                                                                        <span>Random Pattern</span>
+                                                                        
                                                                     </Col>
                                                                     <Col>
-                                                                         <Form.Group>
-                                                                            <Form.Label className="block-level">Using template</Form.Label>
-                                                                                <Form.Control type="text" value="@@@@###" />
-                                                                        </Form.Group>
-                                                                        {/* if Incremental is selected */}
                                                                         <Form.Group>
-                                                                            <Form.Label className="block-level">Starting from</Form.Label>
-                                                                                <Form.Control type="text"  />
+                                                                            <Form.Label className="block-level">Using</Form.Label>
+                                                                                <Form.Control type="text" value="NIGTB@@@@###" />
                                                                         </Form.Group>
                                                                     </Col>
                                                                 </Form.Row>
@@ -177,14 +165,14 @@ class NewDepositsProduct extends React.Component {
                                                         </Accordion.Collapse>
                                                     </Accordion>
 
-                                                    <Accordion >
+                                                    <Accordion>
                                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                                             Interest Rate
                                                         </Accordion.Toggle>
                                                         <Accordion.Collapse eventKey="0">
                                                             <div>
                                                                 <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-11" />
+                                                                    <input type="checkbox" name="" id="pick-11" disabled />
                                                                     <label htmlFor="pick-11">Interest paid into account</label>
                                                                 </div>
                                                                 {/* If Interest paid is checked */}
@@ -224,43 +212,23 @@ class NewDepositsProduct extends React.Component {
                                                                             <Col>
                                                                                 <Form.Group>
                                                                                     <Form.Label className="block-level">Default</Form.Label>
-                                                                                        <Form.Control type="text"  />
+                                                                                        <Form.Control type="text" value="2" />
                                                                                 </Form.Group>
                                                                                 <Form.Group>
                                                                                     <Form.Label className="block-level">Min</Form.Label>
-                                                                                        <Form.Control type="text"   />
+                                                                                        <Form.Control type="text" value="5"  />
                                                                                 </Form.Group>
                                                                             </Col>
                                                                             <Col>
                                                                                 <Form.Group>
                                                                                     <Form.Label className="block-level">Max</Form.Label>
-                                                                                        <Form.Control type="text"   />
+                                                                                        <Form.Control type="text" value="2"  />
                                                                                 </Form.Group>
                                                                             </Col>
                                                                         </Form.Row>
                                                                         {/* if fixed is selected from rate terms */}
 
-                                                                     {/* if fixed is NOT selected from rate terms */}
-                                                                    <Form.Group as={Row} className="center-aligned">
-
-                                                                        <Form.Label column sm={2} className="block-level">Tier 1</Form.Label>
-                                                                        <Col sm={2}>
-                                                                            <Form.Control type="text" size="sm" />
-                                                                        </Col>
-                                                                        <Form.Label column sm={1} className="block-level">to</Form.Label>
-                                                                        <Col sm={2}>
-                                                                            <Form.Control type="text" size="sm" />
-                                                                        </Col>
-                                                                        <Form.Label column sm={2} className="block-level">days</Form.Label>
-                                                                        <Col sm={2}>
-                                                                            <Form.Control type="text" size="sm" />
-                                                                        </Col>
-                                                                        <Form.Label column sm={2} className="block-level">% per 4weeks</Form.Label>
-                                                                        <div className="add-new">
-                                                                            <img alt="add" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqElEQVR42sWT3Q6CMAyF+5K8ragENsfPNkUT9Zrn2Mq6BLihQITEJr1ZTr+22SlACGvbREjVpZcMT+frYpJG3FRHNTAUbymcA0UIdeZEjTZY1pqF0CTAdZeqQu89OucwywU7BXB0be44BME43bGAQiqsws6U7893BLTP1/hOmlmAsY+481qQhqY7HrB7hf/9Am+kcpuRlqxcRys3vJVD7f5j+umc5XTOPaW2ScUMEqMjAAAAAElFTkSuQmCC" width="16" height="16"/>
-                                                                        </div>
-                                                                    </Form.Group>
-                                                                    {/* if fixed is NOT selected from rate terms */}
+                                                                     
 
                                                                     <Form.Row>
                                                                         
@@ -294,9 +262,18 @@ class NewDepositsProduct extends React.Component {
                                                                     </Form.Row>
 
                                                                     <Form.Row>
-                                                                        
+                                                                        {/* if End of day balance is selected */}
                                                                         <Col>
-                                                                            <div className="each-formsection no-margins w-40">
+                                                                            <div className="each-formsection no-margins">
+                                                                                <Form.Label>
+                                                                                    Maximum Balance used for Interest Calculation (CFA)
+                                                                                </Form.Label>
+                                                                                <Form.Control as="select" size="sm"/>
+                                                                            </div>
+                                                                        </Col>
+                                                                        {/* if End of day balance is selected */}
+                                                                        <Col>
+                                                                            <div className="each-formsection no-margins">
                                                                                 <Form.Label>
                                                                                     Days In Year
                                                                                 </Form.Label>
@@ -316,156 +293,86 @@ class NewDepositsProduct extends React.Component {
                                                         </Accordion.Collapse>
                                                     </Accordion>
 
-                                                    <Accordion  >
+
+                                                    <Accordion >
                                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Deposits and Withdrawals
+                                                            Opening Balance
                                                         </Accordion.Toggle>
                                                         <Accordion.Collapse eventKey="0">
                                                             <div>
                                                                 <Form.Row>
                                                                     <Col>
-                                                                        <Form.Label className="block-level">Recommended Deposit Amount</Form.Label>
-                                                                        <Form.Control type="text"  />
-                                                                        <span>CFA</span>
+                                                                        <Form.Group>
+                                                                            <Form.Label className="block-level">Default Opening Balance (CFA) </Form.Label>
+                                                                             <Form.Control type="text"  />
+                                                                        </Form.Group>
+                                                                        <Form.Group>
+                                                                            <Form.Label className="block-level">Min Opening Balance (CFA)</Form.Label>
+                                                                                <Form.Control type="text" />
+                                                                        </Form.Group>
                                                                     </Col>
                                                                     <Col>
                                                                         <Form.Group>
-                                                                            <Form.Label className="block-level">Maximum Withdrawal Amount</Form.Label>
-                                                                            <Form.Control type="text"  />
-                                                                            <span>CFA</span>
+                                                                            <Form.Label className="block-level">Max Opening Balance (CFA)</Form.Label>
+                                                                                <Form.Control type="text"  />
                                                                         </Form.Group>
                                                                     </Col>
                                                                 </Form.Row>
-                                                                
-                                                                
+                                                                        {/* if fixed is selected from rate terms */}
+
+
+                                                                {/* If Interest paid is checked */}
                                                             </div>
                                                         </Accordion.Collapse>
                                                     </Accordion>
 
                                                     <Accordion >
                                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Overdraft Conditions
+                                                            Term Length
                                                         </Accordion.Toggle>
                                                         <Accordion.Collapse eventKey="0">
                                                             <div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-81" />
-                                                                    <label htmlFor="pick-81">Allow Overdrafts</label>
-                                                                </div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-34" />
-                                                                    <label htmlFor="pick-34">Allow Technical Overdrafts</label>
-                                                                </div>
                                                                 <Form.Row>
-
                                                                     <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                Interest Rate Terms
-                                                                        </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option value="FIXED">Fixed</option>
-                                                                                <option value="TIERED">Tiered per Balance</option>
-                                                                            </Form.Control>
-                                                                        </div>
+                                                                        <Form.Group>
+                                                                            <Form.Label className="block-level">Default Term Length</Form.Label>
+                                                                             <Form.Control type="text"  />
+                                                                        </Form.Group>
+                                                                        
                                                                     </Col>
                                                                     <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                How is the Interest rate charged?
-                                                                        </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option value="ANNUALIZED">% per year</option>
-                                                                                <option value="EVERY_MONTH">% per month</option>
-                                                                                <option value="EVERY_FOUR_WEEKS">% per 4 weeks</option>
-                                                                                <option value="EVERY_WEEK">% per week</option>
-                                                                                <option value="EVERY_X_DAYS" selected>% per X days</option>
-                                                                            </Form.Control>
-                                                                        </div>
+                                                                        <Form.Group>
+                                                                            <Form.Label className="block-level">Min Term Length</Form.Label>
+                                                                                <Form.Control type="text" />
+                                                                        </Form.Group>
                                                                     </Col>
                                                                 </Form.Row>
-                                                                {/* if Fixed Interest Rate Terms is selected */}
-                                                                <Form.Label>Interest Rate Constraints (%)</Form.Label>
                                                                 <Form.Row>
                                                                     <Col>
                                                                         <Form.Group>
-                                                                            <Form.Label className="block-level">Default</Form.Label>
-                                                                            <Form.Control type="text" />
-                                                                        </Form.Group>
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Min</Form.Label>
-                                                                            <Form.Control type="text" />
+                                                                            <Form.Label className="block-level">Max Term Length</Form.Label>
+                                                                            <Form.Control type="text"  />
                                                                         </Form.Group>
                                                                     </Col>
                                                                     <Col>
                                                                         <Form.Group>
-                                                                            <Form.Label className="block-level">Max</Form.Label>
-                                                                            <Form.Control type="text" />
+                                                                            <Form.Control as="select" size="sm">
+                                                                            <option selected value="DAYS">days</option>
+                                                                            <option value="WEEKS">weeks</option>
+                                                                            <option value="MONTHS">months</option>
+                                                                            </Form.Control>
                                                                         </Form.Group>
                                                                     </Col>
                                                                 </Form.Row>
-                                                                {/* if Fixed Interest Rate Terms is selected */}
-
-                                                                {/* if Tiered per Balance Interest Rate Terms is selected */}
-
-                                                                <Form.Group as={Row} className="center-aligned">
-
-                                                                    <Form.Label column sm={2} className="block-level">Tier 1</Form.Label>
-                                                                    <Col sm={2}>
-                                                                        <Form.Control type="text" size="sm" value="0.00" />
-                                                                    </Col>
-                                                                    <Form.Label column sm={1} className="block-level">to</Form.Label>
-                                                                    <Col sm={2}>
-                                                                        <Form.Control type="text" size="sm" value="0.00" />
-                                                                    </Col>
-                                                                    <Form.Label column sm={2} className="block-level">days</Form.Label>
-                                                                    <Col sm={2}>
-                                                                        <Form.Control type="text" size="sm" />
-                                                                    </Col>
-                                                                    <Form.Label column sm={2} className="block-level">% per 4weeks</Form.Label>
-                                                                    <div className="add-new">
-                                                                        <img alt="add" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqElEQVR42sWT3Q6CMAyF+5K8ragENsfPNkUT9Zrn2Mq6BLihQITEJr1ZTr+22SlACGvbREjVpZcMT+frYpJG3FRHNTAUbymcA0UIdeZEjTZY1pqF0CTAdZeqQu89OucwywU7BXB0be44BME43bGAQiqsws6U7893BLTP1/hOmlmAsY+481qQhqY7HrB7hf/9Am+kcpuRlqxcRys3vJVD7f5j+umc5XTOPaW2ScUMEqMjAAAAAElFTkSuQmCC" width="16" height="16" />
-                                                                    </div>
-                                                                </Form.Group>
-
-                                                                <Form.Group className="w-40">
-                                                                    <Form.Label className="block-level">Max Overdraft Limit (₦)</Form.Label>
-                                                                    <Form.Control type="text" />
-                                                                </Form.Group>
-
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                Days In Year
-                                                                        </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option value="ACTUAL_365_FIXED">Actual/365 Fixed (365 days)</option>
-                                                                                <option value="ACTUAL_360">Actual/360 (360 days)</option>
-                                                                                <option value="ACTUAL_ACTUAL_ISDA">Actual/Actual ISDA</option>
-                                                                                <option value="E30_360">30E/360 ISDA (30/360 German)</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                Accounts managed under Credit Arrangement
-                                                                        </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option value="OPTIONAL">Optional</option>
-                                                                                <option value="REQUIRED">Required</option>
-                                                                                <option value="NOT_REQUIRED">No</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Form.Row>
+                                                                        {/* if fixed is selected from rate terms */}
 
 
-
+                                                                {/* If Interest paid is checked */}
                                                             </div>
                                                         </Accordion.Collapse>
                                                     </Accordion>
+
+                         
 
                                                     
                                                     <Accordion >
@@ -492,20 +399,20 @@ class NewDepositsProduct extends React.Component {
                                                             <div>
                                                                 <Form.Row>
                                                                     <Col>
-                                                                    <div className="checkbox-wrap">
-                                                                        <input type="checkbox" name="" id="pick-29" />
-                                                                        <label htmlFor="pick-29">Allow Arbitrary Fees</label>
-                                                                    </div>
+                                                                        <div className="checkbox-wrap">
+                                                                            <input type="checkbox" name="" id="pick-29" />
+                                                                            <label htmlFor="pick-29">Allow Arbitrary Fees</label>
+                                                                        </div>
                                                                     </Col>
                                                                     <Col>
                                                                         <div className="checkbox-wrap">
                                                                             <input type="checkbox" name="" id="pick-2c" />
                                                                             <label htmlFor="pick-1">Show Inactive Fees</label>
-                                                                            <Button variant="secondary"  className="grayed-out custom">Add Fee</Button>
+                                                                            <Button variant="secondary" className="grayed-out custom">Add Fee</Button>
                                                                         </div>
                                                                     </Col>
                                                                 </Form.Row>
-                                                               
+
                                                                 <div className="new-fee-wrap">
                                                                     <Form.Row>
                                                                         <Col>
@@ -530,22 +437,36 @@ class NewDepositsProduct extends React.Component {
                                                                             <Form.Control type="text" />
                                                                             <span>CFA</span>
                                                                         </Col>
-                                                                        
+
                                                                     </Form.Row>
-                                                                    {/* If monthly fee is selected */}
-                                                                    <Form.Group className="w-50">
-                                                                        <Form.Label className="block-level">Apply Date Method</Form.Label>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option>Monthly from Activation</option>
-                                                                            <option>First Day of Every Month</option>
-                                                                        </Form.Control>
+                                                                    <Form.Group as={Row} className="center-aligned">
+                                                                        <Form.Label column sm={4} className="block-level">Fee Income</Form.Label>
+                                                                        <Col sm={6}>
+                                                                            <Form.Control as="select" size="sm">
+                                                                                <option value="">----------</option>
+                                                                                <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
+                                                                                <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
+                                                                                <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
+                                                                                <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
+                                                                                <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
+                                                                                <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
+                                                                                <option value="110100106">110100106 - CASH IMPREST - EPE</option>
+                                                                                <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
+                                                                                <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
+                                                                                <option value="110101002">110101002 - Branch Suspense Account</option>
+                                                                                <option value="112010001">112010001 - BALANCE WITH CBN</option>
+                                                                            </Form.Control>
+                                                                        </Col>
+                                                                        <Col sm={2}>
+                                                                            <span>Any GL Account</span>
+                                                                        </Col>
                                                                     </Form.Group>
-                                                                     {/* If monthly fee is selected */}
-                                                                    
+
+
 
                                                                 </div>
-                                                                 
-                                                                
+
+
                                                             </div>
                                                         </Accordion.Collapse>
                                                     </Accordion>
@@ -789,4 +710,4 @@ class NewDepositsProduct extends React.Component {
     }
 }
 
-export default NewDepositsProduct;
+export default EditADepositsProduct;
