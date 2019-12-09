@@ -8,10 +8,12 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  CustomerHeading from './customerheader'
 import Tab from 'react-bootstrap/Tab'
 import Nav from 'react-bootstrap/Nav'
-// import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-// import Dropdown from 'react-bootstrap/Dropdown'
-// import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 // import  SidebarElement from '../../shared/elements/sidebar'
 // import "./administration.scss"; 
@@ -19,10 +21,206 @@ class ViewSavingsAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            showSetDeposit:false,
+            showSetMaxWithdrawal:false,
+            showChangeAccountState:false,
+            showChangeHistory:false,
         }
 
         
+    }
+    handleSetDepositClose = () => this.setState({showSetDeposit:false});
+    
+    handleSetDepositShow = () => this.setState({showSetDeposit:true});
+
+    handleSetMaxWithdrawalClose = () => this.setState({showSetMaxWithdrawal:false});
+    
+    handleSetMaxWithdrawalShow = () => this.setState({showSetMaxWithdrawal:true});
+
+    handleChangeAccountStateModalClose = () => this.setState({showChangeAccountState:false});
+    
+    handleChangeAccountStateModalShow = () => this.setState({showChangeAccountState:true});
+
+    handleChangeHistoryClose = () => this.setState({showChangeHistory:false});
+    
+    handleChangeHistoryShow = () => this.setState({showChangeHistory:true});
+
+    setDepositBox = ()=>{
+        const {showSetDeposit} = this.state;
+        return(
+            <Modal show={showSetDeposit} onHide={this.handleSetDepositClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+                <Modal.Header>
+                    <Modal.Title>Recommended Deposit Amount</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Row>
+                            <Col>
+                                <Form.Label className="block-level">Recommended Deposit Amount (₦)</Form.Label>
+                                {/* Search dropdown of staff list */}
+                                <Form.Control type="text"  />
+                            </Col>
+                            <Col className="date-wrap">
+                            </Col>
+                        </Form.Row>
+                        <Form.Group controlId="debitLocation">
+                            <Form.Label className="block-level">Notes</Form.Label>
+                            <Form.Control as="textarea" rows="2" />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    
+                    <Button variant="light" onClick={this.handleSetDepositClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="secondary">
+                        Save Changes
+                    </Button>
+                
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
+    setMaxWithdrawalBox = ()=>{
+        const {showSetMaxWithdrawal} = this.state;
+        return(
+            <Modal show={showSetMaxWithdrawal} onHide={this.handleSetMaxWithdrawalClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+                <Modal.Header>
+                    <Modal.Title>Maximum Withdrawal Amount</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Row>
+                            <Col>
+                                <Form.Label className="block-level">Maximum Withdrawal Amount (₦)</Form.Label>
+                                {/* Search dropdown of staff list */}
+                                <Form.Control type="text"  />
+                            </Col>
+                            <Col className="date-wrap">
+                            </Col>
+                        </Form.Row>
+                        <Form.Group controlId="debitLocation">
+                            <Form.Label className="block-level">Notes</Form.Label>
+                            <Form.Control as="textarea" rows="2" />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    
+                    <Button variant="light" onClick={this.handleSetMaxWithdrawalClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="secondary">
+                        Save Changes
+                    </Button>
+                
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
+    changeAccountStateBox = ()=>{
+        const {showChangeAccountState} = this.state;
+        return(
+            <Modal show={showChangeAccountState} onHide={this.handleChangeAccountStateModalClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+                <Modal.Header>
+                    <Modal.Title>Changing Account State</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Row>
+                            <Col>
+                                <Form.Label className="block-level">Previous State</Form.Label>
+                                <span className="form-text">Active</span>
+                            </Col>
+                            <Col>
+                                <Form.Label className="block-level">New State</Form.Label>
+                                {/* Display clicked state here closed or locked */}
+                                <span className="form-text">Closed</span>
+                            </Col>
+                        </Form.Row>
+                        <Form.Group controlId="debitLocation">
+                            <Form.Label className="block-level">Comments</Form.Label>
+                            <Form.Control as="textarea" rows="2" />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    
+                    <Button variant="light" onClick={this.handleChangeAccountStateModalClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="secondary">
+                        Change Status
+                    </Button>
+                
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
+    changeHistoryBox = ()=>{
+        const {showChangeHistory} = this.state;
+        return(
+            <Modal show={showChangeHistory} onHide={this.handleChangeHistoryClose} size="lg" centered="true" dialogClassName="modal-45w withcentered-heading"  animation={false}>
+                <Modal.Header>
+                    <Modal.Title>History Change Log</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <div className="select-wrap w-40">
+                            <label>Changed Fields</label>
+                            <select className="form-control form-control-sm w-20" name="" id="">
+                                <option value="">All</option>
+                            </select>
+                        </div>
+                        
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Change</th>
+                                    <th>Original Value</th>
+                                    <th>New Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p>Employer</p>
+                                        <small>Daniel Ugheghe</small>
+                                        <small>11-09-2019 15:20:24</small>
+                                    </td>
+                                    <td></td>
+                                    <td>ADMINISTRATIVE STAFF COLLEGE OF NIGERIA</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>Employer Category</p>
+                                        <small>API</small>
+                                        <small>11-09-2019 15:20:24</small>
+                                    </td>
+                                    <td>-</td>
+                                    <td>GENERAL</td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    
+                    <Button variant="light" onClick={this.handleChangeHistoryClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="secondary">
+                        Save Changes
+                    </Button>
+                
+                </Modal.Footer>
+            </Modal>
+        )
     }
     
 
@@ -32,6 +230,10 @@ class ViewSavingsAccount extends React.Component {
             <Fragment>
                 <InnerPageContainer {...this.props}>
                     <div className="content-wrapper">
+                        {this.setDepositBox()}
+                        {this.changeAccountStateBox()}
+                        {this.setMaxWithdrawalBox()}
+                        {this.changeHistoryBox()}
                         <CustomerHeading {...this.props}/>
                         <div className="module-content">
                                 <div className="content-container">
@@ -39,7 +241,43 @@ class ViewSavingsAccount extends React.Component {
                                         
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                            <div className="customerprofile-tabs">
+                                                <div className="heading-ctas">
+                                                    <ul className="nav">
+                                                        <li>
+                                                            <Button size="sm">Deposit</Button>
+                                                        </li>
+                                                        <li>
+                                                            <DropdownButton
+                                                                size="sm"
+                                                                title="Close"
+                                                                key="inActiveCurrency"
+                                                                className="customone"
+                                                                alignRight
+                                                            >
+                                                               <Dropdown.Item eventKey="1" onClick={this.handleChangeAccountStateModalShow} >Close</Dropdown.Item>
+                                                                
+                                                            </DropdownButton>
+                                                        </li>
+                                                        <li>
+                                                            <DropdownButton
+                                                                size="sm"
+                                                                title="More"
+                                                                key="inActiveCurrency"
+                                                                className="customone"
+                                                                alignRight
+                                                            >
+                                                                <Dropdown.Item eventKey="1">Apply Fee</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="1">Add Field</Dropdown.Item>
+                                                                <NavLink className="dropdown-item" to='/editcustomer'>Edit Account</NavLink>
+                                                                <Dropdown.Item eventKey="1" onClick={this.handleSetDepositShow}>Set Recommended Deposit</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="1" onClick={this.handleSetMaxWithdrawalShow}>Set Max Withdrawal Amount</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="1" onClick={this.handleChangeHistoryShow}>View Change History</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="1" onClick={this.handleChangeAccountStateModalShow}>Lock Deposit Account</Dropdown.Item>
+                                                            </DropdownButton>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div className="customerprofile-tabs">
                                                     <Tab.Container  defaultActiveKey="details">
                                                         
                                                         <Nav variant="pills" >

@@ -16,7 +16,7 @@ import Button from 'react-bootstrap/Button'
 import  TableComponent from '../../shared/elements/table'
 // import  SidebarElement from '../../shared/elements/sidebar'
 // import "./administration.scss"; 
-class ViewLoanAccount extends React.Component {
+class ViewClosedAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -28,7 +28,7 @@ class ViewLoanAccount extends React.Component {
     
 
     render() {
-        
+        console.log('props are', this.props)
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -71,20 +71,8 @@ class ViewLoanAccount extends React.Component {
                                                             <Tab.Pane eventKey="details">
                                                                 <div className="amounts-wrap w-65">
                                                                     <div className="eachamount">
-                                                                        <h6>Total Balance</h6>
-                                                                        <div className="amounttext">₦1,336,928.00</div>
-                                                                    </div>
-                                                                    <div className="eachamount">
-                                                                        <h6>Total Due</h6>
-                                                                        <div className="amounttext">₦997,261.36</div>
-                                                                    </div>
-                                                                    <div className="eachamount">
-                                                                        <h6>Days In Arrears</h6>
-                                                                        <div className="amounttext">225</div>
-                                                                    </div>
-                                                                    <div className="eachamount">
-                                                                        <h6>Days Late</h6>
-                                                                        <div className="amounttext">228</div>
+                                                                        <h6>Account State</h6>
+                                                                        <div className="amounttext">Closed (Written Off)</div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="overview-wrap">
@@ -378,4 +366,4 @@ class ViewLoanAccount extends React.Component {
     }
 }
 
-export default ViewLoanAccount;
+export default ViewClosedAccount;

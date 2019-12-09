@@ -19,7 +19,7 @@ class ViewCustomer extends React.Component {
         this.state={
             user:''
         }
-
+        // console.log('props are', this.props.match.params)
     }
     
 

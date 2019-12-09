@@ -86,6 +86,8 @@ import NewInvestmentCustomerAccount from './viewcustomer/new-investmentcustomer'
 
 import ViewLoanAccount from './viewcustomer/viewloanaccount'
 import ViewSavingsAccount from './viewcustomer/viewsavingsaccount'
+import ViewClosedAccounts from './viewcustomer/viewallclosedaccounts'
+import ViewClosedAccount from './viewcustomer/viewclosedaccount'
 
 import PageNotFound from './pagenot-found'
 
@@ -194,9 +196,11 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/customer/:id/tasks'  render={(props) => <ViewCustomerTasks customerId={props.match.params.id} {...this.props} />} />
                         <Route exact path='/customer/:id/communications'  render={(props) => <ViewCustomerCommunications customerId={props.match.params.id} {...this.props} />} />
                         <Route exact path='/customer/:id/comments'  render={(props) => <ViewCustomerComments customerId={props.match.params.id} {...this.props} />} />
+                        <Route exact path='/customer/:id/closedaccounts'  render={(props) => <ViewClosedAccounts customerId={props.match.params.id} {...this.props} />} />
                         
                         <Route exact path='/customer/:id/loanaccount/:loanid'  render={(props) => <ViewLoanAccount loanId={props.match.params.loanid} customerId={props.match.params.id} {...this.props} />} />
                         <Route exact path='/customer/:id/savingsaccount/:accountid'  render={(props) => <ViewSavingsAccount accountId={props.match.params.accountid} customerId={props.match.params.id} {...this.props} />} />
+                        <Route exact path='/customer/:id/closedaccounts/:accountid'  render={(props) => <ViewClosedAccount accountId={props.match.params.accountid} customerId={props.match.params.id} {...this.props} />} />
                         
                         {/* <Route exact path='/administration/administration-generalcurrency'  render={(props) => <GeneralCurrency {...this.props} />} /> */}
                         

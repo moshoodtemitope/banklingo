@@ -33,6 +33,7 @@ class CustomerHeading extends React.Component {
                 loanaccount: `/customer/${this.props.customerId}/loanaccount/348046272`,
                 // savingsaccount: `/customer/${this.props.customerId}/savingsaccount/${this.props.accountid}`,
                 savingsaccount: `/customer/${this.props.customerId}/savingsaccount/77339322`,
+                allclosedaccounts: `/customer/${this.props.customerId}/closedaccounts`,
             },
             showNewTask:false,
             showSetNotification:false,
@@ -340,6 +341,9 @@ class CustomerHeading extends React.Component {
                                         </li>
                                         <li>
                                             <NavLink to={generatedRoutes.savingsaccount}>Settlement Account 77339322</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={generatedRoutes.allclosedaccounts}>Closed Accounts (1)</NavLink>
                                         </li>
                                         <li>
                                             <NavLink to={generatedRoutes.attachments}>Attachments</NavLink>
