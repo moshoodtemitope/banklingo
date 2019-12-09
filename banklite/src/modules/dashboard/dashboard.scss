@@ -1,1 +1,24 @@
 @import "../../assets/scss/shared/colors";
+@import "../../assets/scss/shared/globalstyles";
+
+.all-stats-wrap {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.each-stat {
+    flex-basis: 33.33%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 10px;
+    .stat-data{
+        text-align: center;
+        h4.stat-value {
+            font-weight: 600;
+        }
+        span.stat-text {
+            font-size: 12px;
+        }
+    }
+}

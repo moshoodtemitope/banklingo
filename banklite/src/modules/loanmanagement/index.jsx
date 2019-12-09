@@ -3,7 +3,7 @@ import * as React from "react";
 
 import {Fragment} from "react";
 
-
+import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import Button from 'react-bootstrap/Button'
@@ -66,48 +66,48 @@ class LoansManagement extends React.Component {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>some text</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            <td><NavLink to={'/customer/464738/loanaccount/348046272'}>MoneyPal</NavLink></td>
+                                                            <td><NavLink to={'/customer/464738'}>464738</NavLink></td>
+                                                            <td><NavLink to={'/customer/464738'}>Matt Randuks</NavLink></td>
+                                                            <td>Active</td>
+                                                            <td>₦40,000</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>16-09-2019</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            <td><NavLink to={'/customer/464738/loanaccount/348046272'}>MoneyPal</NavLink></td>
+                                                            <td><NavLink to={'/customer/73633'}>73633</NavLink></td>
+                                                            <td><NavLink to={'/customer/73633'}>Joshua Wale</NavLink></td>
+                                                            <td>Closed</td>
+                                                            <td>₦30,000</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>26-08-2019</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            <td><NavLink to={'/customer/464738/loanaccount/348046272'}>MoneyPal</NavLink></td>
+                                                            <td><NavLink to={'/customer/35223'}>35223</NavLink></td>
+                                                            <td><NavLink to={'/customer/35223'}>Dan Jones</NavLink></td>
+                                                            <td>Rejected</td>
+                                                            <td>₦100,000</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>16-07-20190</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            <td><NavLink to={'/customer/464738/loanaccount/348046272'}>MoneyPal</NavLink></td>
+                                                            <td><NavLink to={'/customer/33939'}>33939</NavLink></td>
+                                                            <td><NavLink to={'/customer/33939'}>Mark Jones</NavLink></td>
+                                                            <td>Closed(Written Off)</td>
+                                                            <td>₦400,000</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>3₦0.000</td>
+                                                            <td>30-07-2019</td>
                                                         </tr>
                                                     </tbody>
                                                 </TableComponent>

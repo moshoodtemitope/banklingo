@@ -10,6 +10,7 @@ import ClientsExited from './clients/clients-exited'
 import ClientsBlacklisted from './clients/blacklisted'
 
 import LoansManagement from './loanmanagement'
+import NewLoanAccount from './loanmanagement/newloanaccount'
 
 import DisbursementManagement from './disbursements'
 import InitiateDisbursement from './disbursements/initiate-disbursements'
@@ -17,6 +18,8 @@ import DisbursementPendingApproval from './disbursements/pending-approval'
 import NipRequests from './disbursements/nip-request'
 
 import DepositManagement from './depositmanagement'
+import NewDepositAccount from './depositmanagement/newdepositaccount'
+
 import LoanTransactions from './loantransactions'
 import DepositTransactions from './deposittransactions'
 import Activties from './activities'
@@ -71,6 +74,19 @@ import EditUser from './administration/access-edituser'
 import AccessPreferences from './administration/access-preferences'
 import AccessAuth from './administration/access-authentication'
 
+
+import ViewCustomer from './viewcustomer'
+import ViewCustomerAttachments from './viewcustomer/attachments'
+import ViewCustomerComments from './viewcustomer/comments'
+import ViewCustomerCommunications from './viewcustomer/communications'
+import ViewCustomerTasks from './viewcustomer/tasks'
+import NewCustomerAccount from './viewcustomer/newcustomer'
+import EditCustomerAccount from './viewcustomer/editcustomer'
+import NewInvestmentCustomerAccount from './viewcustomer/new-investmentcustomer'
+
+import ViewLoanAccount from './viewcustomer/viewloanaccount'
+import ViewSavingsAccount from './viewcustomer/viewsavingsaccount'
+
 import PageNotFound from './pagenot-found'
 
 
@@ -103,6 +119,7 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/clients-blacklisted' render={(props) => <ClientsBlacklisted {...this.props} />} />
 
                         <Route exact path='/all-loans' render={(props) => <LoansManagement {...this.props} />} />
+                        <Route exact path='/all-loans/newloan-account' render={(props) => <NewLoanAccount {...this.props} />} />
 
                         <Route exact path='/disbursements' render={(props) => <DisbursementManagement {...this.props} />} />
                         <Route  path='/disbursements-initiate' render={(props) => <InitiateDisbursement {...this.props} />} />
@@ -110,6 +127,8 @@ class AuthenticatedRoutes extends React.Component {
                         <Route  path='/disbursements-nip-requests' render={(props) => <NipRequests {...this.props} />} />
 
                         <Route exact path='/deposits' render={(props) => <DepositManagement {...this.props} />} />
+                        <Route exact path='/deposits/newaccount' render={(props) => <NewDepositAccount {...this.props} />} />
+                        
                         <Route exact path='/loan-transactions' render={(props) => <LoanTransactions {...this.props} />} />
                         <Route exact path='/deposit-transactions' render={(props) => <DepositTransactions {...this.props} />} />
                         <Route exact path='/activities' render={(props) => <Activties {...this.props} />} />
@@ -166,6 +185,18 @@ class AuthenticatedRoutes extends React.Component {
                         
                         <Route exact path='/administration/access/preferences'  render={(props) => <AccessPreferences {...this.props} />} />
                         <Route exact path='/administration/access/authentication'  render={(props) => <AccessAuth {...this.props} />} />
+                        
+                        <Route exact path='/customer/:id'  render={(props) => <ViewCustomer customerId={props.match.params.id} {...this.props} />} />
+                        <Route exact path='/createnewcustomer'  render={(props) => <NewCustomerAccount {...this.props} />} />
+                        <Route exact path='/create-investmentcustomer'  render={(props) => <NewInvestmentCustomerAccount {...this.props} />} />
+                        <Route exact path='/editcustomer'  render={(props) => <EditCustomerAccount {...this.props} />} />
+                        <Route exact path='/customer/:id/attachments'  render={(props) => <ViewCustomerAttachments customerId={props.match.params.id} {...this.props} />} />
+                        <Route exact path='/customer/:id/tasks'  render={(props) => <ViewCustomerTasks customerId={props.match.params.id} {...this.props} />} />
+                        <Route exact path='/customer/:id/communications'  render={(props) => <ViewCustomerCommunications customerId={props.match.params.id} {...this.props} />} />
+                        <Route exact path='/customer/:id/comments'  render={(props) => <ViewCustomerComments customerId={props.match.params.id} {...this.props} />} />
+                        
+                        <Route exact path='/customer/:id/loanaccount/:loanid'  render={(props) => <ViewLoanAccount loanId={props.match.params.loanid} customerId={props.match.params.id} {...this.props} />} />
+                        <Route exact path='/customer/:id/savingsaccount/:accountid'  render={(props) => <ViewSavingsAccount accountId={props.match.params.accountid} customerId={props.match.params.id} {...this.props} />} />
                         
                         {/* <Route exact path='/administration/administration-generalcurrency'  render={(props) => <GeneralCurrency {...this.props} />} /> */}
                         

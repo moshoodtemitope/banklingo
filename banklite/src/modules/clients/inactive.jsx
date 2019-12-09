@@ -3,7 +3,7 @@ import * as React from "react";
 
 import {Fragment} from "react";
 
-
+import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
@@ -106,44 +106,56 @@ class InactiveClients extends React.Component {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>some text</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            <td>
+                                                                <NavLink to={'/customer/20'}>Olugbenga Stephen</NavLink>
+                                                            </td>
+                                                            <td>
+                                                                <NavLink to={'/customer/20'}>20</NavLink>
+                                                            </td>
+                                                            <td>Inactive</td>
+                                                            <td>Moneypal Web</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦1,000,000.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>03-10-2019</td>
+                                                            
                                                         </tr>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            <td><NavLink to={'/customer/65'}>Sam Karly</NavLink></td>
+                                                            <td>
+                                                                <NavLink to={'/customer/65'}>65</NavLink>
+                                                            </td>
+                                                            <td>Inactive</td>
+                                                            <td>Moneypal Web</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>03-10-2019</td>
+                                                            
                                                         </tr>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            <td><NavLink to={'/customer/434'}>Thompson Oliha</NavLink></td>
+                                                            <td>
+                                                                <NavLink to={'/customer/65'}>434</NavLink>
+                                                            </td>
+                                                            <td>Inactive</td>
+                                                            <td>Moneypal Web</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦1,000.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>03-10-2019</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
+                                                            <td><NavLink to={'/customer/4393'}>Adekunle Olawale</NavLink></td>
+                                                            <td>
+                                                                <NavLink to={'/customer/4393'}>4393</NavLink>
+                                                            </td>
+                                                            <td>Inactive</td>
+                                                            <td>Moneypal Web</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>₦0.00</td>
+                                                            <td>03-10-2019</td>
                                                         </tr>
                                                     </tbody>
                                                 </TableComponent>
