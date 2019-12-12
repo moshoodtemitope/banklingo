@@ -90,7 +90,7 @@ class TrialBalance extends React.Component {
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                 <div className="heading-with-cta">
-                                                    <h3 className="section-title">Trial Balance</h3>
+                                                    {/* <h3 className="section-title">Trial Balance</h3> */}
                                                     {/* <Button>New Journal Entry</Button> */}
                                                 </div>
                                                 <div className="heading-actions">
@@ -135,6 +135,20 @@ class TrialBalance extends React.Component {
                                                         <Button className="action-icon" variant="outline-secondary" type="button">
                                                             <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" /> 
                                                         </Button>
+                                                    </div>
+                                                </div>
+                                                <div className="heading-with-cta toright compact">
+                                                    <div className="eachitem">
+                                                        <input type="checkbox" name="" id="opening-balance"/>
+                                                        <label htmlFor="opening-balance">Opening Balance</label>
+                                                    </div>
+                                                    <div className="eachitem">
+                                                        <input type="checkbox" name="" id="net-change"/>
+                                                        <label htmlFor="net-change">Net Change</label>
+                                                    </div>
+                                                    <div className="eachitem">
+                                                        <input type="checkbox" name="" id="closing-balance"/>
+                                                        <label htmlFor="closing-balance">Closing Balance</label>
                                                     </div>
                                                 </div>
                                                 <div className="pagination-wrap">

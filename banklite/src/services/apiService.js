@@ -1,4 +1,4 @@
-import { dispatch } from "rxjs/internal/observable/pairs";
+// import { dispatch } from "rxjs/internal/observable/pairs";
 
 const axios = require('axios');
 
@@ -13,13 +13,13 @@ export class ApiService {
         let service;
         bodyData = noStringify ? JSON.stringify(data) : data;
 
-        if(localStorage.getItem("user") == null){
+        if(localStorage.getItem("user") === null){
             headers = undefined;
         }
 
         if (type.toLowerCase() === 'get') {
-            if(headers == undefined){
-                if(localStorage.getItem("user") == null){
+            if(headers === undefined){
+                if(localStorage.getItem("user") === null){
                     delete axios.defaults.headers.common.Authorization;
                 }
                 axios.defaults.headers.common['Content-Type'] = 'application/json';
@@ -37,7 +37,7 @@ export class ApiService {
             }).catch(function (error) {
                 if (error.response) {
                     if (error.response.status === 401) {
-                        dispatch(userActions.logout());
+                        // dispatch(userActions.logout());
                     } else {
                         return service;
                     }
@@ -48,7 +48,8 @@ export class ApiService {
 
         } else {
             //check for header
-            if(headers == undefined){
+            axios.defaults.headers.common['Content-Type'] = 'application/json';
+            if(headers === undefined){
                 if(localStorage.getItem("user") == null){
                     delete axios.defaults.headers.common.Authorization;
                 }
@@ -68,8 +69,8 @@ export class ApiService {
             
               if (error.response) {
                 
-                 if (error.response.status === 401 && error.response.statusText.toLowerCase().includes('token not valid')) {
-                        dispatch(userActions.logout());
+                 if (error.response.status === 401) {
+                        // dispatch(userActions.logout());
                         //history.push('/');
                     }else {
                         return service;

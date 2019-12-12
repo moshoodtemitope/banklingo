@@ -172,11 +172,25 @@ class JournalEntries extends React.Component {
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                 <div className="heading-with-cta">
-                                                    <h3 className="section-title">Journal Entries</h3>
+                                                    {/* <h3 className="section-title">Journal Entries</h3> */}
+                                                    <Form className="one-liner">
+                                                        
+                                                        <Form.Group controlId="filterDropdown">
+                                                        <Form.Label> </Form.Label>
+                                                            <Form.Control as="select" size="sm">
+                                                                <option>No Filter</option>
+                                                                <option>Add New Filter</option>
+                                                                <option>Custom Filter</option>
+                                                            </Form.Control>
+                                                        </Form.Group>
+                                                        <Button variant="primary" type="submit">Filter</Button>
+                                                    </Form>
                                                     <Button
                                                         onClick={this.state.show===false ? this.handleShow : null}
                                                     >New Journal Entry</Button>
                                                 </div>
+                                                <div className="heading-with-cta toleft"><Button >Edit Columns</Button></div>
+                                                
                                                 <div className="pagination-wrap">
                                                     <label htmlFor="toshow">Show</label>
                                                     <select id="toshow" className="countdropdown form-control form-control-sm">

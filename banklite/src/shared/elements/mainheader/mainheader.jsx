@@ -68,19 +68,19 @@ class MainHeader extends React.Component{
                                 title="View"
                                 className="headingmenu-dropdown"
                             >
-                                <NavLink to={'/dashboard'}>Customers</NavLink>
-                                <NavLink to={'/dashboard'}>Groups</NavLink>
-                                <NavLink to={'/dashboard'}>Credit Arrangements</NavLink>
-                                <NavLink to={'/dashboard'}>Loan Accounts</NavLink>
-                                <NavLink to={'/dashboard'}>Loan Transactions</NavLink>
-                                <NavLink to={'/dashboard'}>Installments</NavLink>
-                                <NavLink to={'/dashboard'}>Deposit Accounts</NavLink>
-                                <NavLink to={'/dashboard'}>Deposit Transactions</NavLink>
-                                <NavLink to={'/dashboard'}>System Activities</NavLink>
-                                <NavLink to={'/dashboard'}>Branches</NavLink>
+                                <NavLink to={'/clients'}>Customers</NavLink>
+                                {/* <NavLink to={'/dashboard'}>Groups</NavLink> */}
+                                {/* <NavLink to={'/dashboard'}>Credit Arrangements</NavLink> */}
+                                <NavLink to={'/all-loans'}>Loan Accounts</NavLink>
+                                <NavLink to={'/loan-transactions'}>Loan Transactions</NavLink>
+                                {/* <NavLink to={'/dashboard'}>Installments</NavLink> */}
+                                <NavLink to={'/deposits'}>Deposit Accounts</NavLink>
+                                <NavLink to={'/deposits-transactions'}>Deposit Transactions</NavLink>
+                                <NavLink to={'/activities'}>System Activities</NavLink>
+                                <NavLink to={'/branches'}>Branches</NavLink>
                                 <NavLink to={'/dashboard'}>Centers</NavLink>
-                                <NavLink to={'/dashboard'}>Users</NavLink>
-                                <NavLink to={'/dashboard'}>Communications</NavLink>
+                                <NavLink to={'/user-management'}>Users</NavLink>
+                                <NavLink to={'/communications'}>Communications</NavLink>
                             </DropdownButton>
                             <DropdownButton
                                 size="sm"
@@ -88,14 +88,14 @@ class MainHeader extends React.Component{
                                 title="Create"
                                 className="headingmenu-dropdown"
                             >
-                                <NavLink to={'/dashboard'}>Customer</NavLink>
-                                <NavLink to={'/dashboard'}>Investment Customer</NavLink>
+                                <NavLink exact to={'/createnewcustomer'}>Customer</NavLink>
+                                <NavLink to={'/create-investmentcustomer'}>Investment Customer</NavLink>
                                 <NavLink to={'/dashboard'}>MoneyPal-Nano Customer</NavLink>
                                 <NavLink to={'/dashboard'}>Payrolla Customer</NavLink>
                                 <NavLink to={'/dashboard'}>Group</NavLink>
-                                <NavLink to={'/dashboard'}>Loan Account</NavLink>
-                                <NavLink to={'/dashboard'}>Deposit Account</NavLink>
-                                <NavLink to={'/dashboard'}>User</NavLink>
+                                <NavLink to={'/all-loans/newloan-account'}>Loan Account</NavLink>
+                                <NavLink to={'/deposits/newaccount'}>Deposit Account</NavLink>
+                                <NavLink to={'/administration/access/new-user'}>User</NavLink>
                             </DropdownButton>
                             <Form inline>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" />

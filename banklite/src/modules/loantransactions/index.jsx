@@ -6,6 +6,7 @@ import {Fragment} from "react";
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 import "./loantransactions.scss"; 
@@ -44,8 +45,19 @@ class LoanTransactions extends React.Component {
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                 <div className="heading-with-cta">
-                                                    {/* <h3 className="section-title">Journal Entries</h3> */}
-                                                    <div className="filter-wrap"></div>
+                                                    <Form className="one-liner">
+                                                        
+                                                        <Form.Group controlId="filterDropdown">
+                                                        <Form.Label> </Form.Label>
+                                                            <Form.Control as="select" size="sm">
+                                                                <option>No Filter</option>
+                                                                <option>Loan Disbursement Report Today</option>
+                                                                <option>Add New Filter</option>
+                                                                <option>Custom Filter</option>
+                                                            </Form.Control>
+                                                        </Form.Group>
+                                                        <Button variant="primary" type="submit">Get Transactions</Button>
+                                                    </Form>
                                                     <Button>Edit Columns</Button>
                                                 </div>
                                                 <div className="pagination-wrap">

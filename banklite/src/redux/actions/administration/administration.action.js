@@ -9,9 +9,9 @@ export const administrationActions = {
 }
 
 
-const addARole = (rolePayload)=>{
+function addARole  (rolePayload){
     return dispatch =>{
-        let consume = ApiService.request(routes.ADD_ROLE, "POST", payload);
+        let consume = ApiService.request(routes.ADD_ROLE, "POST", rolePayload);
         dispatch(request(consume));
         return consume
             .then(response =>{

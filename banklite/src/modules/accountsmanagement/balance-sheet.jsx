@@ -85,7 +85,7 @@ class BalanceSheet extends React.Component {
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                 <div className="heading-with-cta">
-                                                    <h3 className="section-title">Balance Sheet</h3>
+                                                    {/* <h3 className="section-title">Balance Sheet</h3> */}
                                                     {/* <Button>New Journal Entry</Button> */}
                                                 </div>
                                                 <div className="heading-actions">
