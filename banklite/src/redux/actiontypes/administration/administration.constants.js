@@ -1,0 +1,8 @@
+
+
+export const administrationConstants ={
+    CREATE_A_ROLE_SUCCESS : 'CREATE_A_ROLE_SUCCESS',
+    CREATE_A_ROLE_PENDING : 'CREATE_A_ROLE_PENDING',
+    CREATE_A_ROLE_FAILURE : 'CREATE_A_ROLE_FAILURE',
+}
+

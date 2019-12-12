@@ -98,7 +98,7 @@ class ActiveClients extends React.Component {
                                                         <th>ID</th>
                                                         <th>Customer State</th>
                                                         <th>Account Officer</th>
-                                                        <th>Total Balance</th>
+                                                        <th>Loans Balance</th>
                                                         <th>Pending Loan Amount</th>
                                                         <th>Approved Loan Amount</th>
                                                         <th>Last modified</th>
