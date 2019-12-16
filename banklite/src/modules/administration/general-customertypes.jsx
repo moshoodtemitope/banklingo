@@ -19,6 +19,9 @@ class GeneralCustomerTypes extends React.Component {
         this.state={
             user:'',
             show:false,
+            customerTypeName: '',
+            customerTypeDesc:'',
+            customerTypeId:''
         }
 
         
@@ -34,19 +37,19 @@ class GeneralCustomerTypes extends React.Component {
         return(
             <Modal show={show} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
                 <Modal.Header>
-                    <Modal.Title>Add Currency</Modal.Title>
+                    <Modal.Title>Add Customer Type</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group controlId="customerTypeName">
                             <Form.Label className="block-level">Name</Form.Label>
-                            <Form.Control type="text" />
+                            <Form.Control type="text" onChan />
                         </Form.Group>
                         <Form.Group controlId="customerTypeId">
                             <Form.Label className="block-level">Id</Form.Label>
                             <Form.Control type="text" />
                         </Form.Group>
-                        <Form.Label className="block-level">Usage</Form.Label>
+                        {/* <Form.Label className="block-level">Usage</Form.Label>
                             <div className="checkbox-wrap">
                                 <input type="checkbox" name="" id="pick-1" />
                                 <label htmlFor="pick-1">Allow opening accounts</label>
@@ -62,7 +65,7 @@ class GeneralCustomerTypes extends React.Component {
                             <div className="checkbox-wrap">
                                 <input type="checkbox" name="" id="pick-3" />
                                 <label htmlFor="pick-3">Show default address fields</label>
-                            </div>
+                            </div> */}
                         <Form.Group controlId="customerTypeDesc">
                             <Form.Label className="block-level">Description</Form.Label>
                             <Form.Control as="textarea" rows="3" />
