@@ -4,77 +4,186 @@ import * as React from "react";
 import {Fragment} from "react";
 
 import { NavLink} from 'react-router-dom';
+import { connect } from 'react-redux';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import  TableComponent from '../../shared/elements/table'
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import Alert from 'react-bootstrap/Alert'
+
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
+import { setTimeout } from "timers";
 class GeneralCustomerTypes extends React.Component {
     constructor(props) {
         super(props);
         this.state={
             user:'',
             show:false,
-            customerTypeName: '',
-            customerTypeDesc:'',
-            customerTypeId:''
+            // customerTypeName: '',
+            // customerTypeDesc:'',
+            // customerTypeId:'',
+            // custTypepayload:''
         }
 
         
+
+        
     }
+
+    validationSchema = Yup.object().shape({
+        custTypeName: Yup.string()
+          .min(2, 'Min of two characters')
+          .max(30, 'Max Limit reached')
+          .required('Please provide name'),
+        custTypeId: Yup.string()
+          .max(6, 'Max Limit reached')
+          .required('Id is required'),
+        custTypeDesc: Yup.string()
+          .min(2, 'Please provide detailed information')
+          .required('Description is required')
+    });
 
     handleClose = () => this.setState({show:false});
     
     handleShow = () => this.setState({show:true});
 
+    
+
+    handleCreateNewType = async (typePayload) =>{
+        
+        const {dispatch} = this.props;
+       
+        await dispatch(administrationActions.addCustomerType(typePayload));
+
+        
+    }
+
+    
+
+
     customerTypePopUp = () =>{
        
         const {show} = this.state;
+        let adminCreateCustomerTypeRequest = this.props.adminCreateCustomerType;
         return(
             <Modal show={show} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
                 <Modal.Header>
                     <Modal.Title>Add Customer Type</Modal.Title>
                 </Modal.Header>
+                
                 <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="customerTypeName">
-                            <Form.Label className="block-level">Name</Form.Label>
-                            <Form.Control type="text" onChan />
-                        </Form.Group>
-                        <Form.Group controlId="customerTypeId">
-                            <Form.Label className="block-level">Id</Form.Label>
-                            <Form.Control type="text" />
-                        </Form.Group>
-                        {/* <Form.Label className="block-level">Usage</Form.Label>
-                            <div className="checkbox-wrap">
-                                <input type="checkbox" name="" id="pick-1" />
-                                <label htmlFor="pick-1">Allow opening accounts</label>
+                    <Formik
+                        initialValues={{
+                            custTypeName: '',
+                            custTypeId: '',
+                            custTypeDesc: '',
+                        }}
+                        validationSchema={this.validationSchema}
+                        onSubmit={ (values, { resetForm}) => {
+                            // same shape as initial values
+                            let custTypepayload ={
+                                key:values.custTypeId,
+                                name:values.custTypeName,
+                                description: values.custTypeDesc
+                            }
+                           
+
+
+                            this.handleCreateNewType(custTypepayload)
+                                .then(
+                                    ()=>{
+                                        resetForm();
+                                        // console.log('response is', adminCreateCustomerTypeRequest)
+                                        setTimeout(() => {
+                                            this.props.dispatch(administrationActions.addCustomerType("CLEAR"))
+                                        }, 3000);
+                                        
+                                    }
+                                )
+                        
+                        }}
+                    >
+                        {({ handleSubmit,
+                            handleChange,
+                            handleBlur,
+                            resetForm,
+                            values,
+                            touched,
+                            isValid,
+                            errors, }) => (
+                        // <Form>
+                        <Form noValidate className="newtype-form" 
+                                 onSubmit={handleSubmit}>
+                            <Form.Group controlId="customerTypeName">
+                                <Form.Label className="block-level">Name</Form.Label>
+                                <Form.Control  
+                                    name="custTypeName" 
+                                    onChange={handleChange}
+                                    value={values.custTypeName}
+                                    className={errors.custTypeName && touched.custTypeName ? "is-invalid": null}
+                                    type="text" required />
+                                {errors.custTypeName && touched.custTypeName ? (
+                                    <span className="invalid-feedback">{errors.custTypeName}</span>
+                                ) : null}
+                                
+                            </Form.Group>
+                            <Form.Group controlId="customerTypeId">
+                                <Form.Label className="block-level">Id</Form.Label>
+                                <Form.Control 
+                                     name="custTypeId" 
+                                     onChange={handleChange}
+                                     value={values.custTypeId}
+                                     className={errors.custTypeId && touched.custTypeId ? "is-invalid": null}
+                                     type="text" required />
+                                {/* <Form.Control.Feedback type="invalid"> */}
+                                {errors.custTypeId && touched.custTypeId ? (
+                                    <span className="invalid-feedback">{errors.custTypeId}</span>
+                                ) : null}      
+                                {/* </Form.Control.Feedback> */}
+                            </Form.Group>
+                           
+                            <Form.Group controlId="customerTypeDesc">
+                                <Form.Label className="block-level">Description</Form.Label>
+                                <Form.Control 
+                                    name="custTypeDesc" 
+                                    onChange={handleChange}
+                                    value={values.custTypeDesc}
+                                    className={errors.custTypeDesc && touched.custTypeDesc ? "is-invalid": null}
+                                    as="textarea" rows="3" />
+                                {errors.custTypeDesc && touched.custTypeDesc ? (
+                                    <span className="invalid-feedback">{errors.custTypeDesc}</span>
+                                ) : null}   
+                            </Form.Group>
+                            <div className="footer-with-cta toleft">
+                                <Button variant="secondary" className="grayed-out" onClick={this.handleClose}>Cancel</Button>
+                                <Button 
+                                    type="submit" 
+                                    disabled={adminCreateCustomerTypeRequest.is_request_processing}>
+                                       {adminCreateCustomerTypeRequest.is_request_processing?"Please wait...": "Save Changes"}
+                                </Button>
                             </div>
-                            <div className="checkbox-wrap">
-                                <input type="checkbox" name="" id="pick-2" />
-                                <label htmlFor="pick-2">Allow as guarantor</label>
-                            </div>
-                            <div className="checkbox-wrap">
-                                <input type="checkbox" name="" id="pick-3" />
-                                <label htmlFor="pick-3">Require identification documents</label>
-                            </div>
-                            <div className="checkbox-wrap">
-                                <input type="checkbox" name="" id="pick-3" />
-                                <label htmlFor="pick-3">Show default address fields</label>
-                            </div> */}
-                        <Form.Group controlId="customerTypeDesc">
-                            <Form.Label className="block-level">Description</Form.Label>
-                            <Form.Control as="textarea" rows="3" />
-                        </Form.Group>
-                        <div className="footer-with-cta toleft">
-                            <Button variant="secondary" className="grayed-out" onClick={this.handleClose}>Cancel</Button>
-                            <Button>Save Changes</Button>
-                        </div>
-                    </Form>
+                        </Form>
+                        )}
+                    </Formik>
+                    
+                    {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS && 
+                        <Alert variant="success">
+                           {adminCreateCustomerTypeRequest.request_data.response.data.message}
+                        </Alert>
+                    }
+                    {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_FAILURE && 
+                        <Alert variant="danger">
+                          {adminCreateCustomerTypeRequest.request_data.error}
+                        </Alert>
+                    }
                 </Modal.Body>
             </Modal>
         )
@@ -260,4 +369,10 @@ class GeneralCustomerTypes extends React.Component {
     }
 }
 
-export default GeneralCustomerTypes;
+function mapStateToProps(state) {
+    return {
+        adminCreateCustomerType : state.administrationReducers.adminCreateCustomerTypeReducer,
+    };
+}
+
+export default  connect(mapStateToProps)(GeneralCustomerTypes);

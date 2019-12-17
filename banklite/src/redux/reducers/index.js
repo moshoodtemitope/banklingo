@@ -16,7 +16,9 @@ const rootReducer = (state, action)=>{
 
 
 const administrationReducers = combineReducers({
-    adminCreateRoleReducer: administration.createRoleReducer,    
+    adminCreateRoleReducer: administration.createRoleReducer, 
+    adminCreateCustomerTypeReducer: administration.createCustomerTypeReducer,   
+    adminCreateTransactionChannelReducer :administration.createTransactionChannelReducer
 })
 
 

@@ -1,13 +1,17 @@
 
 
 import{
-    createRoleReducer
-} from './administration/administration-roles.reducer'
+    createRoleReducer,
+    createCustomerTypeReducer,
+    createTransactionChannelReducer
+} from './administration/administration.reducer'
 
 
 
 
 
 export const administration ={
-    createRoleReducer
+    createRoleReducer,
+    createCustomerTypeReducer,
+    createTransactionChannelReducer
 }
