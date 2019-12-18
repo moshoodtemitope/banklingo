@@ -496,3 +496,12 @@ span.hinttext {
     font-size: 12px;
     text-align: center;
 }
+
+.is-invalid:not(.form-control), .was-validated .form-control:invalid{
+   &>div{
+    border-color: #dc3545;
+   }
+    &~.invalid-feedback{
+        display: block;
+    }
+}

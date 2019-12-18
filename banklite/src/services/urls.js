@@ -9,7 +9,7 @@ export const routes = {
     // Administration endpoints
     
     ADD_BRANCH: BASEURL + '/Dars.Administration/api/Account/branch',
-    ADD_CURRENCY: BASEURL + '/Dars.Administration/api/Account/currency',
+    ADD_CURRENCY: BASEURL + '/Dars.Administration/api/Administration/currency',
     ADD_CUSTOMER_TYPE: BASEURL + '/Dars.Administration/api/Account/customertype',
     ADD_EXCHANGE_RATE: BASEURL + '/Dars.Administration/api/Account/exchangerate',
     ADD_ROLE: BASEURL + '/Dars.Administration/api/Account/role', //works

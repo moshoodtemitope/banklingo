@@ -7,7 +7,8 @@ import { handleRequestErrors } from "../../../shared/utils";
 export const administrationActions = {
     addARole,
     addCustomerType,
-    addTransactionChannel
+    addTransactionChannel,
+    addNewCurrency
 }
 
 
@@ -94,5 +95,35 @@ function addTransactionChannel  (transactionChannelPayload){
     function success(response) { return { type: administrationConstants.CREATE_TRANSACTION_CHANNEL_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.CREATE_TRANSACTION_CHANNEL_FAILURE, error } }
     function clear() { return { type: administrationConstants.CREATE_TRANSACTION_CHANNEL_RESET, clear_data:""} }
+
+}
+
+function addNewCurrency  (newCurrencyPayload){
+    if(newCurrencyPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.ADD_CURRENCY, "POST", newCurrencyPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    console.log('error is', error)
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.CREATE_NEWCURRENCY_PENDING, user } }
+    function success(response) { return { type: administrationConstants.CREATE_NEWCURRENCY_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.CREATE_NEWCURRENCY_FAILURE, error } }
+    function clear() { return { type: administrationConstants.CREATE_NEWCURRENCY_RESET, clear_data:""} }
 
 }

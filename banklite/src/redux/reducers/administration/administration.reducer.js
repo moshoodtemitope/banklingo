@@ -91,4 +91,36 @@ export function createTransactionChannelReducer(state=[], action) {
     }
 }
 
+export function createNewCurrencyReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.CREATE_NEWCURRENCY_PENDING:
+            return {
+                request_status: administrationConstants.CREATE_NEWCURRENCY_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.CREATE_NEWCURRENCY_SUCCESS:
+            return {
+                request_status: administrationConstants.CREATE_NEWCURRENCY_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.CREATE_NEWCURRENCY_FAILURE:
+            return {
+                request_status: administrationConstants.CREATE_NEWCURRENCY_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.CREATE_NEWCURRENCY_RESET:
+            return {
+                request_status: administrationConstants.CREATE_NEWCURRENCY_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 

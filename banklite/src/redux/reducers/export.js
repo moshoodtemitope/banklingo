@@ -3,7 +3,8 @@
 import{
     createRoleReducer,
     createCustomerTypeReducer,
-    createTransactionChannelReducer
+    createTransactionChannelReducer,
+    createNewCurrencyReducer
 } from './administration/administration.reducer'
 
 
@@ -13,5 +14,6 @@ import{
 export const administration ={
     createRoleReducer,
     createCustomerTypeReducer,
-    createTransactionChannelReducer
+    createTransactionChannelReducer,
+    createNewCurrencyReducer
 }

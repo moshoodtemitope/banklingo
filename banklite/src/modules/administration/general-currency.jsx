@@ -4,6 +4,7 @@ import * as React from "react";
 import {Fragment} from "react";
 
 import { NavLink} from 'react-router-dom';
+import { connect } from 'react-redux';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select';
@@ -13,7 +14,12 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button'
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import Alert from 'react-bootstrap/Alert'
 import "./administration.scss"; 
 class GeneralCurrency extends React.Component {
     constructor(props) {
@@ -21,7 +27,8 @@ class GeneralCurrency extends React.Component {
         this.state={
             user:'',
             show:false,
-            showRateEdit:false
+            showRateEdit:false,
+            selectedCountry: ""
         }
 
         
@@ -35,43 +42,138 @@ class GeneralCurrency extends React.Component {
     
     handleRateShow = () => this.setState({showRateEdit:true});
 
+    submitNewCurrencyDetails = async (newCurrencyPayload)=>{
+        const {dispatch} = this.props;
+
+        await dispatch(administrationActions.addNewCurrency(newCurrencyPayload));
+    }
+
     newCurrencyPopUp = () =>{
         let allCountry =[
             {value: 'NGN', label: 'NGN - Nigeria'},
-            {value: 'BTN', label: 'ERN - Eritrean'},
+            {value: 'ERN', label: 'ERN - Eritrean'},
             {value: 'ILS', label: 'ILS - Israeli'},
             {value: 'NIO', label: 'NIO - Cordoba oro'},
-        ]
+        ],
+        currencyValidationSchema = Yup.object().shape({
+            currencyName: Yup.string()
+              .min(2, 'Min of two characters')
+              .max(30, 'Max Limit reached')
+              .required('Please provide name'),
+            currencyCode: Yup.string()
+              .min(1, 'Please provide valid code')
+              .max(6, 'Max Limit reached')
+              .required('Code is required'),
+            currencySymbol: Yup.string()
+              .min(1, 'Please provide valid symbol')
+              .max(6, 'Max Limit reached')
+              .required('Symbol is required')
+        });
         const {show} = this.state;
+        let adminCreateNewCurrencyRequest = this.props.adminCreateNewCurrency;
         return(
-            <Modal show={show} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+            <Modal show={show} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
                 <Modal.Header>
-                    <Modal.Title>Add Currency</Modal.Title>
+                    <Modal.Title>Add New Currency</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="countriesList">
-                            <Form.Label className="block-level">Preset</Form.Label>
-                            <Select
-                                options={allCountry}
-                                onChange={this.handleChange}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="currencyName">
-                            <Form.Label className="block-level">Name</Form.Label>
-                            <Form.Control type="text" />
-                        </Form.Group>
-                        <Form.Row>
-                            <Col>
-                                <Form.Label className="block-level">Code</Form.Label>
-                                <span className="form-text">NGN</span>
-                            </Col>
-                            <Col>
-                                <Form.Label className="block-level">Symbol</Form.Label>
-                                <Form.Control type="text" value="$" />
-                            </Col>
-                        </Form.Row>
-                        <Form.Row>
+                    <Formik
+                        initialValues={{
+                            currencyName: '',
+                            currencyCode: '',
+                            currencySymbol: '',
+                        }}
+                        validationSchema={currencyValidationSchema}
+                        onSubmit={(values, { resetForm }) => {
+                            // same shape as initial values
+                            
+                            let newCurrencyPayload = {
+                                name: values.currencyName,
+                                code: values.currencyCode,
+                                symbol: values.currencySymbol
+                            };
+                            console.log('there now');
+                           
+                            
+                            this.submitNewCurrencyDetails(newCurrencyPayload)
+                                .then(
+                                    () => {
+                                        resetForm();
+                                        setTimeout(() => {
+                                            this.props.dispatch(administrationActions.addNewCurrency("CLEAR"))
+                                        }, 3000);
+
+                                    }
+                                )
+                            
+                                
+                           
+
+                        }}
+                    >
+                        {({ handleSubmit,
+                            handleChange,
+                            handleBlur,
+                            resetForm,
+                            values,
+                            touched,
+                            isValid,
+                            errors, }) => (
+                                <Form noValidate 
+                                        onSubmit={handleSubmit}>
+                                    <Form.Group controlId="countriesList">
+                                        <Form.Label className="block-level">Preset</Form.Label>
+                                        <Select
+                                            options={allCountry}
+                                            onChange={(selectedCountry)=>{
+                                                this.setState({selectedCountry});
+                                                errors.currencyCode = null
+                                                values.currencyCode = selectedCountry.value
+                                            }}
+                                            className={errors.currencyCode && touched.currencyCode ? "is-invalid": null}
+                                            // value="currencyCode"
+                                            name ="currencyCode"
+                                            // value={values.currencyCode}
+                                            required
+                                        />
+                                        {errors.currencyCode && touched.currencyCode ? (
+                                            <span className="invalid-feedback">{errors.currencyCode}</span>
+                                        ) : null} 
+                                    </Form.Group>
+                                    <Form.Group controlId="currencyName">
+                                        <Form.Label className="block-level">Name</Form.Label>
+                                        <Form.Control 
+                                            type="text"
+                                            name="currencyName"
+                                            value={values.currencyName}
+                                            onChange={handleChange} 
+                                            className={errors.currencyName && touched.currencyName ? "is-invalid": null}
+                                            required />
+                                            {errors.currencyName && touched.currencyName ? (
+                                                <span className="invalid-feedback">{errors.currencyName}</span>
+                                            ) : null} 
+                                    </Form.Group>
+                                    <Form.Row>
+                                        <Col>
+                                            <Form.Label className="block-level">Code</Form.Label>
+                                            <span className="form-text">{this.state.selectedCountry.value}</span>
+                                        </Col>
+                                        <Col>
+                                            <Form.Label className="block-level">Symbol</Form.Label>
+                                            <Form.Control 
+                                                type="text" 
+                                                onChange={handleChange} 
+                                                value={values.currencySymbol}
+                                                name="currencySymbol"
+                                                className={errors.currencySymbol && touched.currencySymbol ? "is-invalid": null}
+                                                required/>
+
+                                            {errors.currencySymbol && touched.currencySymbol ? (
+                                                <span className="invalid-feedback">{errors.currencySymbol}</span>
+                                            ) : null} 
+                                        </Col>
+                                    </Form.Row>
+                                    {/* <Form.Row>
                             <Col>
                                 <Form.Label className="block-level">Decimal Digits</Form.Label>
                                 <span className="form-text">2</span>
@@ -83,16 +185,32 @@ class GeneralCurrency extends React.Component {
                                     <option>After Number</option>
                                 </Form.Control>
                             </Col>
-                        </Form.Row>
-                        <div className="footer-with-cta toleft">
+                        </Form.Row> */}
+                                    {/* <div className="footer-with-cta toleft">
                             <input type="checkbox" name="" id="isBaseCurrency"/>
                             <label htmlFor="isBaseCurrency">Base Currency</label>
-                        </div>
-                        <div className="footer-with-cta toleft">
-                            <Button variant="secondary" className="grayed-out" onClick={this.handleClose}>Cancel</Button>
-                            <Button>Save Changes</Button>
-                        </div>
-                    </Form>
+                        </div> */}
+                                    <div className="footer-with-cta toleft">
+                                        <Button variant="secondary" className="grayed-out" onClick={this.handleClose}>Cancel</Button>
+                                        <Button
+                                            type="submit"
+                                            disabled={adminCreateNewCurrencyRequest.is_request_processing}>
+                                                {adminCreateNewCurrencyRequest.is_request_processing?"Please wait...": "Save"}
+                                            </Button>
+                                    </div>
+                                </Form>
+                            )}
+                    </Formik>
+                    {adminCreateNewCurrencyRequest.request_status === administrationConstants.CREATE_NEWCURRENCY_SUCCESS && 
+                        <Alert variant="success">
+                           {adminCreateNewCurrencyRequest.request_data.response.data.message}
+                        </Alert>
+                    }
+                    {adminCreateNewCurrencyRequest.request_status === administrationConstants.CREATE_NEWCURRENCY_FAILURE && 
+                        <Alert variant="danger">
+                          {adminCreateNewCurrencyRequest.request_data.error}
+                        </Alert>
+                    }
                 </Modal.Body>
             </Modal>
         )
@@ -321,4 +439,10 @@ class GeneralCurrency extends React.Component {
     }
 }
 
-export default GeneralCurrency;
+function mapStateToProps(state) {
+    return {
+        adminCreateNewCurrency : state.administrationReducers.adminCreateNewCurrencyReducer,
+    };
+}
+
+export default  connect(mapStateToProps) (GeneralCurrency);
