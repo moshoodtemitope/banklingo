@@ -17,7 +17,7 @@ export const routes = {
     ADD_TRANSACTION_CHANNEL: BASEURL + '/Dars.Administration/api/Administration/transactionchannel',
     GET_TRANSACTION_CHANNEL: BASEURL + '/Dars.Administration/api/Administration/transactionchannels',
     UPDATE_ACCESS_PREFERENCE: BASEURL + '/Dars.Administration/api/Account/accesspreference',
-    UPDATE_EMAIL_SETTINGS: BASEURL + '/Dars.Administration/api/Account/emailsetting',
+    UPDATE_EMAIL_SETTINGS: BASEURL + '/Dars.Administration/api/Administration/emailsetting',
     UPDATE_INTERNAL_CONTROL: BASEURL + '/Dars.Administration/api/Account/internalcontrol',
-    UPDATE_SMS_SETTINGS: BASEURL + '/Dars.Administration/api/Account/smssetting',
+    UPDATE_SMS_SETTINGS: BASEURL + '/Dars.Administration/api/Administration/smssetting',
 }

@@ -123,4 +123,68 @@ export function createNewCurrencyReducer(state=[], action) {
     }
 }
 
+export function smsSettingsReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.SMS_SETTINGS_PENDING:
+            return {
+                request_status: administrationConstants.SMS_SETTINGS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.SMS_SETTINGS_SUCCESS:
+            return {
+                request_status: administrationConstants.SMS_SETTINGS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.SMS_SETTINGS_FAILURE:
+            return {
+                request_status: administrationConstants.SMS_SETTINGS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.SMS_SETTINGS_RESET:
+            return {
+                request_status: administrationConstants.SMS_SETTINGS_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function emailSettingsReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.EMAIL_SETTINGS_PENDING:
+            return {
+                request_status: administrationConstants.EMAIL_SETTINGS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.EMAIL_SETTINGS_SUCCESS:
+            return {
+                request_status: administrationConstants.EMAIL_SETTINGS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.EMAIL_SETTINGS_FAILURE:
+            return {
+                request_status: administrationConstants.EMAIL_SETTINGS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.EMAIL_SETTINGS_RESET:
+            return {
+                request_status: administrationConstants.EMAIL_SETTINGS_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 

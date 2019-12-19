@@ -19,7 +19,9 @@ const administrationReducers = combineReducers({
     adminCreateRoleReducer: administration.createRoleReducer, 
     adminCreateCustomerTypeReducer: administration.createCustomerTypeReducer,   
     adminCreateTransactionChannelReducer :administration.createTransactionChannelReducer,
-    adminCreateNewCurrencyReducer :administration.createNewCurrencyReducer
+    adminCreateNewCurrencyReducer :administration.createNewCurrencyReducer,
+    adminSmsSettingsReducer :administration.smsSettingsReducer,
+    adminEmailSettingsReducer :administration.emailSettingsReducer,
 })
 
 

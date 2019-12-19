@@ -8,7 +8,9 @@ export const administrationActions = {
     addARole,
     addCustomerType,
     addTransactionChannel,
-    addNewCurrency
+    addNewCurrency,
+    smsSettings,
+    emailSettings
 }
 
 
@@ -107,7 +109,7 @@ function addNewCurrency  (newCurrencyPayload){
                 .then(response =>{
                     dispatch(success(response));
                 }).catch(error =>{
-                    console.log('error is', error)
+                    // console.log('error is', error)
                     dispatch(failure(handleRequestErrors(error)));
                 });
             
@@ -125,5 +127,71 @@ function addNewCurrency  (newCurrencyPayload){
     function success(response) { return { type: administrationConstants.CREATE_NEWCURRENCY_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.CREATE_NEWCURRENCY_FAILURE, error } }
     function clear() { return { type: administrationConstants.CREATE_NEWCURRENCY_RESET, clear_data:""} }
+
+}
+
+function smsSettings  (smsSettingsPayload){
+    if(smsSettingsPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.UPDATE_SMS_SETTINGS, "POST", smsSettingsPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    // console.log('error is', error)
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.SMS_SETTINGS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.SMS_SETTINGS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.SMS_SETTINGS_FAILURE, error } }
+    function clear() { return { type: administrationConstants.SMS_SETTINGS_RESET, clear_data:""} }
+
+}
+
+function emailSettings  (emailSettingsPayload){
+    if(emailSettingsPayload!=="CLEAR"){
+        return dispatch =>{
+            console.log('payaloe sent', Object.keys(emailSettingsPayload).length);
+            if(Object.keys(emailSettingsPayload).length >1){
+                let consume = ApiService.request(routes.UPDATE_EMAIL_SETTINGS, "POST", emailSettingsPayload);
+                dispatch(request(consume));
+                return consume
+                    .then(response =>{
+                        dispatch(success(response));
+                    }).catch(error =>{
+                        // console.log('error is', error)
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+            }
+            else{
+                dispatch(failure(handleRequestErrors("Please select a valid email server option")));
+            }
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.EMAIL_SETTINGS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.EMAIL_SETTINGS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.EMAIL_SETTINGS_FAILURE, error } }
+    function clear() { return { type: administrationConstants.EMAIL_SETTINGS_RESET, clear_data:""} }
 
 }

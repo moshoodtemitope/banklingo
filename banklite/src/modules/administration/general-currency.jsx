@@ -83,7 +83,7 @@ class GeneralCurrency extends React.Component {
                             currencyCode: '',
                             currencySymbol: '',
                         }}
-                        validationSchema={currencyValidationSchema}
+                        // validationSchema={currencyValidationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
                             

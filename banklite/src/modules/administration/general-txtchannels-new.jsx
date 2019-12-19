@@ -6,7 +6,7 @@ import {Fragment} from "react";
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
-import Accordion from 'react-bootstrap/Accordion'
+// import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
 
 import Form from 'react-bootstrap/Form'
