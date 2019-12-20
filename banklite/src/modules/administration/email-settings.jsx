@@ -28,31 +28,7 @@ class EmailSettings extends React.Component {
         
     }
 
-    // emailSettingsvalidationSchema = Yup.object().shape({
-    //     fromName: Yup.string()
-    //       .min(2, 'Min of two characters')
-    //       .max(30, 'Max Limit reached')
-    //       .required('Username is required'),
-    //     fromEmail: Yup.string()
-    //       .min(5, 'Min of five characters')
-    //       .required('Password is required'),
-    //     replyToEmail: Yup.string()
-    //       .min(11, 'Please provide a valid phone number')
-    //       .max(11, 'Please provide a valid phone number')
-    //       .required('Phone number is required'),
-    //     smtpHost: Yup.string()
-    //       .required('Gateway is required'),
-    //     smtpPort: Yup.string()
-    //       .required('Gateway is required'),
-    //     username: Yup.string()
-    //       .required('Gateway is required'),
-    //     password: Yup.string()
-    //       .required('Gateway is required'),
-    //     encryptionMethod: Yup.string()
-    //       .required('Gateway is required'),
-    //     channelId: Yup.string()
-    //     .required('Email server is required'),
-    // });
+    
 
 
     handleEmailSettings = async (emailSettingsPayload) =>{
@@ -66,6 +42,7 @@ class EmailSettings extends React.Component {
 
     renderEmailSettings =()=>{
         let adminEmailSettingsRequest = this.props.adminEmailSettings;
+       
         return(
             <Formik
                 initialValues={{
@@ -339,6 +316,8 @@ class EmailSettings extends React.Component {
                             {adminEmailSettingsRequest.request_status === administrationConstants.EMAIL_SETTINGS_FAILURE && 
                                 <Alert variant="danger">
                                     {adminEmailSettingsRequest.request_data.error}
+                            
+                                    {/* {adminEmailSettingsRequest.error} */}
                                 </Alert>
                             }
 

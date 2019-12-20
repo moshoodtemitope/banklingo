@@ -2,13 +2,20 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
-// import  SidebarElement from '../../shared/elements/sidebar'
+
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import Alert from 'react-bootstrap/Alert'
 import "./administration.scss"; 
 class AccessPreferences extends React.Component {
     constructor(props) {
@@ -18,6 +25,247 @@ class AccessPreferences extends React.Component {
         }
 
         
+    }
+
+
+    updatePreferences = async  (updatePreferencesPayload)=>{
+        const {dispatch} = this.props;
+       
+        console.log('payload is', updatePreferencesPayload);
+        await dispatch(administrationActions.accessPreferences(updatePreferencesPayload));
+    }
+
+
+    preferenceValidationSchema = Yup.object().shape({
+        timeOutSession: Yup.string()
+            .min(1, 'Response required')
+            .max(10, 'Max limit reached')
+            .matches(/^[0-9]*$/, 'Invalid repsonse')
+            .required('Required'),
+        minPasswordLength:  Yup.string()
+            .min(1, 'Response required')
+            .matches(/^[0-9]*$/, 'Invalid repsonse')
+            .required('Required'),
+        automaticExpiryOfPassword: Yup.boolean()
+            .oneOf([true], null)
+            .required('Required'),
+        passwordExpiryDays:  Yup.string()
+            .min(1, 'Response required')
+            .matches(/^[0-9]*$/, 'Invalid repsonse')
+            .required('Required'),
+        lockUserAfterFailedLogin: Yup.boolean()
+            .oneOf([true], null)
+            .required('Required'),
+        failedLoginAttemptsMins:  Yup.string()
+            .min(1, 'Response required')
+            .matches(/^[0-9]*$/, 'Invalid repsonse')
+            .required('Required'),
+      });
+
+
+    renderAccessPreference = () =>{
+        let adminAccessPreferencesRequest = this.props.adminAccessPreferences;
+        return(
+
+            <Formik
+                initialValues={{
+                    timeOutSession: '',
+                    minPasswordLength: '',
+                    automaticExpiryOfPassword: '',
+                    passwordExpiryDays: '',
+                    lockUserAfterFailedLogin: '',
+                    failedLoginAttemptsMins: '',
+                }}
+                validationSchema={this.preferenceValidationSchema}
+                onSubmit={(values, { resetForm }) => {
+
+                    let updatePreferencesPayload = {
+                            timeOutSession: values.timeOutSession,
+                            minPasswordLength: values.minPasswordLength,
+                            automaticExpiryOfPassword: values.automaticExpiryOfPassword,
+                            passwordExpiryDays: values.passwordExpiryDays,
+                            lockUserAfterFailedLogin: values.lockUserAfterFailedLogin,
+                            failedLoginAttemptsMins: values.failedLoginAttemptsMins
+                    };
+
+
+                    this.updatePreferences(updatePreferencesPayload)
+                        .then(
+                            () => {
+
+                                if (this.props.adminAccessPreferences.request_status === administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS) {
+                                    resetForm();
+                                }
+
+                                setTimeout(() => {
+                                    this.props.dispatch(administrationActions.accessPreferences("CLEAR"))
+                                }, 3000);
+
+                            }
+                        )
+
+                }}
+            >
+                {({ handleSubmit,
+                    handleChange,
+                    handleBlur,
+                    resetForm,
+                    values,
+                    touched,
+                    isValid,
+                    errors, }) => (
+                        <Form 
+                            noValidate 
+                            onSubmit={handleSubmit}
+                            className="form-content w-60 card">
+
+                            <Form.Row>
+                                <Col>
+                                    <Form.Label className={errors.timeOutSession && touched.timeOutSession? "witherror block-level": "block-level"}>
+                                        Timeout Session 
+                                        {errors.timeOutSession && touched.timeOutSession ? (
+                                            <span className="invalid-feedback">{errors.timeOutSession}</span>
+                                    ) : null}
+                                    </Form.Label>
+                                    
+                                    <Form.Control 
+                                        type="text" 
+                                        name="timeOutSession"
+                                        onChange={handleChange} 
+                                        value={values.timeOutSession}
+                                        className={errors.timeOutSession && touched.timeOutSession ? "is-invalid": null}
+                                        required />
+                                    <span className="hinttext">minutes</span>
+                                    
+                                </Col>
+                                <Col>
+                                    <Form.Label className={errors.timeOutSession && touched.timeOutSession? "witherror block-level": "block-level"}>
+                                        Min Password Length
+                                        {errors.minPasswordLength && touched.minPasswordLength ? (
+                                                <span className="invalid-feedback">{errors.minPasswordLength}</span>
+                                        ) : null}
+                                    </Form.Label>
+                                    <Form.Control 
+                                        type="text" 
+                                        name="minPasswordLength"
+                                        onChange={handleChange} 
+                                        value={values.minPasswordLength}
+                                        className={errors.minPasswordLength && touched.minPasswordLength ? "is-invalid": null}
+                                        required />
+                                    <span className="hinttext">characters</span>
+                                    
+                                </Col>
+
+                            </Form.Row>
+
+                            <div className="table-helper">
+                                <input 
+                                    type="checkbox" 
+                                    id="showAutoLock" 
+                                     
+                                    name="lockUserAfterFailedLogin"
+                                    onChange={handleChange} 
+                                    value={values.lockUserAfterFailedLogin}
+                                    className={errors.lockUserAfterFailedLogin && touched.lockUserAfterFailedLogin ? "is-invalid": null}
+                                    required />
+                                <label htmlFor="showAutoLock" 
+                                        className={errors.lockUserAfterFailedLogin && touched.lockUserAfterFailedLogin? "invalid-label":null }>Lock User After Failed Logins</label>
+                            </div>
+                            {values.lockUserAfterFailedLogin ===true &&
+                                <Form.Row>
+                                    <Col className="one-liner login-attempts">
+                                        {/* <div className="wrap-input">
+                                            <Form.Control type="text" />
+                                        </div>
+                                        <span className="hinttext"> failed login attempts </span> */}
+                                        <div className={errors.timeOutSession && touched.timeOutSession? "witherror wrap-input": "wrap-input"}>
+                                            {errors.failedLoginAttemptsMins && touched.failedLoginAttemptsMins ? (
+                                                <span className="invalid-feedback">{errors.failedLoginAttemptsMins}</span>
+                                            ) : null}
+                                            <Form.Control 
+                                                type="text"
+                                                name="failedLoginAttemptsMins"
+                                                onChange={handleChange} 
+                                                value={values.failedLoginAttemptsMins}
+                                                className={errors.failedLoginAttemptsMins && touched.failedLoginAttemptsMins ? "is-invalid": null}
+                                                required />
+                                                
+                                        </div>
+                                        <span className="hinttext">minutes</span>
+                                        
+                                    </Col>
+                                </Form.Row>
+                            }
+                            <Form.Row>
+                                <Col>
+                                    <div className="table-helper">
+                                        <input 
+                                            type="checkbox" 
+                                            id="autoPasswordExpire" 
+                                             
+                                            name="automaticExpiryOfPassword"
+                                            onChange={handleChange} 
+                                            value={values.automaticExpiryOfPassword}
+                                            className={errors.automaticExpiryOfPassword && touched.automaticExpiryOfPassword ? "is-invalid": null}
+                                            required />
+                                        <label htmlFor="autoPasswordExpire"
+                                               className={errors.automaticExpiryOfPassword && touched.automaticExpiryOfPassword? "invalid-label":null } 
+                                        >
+                                            Password should automatically expire after</label>
+                                    </div>
+                                    {values.automaticExpiryOfPassword === true &&
+                                        <div className={errors.passwordExpiryDays && touched.passwordExpiryDays? "witherror wrap-input": "wrap-input"}>
+                                            {errors.passwordExpiryDays && touched.passwordExpiryDays ? (
+                                                        <span className="invalid-feedback">{errors.passwordExpiryDays}</span>
+                                            ) : null}
+                                            <Form.Control 
+                                                type="text"
+                                                name="passwordExpiryDays"
+                                                onChange={handleChange} 
+                                                value={values.passwordExpiryDays}
+                                                className={errors.passwordExpiryDays && touched.passwordExpiryDays ? "is-invalid": null}
+                                                required />
+                                            
+                                            <span className="hinttext">days</span>
+                                            
+                                        </div>
+                                    }   
+                                </Col>
+                                <Col>
+                            
+                                </Col>
+                            </Form.Row>
+
+                           
+
+
+                            <div className="form-ctas horizontal">
+                                <Button 
+                                    variant="success" 
+                                    className="mr-20px" 
+                                    type="submit"
+                                    disabled={adminAccessPreferencesRequest.is_request_processing}>
+                                        {adminAccessPreferencesRequest.is_request_processing?"Please wait...": "Save Changes"}
+                                </Button>
+                                <Button variant="light" type="button"> Cancel</Button>
+                            </div>
+
+                            {adminAccessPreferencesRequest.request_status === administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS && 
+                                <Alert variant="success">
+                                    {adminAccessPreferencesRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            {adminAccessPreferencesRequest.request_status === administrationConstants.UPDATE_ACCESS_PREFERENCE_FAILURE && 
+                                <Alert variant="danger">
+                                    {adminAccessPreferencesRequest.request_data.error}
+                            
+                                </Alert>
+                            }
+
+                        </Form>
+                    )}
+            </Formik>
+        )
     }
 
     render() {
@@ -84,60 +332,7 @@ class AccessPreferences extends React.Component {
                                         
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                               
-                                                
-                                                <Form className="form-content w-60 card">
-
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Timeout Session </Form.Label>
-                                                            <Form.Control type="text" value="60" /> 
-                                                            <span className="hinttext">minutes</span>
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Min Password Length</Form.Label>
-                                                            <Form.Control type="text"  value="8"/>
-                                                            <span className="hinttext">characters</span>
-                                                        </Col>
-                                                        
-                                                    </Form.Row>
-                                                    
-                                                    <div className="table-helper">
-                                                        <input type="checkbox" name="" id="showAutoLock" checked/>
-                                                        <label htmlFor="showAutoLock">Lock User After Failed Logins</label>
-                                                    </div>
-                                                    <Form.Row>
-                                                        <Col className="one-liner login-attempts">
-                                                            <Form.Control type="text"  />
-                                                            <span className="hinttext"> failed login attempts </span>
-                                                            <Form.Control type="text"  />
-                                                            <span className="hinttext">minutes</span>
-                                                        </Col>
-                                                        {/* <Col>
-                                                            
-                                                        </Col> */}
-                                                    </Form.Row>
-                                                    
-                                                    <Form.Row>
-                                                        <Col className="checked-wrap">
-                                                            <Form.Label className="block-level">IP Access Restrictions</Form.Label>
-                                                            <input type="checkbox" name="" id="showIpRestriction" checked/>
-                                                            <label htmlFor="showIpRestriction">Restrict User Access by IP Address</label>
-                                                        </Col>
-                                                        <Col className="checked-wrap">
-                                                            <Form.Label className="block-level">Critical Actions Re-Authentication</Form.Label>
-                                                            <input type="checkbox" name="" id="showReAuth" checked/>
-                                                            <label htmlFor="showReAuth">Require Admin Password</label>
-                                                        </Col>
-                                                    </Form.Row>
-                      
-
-                                                    <div className="form-ctas horizontal">
-                                                        <Button variant="success" className="mr-20px" type="submit"> Save Changes</Button>
-                                                        <Button variant="light" type="button"> Cancel</Button>
-                                                    </div>
-
-                                                </Form>
+                                               {this.renderAccessPreference()}
                                             </div>
                                         </div>
                                     </div>
@@ -151,4 +346,10 @@ class AccessPreferences extends React.Component {
     }
 }
 
-export default AccessPreferences;
+function mapStateToProps(state) {
+    return {
+        adminAccessPreferences : state.administrationReducers.adminAccessPreferencesReducer,
+    };
+}
+
+export default connect(mapStateToProps)(AccessPreferences);

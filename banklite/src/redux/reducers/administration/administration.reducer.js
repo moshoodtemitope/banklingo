@@ -187,4 +187,36 @@ export function emailSettingsReducer(state=[], action) {
     }
 }
 
+export function accessPreferencesReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_ACCESS_PREFERENCE_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_ACCESS_PREFERENCE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_ACCESS_PREFERENCE_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_ACCESS_PREFERENCE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_ACCESS_PREFERENCE_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_ACCESS_PREFERENCE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 

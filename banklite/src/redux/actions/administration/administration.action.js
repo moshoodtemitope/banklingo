@@ -10,7 +10,8 @@ export const administrationActions = {
     addTransactionChannel,
     addNewCurrency,
     smsSettings,
-    emailSettings
+    emailSettings,
+    accessPreferences
 }
 
 
@@ -163,7 +164,7 @@ function smsSettings  (smsSettingsPayload){
 function emailSettings  (emailSettingsPayload){
     if(emailSettingsPayload!=="CLEAR"){
         return dispatch =>{
-            console.log('payaloe sent', Object.keys(emailSettingsPayload).length);
+            
             if(Object.keys(emailSettingsPayload).length >1){
                 let consume = ApiService.request(routes.UPDATE_EMAIL_SETTINGS, "POST", emailSettingsPayload);
                 dispatch(request(consume));
@@ -171,7 +172,7 @@ function emailSettings  (emailSettingsPayload){
                     .then(response =>{
                         dispatch(success(response));
                     }).catch(error =>{
-                        // console.log('error is', error)
+                       
                         dispatch(failure(handleRequestErrors(error)));
                     });
             }
@@ -193,5 +194,44 @@ function emailSettings  (emailSettingsPayload){
     function success(response) { return { type: administrationConstants.EMAIL_SETTINGS_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.EMAIL_SETTINGS_FAILURE, error } }
     function clear() { return { type: administrationConstants.EMAIL_SETTINGS_RESET, clear_data:""} }
+
+}
+
+function accessPreferences  (accessPreferencePayload){
+    if(accessPreferencePayload!=="CLEAR"){
+        
+        return dispatch =>{
+            
+            if(Object.keys(accessPreferencePayload).length >1 
+                && accessPreferencePayload.automaticExpiryOfPassword ===true
+                && accessPreferencePayload.lockUserAfterFailedLogin ===true){
+                let consume = ApiService.request(routes.UPDATE_ACCESS_PREFERENCE, "POST", accessPreferencePayload);
+                dispatch(request(consume));
+                return consume
+                    .then(response =>{
+                        dispatch(success(response));
+                    }).catch(error =>{
+                       
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+            }
+            else{
+                dispatch(failure(handleRequestErrors("Please provide all required details")));
+            }
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_ACCESS_PREFERENCE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_ACCESS_PREFERENCE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_ACCESS_PREFERENCE_RESET, clear_data:""} }
 
 }

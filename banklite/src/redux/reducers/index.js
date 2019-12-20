@@ -22,6 +22,7 @@ const administrationReducers = combineReducers({
     adminCreateNewCurrencyReducer :administration.createNewCurrencyReducer,
     adminSmsSettingsReducer :administration.smsSettingsReducer,
     adminEmailSettingsReducer :administration.emailSettingsReducer,
+    adminAccessPreferencesReducer :administration.accessPreferencesReducer,
 })
 
 

@@ -6,7 +6,8 @@ import{
     createTransactionChannelReducer,
     createNewCurrencyReducer,
     smsSettingsReducer,
-    emailSettingsReducer
+    emailSettingsReducer,
+    accessPreferencesReducer
 } from './administration/administration.reducer'
 
 
@@ -19,5 +20,6 @@ export const administration ={
     createTransactionChannelReducer,
     createNewCurrencyReducer,
     smsSettingsReducer,
-    emailSettingsReducer
+    emailSettingsReducer,
+    accessPreferencesReducer
 }
