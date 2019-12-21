@@ -11,7 +11,8 @@ export const administrationActions = {
     addNewCurrency,
     smsSettings,
     emailSettings,
-    accessPreferences
+    accessPreferences,
+    internalControlSettings
 }
 
 
@@ -233,5 +234,41 @@ function accessPreferences  (accessPreferencePayload){
     function success(response) { return { type: administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.UPDATE_ACCESS_PREFERENCE_FAILURE, error } }
     function clear() { return { type: administrationConstants.UPDATE_ACCESS_PREFERENCE_RESET, clear_data:""} }
+
+}
+
+function internalControlSettings  (internalControlSettingsPayload){
+    if(internalControlSettingsPayload!=="CLEAR"){
+        return dispatch =>{
+            
+            if(Object.keys(internalControlSettingsPayload).length >1){
+                let consume = ApiService.request(routes.UPDATE_INTERNAL_CONTROL, "POST", internalControlSettingsPayload);
+                dispatch(request(consume));
+                return consume
+                    .then(response =>{
+                        dispatch(success(response));
+                    }).catch(error =>{
+                       
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+            }
+            else{
+                dispatch(failure(handleRequestErrors("Please provide all required details")));
+            }
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.EMAIL_SETTINGS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.EMAIL_SETTINGS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.EMAIL_SETTINGS_FAILURE, error } }
+    function clear() { return { type: administrationConstants.EMAIL_SETTINGS_RESET, clear_data:""} }
 
 }
