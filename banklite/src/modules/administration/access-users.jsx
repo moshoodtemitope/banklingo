@@ -2,25 +2,148 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-
+import { connect } from 'react-redux';
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+
 // import Form from 'react-bootstrap/Form'
 // import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
+
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import Alert from 'react-bootstrap/Alert'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
 class AccessUsers extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            pageSize:''
         }
 
         
     }
+
+    componentDidMount(){
+        this.loadInitialData();
+    }
+
+    loadInitialData=()=>{
+        let params = `PageSize=30`;
+        this.getAllUsers(params);
+    }
+
+    getAllUsers = (paramters)=>{
+        const {dispatch} = this.props;
+
+        dispatch(administrationActions.getAllUsers(paramters));
+    }
+
+    renderAllUsers =()=>{
+        let adminGetAllUsersRequest = this.props.adminGetAllUsers;
+
+            switch (adminGetAllUsersRequest.request_status){
+                case (administrationConstants.GET_ALL_USERS_PENDING):
+                    return (
+                        <div className="loading-content"> 
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+
+                case(administrationConstants.GET_ALL_USERS_SUCCESS):
+                    let allUsersData = adminGetAllUsersRequest.request_data.response.data;
+                        if(allUsersData!==undefined){
+                            if(allUsersData.result.length>=1){
+                                return(
+                                    <div>
+                                        <div className="table-helper">
+                                            <input type="checkbox" name="" id="showDeactivted"/>
+                                            <label htmlFor="showDeactivted">Show deactivated/locked users</label>
+                                        </div>
+                                        <div className="pagination-wrap">
+                                            <label htmlFor="toshow">Show</label>
+                                            <select id="toshow" className="countdropdown form-control form-control-sm">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="200">200</option>
+                                            </select>
+                                            <div className="move-page-actions">
+                                                <div className="each-page-action">
+                                                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                                </div>
+                                                <div className="page-count">
+                                                    <span>1-20</span>  of <span>20000</span>
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11"  />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <TableComponent classnames="striped bordered hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>User Name</th>
+                                                            <th>Title</th>
+                                                            <th>Email</th>
+                                                            <th>Role</th>
+                                                            <th>Last updated</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            allUsersData.result.map((eachUser, index)=>{
+                                                                return(
+                                                                    <Fragment key={index}>
+                                                                        <tr>
+                                                                            <td>{eachUser.name}</td>
+                                                                            <td>{eachUser.title}</td>
+                                                                            <td>{eachUser.emailAddress}</td>
+                                                                            <td>{eachUser.role}</td>
+                                                                            <td>{eachUser.lastUpdated}</td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                    </Fragment>
+                                                                )
+                                                            })
+                                                        }
+                                                    </tbody>
+                                        </TableComponent>
+                                        <div className="footer-with-cta toleft">
+                                            <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
+                                        </div>
+
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                    <div className="no-records">No user account has been created</div>
+                                )
+                            }
+                        }
+
+                case (administrationConstants.GET_ALL_USERS_FAILURE):
+                    return (
+                        <div className="loading-content errormsg"> 
+                            <div>An error occured please try again</div>
+                        </div>
+                    )
+                default :
+                return null;
+            }
+    }
+
 
     render() {
         return (
@@ -73,9 +196,9 @@ class AccessUsers extends React.Component {
                                             <li>
                                                 <NavLink to={'/administration/access/preferences'}>Preferences</NavLink>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                                 <NavLink to={'/administration/access/authentication'}>Federated Authentication</NavLink>
-                                            </li>
+                                            </li> */}
                                         </ul>
                                     </div>
                                 </div>
@@ -86,7 +209,8 @@ class AccessUsers extends React.Component {
                                         
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <div className="table-helper">
+                                                {this.renderAllUsers()}
+                                                {/* <div className="table-helper">
                                                     <input type="checkbox" name="" id="showDeactivted"/>
                                                     <label htmlFor="showDeactivted">Show deactivated/locked users</label>
                                                 </div>
@@ -238,10 +362,10 @@ class AccessUsers extends React.Component {
                                                             </td>
                                                         </tr>
                                                     </tbody>
-                                                </TableComponent>
+                                                </TableComponent> 
                                                 <div className="footer-with-cta toleft">
                                                 <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
-                                                </div>
+                                                </div>*/}
                                             </div>
                                         </div>
                                     </div>
@@ -255,4 +379,10 @@ class AccessUsers extends React.Component {
     }
 }
 
-export default AccessUsers;
+function mapStateToProps(state) {
+    return {
+        adminGetAllUsers : state.administrationReducers.adminGetAllUsersReducer,
+    };
+}
+
+export default connect(mapStateToProps) (AccessUsers);

@@ -52,9 +52,9 @@ class AccessRoles extends React.Component {
                                         <li>
                                             <NavLink to={'/administration/access'}>Access</NavLink>
                                         </li>
-                                        <li>
+                                        {/* <li>
                                             <NavLink to={'/administration/products'}>Products</NavLink>
-                                        </li>
+                                        </li> */}
                                         <li>
                                             <NavLink to={'/administration/sms'}>SMS</NavLink>
                                         </li>
@@ -73,9 +73,9 @@ class AccessRoles extends React.Component {
                                             <li>
                                                 <NavLink to={'/administration/access/preferences'}>Preferences</NavLink>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                                 <NavLink to={'/administration/access/authentication'}>Federated Authentication</NavLink>
-                                            </li>
+                                            </li> */}
                                         </ul>
                                     </div>
                                 </div>

@@ -83,6 +83,9 @@ select, select.form-control{
     &.toright{
         justify-content: flex-start;
     }
+    &.centered{
+        justify-content: center;
+    }
     .eachitem {
         margin-right: 13px;
         font-size: 13px;
@@ -517,4 +520,20 @@ span.hinttext {
 }
 .invalid-label{
     color: #dc3545;
+}
+.loading-content{
+    text-align: center;
+    color: #AEB6BF;
+    &.errormsg{
+        color: #dc3545;
+    }
+    .loading-text{
+        font-size: 23px;
+    }
+}
+.no-records{
+    text-align: center;
+    font-size: 23px;
+    color: #AEB6BF;
+    font-weight: 500;
 }

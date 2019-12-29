@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
@@ -10,17 +11,184 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
+
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import Alert from 'react-bootstrap/Alert'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
 class OrganizationBranches extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            PageSize:'30',
+            FullDetails: false,
+            CurrentPage:1,
+            CurrentSelectedPage:1
         }
 
         
     }
+
+    componentDidMount(){
+        this.loadInitialData();
+    }
+
+    loadInitialData=()=>{
+        let params = `PageSize=30`;
+        this.getAllBranches(params);
+    }
+
+    getAllBranches = (paramters)=>{
+        const {dispatch} = this.props;
+
+        dispatch(administrationActions.getAllBranches(paramters));
+    }
+
+    setPagesize = (PageSize)=>{
+        // console.log('----here', PageSize.target.value);
+        let sizeOfPage = PageSize.target.value,
+            {FullDetails, CurrentPage, CurrentSelectedPage} = this.state;
+
+        this.setState({PageSize: sizeOfPage});
+
+        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+        this.getAllBranches(params);
+    }
+
+    setShowDetails = (FullDetails)=>{
+        // console.log('----here', PageSize.target.value);
+        let showDetails = FullDetails.target.checked,
+            {CurrentPage, CurrentSelectedPage, PageSize} = this.state;
+
+        this.setState({FullDetails: showDetails});
+
+        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+        this.getAllBranches(params);
+    }
+
+    renderAllBranches =()=>{
+        let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
+            switch (adminGetAllBranchesRequest.request_status){
+                case (administrationConstants.GET_ALL_BRANCHES_PENDING):
+                    return (
+                        <div className="loading-content"> 
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+                
+                case(administrationConstants.GET_ALL_BRANCHES_SUCCESS):
+                    let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
+                    if(allBranchesData!==undefined){
+                        if(allBranchesData.result.length>=1){
+                            return(
+                                <div>
+                                    <div className="table-helper">
+                                        <input type="checkbox" name="" 
+                                            onChange={this.setShowDetails}
+                                            checked={this.state.FullDetails}
+                                            id="showFullDetails" />
+                                        <label htmlFor="showFullDetails">Show full details</label>
+                                    </div>
+                                    <div className="heading-with-cta toleft">
+                                        <div className="pagination-wrap">
+                                            <label htmlFor="toshow">Show</label>
+                                            <select id="toshow" 
+                                                onChange={this.setPagesize}
+                                                value={this.state.PageSize}
+                                                className="countdropdown form-control form-control-sm">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="200">200</option>
+                                            </select>
+                                            <div className="move-page-actions">
+                                                <div className="each-page-action">
+                                                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                                </div>
+                                                <div className="page-count">
+                                                    <span>1-{this.state.PageSize}</span>  of <span>{allBranchesData.totalRows}</span>
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <TableComponent classnames="striped bordered hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Branch Name</th>
+                                                <th>Branch State</th>
+                                                {this.state.FullDetails && <th>Address</th> }
+                                                {this.state.FullDetails && <th>Contact</th> }
+                                                <th>Created</th>
+                                                <th>Last Modified</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                allBranchesData.result.map((eachBranch, index)=>{
+                                                    return(
+                                                        <Fragment key={index}>
+                                                            <tr>
+                                                                <td>{eachBranch.name}</td>
+                                                                <td>{eachBranch.objectStateDescription}</td>
+                                                                {this.state.FullDetails && <th>{eachBranch.address}</th> }
+                                                                {this.state.FullDetails && <th>{eachBranch.contact}</th> }
+                                                                <td>{eachBranch.dateCreated}</td>
+                                                                <td>{eachBranch.lastUpdated}</td>
+                                                                <td>
+                                                                    <DropdownButton
+                                                                        size="sm"
+                                                                        title="Actions"
+                                                                        key="activeCurrency"
+                                                                        className="customone"
+                                                                    >
+                                                                        <NavLink className="dropdown-item" to={'/administration/organization/newbranch'}>Edit</NavLink>
+                                                                        <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                        <Dropdown.Item eventKey="1">Set Holidays</Dropdown.Item>
+                                                                    </DropdownButton>
+                                                                </td>
+                                                            </tr>
+                                                        </Fragment>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </TableComponent>
+
+                                </div>
+                            )
+                        }else{
+                            return(
+                                <div className="no-records">No branch has been created</div>
+                            )
+                        }
+                    }
+
+                case (administrationConstants.GET_ALL_USERS_FAILURE):
+                    return (
+                        <div className="loading-content errormsg"> 
+                            <div>An error occured please try again</div>
+                        </div>
+                    )
+                default :
+                return null;
+            }
+    }
+
+    
+
+
 
     render() {
         return (
@@ -52,9 +220,9 @@ class OrganizationBranches extends React.Component {
                                         <li>
                                             <NavLink to={'/administration/access'}>Access</NavLink>
                                         </li>
-                                        <li>
+                                        {/* <li>
                                             <NavLink to={'/administration/products'}>Products</NavLink>
-                                        </li>
+                                        </li> */}
                                         <li>
                                             <NavLink to={'/administration/sms'}>SMS</NavLink>
                                         </li>
@@ -68,10 +236,10 @@ class OrganizationBranches extends React.Component {
                                                 {/* <NavLink to={'/administration-generalorganization'}>Organization</NavLink> */}
                                                 <NavLink exact to={'/administration/organization'}>Branches</NavLink>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                                 <NavLink to={'/administration/organization/centers'}>Centers</NavLink>
-                                                {/* <NavLink to={'/administration/administration-generalcurrency'}>Currency</NavLink> */}
-                                            </li>
+                                                
+                                            </li> */}
                                         </ul>
                                     </div>
                                 </div>
@@ -82,7 +250,8 @@ class OrganizationBranches extends React.Component {
                                         
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <div className="table-helper">
+                                                {this.renderAllBranches()}
+                                                {/* <div className="table-helper">
                                                     <input type="checkbox" name="" id="showDeactivted"/>
                                                     <label htmlFor="showDeactivted">Show deactivated Branches</label>
                                                 </div>
@@ -189,7 +358,7 @@ class OrganizationBranches extends React.Component {
                                                             </td>
                                                         </tr>
                                                     </tbody>
-                                                </TableComponent>
+                                                </TableComponent> */}
                                                 <div className="footer-with-cta toleft">
                                                     <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
                                                 </div>
@@ -206,4 +375,10 @@ class OrganizationBranches extends React.Component {
     }
 }
 
-export default OrganizationBranches;
+function mapStateToProps(state) {
+    return {
+        adminGetAllBranches : state.administrationReducers.adminGetAllBranchesReducer,
+    };
+}
+
+export default connect(mapStateToProps)(OrganizationBranches);
