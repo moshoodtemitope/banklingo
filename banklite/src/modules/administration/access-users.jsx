@@ -120,15 +120,19 @@ class AccessUsers extends React.Component {
                                                         }
                                                     </tbody>
                                         </TableComponent>
-                                        <div className="footer-with-cta toleft">
-                                            <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
-                                        </div>
+                                        
 
                                     </div>
                                 )
                             }else{
                                 return(
-                                    <div className="no-records">No user account has been created</div>
+                                        <div className="no-records">
+                                            No user account has been created
+                                            <div className="footer-with-cta centered">
+                                                <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
+                                            </div>
+                                        </div>
+                                    
                                 )
                             }
                         }
