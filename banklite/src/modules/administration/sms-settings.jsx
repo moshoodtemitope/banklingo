@@ -93,7 +93,7 @@ class SMSSettings extends React.Component {
                                     userName: values.smsSettingsUsername,
                                     password: values.smsSettingsPassword,
                                     phoneNumber: values.smsSettingsPhone,
-                                    channelId: values.smsSettingsGateway
+                                    channelId: parseInt(values.smsSettingsGateway)
                                 };
 
 
@@ -101,9 +101,9 @@ class SMSSettings extends React.Component {
                                     .then(
                                         () => {
                                             
-                                            if(this.props.adminSmsSettings.request_status===administrationConstants.SMS_SETTINGS_SUCCESS){
-                                                resetForm();
-                                            }
+                                            // if(this.props.adminSmsSettings.request_status===administrationConstants.SMS_SETTINGS_SUCCESS){
+                                            //     resetForm();
+                                            // }
                                             
                                             setTimeout(() => {
                                                 this.props.dispatch(administrationActions.smsSettings("CLEAR"))
@@ -137,6 +137,7 @@ class SMSSettings extends React.Component {
                                                 className={errors.smsSettingsGateway && touched.smsSettingsGateway ? "is-invalid": null}
                                                     required>
                                                 <option>Select gateway</option>
+                                                <option value="0">None</option>
                                                 <option value="1">Twilio</option>
                                                 <option value="2">Infobip</option>
                                             </Form.Control>

@@ -63,18 +63,19 @@ class EmailSettings extends React.Component {
             case(administrationConstants.GET_EMAIL_SETTINGS_SUCCESS):
                 let emailSettingsData = adminGetEmailSettingsRequest.request_data.response.data;
                     if(emailSettingsData!==undefined){
+                        console.log('details is', emailSettingsData);
                         return(
                             <Formik
                                 initialValues={{
-                                    fromName: '',
-                                    fromEmail: '',
-                                    replyToEmail: '',
-                                    smtpHost: '',
-                                    smtpPort: '',
-                                    encryptionMethod: '',
+                                    fromName: emailSettingsData.fromName!==''?emailSettingsData.fromName:'',
+                                    fromEmail: emailSettingsData.fromEmail!==''?emailSettingsData.fromEmail:'',
+                                    replyToEmail: emailSettingsData.replyToEmail!==''?emailSettingsData.replyToEmail:'',
+                                    smtpHost: emailSettingsData.smtpHost!==''?emailSettingsData.smtpHost:'',
+                                    smtpPort: emailSettingsData.smtpPort!==''?emailSettingsData.smtpPort:'',
+                                    encryptionMethod: emailSettingsData.transportEncryptionMethod!==''?emailSettingsData.transportEncryptionMethod:'',
                                     username: '',
                                     password: '',
-                                    channelId:'0'
+                                    channelId:'1'
                                 }}
                                 // validationSchema={this.emailSettingsvalidationSchema}
                                 validationSchema={(props)=>{
@@ -121,7 +122,7 @@ class EmailSettings extends React.Component {
 
                                     if(values.channelId!=="0"){
                                         emailSettingsPayload = {
-                                            channelId: values.channelId,
+                                            channelId: parseInt(values.channelId),
                                             fromName: values.fromName,
                                             fromEmail: values.fromEmail,
                                             replyToEmail: values.replyToEmail,
@@ -145,7 +146,7 @@ class EmailSettings extends React.Component {
                                             () => {
 
                                                 if (this.props.adminEmailSettings.request_status === administrationConstants.EMAIL_SETTINGS_SUCCESS) {
-                                                    resetForm();
+                                                    // resetForm();
                                                 }
 
                                                 setTimeout(() => {
@@ -181,7 +182,7 @@ class EmailSettings extends React.Component {
                                                     required
                                                 >
                                                     <option value="0" >None</option>
-                                                    <option value="1">Custom</option>
+                                                    <option value="1" >Default</option>
                                                 </Form.Control>
                                                 {errors.channelId && touched.channelId ? (
                                                     <span className="invalid-feedback">{errors.channelId}</span>

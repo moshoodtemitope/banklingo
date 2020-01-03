@@ -309,21 +309,21 @@ class GeneralCurrency extends React.Component {
             {value: 'ERN', label: 'ERN - Eritrean'},
             {value: 'ILS', label: 'ILS - Israeli'},
             {value: 'NIO', label: 'NIO - Cordoba oro'},
-        ],
-        currencyValidationSchema = Yup.object().shape({
-            currencyName: Yup.string()
-              .min(2, 'Min of two characters')
-              .max(30, 'Max Limit reached')
-              .required('Please provide name'),
-            currencyCode: Yup.string()
-              .min(1, 'Please provide valid code')
-              .max(6, 'Max Limit reached')
-              .required('Code is required'),
-            currencySymbol: Yup.string()
-              .min(1, 'Please provide valid symbol')
-              .max(6, 'Max Limit reached')
-              .required('Symbol is required')
-        });
+        ];
+        // currencyValidationSchema = Yup.object().shape({
+        //     currencyName: Yup.string()
+        //       .min(2, 'Min of two characters')
+        //       .max(30, 'Max Limit reached')
+        //       .required('Please provide name'),
+        //     currencyCode: Yup.string()
+        //       .min(1, 'Please provide valid code')
+        //       .max(6, 'Max Limit reached')
+        //       .required('Code is required'),
+        //     currencySymbol: Yup.string()
+        //       .min(1, 'Please provide valid symbol')
+        //       .max(6, 'Max Limit reached')
+        //       .required('Symbol is required')
+        // });
         const {showNewCurrencyForm} = this.state;
         let adminCreateNewCurrencyRequest = this.props.adminCreateNewCurrency;
         return(

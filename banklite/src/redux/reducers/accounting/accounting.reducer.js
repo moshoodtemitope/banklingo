@@ -117,6 +117,63 @@ export function updateGLAccountReducer(state=[], action) {
 }
 
 
+export function getJournalEntriesReducer(state=[], action) {
+    switch (action.type) {
+        case accountingConstants.GET_JOURNAL_ENTRY_PENDING:
+            return {
+                request_status: accountingConstants.GET_JOURNAL_ENTRY_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case accountingConstants.GET_JOURNAL_ENTRY_SUCCESS:
+            return {
+                request_status: accountingConstants.GET_JOURNAL_ENTRY_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case accountingConstants.GET_JOURNAL_ENTRY_FAILURE:
+            return {
+                request_status: accountingConstants.GET_JOURNAL_ENTRY_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function createJournalEntriesReducer(state=[], action) {
+    switch (action.type) {
+        case accountingConstants.CREATE_JOURNAL_ENTRY_PENDING:
+            return {
+                request_status: accountingConstants.CREATE_JOURNAL_ENTRY_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS:
+            return {
+                request_status: accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case accountingConstants.CREATE_JOURNAL_ENTRY_FAILURE:
+            return {
+                request_status: accountingConstants.CREATE_JOURNAL_ENTRY_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case accountingConstants.CREATE_JOURNAL_ENTRY_RESET:
+            return {
+                request_status: accountingConstants.CREATE_JOURNAL_ENTRY_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
 
 
 

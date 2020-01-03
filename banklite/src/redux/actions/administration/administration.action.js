@@ -9,9 +9,12 @@ export const administrationActions = {
     addARole,
     getOrganizationDetails,
     updateOrganizationDetails,
+    getCustomerTypes,
     addCustomerType,
+    updateCustomerType,
     getTransactionChannels,
     addTransactionChannel,
+    updateTransactionChannel,
     addNewCurrency,
     smsSettings,
     getSmsSettings,
@@ -19,9 +22,12 @@ export const administrationActions = {
     getEmailSettings,
     getAccessPreferences,
     accessPreferences,
-    internalControlSettings,
+    getInternalControl,
+    updateInternalControlSettings,
     getAllBranches,
+    getABranch,
     createNewBranch,
+    updateABranch,
     getAllCurrencies,
     updateCurrency,
     setCurrencyConversionRate
@@ -107,11 +113,24 @@ function getTransactionChannels  (payload){
     
     return dispatch =>{
         let {PageSize, CurrentPage}= payload;
-        let consume = ApiService.request(routes.GET_TRANSACTION_CHANNEL+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_TRANSACTION_CHANNEL+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response =>{
-                dispatch(success(response));
+                let consume2 = ApiService.request(routes.ALL_GLACCOUNTS, "GET", null);
+
+                dispatch(request(consume2));
+
+                return consume2
+                    .then(response2 =>{
+                        dispatch(success(response,response2));
+                    })
+                    .catch(error =>{
+                    
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+
+                // dispatch(success(response));
             }).catch(error =>{
                 
                 dispatch(failure(handleRequestErrors(error)));
@@ -121,7 +140,7 @@ function getTransactionChannels  (payload){
     
 
 function request(user) { return { type: administrationConstants.GET_TRANSACTION_CHANNELS_PENDING, user } }
-function success(response) { return { type: administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS, response } }
+function success(response, response2) { return { type: administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS, response, response2 } }
 function failure(error) { return { type: administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE, error } }
 
 }
@@ -154,6 +173,36 @@ function addARole  (rolePayload){
     function clear() { return { type: administrationConstants.CREATE_A_ROLE_CLEAR, clear_data:""} }
 }
 
+function getCustomerTypes  (customerTypesPayload){
+    if(customerTypesPayload!=="CLEAR"){
+        return dispatch =>{
+            let {PageSize, CurrentPage}= customerTypesPayload;
+            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.GET_CUSTOMERTYPES_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_CUSTOMERTYPES_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_CUSTOMERTYPES_FAILURE, error } }
+    function clear() { return { type: administrationConstants.GET_CUSTOMERTYPES_RESET, clear_data:""} }
+
+}
+
 function addCustomerType  (customerTypePayload){
     if(customerTypePayload!=="CLEAR"){
         return dispatch =>{
@@ -183,6 +232,37 @@ function addCustomerType  (customerTypePayload){
 
 }
 
+function updateCustomerType  (updatedCustomerTypePayload){
+    if(updatedCustomerTypePayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.HIT_CUSTOMER_TYPES+`/${updatedCustomerTypePayload.id}`;
+            delete updatedCustomerTypePayload.id;
+            let consume = ApiService.request(url, "POST", updatedCustomerTypePayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_CUSTOMERTYPE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_CUSTOMERTYPE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_CUSTOMERTYPE_RESET, clear_data:""} }
+
+}
+
 function addTransactionChannel  (transactionChannelPayload){
     if(transactionChannelPayload!=="CLEAR"){
         return dispatch =>{
@@ -209,6 +289,43 @@ function addTransactionChannel  (transactionChannelPayload){
     function success(response) { return { type: administrationConstants.CREATE_TRANSACTION_CHANNEL_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.CREATE_TRANSACTION_CHANNEL_FAILURE, error } }
     function clear() { return { type: administrationConstants.CREATE_TRANSACTION_CHANNEL_RESET, clear_data:""} }
+
+}
+
+function updateTransactionChannel  (transactionChannelPayload){
+    if(transactionChannelPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.ADD_TRANSACTION_CHANNEL+`/${transactionChannelPayload.encodedKey}`;
+            if(transactionChannelPayload.key==='' || 
+                transactionChannelPayload.name===''){
+                    dispatch(failure(handleRequestErrors('Please provide all details')));
+                    return false;
+            }
+
+            delete transactionChannelPayload.encodedKey;
+            let consume = ApiService.request(url, "POST", transactionChannelPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_TRANSACTION_CHANNEL_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_TRANSACTION_CHANNEL_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_TRANSACTION_CHANNEL_RESET, clear_data:""} }
 
 }
 
@@ -361,7 +478,7 @@ function smsSettings  (smsSettingsPayload){
 function getSmsSettings  (){
     
     return dispatch =>{
-        let consume = ApiService.request(routes.GET_SMS_SETTINGS+`1`, "GET", null);
+        let consume = ApiService.request(routes.GET_SMS_SETTINGS+`1?Channel=1`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response =>{
@@ -384,7 +501,7 @@ function getSmsSettings  (){
 function getEmailSettings  (){
     
     return dispatch =>{
-        let consume = ApiService.request(routes.GET_EMAIL_SETTINGS+`1`, "GET", null);
+        let consume = ApiService.request(routes.GET_EMAIL_SETTINGS+`1?Channel=1`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response =>{
@@ -466,7 +583,7 @@ function accessPreferences  (accessPreferencePayload){
     if(accessPreferencePayload!=="CLEAR"){
         
         return dispatch =>{
-            
+            console.log('lalalal', accessPreferencePayload);
             if(Object.keys(accessPreferencePayload).length >1 
                 && accessPreferencePayload.automaticExpiryOfPassword ===true
                 && accessPreferencePayload.lockUserAfterFailedLogin ===true){
@@ -501,13 +618,36 @@ function accessPreferences  (accessPreferencePayload){
 
 }
 
+function getInternalControl  (params){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_INTERNAL_CONTROL, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
 
-function internalControlSettings  (internalControlSettingsPayload){
+function request(user) { return { type: administrationConstants.GET_INTERNAL_CONTROL_PENDING, user } }
+function success(response) { return { type: administrationConstants.GET_INTERNAL_CONTROL_SUCCESS, response } }
+function failure(error) { return { type: administrationConstants.GET_INTERNAL_CONTROL_FAILURE, error } }
+
+}
+
+
+function updateInternalControlSettings  (internalControlSettingsPayload){
     if(internalControlSettingsPayload!=="CLEAR"){
         return dispatch =>{
             
             if(Object.keys(internalControlSettingsPayload).length >1){
-                let consume = ApiService.request(routes.UPDATE_INTERNAL_CONTROL, "POST", internalControlSettingsPayload);
+                let consume = ApiService.request(routes.HIT_INTERNAL_CONTROL, "POST", internalControlSettingsPayload);
                 dispatch(request(consume));
                 return consume
                     .then(response =>{
@@ -538,11 +678,13 @@ function internalControlSettings  (internalControlSettingsPayload){
 
 }
 
+
+
 function getAllBranches  (params){
     
     return dispatch =>{
         
-        let consume = ApiService.request(routes.GET_BRANCHES+params, "GET", null);
+        let consume = ApiService.request(routes.GET_BRANCHES+'?'+params, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response =>{
@@ -558,6 +700,29 @@ function getAllBranches  (params){
 function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
 function success(response) { return { type: administrationConstants.GET_ALL_BRANCHES_SUCCESS, response } }
 function failure(error) { return { type: administrationConstants.GET_ALL_BRANCHES_FAILURE, error } }
+
+}
+
+function getABranch  (encodedKey){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.GET_BRANCHES+'/'+encodedKey, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+function request(user) { return { type: administrationConstants.GET_A_BRANCH_PENDING, user } }
+function success(response) { return { type: administrationConstants.GET_A_BRANCH_SUCCESS, response } }
+function failure(error) { return { type: administrationConstants.GET_A_BRANCH_FAILURE, error } }
 
 }
 
@@ -594,5 +759,44 @@ function createNewBranch  (createNewBranchPayload){
     function success(response) { return { type: administrationConstants.CREATE_NEW_BRANCH_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.CREATE_NEW_BRANCH_FAILURE, error } }
     function clear() { return { type: administrationConstants.CREATE_NEW_BRANCH_RESET, clear_data:""} }
+
+}
+
+function updateABranch  (updateABranchPayload){
+    if(updateABranchPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.ADD_BRANCH+`/${updateABranchPayload.encodedKey}`
+            if(Object.keys(updateABranchPayload).length >1){
+
+                delete updateABranchPayload.encodedKey;
+
+                let consume = ApiService.request(url, "POST", updateABranchPayload);
+                dispatch(request(consume));
+                return consume
+                    .then(response =>{
+                        dispatch(success(response));
+                    }).catch(error =>{
+                       
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+            }
+            else{
+                dispatch(failure(handleRequestErrors("Please provide all required details")));
+            }
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_A_BRANCH_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_A_BRANCH_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_A_BRANCH_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_A_BRANCH_RESET, clear_data:""} }
 
 }

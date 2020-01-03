@@ -8,13 +8,13 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 
 // import Form from 'react-bootstrap/Form'
 // import Button from 'react-bootstrap/Button'
-import Dropdown from 'react-bootstrap/Dropdown'
-import DropdownButton from 'react-bootstrap/DropdownButton'
+// import Dropdown from 'react-bootstrap/Dropdown'
+// import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
-import Alert from 'react-bootstrap/Alert'
+// import Alert from 'react-bootstrap/Alert'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
 class AccessUsers extends React.Component {
@@ -131,6 +131,9 @@ class AccessUsers extends React.Component {
                                     <div className="no-records">No user account has been created</div>
                                 )
                             }
+                        }
+                        else{
+                            return null;
                         }
 
                 case (administrationConstants.GET_ALL_USERS_FAILURE):

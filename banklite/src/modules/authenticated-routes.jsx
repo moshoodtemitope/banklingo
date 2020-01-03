@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Route, Switch } from "react-router-dom";
 import { Fragment } from "react";
 import DashboardLanding from './dashboard'
+import UserLogin from './onboarding/login'
 import ClientsManagement from './clients'
 import InactiveClients from './clients/inactive'
 import ActiveClients from './clients/active'
@@ -50,6 +51,7 @@ import GeneralBranding from './administration/general-branding'
 
 import OrganizationBranches from './administration/organization-branches'
 import NewBranch from './administration/organization-branches-new'
+import EditBranch from './administration/organization-edit-branch'
 import OrganizationCenters from './administration/organization-centers'
 import NewCenter from './administration/organization-centers-new'
 
@@ -110,7 +112,7 @@ class AuthenticatedRoutes extends React.Component {
                
                 <Fragment>
                     <Switch>
-                        <Route exact path='/' render={(props) => <DashboardLanding {...this.props} />} /> 
+                        <Route exact path='/' render={(props) => <UserLogin  />} /> 
                         <Route exact path='/dashboard' render={(props) => <DashboardLanding {...this.props} />} /> 
 
                         <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} />
@@ -162,6 +164,7 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <Route exact path='/administration-generalorganization'  render={(props) => <GeneralOrganization {...this.props} />} /> */}
                         <Route exact path='/administration/organization'  render={(props) => <OrganizationBranches {...this.props} />} />
                         <Route exact path='/administration/organization/newbranch'  render={(props) => <NewBranch {...this.props} />} />
+                        <Route exact path='/administration/organization/editbranch/:encodedkey'  render={(props) => <EditBranch encodedKey={props.match.params.encodedkey} {...this.props} />} />
                         <Route exact path='/administration/organization/centers'  render={(props) => <OrganizationCenters {...this.props} />} />
                         <Route exact path='/administration/organization/new-centers'  render={(props) => <NewCenter {...this.props} />} />
                         

@@ -107,8 +107,10 @@ class NewBranch extends React.Component {
                             addressCountry: values.addressCountry,
                             zipCode: values.zipCode,
                         },
-                        contactMobile: values.contactMobile,
-                        contactEmail: values.contactEmail
+                        contact: {
+                            contactMobile: values.contactMobile,
+                            contactEmail: values.contactEmail
+                        },
                     }
 
 

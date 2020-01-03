@@ -8,8 +8,10 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-// import Form from 'react-bootstrap/Form'
+import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Select from 'react-select';
+import Col from 'react-bootstrap/Col'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
@@ -35,9 +37,11 @@ class GeneralTxtChannels extends React.Component {
         this.getTransactionChannels();
     }
 
+    
+
     handleCloseEdit = () => this.setState({showEdit:false});
 
-    handleShowEdit = () => this.setState({showEdit:true});
+    handleShowEdit = (encodedKey) => this.setState({showEdit:true, encodedKey});
 
 
     getTransactionChannels = ()=>{
@@ -94,11 +98,10 @@ class GeneralTxtChannels extends React.Component {
                                                                         <DropdownButton
                                                                             size="sm"
                                                                             title="Actions"
-                                                                            key="activeCurrency"
                                                                             className="customone"
                                                                         >
-                                                                            <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
-                                                                            {/* <Dropdown.Item href="/administration/general/new-txt-channels">Edit</Dropdown.Item> */}
+                                                                            {/* <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink> */}
+                                                                            <Dropdown.Item eventKey="1" onClick={()=>this.handleShowEdit(eachChannel.encodedKey)}>Edit</Dropdown.Item>
                                                                         </DropdownButton>
                                                                     </td>
                                                                 </tr>
@@ -106,77 +109,7 @@ class GeneralTxtChannels extends React.Component {
                                                         )
                                                     })
                                                 }
-                                                {/* <tr>
-                                                    <td>2 ACCESS BANK SETTLEMENT ACCOUNT <span className="default-channel">DEFAULT</span> </td>
-                                                    <td>29-11-2017</td>
-                                                    <td>Admin</td>
-                                                    <td>Activated</td>
-                                                    <td>
-                                                        <DropdownButton
-                                                            size="sm"
-                                                            title="Actions"
-                                                            key="activeCurrency"
-                                                            className="customone"
-                                                        >
-                                                            <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
-                                                            
-                                                        </DropdownButton>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>INTERSWITCH DISBURSEMENT CHANNEL</td>
-                                                    <td>29-11-2017</td>
-                                                    <td>Bayonle Amzat</td>
-                                                    <td>Activated</td>
-                                                    <td>
-                                                        <DropdownButton
-                                                            size="sm"
-                                                            title="Actions"
-                                                            key="activeCurrency"
-                                                            className="customone"
-                                                        >
-                                                            <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
-                                                            <Dropdown.Item href="/administration/general/new-txt-channels">Deactivate</Dropdown.Item>
-                                                            <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
-                                                        </DropdownButton>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>INTERSWITCH DISBURSEMENT CHANNEL</td>
-                                                    <td>29-11-2017</td>
-                                                    <td>Bayonle Amzat</td>
-                                                    <td>Activated</td>
-                                                    <td>
-                                                        <DropdownButton
-                                                            size="sm"
-                                                            title="Actions"
-                                                            key="activeCurrency"
-                                                            className="customone"
-                                                        >
-                                                            <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
-                                                            <Dropdown.Item eventKey="2">Deactivate</Dropdown.Item>
-                                                            <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
-                                                        </DropdownButton>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>INTERSWITCH DISBURSEMENT CHANNEL</td>
-                                                    <td>29-11-2017</td>
-                                                    <td>Bayonle Amzat</td>
-                                                    <td>Activated</td>
-                                                    <td>
-                                                        <DropdownButton
-                                                            size="sm"
-                                                            title="Actions"
-                                                            key="activeCurrency"
-                                                            className="customone"
-                                                        >
-                                                            <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink>
-                                                            <Dropdown.Item eventKey="2">Deactivate</Dropdown.Item>
-                                                            <Dropdown.Item eventKey="3">Delete</Dropdown.Item>
-                                                        </DropdownButton>
-                                                    </td>
-                                                </tr> */}
+                                                
                                             </tbody>
                                         </TableComponent>
                                         <div className="footer-with-cta toleft">
@@ -213,11 +146,218 @@ class GeneralTxtChannels extends React.Component {
             }
     }
 
+    sendTransactionChannelUpdate = async (payload) =>{
+        const {dispatch} = this.props;
+
+        await dispatch(administrationActions.updateTransactionChannel(payload));
+    }
+
+    editTransactionChannel = ()=>{
+        let {showEdit, encodedKey, selectedGlAccount} = this.state,
+            adminUpdateTransactionChannelRequest = this.props.adminUpdateTransactionChannel,
+            validationSchema = Yup.object().shape({
+                TxtChannelId: Yup.string()
+                .matches(/^[0-9]*$/, 'Invalid repsonse'),
+                // .required('Please provide GL Account'),
+                TxtChannelName: Yup.string()
+                    .min(2, 'Min of two characters')
+                    .required('Name is required'),
+                TxtChannelKey: Yup.string()
+                    .min(2, 'Min of two characters')
+                    .max(30, 'Max Limit reached')
+                    .required('Key is required')
+            });
+
+        let txtChannelList = this.props.adminGetTransactionChannels.request_data.response.data,
+            glAccountList = this.props.adminGetTransactionChannels.request_data.response2.data,
+            selectTxtChannel,selectTxtChannelGl,
+            allGlAccounts =[];
+
+            glAccountList.map((channel, id)=>{
+                allGlAccounts.push({label: channel.accountDescription, value:channel.id});
+            })
+            selectTxtChannel = txtChannelList.filter((channel, index)=>channel.encodedKey===encodedKey)[0];
+        if(selectTxtChannel!==undefined){
+            selectTxtChannelGl = allGlAccounts.filter((glInfo, index)=>glInfo.value===selectTxtChannel.glAccountId)[0];
+
+                
+            
+            return(
+                <Modal show={showEdit} onHide={this.handleCloseEdit} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
+                        <Modal.Header>
+                            <Modal.Title>Edit Transaction Channel</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Formik
+                                initialValues={{
+                                    TxtChannelKey: selectTxtChannel.key,
+                                    TxtChannelName: selectTxtChannel.name,
+                                    TxtChannelId: '',
+                                }}
+                                // validationSchema={(props)=>{
+                                //     return Yup.lazy(values => { 
+
+                                //       return  Yup.object().shape({
+                                //             TxtChannelId: Yup.string()
+                                //             .matches(/^[0-9]*$/, 'Invalid repsonse'),
+                                //             // .required('Please provide GL Account'),
+                                //             TxtChannelName: Yup.string()
+                                //                 .min(2, 'Min of two characters')
+                                //                 .required('Name is required'),
+                                //             TxtChannelKey: Yup.string()
+                                //                 .min(2, 'Min of two characters')
+                                //                 .max(30, 'Max Limit reached')
+                                //                 .required('Key is required')
+                                //         });
+                                //     })
+                                // }}
+                                onSubmit={(values, { resetForm }) => {
+                                    
+                                    
+                                    let updatedTransactionChannelPayload = {
+                                        key: values.TxtChannelKey,
+                                        name: values.TxtChannelName,
+                                        // glId: parseInt(values.TxtChannelId),
+                                        glId: selectedGlAccount!=undefined? parseInt(selectedGlAccount.value): selectTxtChannelGl.value,
+                                        // glId: parseInt(selectedGlAccount.value),
+                                        encodedKey: selectTxtChannel.encodedKey
+                                    }
+                                
+                                    
+                                    this.sendTransactionChannelUpdate(updatedTransactionChannelPayload)
+                                        .then(
+                                            () => {
+                                                if(this.props.adminUpdateTransactionChannel.request_status === administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS){
+                                                    
+                                                    
+                                                    setTimeout(() => {
+                                                        this.getTransactionChannels(); 
+                                                        this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"));
+                                                        this.handleCloseEdit();
+                                                    }, 3000);
+                                                }else{
+                                                    setTimeout(() => {
+                                                        this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"))
+                                                    }, 2000);
+                                                }
+                                                
+                                                
+
+                                            }
+                                        )
+                                    
+                                        
+                                
+
+                                }}
+                            >
+                                {({ handleSubmit,
+                                    handleChange,
+                                    handleBlur,
+                                    resetForm,
+                                    values,
+                                    touched,
+                                    isValid,
+                                    errors, }) => (
+                                        <Form noValidate 
+                                                onSubmit={handleSubmit}>
+                                            <Form.Row>
+                                                <Col>
+                                                <Form.Group controlId="TxtChannelName">
+                                                        <Form.Label className="block-level">Name</Form.Label>
+                                                        <Form.Control
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={values.TxtChannelName}
+                                                            className={errors.TxtChannelName && touched.TxtChannelName ? "is-invalid" : null}
+                                                            name="TxtChannelName" required />
+                                                        {errors.TxtChannelName && touched.TxtChannelName ? (
+                                                            <span className="invalid-feedback">{errors.TxtChannelName}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group controlId="TxtChannelKey">
+                                                        <Form.Label className="block-level">Key</Form.Label>
+                                                        <Form.Control
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={values.TxtChannelKey}
+                                                            className={errors.TxtChannelKey && touched.TxtChannelKey ? "is-invalid" : null}
+                                                            name="TxtChannelKey" required />
+
+                                                        {errors.TxtChannelKey && touched.TxtChannelKey ? (
+                                                            <span className="invalid-feedback">{errors.TxtChannelKey}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">GL Account</Form.Label>
+                                                    <Select
+                                                        options={allGlAccounts}
+                                                        defaultValue ={{label:selectTxtChannelGl.label, value: selectTxtChannelGl.value}}
+                                                        onChange={(selectedGlAccount) => {
+                                                            this.setState({ selectedGlAccount });
+                                                            errors.TxtChannelId = null
+                                                            values.TxtChannelId = selectedGlAccount.value
+                                                            
+                                                            
+                                                        }}
+                                                        className={errors.TxtChannelId && touched.TxtChannelId ? "is-invalid" : null}
+                                                        
+                                                        name="TxtChannelId"
+                                                        // value={values.currencyCode}
+                                                        required
+                                                    />
+                                                    {errors.TxtChannelId && touched.TxtChannelId ? (
+                                                        <span className="invalid-feedback">{errors.TxtChannelId}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                </Col>
+                                            </Form.Row>
+                                            
+                                                
+                                        
+                                            <div className="footer-with-cta toleft">
+                                                <Button variant="secondary" className="grayed-out" onClick={this.handleCloseEdit}>Cancel</Button>
+                                                <Button
+                                                    type="submit"
+                                                    
+                                                    disabled={adminUpdateTransactionChannelRequest.is_request_processing}>
+                                                        {adminUpdateTransactionChannelRequest.is_request_processing?"Please wait...": "Update"}
+                                                    </Button>
+                                            </div>
+                                        </Form>
+                                    )}
+                            </Formik>
+                            {adminUpdateTransactionChannelRequest.request_status === administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS && 
+                                <Alert variant="success">
+                                    {adminUpdateTransactionChannelRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            {adminUpdateTransactionChannelRequest.request_status === administrationConstants.UPDATE_TRANSACTION_CHANNEL_FAILURE && 
+                                <Alert variant="danger">
+                                    {adminUpdateTransactionChannelRequest.request_data.error}
+                                </Alert>
+                            }
+                        </Modal.Body>
+                    </Modal>
+            )
+        }
+    }
+
 
 
     render() {
         return (
             <Fragment>
+                {
+                    this.props.adminGetTransactionChannels.request_status ===administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+                    && this.editTransactionChannel()
+                }
                 <InnerPageContainer {...this.props}>
                     <div className="content-wrapper">
                         <div className="module-heading">
@@ -306,6 +446,7 @@ class GeneralTxtChannels extends React.Component {
 function mapStateToProps(state) {
     return {
         adminGetTransactionChannels : state.administrationReducers.adminGetTransactionChannelsReducer,
+        adminUpdateTransactionChannel : state.administrationReducers.adminUpdateTransactionChannelReducer,
     };
 }
 

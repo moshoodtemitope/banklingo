@@ -78,13 +78,12 @@ class NewTxtChannels extends React.Component {
                 )
             case (accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS):
                 
-                
-                let allTxtChannels = []
-                    , transactionChannnelList;
-                    transactionChannnelList= getAllGLAccountsRequest.request_data.response.data;
+                let allGlAccounts = []
+                    , glAccountsList;
+                    glAccountsList= getAllGLAccountsRequest.request_data.response.data;
 
-                    transactionChannnelList.map((channel, id)=>{
-                        allTxtChannels.push({label: channel.accountDescription, value:channel.accountTypeId});
+                    glAccountsList.map((channel, id)=>{
+                        allGlAccounts.push({label: channel.accountDescription, value:channel.accountTypeId});
                     })
 
                 if(getAllGLAccountsRequest.request_data.response.data.length>=1){
@@ -181,7 +180,7 @@ class NewTxtChannels extends React.Component {
                                                     <Col>
                                                         <Form.Label className="block-level">GL Account</Form.Label>
                                                         <Select
-                                                            options={allTxtChannels}
+                                                            options={allGlAccounts}
                                                             onChange={(selectedAccType) => {
                                                                 this.setState({ selectedAccType });
                                                                 errors.TxtChannelId = null
@@ -221,79 +220,7 @@ class NewTxtChannels extends React.Component {
                                             <Col></Col>
                                         </Form.Row>
 
-                                        {/* <Accordion defaultActiveKey="0">
-                                                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                                        Loan Constraints
-                                                                    </Accordion.Toggle>
-                                                                    <Accordion.Collapse eventKey="0">
-                                                                        <div className="each-formsection w-40">
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option>Unconstrained Usage</option>
-                                                                                <option>Limited Usage</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Accordion.Collapse>
-                                                                </Accordion> */}
-
-                                        {/* <Accordion defaultActiveKey="2">
-                                                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="2">
-                                                                        Savings Constraints
-                                                                    </Accordion.Toggle>
-                                                                    <Accordion.Collapse eventKey="2">
-                                                                        <div className="each-formsection w-40">
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option>Unconstrained Usage</option>
-                                                                                <option>Limited Usage</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Accordion.Collapse>
-                                                                </Accordion> */}
-
-                                        {/* <Accordion defaultActiveKey="3">
-                                                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
-                                                                        Accounting
-                                                                    </Accordion.Toggle>
-                                                                    <Accordion.Collapse eventKey="3">
-                                                                        <div className="each-formsection w-40">
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option>1100100 - Cash Imprest - Head Office</option>
-                                                                                <option>1100100 - Cash Imprest - Akure</option>
-                                                                                <option>1100100 - Cash Imprest - Akure</option>
-                                                                                <option>1100100 - Cash Imprest - Akure</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Accordion.Collapse>
-                                                                </Accordion> */}
-
-                                        {/* <Accordion defaultActiveKey="3">
-                                                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
-                                                                        Usage Rights
-                                                                    </Accordion.Toggle>
-                                                                    <Accordion.Collapse eventKey="3">
-                                                                        <div>
-                                                                            <div className="each-formsection ">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" />
-                                                                                    <label htmlFor="pick-1">All Users</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-2" />
-                                                                                    <label htmlFor="pick-2">Chief Financial Officer</label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="each-formsection two-sided">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-3" />
-                                                                                    <label htmlFor="pick-3">Customer Engagement (Document Manager)</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-4" />
-                                                                                    <label htmlFor="pick-4">Operations - Rectify Adjustment</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </Accordion.Collapse>
-                                                                </Accordion> */}
+                                        
 
                                         <div className="footer-with-cta toleft">
                                             <NavLink to={'/administration/general/txt-channels'} className="btn btn-secondary grayed-out">Cancel</NavLink>
@@ -332,6 +259,8 @@ class NewTxtChannels extends React.Component {
                         <div>An error occured please try again</div>
                     </div>
                 )
+            default :
+            return null;
         }
     }
 

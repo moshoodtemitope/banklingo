@@ -110,6 +110,38 @@ export function updateOrganizationDetailsReducer(state=[], action) {
     }
 }
 
+export function getCustomerTypesReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_CUSTOMERTYPES_PENDING:
+            return {
+                request_status: administrationConstants.GET_CUSTOMERTYPES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_CUSTOMERTYPES_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_CUSTOMERTYPES_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_CUSTOMERTYPES_FAILURE:
+            return {
+                request_status: administrationConstants.GET_CUSTOMERTYPES_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_CUSTOMERTYPES_RESET:
+            return {
+                request_status: administrationConstants.GET_CUSTOMERTYPES_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function createCustomerTypeReducer(state=[], action) {
     switch (action.type) {
         case administrationConstants.CREATE_CUSTOMERTYPE_PENDING:
@@ -133,6 +165,38 @@ export function createCustomerTypeReducer(state=[], action) {
         case administrationConstants.CREATE_CUSTOMERTYPE_RESET:
             return {
                 request_status: administrationConstants.CREATE_CUSTOMERTYPE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function updateCustomerTypeReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_CUSTOMERTYPE_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_CUSTOMERTYPE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_CUSTOMERTYPE_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_CUSTOMERTYPE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_CUSTOMERTYPE_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_CUSTOMERTYPE_RESET,
                 is_request_processing: false,
                 request_data: {}
             };
@@ -197,6 +261,38 @@ export function createTransactionChannelReducer(state=[], action) {
         case administrationConstants.CREATE_TRANSACTION_CHANNEL_RESET:
             return {
                 request_status: administrationConstants.CREATE_TRANSACTION_CHANNEL_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function updateTransactionChannelReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_TRANSACTION_CHANNEL_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_TRANSACTION_CHANNEL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_TRANSACTION_CHANNEL_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_TRANSACTION_CHANNEL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_TRANSACTION_CHANNEL_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_TRANSACTION_CHANNEL_RESET,
                 is_request_processing: false,
                 request_data: {}
             };
@@ -526,6 +622,33 @@ export function accessPreferencesReducer(state=[], action) {
     }
 }
 
+export function getInternalControlReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_INTERNAL_CONTROL_PENDING:
+            return {
+                request_status: administrationConstants.GET_INTERNAL_CONTROL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_INTERNAL_CONTROL_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_INTERNAL_CONTROL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_INTERNAL_CONTROL_FAILURE:
+            return {
+                request_status: administrationConstants.GET_INTERNAL_CONTROL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
 export function internalControlReducer(state=[], action) {
     switch (action.type) {
         case administrationConstants.UPDATE_INTERNAL_CONTROL_PENDING:
@@ -592,6 +715,39 @@ export function getAllBranchesReducer(state=[], action) {
 
 }
 
+export function getABranchReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_A_BRANCH_PENDING:
+            return {
+                request_status: administrationConstants.GET_A_BRANCH_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_A_BRANCH_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_A_BRANCH_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_BRANCH_FAILURE:
+            return {
+                request_status: administrationConstants.GET_A_BRANCH_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_BRANCH_RESET:
+            return {
+                request_status: administrationConstants.GET_A_BRANCH_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
 export function createNewBranchReducer(state=[], action) {
     switch (action.type) {
         case administrationConstants.CREATE_NEW_BRANCH_PENDING:
@@ -615,6 +771,39 @@ export function createNewBranchReducer(state=[], action) {
         case administrationConstants.CREATE_NEW_BRANCH_RESET:
             return {
                 request_status: administrationConstants.CREATE_NEW_BRANCH_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function updateABranchReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_A_BRANCH_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_A_BRANCH_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_BRANCH_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_A_BRANCH_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_BRANCH_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_A_BRANCH_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_BRANCH_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_A_BRANCH_RESET,
                 is_request_processing: false,
                 request_data: {}
             };

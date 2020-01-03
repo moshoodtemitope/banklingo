@@ -236,6 +236,7 @@ class AccountManagement extends React.Component {
             glCode: Yup.string()
                     .min(2, 'Min of two characters')
                     .max(30, 'Max Limit reached')
+                    .matches(/^[0-9]*$/, 'Numbers only')
                     .required('Please provide name'),
         });
         const {showCreateGL, selectedAccType, selectedUsageOption} = this.state;
@@ -267,7 +268,7 @@ class AccountManagement extends React.Component {
                                 manualEntriesAllowed: values.allowManualEntry,
                                 notes: values.accountNotes,
                             };
-                        //    console.log('payload is', newgLPayload);
+                        
                             
                             this.submitNewGLAccountDetails(newgLPayload)
                                 .then(
@@ -465,6 +466,7 @@ class AccountManagement extends React.Component {
             glCode: Yup.string()
                     .min(2, 'Min of two characters')
                     .max(30, 'Max Limit reached')
+                    .matches(/^[0-9]*$/, 'Numbers only')
                     .required('Please provide GL Code'),
         });
         let {showEditGL, glIdToEdit, selectedAccType, selectedUsageOption} = this.state;
@@ -506,7 +508,6 @@ class AccountManagement extends React.Component {
                                     notes: values.accountNotes,
                                     idToUpdate: selectGlAcc.id
                                 };
-                            //    console.log('payload is', updatedGlPayload);
                                 
                                 this.submitUpdatedGLAccountDetails(updatedGlPayload)
                                     .then(
@@ -640,7 +641,7 @@ class AccountManagement extends React.Component {
                                             <Button variant="secondary" className="grayed-out" onClick={this.handleEditGlClose}>Cancel</Button>
                                             <Button
                                                 type="submit"
-                                                // onClick={()=>console.log('shdsdgshdgshd', values, selectedAccType.value)}
+                                                
                                                 disabled={updateGLAccount.is_request_processing}>
                                                     {updateGLAccount.is_request_processing?"Please wait...": "Update"}
                                                 </Button>

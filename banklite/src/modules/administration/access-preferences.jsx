@@ -117,12 +117,16 @@ class AccessPreferences extends React.Component {
                                     () => {
         
                                         if (this.props.adminAccessPreferences.request_status === administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS) {
-                                            resetForm();
+                                            // resetForm();
+                                            
+                                            setTimeout(() => {
+                                                this.getAccessPreferences();
+                                            }, 3000);
                                         }
         
                                         setTimeout(() => {
                                             this.props.dispatch(administrationActions.accessPreferences("CLEAR"))
-                                        }, 3000);
+                                        }, 2000);
         
                                     }
                                 )

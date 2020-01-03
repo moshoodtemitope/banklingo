@@ -1,0 +1,32 @@
+@import "../../assets/scss/shared/colors";
+@import "../../assets/scss/shared/globalstyles";
+
+.login-page{
+    height: 100vh;
+    background: #FBFCFC;
+    position: relative;
+    .card{
+        margin-top: 0;
+    }
+    form{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h4{
+        font-weight: 800;
+        font-size: 30px;
+        margin-right: 8px;
+        color: #2E4053;
+    }
+    img {
+        width: 50px;
+    }
+}

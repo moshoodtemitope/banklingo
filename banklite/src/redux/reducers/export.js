@@ -5,9 +5,12 @@ import{
     createRoleReducer,
     updateOrganizationDetailsReducer,
     getOrganizationDetailsReducer,
+    getCustomerTypesReducer,
     createCustomerTypeReducer,
+    updateCustomerTypeReducer,
     getTransactionChannelsReducer,
     createTransactionChannelReducer,
+    updateTransactionChannelReducer,
     createNewCurrencyReducer,
     updateCurrencyReducer,
     getAllCurrenciesReducer,
@@ -18,9 +21,12 @@ import{
     getEmailSettingsReducer,
     getAccessPreferencesReducer,
     accessPreferencesReducer,
+    getInternalControlReducer,
     internalControlReducer,
     getAllBranchesReducer,
-    createNewBranchReducer
+    getABranchReducer,
+    createNewBranchReducer,
+    updateABranchReducer
 } from './administration/administration.reducer'
 
 
@@ -29,6 +35,9 @@ import{
     createGLAccountsReducer,
     updateGLAccountReducer,
     getAllGLAccountsReducer,
+    getJournalEntriesReducer,
+    createJournalEntriesReducer,
+    
 } from './accounting/accounting.reducer'
 
 
@@ -39,9 +48,12 @@ export const administration ={
     createRoleReducer,
     updateOrganizationDetailsReducer,
     getOrganizationDetailsReducer,
+    getCustomerTypesReducer,
     createCustomerTypeReducer,
+    updateCustomerTypeReducer,
     getTransactionChannelsReducer,
     createTransactionChannelReducer,
+    updateTransactionChannelReducer,
     createNewCurrencyReducer,
     updateCurrencyReducer,
     getAllCurrenciesReducer,
@@ -52,9 +64,12 @@ export const administration ={
     getEmailSettingsReducer,
     getAccessPreferencesReducer,
     accessPreferencesReducer,
+    getInternalControlReducer,
     internalControlReducer,
     getAllBranchesReducer,
-    createNewBranchReducer
+    getABranchReducer,
+    createNewBranchReducer,
+    updateABranchReducer
 }
 
 export const accounting = {
@@ -62,4 +77,7 @@ export const accounting = {
     createGLAccountsReducer,
     updateGLAccountReducer,
     getAllGLAccountsReducer,
+    getJournalEntriesReducer,
+    createJournalEntriesReducer,
+    
 }

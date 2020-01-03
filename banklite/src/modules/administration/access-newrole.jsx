@@ -89,8 +89,8 @@ class CreateNewRole extends React.Component {
                                                                     <Col>
                                                                     <Form.Label>Access Rights</Form.Label>
                                                                         <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-13" disabled />
-                                                                            <label htmlFor="pick-13">Mambu</label>
+                                                                            <input type="checkbox" name="" id="pick-13"/>
+                                                                            <label htmlFor="pick-13">Portal Access</label>
                                                                         </div>
                                                                         <div className="checkbox-wrap">
                                                                             <input type="checkbox" name="" id="pick-25"  />
