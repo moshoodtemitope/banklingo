@@ -312,7 +312,8 @@ class NewBranch extends React.Component {
                                     Cancel</Button> */}
                                 <NavLink to={'/administration/organization'} className="btn btn-secondary grayed-out">Cancel</NavLink>
                                 <Button variant="success" type="submit"
-                                    disabled={adminCreateNewBranchRequest.is_request_processing}    
+                                    disabled={adminCreateNewBranchRequest.is_request_processing} 
+                                    className="mr-20"   
                                     > 
                                         {adminCreateNewBranchRequest.is_request_processing?"Please wait...": "Create Branch"}
                                 </Button>

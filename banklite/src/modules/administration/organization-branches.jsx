@@ -172,7 +172,12 @@ class OrganizationBranches extends React.Component {
                             )
                         }else{
                             return(
-                                <div className="no-records">No branch has been created</div>
+                                <div className="no-records">
+                                    No branch has been created
+                                    <div className="footer-with-cta centered">
+                                        <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
+                                    </div>
+                                </div>
                             )
                         }
                     }else{

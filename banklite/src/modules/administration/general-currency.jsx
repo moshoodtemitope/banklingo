@@ -354,6 +354,7 @@ class GeneralCurrency extends React.Component {
                                     () => {
                                         resetForm();
                                         setTimeout(() => {
+                                            this.getAllCurrencies();
                                             this.props.dispatch(administrationActions.addNewCurrency("CLEAR"))
                                         }, 3000);
 
@@ -674,6 +675,7 @@ class GeneralCurrency extends React.Component {
                                     () => {
                                         resetForm();
                                         setTimeout(() => {
+                                            this.getAllCurrencies()
                                             this.props.dispatch(administrationActions.setCurrencyConversionRate("CLEAR"))
                                             this.handleRateClose();
                                         }, 3000);

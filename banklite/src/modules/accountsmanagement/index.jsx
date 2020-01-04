@@ -92,11 +92,7 @@ class AccountManagement extends React.Component {
                         
                         return(
                             <div>
-                                {/* <div className="sub-tabpills">
-                                    <span className="sub-tabpill">All</span>
-                                    <span className="sub-tabpill">Test</span>
-                                    <span className="sub-tabpill">Test3</span>
-                                </div> */}
+                                
                                 <div className="heading-with-cta">
                                     {/* <h3 className="section-title">Chart of Accounts</h3> */}
                 

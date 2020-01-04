@@ -5,3 +5,25 @@
     background: #F4F6F7;
     padding: 20px 0;
 }
+.footer-with-cta .btn-secondary.btn.addnew-btn{
+    padding: 5px;
+    line-height: unset;
+    font-size: 10px;
+    height: 27px;
+    margin-top: auto;
+    opacity: 0.5;
+    font-weight: 600;
+}
+
+.btn-secondary.btn.remove-btn, .btn-secondary.btn.remove-btn:active,
+.btn-secondary.btn.remove-btn:not(:disabled):not(.disabled):active{
+    padding: 0 7px;
+    line-height: unset;
+    font-size: 12px;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-weight: 800;
+    background: #E74C3C;
+    border-width: 0;
+    border-radius: 3px;
+}

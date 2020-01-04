@@ -19,3 +19,12 @@ export const handleRequestErrors = (error)=>{
     }
     return "Something went wrong. Please try again";
 }
+
+
+export const getDateFromISO =(date) =>{
+    let toUse = new Date(date);
+    let convertedDate = toUse.toUTCString().split(' ').slice(0, 4).join(' ');
+
+    return convertedDate;
+    // console.log(year+'-' + month + '-'+dt) 
+}
