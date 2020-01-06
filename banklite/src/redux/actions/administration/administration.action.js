@@ -7,6 +7,11 @@ import { handleRequestErrors } from "../../../shared/utils";
 export const administrationActions = {
     getAllUsers,
     addARole,
+    updateARole,
+    getRoles,
+    getARole,
+    getAllRoles,
+    getAllPermissions,
     getOrganizationDetails,
     updateOrganizationDetails,
     getCustomerTypes,
@@ -88,7 +93,7 @@ function updateOrganizationDetails   (updateOrgPayload){
                 .then(response =>{
                     dispatch(success(response));
                 }).catch(error =>{
-                    // console.log('error is', error)
+                    
                     dispatch(failure(handleRequestErrors(error)));
                 });
             
@@ -117,6 +122,7 @@ function getTransactionChannels  (payload){
         dispatch(request(consume));
         return consume
             .then(response =>{
+                
                 let consume2 = ApiService.request(routes.ALL_GLACCOUNTS, "GET", null);
 
                 dispatch(request(consume2));
@@ -148,7 +154,7 @@ function failure(error) { return { type: administrationConstants.GET_TRANSACTION
 function addARole  (rolePayload){
     if(rolePayload!=="CLEAR"){
         return dispatch =>{
-            let consume = ApiService.request(routes.ADD_ROLE, "POST", rolePayload);
+            let consume = ApiService.request(routes.HIT_ROLE, "POST", rolePayload);
             dispatch(request(consume));
             return consume
                 .then(response =>{
@@ -170,7 +176,147 @@ function addARole  (rolePayload){
     function request(user) { return { type: administrationConstants.CREATE_A_ROLE_PENDING, user } }
     function success(response) { return { type: administrationConstants.CREATE_A_ROLE_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.CREATE_A_ROLE_FAILURE, error } }
-    function clear() { return { type: administrationConstants.CREATE_A_ROLE_CLEAR, clear_data:""} }
+    function clear() { return { type: administrationConstants.CREATE_A_ROLE_RESET, clear_data:""} }
+}
+
+function updateARole  (updateRolePayload){
+    if(updateRolePayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.HIT_ROLE+`/${updateRolePayload.id}`;
+            delete updateRolePayload.id;
+            let consume = ApiService.request(url, "POST", updateRolePayload);
+
+           
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+
+    function request(user) { return { type: administrationConstants.UPDATE_A_ROLE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_A_ROLE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_A_ROLE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_A_ROLE_RESET, clear_data:""} }
+}
+
+function getRoles  (getRolesPayload){
+    
+    return dispatch =>{
+        let {PageSize, CurrentPage}= getRolesPayload;
+        let consume = ApiService.request(routes.HIT_ROLE+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+        
+    
+
+    function request(user) { return { type: administrationConstants.GET_ROLES_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_ROLES_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_ROLES_FAILURE, error } }
+
+}
+
+function getARole  (id){
+    
+    return dispatch =>{
+        let consume = ApiService.request(routes.HIT_ROLE+`/${id}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                
+                if(response.status===200){
+                    let consume2 = ApiService.request(routes.HIT_ROLE+`/permissions`, "GET", null);
+                    dispatch(request(consume2));
+                    return consume2
+                        .then(response2 =>{
+                            dispatch(success(response, response2));
+                        }).catch(error =>{
+                            dispatch(failure(handleRequestErrors(error)));
+                        });
+                }else{
+                    
+                    
+                    
+                    dispatch(failure(handleRequestErrors("Unable to get requested Role")));
+                   
+                }
+                
+
+                // dispatch(success(response));
+            }).catch(error =>{
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+        
+    
+
+    function request(user) { return { type: administrationConstants.GET_A_ROLE_PENDING, user } }
+    function success(response, response2) { return { type: administrationConstants.GET_A_ROLE_SUCCESS, response,response2 } }
+    function failure(error) { return { type: administrationConstants.GET_A_ROLE_FAILURE, error } }
+
+}
+
+function getAllRoles  (){
+    
+    return dispatch =>{
+        let consume = ApiService.request(routes.HIT_ROLE+`/all`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+        
+    
+
+    function request(user) { return { type: administrationConstants.GET_ALL_ROLES_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_ALL_ROLES_FAILURE, error } }
+
+}
+
+function getAllPermissions  (){
+    
+    return dispatch =>{
+        let consume = ApiService.request(routes.HIT_ROLE+`/permissions`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+        
+    
+
+    function request(user) { return { type: administrationConstants.GET_ROLE_PERMISSIONS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_ROLE_PERMISSIONS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_ROLE_PERMISSIONS_FAILURE, error } }
+
 }
 
 function getCustomerTypes  (customerTypesPayload){
@@ -338,7 +484,7 @@ function addNewCurrency  (newCurrencyPayload){
                 .then(response =>{
                     dispatch(success(response));
                 }).catch(error =>{
-                    // console.log('error is', error)
+                   
                     dispatch(failure(handleRequestErrors(error)));
                 });
             
@@ -368,7 +514,7 @@ function updateCurrency  (updateCurrencyPayload){
                 .then(response =>{
                     dispatch(success(response));
                 }).catch(error =>{
-                    // console.log('error is', error)
+                    
                     dispatch(failure(handleRequestErrors(error)));
                 });
             
@@ -398,7 +544,7 @@ function getAllCurrencies  (){
                 .then(response =>{
                     dispatch(success(response));
                 }).catch(error =>{
-                    // console.log('error is', error)
+                    
                     dispatch(failure(handleRequestErrors(error)));
                 });
             
@@ -422,7 +568,7 @@ function setCurrencyConversionRate (conversionPayload){
                 .then(response =>{
                     dispatch(success(response));
                 }).catch(error =>{
-                    // console.log('error is', error)
+                    
                     dispatch(failure(handleRequestErrors(error)));
                 });
             
@@ -454,7 +600,7 @@ function smsSettings  (smsSettingsPayload){
                 .then(response =>{
                     dispatch(success(response));
                 }).catch(error =>{
-                    // console.log('error is', error)
+                    
                     dispatch(failure(handleRequestErrors(error)));
                 });
             
@@ -484,7 +630,7 @@ function getSmsSettings  (){
             .then(response =>{
                 dispatch(success(response));
             }).catch(error =>{
-                // console.log('error is', error)
+                
                 dispatch(failure(handleRequestErrors(error)));
             });
         
@@ -507,7 +653,7 @@ function getEmailSettings  (){
             .then(response =>{
                 dispatch(success(response));
             }).catch(error =>{
-                // console.log('error is', error)
+                
                 dispatch(failure(handleRequestErrors(error)));
             });
         
@@ -583,7 +729,7 @@ function accessPreferences  (accessPreferencePayload){
     if(accessPreferencePayload!=="CLEAR"){
         
         return dispatch =>{
-            console.log('lalalal', accessPreferencePayload);
+            
             if(Object.keys(accessPreferencePayload).length >1 
                 && accessPreferencePayload.automaticExpiryOfPassword ===true
                 && accessPreferencePayload.lockUserAfterFailedLogin ===true){
@@ -677,8 +823,6 @@ function updateInternalControlSettings  (internalControlSettingsPayload){
     function clear() { return { type: administrationConstants.UPDATE_INTERNAL_CONTROL_RESET, clear_data:""} }
 
 }
-
-
 
 function getAllBranches  (params){
     

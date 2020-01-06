@@ -465,9 +465,13 @@ span.hinttext {
     label{
         font-size: 13px;
         margin-left: 8px;
+        font-weight: normal;
     }
 }
-
+button.togglestyle{
+    display: flex;
+    align-items: center;
+}
 .each-permissiongroup{
     display: flex;
     align-items: center;
@@ -480,7 +484,7 @@ span.hinttext {
         margin-left: 5px;
     }
     .inner-permissions{
-        margin-left: 40px;
+        margin-left: 10px;
         font-size: 13px;
         .checkbox-wrap{
             margin-bottom: 3px;
@@ -488,9 +492,25 @@ span.hinttext {
     }
     .accordion>.btn-link{
         padding-right: 0;
+        &:hover{
+            text-decoration: none;
+            cursor: pointer;
+            label{
+                cursor: pointer;
+            }
+        }
     }
-    .accordion>label{
+    .accordion label{
         font-size: 13px;
+        font-weight: 600;
+        color: #212529;
+    }
+    .accordion .checkbox-wrap{
+        label{
+            font-size: 13px;
+            margin-left: 8px;
+            font-weight: normal;
+        }
     }
 }
 .input-helptext{

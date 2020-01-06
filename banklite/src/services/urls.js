@@ -24,7 +24,8 @@ export const routes = {
     HIT_CUSTOMER_TYPES: BASEURL + '/Dars.Administration/api/CustomerType/customertypes',
     
     ADD_EXCHANGE_RATE: BASEURL + '/Dars.Administration/api/Account/exchangerate',
-    ADD_ROLE: BASEURL + '/Dars.Administration/api/Account/role', //works
+    
+    HIT_ROLE: BASEURL + '/Dars.Administration/api/Role', //works
     // ADD_TRANSACTION_CHANNEL: BASEURL + '/Dars.Administration/api/Account/transactionchannel',
     
     ADD_TRANSACTION_CHANNEL: BASEURL + '/Dars.Administration/api/TransactionChannel/transactionchannel',

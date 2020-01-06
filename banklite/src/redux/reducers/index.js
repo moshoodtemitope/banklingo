@@ -19,6 +19,11 @@ const rootReducer = (state, action)=>{
 const administrationReducers = combineReducers({
     adminGetAllUsersReducer: administration.getAllUsersReducer, 
     adminCreateRoleReducer: administration.createRoleReducer, 
+    adminUpdateARoleReducer: administration.updateARoleReducer, 
+    adminGetRolesReducer: administration.getRolesReducer, 
+    adminGetARoleReducer: administration.getARoleReducer, 
+    adminGetAllRolesReducer: administration.getAllRolesReducer, 
+    adminGetAllPermissionsReducer: administration.getAllPermissionsReducer, 
     adminGetOrganizationDetailsReducer: administration.getOrganizationDetailsReducer, 
     adminUpdateOrganizationDetailsReducer: administration.updateOrganizationDetailsReducer, 
     adminCreateCustomerTypeReducer: administration.createCustomerTypeReducer,   

@@ -46,6 +46,148 @@ export function createRoleReducer(state=[], action) {
                 is_request_processing: false,
                 request_data: action
             };
+        case administrationConstants.CREATE_A_ROLE_RESET:
+            return {
+                request_status: administrationConstants.CREATE_A_ROLE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function updateARoleReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_A_ROLE_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_A_ROLE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_ROLE_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_A_ROLE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_ROLE_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_A_ROLE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_ROLE_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_A_ROLE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getRolesReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ROLES_PENDING:
+            return {
+                request_status: administrationConstants.GET_ROLES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ROLES_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ROLES_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ROLES_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ROLES_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getARoleReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_A_ROLE_PENDING:
+            return {
+                request_status: administrationConstants.GET_A_ROLE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_A_ROLE_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_A_ROLE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_ROLE_FAILURE:
+            return {
+                request_status: administrationConstants.GET_A_ROLE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getAllRolesReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ALL_ROLES_PENDING:
+            return {
+                request_status: administrationConstants.GET_ALL_ROLES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_ROLES_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ALL_ROLES_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_ROLES_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ALL_ROLES_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getAllPermissionsReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ROLE_PERMISSIONS_PENDING:
+            return {
+                request_status: administrationConstants.GET_ROLE_PERMISSIONS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ROLE_PERMISSIONS_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ROLE_PERMISSIONS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ROLE_PERMISSIONS_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ROLE_PERMISSIONS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
 
         default:
             return { ...state }

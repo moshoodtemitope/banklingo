@@ -184,7 +184,7 @@ class OrganizationBranches extends React.Component {
                         return null;
                     }
 
-                case (administrationConstants.GET_ALL_USERS_FAILURE):
+                case (administrationConstants.GET_ALL_BRANCHES_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
                             <div>An error occured please try again</div>

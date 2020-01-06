@@ -3,6 +3,11 @@
 import{
     getAllUsersReducer,
     createRoleReducer,
+    updateARoleReducer,
+    getRolesReducer,
+    getARoleReducer,
+    getAllRolesReducer,
+    getAllPermissionsReducer,
     updateOrganizationDetailsReducer,
     getOrganizationDetailsReducer,
     getCustomerTypesReducer,
@@ -46,6 +51,11 @@ import{
 export const administration ={
     getAllUsersReducer,
     createRoleReducer,
+    updateARoleReducer,
+    getRolesReducer,
+    getARoleReducer,
+    getAllRolesReducer,
+    getAllPermissionsReducer,
     updateOrganizationDetailsReducer,
     getOrganizationDetailsReducer,
     getCustomerTypesReducer,
