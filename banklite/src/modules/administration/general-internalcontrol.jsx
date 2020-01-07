@@ -13,6 +13,7 @@ import Col from 'react-bootstrap/Col'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import {numberWithCommas} from '../../shared/utils';
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
@@ -132,7 +133,7 @@ class GeneralInternalControl extends React.Component {
                                     creditArrangementInitialState: parseInt(values.creditArrangementInitialState),
                                     separateUsersForApprovalsAndDisbursals: 
                                         values.separateUsersForApprovalsAndDisbursals===true ? 1: 0,
-                                    maximumExposureToCustomerAmount: parseFloat(values.maximumExposureToCustomerAmount)
+                                    maximumExposureToCustomerAmount: parseFloat(values.maximumExposureToCustomerAmount.replace(/,/g, ''))
                                 }
             
                                 if(parseInt(values.maximumExposureToCustomer)===1){
@@ -220,7 +221,7 @@ class GeneralInternalControl extends React.Component {
                                                         <Form.Control type="text" size="sm" 
                                                             name="maximumExposureToCustomerAmount"
                                                             onChange={handleChange} 
-                                                            value={values.maximumExposureToCustomerAmount}
+                                                            value={numberWithCommas(values.maximumExposureToCustomerAmount)}
                                                             className={errors.maximumExposureToCustomerAmount && touched.maximumExposureToCustomerAmount ? "is-invalid": null}
                                                             required />
                                                     </Form.Group>

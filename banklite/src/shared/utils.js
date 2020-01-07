@@ -28,3 +28,14 @@ export const getDateFromISO =(date) =>{
     return convertedDate;
     // console.log(year+'-' + month + '-'+dt) 
 }
+
+export const numberWithCommas= (amount)=> {
+    if(amount!==undefined && amount!==''){
+    // return numberProvided.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // return parseFloat(numberProvided).toLocaleString(undefined, {maximumFractionDigits:2});
+        let amountFiltered = amount.replace(/,/g, '');
+        return amountFiltered.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');    
+       
+        
+    }
+}

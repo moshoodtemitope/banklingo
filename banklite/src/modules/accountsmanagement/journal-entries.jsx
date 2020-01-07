@@ -23,7 +23,7 @@ import Select from 'react-select';
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 
-import {getDateFromISO} from '../../shared/utils';
+import {getDateFromISO, numberWithCommas} from '../../shared/utils';
 import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
 import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
 import Alert from 'react-bootstrap/Alert'
@@ -212,7 +212,7 @@ class JournalEntries extends React.Component {
                                     }
                                     jornalEntryModel.push({
                                                     glAccountId: eachEntry.glAcountlId,
-                                                    amount: parseFloat(eachEntry.entryAmount),
+                                                    amount: parseFloat(eachEntry.entryAmount.replace(/,/g, '')),
                                                     journalEntryType: eachEntry.entryTypeId,
                                                     branchId: eachEntry.branchId,
                                                 })
@@ -446,7 +446,7 @@ class JournalEntries extends React.Component {
                                                                     type="text"
                                                                     // onBlur={handleBlur}
                                                                     onChange={handleChange}
-                                                                    value={values.jornalEntries[index].entryAmount}
+                                                                    value={numberWithCommas(values.jornalEntries[index].entryAmount)}
                                                                     className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') && errors.jornalEntries[index].entryAmount && touched.jornalEntries && touched.jornalEntries[index].entryAmount ? "is-invalid withcustom" : "withcustom"}
                                                                     
                                                                     name={`jornalEntries.${index}.entryAmount`}
