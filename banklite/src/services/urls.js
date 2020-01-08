@@ -11,7 +11,7 @@ export const routes = {
     GET_BRANCHES: BASEURL + '/Dars.Administration/api/branch',
     ADD_BRANCH: BASEURL + '/Dars.Administration/api/branch',
     
-    GET_USERS: BASEURL + '/Dars.Administration/api/Account/users?',
+    HIT_USERS: BASEURL + '/Dars.Administration/api/user',
     
     GET_ORGANIZATION_DETAILS: BASEURL + '/Dars.Administration/api/Administration/organization',
     UPDATE_ORGANIZATION_DETAILS: BASEURL + '/Dars.Administration/api/Administration/updateorganization',

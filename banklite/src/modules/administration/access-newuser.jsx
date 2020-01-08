@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
@@ -9,9 +10,19 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
 // import Select from 'react-select';
+
 import Form from 'react-bootstrap/Form'
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 // import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
+
+import Select from 'react-select';
+
+import Alert from 'react-bootstrap/Alert'
+
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import "./administration.scss"; 
 class CreateNewUser extends React.Component {
     constructor(props) {
@@ -22,6 +33,641 @@ class CreateNewUser extends React.Component {
 
         
     }
+
+    componentDidMount(){
+        this.getRoles();
+    }
+
+    getRoles = ()=>{
+        const {dispatch} = this.props;
+        
+        dispatch(administrationActions.getAllRoles(true));
+    }
+
+    createUserRequest = async (payload)=>{
+        const {dispatch} = this.props;
+        
+        await dispatch(administrationActions.createUser(payload));
+    }
+    
+    
+
+    renderCreateUserForm =(roles, branches)=>{
+        let adminCreateAUserRequest = this.props.adminCreateAUserReducer,
+            allRoles =[],
+            allBranches =[],
+            createUserValidationSchema = Yup.object().shape({
+                firstName: Yup.string()
+                    .min(2, 'Valid firstname required')
+                    .max(40, 'Max limit reached')
+                    .required('Required'),
+                lastName: Yup.string()
+                    .min(2, 'Valid lasttname required')
+                    .max(40, 'Max limit reached')
+                    .required('Required'),
+                title: Yup.string()
+                    .min(2, 'Valid title required')
+                    .max(40, 'Max limit reached')
+                    .required('Required'),
+                roleId: Yup.string()
+                    .min(1, 'Valid Role required')
+                    .max(40, 'Max limit reached')
+                    .required('Required'),
+                addressLine1: Yup.string()
+                    .min(2, 'Valid address required')
+                    .max(100, 'Max limit reached'),
+                addressLine2: Yup.string()
+                    .min(2, 'Valid address required')
+                    .max(100, 'Max limit reached'),
+                addressCity: Yup.string()
+                    .min(2, 'Valid address city required')
+                    .max(100, 'Max limit reached'),
+                addressState: Yup.string()
+                    .min(2, 'Valid address state required')
+                    .max(100, 'Max limit reached'),
+                addressCountry: Yup.string()
+                    .min(1, 'Valid address Country required')
+                    .max(100, 'Max limit reached'),
+                zipCode: Yup.string()
+                    .min(2, 'Valid Zip Code  required')
+                    .max(100, 'Max limit reached'),
+                contactMobile: Yup.string()
+                    .min(7, 'Valid Contact mobile  required')
+                    .max(100, 'Max limit reached'),
+                contactEmail: Yup.string()
+                    .email('Valid email  required')
+                    .max(100, 'Max limit reached'),
+                userName: Yup.string()
+                    .min(2, 'Valid Username  required')
+                    .max(100, 'Max limit reached')
+                    .required('Required'),
+                emailAddress: Yup.string()
+                    .email('Valid email  required')
+                    .max(100, 'Max limit reached')
+                    .required('Required'),
+                password: Yup.string()
+                    .min(2, 'Valid password  required')
+                    .max(100, 'Max limit reached')
+                    .required('Required'),
+                branchId: Yup.string()
+                    .min(1, 'Branch  required')
+                    .max(100, 'Max limit reached')
+                    .required('Required'),
+                note:  Yup.string()
+                    .min(5, 'Provide detailed notes'),
+            });
+
+            roles.map((eachRole, index)=>{
+                allRoles.push({value:eachRole.roleId, label:eachRole.name})
+            })
+
+            branches.map((eachBranch, index)=>{
+                allBranches.push({value:eachBranch.id, label:eachBranch.name})
+            })
+
+        return(
+            <Formik
+                initialValues={{
+                    firstName: '',
+                    lastName: '',
+                    title: '',
+                    roleId: '',
+                    userIsTeller: false,
+                    userIsAccountOfficer: false,
+                    userIsAdministrator: false,
+                    userIsPortalAdministrator: false,
+                    userHasApiAccessRight: false,
+                    note: '',
+                    addressLine1: '',
+                    addressLine2: '',
+                    addressCity: '',
+                    addressState: '',
+                    addressCountry: '',
+                    zipCode: '',
+                    contactMobile: '',
+                    contactEmail: '',
+                    userName: '',
+                    emailAddress: '',
+                    password: '',
+                    branchId: '',
+                }}
+
+                validationSchema={createUserValidationSchema}
+                onSubmit={(values, { resetForm }) => {
+
+                    let createNewUserPayload = {
+                        firstName: values.firstName,
+                        lastName: values.lastName,
+                        title: values.title,
+                        roleId: values.roleId,
+                        isAccountOfficer: values.userIsAccountOfficer,
+                        isTeller: values.userIsTeller,
+                        isApiAccess: values.userHasApiAccessRight,
+                        isPortalAdministrator: values.userIsPortalAdministrator,
+                        isAdministrator: values.userIsAdministrator,
+                        contact:{
+                            // contactMobile:values.contactMobile,
+                            // contactEmail:values.contactEmail,
+                        },
+                        address:{
+                            // addressLine1: values.addressLine1,
+                            // addressLine2: values.addressLine2,
+                            // addressCity: values.addressCity,
+                            // addressState: values.addressState,
+                            // addressCountry: values.addressCountry,
+                            // zipCode: values.zipCode,
+                        },
+                        userName: values.userName,
+                        emailAddress: values.emailAddress,
+                        password: values.password,
+                        branchId: values.branchId,
+                        note: values.note,
+                    };
+                    if(values.addressLine1!==''){
+                        createNewUserPayload.address.addressLine1 =values.addressLine1;
+                    }
+                    if(values.addressLine2!==''){
+                        createNewUserPayload.address.addressLine2 =values.addressLine2;
+                    }
+                    if(values.addressCity!==''){
+                        createNewUserPayload.address.addressCity =values.addressCity;
+                    }
+                    if(values.addressState!==''){
+                        createNewUserPayload.address.addressState =values.addressState;
+                    }
+                    if(values.addressCountry!==''){
+                        createNewUserPayload.address.addressCountry =values.addressCountry;
+                    }
+                    if(values.zipCode!==''){
+                        createNewUserPayload.address.zipCode =values.zipCode;
+                    }
+
+                    if(values.contactMobile!==''){
+                        createNewUserPayload.contact.contactMobile =values.contactMobile;
+                    }
+
+                    if(values.contactEmail!==''){
+                        createNewUserPayload.contact.contactEmail =values.contactEmail;
+                    }
+
+                    console.log('payload is ',createNewUserPayload);
+
+                    this.createUserRequest(createNewUserPayload)
+                        .then(
+                            () => {
+
+                                if (this.props.adminCreateAUserReducer.request_status === administrationConstants.CREATE_A_USER_SUCCESS) {
+
+
+                                    setTimeout(() => {
+                                        this.props.dispatch(administrationActions.createUser("CLEAR"));
+                                        resetForm();
+                                    }, 3000);
+                                } else {
+                                    setTimeout(() => {
+                                        this.props.dispatch(administrationActions.createUser("CLEAR"))
+                                    }, 3000);
+                                }
+
+                            }
+                        )
+
+                }}
+            >
+                {({ handleSubmit,
+                    handleChange,
+                    handleBlur,
+                    resetForm,
+                    values,
+                    touched,
+                    isValid,
+                    errors, }) => (
+                        <Form noValidate 
+                            onSubmit={handleSubmit} 
+                            className="form-content card">
+                            <div className="form-heading">
+                                <h3>Creating A New User</h3>
+                            </div>
+                            <Form.Row>
+                                <Col>
+                                    <Form.Label className="block-level">First Names</Form.Label>
+                                    <Form.Control 
+                                        type="text"
+                                        onChange={handleChange}
+                                        value={values.firstName}
+                                        className={errors.firstName && touched.firstName ? "is-invalid": null}
+                                        name="firstName" />
+                                    {errors.firstName && touched.firstName ? (
+                                        <span className="invalid-feedback">{errors.firstName}</span>
+                                    ) : null}
+                                </Col>
+                                <Col>
+                                    <Form.Label className="block-level">Last Name</Form.Label>
+                                    <Form.Control type="text"
+                                        onChange={handleChange}
+                                        value={values.lastName}
+                                        className={errors.lastName && touched.lastName ? "is-invalid": null}
+                                        name="lastName" />
+                                    {errors.lastName && touched.lastName ? (
+                                        <span className="invalid-feedback">{errors.lastName}</span>
+                                    ) : null}
+                                </Col>
+                            </Form.Row>
+                            <Form.Row>
+                                <Col>
+                                    <Form.Label className="block-level">Title</Form.Label>
+                                    <Form.Control 
+                                        type="text"
+                                        onChange={handleChange}
+                                        value={values.title}
+                                        className={errors.title && touched.title ? "is-invalid": null}
+                                        name="title"  />
+                                    {errors.title && touched.title ? (
+                                        <span className="invalid-feedback">{errors.title}</span>
+                                    ) : null}
+                                </Col>
+                                <Col>
+                                    <Form.Label className="block-level">Role</Form.Label>
+                                    <Select
+                                        options={allRoles}
+                                        onChange={(selectedRole) => {
+                                            this.setState({ selectedRole });
+                                            errors.roleId = null
+                                            values.roleId = selectedRole.value
+                                        }}
+                                        className={errors.roleId && touched.roleId ? "is-invalid" : null}
+                                        // value="roleId"
+                                        name="roleId"
+                                        // value={values.roleId}
+                                        required
+                                    />
+                                    {errors.roleId && touched.roleId ? (
+                                        <span className="invalid-feedback">{errors.roleId}</span>
+                                    ) : null} 
+                                    
+                                </Col>
+                            </Form.Row>
+
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    User Rights
+                                                        </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div>
+                                        <Form.Row>
+
+                                            <Col>
+                                                <Form.Label>Type</Form.Label>
+                                                <div className="checkbox-wrap">
+                                                    <input type="checkbox" 
+                                                        id="userIsAdministrator" 
+                                                        checked={values.userIsAdministrator? values.userIsAdministrator:null}
+                                                        name="userIsAdministrator"
+                                                        onChange={handleChange} 
+                                                        value={values.userIsAdministrator}  />
+                                                    <label htmlFor="userIsAdministrator">Administrator</label>
+                                                </div>
+                                                <div className="checkbox-wrap">
+                                                    <input type="checkbox" 
+                                                        id="userIsTeller" 
+                                                        checked={values.userIsTeller? values.userIsTeller:null}
+                                                        name="userIsTeller"
+                                                        onChange={handleChange} 
+                                                        value={values.userIsTeller} />
+                                                    <label htmlFor="userIsTeller">Teller</label>
+                                                </div>
+                                                <div className="checkbox-wrap">
+                                                    <input type="checkbox" 
+                                                        id="userIsAccountOfficer" 
+                                                        checked={values.userIsAccountOfficer? values.userIsAccountOfficer:null}
+                                                        name="userIsAccountOfficer"
+                                                        onChange={handleChange} 
+                                                        value={values.userIsAccountOfficer}/>
+                                                    <label htmlFor="userIsAccountOfficer">Account Officer</label>
+                                                </div>
+                                            </Col>
+                                            <Col>
+                                                {/* <Form.Label>Access Rights</Form.Label> */}
+                                                <div className="checkbox-wrap">
+                                                    <input type="checkbox" 
+                                                        id="userIsPortalAdministrator" 
+                                                        checked={values.userIsPortalAdministrator? values.userIsPortalAdministrator:null}
+                                                        name="userIsPortalAdministrator"
+                                                        onChange={handleChange} 
+                                                        value={values.userIsPortalAdministrator} />
+                                                    <label htmlFor="userIsPortalAdministrator">Portal Administrator</label>
+                                                </div>
+                                                <div className="checkbox-wrap">
+                                                    <input type="checkbox" 
+                                                            id="userHasApiAccessRight" 
+                                                            checked={values.userHasApiAccessRight? values.userHasApiAccessRight:null}
+                                                            name="userHasApiAccessRight"
+                                                            onChange={handleChange} 
+                                                            value={values.userHasApiAccessRight} />
+                                                    <label htmlFor="userHasApiAccessRight">API Access</label>
+                                                </div>
+                                            </Col>
+                                        </Form.Row>
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+
+                            
+
+
+                           
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
+                                    Contact
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div>
+                                        <Form.Row>
+                                            <Col>
+                                                <Form.Label className="block-level">Mobile Phone</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.contactMobile}
+                                                    className={errors.contactMobile && touched.contactMobile ? "is-invalid": null}
+                                                    name="contactMobile" />
+                                                    {errors.contactMobile && touched.contactMobile ? (
+                                                        <span className="invalid-feedback">{errors.contactMobile}</span>
+                                                    ) : null}
+                                            </Col>
+                                            <Col>
+                                                <Form.Label className="block-level">Email Address</Form.Label>
+                                                <Form.Control type="email"
+                                                    onChange={handleChange}
+                                                    value={values.contactEmail}
+                                                    className={errors.contactEmail && touched.contactEmail ? "is-invalid": null}
+                                                    name="contactEmail" />
+                                                {errors.contactEmail && touched.contactEmail ? (
+                                                    <span className="invalid-feedback">{errors.contactEmail}</span>
+                                                ) : null}
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row>
+                                            
+                                            <Col>
+                                                <Form.Label className="block-level">Address Line1</Form.Label>
+                                                <Form.Control 
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.addressLine1}
+                                                    className={errors.addressLine1 && touched.addressLine1 ? "is-invalid" : null}
+                                                    name="addressLine1" />
+                                                {errors.addressLine1 && touched.addressLine1 ? (
+                                                    <span className="invalid-feedback">{errors.addressLine1}</span>
+                                                ) : null}
+                                            </Col>
+                                            <Col>
+                                            <Form.Label className="block-level">Address Line2</Form.Label>
+                                                <Form.Control 
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.addressLine2}
+                                                    className={errors.addressLine2 && touched.addressLine2 ? "is-invalid" : null}
+                                                    name="addressLine2" />
+                                                {errors.addressLine2 && touched.addressLine2 ? (
+                                                    <span className="invalid-feedback">{errors.addressLine2}</span>
+                                                ) : null}
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row>
+                                            
+                                            <Col>
+                                                <Form.Label className="block-level">Address City</Form.Label>
+                                                <Form.Control 
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.addressCity}
+                                                    className={errors.addressCity && touched.addressCity ? "is-invalid" : null}
+                                                    name="addressCity" />
+                                                {errors.addressCity && touched.addressCity ? (
+                                                    <span className="invalid-feedback">{errors.addressCity}</span>
+                                                ) : null}
+                                            </Col>
+                                            <Col>
+                                            <Form.Label className="block-level">Address State</Form.Label>
+                                                <Form.Control 
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.addressState}
+                                                    className={errors.addressState && touched.addressState ? "is-invalid" : null}
+                                                    name="addressState" />
+                                                {errors.addressState && touched.addressState ? (
+                                                    <span className="invalid-feedback">{errors.addressState}</span>
+                                                ) : null}
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row>
+                                            
+                                            <Col>
+                                                <Form.Label className="block-level">Address Country</Form.Label>
+                                                <Form.Control 
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.addressCountry}
+                                                    className={errors.addressCountry && touched.addressCountry ? "is-invalid" : null}
+                                                    name="addressCountry" />
+                                                {errors.addressCountry && touched.addressCountry ? (
+                                                    <span className="invalid-feedback">{errors.addressCountry}</span>
+                                                ) : null}
+                                            </Col>
+                                            <Col>
+                                            <Form.Label className="block-level">Zip Code</Form.Label>
+                                                <Form.Control 
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.zipCode}
+                                                    className={errors.zipCode && touched.zipCode ? "is-invalid" : null}
+                                                    name="zipCode" />
+                                                {errors.zipCode && touched.zipCode ? (
+                                                    <span className="invalid-feedback">{errors.zipCode}</span>
+                                                ) : null}
+                                            </Col>
+                                        </Form.Row>
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
+                                    Login Details
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div>
+                                        <Form.Row>
+                                            <Col>
+                                                <Form.Label className="block-level">Username</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.userName}
+                                                    className={errors.userName && touched.userName ? "is-invalid": null}
+                                                    name="userName" />
+                                                    {errors.userName && touched.userName ? (
+                                                        <span className="invalid-feedback">{errors.userName}</span>
+                                                    ) : null}
+                                            </Col>
+                                            <Col>
+                                                <Form.Label className="block-level">User Email Address</Form.Label>
+                                                <Form.Control type="email"
+                                                    onChange={handleChange}
+                                                    value={values.emailAddress}
+                                                    className={errors.emailAddress && touched.emailAddress ? "is-invalid": null}
+                                                    name="emailAddress" />
+                                                {errors.emailAddress && touched.emailAddress ? (
+                                                    <span className="invalid-feedback">{errors.emailAddress}</span>
+                                                ) : null}
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row>
+                                            
+                                            <Col>
+                                                <Form.Label className="block-level">Password</Form.Label>
+                                                <Form.Control 
+                                                    type="password"
+                                                    onChange={handleChange}
+                                                    value={values.password}
+                                                    className={errors.password && touched.password ? "is-invalid" : null}
+                                                    name="password" />
+                                                {errors.password && touched.password ? (
+                                                    <span className="invalid-feedback">{errors.password}</span>
+                                                ) : null}
+                                            </Col>
+                                            <Col>
+                                                <Form.Label className="block-level">Branch</Form.Label>
+                                                <Select
+                                                    options={allBranches}
+                                                    onChange={(selectedBranch) => {
+                                                        this.setState({ selectedBranch });
+                                                        errors.branchId = null
+                                                        values.branchId = selectedBranch.value
+                                                    }}
+                                                    className={errors.branchId && touched.branchId ? "is-invalid" : null}
+                                                    // value="branchId"
+                                                    name="branchId"
+                                                    // value={values.branchId}
+                                                    required
+                                                />
+                                                {errors.branchId && touched.branchId ? (
+                                                    <span className="invalid-feedback">{errors.branchId}</span>
+                                                ) : null} 
+                                            </Col>
+                                        </Form.Row>
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+                            
+                            
+
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Notes
+                                                        </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div className="each-formsection">
+                                        <Form.Group>
+                                            <Form.Control 
+                                                as="textarea" rows="3"
+                                                onChange={handleChange}
+                                                value={values.note}
+                                                className={errors.note && touched.note ? "is-invalid" : null}
+                                                name="note"
+                                            />
+                                            {errors.note && touched.note ? (
+                                                <span className="invalid-feedback">{errors.note}</span>
+                                            ) : null}
+                                        </Form.Group>
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+
+
+
+                            <div className="footer-with-cta toleft">
+                                {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
+                                <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                <Button 
+                                    type="submit"
+                                    disabled={adminCreateAUserRequest.is_request_processing} 
+                                    className="mr-20">{adminCreateAUserRequest.is_request_processing?'Please wait...': 'Create User'}</Button>
+                            </div>
+                            {adminCreateAUserRequest.request_status === administrationConstants.CREATE_A_USER_SUCCESS && 
+                                <Alert variant="success">
+                                    {adminCreateAUserRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            {adminCreateAUserRequest.request_status === administrationConstants.CREATE_A_USER_FAILURE && 
+                                <Alert variant="danger">
+                                    {adminCreateAUserRequest.request_data.error}
+                            
+                                </Alert>
+                            }
+                        </Form>
+                    )}
+            </Formik>
+        )
+    }
+
+    renderCreateUser = ()=>{
+        let getRolesRequest = this.props.GetRoles;
+            switch (getRolesRequest.request_status){
+                case (administrationConstants.GET_ALL_ROLES_PENDING):
+                    return (
+                        <div className="loading-content"> 
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+                
+                case(administrationConstants.GET_ALL_ROLES_SUCCESS):
+                    let rolesDataData = getRolesRequest.request_data.response.data,
+                        branchesData = getRolesRequest.request_data.response2.data;
+                        if(rolesDataData!==undefined && branchesData!==undefined){
+                            if(rolesDataData.length>=1){
+                                if(branchesData.length>=1){
+                                    return(
+                                        this.renderCreateUserForm(rolesDataData, branchesData)
+                                    )
+                                }else{
+                                    return(
+                                        <div className="no-records">
+                                            No Branches has been created
+                                            <div className="footer-with-cta centered">
+                                                <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">Add Role</NavLink>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            }else{
+                                return(
+                                    <div className="no-records">
+                                        No Role has been created
+                                        <div className="footer-with-cta centered">
+                                            <NavLink to={'/administration/access/new-role'} className="btn btn-primary">Add Role</NavLink>
+                                        </div>
+                                    </div>
+                                )
+                            }
+
+                        }else{
+                            return null;
+                        }
+                case (administrationConstants.GET_ALL_ROLES_FAILURE):
+                    return (
+                        <div className="loading-content errormsg"> 
+                            <div>An error occured please try again</div>
+                        </div>
+                    )
+                default :
+                return null;
+            }
+    }
+
+
+    
 
     render() {
         
@@ -36,841 +682,7 @@ class CreateNewUser extends React.Component {
                                     <div className="col-sm-12">
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
-                                                <Form className="form-content card">
-                                                    <div className="form-heading">
-                                                        <h3>Creating A New User</h3>
-                                                    </div>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">First Names</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Last Name</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                    </Form.Row>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Title</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Role</Form.Label>
-                                                            <Form.Control as="select" size="sm">
-                                                                <option value="8a858eb960648f00016069e9f407190f">Audit</option>
-                                                                <option value="8a858eb960648f00016069e9f407190d">Branch Advisor</option>
-                                                                <option value="8a858fbc6734dfbb01673568db9c2370">Chief Financial Officer</option>
-                                                                <option value="8a858f3d61cecfc20161d13916447d04">Chief Operating Officer</option>
-                                                                <option value="8a858eb960648f0001606a0bcdf3352d">Collections and Recovery</option>
-                                                                <option value="8a858eb960648f0001606a0bcdf3352f">Contact Center</option>
-                                                            </Form.Control>
-                                                        </Col>
-                                                    </Form.Row>
-                                                    
-                                                    <Accordion>
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            User Rights
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <Form.Row>
-                                                                    
-                                                                    <Col>
-                                                                        <Form.Label>Type</Form.Label>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-1" disabled />
-                                                                            <label htmlFor="pick-1">Administrator</label>
-                                                                        </div>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-20"  />
-                                                                            <label htmlFor="pick-20">Teller</label>
-                                                                        </div>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-4" />
-                                                                            <label htmlFor="pick-4">Account Officer</label>
-                                                                        </div>
-                                                                    </Col>
-                                                                    <Col>
-                                                                    <Form.Label>Access Rights</Form.Label>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-13" disabled />
-                                                                            <label htmlFor="pick-13">Mambu</label>
-                                                                        </div>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-25"  />
-                                                                            <label htmlFor="pick-25">API</label>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    <Accordion  >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Permissions
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <div className="searchbox-wrap">
-                                                                    <Form.Control type="text" size="sm" placeholder="search permissions" />
-                                                                </div>
-
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">General</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Audit Transactions</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Create Index Rate</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-4" />
-                                                                                    <label htmlFor="pick-4">View Comments</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-41" />
-                                                                                    <label htmlFor="pick-41">Create Comments</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-41" />
-                                                                                    <label htmlFor="pick-41">Edit Comments</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-41" />
-                                                                                    <label htmlFor="pick-41">Download Backups</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-41" />
-                                                                                    <label htmlFor="pick-41">Import Data</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Administration</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Audit Transactions</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Create Index Rate</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-4" />
-                                                                                    <label htmlFor="pick-4">View Comments</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-41" />
-                                                                                    <label htmlFor="pick-41">Create Comments</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-41" />
-                                                                                    <label htmlFor="pick-41">Edit Comments</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-41" />
-                                                                                    <label htmlFor="pick-41">Download Backups</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-41" />
-                                                                                    <label htmlFor="pick-41">Import Data</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Communications</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Resend Failed Messages</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Communication History</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-
-
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Customers</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">View Customer Details</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Create Customers</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Edit Customers</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Customers</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Change Customer Type</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Approve Customers</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reject Customers</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Exit Customers</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Blacklist Customers</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Undo Customer State Changed</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Anonymize Client Data</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Manage Customer Association</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">	Edit Customer Id</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Groups</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">View Group Details</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Create Groups</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Edit Groups</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Change Group Type</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Manage Group Association</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Credit Arrangements</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Edit Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Credit Arrangements Details</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Add Accounts To Credit Arrangement</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Remove Accounts From Credit Arrangement</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Approve Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Undo Approve Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Withdraw Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Undo Withdraw Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reject Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Undo Reject Credit Arrangements</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Loan Accounts</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Edit Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Credit Arrangements Details</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Add Accounts To Credit Arrangement</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Remove Accounts From Credit Arrangement</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Approve Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Undo Approve Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Withdraw Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Undo Withdraw Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reject Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Undo Reject Credit Arrangements</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Deposit Accounts</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Credit Arrangements</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Edit Credit Arrangements</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Cards</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reverse Card Transactions</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Authorization Holds</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reverse Card Transactions</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Documents</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reverse Card Transactions</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Tasks</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reverse Card Transactions</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Reporting</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reverse Card Transactions</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Accounting</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reverse Card Transactions</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Tellering</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reverse Card Transactions</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                <div className="each-permissiongroup">
-                                                                    <Accordion>
-                                                                        <Accordion.Toggle variant="link"  as={Button} eventKey="2">
-                                                                            <span className="permissiondrop">
-                                                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAArElEQVR42mNgGPogr6KzIbeiM7q+vp6NZM1AjVfyKjv/5Fd0bsmv6o4hzeaqzsNA2/9D8WegQbtyKrpCibO5svNkXmXXf6AmCIYY8gHooiN55R3++G2u7DqF0Nz1H6gJjMFiFZ1fgeLL8fgZpBmuGG57fmXXSyA9M7u6Rx6vs2G2QWzsvA8Mh9n5ZZ3qhAOsvPM8VNNdoKapBWWdmqRE1Qqg86bnV7SbMgxfAAAt/HbnjJn53wAAAABJRU5ErkJggg==" alt="toggle" srcSet=""/>
-                                                                            </span>
-                                                                        </Accordion.Toggle>
-                                                                        <input type="checkbox" name="" id="pick-292"  />
-                                                                        <label htmlFor="pick-1">Funds</label>
-                                                                        <Accordion.Collapse eventKey="2">
-                                                                            <div className="inner-permissions">
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-1" disabled />
-                                                                                    <label htmlFor="pick-1">Create Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">View Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Delete Cards</label>
-                                                                                </div>
-                                                                                <div className="checkbox-wrap">
-                                                                                    <input type="checkbox" name="" id="pick-20"  />
-                                                                                    <label htmlFor="pick-20">Reverse Card Transactions</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Accordion.Collapse>
-                                                                    </Accordion>
-                                                                </div>
-                                                                
-
-                                                                
-                                                                
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                    
-                                                    
-                                                    <Accordion>
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
-                                                            User Access
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="3">
-                                                            <div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-1" disabled/>
-                                                                    <label htmlFor="pick-1">Federated Authentication</label>
-                                                                </div>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Username</Form.Label>
-                                                                        <Form.Control type="text" />
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Password</Form.Label>
-                                                                        <Form.Control type="password" />
-                                                                    </Col>
-                                                                </Form.Row>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Confirm Password</Form.Label>
-                                                                        <Form.Control type="password" />
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Mambu Display Language</Form.Label>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="English">English</option>
-                                                                            <option value="Portuguese">Portuguese</option>
-                                                                            <option value="Spanish">Spanish</option>
-                                                                            <option value="Russian">Russian</option>
-                                                                            <option value="French">French</option>
-                                                                            <option value="Georgian">Georgian</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                    <Accordion>
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
-                                                            Access Rights
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="3">
-                                                            <div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-1" disabled/>
-                                                                    <label htmlFor="pick-1">Can access all branches</label>
-                                                                </div>
-                                                                <Form.Label>Branch</Form.Label>
-                                                                <div className="each-formsection branchselection">
-                                                                        
-                                                                    <Form.Control as="select" size="sm">
-                                                                        <option>Ikeja</option>
-                                                                        <option>Head office</option>
-                                                                        <option>Badagry</option>
-                                                                        <option>Thursday</option>
-                                                                        <option>Marina</option>
-                                                                    </Form.Control>
-                                                                    <Button className="btn small-btnprimary">Add Branch Access</Button>
-                                                                </div>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                    <Accordion>
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
-                                                            Contact
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="3">
-                                                            <div>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Mobile Phone</Form.Label>
-                                                                        <Form.Control type="text" />
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Home Phone</Form.Label>
-                                                                        <Form.Control type="text" />
-                                                                    </Col>
-                                                                </Form.Row>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Email Address</Form.Label>
-                                                                        <Form.Control type="text" />
-                                                                    </Col>
-                                                                    <Col></Col>
-                                                                </Form.Row>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                    <Accordion>
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
-                                                            Transaction Limits
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="3">
-                                                            <div>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Mobile Phone</Form.Label>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="Approve Loan">Approve Loan</option>
-                                                                            <option value="Disburse Loan">Disburse Loan</option>
-                                                                            <option value="Apply Fee">Apply Fee</option>
-                                                                            <option value="Make Deposit">Make Deposit</option>
-                                                                            <option value="Make Withdrawal">Make Withdrawal</option>
-                                                                            <option value="Make Repayment">Make Repayment</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        {/* <Form.Label className="block-level"></Form.Label> */}
-                                                                        <Form.Control type="text" />
-                                                                    </Col>
-                                                                </Form.Row>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    <Accordion >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Notes
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div className="each-formsection">
-                                                               <Form.Group>
-                                                                    <Form.Control as="textarea" rows="3" 
-                                                                    />
-                                                               </Form.Group>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                                                  
-
-                                                    <div className="footer-with-cta toleft">
-                                                        {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
-                                                        <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink>
-                                                        <Button>Save Changes</Button>
-                                                    </div>
-                                                </Form>
+                                                {this.renderCreateUser()}
                                                 {/* <div className="footer-with-cta toleft">
                                                     <Button variant="secondary" className="grayed-out">Rearrange</Button>
                                                     <Button >Add Channel</Button>
@@ -888,4 +700,11 @@ class CreateNewUser extends React.Component {
     }
 }
 
-export default CreateNewUser;
+function mapStateToProps(state) {
+    return {
+        adminCreateAUserReducer : state.administrationReducers.adminCreateAUserReducer,
+        GetRoles : state.administrationReducers.adminGetAllRolesReducer,
+    };
+}
+
+export default connect(mapStateToProps)(CreateNewUser);

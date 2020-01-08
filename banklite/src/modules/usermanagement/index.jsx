@@ -2,22 +2,168 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-
+import { connect } from 'react-redux';
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+
 import "./usermanagement.scss"; 
 class UserManagement extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            PageSize:'50',
+            CurrentPage:1,
         }
 
         
+    }
+
+    componentDidMount(){
+        this.getUsers();
+    }
+
+    loadInitialData=()=>{
+        let {PageSize, CurrentPage}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        this.getUsers(params);
+    }
+
+    setPagesize = (PageSize)=>{
+        // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
+        let {CurrentPage}= this.state;
+        
+
+        let sizeOfPage = PageSize.target.value;
+
+        this.setState({PageSize: sizeOfPage});
+        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+
+        
+       
+        dispatch(administrationActions.getUsers(params));
+    }
+
+    getUsers = (paramters)=>{
+        const {dispatch} = this.props;
+
+        // dispatch(administrationActions.getAllUsers(paramters));
+        dispatch(administrationActions.getAllUsers());
+    }
+
+    renderAllUsers =()=>{
+        let adminGetAllUsers = this.props.adminGetAllUsers;
+
+            switch (adminGetAllUsers.request_status){
+                case (administrationConstants.GET_ALL_USERS_PENDING):
+                    return (
+                        <div className="loading-content"> 
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+
+                case(administrationConstants.GET_ALL_USERS_SUCCESS):
+                    let allUsersData = adminGetAllUsers.request_data.response.data;
+                        if(allUsersData!==undefined){
+                            if(allUsersData.length>=1){
+                                return(
+                                    <div>
+                                        {/* <div className="table-helper">
+                                            <input type="checkbox" name="" id="showDeactivted"/>
+                                            <label htmlFor="showDeactivted">Show deactivated/locked users</label>
+                                        </div> */}
+                                        <div className="pagination-wrap">
+                                            <label htmlFor="toshow">Show</label>
+                                            <select id="toshow"
+                                                onChange={this.setPagesize}
+                                                value={this.state.PageSize}
+                                                 className="countdropdown form-control form-control-sm">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="200">200</option>
+                                            </select>
+                                            {/* <div className="move-page-actions">
+                                                <div className="each-page-action">
+                                                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                                </div>
+                                                <div className="page-count">
+                                                    <span>1-20</span>  of <span>20000</span>
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11"  />
+                                                </div>
+                                            </div> */}
+                                        </div>
+                                        <TableComponent classnames="striped bordered hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>User Name</th>
+                                                            <th>Id</th>
+                                                            {/* <th>Email</th>
+                                                            <th>Role</th>
+                                                            <th>Last updated</th>
+                                                            <th>State</th> */}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            allUsersData.map((eachUser, index)=>{
+                                                                return(
+                                                                    <Fragment key={index}>
+                                                                        <tr>
+                                                                            <td>{eachUser.name}</td>
+                                                                            <td>{eachUser.id}</td>
+                                                                            {/* <td>{eachUser.emailAddress}</td>
+                                                                            <td>{eachUser.role}</td>
+                                                                            <td>{eachUser.lastUpdated}</td>
+                                                                            <td>{eachUser.objectStateDescription}</td> */}
+                                                                        </tr>
+                                                                    </Fragment>
+                                                                )
+                                                            })
+                                                        }
+                                                    </tbody>
+                                        </TableComponent>
+                                        
+
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                        <div className="no-records">
+                                            No user account has been created
+                                        </div>
+                                    
+                                )
+                            }
+                        }
+                        else{
+                            return null;
+                        }
+
+                case (administrationConstants.GET_ALL_USERS_FAILURE):
+                    return (
+                        <div className="loading-content errormsg"> 
+                            <div>An error occured please try again</div>
+                        </div>
+                    )
+                default :
+                return null;
+            }
     }
 
     render() {
@@ -45,7 +191,7 @@ class UserManagement extends React.Component {
                                         </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <div className="heading-with-cta">
+                                                {/* <div className="heading-with-cta">
                                                     <Form className="one-liner">
                                                         
                                                         <Form.Group controlId="filterDropdown">
@@ -59,85 +205,8 @@ class UserManagement extends React.Component {
                                                         <Button variant="primary" type="submit">Filter</Button>
                                                     </Form>
                                                     <Button>Edit Columns</Button>
-                                                </div>
-                                                <div className="pagination-wrap">
-                                                    <label htmlFor="toshow">Show</label>
-                                                    <select id="toshow" className="countdropdown form-control form-control-sm">
-                                                        <option value="10">10</option>
-                                                        <option value="25">25</option>
-                                                        <option value="50">50</option>
-                                                        <option value="200">200</option>
-                                                    </select>
-                                                    <div className="move-page-actions">
-                                                        <div className="each-page-action">
-                                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                        </div>
-                                                        <div className="each-page-action">
-                                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                        </div>
-                                                        <div className="page-count">
-                                                            <span>1-20</span>  of <span>20000</span>
-                                                        </div>
-                                                        <div className="each-page-action">
-                                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                        </div>
-                                                        <div className="each-page-action">
-                                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11"  />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <TableComponent classnames="striped bordered hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Display Name</th>
-                                                            <th>User Name</th>
-                                                            <th>Role</th>
-                                                            <th>Title</th>
-                                                            <th>Mobile Phone</th>
-                                                            <th>Home Phone</th>
-                                                            <th>Email</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>some text</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </TableComponent>
+                                                </div> */}
+                                                {this.renderAllUsers()}
                                             </div>
                                         </div>
                                     </div>
@@ -150,5 +219,10 @@ class UserManagement extends React.Component {
         );
     }
 }
+function mapStateToProps(state) {
+    return {
+        adminGetAllUsers : state.administrationReducers.adminGetAllUsersReducer,
+    };
+}
 
-export default UserManagement;
+export default connect(mapStateToProps) (UserManagement);

@@ -5,7 +5,11 @@ import {administrationConstants} from '../../actiontypes/administration/administ
 import { handleRequestErrors } from "../../../shared/utils";
 
 export const administrationActions = {
+    getUsers,
+    createUser,
+    getAUser,
     getAllUsers,
+    updateAUser,
     addARole,
     updateARole,
     getRoles,
@@ -38,11 +42,93 @@ export const administrationActions = {
     setCurrencyConversionRate
 }
 
-function getAllUsers  (params){
+function getUsers  (params){
     
     return dispatch =>{
         
-        let consume = ApiService.request(routes.GET_USERS+params, "GET", null);
+        let consume = ApiService.request(routes.HIT_USERS+`?${params}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+function request(user) { return { type: administrationConstants.GET_USERS_PENDING, user } }
+function success(response) { return { type: administrationConstants.GET_USERS_SUCCESS, response } }
+function failure(error) { return { type: administrationConstants.GET_USERS_FAILURE, error } }
+
+}
+
+function getAUser  (encodedKey, isEdit){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_USERS+`/${encodedKey}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                if(response.status===200){
+                
+                    if(isEdit){
+                        let consume2 = ApiService.request(routes.HIT_ROLE+`/all`, "GET", null);
+                            dispatch(request(consume2));
+                            return consume2
+                                .then(response2 =>{
+                                    
+                                    
+                                        let consume3 = ApiService.request(routes.GET_BRANCHES + `/all`, "GET", null);
+                                        dispatch(request(consume3));
+                                        return consume3
+                                            .then(response3 => {
+                                                dispatch(success(response, response2, response3));
+                                            })
+                                            .catch(error => {
+
+                                                dispatch(failure(handleRequestErrors(error)));
+                                            });
+                                    
+                                }).catch(error =>{
+                                    dispatch(failure(handleRequestErrors(error)));
+                                });
+                    }else{
+                        dispatch(success(response));
+                    }
+                }else{
+                    dispatch(failure(handleRequestErrors("Unable to get the requested User")));
+                
+                }
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+function request(user) { return { type: administrationConstants.GET_A_USER_PENDING, user } }
+function success(response, response2, response3) { 
+            if(isEdit){
+                return { type: administrationConstants.GET_A_USER_SUCCESS, response,response2, response3 } 
+            }else{
+                return { type: administrationConstants.GET_A_USER_SUCCESS, response } 
+            }
+}
+            
+function failure(error) { return { type: administrationConstants.GET_A_USER_FAILURE, error } }
+
+}
+
+function getAllUsers  (){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_USERS+`/all`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response =>{
@@ -58,6 +144,71 @@ function getAllUsers  (params){
 function request(user) { return { type: administrationConstants.GET_ALL_USERS_PENDING, user } }
 function success(response) { return { type: administrationConstants.GET_ALL_USERS_SUCCESS, response } }
 function failure(error) { return { type: administrationConstants.GET_ALL_USERS_FAILURE, error } }
+
+}
+
+function createUser   (newUserPayload){
+    if(newUserPayload!=="CLEAR"){
+        return dispatch =>{
+            if(Object.keys(newUserPayload.address).length>=1){
+                let consume = ApiService.request(routes.HIT_USERS, "POST", newUserPayload);
+                dispatch(request(consume));
+                return consume
+                    .then(response =>{
+                        dispatch(success(response));
+                    }).catch(error =>{
+                        
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+                }else{
+                    dispatch(failure(handleRequestErrors("Provide Address information")));
+                }
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.CREATE_A_USER_PENDING, user } }
+    function success(response) { return { type: administrationConstants.CREATE_A_USER_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.CREATE_A_USER_FAILURE, error } }
+    function clear() { return { type: administrationConstants.CREATE_A_USER_RESET, clear_data:""} }
+
+}
+
+function updateAUser   (updateUserPayload){
+    if(updateUserPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.HIT_USERS+`/${updateUserPayload.encodedKey}`;
+            delete updateUserPayload.encodedKey;
+            let consume = ApiService.request(url, "POST", updateUserPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_A_USER_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_A_USER_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_A_USER_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_A_USER_RESET, clear_data:""} }
 
 }
 
@@ -275,14 +426,28 @@ function getARole  (id){
 
 }
 
-function getAllRoles  (){
+function getAllRoles  (withBranches){
     
     return dispatch =>{
         let consume = ApiService.request(routes.HIT_ROLE+`/all`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response =>{
-                dispatch(success(response));
+                if(withBranches===undefined||withBranches===null || withBranches===false){
+                    dispatch(success(response));
+                }
+                if(withBranches===true){
+                    let consume2 = ApiService.request(routes.GET_BRANCHES + `/all`, "GET", null);
+                    dispatch(request(consume2));
+                    return consume2
+                        .then(response2 => {
+                            dispatch(success(response, response2));
+                        })
+                        .catch(error => {
+
+                            dispatch(failure(handleRequestErrors(error)));
+                        });
+                }
             }).catch(error =>{
                 dispatch(failure(handleRequestErrors(error)));
             });
@@ -292,7 +457,14 @@ function getAllRoles  (){
     
 
     function request(user) { return { type: administrationConstants.GET_ALL_ROLES_PENDING, user } }
-    function success(response) { return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response } }
+    function success(response, response2) { 
+                                if(!response2){
+                                    return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response } 
+                                }else{
+                                    return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response, response2 } 
+                                }
+                                    
+                                }
     function failure(error) { return { type: administrationConstants.GET_ALL_ROLES_FAILURE, error } }
 
 }

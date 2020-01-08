@@ -1,5 +1,31 @@
 import {administrationConstants} from '../../actiontypes/administration/administration.constants'
 
+export function getUsersReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_USERS_PENDING:
+            return {
+                request_status: administrationConstants.GET_USERS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_USERS_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_USERS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_USERS_FAILURE:
+            return {
+                request_status: administrationConstants.GET_USERS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getAllUsersReducer(state=[], action) {
     switch (action.type) {
         case administrationConstants.GET_ALL_USERS_PENDING:
@@ -19,6 +45,96 @@ export function getAllUsersReducer(state=[], action) {
                 request_status: administrationConstants.GET_ALL_USERS_FAILURE,
                 is_request_processing: false,
                 request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getAUserReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_A_USER_PENDING:
+            return {
+                request_status: administrationConstants.GET_A_USER_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_A_USER_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_A_USER_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_USER_FAILURE:
+            return {
+                request_status: administrationConstants.GET_A_USER_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function createAUserReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.CREATE_A_USER_PENDING:
+            return {
+                request_status: administrationConstants.CREATE_A_USER_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.CREATE_A_USER_SUCCESS:
+            return {
+                request_status: administrationConstants.CREATE_A_USER_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.CREATE_A_USER_FAILURE:
+            return {
+                request_status: administrationConstants.CREATE_A_USER_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.CREATE_A_USER_RESET:
+            return {
+                request_status: administrationConstants.CREATE_A_USER_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function updateAUserReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_A_USER_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_A_USER_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_USER_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_A_USER_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_USER_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_A_USER_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_USER_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_A_USER_RESET,
+                is_request_processing: false,
+                request_data: {}
             };
 
         default:

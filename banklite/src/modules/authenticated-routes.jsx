@@ -186,7 +186,7 @@ class AuthenticatedRoutes extends React.Component {
                         
                         <Route exact path='/administration/access/users'  render={(props) => <AccessUsers {...this.props} />} />
                         <Route exact path='/administration/access/new-user'  render={(props) => <CreateNewUser {...this.props} />} />
-                        <Route exact path='/administration/access/edit-user'  render={(props) => <EditUser {...this.props} />} />
+                        <Route exact path='/administration/access/edit-user/:encodedKey'  render={(props) => <EditUser encodedKey={props.match.params.encodedKey} {...this.props} />} />
                         
                         <Route exact path='/administration/access/preferences'  render={(props) => <AccessPreferences {...this.props} />} />
                         <Route exact path='/administration/access/authentication'  render={(props) => <AccessAuth {...this.props} />} />

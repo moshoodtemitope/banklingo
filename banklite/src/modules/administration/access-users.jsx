@@ -9,7 +9,7 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 // import Button from 'react-bootstrap/Button'
 // import Dropdown from 'react-bootstrap/Dropdown'
-// import DropdownButton from 'react-bootstrap/DropdownButton'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
@@ -22,7 +22,8 @@ class AccessUsers extends React.Component {
         super(props);
         this.state={
             user:'',
-            pageSize:''
+            PageSize:'50',
+            CurrentPage:1,
         }
 
         
@@ -33,46 +34,66 @@ class AccessUsers extends React.Component {
     }
 
     loadInitialData=()=>{
-        let params = `PageSize=30`;
-        this.getAllUsers(params);
+        let {PageSize, CurrentPage}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        this.getUsers(params);
     }
 
-    getAllUsers = (paramters)=>{
+    setPagesize = (PageSize)=>{
+        // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
+        let {CurrentPage}= this.state;
+        
+
+        let sizeOfPage = PageSize.target.value;
+
+        this.setState({PageSize: sizeOfPage});
+        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+
+        
+       
+        dispatch(administrationActions.getUsers(params));
+    }
+
+    getUsers = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(administrationActions.getAllUsers(paramters));
+        dispatch(administrationActions.getUsers(paramters));
     }
 
     renderAllUsers =()=>{
-        let adminGetAllUsersRequest = this.props.adminGetAllUsers;
+        let adminGetUsersRequest = this.props.adminGetUsers;
 
-            switch (adminGetAllUsersRequest.request_status){
-                case (administrationConstants.GET_ALL_USERS_PENDING):
+            switch (adminGetUsersRequest.request_status){
+                case (administrationConstants.GET_USERS_PENDING):
                     return (
                         <div className="loading-content"> 
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
 
-                case(administrationConstants.GET_ALL_USERS_SUCCESS):
-                    let allUsersData = adminGetAllUsersRequest.request_data.response.data;
+                case(administrationConstants.GET_USERS_SUCCESS):
+                    let allUsersData = adminGetUsersRequest.request_data.response.data;
                         if(allUsersData!==undefined){
-                            if(allUsersData.result.length>=1){
+                            if(allUsersData.length>=1){
                                 return(
                                     <div>
-                                        <div className="table-helper">
+                                        {/* <div className="table-helper">
                                             <input type="checkbox" name="" id="showDeactivted"/>
                                             <label htmlFor="showDeactivted">Show deactivated/locked users</label>
-                                        </div>
+                                        </div> */}
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
-                                            <select id="toshow" className="countdropdown form-control form-control-sm">
+                                            <select id="toshow"
+                                                onChange={this.setPagesize}
+                                                value={this.state.PageSize}
+                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>
                                                 <option value="25">25</option>
                                                 <option value="50">50</option>
                                                 <option value="200">200</option>
                                             </select>
-                                            <div className="move-page-actions">
+                                            {/* <div className="move-page-actions">
                                                 <div className="each-page-action">
                                                     <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
                                                 </div>
@@ -88,7 +109,7 @@ class AccessUsers extends React.Component {
                                                 <div className="each-page-action">
                                                     <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11"  />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                         <TableComponent classnames="striped bordered hover">
                                                     <thead>
@@ -98,12 +119,13 @@ class AccessUsers extends React.Component {
                                                             <th>Email</th>
                                                             <th>Role</th>
                                                             <th>Last updated</th>
+                                                            <th>State</th>
                                                             <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            allUsersData.result.map((eachUser, index)=>{
+                                                            allUsersData.map((eachUser, index)=>{
                                                                 return(
                                                                     <Fragment key={index}>
                                                                         <tr>
@@ -112,7 +134,19 @@ class AccessUsers extends React.Component {
                                                                             <td>{eachUser.emailAddress}</td>
                                                                             <td>{eachUser.role}</td>
                                                                             <td>{eachUser.lastUpdated}</td>
-                                                                            <td></td>
+                                                                            <td>{eachUser.objectStateDescription}</td>
+                                                                            <td>
+                                                                                <DropdownButton
+                                                                                    size="sm"
+                                                                                    title="Actions"
+                                                                                    key="editUser"
+                                                                                    className="customone"
+                                                                                >
+                                                                                    <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
+                                                                                    {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                                                </DropdownButton>
+                                                                            </td>
                                                                         </tr>
                                                                     </Fragment>
                                                                 )
@@ -140,7 +174,7 @@ class AccessUsers extends React.Component {
                             return null;
                         }
 
-                case (administrationConstants.GET_ALL_USERS_FAILURE):
+                case (administrationConstants.GET_USERS_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
                             <div>An error occured please try again</div>
@@ -388,7 +422,7 @@ class AccessUsers extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        adminGetAllUsers : state.administrationReducers.adminGetAllUsersReducer,
+        adminGetUsers : state.administrationReducers.adminGetUsersReducer,
     };
 }
 
