@@ -1,7 +1,9 @@
 import {combineReducers} from "redux";
 import { 
     administration,
-    accounting} from "./export";
+    accounting,
+    loans,
+    deposits} from "./export";
 
 const rootReducer = (state, action)=>{
    
@@ -64,11 +66,29 @@ const accountingReducers = combineReducers({
    
 })
 
+const depositsReducers = combineReducers({
+    getDepositsReducer: deposits.getDepositsReducer, 
+    getClientDepositsReducer: deposits.getClientDepositsReducer, 
+    getDepositTransactionReducer: deposits.getDepositTransactionReducer, 
+    getAccountDepositTransactionReducer: deposits.getAccountDepositTransactionReducer, 
+   
+})
+
+const loansReducers = combineReducers({
+    getLoansReducer: loans.getLoansReducer, 
+    getClientLoansReducer: loans.getClientLoansReducer, 
+    getLoanTransactionsReducer: loans.getLoanTransactionsReducer, 
+    getAccountLoanTransactionReducer: loans.getAccountLoanTransactionReducer, 
+   
+})
+
 
 
 const appReducer = combineReducers({
     administrationReducers,
-    accountingReducers
+    accountingReducers,
+    depositsReducers,
+    loansReducers
 })
 
 

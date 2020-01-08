@@ -125,15 +125,16 @@ class EditUser extends React.Component {
 
             let currentRole = roles.filter(eachrole=>eachrole.roleId===userData.roleId)[0],
                 userAddress=userData.address,
-                userContact=userData.contact;
+                userContact=userData.contact,
+                currentBranch = branches.filter(branch=>branch.id===userData.branchId)[0];
 
                 console.log('role is', currentRole);
 
         return(
             <Formik
                 initialValues={{
-                    firstName: userData.firstName!==null?userData.firstName:'',
-                    lastName: userData.lastName!==null?userData.lastName:'',
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
                     title: userData.title,
                     roleId: userData.roleId,
                     userIsTeller: userData.isTeller,
@@ -153,7 +154,7 @@ class EditUser extends React.Component {
                     userName: userData.userName,
                     emailAddress: userData.emailAddress,
                     password: '',
-                    branchId: userData.branchId!==null?userData.branchId:'',
+                    branchId: userData.branchId,
                 }}
 
                 validationSchema={updateUserValidationSchema}
@@ -215,7 +216,7 @@ class EditUser extends React.Component {
                         updateNewUserPayload.contact.contactEmail =values.contactEmail;
                     }
 
-                    console.log('payload is ',updateNewUserPayload);
+                    
 
                     this.updateUserRequest(updateNewUserPayload)
                         .then(
@@ -226,7 +227,7 @@ class EditUser extends React.Component {
 
                                     setTimeout(() => {
                                         this.props.dispatch(administrationActions.updateAUser("CLEAR"));
-                                        resetForm();
+                                        // resetForm();
                                     }, 3000);
                                 } else {
                                     setTimeout(() => {
@@ -547,14 +548,16 @@ class EditUser extends React.Component {
                                                 <Form.Label className="block-level">Branch</Form.Label>
                                                 <Select
                                                     options={allBranches}
-                                                    // defaultValue ={{label:currentRole.name, value: currentRole.roleId}}
+                                                    defaultValue ={{label:currentBranch.name, value: currentBranch.id}}
                                                     onChange={(selectedBranch) => {
                                                         this.setState({ selectedBranch });
                                                         errors.branchId = null
-                                                        values.branchId = selectedBranch.value
+                                                        values.branchId = selectedBranch.value;
+
+                                                        
                                                     }}
                                                     className={errors.branchId && touched.branchId ? "is-invalid" : null}
-                                                    
+                                                    // value={values.branchId}
                                                     name="branchId"
                                                     required
                                                 />

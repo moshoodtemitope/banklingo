@@ -46,4 +46,19 @@ export const routes = {
     HIT_GLACCOUNTS: BASEURL + '/Dars.Administration/api/GLAccount/glaccounts',
     ALL_GLACCOUNTS: BASEURL + '/Dars.Administration/api/GLAccount/allglaccounts',
     CREATE_GLACCOUNT: BASEURL + '/Dars.Administration/api/GLAccount/glaccount',
+
+    //Deposits Endpoints
+    HIT_DEPOSITS: BASEURL + '/Dars.Administration/api/Deposits',
+
+    //Deposits Transactions Endpoints
+    HIT_DEPOSITS_TRANSACTIONS: BASEURL + '/Dars.Administration/api/DepositTransactions',
+
+    //LOAN Endpoints
+    HIT_LOAN: BASEURL + '/Dars.Administration/api/Loans',
+
+    //Loan Transactions Endpoints
+    HIT_LOAN_TRANSACTIONS: BASEURL + '/Dars.Administration/api/LoanTransactions',
+
+    //Notification Endpoints
+    HIT_NOTIFICATIONS: BASEURL + '/Dars.Administration/api/Notifications',
 }

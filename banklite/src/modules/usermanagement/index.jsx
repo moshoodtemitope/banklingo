@@ -26,7 +26,7 @@ class UserManagement extends React.Component {
     }
 
     componentDidMount(){
-        this.getUsers();
+        this.loadInitialData();
     }
 
     loadInitialData=()=>{
@@ -54,22 +54,21 @@ class UserManagement extends React.Component {
     getUsers = (paramters)=>{
         const {dispatch} = this.props;
 
-        // dispatch(administrationActions.getAllUsers(paramters));
-        dispatch(administrationActions.getAllUsers());
+        dispatch(administrationActions.getUsers(paramters));
     }
 
     renderAllUsers =()=>{
         let adminGetAllUsers = this.props.adminGetAllUsers;
 
             switch (adminGetAllUsers.request_status){
-                case (administrationConstants.GET_ALL_USERS_PENDING):
+                case (administrationConstants.GET_USERS_PENDING):
                     return (
                         <div className="loading-content"> 
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
 
-                case(administrationConstants.GET_ALL_USERS_SUCCESS):
+                case(administrationConstants.GET_USERS_SUCCESS):
                     let allUsersData = adminGetAllUsers.request_data.response.data;
                         if(allUsersData!==undefined){
                             if(allUsersData.length>=1){
@@ -112,11 +111,11 @@ class UserManagement extends React.Component {
                                                     <thead>
                                                         <tr>
                                                             <th>User Name</th>
-                                                            <th>Id</th>
-                                                            {/* <th>Email</th>
+                                                            <th>Title</th>
+                                                            <th>Email</th>
                                                             <th>Role</th>
                                                             <th>Last updated</th>
-                                                            <th>State</th> */}
+                                                            <th>State</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -125,12 +124,12 @@ class UserManagement extends React.Component {
                                                                 return(
                                                                     <Fragment key={index}>
                                                                         <tr>
-                                                                            <td>{eachUser.name}</td>
-                                                                            <td>{eachUser.id}</td>
-                                                                            {/* <td>{eachUser.emailAddress}</td>
+                                                                        <td>{eachUser.name}</td>
+                                                                            <td>{eachUser.title}</td>
+                                                                            <td>{eachUser.emailAddress}</td>
                                                                             <td>{eachUser.role}</td>
                                                                             <td>{eachUser.lastUpdated}</td>
-                                                                            <td>{eachUser.objectStateDescription}</td> */}
+                                                                            <td>{eachUser.objectStateDescription}</td>
                                                                         </tr>
                                                                     </Fragment>
                                                                 )
@@ -155,7 +154,7 @@ class UserManagement extends React.Component {
                             return null;
                         }
 
-                case (administrationConstants.GET_ALL_USERS_FAILURE):
+                case (administrationConstants.GET_USERS_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
                             <div>An error occured please try again</div>
@@ -221,7 +220,7 @@ class UserManagement extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        adminGetAllUsers : state.administrationReducers.adminGetAllUsersReducer,
+        adminGetAllUsers : state.administrationReducers.adminGetUsersReducer,
     };
 }
 

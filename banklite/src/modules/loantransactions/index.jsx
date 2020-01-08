@@ -2,7 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-
+import { connect } from 'react-redux';
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'

@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import { connect } from 'react-redux';
 
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
@@ -14,7 +15,11 @@ class DepositManagement extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            PageSize:'30',
+            FullDetails: false,
+            CurrentPage:1,
+            CurrentSelectedPage:1
         }
 
         

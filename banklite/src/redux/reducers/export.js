@@ -36,7 +36,8 @@ import{
     getABranchReducer,
     createNewBranchReducer,
     updateABranchReducer
-} from './administration/administration.reducer'
+}
+ from './administration/administration.reducer'
 
 
 import{
@@ -48,6 +49,25 @@ import{
     createJournalEntriesReducer,
     
 } from './accounting/accounting.reducer'
+
+
+
+
+import{
+    getLoansReducer,
+    getClientLoansReducer,
+    getLoanTransactionsReducer,
+    getAccountLoanTransactionReducer,
+    
+} from './loans/loans.reducer'
+
+import{
+    getDepositsReducer,
+    getClientDepositsReducer,
+    getDepositTransactionReducer,
+    getAccountDepositTransactionReducer,
+    
+} from './deposits/deposits.reducer'
 
 
 
@@ -97,5 +117,18 @@ export const accounting = {
     getAllGLAccountsReducer,
     getJournalEntriesReducer,
     createJournalEntriesReducer,
-    
+}
+
+export const loans = {
+    getLoansReducer,
+    getClientLoansReducer,
+    getLoanTransactionsReducer,
+    getAccountLoanTransactionReducer,
+}
+
+export const deposits = {
+    getDepositsReducer,
+    getClientDepositsReducer,
+    getDepositTransactionReducer,
+    getAccountDepositTransactionReducer,
 }
