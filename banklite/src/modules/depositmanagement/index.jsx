@@ -160,4 +160,10 @@ class DepositManagement extends React.Component {
     }
 }
 
-export default DepositManagement;
+function mapStateToProps(state) {
+    return {
+        adminGetAllBranches : state.administrationReducers.adminGetAllBranchesReducer,
+    };
+}
+
+export default connect(mapStateToProps)(DepositManagement);
