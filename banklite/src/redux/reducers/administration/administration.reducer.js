@@ -1073,3 +1073,31 @@ export function updateABranchReducer(state=[], action) {
 }
 
 
+export function getNotificationsReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_NOTIFICATIONS_PENDING:
+            return {
+                request_status: administrationConstants.GET_NOTIFICATIONS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_NOTIFICATIONS_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_NOTIFICATIONS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_NOTIFICATIONS_FAILURE:
+            return {
+                request_status: administrationConstants.GET_NOTIFICATIONS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+

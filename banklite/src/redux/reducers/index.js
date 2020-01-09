@@ -54,6 +54,7 @@ const administrationReducers = combineReducers({
     adminGetAllCurrenciesReducer: administration.getAllCurrenciesReducer,
     adminUpdateCurrencyReducer: administration.updateCurrencyReducer,
     adminSetCurrencyConversionRateReducer: administration.setCurrencyConversionRateReducer,
+    getNotificationsReducer: administration.getNotificationsReducer,
 })
 
 const accountingReducers = combineReducers({

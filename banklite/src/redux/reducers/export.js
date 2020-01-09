@@ -35,7 +35,8 @@ import{
     getAllBranchesReducer,
     getABranchReducer,
     createNewBranchReducer,
-    updateABranchReducer
+    updateABranchReducer,
+    getNotificationsReducer
 }
  from './administration/administration.reducer'
 
@@ -107,7 +108,8 @@ export const administration ={
     getAllBranchesReducer,
     getABranchReducer,
     createNewBranchReducer,
-    updateABranchReducer
+    updateABranchReducer,
+    getNotificationsReducer
 }
 
 export const accounting = {

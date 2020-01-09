@@ -51,9 +51,9 @@ class AccessAuth extends React.Component {
                                         <li>
                                             <NavLink to={'/administration/access'}>Access</NavLink>
                                         </li>
-                                        {/* <li>
+                                        <li>
                                             <NavLink to={'/administration/products'}>Products</NavLink>
-                                        </li> */}
+                                        </li> 
                                         <li>
                                             <NavLink to={'/administration/sms'}>SMS</NavLink>
                                         </li>

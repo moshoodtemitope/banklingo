@@ -39,7 +39,8 @@ export const administrationActions = {
     updateABranch,
     getAllCurrencies,
     updateCurrency,
-    setCurrencyConversionRate
+    setCurrencyConversionRate,
+    getNotifications
 }
 
 function getUsers  (params){
@@ -1114,5 +1115,28 @@ function updateABranch  (updateABranchPayload){
     function success(response) { return { type: administrationConstants.UPDATE_A_BRANCH_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.UPDATE_A_BRANCH_FAILURE, error } }
     function clear() { return { type: administrationConstants.UPDATE_A_BRANCH_RESET, clear_data:""} }
+
+}
+
+function getNotifications(params) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_NOTIFICATIONS +`?${params}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+
+    function request(user) { return { type: administrationConstants.GET_NOTIFICATIONS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_NOTIFICATIONS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_NOTIFICATIONS_FAILURE, error } }
 
 }
