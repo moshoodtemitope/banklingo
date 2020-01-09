@@ -34,15 +34,20 @@ function getDeposits(params) {
 
 }
 
-function getClientDeposits(params) {
+function getClientDeposits(clientId,params) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_DEPOSITS + `/client/${params.clientId}?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_DEPOSITS + `/client/${clientId}?${params}`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response => {
-                dispatch(success(response));
+                if(response.status===200){
+                    dispatch(success(response));
+                }else{
+                    dispatch(failure(handleRequestErrors("Unable to get the requested Deposit client")));
+                }
+                
             }).catch(error => {
 
                 dispatch(failure(handleRequestErrors(error)));
@@ -88,7 +93,12 @@ function getAccountDepositTransaction(params) {
         dispatch(request(consume));
         return consume
             .then(response => {
-                dispatch(success(response));
+                if(response.status===200){
+                    dispatch(success(response));
+                }else{
+                    dispatch(failure(handleRequestErrors("Unable to get the requested Deposit Account Transactions")));
+                }
+                
             }).catch(error => {
 
                 dispatch(failure(handleRequestErrors(error)));

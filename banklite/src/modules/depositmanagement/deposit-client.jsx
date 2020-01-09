@@ -1,29 +1,30 @@
 import * as React from "react";
 // import {Router} from "react-router";
 
-import {Fragment} from "react";
+import { Fragment } from "react";
 import { connect } from 'react-redux';
 
-import { NavLink} from 'react-router-dom';
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-import  TableComponent from '../../shared/elements/table'
+
+import InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
-import "./deposittransactions.scss"; 
-class DepositTransactions extends React.Component {
+import "./depositmanagement.scss";
+class DepositClient extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            user:'',
+        this.state = {
+            user: '',
             PageSize: '30',
             FullDetails: false,
             CurrentPage: 1,
             CurrentSelectedPage: 1
         }
-        
+
+
     }
 
     componentDidMount() {
@@ -33,13 +34,13 @@ class DepositTransactions extends React.Component {
     loadInitialData = () => {
         let { PageSize, CurrentPage } = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getDepositTransaction(params);
+        this.getClientDeposits(params);
     }
 
-    getDepositTransaction = (paramters) => {
+    getClientDeposits = (paramters) => {
         const { dispatch } = this.props;
 
-        dispatch(depositActions.getDepositTransaction(paramters));
+        dispatch(depositActions.getClientDeposits(this.props.clientId,paramters));
     }
 
     setPagesize = (PageSize) => {
@@ -50,7 +51,7 @@ class DepositTransactions extends React.Component {
         this.setState({ PageSize: sizeOfPage });
 
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getDepositTransaction(params);
+        this.getClientDeposits(this.props.clientId,params);
     }
 
     setShowDetails = (FullDetails) => {
@@ -61,23 +62,23 @@ class DepositTransactions extends React.Component {
         this.setState({ FullDetails: showDetails });
 
         let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getDepositTransaction(params);
+        this.getClientDeposits(this.props.clientId,params);
     }
 
-    renderDepositTransactions = () => {
-        let getDepositTransactionRequest = this.props.getDepositTransactionRequest;
-        switch (getDepositTransactionRequest.request_status) {
-            case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING):
+    renderDeposits = () => {
+        let getClientDepositsReducer = this.props.getClientDepositsReducer;
+        switch (getClientDepositsReducer.request_status) {
+            case (loanAndDepositsConstants.GET_CLIENTDEPOSITS_PENDING):
                 return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
 
-            case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_SUCCESS):
-                let allDepositTransactions = getDepositTransactionRequest.request_data.response.data;
-                if (allDepositTransactions !== undefined) {
-                    if (allDepositTransactions.length >= 1) {
+            case (loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS):
+                let allDeposits = getClientDepositsReducer.request_data.response.data;
+                if (allDeposits !== undefined) {
+                    if (allDeposits.length >= 1) {
                         return (
                             <div>
                                 <div className="table-helper">
@@ -107,7 +108,7 @@ class DepositTransactions extends React.Component {
                                                 <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
                                             </div>
                                             <div className="page-count">
-                                                <span>1-{this.state.PageSize}</span>  of <span>{allDepositTransactions.totalRows}</span>
+                                                <span>1-{this.state.PageSize}</span>  of <span>{allDeposits.totalRows}</span>
                                             </div>
                                             <div className="each-page-action">
                                                 <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
@@ -122,28 +123,28 @@ class DepositTransactions extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>User</th>
-                                            <th>Deposit Account Number</th>
-                                            <th>Type</th>
-                                            <th>Transaction Amount</th>
-                                            <th>User Name</th>
-                                            <th>Entry Date</th>
+                                            <th>Account Number</th>
+                                            <th>Account Holder Name</th>
+                                            <th>Product</th>
+                                            <th>Deposit Balance</th>
+                                            <th>Account State</th>
                                             <th>Date Created</th>
+                                            <th>Deposit Available Balance</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
-                                            allDepositTransactions.map((eachTransaction, index) => {
+                                            allDeposits.map((eachDeposit, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachTransaction.user}</td>
-                                                            <td><NavLink to={`/deposit-transactions/${eachTransaction.accountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
-                                                            <td>{eachTransaction.typeDescription}</td>
-                                                            <td>{eachTransaction.transactionAmount}</td>
-                                                            <td>{eachTransaction.userName}</td>
-                                                            <td>{eachTransaction.entryDate}</td>
-                                                            <td>{eachTransaction.dateCreated}</td>
+                                                            <td>{eachDeposit.accountNumber}</td>
+                                                            <td>{eachDeposit.accountHolderName}</td>
+                                                            <td>{eachDeposit.productName}</td>
+                                                            <td>{eachDeposit.depositBalance}</td>
+                                                            <td>{eachDeposit.accountStateDescription}</td>
+                                                            <td>{eachDeposit.dateCreated}</td>
+                                                            <td>{eachDeposit.depositAvailableBalance}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -159,7 +160,7 @@ class DepositTransactions extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No Deposits Transactions recorded
+                                No records found
                                 {/* <div className="footer-with-cta centered">
                                     <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
                                 </div> */}
@@ -169,16 +170,19 @@ class DepositTransactions extends React.Component {
                 } else {
                     return null;
                 }
-            case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_FAILURE):
+            case (loanAndDepositsConstants.GET_CLIENTDEPOSITS_FAILURE):
                 return (
                     <div className="loading-content errormsg">
-                        <div>An error occured please try again</div>
+                        <div>{getClientDepositsReducer.request_data.error}</div>
                     </div>
                 )
             default:
                 return null;
         }
     }
+
+
+
 
     render() {
         return (
@@ -191,7 +195,7 @@ class DepositTransactions extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Deposit Transactions</h2>
+                                                <h2>Deposit Client</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +209,7 @@ class DepositTransactions extends React.Component {
                                         </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                {this.renderDepositTransactions()}
+                                                {this.renderDeposits()}
                                             </div>
                                         </div>
                                     </div>
@@ -218,9 +222,11 @@ class DepositTransactions extends React.Component {
         );
     }
 }
+
 function mapStateToProps(state) {
     return {
-        getDepositTransactionRequest: state.depositsReducers.getDepositTransactionReducer,
+        getClientDepositsReducer: state.depositsReducers.getClientDepositsReducer,
     };
 }
-export default connect(mapStateToProps)(DepositTransactions);
+
+export default connect(mapStateToProps)(DepositClient);

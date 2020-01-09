@@ -19,10 +19,12 @@ import DisbursementPendingApproval from './disbursements/pending-approval'
 import NipRequests from './disbursements/nip-request'
 
 import DepositManagement from './depositmanagement'
+import DepositClient from './depositmanagement/deposit-client'
 import NewDepositAccount from './depositmanagement/newdepositaccount'
 
 import LoanTransactions from './loantransactions'
 import DepositTransactions from './deposittransactions'
+import DepositTransactionAccount from './deposittransactions/deposit-transaction-account'
 import Activties from './activities'
 import BranchesManagement from './branches'
 import UserManagement from './usermanagement'
@@ -131,10 +133,12 @@ class AuthenticatedRoutes extends React.Component {
                         <Route  path='/disbursements-nip-requests' render={(props) => <NipRequests {...this.props} />} />
 
                         <Route exact path='/deposits' render={(props) => <DepositManagement {...this.props} />} />
+                        <Route exact path='/deposits/:clientId' render={(props) => <DepositClient clientId={props.match.params.clientId} {...this.props} />} />
                         <Route exact path='/deposits/newaccount' render={(props) => <NewDepositAccount {...this.props} />} />
                         
                         <Route exact path='/loan-transactions' render={(props) => <LoanTransactions {...this.props} />} />
                         <Route exact path='/deposit-transactions' render={(props) => <DepositTransactions {...this.props} />} />
+                        <Route exact path='/deposit-transactions/:accountEncodedKey' render={(props) => <DepositTransactionAccount accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} />
                         <Route exact path='/activities' render={(props) => <Activties {...this.props} />} />
                         <Route exact path='/branches' render={(props) => <BranchesManagement {...this.props} />} />
                         <Route exact path='/user-management' render={(props) => <UserManagement {...this.props} />} />

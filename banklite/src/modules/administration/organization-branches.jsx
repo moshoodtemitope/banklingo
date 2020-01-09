@@ -36,7 +36,8 @@ class OrganizationBranches extends React.Component {
     }
 
     loadInitialData=()=>{
-        let params = `PageSize=30`;
+        let {PageSize, CurrentPage}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
         this.getAllBranches(params);
     }
 
