@@ -11,6 +11,7 @@ import ClientsExited from './clients/clients-exited'
 import ClientsBlacklisted from './clients/blacklisted'
 
 import LoansManagement from './loanmanagement'
+import LoanClient from './loanmanagement/loan-client'
 import NewLoanAccount from './loanmanagement/newloanaccount'
 
 import DisbursementManagement from './disbursements'
@@ -23,6 +24,7 @@ import DepositClient from './depositmanagement/deposit-client'
 import NewDepositAccount from './depositmanagement/newdepositaccount'
 
 import LoanTransactions from './loantransactions'
+import LoanAccountTransactions from './loantransactions/loan-account-transactions'
 import DepositTransactions from './deposittransactions'
 import DepositTransactionAccount from './deposittransactions/deposit-transaction-account'
 import Activties from './activities'
@@ -125,6 +127,7 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/clients-blacklisted' render={(props) => <ClientsBlacklisted {...this.props} />} />
 
                         <Route exact path='/all-loans' render={(props) => <LoansManagement {...this.props} />} />
+                        <Route exact path='/all-loans/:clientId' render={(props) => <LoanClient clientId={props.match.params.clientId} {...this.props} />} />
                         <Route exact path='/all-loans/newloan-account' render={(props) => <NewLoanAccount {...this.props} />} />
 
                         <Route exact path='/disbursements' render={(props) => <DisbursementManagement {...this.props} />} />
@@ -137,6 +140,7 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/deposits/newaccount' render={(props) => <NewDepositAccount {...this.props} />} />
                         
                         <Route exact path='/loan-transactions' render={(props) => <LoanTransactions {...this.props} />} />
+                        <Route exact path='/loan-transactions/:accountEncodedKey' render={(props) => <LoanAccountTransactions accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} />
                         <Route exact path='/deposit-transactions' render={(props) => <DepositTransactions {...this.props} />} />
                         <Route exact path='/deposit-transactions/:accountEncodedKey' render={(props) => <DepositTransactionAccount accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} />
                         <Route exact path='/activities' render={(props) => <Activties {...this.props} />} />

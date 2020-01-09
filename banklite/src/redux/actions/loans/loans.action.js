@@ -34,11 +34,11 @@ function getLoans(params) {
 
 }
 
-function getClientLoans(params) {
+function getClientLoans(clientId,params) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_LOAN + `/client/${params.clientId}?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_LOAN + `/client/${clientId}?${params}`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response => {
@@ -80,11 +80,11 @@ function getLoanTransactions(params) {
 
 }
 
-function getAccountLoanTransaction(params) {
+function getAccountLoanTransaction(accountEncodedKey,params) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_LOAN_TRANSACTIONS + `/account/${params.accountEncodedKey}?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_LOAN_TRANSACTIONS + `/account/${accountEncodedKey}?${params}`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response => {

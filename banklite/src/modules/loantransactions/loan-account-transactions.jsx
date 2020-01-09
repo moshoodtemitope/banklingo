@@ -1,28 +1,29 @@
 import * as React from "react";
 // import {Router} from "react-router";
 
-import {Fragment} from "react";
+import { Fragment } from "react";
 import { connect } from 'react-redux';
-import { NavLink} from 'react-router-dom';
 
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-import  TableComponent from '../../shared/elements/table'
+import InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 import { loanActions } from '../../redux/actions/loans/loans.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
-import "./loantransactions.scss"; 
-class LoanTransactions extends React.Component {
+import "./loantransactions.scss";
+class LoanAccountTransactions extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            user:'',
+        this.state = {
+            user: '',
             PageSize: '30',
+            FullDetails: false,
             CurrentPage: 1,
             CurrentSelectedPage: 1
         }
-        
+
+
     }
 
     componentDidMount() {
@@ -32,43 +33,60 @@ class LoanTransactions extends React.Component {
     loadInitialData = () => {
         let { PageSize, CurrentPage } = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getLoanTransactions(params);
+        this.getAccountLoanTransaction(params);
     }
 
-    getLoanTransactions = (paramters) => {
+    getAccountLoanTransaction = (paramters) => {
         const { dispatch } = this.props;
 
-        dispatch(loanActions.getLoanTransactions(paramters));
+        dispatch(loanActions.getAccountLoanTransaction(this.props.accountEncodedKey,paramters));
     }
 
     setPagesize = (PageSize) => {
         // console.log('----here', PageSize.target.value);
         let sizeOfPage = PageSize.target.value,
-            { CurrentPage, CurrentSelectedPage } = this.state;
+            { FullDetails, CurrentPage, CurrentSelectedPage } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
-        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getLoanTransactions(params);
+        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+        this.getAccountLoanTransaction(this.props.accountEncodedKey,params);
     }
 
+    setShowDetails = (FullDetails) => {
+        // console.log('----here', PageSize.target.value);
+        let showDetails = FullDetails.target.checked,
+            { CurrentPage, CurrentSelectedPage, PageSize } = this.state;
 
-    renderLoanTransactions = () => {
-        let getLoanTransactionsRequest = this.props.getLoanTransactions;
-        switch (getLoanTransactionsRequest.request_status) {
-            case (loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_PENDING):
+        this.setState({ FullDetails: showDetails });
+
+        let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+        this.getAccountLoanTransaction(params);
+    }
+
+    renderLoanAccountTransactions = () => {
+        let getAccountLoanTransactionRequest = this.props.getAccountLoanTransactionRequest;
+        switch (getAccountLoanTransactionRequest.request_status) {
+            case (loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING):
                 return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
 
-            case (loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_SUCCESS):
-                let allLoanTransactions = getLoanTransactionsRequest.request_data.response.data;
+            case (loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_SUCCESS):
+                let allLoanTransactions = getAccountLoanTransactionRequest.request_data.response.data;
                 if (allLoanTransactions !== undefined) {
                     if (allLoanTransactions.length >= 1) {
                         return (
                             <div>
+                                <div className="table-helper">
+                                    <input type="checkbox" name=""
+                                        onChange={this.setShowDetails}
+                                        checked={this.state.FullDetails}
+                                        id="showFullDetails" />
+                                    <label htmlFor="showFullDetails">Show full details</label>
+                                </div>
                                 <div className="heading-with-cta toleft">
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
@@ -104,28 +122,28 @@ class LoanTransactions extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>Account Holder</th>
                                             <th>Loan Account Number</th>
-                                            <th>Type</th>
+                                            <th>Account Holder Name</th>
+                                            <th>Transaction Type</th>
                                             <th>Transaction Amount</th>
-                                            <th>UserName</th>
+                                            <th>Username</th>
                                             <th>Transaction Date</th>
                                             <th>Entry Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
-                                            allLoanTransactions.map((eachTransaction, index) => {
+                                            allLoanTransactions.map((eachTransactions, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachTransaction.accountHolderName}</td>
-                                                            <td><NavLink to={`/loan-transactions/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
-                                                            <td>{eachTransaction.typeDescription}</td>
-                                                            <td>{eachTransaction.transactionAmount}</td>
-                                                            <td>{eachTransaction.userName}</td>
-                                                            <td>{eachTransaction.transactionDate}</td>
-                                                            <td>{eachTransaction.entryDate}</td>
+                                                            <td>{eachTransactions.loanAccountNumber}</td>
+                                                            <td>{eachTransactions.accountHolderName}</td>
+                                                            <td>{eachTransactions.typeDescription}</td>
+                                                            <td>{eachTransactions.transactionAmount}</td>
+                                                            <td>{eachTransactions.userName}</td>
+                                                            <td>{eachTransactions.transactionDate}</td>
+                                                            <td>{eachTransactions.entryDate}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -141,7 +159,7 @@ class LoanTransactions extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No Loan Transactions recorded
+                                No Loan Transaction records found
                                 {/* <div className="footer-with-cta centered">
                                     <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
                                 </div> */}
@@ -151,16 +169,18 @@ class LoanTransactions extends React.Component {
                 } else {
                     return null;
                 }
-            case (loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_FAILURE):
+            case (loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_FAILURE):
                 return (
                     <div className="loading-content errormsg">
-                        <div>An error occured please try again</div>
+                        <div>{getAccountLoanTransactionRequest.request_data.error}</div>
                     </div>
                 )
             default:
                 return null;
         }
     }
+
+
 
 
     render() {
@@ -174,7 +194,7 @@ class LoanTransactions extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Loan Transactions</h2>
+                                                <h2>Loan Account Transactions</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -188,7 +208,7 @@ class LoanTransactions extends React.Component {
                                         </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                {this.renderLoanTransactions()}
+                                                {this.renderLoanAccountTransactions()}
                                             </div>
                                         </div>
                                     </div>
@@ -204,8 +224,8 @@ class LoanTransactions extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        getLoanTransactions: state.loansReducers.getLoanTransactionsReducer,
+        getAccountLoanTransactionRequest: state.loansReducers.getAccountLoanTransactionReducer,
     };
 }
 
-export default connect(mapStateToProps)(LoanTransactions);
+export default connect(mapStateToProps)(LoanAccountTransactions);

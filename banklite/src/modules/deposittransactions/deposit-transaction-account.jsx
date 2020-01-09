@@ -51,7 +51,7 @@ class DepositTransactionAccount extends React.Component {
         this.setState({ PageSize: sizeOfPage });
 
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getAccountDepositTransaction(this.props.accountEncodedKey,params);
+        this.getAccountDepositTransaction(params);
     }
 
     setShowDetails = (FullDetails) => {

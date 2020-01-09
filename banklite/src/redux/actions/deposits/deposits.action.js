@@ -85,11 +85,11 @@ function getDepositTransaction(params) {
 
 }
 
-function getAccountDepositTransaction(params) {
+function getAccountDepositTransaction(accountEncodedKey,params) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_DEPOSITS_TRANSACTIONS + `/account/${params.accountEncodedKey}?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_DEPOSITS_TRANSACTIONS + `/account/${accountEncodedKey}?${params}`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response => {
