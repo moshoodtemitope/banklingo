@@ -121,7 +121,8 @@ class AuthenticatedRoutes extends React.Component {
 
                         <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} />
                         <Route exact path='/inactive-clients' render={(props) => <InactiveClients {...this.props} />} />
-                        <Route exact path='/active-clients' render={(props) => <ActiveClients {...this.props} />} />
+                        <Route exact path='/active-clients' render={(props) => <ClientsManagement {...this.props} />} />
+                        {/* <Route exact path='/active-clients' render={(props) => <ActiveClients {...this.props} />} /> */}
                         <Route exact path='/clients-pending-approval' render={(props) => <ClientsPendingApproval {...this.props} />} />
                         <Route exact path='/clients-exited' render={(props) => <ClientsExited {...this.props} />} />
                         <Route exact path='/clients-blacklisted' render={(props) => <ClientsBlacklisted {...this.props} />} />

@@ -3,7 +3,8 @@ import {
     administration,
     accounting,
     loans,
-    deposits} from "./export";
+    deposits,
+    clients} from "./export";
 
 const rootReducer = (state, action)=>{
    
@@ -83,13 +84,22 @@ const loansReducers = combineReducers({
    
 })
 
+const clientsReducers = combineReducers({
+    getClientsReducer: clients.getClientsReducer, 
+    getAllClientsReducer: clients.getAllClientsReducer, 
+    createAClientReducer: clients.createAClientReducer, 
+    updateAClientReducer: clients.updateAClientReducer, 
+   
+})
+
 
 
 const appReducer = combineReducers({
     administrationReducers,
     accountingReducers,
     depositsReducers,
-    loansReducers
+    loansReducers,
+    clientsReducers
 })
 
 

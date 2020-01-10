@@ -71,6 +71,15 @@ import{
 } from './deposits/deposits.reducer'
 
 
+import{
+    getClientsReducer,
+    getAllClientsReducer,
+    createAClientReducer,
+    updateAClientReducer,
+    
+} from './clients/clients.reducer'
+
+
 
 
 export const administration ={
@@ -133,4 +142,11 @@ export const deposits = {
     getClientDepositsReducer,
     getDepositTransactionReducer,
     getAccountDepositTransactionReducer,
+}
+
+export const clients ={
+    getClientsReducer,
+    getAllClientsReducer,
+    createAClientReducer,
+    updateAClientReducer,
 }

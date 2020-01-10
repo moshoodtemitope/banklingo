@@ -61,4 +61,7 @@ export const routes = {
 
     //Notification Endpoints
     HIT_NOTIFICATIONS: BASEURL + '/Dars.Administration/api/Notifications',
+
+    //Clients Endpoints
+    HIT_CLIENTS: BASEURL + '/Dars.Administration/api/Clients',
 }
