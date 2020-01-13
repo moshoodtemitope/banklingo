@@ -74,7 +74,8 @@ select, select.form-control{
         padding-top: 4px;
         margin-left: 10px;
     }
-    [type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled){
+    // [type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled){
+    [type=button], [type=reset], [type=submit], button{
         font-size: 13px;
         padding-bottom: 4px;
         padding-top: 4px;
@@ -301,6 +302,9 @@ select, select.form-control{
 .mr-20px{
     margin-right: 20px!important;
 }
+.mr-20px{
+    margin-left: 20px!important;
+}
 
 .w-40{
     width: 40%!important;
@@ -511,6 +515,15 @@ button.togglestyle{
             margin-left: 8px;
             font-weight: normal;
         }
+    }
+}
+.h-38px{
+    height: 38px!important;
+}
+.fullwidthdate{
+    width: 100%;
+    .react-datepicker-wrapper{
+        width: 100%;
     }
 }
 .input-helptext{

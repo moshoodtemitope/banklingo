@@ -9,6 +9,7 @@ import ActiveClients from './clients/active'
 import ClientsPendingApproval from './clients/pending-approval'
 import ClientsExited from './clients/clients-exited'
 import ClientsBlacklisted from './clients/blacklisted'
+import NewClient from './clients/new-client'
 
 import LoansManagement from './loanmanagement'
 import LoanClient from './loanmanagement/loan-client'
@@ -120,6 +121,7 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/dashboard' render={(props) => <DashboardLanding {...this.props} />} /> 
 
                         <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} />
+                        <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} />
                         <Route exact path='/inactive-clients' render={(props) => <InactiveClients {...this.props} />} />
                         <Route exact path='/active-clients' render={(props) => <ClientsManagement {...this.props} />} />
                         {/* <Route exact path='/active-clients' render={(props) => <ActiveClients {...this.props} />} /> */}
