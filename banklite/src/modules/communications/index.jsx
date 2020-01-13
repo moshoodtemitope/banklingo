@@ -177,7 +177,7 @@ class CommunicationsManagement extends React.Component {
                     case (administrationConstants.GET_NOTIFICATIONS_FAILURE):
                         return (
                             <div className="loading-content errormsg"> 
-                                <div>An error occured please try again</div>
+                                <div>{adminGetNotificationsRequest.request_data.error}</div>
                             </div>
                         )
                     default :

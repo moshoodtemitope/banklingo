@@ -176,7 +176,7 @@ class LoansManagement extends React.Component {
             case (loanAndDepositsConstants.GET_LOANS_FAILURE):
                 return (
                     <div className="loading-content errormsg">
-                        <div>An error occured please try again</div>
+                        <div>{getLoansRequest.request_data.error}</div>
                     </div>
                 )
             default:

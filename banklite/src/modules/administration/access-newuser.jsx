@@ -658,7 +658,7 @@ class CreateNewUser extends React.Component {
                 case (administrationConstants.GET_ALL_ROLES_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
-                            <div>An error occured please try again</div>
+                            <div>{getRolesRequest.request_data.error}</div>
                         </div>
                     )
                 default :

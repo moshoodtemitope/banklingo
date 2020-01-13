@@ -197,7 +197,7 @@ class AccountManagement extends React.Component {
             case (accountingConstants.GET_GLACCOUNTS_FAILURE):
                     return (
                         <div className="loading-content"> 
-                            <div>An error occured please try again</div>
+                            <div>{getGLAccountsRequest.request_data.error}</div>
                         </div>
                     )
             default :

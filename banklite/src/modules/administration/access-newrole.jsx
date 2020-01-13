@@ -353,7 +353,7 @@ class CreateNewRole extends React.Component {
                 case (administrationConstants.GET_ROLE_PERMISSIONS_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
-                            <div>An error occured please try again</div>
+                            <div>{getAllPermissionsRequest.request_data.error}</div>
                         </div>
                     )
                 default :

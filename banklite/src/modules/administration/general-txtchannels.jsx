@@ -138,7 +138,7 @@ class GeneralTxtChannels extends React.Component {
                 case (administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
-                            <div>An error occured please try again</div>
+                            <div>{adminGetTransactionChannelsRequest.request_data.error}</div>
                         </div>
                     )
                 default :

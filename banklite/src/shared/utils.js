@@ -15,8 +15,14 @@ export const handleRequestErrors = (error)=>{
             // console.log('final');
             return "Something went wrong. Please try again";
         }
+
+        if(error.toString()==="Error: Network Error"){
+            return "Please check your network and try again"
+        }
         return error
     }
+
+    
     return "Something went wrong. Please try again";
 }
 

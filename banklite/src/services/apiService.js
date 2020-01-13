@@ -36,13 +36,20 @@ export class ApiService {
                 return service;
             }).catch(function (error) {
                 if (error.response) {
+                    console.log("errors is", error.response.status);
                     if (error.response.status === 401) {
                         // dispatch(userActions.logout());
                     } else {
+                        
                         return service;
                     }
                       
-                } 
+                }
+                // if(!error.response) {
+                //     if(error.toString().indexOf('Network')!==-1){
+                //         return "Please Check your network"
+                //     }
+                // }
                 return  service;
             });
 
@@ -73,9 +80,16 @@ export class ApiService {
                         // dispatch(userActions.logout());
                         //history.push('/');
                     }else {
+                        
                         return service;
                     }
             } 
+            if(!error.response) {
+                if(error.indexOf('Network')!==-1){
+                    return "Please Check your network"
+                }
+                
+            }
             return  service;
             });
         }

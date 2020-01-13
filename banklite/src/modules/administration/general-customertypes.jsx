@@ -184,7 +184,7 @@ class GeneralCustomerTypes extends React.Component {
             case (administrationConstants.GET_CUSTOMERTYPES_FAILURE):
                 return (
                     <div className="loading-content errormsg"> 
-                        <div>An error occured please try again</div>
+                        <div>{adminGetCustomerTypesRequest.request_data.error}</div>
                     </div>
                 )
             default :

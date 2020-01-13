@@ -382,7 +382,7 @@ class GeneralInternalControl extends React.Component {
             case (administrationConstants.GET_INTERNAL_CONTROL_FAILURE):
                 return (
                     <div className="loading-content errormsg"> 
-                        <div>An error occured please try again</div>
+                        <div>{adminGetInternalControlRequest.request_data.error}</div>
                     </div>
                 )
             default :

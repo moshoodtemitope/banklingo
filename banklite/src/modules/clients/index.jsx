@@ -170,7 +170,7 @@ class ClientsManagement extends React.Component {
                 case (clientsConstants.GET_CLIENTS_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
-                            <div>An error occured please try again</div>
+                            <div>{getClientsRequest.request_data.error}</div>
                         </div>
                     )
                 default :

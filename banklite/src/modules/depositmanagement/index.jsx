@@ -173,7 +173,7 @@ class DepositManagement extends React.Component {
             case (loanAndDepositsConstants.GET_DEPOSITS_FAILURE):
                 return (
                     <div className="loading-content errormsg">
-                        <div>An error occured please try again</div>
+                        <div>{getDepositsRequest.request_data.error}</div>
                     </div>
                 )
             default:

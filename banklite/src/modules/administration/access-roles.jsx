@@ -162,7 +162,7 @@ class AccessRoles extends React.Component {
             case (administrationConstants.GET_ROLES_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
-                            <div>An error occured please try again</div>
+                            <div>{GetRolesRequest.request_data.error}</div>
                         </div>
                     )
                 default :

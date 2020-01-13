@@ -256,7 +256,7 @@ class NewTxtChannels extends React.Component {
             case (accountingConstants.GET_ALL_GLACCOUNTS_FAILURE):
                 return (
                     <div className="loading-content card"> 
-                        <div>An error occured please try again</div>
+                        <div>{getAllGLAccountsRequest.request_data.error}</div>
                     </div>
                 )
             default :

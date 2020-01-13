@@ -314,7 +314,7 @@ class GeneralOrganization extends React.Component {
             case (administrationConstants.GET_ORGANIZATION_DETAILS_FAILURE):
                 return (
                     <div className="loading-content errormsg"> 
-                        <div>An error occured please try again</div>
+                        <div>{adminGetOrganizationRequest.request_data.error}</div>
                     </div>
                 )
             default :

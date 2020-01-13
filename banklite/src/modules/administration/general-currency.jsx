@@ -151,9 +151,9 @@ class GeneralCurrency extends React.Component {
 
     displayAllCurrencies =()=>{
 
-        let getAllBranches =  this.props.adminGetAllCurrencies;
+        let getAllCurrencies =  this.props.adminGetAllCurrencies;
             
-        switch(getAllBranches.request_status){
+        switch(getAllCurrencies.request_status){
             case (administrationConstants.GET_ALLCURRENCIES_PENDING):
                 return (
                     <div className="loading-content"> 
@@ -162,7 +162,7 @@ class GeneralCurrency extends React.Component {
                 )
             case (administrationConstants.GET_ALLCURRENCIES_SUCCESS):
                 // contentToDisplay = this.renderCurrencies();
-                    let currenciesList = getAllBranches.request_data.response.data;
+                    let currenciesList = getAllCurrencies.request_data.response.data;
 
                 return (
                     <div>
@@ -269,7 +269,7 @@ class GeneralCurrency extends React.Component {
             case (administrationConstants.GET_ALLCURRENCIES_FAILURE):
                     return (
                         <div className="loading-content"> 
-                            <div>An error occured please try again</div>
+                            <div>{getAllCurrencies.request_data.error}</div>
                         </div>
                     )
             default :
@@ -770,13 +770,13 @@ class GeneralCurrency extends React.Component {
     }
 
     render() {
-        let getAllBranches =  this.props.adminGetAllCurrencies;
+        let getAllCurrencies =  this.props.adminGetAllCurrencies;
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
                     {this.newCurrencyPopUp()}
                     {this.setCurrencyConversion()}
-                    {getAllBranches.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS && this.editACurrencyPopUp()}
+                    {getAllCurrencies.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS && this.editACurrencyPopUp()}
                     <div className="content-wrapper">
                         <div className="module-heading">
                             <div className="module-title">

@@ -177,7 +177,7 @@ class AccessUsers extends React.Component {
                 case (administrationConstants.GET_USERS_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
-                            <div>An error occured please try again</div>
+                            <div>{adminGetUsersRequest.request_data.error}</div>
                         </div>
                     )
                 default :

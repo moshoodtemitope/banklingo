@@ -828,7 +828,7 @@ class JournalEntries extends React.Component {
             case (accountingConstants.GET_JOURNAL_ENTRY_FAILURE):
                     return (
                         <div className="loading-content"> 
-                            <div>An error occured please try again</div>
+                            <div>{getJournalEntriesRequest.request_data.error}</div>
                         </div>
                     )
             default :
