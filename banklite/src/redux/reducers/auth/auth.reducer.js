@@ -2,9 +2,10 @@ import {authConstants} from '../../actiontypes/auth/auth.constants'
 
 
 
+let user = JSON.parse(localStorage.getItem('user'));
+const initialState = user ? { loggedIn: true, user } : {};
 
-
-export function LoginReducer(state=[], action) {
+export function LoginReducer(state=initialState, action) {
     switch (action.type) {
         case authConstants.LOGIN_USER_PENDING:
             return {
@@ -15,6 +16,7 @@ export function LoginReducer(state=[], action) {
         case authConstants.LOGIN_USER_SUCCESS:
             return {
                 request_status: authConstants.LOGIN_USER_SUCCESS,
+                loggedIn: true,
                 is_request_processing: false,
                 request_data: action
             };
@@ -30,6 +32,11 @@ export function LoginReducer(state=[], action) {
                 is_request_processing: false,
                 request_data: {}
             };
+        
+        case authConstants.LOGOUT:
+            return {
+                ...state
+              };
             
         case authConstants.LOGOUT_USER_SUCCESS:
                 return {

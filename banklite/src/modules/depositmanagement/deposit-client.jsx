@@ -40,7 +40,7 @@ class DepositClient extends React.Component {
     getClientDeposits = (paramters) => {
         const { dispatch } = this.props;
 
-        dispatch(depositActions.getClientDeposits(this.props.clientId,paramters));
+        dispatch(depositActions.getClientDeposits(this.props.match.params.clientId,paramters));
     }
 
     setPagesize = (PageSize) => {
@@ -51,7 +51,7 @@ class DepositClient extends React.Component {
         this.setState({ PageSize: sizeOfPage });
 
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getClientDeposits(this.props.clientId,params);
+        this.getClientDeposits(this.props.match.params.clientId,params);
     }
 
     setShowDetails = (FullDetails) => {
@@ -62,7 +62,7 @@ class DepositClient extends React.Component {
         this.setState({ FullDetails: showDetails });
 
         let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getClientDeposits(this.props.clientId,params);
+        this.getClientDeposits(this.props.match.params.clientId,params);
     }
 
     renderDeposits = () => {

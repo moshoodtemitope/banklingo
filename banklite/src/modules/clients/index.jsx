@@ -148,18 +148,18 @@ class ClientsManagement extends React.Component {
                                             }
                                         </tbody>
                                     </TableComponent>
-                                    <div className="footer-with-cta toleft">
+                                    {/* <div className="footer-with-cta toleft">
                                         <NavLink to={'/clients/new'} className="btn btn-primary">New Customer</NavLink>
-                                    </div>
+                                    </div> */}
                                 </div>
                             )
                         }else{
                             return(
                                 <div className="no-records">
                                     No Customer account has been created
-                                    <div className="footer-with-cta centered">
+                                    {/* <div className="footer-with-cta centered">
                                     <NavLink to={'/clients/new'} className="btn btn-primary">New Customer</NavLink>
-                                    </div>
+                                    </div> */}
                                 </div>
                             )
                         }

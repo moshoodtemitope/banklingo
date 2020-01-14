@@ -39,7 +39,7 @@ class LoanAccountTransactions extends React.Component {
     getAccountLoanTransaction = (paramters) => {
         const { dispatch } = this.props;
 
-        dispatch(loanActions.getAccountLoanTransaction(this.props.accountEncodedKey,paramters));
+        dispatch(loanActions.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,paramters));
     }
 
     setPagesize = (PageSize) => {
@@ -50,7 +50,7 @@ class LoanAccountTransactions extends React.Component {
         this.setState({ PageSize: sizeOfPage });
 
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getAccountLoanTransaction(this.props.accountEncodedKey,params);
+        this.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,params);
     }
 
     setShowDetails = (FullDetails) => {

@@ -39,12 +39,13 @@ class EditAClient extends React.Component {
 
     componentDidMount(){
         this.getAClient();
+        console.log("=++++++======", this.props)
     }
 
     getAClient = ()=>{
         const {dispatch} = this.props;
        
-        dispatch(clientsActions.getAClient(this.props.encodedKey));
+        dispatch(clientsActions.getAClient(this.props.match.params.encodedkey));
     }
 
     handleUpdateCustomer = async (updateCustomerpayload)=>{
@@ -176,7 +177,7 @@ class EditAClient extends React.Component {
                                         gender:values.gender?values.gender:'',
                                         dateOfBirth: values.dateOfBirth?values.dateOfBirth.toISOString():'',
                                         notes: values.notes,
-                                        encodedKey:this.props.encodedKey
+                                        encodedKey:this.props.match.params.encodedkey
                                     }
                 
                 

@@ -29,11 +29,18 @@ class UserLogin extends React.Component {
 
     
 
+     
+
+    componentDidMount=()=>{
+        const { dispatch } = this.props;
+          dispatch(authActions.initStore());
+    }
+
     handleLoginForm = async (loginPayload)=>{
         const {dispatch} = this.props;
        
         await dispatch(authActions.Login(loginPayload));
-    } 
+    }
 
     renderLoginForm = ()=>{
         let loginRequest = this.props.loginRequest;
@@ -66,9 +73,12 @@ class UserLogin extends React.Component {
                                                 //     resetForm();
                                                 // }
                 
-                                                // setTimeout(() => {
-                                                //     this.props.dispatch(authActions.Login("CLEAR"))
-                                                // }, 3000);
+                                                setTimeout(() => {
+                                                    if(this.props.loginRequest.request_status===authConstants.LOGIN_USER_SUCCESS){
+                                                        this.props.dispatch(authActions.Login("CLEAR"));
+                                                    }
+                                                    
+                                                }, 3000);
                 
                                             }
                                         )
@@ -86,7 +96,7 @@ class UserLogin extends React.Component {
                                 <Form 
                                     noValidate 
                                     onSubmit={handleSubmit}
-                                    className="form-content w-40 card">
+                                    className="form-content w-30 card">
                                     
                                     <div className="logo-wrap">
                                         <h4>Sign In</h4>

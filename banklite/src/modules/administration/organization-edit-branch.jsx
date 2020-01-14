@@ -31,7 +31,7 @@ class EditBranch extends React.Component {
 
     componentDidMount(){
         
-        this.getBranch(this.props.encodedKey)
+        this.getBranch(this.props.match.params.encodedkey)
     }
 
 
@@ -136,7 +136,7 @@ class EditBranch extends React.Component {
                                         contactMobile: values.contactMobile,
                                         contactEmail: values.contactEmail
                                     },
-                                    encodedKey:this.props.encodedKey
+                                    encodedKey:this.props.match.params.encodedkey
                                 }
             
             
@@ -171,7 +171,7 @@ class EditBranch extends React.Component {
                                         onSubmit={handleSubmit}
                                         className="form-content card">
                                         <div className="form-heading">
-                                            <h3>Creating A New Branch</h3>
+                                            <h3>Editing  Branch</h3>
                                         </div>
                                         <Form.Row>
                                             <Col>

@@ -2,9 +2,14 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import { connect } from 'react-redux';
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import { NavLink} from 'react-router-dom';
+
+
+import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
+import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashoboard.constants'
 import "./dashboard.scss"; 
 class DashboardLanding extends React.Component {
     constructor(props) {
@@ -14,6 +19,50 @@ class DashboardLanding extends React.Component {
         }
 
         
+    }
+
+    componentDidMount() {
+        this.loadInitialData();
+    }
+
+    loadInitialData = () => {
+        this.getDashboardData();
+    }
+
+    getDashboardData = () => {
+        const { dispatch } = this.props;
+
+        dispatch(dashboardActions.getDashboardData());
+    }
+
+    renderDashboardStats(){
+        let getDashboardStatsRequest = this.props.getDashboardStats;
+
+        switch (getDashboardStatsRequest.request_status) {
+            case (dashboardConstants.GET_DASHOBOARD_DATA_PENDING):
+                return (
+                    <div className="loading-content">
+                        <div className="loading-text">Please wait... </div>
+                    </div>
+                )
+
+            case (dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS):
+                let allDashboardStat = getDashboardStatsRequest.request_data.response.data;
+                if(allDashboardStat !== undefined){
+                    console.log("-----",allDashboardStat);
+                }else {
+                    return null;
+                }
+
+            case (dashboardConstants.GET_DASHOBOARD_DATA_FAILURE):
+                return (
+                    <div className="loading-content errormsg">
+                        <div>{getDashboardStatsRequest.request_data.error}</div>
+                    </div>
+                )
+            default:
+                return null;
+        }
     }
 
     render() {
@@ -44,7 +93,8 @@ class DashboardLanding extends React.Component {
                                                 <div className="col-sm-8">
                                                     <div className="dashboardstats">
                                                         <div className="all-stats-wrap">
-                                                            <div className="each-stat">
+                                                            {this.renderDashboardStats()}
+                                                            {/* <div className="each-stat">
                                                                 <div className="stat-data card">
                                                                     <h4 className="stat-value">6,669</h4>
                                                                     <span className="stat-text">Active Customers</span>
@@ -85,7 +135,7 @@ class DashboardLanding extends React.Component {
                                                                     <h4 className="stat-value">99.89%</h4>
                                                                     <span className="stat-text">PAR > 30 Days</span>
                                                                 </div>
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -159,4 +209,10 @@ class DashboardLanding extends React.Component {
     }
 }
 
-export default DashboardLanding;
+function mapStateToProps(state) {
+    return {
+        getDashboardStats: state.dashboardReducers.getDashboardStatReducer,
+    };
+}
+
+export default connect(mapStateToProps)(DashboardLanding);

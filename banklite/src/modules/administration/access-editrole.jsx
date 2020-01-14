@@ -34,7 +34,7 @@ class EditRole extends React.Component {
     componentDidMount() {
 
         // this.getAllPermissions();
-        this.getARole(this.props.roleId);
+        this.getARole(this.props.match.params.roleId);
     }
 
 
@@ -99,7 +99,7 @@ class EditRole extends React.Component {
                         hasApiAccessRight: values.roleHasApiAccessRight,
                         note:values.note,
                         permissionCodes:permissionsSelected,
-                        id:this.props.roleId
+                        id:this.props.match.params.roleId
                     }
 
 
@@ -112,7 +112,7 @@ class EditRole extends React.Component {
                                    
 
                                     setTimeout(() => {
-                                        // this.getARole(this.props.roleId);
+                                        // this.getARole(this.props.match.params.roleId);
                                         this.props.dispatch(administrationActions.updateARole("CLEAR"));
                                         
                                         // resetForm();

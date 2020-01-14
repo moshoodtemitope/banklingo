@@ -34,7 +34,7 @@ class EditUser extends React.Component {
     componentDidMount() {
 
         // this.getAllPermissions();
-        this.getAUser(this.props.encodedKey);
+        this.getAUser(this.props.match.params.encodedKey);
     }
 
     getAUser =  (encodedKey)=>{
@@ -126,7 +126,13 @@ class EditUser extends React.Component {
             let currentRole = roles.filter(eachrole=>eachrole.roleId===userData.roleId)[0],
                 userAddress=userData.address,
                 userContact=userData.contact,
-                currentBranch = branches.filter(branch=>branch.id===userData.branchId)[0];
+                currentBranch;
+                if(userData.branchId!==null){
+                    currentBranch = branches.filter(branch=>branch.id===userData.branchId)[0];
+                }else{
+                    currentBranch =null
+                }
+                
 
                 console.log('role is', currentRole);
 
@@ -187,7 +193,7 @@ class EditUser extends React.Component {
                         password: values.password,
                         branchId: values.branchId,
                         note: values.note,
-                        encodedKey: this.props.encodedKey
+                        encodedKey: this.props.match.params.encodedKey
                     };
                     if(values.addressLine1!==''){
                         updateNewUserPayload.address.addressLine1 =values.addressLine1;
@@ -548,7 +554,8 @@ class EditUser extends React.Component {
                                                 <Form.Label className="block-level">Branch</Form.Label>
                                                 <Select
                                                     options={allBranches}
-                                                    defaultValue ={{label:currentBranch.name, value: currentBranch.id}}
+                                                    defaultValue ={{label:currentBranch!==null?currentBranch.name:null, 
+                                                                    value:currentBranch!==null? currentBranch.id:null}}
                                                     onChange={(selectedBranch) => {
                                                         this.setState({ selectedBranch });
                                                         errors.branchId = null

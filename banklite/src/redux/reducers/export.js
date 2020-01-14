@@ -69,6 +69,11 @@ import{
 } from './auth/auth.reducer'
 
 import{
+    getDashboardStatReducer,
+    
+} from './dashboard/dashboard.reducer'
+
+import{
     getDepositsReducer,
     getClientDepositsReducer,
     getDepositTransactionReducer,
@@ -147,6 +152,10 @@ export const loans = {
 
 export const auth = {
     LoginReducer,
+}
+
+export const dashboard = {
+    getDashboardStatReducer,
 }
 
 export const deposits = {

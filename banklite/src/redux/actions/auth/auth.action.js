@@ -5,7 +5,9 @@ import {authConstants} from '../../actiontypes/auth/auth.constants'
 import { handleRequestErrors } from "../../../shared/utils";
 
 export const authActions = {
-    Login
+    Login,
+    Logout,
+    initStore
 }
 
 
@@ -52,5 +54,26 @@ function Login   (loginPayload){
 
 }
 
+
+function Logout(type) {
+    // userService.logout();
+    //console.error("We are logging you out...");
+    localStorage.clear();
+    history.push('/');
+    // window.location.reload();
+    return (dispatch) => {
+        dispatch(logout());
+    }
+
+    function logout() { return { type: authConstants.LOGOUT } }
+}
+
+function initStore() {
+    localStorage.clear();
+    return (dispatch) => {
+        dispatch(logout());
+    }
+    function logout() { return { type: authConstants.LOGOUT } }
+}
 
 

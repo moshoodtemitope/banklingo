@@ -523,7 +523,7 @@ class NewClient extends React.Component {
                                                     disabled={createAClientRequest.is_request_processing} 
                                                     className="ml-20"   
                                                     > 
-                                                        {createAClientRequest.is_request_processing?"Please wait...": "Create Customer Account"}
+                                                        {createAClientRequest.is_request_processing?"Please wait...": "Create Customer"}
                                                 </Button>
                 
                                                 

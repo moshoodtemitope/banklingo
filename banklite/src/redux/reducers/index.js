@@ -1,11 +1,14 @@
 import {combineReducers} from "redux";
 import { 
     auth,
+    dashboard,
     administration,
     accounting,
     loans,
     deposits,
     clients} from "./export";
+
+import {LoginReducer} from "./auth/auth.reducer";
 
 const rootReducer = (state, action)=>{
    
@@ -91,6 +94,13 @@ const authReducers = combineReducers({
    
 })
 
+const dashboardReducers = combineReducers({
+    getDashboardStatReducer: dashboard.getDashboardStatReducer, 
+   
+})
+
+
+
 const clientsReducers = combineReducers({
     getClientsReducer: clients.getClientsReducer, 
     getAllClientsReducer: clients.getAllClientsReducer, 
@@ -108,7 +118,9 @@ const appReducer = combineReducers({
     depositsReducers,
     loansReducers,
     clientsReducers,
-    authReducers
+    // LoginReducer,
+    authReducers,
+    dashboardReducers
 })
 
 

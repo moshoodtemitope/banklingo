@@ -10,6 +10,8 @@ import Form from 'react-bootstrap/Form'
 // import Button from 'react-bootstrap/Button'
 import FormControl from 'react-bootstrap/FormControl'
 import {NavLink} from 'react-router-dom';
+import { history } from '../../../_helpers/history';
+import {authActions} from '../../../redux/actions/auth/auth.action';
 // import {Nav, NavDropdown, Navbar, Form, Button, FormControl} from 'react-bootstrap'
 import "./mainheader.scss"; 
 class MainHeader extends React.Component{
@@ -20,7 +22,10 @@ class MainHeader extends React.Component{
             activeBranch:'Head Office',
             showDropdown: false
         }
-       
+    //    if(Object.keys(this.props.user).length<=1){
+    //         history.push('/');
+    //    }
+    //    console.log("========", this.props.user);
     }
 
     handleCurrentBranchClicked = () =>{
@@ -33,11 +38,17 @@ class MainHeader extends React.Component{
         this.setState({showDropdown: false, activeBranch: e.target.value})
     }
 
+    logout =()=>{
+        const { dispatch } = this.props;
+        dispatch(authActions.Logout());
+        localStorage.removeItem("user");
+        history.push('/');
+    }
+
 
     renderHeadingWrap(){
         
         const {user} = this.state;
-        console.log('======',user);
         return(
             <div className="mainheader-wrap">
                 
@@ -107,7 +118,7 @@ class MainHeader extends React.Component{
                                     <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
                                     <NavDropdown.Item href="#action">Account settings</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action">Logout</NavDropdown.Item>
+                                    <NavDropdown.Item  onClick={()=>this.logout()}>Logout</NavDropdown.Item>
                                 </NavDropdown>
                                 {/* <Button variant="outline-success">Search</Button> */}
                             </Form>

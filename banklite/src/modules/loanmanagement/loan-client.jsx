@@ -40,7 +40,7 @@ class LoanClient extends React.Component {
     getClientLoans = (paramters) => {
         const { dispatch } = this.props;
 
-        dispatch(loanActions.getClientLoans(this.props.clientId,paramters));
+        dispatch(loanActions.getClientLoans(this.props.match.params.clientId,paramters));
     }
 
     setPagesize = (PageSize) => {
@@ -51,7 +51,7 @@ class LoanClient extends React.Component {
         this.setState({ PageSize: sizeOfPage });
 
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getClientLoans(this.props.clientId,params);
+        this.getClientLoans(this.props.match.params.clientId,params);
     }
 
     setShowDetails = (FullDetails) => {
@@ -62,7 +62,7 @@ class LoanClient extends React.Component {
         this.setState({ FullDetails: showDetails });
 
         let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getClientLoans(this.props.clientId,params);
+        this.getClientLoans(this.props.match.params.clientId,params);
     }
 
     renderClientLoans = () => {

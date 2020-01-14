@@ -9,6 +9,7 @@ export const routes = {
     // Administration endpoints
     
     LOGIN_USER: BASEURL + '/Dars.Administration/api/Login',
+    HIT_DASHBOARD: BASEURL + '/Dars.Administration/api/Dashboard',
 
 
     // Administration endpoints

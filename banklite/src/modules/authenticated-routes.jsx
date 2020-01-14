@@ -101,16 +101,17 @@ import ViewClosedAccounts from './viewcustomer/viewallclosedaccounts'
 import ViewClosedAccount from './viewcustomer/viewclosedaccount'
 
 import PageNotFound from './pagenot-found'
-
+import {authActions} from '../redux/actions/auth/auth.action';
 
 
 var user = JSON.parse(localStorage.getItem("user"));
 //console.log("ouside", user);
 function PrivateRoute({ component: Component, authed, ...rest }) {
+    
     return (
         <Route
             {...rest}
-            render={(props) => authed ? <Component {...props} />
+            render={(props) => authed && Object.keys(authed).length>=1 ? <Component  {...rest} {...props} />
                 : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
         />
     )
@@ -139,102 +140,134 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute path='/dashboard' {...this.props} authed={this.props.user} component={DashboardLanding} />
                         {/* <Route exact path='/dashboard' render={(props) => <DashboardLanding {...this.props} />} />  */}
 
-                        <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} />
-                        <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} />
-                        <Route exact path='/clients/edit/:encodedkey'  render={(props) => <EditAClient encodedKey={props.match.params.encodedkey} {...this.props} />} />
-                        <Route exact path='/inactive-clients' render={(props) => <InactiveClients {...this.props} />} />
+                        <PrivateRoute exact path='/clients' {...this.props} authed={this.props.user} component={ClientsManagement} />
+                        {/* <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} /> */}
+
+                        <PrivateRoute exact path='/clients/new' {...this.props} authed={this.props.user} component={NewClient} />
+                        {/* <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} /> */}
+
+                        <PrivateRoute exact path='/clients/edit/:encodedkey'    authed={this.props.user} component={EditAClient} />
+                        {/* <PrivateRoute path='/clients/edit/:encodedkey' exact  encodedKey={this.props.computedMatch.params.encodedkey} authed={this.props.user} component={EditAClient} /> */}
+                        {/* <Route exact path='/clients/edit/:encodedkey'  render={(props) => <EditAClient encodedKey={props.match.params.encodedkey} {...this.props} />} /> */}
+
+                        <PrivateRoute exact path='/active-clients' {...this.props} authed={this.props.user} component={ClientsManagement} />
                         <Route exact path='/active-clients' render={(props) => <ClientsManagement {...this.props} />} />
+
+                        <PrivateRoute exact path='/inactive-clients' {...this.props} authed={this.props.user} component={InactiveClients} />
+                        {/* <Route exact path='/inactive-clients' render={(props) => <InactiveClients {...this.props} />} /> */}
+                       
                         {/* <Route exact path='/active-clients' render={(props) => <ActiveClients {...this.props} />} /> */}
-                        <Route exact path='/clients-pending-approval' render={(props) => <ClientsPendingApproval {...this.props} />} />
-                        <Route exact path='/clients-exited' render={(props) => <ClientsExited {...this.props} />} />
-                        <Route exact path='/clients-blacklisted' render={(props) => <ClientsBlacklisted {...this.props} />} />
+                        <PrivateRoute exact path='/clients-pending-approval' {...this.props} authed={this.props.user} component={ClientsPendingApproval} />
+                        {/* <Route exact path='/clients-pending-approval' render={(props) => <ClientsPendingApproval {...this.props} />} /> */}
 
-                        <Route exact path='/all-loans' render={(props) => <LoansManagement {...this.props} />} />
-                        <Route exact path='/all-loans/:clientId' render={(props) => <LoanClient clientId={props.match.params.clientId} {...this.props} />} />
-                        <Route exact path='/all-loans/newloan-account' render={(props) => <NewLoanAccount {...this.props} />} />
 
-                        <Route exact path='/disbursements' render={(props) => <DisbursementManagement {...this.props} />} />
-                        <Route  path='/disbursements-initiate' render={(props) => <InitiateDisbursement {...this.props} />} />
-                        <Route  path='/disbursements-pending-approval' render={(props) => <DisbursementPendingApproval {...this.props} />} />
-                        <Route  path='/disbursements-nip-requests' render={(props) => <NipRequests {...this.props} />} />
+                        <PrivateRoute exact path='/clients-exited' {...this.props} authed={this.props.user} component={ClientsExited} />
+                        {/* <Route exact path='/clients-exited' render={(props) => <ClientsExited {...this.props} />} /> */}
 
-                        <Route exact path='/deposits' render={(props) => <DepositManagement {...this.props} />} />
-                        <Route exact path='/deposits/:clientId' render={(props) => <DepositClient clientId={props.match.params.clientId} {...this.props} />} />
-                        <Route exact path='/deposits/newaccount' render={(props) => <NewDepositAccount {...this.props} />} />
-                        
-                        <Route exact path='/loan-transactions' render={(props) => <LoanTransactions {...this.props} />} />
-                        <Route exact path='/loan-transactions/:accountEncodedKey' render={(props) => <LoanAccountTransactions accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} />
-                        <Route exact path='/deposit-transactions' render={(props) => <DepositTransactions {...this.props} />} />
-                        <Route exact path='/deposit-transactions/:accountEncodedKey' render={(props) => <DepositTransactionAccount accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} />
-                        <Route exact path='/activities' render={(props) => <Activties {...this.props} />} />
-                        <Route exact path='/branches' render={(props) => <BranchesManagement {...this.props} />} />
-                        <Route exact path='/user-management' render={(props) => <UserManagement {...this.props} />} />
+                        <PrivateRoute exact path='/clients-blacklisted' {...this.props} authed={this.props.user} component={ClientsBlacklisted} />            
+                        {/* <Route exact path='/clients-blacklisted' render={(props) => <ClientsBlacklisted {...this.props} />} /> */}
 
-                        <Route exact path='/communications' render={(props) => <CommunicationsManagement {...this.props} />} />
-                        <Route exact path='/communications/emails' render={(props) => <EmailCommunications {...this.props} />} />
-                        <Route exact path='/communications/sms' render={(props) => <SMSCommunications {...this.props} />} />
-                        <Route exact path='/communications/webhooks' render={(props) => <WebhooksCommunications {...this.props} />} />
+                        <PrivateRoute exact path='/all-loans' {...this.props} authed={this.props.user} component={LoansManagement} />  
 
-                        <Route exact path='/accounts' render={(props) => <AccountManagement {...this.props} />} />
-                        <Route exact path='/journals' render={(props) => <JournalEntries {...this.props} />} />
-                        <Route exact path='/trial-balance' render={(props) => <TrialBalance {...this.props} />} />
-                        <Route exact path='/profit-loss' render={(props) => <ProfitAndLoss {...this.props} />} />
-                        <Route exact path='/balancesheet' render={(props) => <BalanceSheet {...this.props} />} />
+
+                        <PrivateRoute exact path='/all-loans/:clientId' {...this.props} authed={this.props.user} component={LoanClient} />  
+                        {/* <Route exact path='/all-loans/:clientId' render={(props) => <LoanClient clientId={props.match.params.clientId} {...this.props} />} /> */}
+
+                        {/* <Route exact path='/all-loans/newloan-account' render={(props) => <NewLoanAccount {...this.props} />} /> */}
+                        <PrivateRoute exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
+
+                        <PrivateRoute exact path='/disbursements' {...this.props} authed={this.props.user} component={DisbursementManagement} />  
+                        <PrivateRoute exact path='/disbursements-initiate' {...this.props} authed={this.props.user} component={InitiateDisbursement} />  
+
+                        <PrivateRoute exact path='/disbursements-pending-approval' {...this.props} authed={this.props.user} component={DisbursementPendingApproval} /> 
+                        <PrivateRoute exact path='/disbursements-nip-requests' {...this.props} authed={this.props.user} component={NipRequests} /> 
                         
-                        <Route exact path='/administration'  render={(props) => <AdminManagement {...this.props} />} />
-                        {/* <Route exact path='/administration-generalorganization'  render={(props) => <GeneralOrganization {...this.props} />} /> */}
-                        <Route exact path='/administration/general'  render={(props) => <GeneralOrganization {...this.props} />} />
-                        <Route exact path='/administration/general/currency'  render={(props) => <GeneralCurrency {...this.props} />} />
-                        <Route exact path='/administration/general/txt-channels'  render={(props) => <GeneralTxtChannels {...this.props} />} />
-                        <Route exact path='/administration/general/new-txt-channels'  render={(props) => <NewTxtChannels {...this.props} />} />
-                        <Route exact path='/administration/general/customer-types'  render={(props) => <GeneralCustomerTypes {...this.props} />} />
-                        <Route exact path='/administration/general/control'  render={(props) => <GeneralInternalControl {...this.props} />} />
-                        <Route exact path='/administration/general/branding'  render={(props) => <GeneralBranding {...this.props} />} />
+                        <PrivateRoute exact path='/deposits' {...this.props} authed={this.props.user} component={DepositManagement} /> 
+                        {/* <Route exact path='/deposits' render={(props) => <DepositManagement {...this.props} />} /> */}
+
+                        <PrivateRoute exact path='/deposits/:clientId' {...this.props} authed={this.props.user} component={DepositClient} /> 
+                        {/* <Route exact path='/deposits/:clientId' render={(props) => <DepositClient clientId={props.match.params.clientId} {...this.props} />} /> */}
+                        <PrivateRoute exact path='/deposits/newaccount' {...this.props} authed={this.props.user} component={NewDepositAccount} /> 
+                       
+                        <PrivateRoute exact path='/loan-transactions' {...this.props} authed={this.props.user} component={LoanTransactions} /> 
+                        <PrivateRoute exact path='/loan-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={LoanAccountTransactions} /> 
+                        {/* <Route exact path='/loan-transactions/:accountEncodedKey' render={(props) => <LoanAccountTransactions accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} /> */}
+
+                        <PrivateRoute exact path='/deposit-transactions' {...this.props} authed={this.props.user} component={DepositTransactions} /> 
+                        <PrivateRoute exact path='/deposit-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={DepositTransactionAccount} /> 
+                        {/* <Route exact path='/deposit-transactions/:accountEncodedKey' render={(props) => <DepositTransactionAccount accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} /> */}
+
+                        <PrivateRoute exact path='/activities' {...this.props} authed={this.props.user} component={Activties} /> 
+                        <PrivateRoute exact path='/branches' {...this.props} authed={this.props.user} component={BranchesManagement} /> 
+                        <PrivateRoute exact path='/user-management' {...this.props} authed={this.props.user} component={UserManagement} /> 
+                        <PrivateRoute exact path='/communications' {...this.props} authed={this.props.user} component={CommunicationsManagement} /> 
+                        <PrivateRoute exact path='/communications/emails' {...this.props} authed={this.props.user} component={EmailCommunications} /> 
+                        <PrivateRoute exact path='/communications/sms' {...this.props} authed={this.props.user} component={SMSCommunications} /> 
+                        <PrivateRoute exact path='/communications/webhooks' {...this.props} authed={this.props.user} component={WebhooksCommunications} /> 
+                        
+                        <PrivateRoute exact path='/accounts' {...this.props} authed={this.props.user} component={AccountManagement} /> 
+                        <PrivateRoute exact path='/journals' {...this.props} authed={this.props.user} component={JournalEntries} /> 
+                        <PrivateRoute exact path='/trial-balance' {...this.props} authed={this.props.user} component={TrialBalance} /> 
+                        <PrivateRoute exact path='/profit-loss' {...this.props} authed={this.props.user} component={ProfitAndLoss} /> 
+                        <PrivateRoute exact path='/balancesheet' {...this.props} authed={this.props.user} component={BalanceSheet} /> 
+                        <PrivateRoute exact path='/balancesheet' {...this.props} authed={this.props.user} component={BalanceSheet} /> 
+                        
+                        <PrivateRoute exact path='/administration' {...this.props} authed={this.props.user} component={AdminManagement} /> 
+                        <PrivateRoute exact path='/administration/general' {...this.props} authed={this.props.user} component={GeneralOrganization} /> 
+                        <PrivateRoute exact path='/administration/general/currency' {...this.props} authed={this.props.user} component={GeneralCurrency} /> 
+                        <PrivateRoute exact path='/administration/general/txt-channels' {...this.props} authed={this.props.user} component={GeneralTxtChannels} /> 
+                        <PrivateRoute exact path='/administration/general/new-txt-channels' {...this.props} authed={this.props.user} component={NewTxtChannels} /> 
+                        <PrivateRoute exact path='/administration/general/customer-types' {...this.props} authed={this.props.user} component={GeneralCustomerTypes} /> 
+                        <PrivateRoute exact path='/administration/general/control' {...this.props} authed={this.props.user} component={GeneralInternalControl} /> 
+                        <PrivateRoute exact path='/administration/general/branding' {...this.props} authed={this.props.user} component={GeneralBranding} /> 
+                        
+                        <PrivateRoute exact path='/administration/organization' {...this.props} authed={this.props.user} component={OrganizationBranches} /> 
+                        <PrivateRoute exact path='/administration/organization/newbranch' {...this.props} authed={this.props.user} component={NewBranch} /> 
+                        <PrivateRoute exact path='/administration/organization/editbranch/:encodedkey' {...this.props} authed={this.props.user} component={EditBranch} /> 
+                        <PrivateRoute exact path='/administration/organization/centers' {...this.props} authed={this.props.user} component={OrganizationCenters} /> 
+                        <PrivateRoute exact path='/administration/organization/new-centers' {...this.props} authed={this.props.user} component={NewCenter} /> 
+                        <PrivateRoute exact path='/administration/sms' {...this.props} authed={this.props.user} component={SMSSettings} /> 
+                        <PrivateRoute exact path='/administration/email' {...this.props} authed={this.props.user} component={EmailSettings} /> 
+                        
+                        <PrivateRoute exact path='/administration/products' {...this.props} authed={this.props.user} component={ProductLoans} /> 
+                        <PrivateRoute exact path='/administration/products/deposits' {...this.props} authed={this.props.user} component={ProductDeposits} /> 
+                        <PrivateRoute exact path='/administration/products/edita-depositsproduct' {...this.props} authed={this.props.user} component={EditADepositsProduct} /> 
+                        <PrivateRoute exact path='/administration/products/newdeposits-product' {...this.props} authed={this.props.user} component={NewDepositsProduct} /> 
+                        <PrivateRoute exact path='/administration/products/newloan-product' {...this.props} authed={this.props.user} component={NewLoanProduct} /> 
+                        <PrivateRoute exact path='/administration/products/editloan-product' {...this.props} authed={this.props.user} component={EditLoanProduct} /> 
+                        
+                        <PrivateRoute exact path='/administration/access' {...this.props} authed={this.props.user} component={AccessRoles} /> 
+                        <PrivateRoute exact path='/administration/access/new-role' {...this.props} authed={this.props.user} component={CreateNewRole} /> 
+                        <PrivateRoute exact path='/administration/access/edit-role/:roleId' {...this.props} authed={this.props.user} component={EditRole} /> 
+                        
+                        <PrivateRoute exact path='/administration/access/users' {...this.props} authed={this.props.user} component={AccessUsers} /> 
+                        <PrivateRoute exact path='/administration/access/new-user' {...this.props} authed={this.props.user} component={CreateNewUser} /> 
+                        <PrivateRoute exact path='/administration/access/edit-user/:encodedKey' {...this.props} authed={this.props.user} component={EditUser} /> 
+                        
+                        <PrivateRoute exact path='/administration/access/preferences' {...this.props} authed={this.props.user} component={AccessPreferences} /> 
+                        <PrivateRoute exact path='/administration/access/authentication' {...this.props} authed={this.props.user} component={AccessAuth} /> 
+                        
+                        <PrivateRoute exact path='/customer/:id' {...this.props} authed={this.props.user} component={ViewCustomer} /> 
+                        <PrivateRoute exact path='/createnewcustomer' {...this.props} authed={this.props.user} component={NewCustomerAccount} /> 
+                        <PrivateRoute exact path='/create-investmentcustomer' {...this.props} authed={this.props.user} component={NewInvestmentCustomerAccount} /> 
+                        <PrivateRoute exact path='/editcustomer' {...this.props} authed={this.props.user} component={EditCustomerAccount} /> 
+                        <PrivateRoute exact path='/customer/:id/attachments' {...this.props} authed={this.props.user} component={ViewCustomerAttachments} /> 
+                        <PrivateRoute exact path='/customer/:id/tasks' {...this.props} authed={this.props.user} component={ViewCustomerTasks} /> 
+                        <PrivateRoute exact path='/customer/:id/communications' {...this.props} authed={this.props.user} component={ViewCustomerCommunications} /> 
+                        <PrivateRoute exact path='/customer/:id/comments' {...this.props} authed={this.props.user} component={ViewCustomerComments} /> 
+                        <PrivateRoute exact path='/customer/:id/closedaccounts' {...this.props} authed={this.props.user} component={ViewClosedAccounts} /> 
+                        <PrivateRoute exact path='/customer/:id/loanaccount/:loanid' {...this.props} authed={this.props.user} component={ViewLoanAccount} /> 
+                        <PrivateRoute exact path='/customer/:id/savingsaccount/:accountid' {...this.props} authed={this.props.user} component={ViewSavingsAccount} /> 
+                        
+                        <PrivateRoute exact path='/customer/:id/closedaccounts/:accountid' {...this.props} authed={this.props.user} component={ViewClosedAccount} /> 
+                        
 
                         
-                        {/* <Route exact path='/administration-generalorganization'  render={(props) => <GeneralOrganization {...this.props} />} /> */}
-                        <Route exact path='/administration/organization'  render={(props) => <OrganizationBranches {...this.props} />} />
-                        <Route exact path='/administration/organization/newbranch'  render={(props) => <NewBranch {...this.props} />} />
-                        <Route exact path='/administration/organization/editbranch/:encodedkey'  render={(props) => <EditBranch encodedKey={props.match.params.encodedkey} {...this.props} />} />
-                        <Route exact path='/administration/organization/centers'  render={(props) => <OrganizationCenters {...this.props} />} />
-                        <Route exact path='/administration/organization/new-centers'  render={(props) => <NewCenter {...this.props} />} />
-                        
-                        <Route exact path='/administration/sms'  render={(props) => <SMSSettings {...this.props} />} />
-                        <Route exact path='/administration/email'  render={(props) => <EmailSettings {...this.props} />} />
-                        
-                        <Route exact path='/administration/products'  render={(props) => <ProductLoans {...this.props} />} />
 
-                        <Route exact path='/administration/products/deposits'  render={(props) => <ProductDeposits {...this.props} />} />
-                        <Route exact path='/administration/products/edita-depositsproduct'  render={(props) => <EditADepositsProduct {...this.props} />} />
-                        <Route exact path='/administration/products/newdeposits-product'  render={(props) => <NewDepositsProduct {...this.props} />} />
-
-                        <Route exact path='/administration/products/newloan-product'  render={(props) => <NewLoanProduct {...this.props} />} />
-                        <Route exact path='/administration/products/editloan-product'  render={(props) => <EditLoanProduct {...this.props} />} />
+                        {/* <Route exact path='/administration/organization/editbranch/:encodedkey'  render={(props) => <EditBranch encodedKey={props.match.params.encodedkey} {...this.props} />} /> */}
+                        {/* <Route exact path='/administration/access/edit-user/:encodedKey'  render={(props) => <EditUser encodedKey={props.match.params.encodedKey} {...this.props} />} /> */}
                         
-                        <Route exact path='/administration/access'  render={(props) => <AccessRoles {...this.props} />} />
-                        <Route exact path='/administration/access/new-role'  render={(props) => <CreateNewRole {...this.props} />} />
-                        <Route exact path='/administration/access/edit-role/:roleId'  render={(props) => <EditRole roleId={props.match.params.roleId} {...this.props} />} />
                         
-                        <Route exact path='/administration/access/users'  render={(props) => <AccessUsers {...this.props} />} />
-                        <Route exact path='/administration/access/new-user'  render={(props) => <CreateNewUser {...this.props} />} />
-                        <Route exact path='/administration/access/edit-user/:encodedKey'  render={(props) => <EditUser encodedKey={props.match.params.encodedKey} {...this.props} />} />
-                        
-                        <Route exact path='/administration/access/preferences'  render={(props) => <AccessPreferences {...this.props} />} />
-                        <Route exact path='/administration/access/authentication'  render={(props) => <AccessAuth {...this.props} />} />
-                        
-                        <Route exact path='/customer/:id'  render={(props) => <ViewCustomer customerId={props.match.params.id} {...this.props} />} />
-                        <Route exact path='/createnewcustomer'  render={(props) => <NewCustomerAccount {...this.props} />} />
-                        <Route exact path='/create-investmentcustomer'  render={(props) => <NewInvestmentCustomerAccount {...this.props} />} />
-                        <Route exact path='/editcustomer'  render={(props) => <EditCustomerAccount {...this.props} />} />
-                        <Route exact path='/customer/:id/attachments'  render={(props) => <ViewCustomerAttachments customerId={props.match.params.id} {...this.props} />} />
-                        <Route exact path='/customer/:id/tasks'  render={(props) => <ViewCustomerTasks customerId={props.match.params.id} {...this.props} />} />
-                        <Route exact path='/customer/:id/communications'  render={(props) => <ViewCustomerCommunications customerId={props.match.params.id} {...this.props} />} />
-                        <Route exact path='/customer/:id/comments'  render={(props) => <ViewCustomerComments customerId={props.match.params.id} {...this.props} />} />
-                        <Route exact path='/customer/:id/closedaccounts'  render={(props) => <ViewClosedAccounts customerId={props.match.params.id} {...this.props} />} />
-                        
-                        <Route exact path='/customer/:id/loanaccount/:loanid'  render={(props) => <ViewLoanAccount loanId={props.match.params.loanid} customerId={props.match.params.id} {...this.props} />} />
-                        <Route exact path='/customer/:id/savingsaccount/:accountid'  render={(props) => <ViewSavingsAccount accountId={props.match.params.accountid} customerId={props.match.params.id} {...this.props} />} />
-                        <Route exact path='/customer/:id/closedaccounts/:accountid'  render={(props) => <ViewClosedAccount accountId={props.match.params.accountid} customerId={props.match.params.id} {...this.props} />} />
                         
                         {/* <Route exact path='/administration/administration-generalcurrency'  render={(props) => <GeneralCurrency {...this.props} />} /> */}
                         
@@ -249,8 +282,14 @@ class AuthenticatedRoutes extends React.Component {
 }
 function mapStateToProps(state) {
     return {
+        // user : state.authReducers.LoginReducer
         user : state.authReducers.LoginReducer
     };
 }
+const mapDispatchToProps = dispatch => {
+    return {
+        logout: () => dispatch(authActions.Logout()),
+    };
+};
 
-export default connect(mapStateToProps)(AuthenticatedRoutes);
+export default connect(mapStateToProps,mapDispatchToProps)(AuthenticatedRoutes);
