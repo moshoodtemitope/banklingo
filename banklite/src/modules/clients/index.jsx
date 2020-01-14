@@ -123,7 +123,7 @@ class ClientsManagement extends React.Component {
                                                     return(
                                                         <Fragment key={index}>
                                                             <tr>
-                                                                <td>{eachClient.name}</td>
+                                                                <td>{eachClient.firstName} {eachClient.lastName}</td>
                                                                 <td>{eachClient.clientStateDescription}</td>
                                                                 <td>{eachClient.accountOfficer}</td>
                                                                 <td>{eachClient.currency}</td>
@@ -136,7 +136,7 @@ class ClientsManagement extends React.Component {
                                                                         key="activeCurrency"
                                                                         className="customone"
                                                                     >
-                                                                        <NavLink className="dropdown-item" to={`/clients/${eachClient.clientEncodedKey}`}>Edit</NavLink>
+                                                                        <NavLink className="dropdown-item" to={`/clients/edit/${eachClient.clientEncodedKey}`}>Edit</NavLink>
                                                                         {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                         <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                                                     </DropdownButton>

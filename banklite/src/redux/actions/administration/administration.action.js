@@ -19,6 +19,7 @@ export const administrationActions = {
     getOrganizationDetails,
     updateOrganizationDetails,
     getCustomerTypes,
+    getAllCustomerTypes,
     addCustomerType,
     updateCustomerType,
     getTransactionChannels,
@@ -493,10 +494,10 @@ function getAllPermissions  (){
 }
 
 function getCustomerTypes  (customerTypesPayload){
-    if(customerTypesPayload!=="CLEAR"){
+    
         return dispatch =>{
             let {PageSize, CurrentPage}= customerTypesPayload;
-            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/customertypes?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
             dispatch(request(consume));
             return consume
                 .then(response =>{
@@ -507,19 +508,37 @@ function getCustomerTypes  (customerTypesPayload){
             
         }
         
-    }
+    
 
-    return dispatch =>{
-        
-        dispatch(clear());
-        
-    }
+    
 
     function request(user) { return { type: administrationConstants.GET_CUSTOMERTYPES_PENDING, user } }
     function success(response) { return { type: administrationConstants.GET_CUSTOMERTYPES_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.GET_CUSTOMERTYPES_FAILURE, error } }
-    function clear() { return { type: administrationConstants.GET_CUSTOMERTYPES_RESET, clear_data:""} }
+    
+}
 
+function getAllCustomerTypes  (customerTypesPayload){
+    
+        return dispatch =>{
+            let {PageSize, CurrentPage}= customerTypesPayload;
+            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/all?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    
+
+    function request(user) { return { type: administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE, error } }
+    
 }
 
 function addCustomerType  (customerTypePayload){
@@ -554,7 +573,7 @@ function addCustomerType  (customerTypePayload){
 function updateCustomerType  (updatedCustomerTypePayload){
     if(updatedCustomerTypePayload!=="CLEAR"){
         return dispatch =>{
-            let url = routes.HIT_CUSTOMER_TYPES+`/${updatedCustomerTypePayload.id}`;
+            let url = routes.HIT_CUSTOMER_TYPES+`/customertypes/${updatedCustomerTypePayload.id}`;
             delete updatedCustomerTypePayload.id;
             let consume = ApiService.request(url, "POST", updatedCustomerTypePayload);
             dispatch(request(consume));

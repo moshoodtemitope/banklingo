@@ -388,11 +388,31 @@ export function getCustomerTypesReducer(state=[], action) {
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.GET_CUSTOMERTYPES_RESET:
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getAllCustomerTypesReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING:
             return {
-                request_status: administrationConstants.GET_CUSTOMERTYPES_RESET,
+                request_status: administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS,
                 is_request_processing: false,
-                request_data: {}
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE,
+                is_request_processing: false,
+                request_data: action
             };
 
         default:

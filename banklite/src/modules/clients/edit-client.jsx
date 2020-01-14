@@ -27,7 +27,7 @@ import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import "./clients.scss"; 
-class NewClient extends React.Component {
+class EditAClient extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -38,26 +38,23 @@ class NewClient extends React.Component {
     }
 
     componentDidMount(){
-        this.getCustomerTypes();
+        this.getAClient();
     }
 
-    getCustomerTypes = ()=>{
-        const {dispatch} = this.props;
-        let payload ={
-            PageSize:20,
-            CurrentPage:1
-        }
-        dispatch(administrationActions.getAllCustomerTypes(payload));
-    }
-
-    handleCreateNewCustomer = async (createNewCustomerpayload)=>{
+    getAClient = ()=>{
         const {dispatch} = this.props;
        
-        await dispatch(clientsActions.createClient(createNewCustomerpayload));
+        dispatch(clientsActions.getAClient(this.props.encodedKey));
+    }
+
+    handleUpdateCustomer = async (updateCustomerpayload)=>{
+        const {dispatch} = this.props;
+       
+        await dispatch(clientsActions.updateAClient(updateCustomerpayload));
     }                                   
 
 
-    createCustomerValidationSchema = Yup.object().shape({
+    updateCustomerValidationSchema = Yup.object().shape({
         FName: Yup.string()
             .min(1, 'Valid Response required')
             .max(50, 'Max limit reached')
@@ -108,56 +105,54 @@ class NewClient extends React.Component {
             .min(3, 'Valid response required'),
       });
 
-    renderCreateNewCustomer = ()=>{
-        let createAClientRequest = this.props.createAClient,
-            adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
+    renderUpdateCustomer = ()=>{
+        let updateAClientRequest = this.props.updateAClient,
+            getAClientRequest = this.props.getAClient;
 
-        switch(adminGetCustomerTypesRequest.request_status){
-            case (administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING):
+        switch(getAClientRequest.request_status){
+            case (clientsConstants.GET_A_CLIENT_PENDING):
                 return (
                     <div className="loading-content card"> 
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
 
-            case (administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS):
+            case (clientsConstants.GET_A_CLIENT_SUCCESS):
                 
-                let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data,
-                    allCustomerTypes=[],
-                    allCustomerTypesList;
-
-                    if(allCustomerTypesData.length>=1){
-                        allCustomerTypesData.map((eachType, id)=>{
-                            allCustomerTypes.push({label: eachType.name, value:eachType.id});
-                        })
+                let allCustomerData = getAClientRequest.request_data.response.data;
+                    console.log('Customer is', allCustomerData);
+                    if(Object.keys(allCustomerData).length>=1){
+                        
                         return (
                             <Formik
                                 initialValues={{
-                                    FName: '',
-                                    LName: '',
-                                    MName: '',
+                                    FName: allCustomerData.firstName,
+                                    LName: allCustomerData.lastName,
+                                    MName: allCustomerData.middleName?allCustomerData.middleName:'',
                                     custType: '',
-                                    addressLine1: '',
-                                    addressLine2: '',
-                                    addressCity: '',
-                                    addressState: '',
-                                    addressCountry: '',
-                                    zipCode: '',
-                                    contactMobile: '',
-                                    contactEmail: '',
+                                    addressLine1: allCustomerData.address.addressLine1?allCustomerData.address.addressLine1:'',
+                                    addressLine2: allCustomerData.address.addressLine2?allCustomerData.address.addressLine2:'',
+                                    addressCity: allCustomerData.address.addressCity?allCustomerData.address.addressCity:'',
+                                    addressState: allCustomerData.address.addressState?allCustomerData.address.addressState:'',
+                                    addressCountry: allCustomerData.address.addressCountry?allCustomerData.address.addressCountry:'',
+                                    zipCode: allCustomerData.address.zipCode?allCustomerData.address.zipCode:'',
+                                    contactMobile: allCustomerData.contact.contactMobile?allCustomerData.contact.contactMobile:'',
+                                    contactEmail:allCustomerData.contact.contactEmail?allCustomerData.contact.contactEmail:'',
                                     nextOfKinFullName: '',
                                     nextOfKinAddress: '',
                                     nextOfKinMobile: '',
                                     gender:'',
                                     dateOfBirth:'',
-                                    notes:''
+                                    custType:1,
+                                    notes:allCustomerData.notes.notes?allCustomerData.notes.notes:'',
                                 }}
                 
-                                validationSchema={this.createCustomerValidationSchema}
+                                validationSchema={this.updateCustomerValidationSchema}
                                 onSubmit={(values, { resetForm }) => {
                 
-                                    let createNewCustomerPayload = {
+                                    let updateCustomerPayload = {
                                         clientTypeId:values.custType,
+                                        // clientTypeId:values.custType,
                                         firstName:values.FName,
                                         middleName:values.MName,
                                         lastName:values.LName,
@@ -178,23 +173,24 @@ class NewClient extends React.Component {
                                             nextofKinHomeAddress: values.nextOfKinAddress,
                                             nextOfKinMobileNumber: values.nextOfKinMobile,
                                         },
-                                        gender:values.gender,
-                                        dateOfBirth: values.dateOfBirth.toISOString(),
-                                        notes: values.notes
+                                        gender:values.gender?values.gender:'',
+                                        dateOfBirth: values.dateOfBirth?values.dateOfBirth.toISOString():'',
+                                        notes: values.notes,
+                                        encodedKey:this.props.encodedKey
                                     }
                 
                 
                 
-                                    this.handleCreateNewCustomer(createNewCustomerPayload)
+                                    this.handleUpdateCustomer(updateCustomerPayload)
                                         .then(
                                             () => {
                 
-                                                if (this.props.createAClient.request_status === clientsConstants.CREATE_A_CLIENT_SUCCESS) {
-                                                    resetForm();
-                                                }
+                                                // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
+                                                //     resetForm();
+                                                // }
                 
                                                 setTimeout(() => {
-                                                    this.props.dispatch(clientsActions.createClient("CLEAR"))
+                                                    this.props.dispatch(clientsActions.updateAClient("CLEAR"))
                                                 }, 3000);
                 
                                             }
@@ -216,7 +212,7 @@ class NewClient extends React.Component {
                                             onSubmit={handleSubmit}
                                             className="form-content card">
                                             <div className="form-heading">
-                                                <h3>Create A New User</h3>
+                                                <h3>Editing -{allCustomerData.firstName} {allCustomerData.lastName}</h3>
                                             </div>
                                             <Form.Row>
                                                 <Col>
@@ -260,7 +256,7 @@ class NewClient extends React.Component {
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Customer Type</Form.Label>
-                                                    <Select
+                                                    {/* <Select
                                                             options={allCustomerTypes}
                                                             onChange={(selectedCustType) => {
                                                                 this.setState({ selectedCustType });
@@ -275,21 +271,21 @@ class NewClient extends React.Component {
                                                         />
                                                         {errors.custType && touched.custType ? (
                                                                 <span className="invalid-feedback">{errors.custType}</span>
-                                                        ) : null}
+                                                        ) : null} */}
                                                 </Col>
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
                                                     {/* <Form.Label className="block-level">Gender</Form.Label> */}
                                                     <Form.Check type="radio"
-                                                        name="radio"
+                                                        name="gender"
                                                         onChange={handleChange} 
                                                         label="Female"
                                                         id="choose-female"
                                                         value={values.gender}
                                                           />
                                                     <Form.Check type="radio"
-                                                        name="radio"
+                                                        name="gender"
                                                         onChange={handleChange} 
                                                         label="Male"
                                                         id="choose-male"
@@ -520,22 +516,22 @@ class NewClient extends React.Component {
                                                     Cancel</Button> */}
                                                 <NavLink to={'/active-clients'} className="btn btn-secondary grayed-out">Cancel</NavLink>
                                                 <Button variant="success" type="submit"
-                                                    disabled={createAClientRequest.is_request_processing} 
+                                                    disabled={updateAClientRequest.is_request_processing} 
                                                     className="ml-20"   
                                                     > 
-                                                        {createAClientRequest.is_request_processing?"Please wait...": "Create Customer Account"}
+                                                        {updateAClientRequest.is_request_processing?"Please wait...": "Update Customer"}
                                                 </Button>
                 
                                                 
                                             </div>
-                                            {createAClientRequest.request_status === clientsConstants.CREATE_A_CLIENT_SUCCESS && 
+                                            {updateAClientRequest.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS && 
                                                 <Alert variant="success">
-                                                    {createAClientRequest.request_data.response.data.message}
+                                                    {updateAClientRequest.request_data.response.data.message}
                                                 </Alert>
                                             }
-                                            {createAClientRequest.request_status === clientsConstants.CREATE_A_CLIENT_FAILURE && 
+                                            {updateAClientRequest.request_status === clientsConstants.UPDATE_A_CLIENT_FAILURE && 
                                                 <Alert variant="danger">
-                                                    {createAClientRequest.request_data.error}
+                                                    {updateAClientRequest.request_data.error}
                                             
                                                 </Alert>
                                             }
@@ -546,15 +542,15 @@ class NewClient extends React.Component {
                     }else{
                         return(
                             <div className="loading-content card"> 
-                                <div>No Customer Type found. Please contact Admin</div>
+                                <div>The requsted Customer could not be found</div>
                             </div>
                         )
                     }
                     
-            case (administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE):
+            case (clientsConstants.GET_A_CLIENT_FAILURE):
                 return (
                     <div className="loading-content card"> 
-                        <div>{adminGetCustomerTypesRequest.request_data.error}</div>
+                        <div>{getAClientRequest.request_data.error}</div>
                     </div>
                 )
             default :
@@ -580,7 +576,7 @@ class NewClient extends React.Component {
                                                     <Button variant="secondary" className="grayed-out">Rearrange</Button>
                                                     <Button >Add Channel</Button>
                                                 </div> */}
-                                                {this.renderCreateNewCustomer()}
+                                                {this.renderUpdateCustomer()}
                                             </div>
                                         </div>
                                     </div>
@@ -596,9 +592,9 @@ class NewClient extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        adminGetCustomerTypes : state.administrationReducers.getAllCustomerTypesReducer,
-        createAClient : state.clientsReducers.createAClientReducer,
+        getAClient : state.clientsReducers.getAClientReducer,
+        updateAClient : state.clientsReducers.updateAClientReducer,
     };
 }
 
-export default connect(mapStateToProps)(NewClient);
+export default connect(mapStateToProps)(EditAClient);

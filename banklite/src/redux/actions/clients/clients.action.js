@@ -8,6 +8,7 @@ export const clientsActions = {
     getClients,
     createClient,
     getAllClients,
+    getAClient,
     updateAClient
 }
 
@@ -57,7 +58,28 @@ function failure(error) { return { type: clientsConstants.GET_ALL_CLIENTS_FAILUR
 
 }
 
+function getAClient  (encodedKey){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_CLIENTS+`/${encodedKey}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
 
+function request(user) { return { type: clientsConstants.GET_A_CLIENT_PENDING, user } }
+function success(response) { return { type: clientsConstants.GET_A_CLIENT_SUCCESS, response } }
+function failure(error) { return { type: clientsConstants.GET_A_CLIENT_FAILURE, error } }
+
+}
 
 
 function createClient   (createClientPayload){

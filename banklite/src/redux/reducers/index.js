@@ -1,5 +1,6 @@
 import {combineReducers} from "redux";
 import { 
+    auth,
     administration,
     accounting,
     loans,
@@ -35,6 +36,7 @@ const administrationReducers = combineReducers({
     adminUpdateOrganizationDetailsReducer: administration.updateOrganizationDetailsReducer, 
     adminCreateCustomerTypeReducer: administration.createCustomerTypeReducer,   
     adminGetCustomerTypesReducer: administration.getCustomerTypesReducer,   
+    getAllCustomerTypesReducer: administration.getAllCustomerTypesReducer,   
     adminUpdateCustomerTypeReducer: administration.updateCustomerTypeReducer,   
     adminGetTransactionChannelsReducer :administration.getTransactionChannelsReducer,
     adminCreateTransactionChannelReducer :administration.createTransactionChannelReducer,
@@ -84,10 +86,16 @@ const loansReducers = combineReducers({
    
 })
 
+const authReducers = combineReducers({
+    LoginReducer: auth.LoginReducer, 
+   
+})
+
 const clientsReducers = combineReducers({
     getClientsReducer: clients.getClientsReducer, 
     getAllClientsReducer: clients.getAllClientsReducer, 
     createAClientReducer: clients.createAClientReducer, 
+    getAClientReducer: clients.getAClientReducer, 
     updateAClientReducer: clients.updateAClientReducer, 
    
 })
@@ -99,7 +107,8 @@ const appReducer = combineReducers({
     accountingReducers,
     depositsReducers,
     loansReducers,
-    clientsReducers
+    clientsReducers,
+    authReducers
 })
 
 

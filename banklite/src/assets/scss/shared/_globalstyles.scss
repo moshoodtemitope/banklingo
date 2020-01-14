@@ -14,6 +14,9 @@
     font-size: 12px;
     font-weight: 600;
 }
+.mt-20{
+    margin-top: 20px;
+}
 select, select.form-control{
     &:not(.react-datepicker__month-select) :not(.react-datepicker__year-select){
         -webkit-appearance: none;

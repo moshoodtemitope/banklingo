@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { Route, Switch } from "react-router-dom";
+import { Redirect, Router } from "react-router";
+import {history} from "../_helpers/history";
+import { connect } from 'react-redux';
 import { Fragment } from "react";
 import DashboardLanding from './dashboard'
 import UserLogin from './onboarding/login'
@@ -10,6 +13,7 @@ import ClientsPendingApproval from './clients/pending-approval'
 import ClientsExited from './clients/clients-exited'
 import ClientsBlacklisted from './clients/blacklisted'
 import NewClient from './clients/new-client'
+import EditAClient from './clients/edit-client'
 
 import LoansManagement from './loanmanagement'
 import LoanClient from './loanmanagement/loan-client'
@@ -100,6 +104,18 @@ import PageNotFound from './pagenot-found'
 
 
 
+var user = JSON.parse(localStorage.getItem("user"));
+//console.log("ouside", user);
+function PrivateRoute({ component: Component, authed, ...rest }) {
+    return (
+        <Route
+            {...rest}
+            render={(props) => authed ? <Component {...props} />
+                : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
+        />
+    )
+}
+
 class AuthenticatedRoutes extends React.Component {
     constructor(props) {
         super(props);
@@ -116,12 +132,16 @@ class AuthenticatedRoutes extends React.Component {
         return (
                
                 <Fragment>
+                    <Router history={history}>
                     <Switch>
                         <Route exact path='/' render={(props) => <UserLogin  />} /> 
-                        <Route exact path='/dashboard' render={(props) => <DashboardLanding {...this.props} />} /> 
+
+                        <PrivateRoute path='/dashboard' {...this.props} authed={this.props.user} component={DashboardLanding} />
+                        {/* <Route exact path='/dashboard' render={(props) => <DashboardLanding {...this.props} />} />  */}
 
                         <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} />
                         <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} />
+                        <Route exact path='/clients/edit/:encodedkey'  render={(props) => <EditAClient encodedKey={props.match.params.encodedkey} {...this.props} />} />
                         <Route exact path='/inactive-clients' render={(props) => <InactiveClients {...this.props} />} />
                         <Route exact path='/active-clients' render={(props) => <ClientsManagement {...this.props} />} />
                         {/* <Route exact path='/active-clients' render={(props) => <ActiveClients {...this.props} />} /> */}
@@ -221,11 +241,16 @@ class AuthenticatedRoutes extends React.Component {
                         <Route  render={(props) => <PageNotFound {...this.props} />} />
                     </Switch>
                     {/* <Route  path='/clients' component={ClientsManagement} /> */}
+                    </Router>
                 </Fragment>
 
         )
     }
 }
+function mapStateToProps(state) {
+    return {
+        user : state.authReducers.LoginReducer
+    };
+}
 
-
-export default AuthenticatedRoutes;
+export default connect(mapStateToProps)(AuthenticatedRoutes);

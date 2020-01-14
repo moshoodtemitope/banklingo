@@ -10,6 +10,10 @@ import Button from 'react-bootstrap/Button'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+
+import {authActions} from '../../../redux/actions/auth/auth.action';
+import {authConstants} from '../../../redux/actiontypes/auth/auth.constants';
+
 import Alert from 'react-bootstrap/Alert'
 import loginIcon from '../../../assets/img/enter.svg'
 
@@ -23,11 +27,16 @@ class UserLogin extends React.Component {
         
     }
 
-    handleLoginForm = ()=>{
+    
 
-    }
+    handleLoginForm = async (loginPayload)=>{
+        const {dispatch} = this.props;
+       
+        await dispatch(authActions.Login(loginPayload));
+    } 
 
     renderLoginForm = ()=>{
+        let loginRequest = this.props.loginRequest;
         let loginValidationSchema = Yup.object().shape({
             userEmail: Yup.string()
                 .required('Required'),
@@ -41,9 +50,28 @@ class UserLogin extends React.Component {
                             userEmail:'',
                             userPassword:''
                         }}
-                        validationSchema={this.loginValidationSchema}
+                        validationSchema={loginValidationSchema}
                         onSubmit={(values, { resetForm }) => {
-    
+                            
+                            let loginPayload ={
+                                username: values.userEmail,
+                                password:values.userPassword
+                            }
+
+                            this.handleLoginForm(loginPayload)
+                                        .then(
+                                            () => {
+                
+                                                // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
+                                                //     resetForm();
+                                                // }
+                
+                                                // setTimeout(() => {
+                                                //     this.props.dispatch(authActions.Login("CLEAR"))
+                                                // }, 3000);
+                
+                                            }
+                                        )
         
                         }}
                     >
@@ -90,7 +118,7 @@ class UserLogin extends React.Component {
                                                 ) : null}
                                             </Form.Label>
                                             <Form.Control 
-                                                type="text" 
+                                                type="password" 
                                                 name="userPassword"
                                                 onChange={handleChange} 
                                                 value={values.userPassword}
@@ -104,12 +132,28 @@ class UserLogin extends React.Component {
         
         
                                     <div className=" form-cta">
-                                        
+                                        <Button variant="success" type="submit"
+                                            disabled={loginRequest.is_request_processing}
+                                            className="ml-20"
+                                        >
+                                            {loginRequest.is_request_processing ? "Please wait..." : "Log In"}
+                                        </Button>
 
-                                        <NavLink to={'/dashboard'} className="btn btn-success">Log In</NavLink>
+                                        {/* <NavLink to={'/dashboard'} className="btn btn-success">Log In</NavLink> */}
                                         
                                     </div>
-        
+                                    
+                                {loginRequest.request_status === authConstants.LOGIN_USER_SUCCESS &&
+                                    <Alert variant="success mt-20">
+                                        {loginRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+                                {loginRequest.request_status === authConstants.LOGIN_USER_FAILURE &&
+                                    <Alert variant="danger mt-20">
+                                        {loginRequest.request_data.error}
+
+                                    </Alert>
+                                }
                                    
         
                                 </Form>
@@ -131,7 +175,7 @@ class UserLogin extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        
+        loginRequest : state.authReducers.LoginReducer
     };
 }
 

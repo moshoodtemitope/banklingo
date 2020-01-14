@@ -8,6 +8,11 @@ export const routes = {
 
     // Administration endpoints
     
+    LOGIN_USER: BASEURL + '/Dars.Administration/api/Login',
+
+
+    // Administration endpoints
+    
     GET_BRANCHES: BASEURL + '/Dars.Administration/api/branch',
     ADD_BRANCH: BASEURL + '/Dars.Administration/api/branch',
     
@@ -21,7 +26,7 @@ export const routes = {
     GET_ALL_CURRENCIES: BASEURL + '/Dars.Administration/api/Administration/currencies',
     
     ADD_CUSTOMER_TYPE: BASEURL + '/Dars.Administration/api/CustomerType/customertype',
-    HIT_CUSTOMER_TYPES: BASEURL + '/Dars.Administration/api/CustomerType/customertypes',
+    HIT_CUSTOMER_TYPES: BASEURL + '/Dars.Administration/api/CustomerType',
     
     ADD_EXCHANGE_RATE: BASEURL + '/Dars.Administration/api/Account/exchangerate',
     

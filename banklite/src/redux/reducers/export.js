@@ -15,6 +15,7 @@ import{
     updateOrganizationDetailsReducer,
     getOrganizationDetailsReducer,
     getCustomerTypesReducer,
+    getAllCustomerTypesReducer,
     createCustomerTypeReducer,
     updateCustomerTypeReducer,
     getTransactionChannelsReducer,
@@ -63,6 +64,11 @@ import{
 } from './loans/loans.reducer'
 
 import{
+    LoginReducer,
+    
+} from './auth/auth.reducer'
+
+import{
     getDepositsReducer,
     getClientDepositsReducer,
     getDepositTransactionReducer,
@@ -75,6 +81,7 @@ import{
     getClientsReducer,
     getAllClientsReducer,
     createAClientReducer,
+    getAClientReducer,
     updateAClientReducer,
     
 } from './clients/clients.reducer'
@@ -97,6 +104,7 @@ export const administration ={
     updateOrganizationDetailsReducer,
     getOrganizationDetailsReducer,
     getCustomerTypesReducer,
+    getAllCustomerTypesReducer,
     createCustomerTypeReducer,
     updateCustomerTypeReducer,
     getTransactionChannelsReducer,
@@ -137,6 +145,10 @@ export const loans = {
     getAccountLoanTransactionReducer,
 }
 
+export const auth = {
+    LoginReducer,
+}
+
 export const deposits = {
     getDepositsReducer,
     getClientDepositsReducer,
@@ -148,5 +160,6 @@ export const clients ={
     getClientsReducer,
     getAllClientsReducer,
     createAClientReducer,
+    getAClientReducer,
     updateAClientReducer,
 }

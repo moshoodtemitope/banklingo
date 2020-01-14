@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link} from 'react-router-dom';
+import { connect } from 'react-redux';
 import {Fragment} from "react";
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
@@ -15,7 +16,7 @@ class MainHeader extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            user:'',
+            user:JSON.parse(localStorage.getItem("user")),
             activeBranch:'Head Office',
             showDropdown: false
         }
@@ -34,6 +35,9 @@ class MainHeader extends React.Component{
 
 
     renderHeadingWrap(){
+        
+        const {user} = this.state;
+        console.log('======',user);
         return(
             <div className="mainheader-wrap">
                 
@@ -99,7 +103,7 @@ class MainHeader extends React.Component{
                             </DropdownButton>
                             <Form inline>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" />
-                                <NavDropdown title={this.props.user.name} id="basic-nav-dropdown">
+                                <NavDropdown title={user.displayName!==undefined?user.displayName:'Unverified Account'} id="basic-nav-dropdown">
                                     <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
                                     <NavDropdown.Item href="#action">Account settings</NavDropdown.Item>
                                     <NavDropdown.Divider />
@@ -141,6 +145,10 @@ class MainHeader extends React.Component{
 }
 
 
+function mapStateToProps(state) {
+    return {
+        user : state.authReducers.LoginReducer
+    };
+}
 
-
-export default MainHeader;
+export default connect(mapStateToProps)(MainHeader);
