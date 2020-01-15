@@ -39,7 +39,7 @@ class EditAClient extends React.Component {
 
     componentDidMount(){
         this.getAClient();
-        console.log("=++++++======", this.props)
+        
     }
 
     getAClient = ()=>{

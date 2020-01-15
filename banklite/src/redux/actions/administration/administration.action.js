@@ -518,11 +518,11 @@ function getCustomerTypes  (customerTypesPayload){
     
 }
 
-function getAllCustomerTypes  (customerTypesPayload){
+function getAllCustomerTypes  (){
     
         return dispatch =>{
-            let {PageSize, CurrentPage}= customerTypesPayload;
-            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/all?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+            
+            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/all`, "GET", null);
             dispatch(request(consume));
             return consume
                 .then(response =>{
@@ -921,10 +921,11 @@ function accessPreferences  (accessPreferencePayload){
     if(accessPreferencePayload!=="CLEAR"){
         
         return dispatch =>{
+            // if(Object.keys(accessPreferencePayload).length >1 
+            //     && accessPreferencePayload.automaticExpiryOfPassword ===true
+            //     && accessPreferencePayload.lockUserAfterFailedLogin ===true)
             
-            if(Object.keys(accessPreferencePayload).length >1 
-                && accessPreferencePayload.automaticExpiryOfPassword ===true
-                && accessPreferencePayload.lockUserAfterFailedLogin ===true){
+            if(Object.keys(accessPreferencePayload).length >1){
                 let consume = ApiService.request(routes.UPDATE_ACCESS_PREFERENCE, "POST", accessPreferencePayload);
                 dispatch(request(consume));
                 return consume

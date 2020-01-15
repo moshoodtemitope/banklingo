@@ -50,19 +50,27 @@ class AccessPreferences extends React.Component {
             .matches(/^[0-9]*$/, 'Invalid repsonse')
             .required('Required'),
         automaticExpiryOfPassword: Yup.boolean()
-            .oneOf([true], null)
-            .required('Required'),
-        passwordExpiryDays:  Yup.string()
-            .min(1, 'Response required')
-            .matches(/^[0-9]*$/, 'Invalid repsonse')
-            .required('Required'),
+            .oneOf([true, false], null),
+        passwordExpiryDays:  Yup.number()
+            .when('automaticExpiryOfPassword',{
+                is:(value)=>value===true,
+                then: Yup.number()
+                    .min(1, 'Valid response required')
+                    .required('Required')
+            }),
         lockUserAfterFailedLogin: Yup.boolean()
-            .oneOf([true], null)
+            .oneOf([true, false], null)
             .required('Required'),
-        failedLoginAttemptsMins:  Yup.string()
-            .min(1, 'Response required')
-            .matches(/^[0-9]*$/, 'Invalid repsonse')
-            .required('Required'),
+        failedLoginAttemptsMins:  Yup.number()
+            .when('lockUserAfterFailedLogin',{
+                is:(value)=>value===true,
+                then: Yup.number()
+                    .min(1, 'Valid response required')
+                    .required('Required')
+            }),
+            // .min(1, 'Response required')
+            // .matches(/^[0-9]*$/, 'Invalid repsonse')
+            // .required('Required'),
       });
 
 
@@ -106,10 +114,17 @@ class AccessPreferences extends React.Component {
                                     timeOutSession: values.timeOutSession,
                                     minPasswordLength: values.minPasswordLength,
                                     automaticExpiryOfPassword: values.automaticExpiryOfPassword,
-                                    passwordExpiryDays: values.passwordExpiryDays,
+                                    passwordExpiryDays: parseInt(values.passwordExpiryDays),
                                     lockUserAfterFailedLogin: values.lockUserAfterFailedLogin,
-                                    failedLoginAttemptsMins: values.failedLoginAttemptsMins
+                                    failedLoginAttemptsMins: parseInt(values.failedLoginAttemptsMins)
                             };
+                            if(values.automaticExpiryOfPassword===false){
+                                updatePreferencesPayload.passwordExpiryDays=0;
+                            }
+
+                            if(values.lockUserAfterFailedLogin===false){
+                                updatePreferencesPayload.failedLoginAttemptsMins=0;
+                            }
         
         
                             this.updatePreferences(updatePreferencesPayload)
@@ -119,9 +134,9 @@ class AccessPreferences extends React.Component {
                                         if (this.props.adminAccessPreferences.request_status === administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS) {
                                             // resetForm();
                                             
-                                            setTimeout(() => {
-                                                this.getAccessPreferences();
-                                            }, 3000);
+                                            // setTimeout(() => {
+                                            //     this.getAccessPreferences();
+                                            // }, 3000);
                                         }
         
                                         setTimeout(() => {

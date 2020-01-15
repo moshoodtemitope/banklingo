@@ -38,17 +38,14 @@ class NewClient extends React.Component {
     }
 
     componentDidMount(){
-        this.getCustomerTypes();
+        // this.getCustomerTypes();
     }
 
-    getCustomerTypes = ()=>{
-        const {dispatch} = this.props;
-        let payload ={
-            PageSize:20,
-            CurrentPage:1
-        }
-        dispatch(administrationActions.getAllCustomerTypes(payload));
-    }
+    // getCustomerTypes = ()=>{
+    //     const {dispatch} = this.props;
+        
+    //     dispatch(administrationActions.getAllCustomerTypes());
+    // }
 
     handleCreateNewCustomer = async (createNewCustomerpayload)=>{
         const {dispatch} = this.props;
@@ -69,8 +66,8 @@ class NewClient extends React.Component {
         MName:  Yup.string()
             .min(1, 'Valid response required')
             .max(50, 'Max limit reached'),
-        custType:  Yup.string()
-            .min(1, 'Valid response required'),
+        // custType:  Yup.string()
+        //     .min(1, 'Valid response required'),
         addressLine1: Yup.string()
             .min(2, 'Valid response required')
             .max(70, 'Max limit reached'),
@@ -126,6 +123,9 @@ class NewClient extends React.Component {
                     allCustomerTypes=[],
                     allCustomerTypesList;
 
+                let selectedCustype = allCustomerTypesData.filter(CustType=>parseInt(CustType.id)===parseInt(this.props.match.params.custTypeid))[0];
+                
+                console.log("=====", selectedCustype);
                     if(allCustomerTypesData.length>=1){
                         allCustomerTypesData.map((eachType, id)=>{
                             allCustomerTypes.push({label: eachType.name, value:eachType.id});
@@ -136,7 +136,7 @@ class NewClient extends React.Component {
                                     FName: '',
                                     LName: '',
                                     MName: '',
-                                    custType: '',
+                                    // custType: '',
                                     addressLine1: '',
                                     addressLine2: '',
                                     addressCity: '',
@@ -157,7 +157,8 @@ class NewClient extends React.Component {
                                 onSubmit={(values, { resetForm }) => {
                 
                                     let createNewCustomerPayload = {
-                                        clientTypeId:values.custType,
+                                        // clientTypeId:values.custType,
+                                        clientTypeId:selectedCustype.id,
                                         firstName:values.FName,
                                         middleName:values.MName,
                                         lastName:values.LName,
@@ -260,7 +261,8 @@ class NewClient extends React.Component {
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Customer Type</Form.Label>
-                                                    <Select
+                                                    <span className="form-text">{selectedCustype.name}</span>
+                                                    {/* <Select
                                                             options={allCustomerTypes}
                                                             onChange={(selectedCustType) => {
                                                                 this.setState({ selectedCustType });
@@ -275,13 +277,21 @@ class NewClient extends React.Component {
                                                         />
                                                         {errors.custType && touched.custType ? (
                                                                 <span className="invalid-feedback">{errors.custType}</span>
-                                                        ) : null}
+                                                        ) : null} */}
                                                 </Col>
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    {/* <Form.Label className="block-level">Gender</Form.Label> */}
-                                                    <Form.Check type="radio"
+                                                    <Form.Label htmlFor="gender" className="block-level">Gender</Form.Label>
+                                                    <select id="gender"
+                                                        onChange={handleChange}
+                                                        name="gender"
+                                                        value={values.gender}
+                                                        className="countdropdown form-control form-control-sm">
+                                                        <option value="Female">Female</option>
+                                                        <option value="Male">Male</option>
+                                                    </select>
+                                                    {/* <Form.Check type="radio"
                                                         name="radio"
                                                         onChange={handleChange} 
                                                         label="Female"
@@ -294,7 +304,7 @@ class NewClient extends React.Component {
                                                         label="Male"
                                                         id="choose-male"
                                                         value={values.gender}
-                                                          />
+                                                          /> */}
                                                     {errors.gender && touched.gender ? (
                                                         <span className="invalid-feedback">{errors.gender}</span>
                                                     ) : null}
