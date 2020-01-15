@@ -63,6 +63,19 @@ import{
     
 } from './loans/loans.reducer'
 
+
+import{
+    getDisbursementsReducer,
+    postDisbursementReducer,
+    confirmPostDisbursementReducer,
+    approvePostDisbursementReducer,
+    rejectPostDisbursementReducer,
+    getDisbursementByRefReducer
+    
+} from './disbursment/disbursment.reducer'
+
+
+
 import{
     LoginReducer,
     
@@ -171,4 +184,13 @@ export const clients ={
     createAClientReducer,
     getAClientReducer,
     updateAClientReducer,
+}
+
+export const disbursment ={
+    getDisbursementsReducer,
+    postDisbursementReducer,
+    confirmPostDisbursementReducer,
+    approvePostDisbursementReducer,
+    rejectPostDisbursementReducer,
+    getDisbursementByRefReducer
 }

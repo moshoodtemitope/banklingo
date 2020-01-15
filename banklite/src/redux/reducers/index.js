@@ -6,7 +6,8 @@ import {
     accounting,
     loans,
     deposits,
-    clients} from "./export";
+    clients,
+    disbursment} from "./export";
 
 import {LoginReducer} from "./auth/auth.reducer";
 
@@ -110,6 +111,15 @@ const clientsReducers = combineReducers({
    
 })
 
+const disbursmentReducers = combineReducers({
+    getDisbursementsReducer: disbursment.getDisbursementsReducer, 
+    postDisbursementReducer: disbursment.postDisbursementReducer, 
+    confirmPostDisbursementReducer: disbursment.confirmPostDisbursementReducer, 
+    approvePostDisbursementReducer: disbursment.approvePostDisbursementReducer, 
+    rejectPostDisbursementReducer: disbursment.rejectPostDisbursementReducer, 
+    getDisbursementByRefReducer: disbursment.getDisbursementByRefReducer, 
+})
+
 
 
 const appReducer = combineReducers({
@@ -118,6 +128,7 @@ const appReducer = combineReducers({
     depositsReducers,
     loansReducers,
     clientsReducers,
+    disbursmentReducers,
     // LoginReducer,
     authReducers,
     dashboardReducers

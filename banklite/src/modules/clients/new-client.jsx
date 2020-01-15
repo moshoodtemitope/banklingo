@@ -546,7 +546,6 @@ class NewClient extends React.Component {
                                             {createAClientRequest.request_status === clientsConstants.CREATE_A_CLIENT_FAILURE && 
                                                 <Alert variant="danger">
                                                     {createAClientRequest.request_data.error}
-                                            
                                                 </Alert>
                                             }
                                         </Form>

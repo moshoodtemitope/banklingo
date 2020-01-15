@@ -12,6 +12,11 @@ export const routes = {
     HIT_DASHBOARD: BASEURL + '/Dars.Administration/api/Dashboard',
 
 
+    // Disbursement endpoints
+    
+    HIT_DISBURSEMENT: BASEURL + '/Dars.Administration/api/Disbursment',
+
+
     // Administration endpoints
     
     GET_BRANCHES: BASEURL + '/Dars.Administration/api/branch',

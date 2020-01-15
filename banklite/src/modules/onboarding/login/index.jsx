@@ -72,13 +72,13 @@ class UserLogin extends React.Component {
                                                 // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
                                                 //     resetForm();
                                                 // }
-                
-                                                setTimeout(() => {
+                                                
+                                                // setTimeout(() => {
                                                     if(this.props.loginRequest.request_status===authConstants.LOGIN_USER_SUCCESS){
                                                         this.props.dispatch(authActions.Login("CLEAR"));
                                                     }
                                                     
-                                                }, 3000);
+                                                // }, 1500);
                 
                                             }
                                         )
@@ -153,11 +153,11 @@ class UserLogin extends React.Component {
                                         
                                     </div>
                                     
-                                {loginRequest.request_status === authConstants.LOGIN_USER_SUCCESS &&
+                                {/* {loginRequest.request_status === authConstants.LOGIN_USER_SUCCESS &&
                                     <Alert variant="success mt-20">
-                                        {loginRequest.request_data.response.data.message}
+                                        {loginRequest.request_data!==undefined && loginRequest.request_data.response.data.message}
                                     </Alert>
-                                }
+                                } */}
                                 {loginRequest.request_status === authConstants.LOGIN_USER_FAILURE &&
                                     <Alert variant="danger mt-20">
                                         {loginRequest.request_data.error}

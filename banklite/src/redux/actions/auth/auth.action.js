@@ -19,15 +19,16 @@ function Login   (loginPayload){
             dispatch(request(consume));
             return consume
                 .then(response =>{
-                    console.log("++++",response.data);
                     if(response.data.token!==undefined){
                         localStorage.setItem('user', JSON.stringify(response.data));
-                        history.push('/dashboard');
+                        
                         dispatch(success(response.data));
+                        history.push('/dashboard');
                     }else{
                         localStorage.setItem('user', JSON.stringify(response.data));
-                        history.push('/dashboard');
+                       
                         dispatch(success(response.data));
+                        history.push('/dashboard');
                         // dispatch(failure(handleRequestErrors(response.data.message)))
                     }
                     
