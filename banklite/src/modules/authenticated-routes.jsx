@@ -177,10 +177,10 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
 
                         <PrivateRoute exact path='/disbursements' {...this.props} authed={this.props.user} component={DisbursementManagement} />  
-                        <PrivateRoute exact path='/disbursements-initiate' {...this.props} authed={this.props.user} component={InitiateDisbursement} />  
+                        <PrivateRoute exact path='/disbursements/initiate' {...this.props} authed={this.props.user} component={InitiateDisbursement} />  
 
-                        <PrivateRoute exact path='/disbursements-pending-approval' {...this.props} authed={this.props.user} component={DisbursementPendingApproval} /> 
-                        <PrivateRoute exact path='/disbursements-nip-requests' {...this.props} authed={this.props.user} component={NipRequests} /> 
+                        <PrivateRoute exact path='/disbursements/pending-approval' {...this.props} authed={this.props.user} component={DisbursementPendingApproval} /> 
+                        <PrivateRoute exact path='/disbursements/nip-requests' {...this.props} authed={this.props.user} component={NipRequests} /> 
                         
                         <PrivateRoute exact path='/deposits' {...this.props} authed={this.props.user} component={DepositManagement} /> 
                         {/* <Route exact path='/deposits' render={(props) => <DepositManagement {...this.props} />} /> */}

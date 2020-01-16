@@ -18,9 +18,11 @@ function getDisbursement  (payload, type){
     return dispatch =>{
         let url;
             if(type===undefined){
-                url = routes.HIT_DISBURSEMENT+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
-            }else{
-                url = routes.HIT_DISBURSEMENT+`?/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;   
+                // console.log('----',payload);
+                url = routes.HIT_DISBURSEMENT+`?${payload}`;
+            }
+            if(type===true){
+                url = routes.HIT_DISBURSEMENT+`/pendingapproval?${payload}`;   
             }
 
             // url = routes.HIT_DISBURSEMENT+`/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;

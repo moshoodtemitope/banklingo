@@ -200,7 +200,7 @@ class JournalEntries extends React.Component {
                         validationSchema={createJournalEntrySchema}
                         onSubmit={(values, { resetForm }, errors,) => {
                             // same shape as initial values
-                            console.log('values are', values);
+                            
                             let debitTotal =0,
                                 creditTotal=0,
                                 jornalEntryModel =[]
@@ -225,8 +225,7 @@ class JournalEntries extends React.Component {
                                     checkTotals = true
                                 }
 
-                                console.log("Total credit", creditTotal);
-                                console.log("Total debit", debitTotal);
+                                
                             
                             if(checkTotals){
                                 let newJournalEntryPayload = {
@@ -243,7 +242,7 @@ class JournalEntries extends React.Component {
                                     bookingDate: values.entryDate.toISOString(),
                                 };
 
-                                console.log("payload is", newJournalEntryPayload);
+                                
 
                                 this.createJournalEntry(newJournalEntryPayload)
                                     .then(

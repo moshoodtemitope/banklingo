@@ -44,16 +44,16 @@ class NipRequests extends React.Component {
                                 <div className="content-container">
                                     <ul className="nav">
                                         <li>
-                                            <NavLink to={'/disbursements'}>Disbursements</NavLink>
+                                            <NavLink exact to={'/disbursements'}>Disbursements</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/disbursements-initiate'}>Initiate Disbursement</NavLink>
+                                            <NavLink to={'/disbursements/initiate'}>Initiate Disbursement</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/disbursements-pending-approval'}>Pending Approval</NavLink>
+                                            <NavLink to={'/disbursements/pending-approval'}>Pending Approval</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/disbursements-nip-requests'}>NIP Requests</NavLink>
+                                            <NavLink to={'/disbursements/nip-requests'}>NIP Requests</NavLink>
                                             {/* <ul>
                                                 <li>
                                                     <NavLink to={'/disbursements/transfer-requests'}>Transfer Requests</NavLink>

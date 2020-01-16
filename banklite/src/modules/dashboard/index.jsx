@@ -49,7 +49,71 @@ class DashboardLanding extends React.Component {
             case (dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS):
                 let allDashboardStat = getDashboardStatsRequest.request_data.response.data;
                 if(allDashboardStat !== undefined){
-                    console.log("-----",allDashboardStat);
+                    // console.log("-----",allDashboardStat);
+                    return (
+                        <div className="all-stats-wrap">
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">{allDashboardStat.activeCustomers}</h4>
+                                    <span className="stat-text">Active Customers</span>
+                                </div>
+                            </div>
+                            {/* <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">{allDashboardStat.activeCustomers}</h4>
+                                    <span className="stat-text">Number Of Groups</span>
+                                </div>
+                            </div> */}
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">{allDashboardStat.loansAwaitingApproval}</h4>
+                                    <span className="stat-text">Loans Awaiting Approval</span>
+                                </div>
+                            </div>
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">{allDashboardStat.totalDeposits}</h4>
+                                    <span className="stat-text">Total Deposits</span>
+                                </div>
+                            </div>
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">{allDashboardStat.activeSavings}</h4>
+                                    <span className="stat-text">Active Savings</span>
+                                </div>
+                            </div>
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">{allDashboardStat.users}</h4>
+                                    <span className="stat-text">Users</span>
+                                </div>
+                            </div>
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">{allDashboardStat.totalLoanPortfolio}</h4>
+                                    <span className="stat-text">Total Loan Portfolio</span>
+                                </div>
+                            </div>
+                            {/* <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">0.00</h4>
+                                    <span className="stat-text">Total Overdrafts</span>
+                                </div>
+                            </div>
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">1,475,235,576.64</h4>
+                                    <span className="stat-text">Gross Loan Portfolio</span>
+                                </div>
+                            </div>
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">99.89%</h4>
+                                    <span className="stat-text">PAR > 30 Days</span>
+                                </div>
+                            </div> */}
+                        </div>
+                    )
                 }else {
                     return null;
                 }
@@ -142,7 +206,7 @@ class DashboardLanding extends React.Component {
                                                 <div className="col-sm-4">
                                                     <div className="activities-items">
                                                         <h6>Latest Activity </h6>
-                                                        <div className="activities-wrap">
+                                                        {/* <div className="activities-wrap">
                                                             <div className="each-activity">
                                                                 <span>
                                                                     <NavLink to='/customer/20/savingsaccount/77339322'>Payroll - Private 2073458499</NavLink>
@@ -193,7 +257,7 @@ class DashboardLanding extends React.Component {
                                                                     <span className="action-by"> <NavLink to='/customer/20/savingsaccount/77339322'>Mayokun Malomo</NavLink></span>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </div>
