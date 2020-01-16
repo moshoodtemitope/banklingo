@@ -67,6 +67,7 @@ import{
 import{
     getDisbursementsReducer,
     postDisbursementReducer,
+    getDisbursementBanksReducer,
     confirmPostDisbursementReducer,
     approvePostDisbursementReducer,
     rejectPostDisbursementReducer,
@@ -188,6 +189,7 @@ export const clients ={
 
 export const disbursment ={
     getDisbursementsReducer,
+    getDisbursementBanksReducer,
     postDisbursementReducer,
     confirmPostDisbursementReducer,
     approvePostDisbursementReducer,

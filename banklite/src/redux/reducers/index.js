@@ -113,6 +113,7 @@ const clientsReducers = combineReducers({
 
 const disbursmentReducers = combineReducers({
     getDisbursementsReducer: disbursment.getDisbursementsReducer, 
+    getDisbursementBanksReducer: disbursment.getDisbursementBanksReducer, 
     postDisbursementReducer: disbursment.postDisbursementReducer, 
     confirmPostDisbursementReducer: disbursment.confirmPostDisbursementReducer, 
     approvePostDisbursementReducer: disbursment.approvePostDisbursementReducer, 

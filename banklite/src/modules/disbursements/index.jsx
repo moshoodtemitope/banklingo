@@ -71,7 +71,7 @@ class DisbursementManagement extends React.Component {
                             if(allDisbursments.length>=1){
                                 return(
                                     <div>
-                                        <div className="heading-actions">
+                                        {/* <div className="heading-actions">
                                             <Form className="one-liner">
                                                 <Form.Group controlId="periodOptionChosen">
                                                     <Form.Label>From</Form.Label>
@@ -114,7 +114,7 @@ class DisbursementManagement extends React.Component {
                                                     <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" />
                                                 </Button>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow"
@@ -147,11 +147,12 @@ class DisbursementManagement extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Amount</th>
+                                                    
                                                     <th>Transaction Ref</th>
                                                     <th>Source Account</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
+                                                    <th>Amount (NGN)</th>
                                                     <th>Inititated By</th>
                                                     <th>Approved By</th>
                                                     <th>Status</th>
@@ -163,14 +164,18 @@ class DisbursementManagement extends React.Component {
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
-                                                                    <td>{eachDisburment.amount}</td>
+                                                                    
                                                                     <td>{eachDisburment.transactionReference}</td>
                                                                     <td>{eachDisburment.sourceAccount}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
-                                                                    <td>{eachDisburment.destinationBank}</td>
-                                                                    <td>{eachDisburment.initiatedBy}</td>
-                                                                    <td>{eachDisburment.approvedBy}</td>
-                                                                    <td>{eachDisburment.disbursmentStatus}</td>
+                                                                    {/* <td>{eachDisburment.destinationBank}</td> */}
+                                                                    <td>-</td>
+                                                                    <td>{eachDisburment.amount}.00</td>
+                                                                    {/* <td>{eachDisburment.initiatedBy}</td> */}
+                                                                    <td>-</td>
+                                                                    {/* <td>{eachDisburment.approvedBy}</td> */}
+                                                                    <td>-</td>
+                                                                    <td>{eachDisburment.disbursmentStatusDescription}</td>
                                                                 </tr>
                                                             </Fragment>
                                                         )

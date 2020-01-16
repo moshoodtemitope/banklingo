@@ -1,6 +1,29 @@
 @import "../../assets/scss/shared/colors";
-
+@import "../../assets/scss/shared/globalstyles";
 .module-title {
     background: #F4F6F7;
     padding: 20px 0;
+}
+.back-cta {
+    margin-bottom: 15px;
+    text-align: left;
+    font-weight: 800;
+    &.centered{
+        text-align: center;
+    }
+    span.back-link {
+        font-size: 13px;
+        border-bottom: 1px solid;
+        color: #5499C7;
+    }
+    &:hover{
+        cursor: pointer;
+        font-weight: 800;
+    }
+}
+span.txt-cta {
+    color: #34495E;
+    text-decoration: underline;
+    font-size: 13px;
+    cursor: pointer;
 }

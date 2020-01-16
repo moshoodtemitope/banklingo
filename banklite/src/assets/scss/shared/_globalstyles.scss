@@ -305,9 +305,9 @@ select, select.form-control{
 .mr-20px{
     margin-right: 20px!important;
 }
-.mr-20px{
-    margin-left: 20px!important;
-}
+// .mr-20px{
+//     margin-left: 20px!important;
+// }
 
 .w-40{
     width: 40%!important;
@@ -320,6 +320,15 @@ select, select.form-control{
 }
 .w-30{
     width: 30%!important;
+}
+mr-
+.disabled-field{
+    background-color: #F0F3F4;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
 }
 .w-60{
     width: 60%!important;

@@ -8,6 +8,10 @@ import { NavLink} from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+
+import Modal from 'react-bootstrap/Modal'
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer';
 import  TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
@@ -24,6 +28,7 @@ class DisbursementPendingApproval extends React.Component {
             user:'',
             PageSize:30,
             CurrentPage:1,
+            show
         }
 
         
@@ -44,6 +49,18 @@ class DisbursementPendingApproval extends React.Component {
         dispatch(disbursementActions.getDisbursement(paramters, true));
     }
 
+    approveDisburmentRequest = async (approvalPayload)=>{
+        const {dispatch} = this.props;
+
+        await dispatch(disbursementActions.approvePostDisbursement(approvalPayload));
+    }
+
+    rejectDisburmentRequest = async (rejectionPayload)=>{
+        const {dispatch} = this.props;
+
+        await dispatch(disbursementActions.rejectPostDisbursement(rejectionPayload));
+    }
+
     setPagesize = (PageSize)=>{
         // console.log('----here', PageSize.target.value);
         let sizeOfPage = PageSize.target.value,
@@ -53,6 +70,156 @@ class DisbursementPendingApproval extends React.Component {
 
         let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
         this.getDisbursements(params);
+    }
+    renderFullDetails=(transactionToProcess)=>{
+
+        return(
+            <Modal show={showEdit} onHide={this.handleCloseEdit} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
+                        <Modal.Header>
+                            <Modal.Title>Edit Transaction Channel</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Formik
+                                initialValues={{
+                                    securityCode: selectTxtChannel.securityCode,
+                                    comment: selectTxtChannel.comment,
+                                }}
+                               
+                                onSubmit={(values, { resetForm }) => {
+                                    
+                                    
+                                    let processPayload = {
+                                        key: values.TxtChannelKey,
+                                        name: values.TxtChannelName,
+                                        // glId: parseInt(values.TxtChannelId),
+                                        glId: selectedGlAccount!=undefined? parseInt(selectedGlAccount.value): selectTxtChannelGl.value,
+                                        // glId: parseInt(selectedGlAccount.value),
+                                        encodedKey: selectTxtChannel.encodedKey
+                                    }
+                                
+                                    
+                                    this.approveDisburmentRequest(processPayload)
+                                        .then(
+                                            () => {
+                                                if(this.props.adminUpdateTransactionChannel.request_status === administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS){
+                                                    
+                                                    
+                                                    // setTimeout(() => {
+                                                    //     this.getTransactionChannels(); 
+                                                    //     this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"));
+                                                    //     this.handleCloseEdit();
+                                                    // }, 3000);
+                                                }else{
+                                                    // setTimeout(() => {
+                                                    //     this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"))
+                                                    // }, 2000);
+                                                }
+                                                
+                                                
+
+                                            }
+                                        )
+                                    
+                                        
+                                
+
+                                }}
+                            >
+                                {({ handleSubmit,
+                                    handleChange,
+                                    handleBlur,
+                                    resetForm,
+                                    values,
+                                    touched,
+                                    isValid,
+                                    errors, }) => (
+                                        <Form noValidate 
+                                                onSubmit={handleSubmit}>
+                                            <Form.Row>
+                                                <Col>
+                                                <Form.Group controlId="TxtChannelName">
+                                                        <Form.Label className="block-level">Name</Form.Label>
+                                                        <Form.Control
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={values.TxtChannelName}
+                                                            className={errors.TxtChannelName && touched.TxtChannelName ? "is-invalid" : null}
+                                                            name="TxtChannelName" required />
+                                                        {errors.TxtChannelName && touched.TxtChannelName ? (
+                                                            <span className="invalid-feedback">{errors.TxtChannelName}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group controlId="TxtChannelKey">
+                                                        <Form.Label className="block-level">Key</Form.Label>
+                                                        <Form.Control
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={values.TxtChannelKey}
+                                                            className={errors.TxtChannelKey && touched.TxtChannelKey ? "is-invalid" : null}
+                                                            name="TxtChannelKey" required />
+
+                                                        {errors.TxtChannelKey && touched.TxtChannelKey ? (
+                                                            <span className="invalid-feedback">{errors.TxtChannelKey}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">GL Account</Form.Label>
+                                                    <Select
+                                                        options={allGlAccounts}
+                                                        defaultValue ={{label:selectTxtChannelGl.label, value: selectTxtChannelGl.value}}
+                                                        onChange={(selectedGlAccount) => {
+                                                            this.setState({ selectedGlAccount });
+                                                            errors.TxtChannelId = null
+                                                            values.TxtChannelId = selectedGlAccount.value
+                                                            
+                                                            
+                                                        }}
+                                                        className={errors.TxtChannelId && touched.TxtChannelId ? "is-invalid" : null}
+                                                        
+                                                        name="TxtChannelId"
+                                                        // value={values.currencyCode}
+                                                        required
+                                                    />
+                                                    {errors.TxtChannelId && touched.TxtChannelId ? (
+                                                        <span className="invalid-feedback">{errors.TxtChannelId}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                </Col>
+                                            </Form.Row>
+                                            
+                                                
+                                        
+                                            <div className="footer-with-cta toleft">
+                                                <Button variant="secondary" className="grayed-out" onClick={this.handleCloseEdit}>Cancel</Button>
+                                                <Button
+                                                    type="submit"
+                                                    
+                                                    disabled={adminUpdateTransactionChannelRequest.is_request_processing}>
+                                                        {adminUpdateTransactionChannelRequest.is_request_processing?"Please wait...": "Update"}
+                                                    </Button>
+                                            </div>
+                                        </Form>
+                                    )}
+                            </Formik>
+                            {adminUpdateTransactionChannelRequest.request_status === administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS && 
+                                <Alert variant="success">
+                                    {adminUpdateTransactionChannelRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            {adminUpdateTransactionChannelRequest.request_status === administrationConstants.UPDATE_TRANSACTION_CHANNEL_FAILURE && 
+                                <Alert variant="danger">
+                                    {adminUpdateTransactionChannelRequest.request_data.error}
+                                </Alert>
+                            }
+                        </Modal.Body>
+                    </Modal>
+        )
     }
 
     renderPendingDisbursment=()=>{
@@ -73,7 +240,7 @@ class DisbursementPendingApproval extends React.Component {
                                     <div>
                                         <div className="heading-actions">
                                             <Form className="one-liner">
-                                                <Form.Group controlId="periodOptionChosen">
+                                                {/* <Form.Group controlId="periodOptionChosen">
                                                     <Form.Label>From</Form.Label>
 
                                                     <DatePicker placeholderText="Choose start date" selected={this.state.dob}
@@ -101,10 +268,10 @@ class DisbursementPendingApproval extends React.Component {
                                                         dropdownMode="select"
                                                         maxDate={new Date()}
                                                     />
-                                                </Form.Group>
+                                                </Form.Group> */}
 
-                                                <Button variant="secondary" type="button">More >> </Button>
-                                                <Button variant="primary" type="submit">Generate Profit &amp; Loss</Button>
+                                                {/* <Button variant="secondary" type="button">More >> </Button>
+                                                <Button variant="primary" type="submit">Generate Profit &amp; Loss</Button> */}
                                             </Form>
                                             <div className="actions-wrap">
                                                 <Button className="action-icon" variant="outline-secondary" type="button">
@@ -122,7 +289,7 @@ class DisbursementPendingApproval extends React.Component {
                                                     value={this.state.PageSize}
                                                      className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>
-                                                <option value="25">25</option>
+                                                <option value="30">30</option>
                                                 <option value="50">50</option>
                                                 <option value="200">200</option>
                                             </select>
@@ -134,7 +301,7 @@ class DisbursementPendingApproval extends React.Component {
                                                     <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
                                                 </div>
                                                 <div className="page-count">
-                                                    <span>1-{this.state.PageSize}}</span>  of <span>20000</span>
+                                                    <span>1-{this.state.PageSize}</span>  of <span>20000</span>
                                                 </div>
                                                 <div className="each-page-action">
                                                     <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
@@ -147,11 +314,12 @@ class DisbursementPendingApproval extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Amount</th>
+                                                   
                                                     <th>Transaction Ref</th>
                                                     <th>Source Account</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
+                                                    <th>Amount</th>
                                                     <th>Inititated By</th>
                                                     <th>Approved By</th>
                                                     <th>Status</th>
@@ -163,14 +331,28 @@ class DisbursementPendingApproval extends React.Component {
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
-                                                                    <td>{eachDisburment.amount}</td>
-                                                                    <td>{eachDisburment.transactionReference}</td>
+                                                                    
+                                                                    <td>
+                                                                        <span className="txt-cta">{eachDisburment.transactionReference}</span> 
+                                                                    </td>
                                                                     <td>{eachDisburment.sourceAccount}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
                                                                     <td>{eachDisburment.destinationBank}</td>
+                                                                    <td>{eachDisburment.amount}</td>
                                                                     <td>{eachDisburment.initiatedBy}</td>
                                                                     <td>{eachDisburment.approvedBy}</td>
-                                                                    <td>{eachDisburment.disbursmentStatus}</td>
+                                                                    <td>{eachDisburment.disbursmentStatusDescription}</td>
+                                                                    {/* <td>
+                                                                        <DropdownButton
+                                                                            size="sm"
+                                                                            title="Actions"
+                                                                            className="customone"
+                                                                        >
+                                                                            
+                                                                            <Dropdown.Item eventKey="1">Approve</Dropdown.Item>
+                                                                            <Dropdown.Item eventKey="2">Reject</Dropdown.Item>
+                                                                        </DropdownButton>
+                                                                    </td> */}
                                                                 </tr>
                                                             </Fragment>
                                                         )
@@ -186,11 +368,12 @@ class DisbursementPendingApproval extends React.Component {
                                     <TableComponent classnames="striped bordered hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Amount</th>
+                                                        
                                                         <th>Transaction Ref</th>
                                                         <th>Source Account</th>
                                                         <th>Destination Account</th>
                                                         <th>Destination Bank</th>
+                                                        <th>Amount</th>
                                                         <th>Inititated By</th>
                                                         <th>Approved By</th>
                                                         <th>Status</th>
@@ -294,6 +477,8 @@ class DisbursementPendingApproval extends React.Component {
 function mapStateToProps(state) {
     return {
         getDisbursementsReducer : state.disbursmentReducers.getDisbursementsReducer,
+        approvePostDisbursementReducer : state.disbursmentReducers.approvePostDisbursementReducer,
+        rejectPostDisbursementReducer : state.disbursmentReducers.rejectPostDisbursementReducer,
     };
 }
 export default connect(mapStateToProps)(DisbursementPendingApproval);

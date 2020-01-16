@@ -37,9 +37,14 @@ export const getDateFromISO =(date) =>{
 
 export const numberWithCommas= (amount)=> {
     if(amount!==undefined && amount!==''){
+        let amountFiltered ;
     // return numberProvided.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     // return parseFloat(numberProvided).toLocaleString(undefined, {maximumFractionDigits:2});
-        let amountFiltered = amount.replace(/,/g, '');
+        
+        // if(amount.indexOf(',')>-1){
+             amountFiltered = amount.toString().replace(/,/g, '');
+        // }
+        
         return amountFiltered.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');    
        
         

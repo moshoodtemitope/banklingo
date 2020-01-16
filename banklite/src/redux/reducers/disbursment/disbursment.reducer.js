@@ -26,6 +26,32 @@ export function getDisbursementsReducer(state=[], action) {
     }
 }
 
+export function getDisbursementBanksReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.GET_DISBURSMENTS_BANKS_PENDING:
+            return {
+                request_status: disbursmentConstants.GET_DISBURSMENTS_BANKS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.GET_DISBURSMENTS_BANKS_SUCCESS:
+            return {
+                request_status: disbursmentConstants.GET_DISBURSMENTS_BANKS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_DISBURSMENTS_BANKS_FAILURE:
+            return {
+                request_status: disbursmentConstants.GET_DISBURSMENTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function postDisbursementReducer(state=[], action) {
     switch (action.type) {
         case disbursmentConstants.POST_DISBURSMENT_PENDING:
@@ -43,6 +69,12 @@ export function postDisbursementReducer(state=[], action) {
         case disbursmentConstants.POST_DISBURSMENT_FAILURE:
             return {
                 request_status: disbursmentConstants.POST_DISBURSMENT_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.POST_DISBURSMENT_EDIT:
+            return {
+                request_status: disbursmentConstants.POST_DISBURSMENT_EDIT,
                 is_request_processing: false,
                 request_data: action
             };
@@ -78,6 +110,7 @@ export function confirmPostDisbursementReducer(state=[], action) {
                 is_request_processing: false,
                 request_data: action
             };
+        
         case disbursmentConstants.CONFIRM_DISBURSMENT_RESET:
             return {
                 request_status: disbursmentConstants.CONFIRM_DISBURSMENT_RESET,

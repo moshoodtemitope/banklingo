@@ -66,8 +66,9 @@ class MainMenu extends React.Component{
                         <span>Disbursement</span>
                         <ul>
                             <li>
-                                <NavLink to="/disbursements">All Disbursements</NavLink>
-                                <NavLink to="/disbursements/initiate">Initiate Disbursements</NavLink>
+                                <NavLink exact to="/disbursements">All Disbursements</NavLink>
+                                <NavLink exact to="/disbursements/initiate">Initiate Disbursements</NavLink>
+                                <NavLink exact to="/disbursements/pending-approval">Pending Approval</NavLink>
                             </li>
                         </ul>
 
