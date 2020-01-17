@@ -116,7 +116,7 @@ const disbursmentReducers = combineReducers({
     getDisbursementBanksReducer: disbursment.getDisbursementBanksReducer, 
     postDisbursementReducer: disbursment.postDisbursementReducer, 
     confirmPostDisbursementReducer: disbursment.confirmPostDisbursementReducer, 
-    approvePostDisbursementReducer: disbursment.approvePostDisbursementReducer, 
+    approveOrRejectPostDisbursementReducer: disbursment.approveOrRejectPostDisbursementReducer, 
     rejectPostDisbursementReducer: disbursment.rejectPostDisbursementReducer, 
     getDisbursementByRefReducer: disbursment.getDisbursementByRefReducer, 
 })

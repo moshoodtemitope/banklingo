@@ -129,12 +129,13 @@ class AuthenticatedRoutes extends React.Component {
 
 
     render() {
-        
+        console.log('=====',this.props.user);
         return (
                
                 <Fragment>
                     <Router history={history}>
                     <Switch>
+                        
                         <Route exact path='/' render={(props) => <UserLogin  />} /> 
 
                         <PrivateRoute path='/dashboard' {...this.props} authed={this.props.user} component={DashboardLanding} />

@@ -123,29 +123,29 @@ export function confirmPostDisbursementReducer(state=[], action) {
     }
 }
 
-export function approvePostDisbursementReducer(state=[], action) {
+export function approveOrRejectPostDisbursementReducer(state=[], action) {
     switch (action.type) {
-        case disbursmentConstants.APPROVE_DISBURSMENT_PENDING:
+        case disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_PENDING:
             return {
-                request_status: disbursmentConstants.APPROVE_DISBURSMENT_PENDING,
+                request_status: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_PENDING,
                 is_request_processing: true,
                 request_data: action
             };
-        case disbursmentConstants.APPROVE_DISBURSMENT_SUCCESS:
+        case disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS:
             return {
-                request_status: disbursmentConstants.APPROVE_DISBURSMENT_SUCCESS,
+                request_status: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS,
                 is_request_processing: false,
                 request_data: action
             };
-        case disbursmentConstants.APPROVE_DISBURSMENT_FAILURE:
+        case disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE:
             return {
-                request_status: disbursmentConstants.APPROVE_DISBURSMENT_FAILURE,
+                request_status: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };
-        case disbursmentConstants.APPROVE_DISBURSMENT_RESET:
+        case disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_RESET:
             return {
-                request_status: disbursmentConstants.APPROVE_DISBURSMENT_RESET,
+                request_status: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_RESET,
                 is_request_processing: false,
                 request_data: {}
             };

@@ -106,7 +106,7 @@ class MainHeader extends React.Component{
             <div className="mainheader-wrap">
                 
                 <Navbar  expand="lg">
-                    <Navbar.Brand as={Link} to="/">Empire Trust</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/dashboard">Empire Trust</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="heading-nav">
                         {/* <Nav className="">

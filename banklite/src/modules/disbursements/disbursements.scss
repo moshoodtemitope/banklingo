@@ -26,4 +26,9 @@ span.txt-cta {
     text-decoration: underline;
     font-size: 13px;
     cursor: pointer;
+    &:hover{
+        font-weight: 600;
+        padding: 0;
+        margin: 0;
+    }
 }

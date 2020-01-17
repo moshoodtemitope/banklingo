@@ -134,7 +134,7 @@ class DisbursementManagement extends React.Component {
                                                     <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
                                                 </div>
                                                 <div className="page-count">
-                                                    <span>1-{this.state.PageSize}}</span>  of <span>20000</span>
+                                                    <span>1-{this.state.PageSize}</span>  of <span>20000</span>
                                                 </div>
                                                 <div className="each-page-action">
                                                     <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
@@ -283,7 +283,7 @@ class DisbursementManagement extends React.Component {
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                {this.renderDisbursment()}
-                                                
+                                               
                                             </div>
                                         </div>
                                     </div>

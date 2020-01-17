@@ -9,7 +9,7 @@ export const disbursementActions = {
     getDisbursementBanks,
     postDisbursement,
     confirmPostDisbursement,
-    approvePostDisbursement,
+    approveOrRejectPostDisbursement,
     rejectPostDisbursement,
     getDisbursementByRef
 }
@@ -158,14 +158,28 @@ function confirmPostDisbursement   (confirmDisbursmentPayload){
 
 }
 
-function approvePostDisbursement   (approveDisbursmentPayload){
-    if(approveDisbursmentPayload!=="CLEAR"){
+function approveOrRejectPostDisbursement   (actionDisbursmentPayload){
+    if(actionDisbursmentPayload!=="CLEAR"){
         return dispatch =>{
-            let consume = ApiService.request(routes.HIT_DISBURSEMENT+'/approve', "POST", approveDisbursmentPayload);
+            let url;
+
+            if(actionDisbursmentPayload.actionToPerform==="approve"){
+                url = routes.HIT_DISBURSEMENT+'/approve';
+            }
+            if(actionDisbursmentPayload.actionToPerform==="reject"){
+                url = routes.HIT_DISBURSEMENT+'/reject';
+            }
+            delete actionDisbursmentPayload.actionToPerform
+            let consume = ApiService.request(url, "POST", actionDisbursmentPayload);
             dispatch(request(consume));
             return consume
                 .then(response =>{
-                    dispatch(success(response));
+                    if(response.status===200){
+                        dispatch(success(response));
+                    }else{
+                        dispatch(failure(handleRequestErrors("Unable to complete action")));
+                    }
+                    
                 }).catch(error =>{
                     // console.log('error is', error)
                     dispatch(failure(handleRequestErrors(error)));
@@ -181,10 +195,10 @@ function approvePostDisbursement   (approveDisbursmentPayload){
         
     }
 
-    function request(user) { return { type: disbursmentConstants.APPROVE_DISBURSMENT_PENDING, user } }
-    function success(response) { return { type: disbursmentConstants.APPROVE_DISBURSMENT_SUCCESS, response } }
-    function failure(error) { return { type: disbursmentConstants.APPROVE_DISBURSMENT_FAILURE, error } }
-    function clear() { return { type: disbursmentConstants.APPROVE_DISBURSMENT_RESET, clear_data:""} }
+    function request(user) { return { type: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE, error } }
+    function clear() { return { type: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_RESET, clear_data:""} }
 
 }
 

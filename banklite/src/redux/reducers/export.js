@@ -69,7 +69,7 @@ import{
     postDisbursementReducer,
     getDisbursementBanksReducer,
     confirmPostDisbursementReducer,
-    approvePostDisbursementReducer,
+    approveOrRejectPostDisbursementReducer,
     rejectPostDisbursementReducer,
     getDisbursementByRefReducer
     
@@ -192,7 +192,7 @@ export const disbursment ={
     getDisbursementBanksReducer,
     postDisbursementReducer,
     confirmPostDisbursementReducer,
-    approvePostDisbursementReducer,
+    approveOrRejectPostDisbursementReducer,
     rejectPostDisbursementReducer,
     getDisbursementByRefReducer
 }

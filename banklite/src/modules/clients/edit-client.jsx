@@ -122,6 +122,8 @@ class EditAClient extends React.Component {
                 
                 let allCustomerData = getAClientRequest.request_data.response.data;
                     console.log('Customer is', allCustomerData);
+                let custTypes = this.props.adminGetCustomerTypes.request_data.response.data,
+                    selectedCustype  = custTypes.filter(type=>type.id===allCustomerData.clientTypeId)[0];
                     if(Object.keys(allCustomerData).length>=1){
                         
                         return (
@@ -144,7 +146,7 @@ class EditAClient extends React.Component {
                                     nextOfKinMobile: '',
                                     gender:'',
                                     dateOfBirth:'',
-                                    custType:1,
+                                    custType:allCustomerData.clientTypeId,
                                     notes:allCustomerData.notes.notes?allCustomerData.notes.notes:'',
                                 }}
                 
@@ -257,6 +259,7 @@ class EditAClient extends React.Component {
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Customer Type</Form.Label>
+                                                    <span className="form-text">{selectedCustype.name}</span>
                                                     {/* <Select
                                                             options={allCustomerTypes}
                                                             onChange={(selectedCustType) => {
@@ -595,6 +598,7 @@ function mapStateToProps(state) {
     return {
         getAClient : state.clientsReducers.getAClientReducer,
         updateAClient : state.clientsReducers.updateAClientReducer,
+        adminGetCustomerTypes : state.administrationReducers.getAllCustomerTypesReducer,
     };
 }
 
