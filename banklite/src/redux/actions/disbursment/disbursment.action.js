@@ -235,7 +235,7 @@ function rejectPostDisbursement   (rejectDisbursmentPayload){
 function getDisbursementByRef   (disbursmentReference){
     
         return dispatch =>{
-            let consume = ApiService.request(routes.HIT_DISBURSEMENT+`/${disbursmentReference}`, "POST", null);
+            let consume = ApiService.request(routes.HIT_DISBURSEMENT+`/${disbursmentReference}`, "GET", null);
             dispatch(request(consume));
             return consume
                 .then(response =>{

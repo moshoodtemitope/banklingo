@@ -15,6 +15,14 @@
         transform: translate(-50%, -50%);
     }
 }
+.login-heading{
+    text-align: center;
+    h3{
+        font-size: 32px;
+        font-weight: 600;
+        color: #34495e;
+    }
+}
 
 .logo-wrap {
     display: flex;
@@ -22,11 +30,11 @@
     justify-content: center;
     h4{
         font-weight: 600;
-        font-size: 30px;
+        font-size: 22px;
         margin-right: 8px;
         color: #2E4053;
     }
     img {
-        width: 50px;
+        width: 30px;
     }
 }

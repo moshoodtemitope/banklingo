@@ -2,24 +2,40 @@ import React, { Fragment} from "react";
 // import { Redirect, Route, Router, Switch } from "react-router-dom";
 // import OnboardingRoute from "./onboarding/onboarding.routes";
 import AuthenticatedRoutes from "./authenticated-routes";
+import DeviceRestriction from "../shared/templates/device-restriction";
 class IndexRoute extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            screenWidthSize: window.innerWidth
         }
+
+        window.addEventListener("resize", ()=>this.setState({screenWidthSize: window.innerWidth}));
     }
+    
 
     render(){
+        const{screenWidthSize} = this.state
+        console.log("Screen Scize", screenWidthSize);
         let user ={
             name:'Segun Owa'
         }
-        let routerLayers = (
-            <Fragment>
-                {/* <OnboardingRoute /> */}
-                <AuthenticatedRoutes  user={user}/>
-            </Fragment>
-        )
+        let routerLayers
+        if(screenWidthSize>=1024){
+            routerLayers = (
+                <Fragment>
+                    {/* <OnboardingRoute /> */}
+                    <AuthenticatedRoutes  user={user}/>
+                </Fragment>
+            )
+        }else{
+            routerLayers =(
+                <Fragment>
+                    <DeviceRestriction/>
+                </Fragment>
+            )
+        }
 
         return routerLayers;
     }

@@ -11,6 +11,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer';
 import  TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import "./disbursements.scss"; 
 
@@ -23,6 +25,7 @@ class DisbursementManagement extends React.Component {
             user:'',
             PageSize:30,
             CurrentPage:1,
+            showDetails: false
         }
 
         
@@ -55,7 +58,154 @@ class DisbursementManagement extends React.Component {
         this.getDisbursements(params);
     }
 
-    renderDisbursment=()=>{
+    getADisbursment =(transactionReference)=>{
+        const {dispatch} =  this.props;
+
+        dispatch(disbursementActions.getDisbursementByRef(transactionReference))
+    }
+
+    showDetails = (transactionReference)=>{
+        
+        this.setState({showDetails: true, transactionReference}, ()=>console.log('dsdsds===='))
+        this.getADisbursment(transactionReference);
+        // this.getADisbursment(transactionReference);
+        
+        // let getDisbursementByRefRequest = this.props.getDisbursementByRefReducer;
+
+        // switch (getDisbursementByRefRequest.request_status){
+        //     case (disbursmentConstants.GET_DISBURSMENTS_PENDING):
+        //         return (
+        //             <div className="card form-content">
+        //                 <div className="loading-content">
+        //                     <div className="loading-text">Please wait... </div>
+        //                 </div>
+        //             </div>
+                   
+        //         )
+        //     case(disbursmentConstants.GET_DISBURSMENTS_SUCCESS):
+        //         let disbursmentData = getDisbursementByRefRequest.request_data.response.data;
+                
+        //         if(disbursmentData!==undefined){
+        //             if(disbursmentData.length>=1){
+        //                 return(
+        //                     <div className="card form-content">
+        //                         {
+        //                             disbursmentData.map((eachInfo, index)=>{
+        //                                 return(
+        //                                     <Col xs={6}>
+        //                                         <Form.Label className="block-level">{eachInfo.key}</Form.Label>
+        //                                         <span className="form-text disabled-field">{eachInfo.value}}</span>
+
+        //                                     </Col>
+        //                                 )
+        //                             })
+        //                         }
+                                
+        //                     </div>
+        //                 )
+        //             }else{
+        //                 return(
+        //                     <div className="card form-content">
+        //                         <div className="no-records">
+        //                         No records found
+        //                         </div>
+        //                     </div>
+        //                 )
+        //             }
+        //         }else{
+        //             return null;
+        //         }
+
+        //     case (disbursmentConstants.GET_DISBURSMENTS_FAILURE):
+        //         return (
+        //             <div className="card form-content">
+        //                <div className="loading-content errormsg"> 
+        //                     <div>{getDisbursementByRefRequest.request_data.error}</div>
+        //                 </div>
+        //             </div>
+                    
+        //         )
+        //     default :
+        //     return null;
+        // }
+    }
+
+
+    renderADisbursment =(transactionReference)=>{
+        
+        
+        let getDisbursementByRefRequest = this.props.getDisbursementByRefReducer;
+
+        switch (getDisbursementByRefRequest.request_status){
+            case (disbursmentConstants.GET_A_DISBURSMENT_PENDING):
+                return (
+                    <div className="card form-content details-wrap w-40">
+                        <div className="loading-content">
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    </div>
+                   
+                )
+            case(disbursmentConstants.GET_A_DISBURSMENT_SUCCESS):
+                let disbursmentData = getDisbursementByRefRequest.request_data.response.data;
+                
+                if(disbursmentData!==undefined){
+                    if(disbursmentData.length>=1){
+                        return(
+                            <div className="">
+                                <div className="card form-content details-wrap  w-40">
+                                    <div className="form-heading centered mb-20">
+                                        <h4>Disbursment details</h4>
+                                    </div>
+                                    <Row>
+                                        {
+                                            disbursmentData.map((eachInfo, index)=>{
+                                                return(
+                                                    <Col xs={6} className="mb-10">
+                                                        <div className="dissburseInfo">
+                                                            <Form.Label className="block-level">{eachInfo.key}</Form.Label>
+                                                            <span className="form-text disabled-field">{
+                                                                (eachInfo.value!=='' && eachInfo.value!==null)?
+                                                                    (eachInfo.key==="Amount")?`₦${eachInfo.value}`:eachInfo.value
+                                                                :'N/A'}
+                                                            </span>
+                                                        </div>
+                                                    </Col>
+                                                )
+                                            })
+                                        }
+                                    </Row>
+                                </div>
+                            </div>
+                        )
+                    }else{
+                        return(
+                            <div className="card form-content details-wrap w-40">
+                                <div className="no-records">
+                                No records found
+                                </div>
+                            </div>
+                        )
+                    }
+                }else{
+                    return null;
+                }
+
+            case (disbursmentConstants.GET_A_DISBURSMENT_FAILURE):
+                return (
+                    <div className="card form-content w-40">
+                       <div className="loading-content errormsg"> 
+                            <div>{getDisbursementByRefRequest.request_data.error}</div>
+                        </div>
+                    </div>
+                    
+                )
+            default :
+            return null;
+        }
+    }
+
+    renderAllDisbursments=()=>{
         let getDisbursementsRequest = this.props.getDisbursementsReducer;
             switch (getDisbursementsRequest.request_status){
                 case (disbursmentConstants.GET_DISBURSMENTS_PENDING):
@@ -165,7 +315,9 @@ class DisbursementManagement extends React.Component {
                                                             <Fragment key={index}>
                                                                 <tr>
                                                                     
-                                                                    <td>{eachDisburment.transactionReference}</td>
+                                                                    <td>
+                                                                        <span className="txt-cta" onClick={()=>this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span> 
+                                                                    </td>
                                                                     <td>{eachDisburment.sourceAccount}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
                                                                     {/* <td>{eachDisburment.destinationBank}</td> */}
@@ -232,6 +384,7 @@ class DisbursementManagement extends React.Component {
     }
 
     render() {
+        const {showDetails,transactionReference}  = this.state;
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -282,8 +435,9 @@ class DisbursementManagement extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                               {this.renderDisbursment()}
-                                               
+                                                {this.renderAllDisbursments()}
+
+                                               {showDetails===true && this.renderADisbursment(transactionReference)}
                                             </div>
                                         </div>
                                     </div>
@@ -299,6 +453,7 @@ class DisbursementManagement extends React.Component {
 function mapStateToProps(state) {
     return {
         getDisbursementsReducer : state.disbursmentReducers.getDisbursementsReducer,
+        getDisbursementByRefReducer : state.disbursmentReducers.getDisbursementByRefReducer,
     };
 }
 

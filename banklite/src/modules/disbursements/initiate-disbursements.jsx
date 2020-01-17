@@ -256,6 +256,7 @@ class InitiateDisbursement extends React.Component {
                                                                             <Form.Control
                                                                                 type="text"
                                                                                 name="sourceAccount"
+                                                                                maxLength="10"
                                                                                 onChange={handleChange}
                                                                                 value={values.sourceAccount}
                                                                                 className={errors.sourceAccount && touched.sourceAccount ? "is-invalid withcustom" : "withcustom"} />
@@ -324,6 +325,7 @@ class InitiateDisbursement extends React.Component {
                                                                                 <Form.Control
                                                                                     type="text"
                                                                                     name="destinationAccount"
+                                                                                    maxLength="10"
                                                                                     onChange={handleChange}
                                                                                     value={values.destinationAccount}
                                                                                     className={errors.destinationAccount && touched.destinationAccount ? "is-invalid withcustom" : "withcustom"} />
@@ -518,7 +520,7 @@ class InitiateDisbursement extends React.Component {
                                                     <span className="form-text disabled-field">{selectedTxtSourceText}</span>
                                                 </Col>
                                                 <Col>
-                                                    <Form.Label className="block-level">Source Account</Form.Label>
+                                                    <Form.Label  className="block-level">Source Account</Form.Label>
                                                     <span className="form-text disabled-field">{postDisbursementpayload.sourceAccount}</span>
                                                 </Col>
                                             </Form.Row>
@@ -556,7 +558,7 @@ class InitiateDisbursement extends React.Component {
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">Amount</Form.Label>
-                                                    <span className="form-text disabled-field">{postDisbursementpayload.amount}</span>
+                                                    <span className="form-text disabled-field">{numberWithCommas(postDisbursementpayload.amount)}</span>
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Narration</Form.Label>

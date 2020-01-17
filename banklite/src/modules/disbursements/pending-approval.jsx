@@ -20,10 +20,12 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer';
 import  TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import "./disbursements.scss"; 
 
 import Accordion from 'react-bootstrap/Accordion'
+import {numberWithCommas} from '../../shared/utils';
 
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
 import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
@@ -35,7 +37,8 @@ class DisbursementPendingApproval extends React.Component {
             user:'',
             PageSize:30,
             CurrentPage:1,
-            show: false
+            show: false,
+            showDetails:false
         }
 
         
@@ -78,6 +81,9 @@ class DisbursementPendingApproval extends React.Component {
         let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
         this.getDisbursements(params);
     }
+    handleBackToEdit = ()=>{
+        this.setState({showDetails: false})
+    }
 
     handleClose = () => this.setState({show:false});
     
@@ -119,7 +125,7 @@ class DisbursementPendingApproval extends React.Component {
                                     }
                                 
                                     
-                                    console.log("-----", processPayload);
+                                    
                                     this.approveOrRejectPostDisbursementRequest(processPayload)
                                         .then(
                                             () => {
@@ -207,7 +213,7 @@ class DisbursementPendingApproval extends React.Component {
                                                 <Form.Row>
                                                     <Col>
                                                         <Form.Label className="block-level">Amount</Form.Label>
-                                                        <span className="form-text disabled-field">{transactionToProcess.amount}</span>
+                                                        <span className="form-text disabled-field">{numberWithCommas(transactionToProcess.amount)}</span>
                                                     </Col>
                                                     <Col>
                                                         {/* <Form.Label className="block-level">Narration</Form.Label>
@@ -325,7 +331,7 @@ class DisbursementPendingApproval extends React.Component {
             allDisbursments = getDisbursementsRequest.request_data.response.data,
             transacTionSelected = allDisbursments.filter(txt=>txt.transactionReference===transactionReference)[0];
 
-            this.setState({transacTionSelected, show:true})
+            this.setState({transacTionSelected, showDetails:true})
     }
 
     renderPendingDisbursment=()=>{
@@ -425,7 +431,7 @@ class DisbursementPendingApproval extends React.Component {
                                                     <th>Source Account</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
-                                                    <th>Amount</th>
+                                                    <th>Amount (NGN)</th>
                                                     <th>Inititated By</th>
                                                     {/* <th>Approved By</th> */}
                                                     <th>Status</th>
@@ -444,7 +450,7 @@ class DisbursementPendingApproval extends React.Component {
                                                                     <td>{eachDisburment.sourceAccount}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
                                                                     <td>{eachDisburment.destinationBank}</td>
-                                                                    <td>{eachDisburment.amount}</td>
+                                                                    <td>{numberWithCommas(eachDisburment.amount)}</td>
                                                                     <td>{eachDisburment.initiatedBy}</td>
                                                                     {/* <td>{eachDisburment.approvedBy}</td> */}
                                                                     <td>{eachDisburment.disbursmentStatusDescription}</td>
@@ -515,8 +521,240 @@ class DisbursementPendingApproval extends React.Component {
             }
     }
 
+    renderDisbursment =(transactionToProcess)=>{
+        let  approveOrRejectPostDisbursementRequest= this.props.approveOrRejectPostDisbursementReducer,
+        rejectPostDisbursementRequest= this.props.rejectPostDisbursementReducer,
+        processDisburmentValidationSchema = Yup.object().shape({
+            securityCode: Yup.string()
+                .min(1, 'Vailid response required')
+                .max(50, 'Valid response required')
+                .required('Security Code is required'),
+            comment: Yup.string()
+                .min(1, 'Please provide account number')
+                .required('Comment is required'),
+        })
+        return(
+            <div>
+                <Formik
+                    initialValues={{
+                        securityCode: '',
+                        comment: '',
+                    }}
+                    // validationSchema={processDisburmentValidationSchema}
+                    onSubmit={(values, { resetForm }) => {
+
+
+                        let processPayload = {
+                            transactionReference: transactionToProcess.transactionReference,
+                            securityCode: values.securityCode,
+                            comment: values.comment,
+                            actionToPerform: this.state.actionToPerform
+                        }
+
+
+
+                        this.approveOrRejectPostDisbursementRequest(processPayload)
+                            .then(
+                                () => {
+                                    if (this.props.approveOrRejectPostDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS) {
+
+
+                                        setTimeout(() => {
+                                            this.setState({showDetails:false})
+                                            this.loadInitialData();
+                                            this.props.dispatch(disbursementActions.approveOrRejectPostDisbursement("CLEAR"));
+                                            this.handleClose();
+                                        }, 2000);
+                                    } else {
+                                        // setTimeout(() => {
+                                        //     this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"))
+                                        // }, 2000);
+                                    }
+
+
+
+                                }
+                            )
+
+
+
+
+                    }}
+                >
+                    {({ handleSubmit,
+                        handleChange,
+                        handleBlur,
+                        resetForm,
+                        values,
+                        touched,
+                        isValid,
+                        errors, }) => (
+                            <Form noValidate
+                                className="form-content w-40 card"
+                                onSubmit={handleSubmit}>
+
+
+                                <Accordion defaultActiveKey="0" className="mb-0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Sender Details
+                                        </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+
+                                            <Form.Row>
+
+                                                {/* <Col>
+                                                        <Form.Label className="block-level">Transaction Source</Form.Label>
+
+
+                                                        <span className="form-text disabled-field">{selectedTxtSourceText}</span>
+                                                    </Col> */}
+                                                <Col>
+                                                    <Form.Label className="block-level">Source Account</Form.Label>
+                                                    <span className="form-text disabled-field">{transactionToProcess.sourceAccount}</span>
+                                                </Col>
+                                                <Col></Col>
+                                            </Form.Row>
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Accordion defaultActiveKey="0" className="mb-0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Recipient Details
+                                        </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+
+                                            <Form.Row className="mb-0">
+                                                <Col>
+                                                    <Form.Group >
+                                                        <Form.Label className="block-level">Destination Bank</Form.Label>
+                                                        <span className="form-text disabled-field">{transactionToProcess.destinationBank}</span>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group  className="mb-0">
+                                                        <Form.Label className="block-level">Destination Account </Form.Label>
+                                                        <span className="form-text disabled-field">{transactionToProcess.destinationAccount}</span>
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Amount</Form.Label>
+                                                    <span className="form-text disabled-field">&#8358;{numberWithCommas(transactionToProcess.amount)}</span>
+                                                </Col>
+                                                <Col>
+                                                    {/* <Form.Label className="block-level">Narration</Form.Label>
+                                                        <span className="form-text disabled-field">{postDisbursementpayload.narration}</span> */}
+                                                </Col>
+
+                                            </Form.Row>
+
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Provide Confirmation details
+                                        </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+                                            <Form.Row>
+
+                                                <Col>
+                                                    <Form.Group >
+
+                                                        <Form.Label className="block-level">Security Code</Form.Label>
+                                                        <Form.Control type="password"
+                                                            name="securityCode"
+                                                            onChange={handleChange}
+                                                            placeholder="Enter the security code sent to you"
+                                                            value={values.securityCode}
+                                                            className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                                                            required />
+                                                        {errors.securityCode && touched.securityCode ? (
+                                                            <span className="invalid-feedback">{errors.securityCode}</span>
+                                                        ) : null}
+
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
+
+                                            <Form.Row className="mb-0">
+                                                <Col>
+                                                    <Form.Group className="mb-0">
+
+                                                        <Form.Label className="block-level">Comments</Form.Label>
+                                                        <Form.Control
+                                                            as="textarea" rows="3"
+                                                            onChange={handleChange}
+                                                            value={values.comment}
+                                                            className={errors.comment && touched.comment ? "is-invalid" : null}
+                                                            name="comment"
+                                                        />
+                                                        {errors.comment && touched.comment ? (
+                                                            <span className="invalid-feedback">{errors.comment}</span>
+                                                        ) : null}
+
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
+
+
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+
+
+                                {approveOrRejectPostDisbursementRequest.request_status !== disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS &&
+                                    <div>
+                                        <div className="footer-with-cta centered approvalctas">
+                                            {/* <Button variant="secondary" className="grayed-out" onClick={this.handleCloseEdit}>Cancel</Button> */}
+                                            <Button
+                                                type="submit"
+                                                className="redvariant"
+                                                onClick={() => this.setState({ actionToPerform: "approve" })}
+                                                disabled={approveOrRejectPostDisbursementRequest.is_request_processing}>
+                                                {approveOrRejectPostDisbursementRequest.is_request_processing && this.state.actionToPerform === "approve" ? "Please wait..." : "Approve"}
+                                            </Button>
+
+                                            <Button
+                                                type="submit"
+                                                // className="ml-50"
+                                                onClick={() => this.setState({ actionToPerform: "reject" })}
+                                                disabled={approveOrRejectPostDisbursementRequest.is_request_processing}>
+                                                {approveOrRejectPostDisbursementRequest.is_request_processing && this.state.actionToPerform === "reject" ? "Please wait..." : "Reject"}
+                                            </Button>
+                                        </div>
+                                        <div className="back-cta centered" onClick={this.handleBackToEdit}>
+                                            <span className="back-link">Back</span>
+                                        </div>
+                                    </div>
+                                }
+
+                                {approveOrRejectPostDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS &&
+                                    <Alert variant="success">
+                                        {approveOrRejectPostDisbursementRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+                                {approveOrRejectPostDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE &&
+                                    <Alert variant="danger">
+                                        {approveOrRejectPostDisbursementRequest.request_data.error}
+                                    </Alert>
+                                }
+                            </Form>
+                        )}
+                </Formik>
+
+            </div>   
+        )
+    }
+
     render() {
-        const {transacTionSelected}=this.state;
+        const {transacTionSelected, showDetails}=this.state;
+        let  approveOrRejectPostDisbursementRequest= this.props.approveOrRejectPostDisbursementReducer;
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -567,10 +805,11 @@ class DisbursementPendingApproval extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                {this.renderPendingDisbursment()}
+                                                {(showDetails===false) && this.renderPendingDisbursment()}
                                                 {
-                                                    this.props.getDisbursementsReducer.request_status ===disbursmentConstants.GET_DISBURSMENTS_SUCCESS
-                                                    && this.renderFullDetails(transacTionSelected)
+                                                    (this.props.getDisbursementsReducer.request_status ===disbursmentConstants.GET_DISBURSMENTS_SUCCESS 
+                                                        && showDetails===true && approveOrRejectPostDisbursementRequest.request_status!==disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_RESET)
+                                                    && this.renderDisbursment(transacTionSelected)
                                                 }
                                             </div>
                                         </div>

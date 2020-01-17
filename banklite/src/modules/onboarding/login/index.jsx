@@ -52,6 +52,7 @@ class UserLogin extends React.Component {
           });
         return(
             <div className="login-page">
+                
                 <Formik
                         initialValues={{
                             userEmail:'',
@@ -96,12 +97,18 @@ class UserLogin extends React.Component {
                                 <Form 
                                     noValidate 
                                     onSubmit={handleSubmit}
-                                    className="form-content w-30 card">
-                                    
-                                    <div className="logo-wrap">
-                                        <h4>Sign In</h4>
-                                        <img src={loginIcon} alt="" />
+                                    className="form-content w-30 ">
+                                        
+                                    <div className="login-heading">
+                                        <h3>Empire Trust</h3>
                                     </div>
+                                    <div className="login-wrap card">
+
+                                    
+                                        <div className="logo-wrap">
+                                            <h4>Sign In</h4>
+                                            <img src={loginIcon} alt="" />
+                                        </div>
                                     <Form.Row>
                                         
                                             <Form.Label className={errors.userEmail && touched.userEmail? "witherror block-level": "block-level"}>
@@ -153,11 +160,7 @@ class UserLogin extends React.Component {
                                         
                                     </div>
                                     
-                                {/* {loginRequest.request_status === authConstants.LOGIN_USER_SUCCESS &&
-                                    <Alert variant="success mt-20">
-                                        {loginRequest.request_data!==undefined && loginRequest.request_data.response.data.message}
-                                    </Alert>
-                                } */}
+                                
                                 {loginRequest.request_status === authConstants.LOGIN_USER_FAILURE &&
                                     <Alert variant="danger mt-20">
                                         {loginRequest.request_data.error}
@@ -165,7 +168,7 @@ class UserLogin extends React.Component {
                                     </Alert>
                                 }
                                    
-        
+                                   </div>
                                 </Form>
                             )}
                     </Formik>

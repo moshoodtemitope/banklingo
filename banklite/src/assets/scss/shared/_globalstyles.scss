@@ -37,6 +37,21 @@ select, select.form-control{
     padding-top: 4px;
     margin-left: 10px;
 }
+.mb-0{
+    margin-bottom: 0;
+}
+.mb-10{
+    margin-bottom: 10px;
+}
+.mb-20{
+    margin-bottom: 20px;
+}
+.ml-0{
+    margin-left: 0;
+}
+.ml-50{
+    margin-left: 50px!important;
+}
 .hint-text {
     font-size: 11px;
 }
@@ -68,6 +83,10 @@ select, select.form-control{
         a{
             color: #ffffff;
             text-decoration: none;
+        }
+        &.redvariant{
+            background-color: #CB4335;
+            border-color: #CB4335;
         }
     }
    
@@ -455,9 +474,17 @@ span.hinttext {
         margin: -30px -30px 30px -30px;
         padding: 15px 20px;
         border-bottom: 1px solid #D6DBDF;
+        &.centered{
+            text-align: center;
+        }
         h3{
             color: #34495E;
             font-size: 25px;
+            margin-bottom: 0;
+        }
+        h4{
+            color: #34495E;
+            font-size: 20px;
             margin-bottom: 0;
         }
     }
