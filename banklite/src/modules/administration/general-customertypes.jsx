@@ -56,13 +56,18 @@ class GeneralCustomerTypes extends React.Component {
           .required('Description is required')
     });
 
-    getCustomerTypes = ()=>{
+    getCustomerTypes = (tempData)=>{
         const {dispatch} = this.props;
         let payload ={
             PageSize:20,
             CurrentPage:1
         }
-        dispatch(administrationActions.getCustomerTypes(payload));
+        if(tempData){
+            dispatch(administrationActions.getCustomerTypes(payload, tempData));
+        }else{
+            dispatch(administrationActions.getCustomerTypes(payload));
+        }
+        
     }
 
     handleClose = () => this.setState({show:false});
@@ -96,51 +101,113 @@ class GeneralCustomerTypes extends React.Component {
 
     
     renderAllCustomerTypes =()=>{
-        let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
+        let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes,
+            adminUpdateCustomerTypeRequest = this.props.adminUpdateCustomerType;
+        
+        let adminCreateCustomerTypeRequest = this.props.adminCreateCustomerType;
+        let saveRequestData= adminGetCustomerTypesRequest.request_data!==undefined?adminGetCustomerTypesRequest.request_data.tempData:null;
 
+        
         switch(adminGetCustomerTypesRequest.request_status){
             case(administrationConstants.GET_CUSTOMERTYPES_PENDING):
-                return (
-                    <div className="loading-content"> 
-                        <TableComponent classnames="striped bordered hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Created</th>
-                                    <th>Created by</th>
-                                    {/* <th></th> */}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </TableComponent>
-                        <div className="loading-text">Please wait... </div>
-                    </div>
-                )
+            
+                if(saveRequestData===undefined){
+                    return (
+                        <div className="loading-content"> 
+                        
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Created</th>
+                                        <th>Created by</th>
+                                        {/* <th></th> */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+                }else{
+                    
+                    return(
+                        <div>
+                            {adminUpdateCustomerTypeRequest.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS && 
+                                <Alert variant="success">
+                                    {adminUpdateCustomerTypeRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS && 
+                                <Alert variant="success">
+                                {adminCreateCustomerTypeRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            <div className="loading-text toleft">Please wait... </div>
+                            <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Created</th>
+                                            <th>Created by</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            saveRequestData.map((eachCustomerype, index)=>{
+                                                return(
+                                                    <Fragment key={index}>
+                                                        <tr>
+                                                            <td>{eachCustomerype.name}</td>
+                                                            <td>{eachCustomerype.dateCreated}</td>
+                                                            <td>{eachCustomerype.createdBy}</td>
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    key="activeCurrency"
+                                                                    className="customone"
+                                                                >
+                                                                    <Dropdown.Item eventKey="1" onClick={()=>this.handleShowEdit(eachCustomerype.id)}>Edit</Dropdown.Item>
+                                                                </DropdownButton>
+                                                            </td>
+                                                        </tr>
+                                                    </Fragment>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </TableComponent>
+                        </div>
+                    )
+                }
+                
             case(administrationConstants.GET_CUSTOMERTYPES_SUCCESS):
                 let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data;
 
                 if(allCustomerTypesData!==undefined){
                     if(allCustomerTypesData.length>=1){
+                        // saveRequestData = allCustomerTypesData;
                         return (
                             <div>
-                                {/* <div className="heading-with-cta">
+                                {adminUpdateCustomerTypeRequest.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS && 
+                                    <Alert variant="success">
+                                        {adminUpdateCustomerTypeRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
 
-                                    <Form className="one-liner">
-                                        <Form.Group className="sameline-label" controlId="filterDropdown">
-                                            <Form.Label> Type</Form.Label>
-                                            <Form.Control as="select" size="sm">
-                                                <option>Customer</option>
-                                                <option>Group</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                    </Form>
-                                </div> */}
+                                {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS && 
+                                    <Alert variant="success">
+                                    {adminCreateCustomerTypeRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -231,6 +298,8 @@ class GeneralCustomerTypes extends React.Component {
         let adminUpdateCustomerTypeRequest = this.props.adminUpdateCustomerType,
             adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes.request_data.response.data,
             selectedCustType = adminGetCustomerTypesRequest.filter((custType, index)=>custType.id===selectedCustTypeId)[0];
+
+            let allCustomerTypesData = this.props.adminGetCustomerTypes.request_data.response!==undefined? this.props.adminGetCustomerTypes.request_data.response.data :null;
         
         if(selectedCustType!==undefined){
             return(
@@ -263,17 +332,19 @@ class GeneralCustomerTypes extends React.Component {
                                         ()=>{
                                             
                                             if(this.props.adminUpdateCustomerType.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS){
-                                                    
+                                                this.handleCloseEdit();
+                                                // this.getCustomerTypes(allCustomerTypesData);
                                                 setTimeout(() => {
-                                                    this.getCustomerTypes();
+                                                    this.getCustomerTypes(allCustomerTypesData);
+                                                    
                                                     this.props.dispatch(administrationActions.updateCustomerType("CLEAR"))
-                                                    this.handleCloseEdit();
-                                                }, 3000);
+                                                    
+                                                }, 2000);
                                                  
                                             }else{
                                                 setTimeout(() => {
                                                     this.props.dispatch(administrationActions.updateCustomerType("CLEAR"))
-                                                }, 3000);
+                                                }, 2000);
                                             }
                                            
                                             
@@ -345,11 +416,11 @@ class GeneralCustomerTypes extends React.Component {
                             )}
                         </Formik>
                         
-                        {adminUpdateCustomerTypeRequest.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS && 
+                        {/* {adminUpdateCustomerTypeRequest.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS && 
                             <Alert variant="success">
                             {adminUpdateCustomerTypeRequest.request_data.response.data.message}
                             </Alert>
-                        }
+                        } */}
                         {adminUpdateCustomerTypeRequest.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_FAILURE && 
                             <Alert variant="danger">
                             {adminUpdateCustomerTypeRequest.request_data.error}
@@ -365,6 +436,8 @@ class GeneralCustomerTypes extends React.Component {
        
         const {show} = this.state;
         let adminCreateCustomerTypeRequest = this.props.adminCreateCustomerType;
+        let allCustomerTypesData = (this.props.adminGetCustomerTypes.request_data!==undefined && this.props.adminGetCustomerTypes.request_data.response!==undefined)
+                                        ? this.props.adminGetCustomerTypes.request_data.response.data :null;
         return(
             <Modal show={show} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
                 <Modal.Header>
@@ -392,11 +465,30 @@ class GeneralCustomerTypes extends React.Component {
                             this.handleCreateNewType(custTypepayload)
                                 .then(
                                     ()=>{
-                                        resetForm();
-                                        // console.log('response is', adminCreateCustomerTypeRequest)
-                                        setTimeout(() => {
-                                            this.props.dispatch(administrationActions.addCustomerType("CLEAR"))
-                                        }, 3000);
+                                        // resetForm();
+                                        // this.handleClose();
+                                        // this.getCustomerTypes(allCustomerTypesData);
+                                        // setTimeout(() => {
+                                        //     this.getCustomerTypes();
+                                            
+                                        // }, 2000);
+
+
+                                        if(this.props.adminCreateCustomerType.request_status === administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS){
+                                            resetForm();
+                                            this.handleClose();
+                                            setTimeout(() => {
+                                                this.getCustomerTypes(allCustomerTypesData);
+                                                
+                                                this.props.dispatch(administrationActions.addCustomerType("CLEAR"))
+                                                
+                                            }, 2000);
+                                             
+                                        }else{
+                                            setTimeout(() => {
+                                                this.props.dispatch(administrationActions.addCustomerType("CLEAR"))
+                                            }, 2000);
+                                        }
                                         
                                     }
                                 )
@@ -466,11 +558,11 @@ class GeneralCustomerTypes extends React.Component {
                         )}
                     </Formik>
                     
-                    {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS && 
+                    {/* {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS && 
                         <Alert variant="success">
                            {adminCreateCustomerTypeRequest.request_data.response.data.message}
                         </Alert>
-                    }
+                    } */}
                     {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_FAILURE && 
                         <Alert variant="danger">
                           {adminCreateCustomerTypeRequest.request_data.error}

@@ -248,7 +248,7 @@ class NewTxtChannels extends React.Component {
                 }else{
                     return(
                         <div className="loading-content card"> 
-                            <div>No transaction channels found</div>
+                            <div>No GL Account found</div>
                         </div>
                     )
                 }

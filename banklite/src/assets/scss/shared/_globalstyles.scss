@@ -634,6 +634,9 @@ button.togglestyle{
     }
     .loading-text{
         font-size: 23px;
+        &.toleft{
+            text-align: left;
+        }
     }
 }
 .no-records{

@@ -493,12 +493,12 @@ function getAllPermissions  (){
 
 }
 
-function getCustomerTypes  (customerTypesPayload){
+function getCustomerTypes  (customerTypesPayload, tempData){
     
         return dispatch =>{
             let {PageSize, CurrentPage}= customerTypesPayload;
             let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/customertypes?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
-            dispatch(request(consume));
+            dispatch(request(consume, tempData));
             return consume
                 .then(response =>{
                     dispatch(success(response));
@@ -512,7 +512,16 @@ function getCustomerTypes  (customerTypesPayload){
 
     
 
-    function request(user) { return { type: administrationConstants.GET_CUSTOMERTYPES_PENDING, user } }
+    function request(user, tempData) {
+       
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_CUSTOMERTYPES_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_CUSTOMERTYPES_PENDING, user, tempData } 
+        }
+         
+    }
     function success(response) { return { type: administrationConstants.GET_CUSTOMERTYPES_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.GET_CUSTOMERTYPES_FAILURE, error } }
     
@@ -727,11 +736,11 @@ function updateCurrency  (updateCurrencyPayload){
 
 }
 
-function getAllCurrencies  (){
+function getAllCurrencies  (tempData){
     
         return dispatch =>{
             let consume = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
-            dispatch(request(consume));
+            dispatch(request(consume,tempData));
             return consume
                 .then(response =>{
                     dispatch(success(response));
@@ -744,7 +753,15 @@ function getAllCurrencies  (){
         
 
 
-    function request(user) { return { type: administrationConstants.GET_ALLCURRENCIES_PENDING, user } }
+    function request(user, tempData) {
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_ALLCURRENCIES_PENDING, user }
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_ALLCURRENCIES_PENDING, user, tempData}
+        }
+         
+    }
     function success(response) { return { type: administrationConstants.GET_ALLCURRENCIES_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.GET_ALLCURRENCIES_FAILURE, error } }
     // function clear() { return { type: administrationConstants.CREATE_NEWCURRENCY_RESET, clear_data:""} }

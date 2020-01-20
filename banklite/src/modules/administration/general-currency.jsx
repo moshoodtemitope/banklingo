@@ -39,9 +39,13 @@ class GeneralCurrency extends React.Component {
         this.getAllCurrencies();
     }
 
-    getAllCurrencies = () =>{
+    getAllCurrencies = (tempData) =>{
         const {dispatch} = this.props;
-        dispatch(administrationActions.getAllCurrencies());
+        if(tempData){
+            dispatch(administrationActions.getAllCurrencies(tempData));
+        }else{
+            dispatch(administrationActions.getAllCurrencies());
+        }
     }
 
     renderCurrencies =()=>{
@@ -152,52 +156,181 @@ class GeneralCurrency extends React.Component {
     displayAllCurrencies =()=>{
 
         let getAllCurrencies =  this.props.adminGetAllCurrencies;
+        let adminCreateNewCurrencyRequest = this.props.adminCreateNewCurrency;
+        let adminUpdateCurrencyRequest = this.props.adminUpdateCurrency;
+
+        let saveRequestData= getAllCurrencies.request_data!==undefined?getAllCurrencies.request_data.tempData:null;
             
         switch(getAllCurrencies.request_status){
             case (administrationConstants.GET_ALLCURRENCIES_PENDING):
-                return (
-                    <div className="loading-content"> 
-                        <Accordion defaultActiveKey="0">
+                if(saveRequestData===undefined){
+                    return(
+                        <div className="loading-content">
+                            <Accordion defaultActiveKey="0">
 
-                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                Currencies In Use
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Currencies In Use
                             </Accordion.Toggle>
-                            <Accordion.Collapse eventKey="0">
-                                <div>
-                                    <TableComponent classnames="striped bordered hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Code</th>
-                                                <th>Name</th>
-                                                <th>Symbol</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </TableComponent>
-                                </div>
-                            </Accordion.Collapse>
-                        </Accordion>
-                        <div className="loading-text">Please wait... </div>
-                    </div>
-                )
+                                <Accordion.Collapse eventKey="0">
+                                    <div>
+                                        <TableComponent classnames="striped bordered hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Code</th>
+                                                    <th>Name</th>
+                                                    <th>Symbol</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </TableComponent>
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+                }else{
+                    return(
+                        <div>
+                            {adminCreateNewCurrencyRequest.request_status === administrationConstants.CREATE_NEWCURRENCY_SUCCESS && 
+                                <Alert variant="success">
+                                {adminCreateNewCurrencyRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+
+                            {adminUpdateCurrencyRequest.request_status === administrationConstants.UPDATE_CURRENCY_SUCCESS && 
+                                <Alert variant="success">
+                                {adminUpdateCurrencyRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            <Accordion defaultActiveKey="0">
+
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Currencies In Use
+                            </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div>
+                                        <TableComponent classnames="striped bordered hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Code</th>
+                                                    <th>Name</th>
+                                                    <th>Symbol</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {saveRequestData.map((eachCurrency, index) => {
+                                                    return (
+                                                        <Fragment key={index}>
+                                                            <tr>
+                                                                <td>{eachCurrency.code} {eachCurrency.code === "NGN" && <span className="base-currency">Base</span>}</td>
+                                                                <td>{eachCurrency.name}</td>
+                                                                <td>{eachCurrency.symbol}</td>
+                                                                <td>
+                                                                    <DropdownButton
+                                                                        size="sm"
+                                                                        title="Actions"
+                                                                        key="activeCurrency"
+                                                                        className="customone"
+                                                                    >
+                                                                        <Dropdown.Item eventKey="1" data-currencycode={eachCurrency.code} onClick={() => this.handleEditCurrencyShow(eachCurrency.code)}>Edit</Dropdown.Item>
+                                                                    </DropdownButton>
+                                                                </td>
+                                                            </tr>
+                                                        </Fragment>
+                                                    )
+                                                })}
+                                            </tbody>
+                                        </TableComponent>
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Exchange Rates - From Nigerian naira (NGN)
+                                                    </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div>
+                                        <TableComponent classnames="striped bordered hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Code</th>
+                                                    <th>Name</th>
+                                                    <th>Buy Rate</th>
+                                                    <th>Sell Rate</th>
+                                                    <th>Date Set</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {saveRequestData.map((eachCurrency, index) => {
+                                                    if (eachCurrency.code !== "NGN") {
+                                                        return (
+                                                            <Fragment key={index}>
+                                                                <tr>
+                                                                    <td>{eachCurrency.code}</td>
+                                                                    <td>{eachCurrency.name}</td>
+                                                                    <td>Not set</td>
+                                                                    <td> Not set </td>
+                                                                    <td> Not set </td>
+                                                                    <td>
+                                                                        <DropdownButton
+                                                                            size="sm"
+                                                                            title="Actions"
+                                                                            key="activeCurrency"
+                                                                            className="customone"
+                                                                        >
+                                                                            <Dropdown.Item eventKey="1" data-currencycode={eachCurrency.code} onClick={() => this.handleRateShow(eachCurrency.code, eachCurrency.name)}>Set Rate</Dropdown.Item>
+                                                                        </DropdownButton>
+                                                                    </td>
+                                                                </tr>
+                                                            </Fragment>
+                                                        )
+                                                    }
+                                                })}
+
+
+                                            </tbody>
+                                        </TableComponent>
+
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+                        </div>
+                    )
+                }
+                
             case (administrationConstants.GET_ALLCURRENCIES_SUCCESS):
                 // contentToDisplay = this.renderCurrencies();
                     let currenciesList = getAllCurrencies.request_data.response.data;
 
                 return (
                     <div>
-                        <Accordion defaultActiveKey="0">
+                        {adminCreateNewCurrencyRequest.request_status === administrationConstants.CREATE_NEWCURRENCY_SUCCESS && 
+                            <Alert variant="success">
+                                {adminCreateNewCurrencyRequest.request_data.response.data.message}
+                            </Alert>
+                        }
 
-                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                        {adminUpdateCurrencyRequest.request_status === administrationConstants.UPDATE_CURRENCY_SUCCESS && 
+                            <Alert variant="success">
+                                {adminUpdateCurrencyRequest.request_data.response.data.message}
+                            </Alert>
+                        }
+                        <Accordion defaultActiveKey="2">
+
+                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="2">
                                 Currencies In Use
                             </Accordion.Toggle>
-                            <Accordion.Collapse eventKey="0">
+                            <Accordion.Collapse eventKey="2">
                                 <div>
                                     <TableComponent classnames="striped bordered hover">
                                         <thead>
@@ -352,6 +485,11 @@ class GeneralCurrency extends React.Component {
         // });
         const {showNewCurrencyForm} = this.state;
         let adminCreateNewCurrencyRequest = this.props.adminCreateNewCurrency;
+
+        // let getAllCurrencies =  this.props.adminGetAllCurrencies;
+
+        let allCurrenciesData = (this.props.adminGetAllCurrencies.request_data!==undefined && this.props.adminGetAllCurrencies.request_data.response!==undefined)
+                                        ? this.props.adminGetAllCurrencies.request_data.response.data :null;
         return(
             <Modal show={showNewCurrencyForm} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
                 <Modal.Header>
@@ -378,11 +516,29 @@ class GeneralCurrency extends React.Component {
                             this.submitNewCurrencyDetails(newCurrencyPayload)
                                 .then(
                                     () => {
-                                        resetForm();
-                                        setTimeout(() => {
-                                            this.getAllCurrencies();
-                                            this.props.dispatch(administrationActions.addNewCurrency("CLEAR"))
-                                        }, 3000);
+                                       
+                                        // setTimeout(() => {
+                                        //     this.getAllCurrencies();
+                                        //     this.props.dispatch(administrationActions.addNewCurrency("CLEAR"))
+                                        // }, 3000);
+
+
+                                        if(this.props.adminCreateNewCurrency.request_status === administrationConstants.CREATE_NEWCURRENCY_SUCCESS){
+                                            resetForm();
+                                            this.handleClose();
+                                            setTimeout(() => {
+                                                // this.getCustomerTypes(allCustomerTypesData);
+                                                this.getAllCurrencies(allCurrenciesData);
+                                                
+                                                this.props.dispatch(administrationActions.addNewCurrency("CLEAR"))
+                                                
+                                            }, 2000);
+                                             
+                                        }else{
+                                            setTimeout(() => {
+                                                this.props.dispatch(administrationActions.addNewCurrency("CLEAR"))
+                                            }, 2000);
+                                        }
 
                                     }
                                 )
@@ -482,11 +638,11 @@ class GeneralCurrency extends React.Component {
                                 </Form>
                             )}
                     </Formik>
-                    {adminCreateNewCurrencyRequest.request_status === administrationConstants.CREATE_NEWCURRENCY_SUCCESS && 
+                    {/* {adminCreateNewCurrencyRequest.request_status === administrationConstants.CREATE_NEWCURRENCY_SUCCESS && 
                         <Alert variant="success">
                            {adminCreateNewCurrencyRequest.request_data.response.data.message}
                         </Alert>
-                    }
+                    } */}
                     {adminCreateNewCurrencyRequest.request_status === administrationConstants.CREATE_NEWCURRENCY_FAILURE && 
                         <Alert variant="danger">
                           {adminCreateNewCurrencyRequest.request_data.error}
@@ -518,6 +674,8 @@ class GeneralCurrency extends React.Component {
 
             currencyDetails = allCurrencies.filter((currency, index)=>currency.code===currencyToEdit)[0];
 
+        let allCurrenciesData = (this.props.adminGetAllCurrencies.request_data!==undefined && this.props.adminGetAllCurrencies.request_data.response!==undefined)
+            ? this.props.adminGetAllCurrencies.request_data.response.data :null;
         
         if(currencyDetails!==undefined){
             return(
@@ -546,10 +704,27 @@ class GeneralCurrency extends React.Component {
                                 .then(
                                     () => {
                                         // resetForm();
-                                        setTimeout(() => {
-                                            this.getAllCurrencies();
-                                            this.props.dispatch(administrationActions.updateCurrency("CLEAR"))
-                                        }, 3000);
+                                        // setTimeout(() => {
+                                        //     this.getAllCurrencies();
+                                        //     this.props.dispatch(administrationActions.updateCurrency("CLEAR"))
+                                        // }, 3000);
+
+                                        if(this.props.adminUpdateCurrency.request_status === administrationConstants.UPDATE_CURRENCY_SUCCESS){
+                                            resetForm();
+                                            this.handleEditCurrencyClose();
+                                            setTimeout(() => {
+                                                // this.getCustomerTypes(allCustomerTypesData);
+                                                this.getAllCurrencies(allCurrenciesData);
+                                                
+                                                this.props.dispatch(administrationActions.updateCurrency("CLEAR"))
+                                                
+                                            }, 2000);
+                                             
+                                        }else{
+                                            setTimeout(() => {
+                                                this.props.dispatch(administrationActions.updateCurrency("CLEAR"))
+                                            }, 2000);
+                                        }
 
                                     }
                                 )
@@ -633,11 +808,11 @@ class GeneralCurrency extends React.Component {
                                     </Form>
                                 )}
                         </Formik>
-                        {adminUpdateCurrencyRequest.request_status === administrationConstants.UPDATE_CURRENCY_SUCCESS && 
+                        {/* {adminUpdateCurrencyRequest.request_status === administrationConstants.UPDATE_CURRENCY_SUCCESS && 
                             <Alert variant="success">
                             {adminUpdateCurrencyRequest.request_data.response.data.message}
                             </Alert>
-                        }
+                        } */}
                         {adminUpdateCurrencyRequest.request_status === administrationConstants.UPDATE_CURRENCY_FAILURE && 
                             <Alert variant="danger">
                             {adminUpdateCurrencyRequest.request_data.error}
