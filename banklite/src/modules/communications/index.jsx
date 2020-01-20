@@ -69,6 +69,30 @@ class CommunicationsManagement extends React.Component {
                     case (administrationConstants.GET_NOTIFICATIONS_PENDING):
                         return (
                             <div className="loading-content"> 
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Sent By</th>
+                                            <th>Destination</th>
+                                            <th>Message</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Date Sent</th>
+                                            <th>Failure reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
                                 <div className="loading-text">Please wait... </div>
                             </div>
                         )
@@ -166,7 +190,30 @@ class CommunicationsManagement extends React.Component {
                             }else{
                                 return(
                                     <div className="no-records">
-                                         No notification found
+                                        <TableComponent classnames="striped bordered hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sent By</th>
+                                                    <th>Destination</th>
+                                                    <th>Message</th>
+                                                    <th>Type</th>
+                                                    <th>Status</th>
+                                                    <th>Date Sent</th>
+                                                    <th>Failure reason</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </TableComponent>
                                     </div>
                                 )
                             }

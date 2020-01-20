@@ -70,6 +70,30 @@ class LoanAccountTransactions extends React.Component {
             case (loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING):
                 return (
                     <div className="loading-content">
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Loan Account Number</th>
+                                    <th>Account Holder Name</th>
+                                    <th>Transaction Type</th>
+                                    <th>Transaction Amount</th>
+                                    <th>Username</th>
+                                    <th>Transaction Date</th>
+                                    <th>Entry Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
@@ -159,7 +183,30 @@ class LoanAccountTransactions extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No Loan Transaction records found
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Loan Account Number</th>
+                                            <th>Account Holder Name</th>
+                                            <th>Transaction Type</th>
+                                            <th>Transaction Amount</th>
+                                            <th>Username</th>
+                                            <th>Transaction Date</th>
+                                            <th>Entry Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
                                 {/* <div className="footer-with-cta centered">
                                     <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
                                 </div> */}

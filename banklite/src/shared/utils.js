@@ -1,8 +1,8 @@
 export const handleRequestErrors = (error)=>{
-    // console.log('error type', typeof error)
+    // console.log('error type',  error.toString())
     if(error!==undefined){
         if(typeof error.response ==="object"){
-            console.log('error keys', error.response);
+            // console.log('error keys', error.response);
             if(error.response && error.response.data.message!==null){
                 return error.response.data.message;
             }

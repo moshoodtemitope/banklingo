@@ -157,6 +157,32 @@ class GeneralCurrency extends React.Component {
             case (administrationConstants.GET_ALLCURRENCIES_PENDING):
                 return (
                     <div className="loading-content"> 
+                        <Accordion defaultActiveKey="0">
+
+                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                Currencies In Use
+                            </Accordion.Toggle>
+                            <Accordion.Collapse eventKey="0">
+                                <div>
+                                    <TableComponent classnames="striped bordered hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>Name</th>
+                                                <th>Symbol</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </TableComponent>
+                                </div>
+                            </Accordion.Collapse>
+                        </Accordion>
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )

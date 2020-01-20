@@ -57,6 +57,30 @@ class ClientsManagement extends React.Component {
                 case (clientsConstants.GET_CLIENTS_PENDING):
                     return (
                         <div className="loading-content"> 
+                           
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Customer Name</th>
+                                        <th>Customer Status</th>
+                                        <th>Account Officer</th>
+                                        <th>Account Currency</th>
+                                        <th>Account Balance</th>
+                                        <th>Date Created</th>
+                                        {/* <th></th> */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
@@ -155,12 +179,32 @@ class ClientsManagement extends React.Component {
                             )
                         }else{
                             return(
-                                <div className="no-records">
-                                    No Customer account has been created
-                                    {/* <div className="footer-with-cta centered">
-                                    <NavLink to={'/clients/new'} className="btn btn-primary">New Customer</NavLink>
-                                    </div> */}
-                                </div>
+                                // <div className="no-records">
+                                //     No Customer account has been created
+                                // </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Name</th>
+                                            <th>Customer Status</th>
+                                            <th>Account Officer</th>
+                                            <th>Account Currency</th>
+                                            <th>Account Balance</th>
+                                            <th>Date Created</th>
+                                            {/* <th></th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
                             )
                         }
                     }else{

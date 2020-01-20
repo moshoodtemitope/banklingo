@@ -102,6 +102,23 @@ class GeneralCustomerTypes extends React.Component {
             case(administrationConstants.GET_CUSTOMERTYPES_PENDING):
                 return (
                     <div className="loading-content"> 
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Created</th>
+                                    <th>Created by</th>
+                                    {/* <th></th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
@@ -161,7 +178,7 @@ class GeneralCustomerTypes extends React.Component {
                                     </tbody>
                                 </TableComponent>
                                 <div className="footer-with-cta toleft">
-                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
+                                    {/* <Button variant="secondary" className="grayed-out">Rearrange</Button> */}
                                     <Button onClick={this.handleShow}>Add Type</Button>
                                 </div>
                             </div>
@@ -169,10 +186,27 @@ class GeneralCustomerTypes extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No Customer Type has been created
+                                {/* No Customer Type has been created
                                 <div className="footer-with-cta centered">
                                     <Button onClick={this.handleShow}>Add Type</Button>
-                                </div>
+                                </div> */}
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Created</th>
+                                            <th>Created by</th>
+                                            {/* <th></th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
                             </div>
                         )
                     }

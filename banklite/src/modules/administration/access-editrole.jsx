@@ -273,7 +273,6 @@ class EditRole extends React.Component {
                                                                                                 }else{
                                                                                                     permissionsSelected.push(permitCode);
                                                                                                 }
-                                                                                                  console.log('=====', permissionsSelected);
                                                                                             }}
                                                                                         />
                                                                                         <label htmlFor={`permit-${permission.permissionCode}`} >{permission.permissionName}</label>

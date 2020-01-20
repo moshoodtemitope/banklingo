@@ -80,6 +80,29 @@ class AccountManagement extends React.Component {
             case (accountingConstants.GET_GLACCOUNTS_PENDING):
                 return (
                     <div className="loading-content"> 
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>GLCode</th>
+                                    <th>Account Name</th>
+                                    <th>Account Type</th>
+                                    <th>Account Usage</th>
+                                    <th>In Use</th>
+                                    <th>Manual Entries Allowed</th>
+                                    {/* <th>Actions</th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
@@ -184,8 +207,30 @@ class AccountManagement extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No GL Accounts have been created
-                                <div className="footer-with-cta centered">
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>GLCode</th>
+                                            <th>Account Name</th>
+                                            <th>Account Type</th>
+                                            <th>Account Usage</th>
+                                            <th>In Use</th>
+                                            <th>Manual Entries Allowed</th>
+                                            {/* <th>Actions</th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                                <div className="footer-with-cta toleft">
                                     <Button variant="primary" onClick={this.handleShow} className="btn btn-primary">Create GL Account</Button>
                                 </div>
                             </div>

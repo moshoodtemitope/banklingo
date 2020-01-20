@@ -71,6 +71,32 @@ class LoanClient extends React.Component {
             case (loanAndDepositsConstants.GET_CLIENTLOANS_PENDING):
                 return (
                     <div className="loading-content">
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Account Number</th>
+                                    <th>Client Name</th>
+                                    <th>Product Name</th>
+                                    <th>Loan Amount</th>
+                                    <th>Loan State</th>
+                                    <th>Principal Due</th>
+                                    <th>Total Paid</th>
+                                    <th>Total Due</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
@@ -162,7 +188,32 @@ class LoanClient extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No records found
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Account Number</th>
+                                            <th>Client Name</th>
+                                            <th>Product Name</th>
+                                            <th>Loan Amount</th>
+                                            <th>Loan State</th>
+                                            <th>Principal Due</th>
+                                            <th>Total Paid</th>
+                                            <th>Total Due</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
                                 {/* <div className="footer-with-cta centered">
                                     <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
                                 </div> */}
@@ -197,7 +248,7 @@ class LoanClient extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Loan Client</h2>
+                                                <h2>Loan Account</h2>
                                             </div>
                                         </div>
                                     </div>

@@ -82,10 +82,10 @@ class ProductDeposits extends React.Component {
                                         
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <div className="table-helper">
+                                                {/* <div className="table-helper">
                                                     <input type="checkbox" name="" id="showDeactivted"/>
                                                     <label htmlFor="showDeactivted">Show deactivated products</label>
-                                                </div>
+                                                </div> */}
                                                 
                                                 <TableComponent classnames="striped bordered hover">
                                                     <thead>
@@ -95,11 +95,18 @@ class ProductDeposits extends React.Component {
                                                             <th>Product Type</th>
                                                             <th>Last Modified</th>
                                                             <th>Active</th>
-                                                            <th></th>
+                                                            {/* <th></th> */}
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        {/* <tr>
                                                             <td>(Discontinued)Payrolla - Private</td>
                                                             <td>payrolla_private</td>
                                                             <td>Fixed Term Loan</td>
@@ -158,12 +165,12 @@ class ProductDeposits extends React.Component {
                                                                     <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
-                                                        </tr>
+                                                        </tr> */}
                                                     </tbody>
                                                 </TableComponent>
-                                                <div className="footer-with-cta toleft">
+                                                {/* <div className="footer-with-cta toleft">
                                                     <NavLink to={'/administration/products/newdeposits-product'} className="btn btn-primary">New Deposit Product</NavLink>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     </div>

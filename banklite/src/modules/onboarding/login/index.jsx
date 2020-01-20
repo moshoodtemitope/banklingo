@@ -163,7 +163,8 @@ class UserLogin extends React.Component {
                                 
                                 {loginRequest.request_status === authConstants.LOGIN_USER_FAILURE &&
                                     <Alert variant="danger mt-20">
-                                        {loginRequest.request_data.error}
+                                        {loginRequest.request_data.error!==undefined?loginRequest.request_data.error:null}
+                                        
 
                                     </Alert>
                                 }

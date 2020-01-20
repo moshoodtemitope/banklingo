@@ -57,7 +57,7 @@ class Activties extends React.Component {
                                                         </Form.Group>
                                                         <Button variant="primary" type="submit">Get Transactions</Button>
                                                     </Form>
-                                                    <Button>Edit Columns</Button>
+                                                    {/* <Button>Edit Columns</Button> */}
                                                 </div>
                                                 <div className="pagination-wrap">
                                                     <label htmlFor="toshow">Show</label>

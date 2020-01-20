@@ -68,6 +68,29 @@ class AccessUsers extends React.Component {
                 case (administrationConstants.GET_USERS_PENDING):
                     return (
                         <div className="loading-content"> 
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>Title</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Last updated</th>
+                                        <th>State</th>
+                                        {/* <th></th> */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
@@ -164,8 +187,30 @@ class AccessUsers extends React.Component {
                             }else{
                                 return(
                                         <div className="no-records">
-                                            No user account has been created
-                                            <div className="footer-with-cta centered">
+                                        <TableComponent classnames="striped bordered hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>User Name</th>
+                                                    <th>Title</th>
+                                                    <th>Email</th>
+                                                    <th>Role</th>
+                                                    <th>Last updated</th>
+                                                    <th>State</th>
+                                                    {/* <th></th> */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </TableComponent>
+                                            <div className="footer-with-cta toleft">
                                                 <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
                                             </div>
                                         </div>

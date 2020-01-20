@@ -3,7 +3,8 @@ import {authConstants} from '../../actiontypes/auth/auth.constants'
 
 
 let user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? { loggedIn: true, user } : {};
+
+const initialState = (user && user.AllowedBranches!==undefined) ? { loggedIn: true, user } : {};
 
 export function LoginReducer(state=initialState, action) {
     switch (action.type) {

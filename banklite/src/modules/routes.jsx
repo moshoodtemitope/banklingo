@@ -17,7 +17,7 @@ class IndexRoute extends React.Component{
 
     render(){
         const{screenWidthSize} = this.state
-        console.log("Screen Scize", screenWidthSize);
+        
         let user ={
             name:'Segun Owa'
         }

@@ -326,8 +326,8 @@ class EmailSettings extends React.Component {
                                                 > 
                                                     {adminEmailSettingsRequest.is_request_processing?"Please wait...": "Save Changes"}
                                                 </Button>
-                                                <Button variant="light" type="button"> Send Test Email</Button>
-                                                <Button variant="light" type="button"> Cancel</Button>
+                                                {/* <Button variant="light" type="button"> Send Test Email</Button> */}
+                                                {/* <Button variant="light" type="button"> Cancel</Button> */}
                                             </div>
                                             {adminEmailSettingsRequest.request_status === administrationConstants.EMAIL_SETTINGS_SUCCESS && 
                                                 <Alert variant="success">

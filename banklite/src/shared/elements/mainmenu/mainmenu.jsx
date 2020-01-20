@@ -125,7 +125,7 @@ class MainMenu extends React.Component{
                         <NavLink to={'/accounts'}>Accounting</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink to={'/administration'}>Administration</NavLink>
+                        <NavLink to={'/administration/general'}>Administration</NavLink>
                     </li>
                 </ul>
                 

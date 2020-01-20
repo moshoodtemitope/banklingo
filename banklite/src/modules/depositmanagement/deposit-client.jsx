@@ -71,6 +71,30 @@ class DepositClient extends React.Component {
             case (loanAndDepositsConstants.GET_CLIENTDEPOSITS_PENDING):
                 return (
                     <div className="loading-content">
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Account Number</th>
+                                    <th>Account Holder Name</th>
+                                    <th>Product</th>
+                                    <th>Deposit Balance</th>
+                                    <th>Account State</th>
+                                    <th>Date Created</th>
+                                    <th>Deposit Available Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
@@ -160,7 +184,30 @@ class DepositClient extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No records found
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Account Number</th>
+                                            <th>Account Holder Name</th>
+                                            <th>Product</th>
+                                            <th>Deposit Balance</th>
+                                            <th>Account State</th>
+                                            <th>Date Created</th>
+                                            <th>Deposit Available Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
                                 {/* <div className="footer-with-cta centered">
                                     <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
                                 </div> */}
@@ -195,7 +242,7 @@ class DepositClient extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Deposit Client</h2>
+                                                <h2>Deposit Account</h2>
                                             </div>
                                         </div>
                                     </div>

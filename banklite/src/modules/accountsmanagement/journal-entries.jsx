@@ -715,6 +715,27 @@ class JournalEntries extends React.Component {
             case (accountingConstants.GET_JOURNAL_ENTRY_PENDING):
                 return (
                     <div className="loading-content"> 
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Entry Id</th>
+                                    <th>Booking Date (Entry Date)</th>
+                                    <th>GL Account Name</th>
+                                    <th>Debit Amount</th>
+                                    <th>Credit Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                            </tbody>
+                        </TableComponent>
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
@@ -812,8 +833,28 @@ class JournalEntries extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No Journal Entry has been created
-                                <div className="footer-with-cta centered">
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Entry Id</th>
+                                            <th>Booking Date (Entry Date)</th>
+                                            <th>GL Account Name</th>
+                                            <th>Debit Amount</th>
+                                            <th>Credit Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+
+                                    </tbody>
+                                </TableComponent>
+                                <div className="footer-with-cta toleft">
                                     <Button variant="primary"  onClick={this.state.show === false ? this.handleShow : null} className="btn btn-primary">New Journal Entry</Button>
                                 </div>
                             </div>

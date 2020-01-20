@@ -211,6 +211,33 @@ class DisbursementManagement extends React.Component {
                 case (disbursmentConstants.GET_DISBURSMENTS_PENDING):
                     return (
                         <div className="loading-content"> 
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+
+                                        <th>Transaction Ref</th>
+                                        <th>Source Account</th>
+                                        <th>Destination Account</th>
+                                        <th>Destination Bank</th>
+                                        <th>Amount (NGN)</th>
+                                        <th>Inititated By</th>
+                                        <th>Approved By</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
@@ -341,30 +368,31 @@ class DisbursementManagement extends React.Component {
                             }else{
                                 return(
                                     <TableComponent classnames="striped bordered hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Amount</th>
-                                                        <th>Transaction Ref</th>
-                                                        <th>Source Account</th>
-                                                        <th>Destination Account</th>
-                                                        <th>Destination Bank</th>
-                                                        <th>Inititated By</th>
-                                                        <th>Approved By</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
+                                        <thead>
+                                            <tr>
+
+                                                <th>Transaction Ref</th>
+                                                <th>Source Account</th>
+                                                <th>Destination Account</th>
+                                                <th>Destination Bank</th>
+                                                <th>Amount (NGN)</th>
+                                                <th>Inititated By</th>
+                                                <th>Approved By</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
                                     </TableComponent>
                                 )
                             }

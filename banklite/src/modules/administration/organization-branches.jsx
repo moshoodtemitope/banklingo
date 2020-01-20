@@ -75,6 +75,25 @@ class OrganizationBranches extends React.Component {
                 case (administrationConstants.GET_ALL_BRANCHES_PENDING):
                     return (
                         <div className="loading-content"> 
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Branch Name</th>
+                                        <th>Branch State</th>
+                                        <th>Created</th>
+                                        <th>Last Modified</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
@@ -174,8 +193,26 @@ class OrganizationBranches extends React.Component {
                         }else{
                             return(
                                 <div className="no-records">
-                                    No branch has been created
-                                    <div className="footer-with-cta centered">
+                                    <TableComponent classnames="striped bordered hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Branch Name</th>
+                                                <th>Branch State</th>
+                                                <th>Created</th>
+                                                <th>Last Modified</th>
+                                                {/* <th></th> */}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </TableComponent>
+                                    <div className="footer-with-cta toleft">
                                         <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
                                     </div>
                                 </div>

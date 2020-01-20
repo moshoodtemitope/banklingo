@@ -64,6 +64,21 @@ class AccessRoles extends React.Component {
             case (administrationConstants.GET_ROLES_PENDING):
                 return (
                     <div className="loading-content"> 
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Role Name</th>
+                                    <th>Created</th>
+                                    {/* <th></th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
@@ -149,8 +164,22 @@ class AccessRoles extends React.Component {
                     }else{
                         return(
                             <div className="no-records">
-                                No Role has been created
-                                <div className="footer-with-cta centered">
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Role Name</th>
+                                            <th>Created</th>
+                                            {/* <th></th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                                <div className="footer-with-cta toleft">
                                 <NavLink to={'/administration/access/new-role'} className="btn btn-primary">Add Role</NavLink>
                                 </div>
                             </div>

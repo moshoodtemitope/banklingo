@@ -460,7 +460,7 @@ class InitiateDisbursement extends React.Component {
                             transactionReference: postDisbursementResponse.transactionReference
                         };
 
-                        // console.log('======+++', confirmPayload);
+                        
 
                         this.confirmPostDisbursement(confirmPayload)
                             .then(
@@ -601,18 +601,19 @@ class InitiateDisbursement extends React.Component {
                                 </Accordion>
 
 
-                                                    
-                                <div className="form-ctas horizontal">
-                                    <Button variant="success"
-                                        className="mr-20px"
-                                        type="submit"
-                                        onClick={handleSubmit}
-                                        disabled={confirmPostDisbursementReducer.is_request_processing}>
-                                        {confirmPostDisbursementReducer.is_request_processing ? "Please wait..." : "Confirm Disburment"}
-                                    </Button>
-                                    <Button variant="light" className="btn btn-light" onClick={this.handleBackToEdit}> Edit</Button>
-                                    {/* <Button variant="light" type="button"> Cancel</Button> */}
-                                </div>
+                                {this.props.confirmPostDisbursementReducer.request_status !== disbursmentConstants.CONFIRM_DISBURSMENT_SUCCESS &&
+                                    <div className="form-ctas horizontal">
+                                        <Button variant="success"
+                                            className="mr-20px"
+                                            type="submit"
+                                            onClick={handleSubmit}
+                                            disabled={confirmPostDisbursementReducer.is_request_processing}>
+                                            {confirmPostDisbursementReducer.is_request_processing ? "Please wait..." : "Confirm Disburment"}
+                                        </Button>
+                                        <Button variant="light" className="btn btn-light" onClick={this.handleBackToEdit}> Edit</Button>
+                                        {/* <Button variant="light" type="button"> Cancel</Button> */}
+                                    </div>
+                                }
                                 {/* <div className="back-cta centered" onClick={this.handleBackToEdit}>
                                     <span className="back-link">Edit</span>
                                 </div> */}

@@ -43,6 +43,8 @@ class DashboardLanding extends React.Component {
                 return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
+                        
+                        
                     </div>
                 )
 

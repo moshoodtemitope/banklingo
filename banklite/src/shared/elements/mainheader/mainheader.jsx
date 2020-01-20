@@ -22,13 +22,13 @@ class MainHeader extends React.Component{
         super(props);
         this.state={
             user:JSON.parse(localStorage.getItem("user")),
-            activeBranch:'Head Office',
+            activeBranch:JSON.parse(localStorage.getItem("user")).BranchName,
             showDropdown: false
         }
     //    if(Object.keys(this.props.user).length<=1){
     //         history.push('/');
     //    }
-    //    console.log("========", this.props.user);
+    
     }
 
     componentDidMount(){
@@ -36,13 +36,22 @@ class MainHeader extends React.Component{
     }
 
     handleCurrentBranchClicked = () =>{
+        let {user} = this.state;
+        if(user.AllowedBranches.length>1){
+            this.setState({showDropdown: true})
+        }
         
-        this.setState({showDropdown: true})
     }
 
     chooseBranch = (e)=>{
-        
-        this.setState({showDropdown: false, activeBranch: e.target.value})
+        console.log("eeeeeeee");
+        let user = JSON.parse(localStorage.getItem("user"));
+            user.BranchId = e.target.value;
+            localStorage.setItem('user', JSON.stringify(user));
+            let selectedBranch = user.AllowedBranches(branch=>branch.id===parseInt(e.target.value))[0].name;
+        this.setState({showDropdown: false, 
+                        activeBranch: selectedBranch
+                    })
     }
 
     logout =()=>{
@@ -98,6 +107,23 @@ class MainHeader extends React.Component{
         // return( <NavLink to={'/dashboard'}>dsdhsjdhshjd</NavLink>)
     }
 
+    renderAllowedBranches =()=>{
+        let {AllowedBranches} = this.state.user;
+        console.log('branches are', AllowedBranches);
+        return(
+            <select name="" id="" onBlur={this.chooseBranch} onChange={this.chooseBranch}>
+                {
+                    AllowedBranches.map(eachBranch=>{
+                        return(
+                            <option key={eachBranch.id} value={eachBranch.id}>{eachBranch.name}</option>
+                        )
+                        
+                    })
+                }
+                
+            </select>
+        )
+    }
 
     renderHeadingWrap(){
         // let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
@@ -119,13 +145,8 @@ class MainHeader extends React.Component{
                             }
                             { this.state.showDropdown &&
                                     <div className="branch-dropdown">
-                                        <select name="" id="" onChange={this.chooseBranch}>
-                                            <option value="Epe">Epe</option>
-                                            <option value="Ikorodu">Ikorodu</option>
-                                            <option value="Lagos Island">Lagos Island</option>
-                                            <option value="Badagry">Badagry</option>
-                                            <option value="Surulere">Surulere</option>
-                                        </select>
+                                        {this.renderAllowedBranches()}
+                                        
                                     </div>
                                 }
                         </div>

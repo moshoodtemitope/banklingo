@@ -8,6 +8,54 @@ export class ApiService {
         redirect: false
     };
 
+
+    static setTokenAuthorization = (url)=>{
+        let urlsToAuthenticate = [
+                "api/Login"
+            ],
+            urlsWithoutBranchIdInRequest = [
+                "/api/branch/allowedbranches"
+            ];
+        if(localStorage.getItem("user") === null){
+            // if(localStorage.getItem("user") === null && axios.defaults.headers.common["Token"]){
+            
+            delete axios.defaults.headers.common.Authorization;
+            delete axios.defaults.headers.common.Bid;
+        }
+        axios.defaults.headers.common['Content-Type'] = 'application/json';
+       if(localStorage.getItem("user") !==null){
+           
+           let user = JSON.parse(localStorage.getItem("user")),
+                serviceToTest = url.split("Dars.Administration")[1];
+              
+            //Exclude urlsToAuthenticate urls from Authenticated requests with Token
+           if (urlsToAuthenticate.indexOf(serviceToTest) === -1) {
+               // axios.defaults.headers.common['Token'] = user.token;
+               axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+            //    console.log("user is", user);
+                delete axios.defaults.headers.common.Bid;
+                
+                if (urlsWithoutBranchIdInRequest.indexOf(serviceToTest) === -1) {
+                    axios.defaults.headers.common.Bid = `${parseInt(user.BranchId)}`;
+                    
+                }
+                // else{
+                //     delete axios.defaults.headers.common.Bid;
+
+                   
+                // }
+               
+           }
+
+           //Exclude urlsWithoutBranchIdInRequest urls from Authenticated requests with BranchId
+           
+            
+            // axios.defaults.headers.common['Authorization'] = 'Bearer';
+            axios.defaults.headers.common['Accept'] = 'application/json';
+       }
+    }
+
+
     static request(url, type, data, headers = undefined, noStringify=false){
         let bodyData;
         let service;
@@ -19,11 +67,7 @@ export class ApiService {
 
         if (type.toLowerCase() === 'get') {
             if(headers === undefined){
-                if(localStorage.getItem("user") === null){
-                    delete axios.defaults.headers.common.Authorization;
-                }
-                axios.defaults.headers.common['Content-Type'] = 'application/json';
-               
+                this.setTokenAuthorization(url);
             }
            
             else if(headers !== undefined){
@@ -57,10 +101,7 @@ export class ApiService {
             //check for header
             axios.defaults.headers.common['Content-Type'] = 'application/json';
             if(headers === undefined){
-                if(localStorage.getItem("user") == null){
-                    delete axios.defaults.headers.common.Authorization;
-                }
-                axios.defaults.headers.common['Content-Type'] = 'application/json';
+                this.setTokenAuthorization(url);
             }
             else if(headers !== undefined){
                 for (let [key, value] of Object.entries(headers)) {
@@ -84,13 +125,15 @@ export class ApiService {
                         return service;
                     }
             } 
-            if(!error.response) {
-                if(error.indexOf('Network')!==-1){
-                    return "Please Check your network"
-                }
-                
-            }
-            return  service;
+            // if(!error.response) {
+            //     // let errorm = {...error};
+            //     console.log("error is", error.toString());
+            //     if(error.toString().indexOf('Network')!==-1){
+            //         return "Please Check your network"
+            //     }
+            //     return  service;
+            // }
+                return  service;
             });
         }
     }

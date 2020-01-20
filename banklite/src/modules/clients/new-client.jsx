@@ -125,7 +125,7 @@ class NewClient extends React.Component {
 
                 let selectedCustype = allCustomerTypesData.filter(CustType=>parseInt(CustType.id)===parseInt(this.props.match.params.custTypeid))[0];
                 
-                console.log("=====", selectedCustype);
+                
                     if(allCustomerTypesData.length>=1){
                         allCustomerTypesData.map((eachType, id)=>{
                             allCustomerTypes.push({label: eachType.name, value:eachType.id});

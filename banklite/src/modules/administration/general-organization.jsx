@@ -120,7 +120,7 @@ class GeneralOrganization extends React.Component {
                                         () => {
                                             // resetForm();
                                             setTimeout(() => {
-                                                this.getOrganizationDetails();
+                                                // this.getOrganizationDetails();
                                                 this.props.dispatch(administrationActions.updateOrganizationDetails("CLEAR"))
                                             }, 3000);
     

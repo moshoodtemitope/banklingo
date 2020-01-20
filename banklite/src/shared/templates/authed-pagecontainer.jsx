@@ -6,6 +6,10 @@ import MainMenu from "../elements/mainmenu/mainmenu";
 class InnerPageContainer extends React.Component{
     
     render() {
+        let user = JSON.parse(localStorage.getItem("user"));
+
+        // console.log("user is", user.BranchId)
+        // if(user.BranchId)
         return (
             
                 <div className="innerpage-wrap">

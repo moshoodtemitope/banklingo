@@ -14,6 +14,7 @@ export const authActions = {
 
 function Login   (loginPayload){
     if(loginPayload!=="CLEAR"){
+        let userData;
         return dispatch =>{
             let consume = ApiService.request(routes.LOGIN_USER, "POST", loginPayload);
             dispatch(request(consume));
@@ -21,16 +22,42 @@ function Login   (loginPayload){
                 .then(response =>{
                     if(response.data.token!==undefined){
                         localStorage.setItem('user', JSON.stringify(response.data));
+                        userData = response.data;
+                        let consume2 = ApiService.request(routes.ADD_BRANCH+'/allowedbranches', "GET", null);
+                        dispatch(request(consume2));
+
+                        return consume2
+                        .then(response2 =>{
+                            // localStorage.setItem('user', JSON.stringify(response.data));
+                            let user = JSON.parse(localStorage.getItem("user"));
+                                user.AllowedBranches = response2.data;
+                                user.BranchId = response2.data[0].id;
+                                user.BranchName = response2.data[0].name;
+                                localStorage.setItem('user', JSON.stringify(user));
                         
-                        dispatch(success(response.data));
-                        history.push('/dashboard');
-                    }else{
-                        localStorage.setItem('user', JSON.stringify(response.data));
-                       
-                        dispatch(success(response.data));
-                        history.push('/dashboard');
-                        // dispatch(failure(handleRequestErrors(response.data.message)))
+                            dispatch(success(response2.data));
+                            history.push('/dashboard');
+                        })
+                        .catch(error =>{
+                            
+                            if(error.response.status===401){
+                                dispatch(failure(handleRequestErrors("Unable to login. Please try again")))
+                            }else{
+                                dispatch(failure(handleRequestErrors(error)));
+                            }
+                            
+                            
+                        });
+
+                        
                     }
+                    // else{
+                    //     localStorage.setItem('user', JSON.stringify(response.data));
+                       
+                    //     dispatch(success(response.data));
+                    //     history.push('/dashboard');
+                    //     // dispatch(failure(handleRequestErrors(response.data.message)))
+                    // }
                     
                     
                 }).catch(error =>{

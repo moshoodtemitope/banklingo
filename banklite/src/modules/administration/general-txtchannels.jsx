@@ -60,6 +60,26 @@ class GeneralTxtChannels extends React.Component {
                 case (administrationConstants.GET_TRANSACTION_CHANNELS_PENDING):
                     return (
                         <div className="loading-content"> 
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Created</th>
+                                        <th>Created by</th>
+                                        {/* <th>Active</th> */}
+                                        {/* <th></th> */}
+                                    </tr>
+                                </thead>
+                                    
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        {/* <td></td> */}
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
@@ -123,11 +143,30 @@ class GeneralTxtChannels extends React.Component {
                             else{
                                 return(
                                     <div className="no-records">
-                                        No Channels have been created
-                                        <div className="footer-with-cta centered">
-                                            {/* <Button variant="secondary" className="grayed-out">Rearrange</Button> */}
+                                        {/* No Channels have been created */}
+                                        <TableComponent classnames="striped bordered hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Created</th>
+                                                    <th>Created by</th>
+                                                    {/* <th>Active</th> */}
+                                                    {/* <th></th> */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    {/* <td></td> */}
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </TableComponent>
+                                        <div className="footer-with-cta toleft">
+                                            
                                             <NavLink to={'/administration/general/new-txt-channels'} className="btn btn-primary">Add Channel</NavLink>
-                                            {/* <Button href="/administration/general/new-txt-channels">Add Channel</Button> */}
+                                            
                                         </div>
                                     </div>
                                 )
