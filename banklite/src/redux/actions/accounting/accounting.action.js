@@ -13,7 +13,7 @@ export const acoountingActions = {
     createJournalEntry,
 }
 
-function getGLAccounts  (payload){
+function getGLAccounts  (payload, tempData){
     
     return dispatch =>{
         let url;
@@ -26,7 +26,7 @@ function getGLAccounts  (payload){
             url = routes.HIT_GLACCOUNTS+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
 
         let consume = ApiService.request(url, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response =>{
                 dispatch(success(response));
@@ -38,7 +38,14 @@ function getGLAccounts  (payload){
     }
     
 
-    function request(user) { return { type: accountingConstants.GET_GLACCOUNTS_PENDING, user } }
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.GET_GLACCOUNTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: accountingConstants.GET_GLACCOUNTS_PENDING, user, tempData } 
+        }
+    }
     function success(response) { return { type: accountingConstants.GET_GLACCOUNTS_SUCCESS, response } }
     function failure(error) { return { type: accountingConstants.GET_GLACCOUNTS_FAILURE, error } }
 
@@ -138,7 +145,7 @@ function updateGLAccount   (updateGLPayload){
 
 }
 
-function getJournalEntries  (payload){
+function getJournalEntries  (payload, tempData){
     
     return dispatch =>{
         let url;
@@ -151,15 +158,15 @@ function getJournalEntries  (payload){
             url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
 
         let consume = ApiService.request(url, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response =>{
                 let consume2 = ApiService.request(routes.ALL_GLACCOUNTS, "GET", null);
-                    dispatch(request(consume2));
+                    dispatch(request(consume2, tempData));
                     return consume2
                         .then(response2 =>{
                             let consume3 = ApiService.request(routes.GET_BRANCHES+`/all`, "GET", null);
-                            dispatch(request(consume3));
+                            dispatch(request(consume3, tempData));
                             return consume3
                                 .then(response3 =>{
                                     dispatch(success(response,response2, response3));
@@ -181,7 +188,17 @@ function getJournalEntries  (payload){
     }
     
 
-    function request(user) { return { type: accountingConstants.GET_JOURNAL_ENTRY_PENDING, user } }
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.GET_JOURNAL_ENTRY_PENDING, user }
+        }
+
+        if(tempData!==undefined){
+            return { type: accountingConstants.GET_JOURNAL_ENTRY_PENDING, user }
+        }
+
+         
+    }
     function success(response,response2, response3) { return { type: accountingConstants.GET_JOURNAL_ENTRY_SUCCESS, response,response2, response3 } }
     function failure(error) { return { type: accountingConstants.GET_JOURNAL_ENTRY_FAILURE, error } }
 

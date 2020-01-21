@@ -40,13 +40,19 @@ class AccountManagement extends React.Component {
        this.getGLAccounts();
     }
 
-    getGLAccounts = () =>{
+    getGLAccounts = (tempData) =>{
         const {dispatch} = this.props;
         let payload ={
             PageSize: this.state.PageSize,
             CurrentPage:this.state.CurrentPage
         }
-        dispatch(acoountingActions.getGLAccounts(payload));
+
+        if(tempData){
+            dispatch(acoountingActions.getGLAccounts(payload, tempData));
+        }else{
+            dispatch(acoountingActions.getGLAccounts(payload));
+        }
+        
     }
 
     submitNewGLAccountDetails = async (newGlPayload)=>{

@@ -158,6 +158,7 @@ class GeneralCurrency extends React.Component {
         let getAllCurrencies =  this.props.adminGetAllCurrencies;
         let adminCreateNewCurrencyRequest = this.props.adminCreateNewCurrency;
         let adminUpdateCurrencyRequest = this.props.adminUpdateCurrency;
+        let adminSetCurrencyConversionRateRequest =  this.props.adminSetCurrencyConversionRate;
 
         let saveRequestData= getAllCurrencies.request_data!==undefined?getAllCurrencies.request_data.tempData:null;
             
@@ -209,6 +210,13 @@ class GeneralCurrency extends React.Component {
                                 {adminUpdateCurrencyRequest.request_data.response.data.message}
                                 </Alert>
                             }
+
+                            {adminSetCurrencyConversionRateRequest.request_status === administrationConstants.SET_CONVERSION_RATE_SUCCESS && 
+                                <Alert variant="success">
+                                    {adminSetCurrencyConversionRateRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            <div className="loading-text">Please wait... </div>
                             <Accordion defaultActiveKey="0">
 
                                 <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
@@ -230,7 +238,7 @@ class GeneralCurrency extends React.Component {
                                                     return (
                                                         <Fragment key={index}>
                                                             <tr>
-                                                                <td>{eachCurrency.code} {eachCurrency.code === "NGN" && <span className="base-currency">Base</span>}</td>
+                                                                <td>{eachCurrency.code} {eachCurrency.isBaseCurrency && <span className="base-currency">Base</span>}</td>
                                                                 <td>{eachCurrency.name}</td>
                                                                 <td>{eachCurrency.symbol}</td>
                                                                 <td>
@@ -323,6 +331,12 @@ class GeneralCurrency extends React.Component {
                         {adminUpdateCurrencyRequest.request_status === administrationConstants.UPDATE_CURRENCY_SUCCESS && 
                             <Alert variant="success">
                                 {adminUpdateCurrencyRequest.request_data.response.data.message}
+                            </Alert>
+                        }
+
+                        {adminSetCurrencyConversionRateRequest.request_status === administrationConstants.SET_CONVERSION_RATE_SUCCESS && 
+                            <Alert variant="success">
+                                {adminSetCurrencyConversionRateRequest.request_data.response.data.message}
                             </Alert>
                         }
                         <Accordion defaultActiveKey="2">
@@ -847,6 +861,9 @@ class GeneralCurrency extends React.Component {
                 .required('Required')
           });
 
+        let allCurrenciesData = (this.props.adminGetAllCurrencies.request_data!==undefined && this.props.adminGetAllCurrencies.request_data.response!==undefined)
+                                        ? this.props.adminGetAllCurrencies.request_data.response.data :null;
+
         const {showRateEdit, selectCurrencyForRateSetting, selectCurrencyNameForRateSetting} = this.state;
         if(selectCurrencyForRateSetting!==undefined){
             return(
@@ -874,12 +891,30 @@ class GeneralCurrency extends React.Component {
                             this.setCurrencyConvertion(currencyConvertionPayload)
                                 .then(
                                     () => {
-                                        resetForm();
-                                        setTimeout(() => {
-                                            this.getAllCurrencies()
-                                            this.props.dispatch(administrationActions.setCurrencyConversionRate("CLEAR"))
+                                        // resetForm();
+                                        // setTimeout(() => {
+                                        //     this.getAllCurrencies()
+                                        //     this.props.dispatch(administrationActions.setCurrencyConversionRate("CLEAR"))
+                                        //     this.handleRateClose();
+                                        // }, 3000);
+
+
+                                        if(this.props.adminSetCurrencyConversionRate.request_status === administrationConstants.SET_CONVERSION_RATE_SUCCESS){
+                                            resetForm();
                                             this.handleRateClose();
-                                        }, 3000);
+                                            setTimeout(() => {
+                                                // this.getCustomerTypes(allCustomerTypesData);
+                                                this.getAllCurrencies(allCurrenciesData);
+                                                
+                                                this.props.dispatch(administrationActions.setCurrencyConversionRate("CLEAR"))
+                                                
+                                            }, 2000);
+                                             
+                                        }else{
+                                            setTimeout(() => {
+                                                this.props.dispatch(administrationActions.setCurrencyConversionRate("CLEAR"))
+                                            }, 2000);
+                                        }
 
                                     }
                                 )
@@ -950,11 +985,11 @@ class GeneralCurrency extends React.Component {
                                     </Button>
                             </div>
 
-                            {adminSetCurrencyConversionRateRequest.request_status === administrationConstants.SET_CONVERSION_RATE_SUCCESS && 
+                            {/* {adminSetCurrencyConversionRateRequest.request_status === administrationConstants.SET_CONVERSION_RATE_SUCCESS && 
                                 <Alert variant="success">
                                     {adminSetCurrencyConversionRateRequest.request_data.response.data.message}
                                 </Alert>
-                            }
+                            } */}
                             {adminSetCurrencyConversionRateRequest.request_status === administrationConstants.SET_CONVERSION_RATE_FAILURE && 
                                 <Alert variant="danger">
                                     {adminSetCurrencyConversionRateRequest.request_data.error}

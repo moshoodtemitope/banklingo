@@ -49,13 +49,18 @@ class JournalEntries extends React.Component {
         this.getJournalEntries();
      }
  
-     getJournalEntries = () =>{
+     getJournalEntries = (tempData) =>{
          const {dispatch} = this.props;
          let payload ={
              PageSize: this.state.PageSize,
              CurrentPage:this.state.CurrentPage
          }
-         dispatch(acoountingActions.getJournalEntries(payload));
+         if(tempData){
+            dispatch(acoountingActions.getJournalEntries(payload, tempData));
+         }else{
+            dispatch(acoountingActions.getJournalEntries(payload));
+         }
+         
      }
 
      createJournalEntry = async(journalPayload) =>{
@@ -140,6 +145,8 @@ class JournalEntries extends React.Component {
                 {value: 1, label: 'Credit'},
                 {value: 2, label: 'Debit'},
             ];
+            let saveRequestData= (this.props.getJournalEntries.request_data!==undefined && this.props.getJournalEntries.request_data.response!==undefined)
+                                    ? this.props.getJournalEntries.request_data.response.data :null;
 
             getJournalEntriesRequest.request_data.response2.data.map((channel, id)=>{
                 allGlAccounts.push({label: channel.accountDescription, value:channel.id});
@@ -248,12 +255,14 @@ class JournalEntries extends React.Component {
                                     .then(
                                         () => {
                                             if (this.props.createJournalEntry.request_status === accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS) {
-                                                
+                                                resetForm();
+                                                this.handleClose();
                                                 setTimeout(() => {
+                                                    this.getJournalEntries(saveRequestData);
                                                     this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
-                                                    resetForm();
-                                                    this.getJournalEntries();
-                                                }, 3000);
+                                                    
+                                                    
+                                                }, 2000);
                                             } else {
                                                 setTimeout(() => {
                                                     this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
@@ -686,11 +695,11 @@ class JournalEntries extends React.Component {
                                 </Form>
                             )}
                     </Formik>
-                    {createJournalEntryRequest.request_status === accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS &&
+                    {/* {createJournalEntryRequest.request_status === accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS &&
                         <Alert variant="success">
                             {createJournalEntryRequest.request_data.response.data.message}
                         </Alert>
-                    }
+                    } */}
                     {createJournalEntryRequest.request_status === accountingConstants.CREATE_JOURNAL_ENTRY_FAILURE &&
                         <Alert variant="danger">
                             {createJournalEntryRequest.request_data.error}
@@ -709,36 +718,136 @@ class JournalEntries extends React.Component {
 
     renderAllJournals =()=>{
         let getJournalEntriesRequest = this.props.getJournalEntries,
+            createJournalEntryRequest = this.props.createJournalEntry,
             {CurrentPage, PageSize} = this.state;
+        
+        let saveRequestData= getJournalEntriesRequest.request_data!==undefined?getJournalEntriesRequest.request_data.tempData:null;
         
         switch(getJournalEntriesRequest.request_status){
             case (accountingConstants.GET_JOURNAL_ENTRY_PENDING):
-                return (
-                    <div className="loading-content"> 
-                        <TableComponent classnames="striped bordered hover">
-                            <thead>
-                                <tr>
-                                    <th>Entry Id</th>
-                                    <th>Booking Date (Entry Date)</th>
-                                    <th>GL Account Name</th>
-                                    <th>Debit Amount</th>
-                                    <th>Credit Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                if(saveRequestData===undefined){
+                    return (
+                        <div className="loading-content"> 
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Entry Id</th>
+                                        <th>Booking Date (Entry Date)</th>
+                                        <th>GL Account Name</th>
+                                        <th>Debit Amount</th>
+                                        <th>Credit Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+    
+                                </tbody>
+                            </TableComponent>
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+                }else{
+                    return(
+                        <div>
+                            {createJournalEntryRequest.request_status === accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS &&
+                                <Alert variant="success">
+                                    {createJournalEntryRequest.request_data.response.data.message}
+                                </Alert>
+                            }
 
-                            </tbody>
-                        </TableComponent>
-                        <div className="loading-text">Please wait... </div>
-                    </div>
-                )
+
+                            <div className="heading-with-cta">
+                                {/* <h3 className="section-title">Journal Entries</h3> */}
+                                <Form className="one-liner">
+
+                                    {/* <Form.Group controlId="filterDropdown">
+                                        <Form.Label> </Form.Label>
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button variant="primary" type="submit">Filter</Button> */}
+                                </Form>
+                                <Button
+                                    onClick={this.state.show === false ? this.handleShow : null}
+                                >New Journal Entry</Button>
+                            </div>
+                            {/* <div className="heading-with-cta toleft"><Button >Edit Columns</Button></div> */}
+
+                            <div className="pagination-wrap">
+                                <label htmlFor="toshow">Show</label>
+                                <select id="toshow" 
+                                    className="countdropdown form-control form-control-sm"
+                                    value={PageSize}
+                                    onChange={(event)=>{
+                                        this.setState({PageSize: event.target.value})
+                                        let payload={
+                                            CurrentPage,
+                                            PageSize: event.target.value
+                                        }
+                                        this.props.dispatch(acoountingActions.getJournalEntries(payload))
+                                    }}>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="200">200</option>
+                                </select>
+                                <div className="move-page-actions">
+                                    <div className="each-page-action">
+                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                    </div>
+                                    <div className="page-count">
+                                        <span>1-20</span>  of <span>20000</span>
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Entry Id</th>
+                                        <th>Booking Date (Entry Date)</th>
+                                        <th>GL Account Name</th>
+                                        <th>Debit Amount</th>
+                                        <th>Credit Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {saveRequestData.result.map((eachJournal, key)=>{
+                                    return(
+                                        <tr key={key}>
+                                            <td>{eachJournal.id}</td>
+                                            <td>{getDateFromISO(eachJournal.bookingDate)}</td>
+                                            <td>{eachJournal.accountName}</td>
+                                            <td>{eachJournal.debitAmount}</td>
+                                            <td>{eachJournal.creditAmount}</td>
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </TableComponent>
+                            
+                        </div>
+                    )
+                }
+                
             
             case (accountingConstants.GET_JOURNAL_ENTRY_SUCCESS):
                 let JournalEntriesData = getJournalEntriesRequest.request_data.response.data;
