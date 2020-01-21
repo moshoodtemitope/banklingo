@@ -226,6 +226,8 @@ class JournalEntries extends React.Component {
                                 })
 
                                 if(creditTotal!==debitTotal){
+                                    console.log("#####",creditTotal);
+                                    console.log("+++++",debitTotal);
                                     this.setState({totalComparison:false});
                                 }else{
                                     this.setState({totalComparison:true});
@@ -259,13 +261,13 @@ class JournalEntries extends React.Component {
                                                 this.handleClose();
                                                 setTimeout(() => {
                                                     this.getJournalEntries(saveRequestData);
-                                                    this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
+                                                    // this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
                                                     
                                                     
                                                 }, 2000);
                                             } else {
                                                 setTimeout(() => {
-                                                    this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
+                                                    // this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
                                                 }, 2000);
                                             }
 
@@ -531,7 +533,7 @@ class JournalEntries extends React.Component {
                                                             </Form.Row>
                                                         /* </div> */
                                                     ))}
-                                                    { Object.keys(errors).length<1 &&
+                                                    {/* { Object.keys(errors).length<1 && */}
                                                         <div className="footer-with-cta toleft">
                                                             <Button
                                                                 type="button"
@@ -543,7 +545,7 @@ class JournalEntries extends React.Component {
                                                                     <span>+</span>New
                                                             </Button>
                                                         </div>
-                                                    }
+                                                    {/* // } */}
                                                     
                                                 {/* <button
                                                     type="button"
@@ -726,6 +728,7 @@ class JournalEntries extends React.Component {
         switch(getJournalEntriesRequest.request_status){
             case (accountingConstants.GET_JOURNAL_ENTRY_PENDING):
                 if(saveRequestData===undefined){
+                    
                     return (
                         <div className="loading-content"> 
                             <TableComponent classnames="striped bordered hover">
@@ -753,6 +756,7 @@ class JournalEntries extends React.Component {
                         </div>
                     )
                 }else{
+                    
                     return(
                         <div>
                             {createJournalEntryRequest.request_status === accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS &&
@@ -762,27 +766,16 @@ class JournalEntries extends React.Component {
                             }
 
 
-                            <div className="heading-with-cta">
-                                {/* <h3 className="section-title">Journal Entries</h3> */}
+                            {/* <div className="heading-with-cta">
                                 <Form className="one-liner">
 
-                                    {/* <Form.Group controlId="filterDropdown">
-                                        <Form.Label> </Form.Label>
-                                        <Form.Control as="select" size="sm">
-                                            <option>No Filter</option>
-                                            <option>Add New Filter</option>
-                                            <option>Custom Filter</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Button variant="primary" type="submit">Filter</Button> */}
                                 </Form>
                                 <Button
                                     onClick={this.state.show === false ? this.handleShow : null}
                                 >New Journal Entry</Button>
-                            </div>
-                            {/* <div className="heading-with-cta toleft"><Button >Edit Columns</Button></div> */}
+                            </div> */}
 
-                            <div className="pagination-wrap">
+                            {/* <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow" 
                                     className="countdropdown form-control form-control-sm"
@@ -817,7 +810,7 @@ class JournalEntries extends React.Component {
                                         <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
@@ -834,7 +827,8 @@ class JournalEntries extends React.Component {
                                     return(
                                         <tr key={key}>
                                             <td>{eachJournal.id}</td>
-                                            <td>{getDateFromISO(eachJournal.bookingDate)}</td>
+                                            {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
+                                            <td>{eachJournal.bookingDate}</td>
                                             <td>{eachJournal.accountName}</td>
                                             <td>{eachJournal.debitAmount}</td>
                                             <td>{eachJournal.creditAmount}</td>
@@ -860,7 +854,7 @@ class JournalEntries extends React.Component {
                                     {/* <h3 className="section-title">Journal Entries</h3> */}
                                     <Form className="one-liner">
 
-                                        {/* <Form.Group controlId="filterDropdown">
+                                        <Form.Group controlId="filterDropdown">
                                             <Form.Label> </Form.Label>
                                             <Form.Control as="select" size="sm">
                                                 <option>No Filter</option>
@@ -868,7 +862,7 @@ class JournalEntries extends React.Component {
                                                 <option>Custom Filter</option>
                                             </Form.Control>
                                         </Form.Group>
-                                        <Button variant="primary" type="submit">Filter</Button> */}
+                                        <Button variant="primary" type="submit">Filter</Button>
                                     </Form>
                                     <Button
                                         onClick={this.state.show === false ? this.handleShow : null}
@@ -928,7 +922,8 @@ class JournalEntries extends React.Component {
                                         return(
                                             <tr key={key}>
                                                 <td>{eachJournal.id}</td>
-                                                <td>{getDateFromISO(eachJournal.bookingDate)}</td>
+                                                <td>{eachJournal.bookingDate}</td>
+                                                {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
                                                 <td>{eachJournal.accountName}</td>
                                                 <td>{eachJournal.debitAmount}</td>
                                                 <td>{eachJournal.creditAmount}</td>

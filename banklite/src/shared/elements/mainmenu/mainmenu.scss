@@ -49,6 +49,10 @@
                 text-decoration: none;
                 cursor: pointer;
             }
+            @media only screen and (max-width: 1024px) {
+                padding: 10px 6px;
+                font-size: 11px;
+            }
         }
         // &:first-of-type{
         //     a{

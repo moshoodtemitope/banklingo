@@ -194,7 +194,7 @@ function getJournalEntries  (payload, tempData){
         }
 
         if(tempData!==undefined){
-            return { type: accountingConstants.GET_JOURNAL_ENTRY_PENDING, user }
+            return { type: accountingConstants.GET_JOURNAL_ENTRY_PENDING, user, tempData }
         }
 
          

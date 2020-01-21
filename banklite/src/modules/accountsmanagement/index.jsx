@@ -80,38 +80,113 @@ class AccountManagement extends React.Component {
     renderAllGL = ()=>{
 
         let getGLAccountsRequest = this.props.getGLAccounts,
-            {CurrentPage, PageSize} = this.state;
+            {CurrentPage, PageSize} = this.state,
+            createGLAccountRequest = this.props.createGLAccount,
+            updateGLAccount = this.props.updateGLAccount;
+
+        let saveRequestData= getGLAccountsRequest.request_data!==undefined?getGLAccountsRequest.request_data.tempData:null;
         
         switch(getGLAccountsRequest.request_status){
             case (accountingConstants.GET_GLACCOUNTS_PENDING):
-                return (
-                    <div className="loading-content"> 
-                        <TableComponent classnames="striped bordered hover">
-                            <thead>
-                                <tr>
-                                    <th>GLCode</th>
-                                    <th>Account Name</th>
-                                    <th>Account Type</th>
-                                    <th>Account Usage</th>
-                                    <th>In Use</th>
-                                    <th>Manual Entries Allowed</th>
-                                    {/* <th>Actions</th> */}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </TableComponent>
-                        <div className="loading-text">Please wait... </div>
-                    </div>
-                )
+                console.log("data is", saveRequestData);
+                if(saveRequestData===undefined){
+                    return (
+                        <div className="loading-content"> 
+                            {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
+                                <Alert variant="success">
+                                    {createGLAccountRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>GLCode</th>
+                                        <th>Account Name</th>
+                                        <th>Account Type</th>
+                                        <th>Account Usage</th>
+                                        <th>In Use</th>
+                                        <th>Manual Entries Allowed</th>
+                                        {/* <th>Actions</th> */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+                }else{
+                    
+                    return(
+                        <div>
+                            {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
+                                <Alert variant="success">
+                                    {createGLAccountRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+
+                            {updateGLAccount.request_status === accountingConstants.UPDATE_GLACCOUNTS_SUCCESS && 
+                                <Alert variant="success">
+                                    {updateGLAccount.request_data.response.data.message}
+                                </Alert>
+                            }
+                            <div className="loading-text">Please wait...</div>
+                            <div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>GLCode</th>
+                                            <th>Account Name</th>
+                                            <th>Account Type</th>
+                                            <th>Account Usage</th>
+                                            <th>In Use</th>
+                                            <th>Manual Entries Allowed</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            saveRequestData.map((eachGL, index)=>{
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{eachGL.glCode}</td>
+                                                        <td>{eachGL.accountName}</td>
+                                                        <td>{eachGL.accountTypeDescription}</td>
+                                                        <td>{eachGL.accountUsageDescription}</td>
+                                                        <td>{eachGL.inUse.toString()}</td>
+                                                        <td>{eachGL.manualEntriesAllowed.toString()}</td>
+                                                        <td>
+                                                            <DropdownButton
+                                                                size="sm"
+                                                                title="Actions"
+                                                                key="glAccountActions"
+                                                                // drop="left"
+                                                                className="customone"
+                                                            >
+                                                                <Dropdown.Item eventKey="1" >Edit</Dropdown.Item>
+                                                            </DropdownButton>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                        
+                                    </tbody>
+                                </TableComponent>
+                               
+                
+                            </div>
+                        </div>
+                    )
+                }
             
             case (accountingConstants.GET_GLACCOUNTS_SUCCESS):
                 let getGLAccountsData = getGLAccountsRequest.request_data.response.data;
@@ -121,6 +196,17 @@ class AccountManagement extends React.Component {
                         
                         return(
                             <div>
+                                {/* {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
+                                    <Alert variant="success">
+                                        {createGLAccountRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+
+                                {updateGLAccount.request_status === accountingConstants.UPDATE_GLACCOUNTS_SUCCESS && 
+                                    <Alert variant="success">
+                                        {updateGLAccount.request_data.response.data.message}
+                                    </Alert>
+                                } */}
                                 
                                 <div className="heading-with-cta">
                                     {/* <h3 className="section-title">Chart of Accounts</h3> */}
@@ -137,7 +223,7 @@ class AccountManagement extends React.Component {
                                                 CurrentPage,
                                                 PageSize: event.target.value
                                             }
-                                            this.props.dispatch(acoountingActions.getGLAccounts(payload))
+                                            this.props.dispatch(acoountingActions.getGLAccounts(payload, saveRequestData))
                                         }}>
                                         <option value="10">10</option>
                                         <option value="25">25</option>
@@ -162,6 +248,17 @@ class AccountManagement extends React.Component {
                                         </div>
                                     </div>
                                 </div>
+                                {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
+                                    <Alert variant="success">
+                                        {createGLAccountRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+
+                                {updateGLAccount.request_status === accountingConstants.UPDATE_GLACCOUNTS_SUCCESS && 
+                                    <Alert variant="success">
+                                        {updateGLAccount.request_data.response.data.message}
+                                    </Alert>
+                                }
                 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -288,6 +385,9 @@ class AccountManagement extends React.Component {
         });
         const {showCreateGL, selectedAccType, selectedUsageOption} = this.state;
         let createGLAccountRequest = this.props.createGLAccount;
+
+        let allAccountsData = (this.props.getGLAccounts.request_data!==undefined && this.props.getGLAccounts.request_data.response!==undefined)
+            ? this.props.getGLAccounts.request_data.response.data :null;
         return(
             <Modal show={showCreateGL} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
                 <Modal.Header>
@@ -322,10 +422,12 @@ class AccountManagement extends React.Component {
                                     () => {
                                         if(this.props.createGLAccount.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS){
                                            resetForm();
-                                            this.getGLAccounts(); 
+                                           this.handleClose();
+                                            
                                             setTimeout(() => {
+                                                this.getGLAccounts(allAccountsData); 
                                                 this.props.dispatch(acoountingActions.createGLAccount("CLEAR"))
-                                            }, 3000);
+                                            }, 2000);
                                         }else{
                                             setTimeout(() => {
                                                 this.props.dispatch(acoountingActions.createGLAccount("CLEAR"))
@@ -472,11 +574,11 @@ class AccountManagement extends React.Component {
                                 </Form>
                             )}
                     </Formik>
-                    {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
+                    {/* {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
                         <Alert variant="success">
                            {createGLAccountRequest.request_data.response.data.message}
                         </Alert>
-                    }
+                    } */}
                     {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_FAILURE && 
                         <Alert variant="danger">
                           {createGLAccountRequest.request_data.error}
@@ -523,6 +625,9 @@ class AccountManagement extends React.Component {
             let updateGLAccount = this.props.updateGLAccount;
 
             selectGlAcc = gLAccountsList.filter((account, index)=>account.glCode===glIdToEdit)[0];
+
+            let allAccountsData = (this.props.getGLAccounts.request_data!==undefined && this.props.getGLAccounts.request_data.response!==undefined)
+            ? this.props.getGLAccounts.request_data.response.data :null;
             
         if(selectGlAcc!==undefined){
             return(
@@ -560,13 +665,13 @@ class AccountManagement extends React.Component {
                                     .then(
                                         () => {
                                             if(this.props.updateGLAccount.request_status === accountingConstants.UPDATE_GLACCOUNTS_SUCCESS){
-                                                resetForm();
-                                                
+                                                // resetForm();
+                                                this.handleEditGlClose();
                                                 setTimeout(() => {
-                                                    this.getGLAccounts(); 
+                                                    this.getGLAccounts(allAccountsData); 
                                                     this.props.dispatch(acoountingActions.updateGLAccount("CLEAR"));
-                                                    this.handleEditGlClose();
-                                                }, 3000);
+                                                    
+                                                }, 2000);
                                             }else{
                                                 setTimeout(() => {
                                                     this.props.dispatch(acoountingActions.updateGLAccount("CLEAR"))
@@ -696,11 +801,11 @@ class AccountManagement extends React.Component {
                                     </Form>
                                 )}
                         </Formik>
-                        {updateGLAccount.request_status === accountingConstants.UPDATE_GLACCOUNTS_SUCCESS && 
+                        {/* {updateGLAccount.request_status === accountingConstants.UPDATE_GLACCOUNTS_SUCCESS && 
                             <Alert variant="success">
                             {updateGLAccount.request_data.response.data.message}
                             </Alert>
-                        }
+                        } */}
                         {updateGLAccount.request_status === accountingConstants.UPDATE_GLACCOUNTS_FAILURE && 
                             <Alert variant="danger">
                             {updateGLAccount.request_data.error}

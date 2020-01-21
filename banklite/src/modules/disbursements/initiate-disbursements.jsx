@@ -19,7 +19,7 @@ import "./disbursements.scss";
 import { Formik} from 'formik';
 import * as Yup from 'yup';
 import Alert from 'react-bootstrap/Alert'
-import {numberWithCommas} from '../../shared/utils';
+import {numberWithCommas, accountNumber} from '../../shared/utils';
 import Accordion from 'react-bootstrap/Accordion'
 import Select from 'react-select';
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
@@ -256,9 +256,8 @@ class InitiateDisbursement extends React.Component {
                                                                             <Form.Control
                                                                                 type="text"
                                                                                 name="sourceAccount"
-                                                                                maxLength="10"
                                                                                 onChange={handleChange}
-                                                                                value={values.sourceAccount}
+                                                                                value={accountNumber(values.sourceAccount)}
                                                                                 className={errors.sourceAccount && touched.sourceAccount ? "is-invalid withcustom" : "withcustom"} />
                         
                                                                             {errors.sourceAccount && touched.sourceAccount ? (
@@ -325,9 +324,9 @@ class InitiateDisbursement extends React.Component {
                                                                                 <Form.Control
                                                                                     type="text"
                                                                                     name="destinationAccount"
-                                                                                    maxLength="10"
+                                                                                    // maxLength="10"
                                                                                     onChange={handleChange}
-                                                                                    value={values.destinationAccount}
+                                                                                    value={accountNumber(values.destinationAccount)}
                                                                                     className={errors.destinationAccount && touched.destinationAccount ? "is-invalid withcustom" : "withcustom"} />
                         
                                                                                 {errors.destinationAccount && touched.destinationAccount ? (
@@ -342,7 +341,14 @@ class InitiateDisbursement extends React.Component {
                                                                             <Form.Control
                                                                                 type="text"
                                                                                 name="amount"
+                                                                                // onChange={
+                                                                                //     (e)=>{
+                                                                                //         if(!Number(e.target.value))
+                                                                                //         console.log("tttttt", e.target.value)
+                                                                                //     }
+                                                                                // }
                                                                                 onChange={handleChange}
+                                                                                // pattern="\d+((\.|,)\d+)?"
                                                                                 value={numberWithCommas(values.amount)}
                                                                                 className={errors.amount && touched.amount ? "is-invalid" : null} />
                         

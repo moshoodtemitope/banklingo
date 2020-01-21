@@ -35,9 +35,29 @@ export const getDateFromISO =(date) =>{
     // console.log(year+'-' + month + '-'+dt) 
 }
 
+export const accountNumber = (accountNum)=>{
+    var reg = /^\d+$/;
+    if(reg.test(accountNum)){
+        if(accountNum.toString().length<=10){
+            return accountNum;
+        }else{
+            return accountNum.toString().substr(0,10);
+        }
+    }else{
+
+        return "";
+    }
+}
+
 export const numberWithCommas= (amount)=> {
+    let testSequence = /^[0-9.,]+$/;
+    // let testSequence = /^(?:\d{1,3}(?:,\d{3})*|\d+)(?:\.\d+)?$/;
     if(amount!==undefined && amount!==''){
         let amountFiltered ;
+
+        if(!testSequence.test(amount)){
+            return "";
+        }
     // return numberProvided.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     // return parseFloat(numberProvided).toLocaleString(undefined, {maximumFractionDigits:2});
         

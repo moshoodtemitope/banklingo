@@ -49,7 +49,7 @@ class GeneralCustomerTypes extends React.Component {
           .max(30, 'Max Limit reached')
           .required('Please provide name'),
         custTypeId: Yup.string()
-          .max(6, 'Max Limit reached')
+        //   .max(6, 'Max Limit reached')
           .required('Id is required'),
         custTypeDesc: Yup.string()
           .min(2, 'Please provide detailed information')
