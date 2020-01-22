@@ -20,7 +20,7 @@ class LoansManagement extends React.Component {
         super(props);
         this.state={
             user:'',
-            PageSize: '30',
+            PageSize: 25,
             FullDetails: false,
             CurrentPage: 1,
             CurrentSelectedPage: 1
@@ -46,7 +46,7 @@ class LoansManagement extends React.Component {
     }
 
     setPagesize = (PageSize) => {
-        // console.log('----here', PageSize.target.value);
+        console.log('----here', PageSize.target.value);
         let sizeOfPage = PageSize.target.value,
             { FullDetails, CurrentPage, CurrentSelectedPage } = this.state;
 
@@ -88,7 +88,9 @@ class LoansManagement extends React.Component {
 
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select id="toshow" className="countdropdown form-control form-control-sm">
+                                <select id="toshow" 
+                                    
+                                    className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -164,7 +166,10 @@ class LoansManagement extends React.Component {
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <select id="toshow" 
+                                            onChange={this.setPagesize}
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -255,7 +260,9 @@ class LoansManagement extends React.Component {
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <select id="toshow"
+                                            value={this.state.PageSize}
+                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>

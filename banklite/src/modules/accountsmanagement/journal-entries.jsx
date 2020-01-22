@@ -90,6 +90,17 @@ class JournalEntries extends React.Component {
         
     }
 
+    setPagesize = (PageSize)=>{
+        // console.log('----here', PageSize.target.value);
+        let sizeOfPage = PageSize.target.value,
+            {CurrentPage, BranchId,ClientState} = this.state;
+
+        this.setState({PageSize: sizeOfPage});
+
+        let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        this.getClients(params);
+    }
+
 
 
     handleClose = () => this.setState({show:false});
@@ -821,7 +832,10 @@ class JournalEntries extends React.Component {
 
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" className="countdropdown form-control form-control-sm">
+                                    <select id="toshow" 
+                                        onChange={this.setPagesize}
+                                        value={this.state.PageSize}
+                                        className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -906,7 +920,10 @@ class JournalEntries extends React.Component {
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <select id="toshow" 
+                                            onChange={this.setPagesize}
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
