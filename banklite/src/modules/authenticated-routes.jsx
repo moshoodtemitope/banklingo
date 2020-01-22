@@ -151,8 +151,8 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <PrivateRoute path='/clients/edit/:encodedkey' exact  encodedKey={this.props.computedMatch.params.encodedkey} authed={this.props.user} component={EditAClient} /> */}
                         {/* <Route exact path='/clients/edit/:encodedkey'  render={(props) => <EditAClient encodedKey={props.match.params.encodedkey} {...this.props} />} /> */}
 
-                        <PrivateRoute exact path='/active-clients' {...this.props} authed={this.props.user} component={ClientsManagement} />
-                        <Route exact path='/active-clients' render={(props) => <ClientsManagement {...this.props} />} />
+                        <PrivateRoute exact path='/active-clients' {...this.props} authed={this.props.user} component={ActiveClients} />
+                        {/* <Route exact path='/active-clients' render={(props) => <ClientsManagement {...this.props} />} /> */}
 
                         <PrivateRoute exact path='/inactive-clients' {...this.props} authed={this.props.user} component={InactiveClients} />
                         {/* <Route exact path='/inactive-clients' render={(props) => <InactiveClients {...this.props} />} /> */}

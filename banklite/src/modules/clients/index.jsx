@@ -12,6 +12,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
+import "./clients.scss"; 
 
 class ClientsManagement extends React.Component {
     constructor(props) {
@@ -21,6 +22,8 @@ class ClientsManagement extends React.Component {
             PageSize:'30',
             FullDetails: false,
             CurrentPage:1,
+            BranchId: JSON.parse(localStorage.getItem("user")).BranchId,
+            ClientState:0
         }
     }
 
@@ -29,8 +32,8 @@ class ClientsManagement extends React.Component {
     }
 
     loadInitialData=()=>{
-        let {PageSize, CurrentPage}= this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        let {PageSize, CurrentPage, BranchId,ClientState, FullDetails}= this.state;
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
         this.getClients(params);
     }
 
@@ -43,11 +46,21 @@ class ClientsManagement extends React.Component {
     setPagesize = (PageSize)=>{
         // console.log('----here', PageSize.target.value);
         let sizeOfPage = PageSize.target.value,
-            {FullDetails, CurrentPage} = this.state;
+            {FullDetails, CurrentPage, BranchId,ClientState} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
-        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
+        this.getClients(params);
+    }
+    setShowDetails = (FullDetails)=>{
+        // console.log('----here', PageSize.target.value);
+        let showDetails = FullDetails.target.checked,
+            {CurrentPage, PageSize, BranchId,ClientState} = this.state;
+
+        this.setState({FullDetails: showDetails});
+
+        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
         this.getClients(params);
     }
 
@@ -91,13 +104,13 @@ class ClientsManagement extends React.Component {
                         if(allClientsData.length>=1){
                             return(
                                 <div>
-                                    {/* <div className="table-helper">
+                                    <div className="table-helper">
                                         <input type="checkbox" name="" 
                                             onChange={this.setShowDetails}
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>
-                                    </div> */}
+                                    </div>
                                     <div className="heading-with-cta toleft">
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
@@ -233,7 +246,7 @@ class ClientsManagement extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Customers</h2>
+                                                <h2>All Customers</h2>
                                             </div>
                                         </div>
                                     </div>

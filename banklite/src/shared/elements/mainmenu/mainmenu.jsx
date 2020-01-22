@@ -117,7 +117,10 @@ class MainMenu extends React.Component{
                         <span>Communications</span>
                         <ul>
                             <li>
-                                <NavLink to="/communications">All Communications</NavLink>
+                                <NavLink exact to="/communications">All Communications</NavLink>
+                                <NavLink to="/communications/emails">Email</NavLink>
+                                <NavLink to="/communications/sms">SMS</NavLink>
+                                <NavLink to="/communications/webhooks">Web Hooks</NavLink>
                             </li>
                         </ul>
                     </li>
