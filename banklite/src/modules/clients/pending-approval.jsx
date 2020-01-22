@@ -71,7 +71,48 @@ class ClientsPendingApproval extends React.Component {
                 case (clientsConstants.GET_CLIENTS_PENDING):
                     return (
                         <div className="loading-content"> 
-                           
+                           <div className="heading-with-cta ">
+                                <Form className="one-liner">
+
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                </Form>
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow" 
+                                        onChange={this.setPagesize}
+                                        value={this.state.PageSize}
+                                        className="countdropdown form-control form-control-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                    <div className="move-page-actions">
+                                        <div className="each-page-action">
+                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                        </div>
+                                        <div className="page-count">
+                                            <span>1-20</span>  of <span>20000</span>
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
@@ -112,7 +153,18 @@ class ClientsPendingApproval extends React.Component {
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>
                                     </div>
-                                    <div className="heading-with-cta toleft">
+                                    <div className="heading-with-cta ">
+                                        <Form className="one-liner">
+
+                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                <Form.Control as="select" size="sm">
+                                                    <option>No Filter</option>
+                                                    <option>Add New Filter</option>
+                                                    <option>Custom Filter</option>
+                                                </Form.Control>
+                                            </Form.Group>
+                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        </Form>
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow" 
@@ -132,7 +184,7 @@ class ClientsPendingApproval extends React.Component {
                                                     <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
                                                 </div>
                                                 <div className="page-count">
-                                                    <span>1-{this.state.PageSize}</span>  of <span>{allClientsData.totalRows}</span>
+                                                <span>1-20</span>  of <span>20000</span>
                                                 </div>
                                                 <div className="each-page-action">
                                                     <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
@@ -193,32 +245,74 @@ class ClientsPendingApproval extends React.Component {
                             )
                         }else{
                             return(
-                                // <div className="no-records">
-                                //     No Customer account has been created
-                                // </div>
-                                <TableComponent classnames="striped bordered hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Customer Name</th>
-                                            <th>Customer Status</th>
-                                            <th>Account Officer</th>
-                                            <th>Account Currency</th>
-                                            <th>Account Balance</th>
-                                            <th>Date Created</th>
-                                            {/* <th></th> */}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </TableComponent>
+                                <div className="no-records">
+
+                                    <div className="heading-with-cta ">
+                                        <Form className="one-liner">
+
+                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                <Form.Control as="select" size="sm">
+                                                    <option>No Filter</option>
+                                                    <option>Add New Filter</option>
+                                                    <option>Custom Filter</option>
+                                                </Form.Control>
+                                            </Form.Group>
+                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        </Form>
+                                        <div className="pagination-wrap">
+                                            <label htmlFor="toshow">Show</label>
+                                            <select id="toshow"
+                                                onChange={this.setPagesize}
+                                                value={this.state.PageSize}
+                                                className="countdropdown form-control form-control-sm">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="200">200</option>
+                                            </select>
+                                            <div className="move-page-actions">
+                                                <div className="each-page-action">
+                                                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                                </div>
+                                                <div className="page-count">
+                                                <span>1-20</span>  of <span>20000</span>
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                                <div className="each-page-action">
+                                                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <TableComponent classnames="striped bordered hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Customer Name</th>
+                                                <th>Customer Status</th>
+                                                <th>Account Officer</th>
+                                                <th>Account Currency</th>
+                                                <th>Account Balance</th>
+                                                <th>Date Created</th>
+                                                {/* <th></th> */}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </TableComponent>
+                                </div>
                             )
                         }
                     }else{
@@ -251,6 +345,31 @@ class ClientsPendingApproval extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="module-submenu">
+                                <div className="content-container">
+                                    <ul className="nav">
+                                        
+                                        <li>
+                                            <NavLink to={'/clients'}>All</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink exact to={'/active-clients'}>Active</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/inactive-clients'}>Inactive</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/clients-pending-approval'}>Pending Approval</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/clients-exited'}>Exited</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/clients-blacklisted'}>Blacklisted</NavLink>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             <div className="module-content">

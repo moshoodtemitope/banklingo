@@ -29,8 +29,8 @@ class CommunicationsManagement extends React.Component {
         }
     
         loadInitialData=()=>{
-            let {PageSize, CurrentPage}= this.state;
-            let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+            let {PageSize, CurrentPage, NotificationType}= this.state;
+            let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&NotificationType=${NotificationType}`;
             this.getNotifications(params);
         }
     
@@ -43,24 +43,15 @@ class CommunicationsManagement extends React.Component {
         setPagesize = (PageSize)=>{
             // console.log('----here', PageSize.target.value);
             let sizeOfPage = PageSize.target.value,
-                {FullDetails, CurrentPage, CurrentSelectedPage} = this.state;
+                {CurrentPage, NotificationType} = this.state;
     
             this.setState({PageSize: sizeOfPage});
     
-            let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+            let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&&NotificationType=${NotificationType}`;
             this.getNotifications(params);
         }
     
-        setShowDetails = (FullDetails)=>{
-            // console.log('----here', PageSize.target.value);
-            let showDetails = FullDetails.target.checked,
-                {CurrentPage, CurrentSelectedPage, PageSize} = this.state;
-    
-            this.setState({FullDetails: showDetails});
-    
-            let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-            this.getNotifications(params);
-        }
+        
 
 
         renderAllNotifications =()=>{
@@ -69,6 +60,46 @@ class CommunicationsManagement extends React.Component {
                     case (administrationConstants.GET_NOTIFICATIONS_PENDING):
                         return (
                             <div className="loading-content"> 
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        <div className="move-page-actions">
+                                            <div className="each-page-action">
+                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                            </div>
+                                            <div className="page-count">
+                                                <span>1-20</span>  of <span>20000</span>
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
@@ -111,7 +142,7 @@ class CommunicationsManagement extends React.Component {
                                             {/* <label htmlFor="showFullDetails">Show full details</label> */}
                                             {/* <Form className="one-liner">
                                                         
-                                                <Form.Group controlId="filterDropdown">
+                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                                 <Form.Label>Filter </Form.Label>
                                                     <Form.Control as="select" size="sm">
                                                         <option>No Filter</option>
@@ -119,16 +150,25 @@ class CommunicationsManagement extends React.Component {
                                                         <option>Custom Filter</option>
                                                     </Form.Control>
                                                 </Form.Group>
-                                                <Button variant="primary" type="submit">Filter</Button>
+                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
                                             </Form> */}
                                         </div>
-                                        <div className="heading-with-cta toleft">
+                                        <div className="heading-with-cta">
+                                            <Form className="one-liner">
+
+                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                    <Form.Control as="select" size="sm">
+                                                        <option>No Filter</option>
+                                                        <option>Add New Filter</option>
+                                                        <option>Custom Filter</option>
+                                                    </Form.Control>
+                                                </Form.Group>
+                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                            </Form>
+
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
-                                                <select id="toshow" 
-                                                    onChange={this.setPagesize}
-                                                    value={this.state.PageSize}
-                                                    className="countdropdown form-control form-control-sm">
+                                                <select id="toshow" className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
                                                     <option value="25">25</option>
                                                     <option value="50">50</option>
@@ -142,7 +182,7 @@ class CommunicationsManagement extends React.Component {
                                                         <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
                                                     </div>
                                                     <div className="page-count">
-                                                        <span>1-{this.state.PageSize}</span>  of <span>{allNotificationsData.totalRows}</span>
+                                                        <span>1-20</span>  of <span>20000</span>
                                                     </div>
                                                     <div className="each-page-action">
                                                         <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
@@ -190,6 +230,47 @@ class CommunicationsManagement extends React.Component {
                             }else{
                                 return(
                                     <div className="no-records">
+                                        <div className="heading-with-cta">
+                                            <Form className="one-liner">
+
+                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                    
+                                                    <Form.Control as="select" size="sm">
+                                                        <option>No Filter</option>
+                                                        <option>Add New Filter</option>
+                                                        <option>Custom Filter</option>
+                                                    </Form.Control>
+                                                </Form.Group>
+                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                            </Form>
+
+                                            <div className="pagination-wrap">
+                                                <label htmlFor="toshow">Show</label>
+                                                <select id="toshow" className="countdropdown form-control form-control-sm">
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="200">200</option>
+                                                </select>
+                                                <div className="move-page-actions">
+                                                    <div className="each-page-action">
+                                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                    </div>
+                                                    <div className="each-page-action">
+                                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                                    </div>
+                                                    <div className="page-count">
+                                                        <span>1-20</span>  of <span>20000</span>
+                                                    </div>
+                                                    <div className="each-page-action">
+                                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                                    </div>
+                                                    <div className="each-page-action">
+                                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
@@ -253,19 +334,22 @@ class CommunicationsManagement extends React.Component {
                                 </div>
                             </div>
                             <div className="module-submenu">
-                                {/* <div className="content-container">
+                                <div className="content-container">
                                     <ul className="nav">
-                                    <li>
-                                        <NavLink to={'/communications/emails'}>Emails</NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to={'/communications/sms'}>SMS</NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to={'/communications/webhooks'}>Webhooks</NavLink>
-                                    </li>
+                                        <li>
+                                            <NavLink exact to={'/communications'}>All</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/communications/emails'}>Emails</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/communications/sms'}>SMS</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/communications/webhooks'}>Webhooks</NavLink>
+                                        </li>
                                     </ul>
-                                </div> */}
+                                </div>
                             </div>
                             <div className="module-content">
                                 <div className="content-container">

@@ -245,12 +245,18 @@ select, select.form-control{
 .grayed-out{
     opacity: 0.5;
 }
+.no-margins{
+    margin: 0;
+}
+.pr-10{
+    padding-right: 10px;
+}
 //Pagination
 .pagination-wrap{
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
     label{
         margin-bottom: 0;
         margin-right: 7px;
