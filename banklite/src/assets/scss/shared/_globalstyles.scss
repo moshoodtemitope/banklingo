@@ -510,7 +510,8 @@ span.hinttext {
         
     }
     .collapse {
-        margin: 0 30px;
+        margin: 0;
+        // margin-left: 0;
     }
 }
 .checkbox-wrap{

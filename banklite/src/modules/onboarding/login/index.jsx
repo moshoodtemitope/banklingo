@@ -14,6 +14,9 @@ import * as Yup from 'yup';
 import {authActions} from '../../../redux/actions/auth/auth.action';
 import {authConstants} from '../../../redux/actiontypes/auth/auth.constants';
 
+
+import {getRouteForRedirect} from "../../../shared/utils";
+
 import Alert from 'react-bootstrap/Alert'
 import loginIcon from '../../../assets/img/enter.svg'
 
@@ -24,6 +27,14 @@ class UserLogin extends React.Component {
         this.state={
         }
 
+
+        let returnUrl  =  getRouteForRedirect().getPreviousRoute;
+        let redirectType  =  getRouteForRedirect().redirectType;
+        
+        if(window.location.href.indexOf("retUrl")===-1 && returnUrl!==null){
+            window.location = `${window.location.href}?type=${redirectType}&retUrl=${returnUrl}`;
+            this.state.redirectType = redirectType;
+        }
         
     }
 
@@ -33,6 +44,8 @@ class UserLogin extends React.Component {
 
     componentDidMount=()=>{
         const { dispatch } = this.props;
+        // console.log("props are", this.props.loginRequest);
+        
           dispatch(authActions.initStore());
     }
 
@@ -50,6 +63,13 @@ class UserLogin extends React.Component {
             userPassword:  Yup.string()
                 .required('Required'),
           });
+        
+        let loggoutType, currentUrl;
+        if(window.location.href.indexOf("type")){
+            loggoutType = window.location.href.split('type=')[1].split('&retUrl')[0];
+            console.log("types is", loggoutType);
+        }
+        
         return(
             <div className="login-page">
                 
@@ -165,6 +185,25 @@ class UserLogin extends React.Component {
                                     <Alert variant="danger mt-20">
                                         {loginRequest.request_data.error!==undefined?loginRequest.request_data.error:null}
                                         
+
+                                    </Alert>
+                                }
+                                {loggoutType!==null && loggoutType==="timeout" && 
+                                    loginRequest.request_status !== authConstants.LOGIN_USER_FAILURE &&
+                                    loginRequest.request_status !== authConstants.LOGIN_USER_PENDING &&
+                                    loginRequest.request_status !== authConstants.LOGIN_USER_SUCCESS &&
+                                     <Alert variant="danger mt-20">
+                                         You were logged out because you were inactive
+
+                                    </Alert>
+                                }
+
+                                {loggoutType!==null && loggoutType==="unauthorized" && 
+                                    loginRequest.request_status !== authConstants.LOGIN_USER_FAILURE &&
+                                    loginRequest.request_status !== authConstants.LOGIN_USER_PENDING &&
+                                    loginRequest.request_status !== authConstants.LOGIN_USER_SUCCESS &&
+                                     <Alert variant="danger mt-20">
+                                        Please log in to authorize your activities
 
                                     </Alert>
                                 }

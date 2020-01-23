@@ -1,4 +1,11 @@
-// import { dispatch } from "rxjs/internal/observable/pairs";
+import { dispatch } from "rxjs/internal/observable/pairs";
+import { authActions } from "../redux/actions/auth/auth.action";
+
+import {saveRouteForRedirect} from "../shared/utils";
+
+
+
+
 
 const axios = require('axios');
 
@@ -76,15 +83,16 @@ export class ApiService {
                 }
             }
             service = axios.get(url, bodyData);
+
             return service.then(function (response) {
                 return service;
             }).catch(function (error) {
                 if (error.response) {
-                    console.log("errors is", error.response.status);
+                    
                     if (error.response.status === 401) {
-                        // dispatch(userActions.logout());
+                        let currentRoute = window.location.pathname;
+                        dispatch(authActions.Logout("unauthorized",currentRoute));
                     } else {
-                        
                         return service;
                     }
                       
@@ -118,7 +126,8 @@ export class ApiService {
               if (error.response) {
                 
                  if (error.response.status === 401) {
-                        // dispatch(userActions.logout());
+                        let currentRoute = window.location.pathname;
+                        dispatch(authActions.Logout("unauthorized",currentRoute));
                         //history.push('/');
                     }else {
                         

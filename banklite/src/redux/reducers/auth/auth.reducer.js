@@ -7,6 +7,7 @@ let user = JSON.parse(localStorage.getItem('user'));
 const initialState = (user && user.AllowedBranches!==undefined) ? { loggedIn: true, user } : {};
 
 export function LoginReducer(state=initialState, action) {
+    
     switch (action.type) {
         case authConstants.LOGIN_USER_PENDING:
             return {
@@ -31,11 +32,13 @@ export function LoginReducer(state=initialState, action) {
             return {
                 request_status: authConstants.LOGIN_USER_RESET,
                 is_request_processing: false,
-                request_data: {}
+                request_data: {},
             };
         
         case authConstants.LOGOUT:
             return {
+                // test:"dsdsds",
+                // request_data: action,
                 ...state
               };
             

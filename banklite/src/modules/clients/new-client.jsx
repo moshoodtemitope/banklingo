@@ -180,7 +180,7 @@ class NewClient extends React.Component {
                                             nextOfKinMobileNumber: values.nextOfKinMobile,
                                         },
                                         gender:values.gender,
-                                        dateOfBirth: values.dateOfBirth.toISOString(),
+                                        dateOfBirth: values.dateOfBirth!==''?values.dateOfBirth.toISOString():null,
                                         notes: values.notes
                                     }
                 

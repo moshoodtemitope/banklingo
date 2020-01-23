@@ -2,7 +2,7 @@ import { ApiService } from "../../../services/apiService";
 import { routes } from "../../../services/urls";
 import { history } from './../../../_helpers/history';
 import {authConstants} from '../../actiontypes/auth/auth.constants'
-import { handleRequestErrors } from "../../../shared/utils";
+import { handleRequestErrors, saveRouteForRedirect, removeRouteForRedirect } from "../../../shared/utils";
 
 export const authActions = {
     Login,
@@ -36,7 +36,19 @@ function Login   (loginPayload){
                                 localStorage.setItem('user', JSON.stringify(user));
                         
                             dispatch(success(response2.data));
-                            history.push('/dashboard');
+
+                            
+                            if(window.location.href.indexOf('retUrl=')>-1){
+                                let retUrl = window.location.href.split('retUrl=');
+                                
+                                if(retUrl.length===2){
+                                    history.push(retUrl[1]);
+                                    removeRouteForRedirect();
+                                }
+                            }else{
+                                history.push('/dashboard');
+                            }
+                            
                         })
                         .catch(error =>{
                             
@@ -83,17 +95,29 @@ function Login   (loginPayload){
 }
 
 
-function Logout(type) {
-    // userService.logout();
-    //console.error("We are logging you out...");
+function Logout(redirectType,retUrl) {
+    
     localStorage.clear();
-    history.push('/');
-    // window.location.reload();
-    return (dispatch) => {
-        dispatch(logout());
+    
+    
+    if(retUrl!==undefined){
+        
+        saveRouteForRedirect(redirectType,retUrl);
     }
-
-    function logout() { return { type: authConstants.LOGOUT } }
+    return (dispatch) => {
+        dispatch(logout(retUrl));
+    }
+    
+    
+    function logout(retUrl) { 
+        if(retUrl===undefined){
+            return { type: authConstants.LOGOUT } 
+        }
+        if(retUrl!==undefined){
+            return { type: authConstants.LOGOUT, retUrl } 
+        }
+        
+    }
 }
 
 function initStore() {

@@ -12,6 +12,8 @@ import FormControl from 'react-bootstrap/FormControl'
 import {NavLink} from 'react-router-dom';
 import { history } from '../../../_helpers/history';
 import {authActions} from '../../../redux/actions/auth/auth.action';
+
+import {saveRouteForRedirect} from "../../utils";
 // import {Nav, NavDropdown, Navbar, Form, Button, FormControl} from 'react-bootstrap'
 
 import {administrationActions} from '../../../redux/actions/administration/administration.action';
@@ -44,7 +46,7 @@ class MainHeader extends React.Component{
     }
 
     chooseBranch = (e)=>{
-        console.log("eeeeeeee");
+        
         let user = JSON.parse(localStorage.getItem("user"));
             user.BranchId = e.target.value;
             localStorage.setItem('user', JSON.stringify(user));
@@ -56,7 +58,12 @@ class MainHeader extends React.Component{
 
     logout =()=>{
         const { dispatch } = this.props;
+        // let currentRoute = window.location.pathname;
+
+        // dispatch(authActions.Logout("timeout",currentRoute));
+
         dispatch(authActions.Logout());
+        
         localStorage.removeItem("user");
         history.push('/');
     }

@@ -105,7 +105,7 @@ import {authActions} from '../redux/actions/auth/auth.action';
 
 
 var user = JSON.parse(localStorage.getItem("user"));
-//console.log("ouside", user);
+
 function PrivateRoute({ component: Component, authed, ...rest }) {
     
     return (
@@ -123,9 +123,10 @@ class AuthenticatedRoutes extends React.Component {
         this.state={
             user:''
         }
-
+        
     }
     
+
 
 
     render() {

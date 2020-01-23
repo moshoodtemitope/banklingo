@@ -70,3 +70,27 @@ export const numberWithCommas= (amount)=> {
         
     }
 }
+
+export const saveRouteForRedirect = (redirectType,currentRoute)=>{
+    
+    localStorage.setItem('currentRoute', JSON.stringify(currentRoute));
+    localStorage.setItem('redirectType', JSON.stringify(redirectType));
+}
+
+export const removeRouteForRedirect = ()=>{
+    
+    localStorage.removeItem("currentRoute");
+    localStorage.removeItem("redirectType");
+}
+
+export const getRouteForRedirect = ()=>{
+
+    let getPreviousRoute = JSON.parse(localStorage.getItem("currentRoute"));
+    let redirectType = JSON.parse(localStorage.getItem("redirectType"));
+    if(getPreviousRoute!==undefined){
+        return {getPreviousRoute,redirectType };
+    }else{
+        return null
+    }
+    
+}
