@@ -267,11 +267,11 @@ function updateOrganizationDetails   (updateOrgPayload){
 
 }
 
-function getTransactionChannels  (payload){
+function getTransactionChannels  (params){
     
     return dispatch =>{
-        let {PageSize, CurrentPage}= payload;
-        let consume = ApiService.request(routes.HIT_TRANSACTION_CHANNEL+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+        // let {PageSize, CurrentPage}= payload;
+        let consume = ApiService.request(routes.HIT_TRANSACTION_CHANNEL+`?${params}`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response =>{
@@ -496,8 +496,8 @@ function getAllPermissions  (){
 function getCustomerTypes  (customerTypesPayload, tempData){
     
         return dispatch =>{
-            let {PageSize, CurrentPage}= customerTypesPayload;
-            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/customertypes?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+            // let {PageSize, CurrentPage}= customerTypesPayload;
+            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/customertypes?${customerTypesPayload}`, "GET", null);
             dispatch(request(consume, tempData));
             return consume
                 .then(response =>{

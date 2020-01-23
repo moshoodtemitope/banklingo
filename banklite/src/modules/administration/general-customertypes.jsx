@@ -32,6 +32,8 @@ class GeneralCustomerTypes extends React.Component {
             // customerTypeDesc:'',
             // customerTypeId:'',
             // custTypepayload:''
+            PageSize: 30,
+            CurrentPage:1
         }
 
         
@@ -40,7 +42,7 @@ class GeneralCustomerTypes extends React.Component {
     }
 
     componentDidMount(){
-        this.getCustomerTypes();
+        this.loadInitialData();
     }
 
     validationSchema = Yup.object().shape({
@@ -56,18 +58,38 @@ class GeneralCustomerTypes extends React.Component {
           .required('Description is required')
     });
 
-    getCustomerTypes = (tempData)=>{
+    loadInitialData=()=>{
+        let {PageSize, CurrentPage}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        this.getCustomerTypes(params);
+    }
+
+    getCustomerTypes = (params, tempData)=>{
         const {dispatch} = this.props;
-        let payload ={
-            PageSize:20,
-            CurrentPage:1
-        }
+        // let payload ={
+        //     PageSize:20,
+        //     CurrentPage:1
+        // }
+        let {PageSize, CurrentPage}= this.state;
+        // let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
         if(tempData){
-            dispatch(administrationActions.getCustomerTypes(payload, tempData));
+            dispatch(administrationActions.getCustomerTypes(params, tempData));
         }else{
-            dispatch(administrationActions.getCustomerTypes(payload));
+            dispatch(administrationActions.getCustomerTypes(params));
         }
         
+    }
+
+    setPagesize = (PageSize)=>{
+        // console.log('----here', PageSize.target.value);
+        let sizeOfPage = PageSize.target.value,
+            {CurrentPage} = this.state;
+        
+
+        this.setState({PageSize: sizeOfPage});
+
+        let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        this.getCustomerTypes(params);
     }
 
     handleClose = () => this.setState({show:false});
@@ -302,7 +324,10 @@ class GeneralCustomerTypes extends React.Component {
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <select id="toshow" 
+                                            onChange={this.setPagesize}
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -387,7 +412,8 @@ class GeneralCustomerTypes extends React.Component {
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <select id="toshow" 
+                                            className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -489,8 +515,10 @@ class GeneralCustomerTypes extends React.Component {
                                             if(this.props.adminUpdateCustomerType.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS){
                                                 this.handleCloseEdit();
                                                 // this.getCustomerTypes(allCustomerTypesData);
+                                                let {PageSize, CurrentPage}= this.state;
+                                                let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
                                                 setTimeout(() => {
-                                                    this.getCustomerTypes(allCustomerTypesData);
+                                                    this.getCustomerTypes(params,allCustomerTypesData);
                                                     
                                                     this.props.dispatch(administrationActions.updateCustomerType("CLEAR"))
                                                     

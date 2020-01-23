@@ -48,7 +48,7 @@ class WebhooksCommunications extends React.Component {
     
             this.setState({PageSize: sizeOfPage});
     
-            let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&&NotificationType=${NotificationType}`;
+            let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&NotificationType=${NotificationType}`;
             this.getNotifications(params);
         }
     

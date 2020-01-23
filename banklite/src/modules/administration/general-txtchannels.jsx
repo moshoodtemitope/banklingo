@@ -27,16 +27,23 @@ class GeneralTxtChannels extends React.Component {
         super(props);
         this.state={
             user:'',
-            showEdit: false
+            showEdit: false,
+            PageSize: 30,
+            CurrentPage:1
         }
 
         
     }
 
     componentDidMount(){
-        this.getTransactionChannels();
+        this.loadInitialData();
     }
 
+    loadInitialData=()=>{
+        let {PageSize, CurrentPage}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        this.getTransactionChannels(params);
+    }
     
 
     handleCloseEdit = () => this.setState({showEdit:false});
@@ -44,14 +51,26 @@ class GeneralTxtChannels extends React.Component {
     handleShowEdit = (encodedKey) => this.setState({showEdit:true, encodedKey});
 
 
-    getTransactionChannels = ()=>{
+    getTransactionChannels = (params)=>{
         const {dispatch} = this.props;
-        let payload ={
-            PageSize:20,
-            CurrentPage:1
-        }
-        dispatch(administrationActions.getTransactionChannels(payload));
+        // let payload ={
+        //     PageSize:20,
+        //     CurrentPage:1
+        // }
+        dispatch(administrationActions.getTransactionChannels(params));
     }
+
+    setPagesize = (PageSize)=>{
+        // console.log('----here', PageSize.target.value);
+        let sizeOfPage = PageSize.target.value,
+            {CurrentPage} = this.state;
+
+        this.setState({PageSize: sizeOfPage});
+
+        let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        this.getTransactionChannels(params);
+    }
+    
 
     renderAllChannels =()=>{
         let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels;
@@ -145,7 +164,10 @@ class GeneralTxtChannels extends React.Component {
 
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
-                                                <select id="toshow" className="countdropdown form-control form-control-sm">
+                                                <select id="toshow" 
+                                                    onChange={this.setPagesize}
+                                                    value={this.state.PageSize}
+                                                    className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
                                                     <option value="25">25</option>
                                                     <option value="50">50</option>
@@ -234,7 +256,8 @@ class GeneralTxtChannels extends React.Component {
 
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
-                                                <select id="toshow" className="countdropdown form-control form-control-sm">
+                                                <select id="toshow" 
+                                                    className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
                                                     <option value="25">25</option>
                                                     <option value="50">50</option>
@@ -383,10 +406,11 @@ class GeneralTxtChannels extends React.Component {
                                         .then(
                                             () => {
                                                 if(this.props.adminUpdateTransactionChannel.request_status === administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS){
-                                                    
+                                                    let {PageSize, CurrentPage}= this.state;
+                                                    let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
                                                     
                                                     setTimeout(() => {
-                                                        this.getTransactionChannels(); 
+                                                        this.getTransactionChannels(params); 
                                                         this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"));
                                                         this.handleCloseEdit();
                                                     }, 3000);
