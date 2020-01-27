@@ -105,11 +105,11 @@ function Logout(redirectType,retUrl) {
         saveRouteForRedirect(redirectType,retUrl);
     }
     return (dispatch) => {
-        dispatch(logout(retUrl));
+        dispatch(logout(redirectType,retUrl));
     }
     
     
-    function logout(retUrl) { 
+    function logout(redirectType,retUrl) { 
         if(retUrl===undefined){
             return { type: authConstants.LOGOUT } 
         }

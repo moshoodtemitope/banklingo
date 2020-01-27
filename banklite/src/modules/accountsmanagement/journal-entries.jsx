@@ -98,7 +98,10 @@ class JournalEntries extends React.Component {
         this.setState({PageSize: sizeOfPage});
 
         let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-        this.getClients(params);
+        // this.getJournalEntries(params);
+        let getJournalEntriesRequest = this.props.getJournalEntries;
+        let saveRequestData= getJournalEntriesRequest.request_data!==undefined?getJournalEntriesRequest.request_data.tempData:null;
+        this.getJournalEntries(saveRequestData);
     }
 
 
@@ -431,9 +434,10 @@ class JournalEntries extends React.Component {
                                                                             touched.jornalEntries[index].entryTypeId  = null
                                                                         }
 
+                                                                        console.log("type is",selectedType.value, typeof selectedType.value);
                                                                         
-                                                                        
-                                                                        values.jornalEntries[index].entryTypeId = selectedType.value
+                                                                        // values.jornalEntries[index].entryTypeId = selectedType.value
+                                                                        values.jornalEntries[index].entryTypeId = parseInt(selectedType.value)
 
                                                                         
                                                                        
@@ -786,6 +790,7 @@ class JournalEntries extends React.Component {
                                 <thead>
                                     <tr>
                                         <th>Entry Id</th>
+                                        <th>Transaction Id</th>
                                         <th>Booking Date (Entry Date)</th>
                                         <th>GL Account Name</th>
                                         <th>Debit Amount</th>
@@ -794,6 +799,7 @@ class JournalEntries extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -865,6 +871,7 @@ class JournalEntries extends React.Component {
                                 <thead>
                                     <tr>
                                         <th>Entry Id</th>
+                                        <th>Transaction Id</th>
                                         <th>Booking Date (Entry Date)</th>
                                         <th>GL Account Name</th>
                                         <th>Debit Amount</th>
@@ -876,6 +883,7 @@ class JournalEntries extends React.Component {
                                     return(
                                         <tr key={key}>
                                             <td>{eachJournal.id}</td>
+                                            <td>{eachJournal.transactionReference}</td>
                                             {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
                                             <td>{eachJournal.bookingDate}</td>
                                             <td>{eachJournal.accountName}</td>
@@ -953,6 +961,7 @@ class JournalEntries extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Entry Id</th>
+                                            <th>Transaction Id</th>
                                             <th>Booking Date (Entry Date)</th>
                                             <th>GL Account Name</th>
                                             <th>Debit Amount</th>
@@ -964,6 +973,7 @@ class JournalEntries extends React.Component {
                                         return(
                                             <tr key={key}>
                                                 <td>{eachJournal.id}</td>
+                                                <td>{eachJournal.transactionReference}</td>
                                                 <td>{eachJournal.bookingDate}</td>
                                                 {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
                                                 <td>{eachJournal.accountName}</td>
@@ -1023,6 +1033,7 @@ class JournalEntries extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Entry Id</th>
+                                            <th>Transaction Id</th>
                                             <th>Booking Date (Entry Date)</th>
                                             <th>GL Account Name</th>
                                             <th>Debit Amount</th>

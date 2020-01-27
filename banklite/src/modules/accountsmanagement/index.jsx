@@ -493,9 +493,11 @@ class AccountManagement extends React.Component {
             accountNotes: Yup.string()
               .min(1, 'Min of two characters'),
             accountUsage: Yup.string()
-              .min(1, 'Please provide valid symbol'),
+              .min(1, 'Please provide valid symbol')
+              .required('Please select usage'),
             accountType: Yup.string()
-              .min(1, 'Min of two characters'),
+              .min(1, 'Min of two characters')
+              .required('Please select type'),
             accountName: Yup.string()
                 .min(2, 'Min of two characters')
                 .max(30, 'Max Limit reached')

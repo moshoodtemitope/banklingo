@@ -32,7 +32,8 @@ class UserLogin extends React.Component {
         let redirectType  =  getRouteForRedirect().redirectType;
         
         if(window.location.href.indexOf("retUrl")===-1 && returnUrl!==null){
-            window.location = `${window.location.href}?type=${redirectType}&retUrl=${returnUrl}`;
+            // window.location = `${window.location.href}?type=${redirectType}&retUrl=${returnUrl}`;
+            window.location = `${window.location.href}?retUrl=${returnUrl}`;
             this.state.redirectType = redirectType;
         }
         
@@ -65,9 +66,14 @@ class UserLogin extends React.Component {
           });
         
         let loggoutType, currentUrl;
-        if(window.location.href.indexOf("type")){
-            loggoutType = window.location.href.split('type=')[1].split('&retUrl')[0];
-            console.log("types is", loggoutType);
+        
+        // if(window.location.href.indexOf("type")>-1){
+        //     loggoutType = window.location.href.split('type=')[1].split('&retUrl')[0];
+        //     console.log("types is", loggoutType);
+        // }
+
+        if(getRouteForRedirect().getPreviousRoute!==undefined && getRouteForRedirect().getPreviousRoute!==null){
+            loggoutType  =  getRouteForRedirect().getPreviousRoute;
         }
         
         return(

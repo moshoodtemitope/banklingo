@@ -1,9 +1,12 @@
 export const handleRequestErrors = (error)=>{
-    // console.log('error type',  error.toString())
-    if(error!==undefined){
+    console.log('error type',  error)
+    if(error!==undefined && error!==null){
+        // if(error!==undefined && error!==null && error.toString().indexOf("'closed' of undefined")===-1){
+        console.log("before");
         if(typeof error.response ==="object"){
             // console.log('error keys', error.response);
             if(error.response && error.response.data.message!==null){
+                console.log("=====center====");
                 return error.response.data.message;
             }
             // if(error.message){
@@ -13,12 +16,14 @@ export const handleRequestErrors = (error)=>{
             //     return error.message;
             // }
             // console.log('final');
+            console.log("middle");
             return "Something went wrong. Please try again";
         }
 
         if(error.toString()==="Error: Network Error"){
             return "Please check your network and try again"
         }
+        console.log("after");
         return error
     }
 
