@@ -1,12 +1,15 @@
 export const handleRequestErrors = (error)=>{
-    console.log('error type',  error)
+    console.log('error type',  error, typeof error);
+    if(error.toString().indexOf("'closed' of undefined")>-1){
+        // window.location.reload();
+    }
     if(error!==undefined && error!==null){
         // if(error!==undefined && error!==null && error.toString().indexOf("'closed' of undefined")===-1){
-        console.log("before");
+        
         if(typeof error.response ==="object"){
             // console.log('error keys', error.response);
             if(error.response && error.response.data.message!==null){
-                console.log("=====center====");
+                
                 return error.response.data.message;
             }
             // if(error.message){
@@ -15,16 +18,16 @@ export const handleRequestErrors = (error)=>{
             //     }
             //     return error.message;
             // }
-            // console.log('final');
-            console.log("middle");
+           
             return "Something went wrong. Please try again";
         }
 
         if(error.toString()==="Error: Network Error"){
             return "Please check your network and try again"
         }
-        console.log("after");
-        return error
+        
+        // return error
+        return '';
     }
 
     
@@ -79,7 +82,9 @@ export const numberWithCommas= (amount)=> {
 export const saveRouteForRedirect = (redirectType,currentRoute)=>{
     
     localStorage.setItem('currentRoute', JSON.stringify(currentRoute));
+    // localStorage.setItem('currentRoute', currentRoute);
     localStorage.setItem('redirectType', JSON.stringify(redirectType));
+    // localStorage.setItem('redirectType', redirectType);
 }
 
 export const removeRouteForRedirect = ()=>{
@@ -92,6 +97,10 @@ export const getRouteForRedirect = ()=>{
 
     let getPreviousRoute = JSON.parse(localStorage.getItem("currentRoute"));
     let redirectType = JSON.parse(localStorage.getItem("redirectType"));
+
+    // let getPreviousRoute = localStorage.getItem("currentRoute");
+    // let redirectType = localStorage.getItem("redirectType");
+
     if(getPreviousRoute!==undefined){
         return {getPreviousRoute,redirectType };
     }else{

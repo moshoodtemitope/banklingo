@@ -29,13 +29,14 @@ class UserLogin extends React.Component {
 
 
         let returnUrl  =  getRouteForRedirect().getPreviousRoute;
-        let redirectType  =  getRouteForRedirect().redirectType;
+        this.redirectType  =  getRouteForRedirect().redirectType;
         
         if(window.location.href.indexOf("retUrl")===-1 && returnUrl!==null){
             // window.location = `${window.location.href}?type=${redirectType}&retUrl=${returnUrl}`;
             window.location = `${window.location.href}?retUrl=${returnUrl}`;
-            this.state.redirectType = redirectType;
+            this.state.redirectType = this.redirectType;
         }
+        console.log("++++++", this.redirectType);
         
     }
 
@@ -73,7 +74,7 @@ class UserLogin extends React.Component {
         // }
 
         if(getRouteForRedirect().getPreviousRoute!==undefined && getRouteForRedirect().getPreviousRoute!==null){
-            loggoutType  =  getRouteForRedirect().getPreviousRoute;
+            loggoutType  =  getRouteForRedirect().redirectType;
         }
         
         return(
@@ -194,7 +195,7 @@ class UserLogin extends React.Component {
 
                                     </Alert>
                                 }
-                                {loggoutType!==null && loggoutType==="timeout" && 
+                                {this.redirectType!==null && this.redirectType==="timeout" && 
                                     loginRequest.request_status !== authConstants.LOGIN_USER_FAILURE &&
                                     loginRequest.request_status !== authConstants.LOGIN_USER_PENDING &&
                                     loginRequest.request_status !== authConstants.LOGIN_USER_SUCCESS &&
@@ -204,7 +205,7 @@ class UserLogin extends React.Component {
                                     </Alert>
                                 }
 
-                                {loggoutType!==null && loggoutType==="unauthorized" && 
+                                {this.redirectType!==null && this.redirectType==="unauthorized" && 
                                     loginRequest.request_status !== authConstants.LOGIN_USER_FAILURE &&
                                     loginRequest.request_status !== authConstants.LOGIN_USER_PENDING &&
                                     loginRequest.request_status !== authConstants.LOGIN_USER_SUCCESS &&

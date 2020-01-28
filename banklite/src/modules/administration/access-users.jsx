@@ -112,6 +112,7 @@ class AccessUsers extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
+                                        <th>Fullname</th>
                                         <th>User Name</th>
                                         <th>Title</th>
                                         <th>Email</th>
@@ -123,6 +124,7 @@ class AccessUsers extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -188,6 +190,7 @@ class AccessUsers extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                                     <thead>
                                                         <tr>
+                                                            <th>Fullname</th>
                                                             <th>User Name</th>
                                                             <th>Title</th>
                                                             <th>Email</th>
@@ -204,6 +207,7 @@ class AccessUsers extends React.Component {
                                                                     <Fragment key={index}>
                                                                         <tr>
                                                                             <td>{eachUser.name}</td>
+                                                                            <td>{eachUser.userName}</td>
                                                                             <td>{eachUser.title}</td>
                                                                             <td>{eachUser.emailAddress}</td>
                                                                             <td>{eachUser.role}</td>
@@ -281,6 +285,7 @@ class AccessUsers extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
+                                                    <th>FullName</th>
                                                     <th>User Name</th>
                                                     <th>Title</th>
                                                     <th>Email</th>
@@ -292,6 +297,7 @@ class AccessUsers extends React.Component {
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

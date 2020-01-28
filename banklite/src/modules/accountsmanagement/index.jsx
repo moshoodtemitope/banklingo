@@ -31,6 +31,7 @@ class AccountManagement extends React.Component {
             showEditGL:false,
             CurrentPage: 1,
             PageSize: 25,
+            typeToShow: "all"
         }
 
         
@@ -87,11 +88,19 @@ class AccountManagement extends React.Component {
     
     handleEditGlShow = (glIdToEdit, accountToEdit) => this.setState({showEditGL:true, glIdToEdit, accountToEdit});
 
+    filterWithType = (typeToShow)=>{
+        if(typeToShow===this.state.typeToShow){
+            this.setState({typeToShow: "all"})
+        }else{
+            this.setState({typeToShow})
+        }
+        
+    }
 
     renderAllGL = ()=>{
 
         let getGLAccountsRequest = this.props.getGLAccounts,
-            {CurrentPage, PageSize} = this.state,
+            {CurrentPage, PageSize, typeToShow} = this.state,
             createGLAccountRequest = this.props.createGLAccount,
             updateGLAccount = this.props.updateGLAccount;
 
@@ -175,7 +184,29 @@ class AccountManagement extends React.Component {
                         </div>
                     )
                 }else{
-                    
+                    let unfilteredAccounTypes =[],
+                        countOfAccounTypes ={},
+                        {accounTypesData} = this.state;
+
+                        saveRequestData.map((eachGL, index)=>{
+                            if(accounTypes.indexOf(eachGL.accountTypeDescription)===-1){
+                                accounTypes.push(eachGL.accountTypeDescription)
+                            }
+                            unfilteredAccounTypes.push(eachGL.accountTypeDescription)
+                        })
+
+                        if (unfilteredAccounTypes instanceof Array) { 
+                            unfilteredAccounTypes.forEach(function (v, i) {
+                                if (!countOfAccounTypes[v]) { 
+                                    countOfAccounTypes[v] = [i]; 
+                                } else { 
+                                    countOfAccounTypes[v].push(i); 
+                                }
+                            });
+                            Object.keys(countOfAccounTypes).forEach(function (v) {
+                                countOfAccounTypes[v] = {"index": countOfAccounTypes[v], "length": countOfAccounTypes[v].length};
+                            });
+                        }
                     return(
                         <div>
                             {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
@@ -230,6 +261,29 @@ class AccountManagement extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            <div className="filter-nav">
+                                <div  className={typeToShow==="all"?'active-type':''}
+                                        onClick={(e)=>this.filterWithType("all")}>
+                                    All({getGLAccountsData.length})
+                                </div>
+                                {accounTypes!==undefined &&
+
+                                    accounTypes.map((eachType, index)=>{
+                                        // if(eachType){
+
+                                        // }
+                                        let typeDataLength = countOfAccounTypes[eachType].length;
+                                        return(
+                                            <div key={index}
+                                                    className={typeToShow===eachType?'active-type':''}
+                                                    onClick={(e)=>this.filterWithType(eachType)} >
+                                                        {eachType} ({typeDataLength}) 
+                                            </div>
+                                        )
+                                    })
+                                
+                                }
+                            </div>
                             <div className="loading-text">Please wait...</div>
                             <div>
                                 <TableComponent classnames="striped bordered hover">
@@ -281,7 +335,32 @@ class AccountManagement extends React.Component {
                 }
             
             case (accountingConstants.GET_GLACCOUNTS_SUCCESS):
-                let getGLAccountsData = getGLAccountsRequest.request_data.response.data;
+                let getGLAccountsData = getGLAccountsRequest.request_data.response.data,
+                    accounTypes =[],
+                    unfilteredAccounTypes =[],
+                    countOfAccounTypes ={},
+                    {accounTypesData} = this.state;
+
+                    getGLAccountsData.map((eachGL, index)=>{
+                        if(accounTypes.indexOf(eachGL.accountTypeDescription)===-1){
+                            accounTypes.push(eachGL.accountTypeDescription)
+                        }
+                        unfilteredAccounTypes.push(eachGL.accountTypeDescription)
+                    })
+
+                    if (unfilteredAccounTypes instanceof Array) { 
+                        unfilteredAccounTypes.forEach(function (v, i) {
+                            if (!countOfAccounTypes[v]) { 
+                                countOfAccounTypes[v] = [i]; 
+                            } else { 
+                                countOfAccounTypes[v].push(i); 
+                            }
+                        });
+                        Object.keys(countOfAccounTypes).forEach(function (v) {
+                            countOfAccounTypes[v] = {"index": countOfAccounTypes[v], "length": countOfAccounTypes[v].length};
+                        });
+                    }
+                   
 
                 if(getGLAccountsData!==undefined){
                     if(getGLAccountsData.length>=1){
@@ -342,6 +421,29 @@ class AccountManagement extends React.Component {
                                         {updateGLAccount.request_data.response.data.message}
                                     </Alert>
                                 }
+                                <div className="filter-nav">
+                                    <div  className={typeToShow==="all"?'active-type':''}
+                                          onClick={(e)=>this.filterWithType("all")}>
+                                        All({getGLAccountsData.length})
+                                    </div>
+                                    {accounTypes!==undefined &&
+
+                                        accounTypes.map((eachType, index)=>{
+                                            // if(eachType){
+
+                                            // }
+                                            let typeDataLength = countOfAccounTypes[eachType].length;
+                                            return(
+                                                <div key={index}
+                                                     className={typeToShow===eachType?'active-type':''}
+                                                     onClick={(e)=>this.filterWithType(eachType)} >
+                                                         {eachType} ({typeDataLength}) 
+                                                </div>
+                                            )
+                                        })
+                                    
+                                    }
+                                </div>
                 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -358,27 +460,53 @@ class AccountManagement extends React.Component {
                                     <tbody>
                                         {
                                             getGLAccountsData.map((eachGL, index)=>{
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>{eachGL.glCode}</td>
-                                                        <td>{eachGL.accountName}</td>
-                                                        <td>{eachGL.accountTypeDescription}</td>
-                                                        <td>{eachGL.accountUsageDescription}</td>
-                                                        <td>{eachGL.inUse.toString()}</td>
-                                                        <td>{eachGL.manualEntriesAllowed.toString()}</td>
-                                                        <td>
-                                                            <DropdownButton
-                                                                size="sm"
-                                                                title="Actions"
-                                                                key="glAccountActions"
-                                                                // drop="left"
-                                                                className="customone"
-                                                            >
-                                                                <Dropdown.Item eventKey="1" onClick={()=>this.handleEditGlShow(eachGL.glCode, eachGL.accountTypeDescription)}>Edit</Dropdown.Item>
-                                                            </DropdownButton>
-                                                        </td>
-                                                    </tr>
-                                                )
+                                                if(typeToShow === eachGL.accountTypeDescription){
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{eachGL.glCode}</td>
+                                                            <td>{eachGL.accountName}</td>
+                                                            <td>{eachGL.accountTypeDescription}</td>
+                                                            <td>{eachGL.accountUsageDescription}</td>
+                                                            <td>{eachGL.inUse.toString()}</td>
+                                                            <td>{eachGL.manualEntriesAllowed.toString()}</td>
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    key="glAccountActions"
+                                                                    // drop="left"
+                                                                    className="customone"
+                                                                >
+                                                                    <Dropdown.Item eventKey="1" onClick={()=>this.handleEditGlShow(eachGL.glCode, eachGL.accountTypeDescription)}>Edit</Dropdown.Item>
+                                                                </DropdownButton>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                }
+
+                                                if(typeToShow === "all"){
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{eachGL.glCode}</td>
+                                                            <td>{eachGL.accountName}</td>
+                                                            <td>{eachGL.accountTypeDescription}</td>
+                                                            <td>{eachGL.accountUsageDescription}</td>
+                                                            <td>{eachGL.inUse.toString()}</td>
+                                                            <td>{eachGL.manualEntriesAllowed.toString()}</td>
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    key="glAccountActions"
+                                                                    // drop="left"
+                                                                    className="customone"
+                                                                >
+                                                                    <Dropdown.Item eventKey="1" onClick={()=>this.handleEditGlShow(eachGL.glCode, eachGL.accountTypeDescription)}>Edit</Dropdown.Item>
+                                                                </DropdownButton>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                }
                                             })
                                         }
                                         

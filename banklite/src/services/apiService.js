@@ -1,6 +1,6 @@
 import { dispatch } from "rxjs/internal/observable/pairs";
 import { authActions } from "../redux/actions/auth/auth.action";
-
+import {history} from "../_helpers/history";
 import {saveRouteForRedirect} from "../shared/utils";
 
 
@@ -38,6 +38,7 @@ export class ApiService {
             //Exclude urlsToAuthenticate urls from Authenticated requests with Token
            if (urlsToAuthenticate.indexOf(serviceToTest) === -1) {
                // axios.defaults.headers.common['Token'] = user.token;
+            //    axios.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
                axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
             //    console.log("user is", user);
                 delete axios.defaults.headers.common.Bid;
@@ -85,13 +86,33 @@ export class ApiService {
             service = axios.get(url, bodyData);
 
             return service.then(function (response) {
+                // let currentRoute = window.location.pathname;
+                // dispatch(authActions.Logout("unauthorized",currentRoute));
+                // console.log("dsdsds csds", response.status)
+                // if (response.status === 200) {
+                //     let currentRoute = window.location.pathname,
+                //     type = "unauthorized";
+
+                    
+                    
+                //     authActions.Logout(type,currentRoute);
+                    
+                    
+                // }
+
                 return service;
             }).catch(function (error) {
                 if (error.response) {
                     
                     if (error.response.status === 401) {
-                        let currentRoute = window.location.pathname;
-                        dispatch(authActions.Logout("unauthorized",currentRoute));
+                        let currentRoute = window.location.pathname,
+                        type = "unauthorized";
+
+                       
+                        dispatch(authActions.Logout(type,currentRoute));
+                        
+                       
+                        
                     } else {
                         return service;
                     }
@@ -102,10 +123,13 @@ export class ApiService {
                 //         return "Please Check your network"
                 //     }
                 // }
+                
                 return  service;
             });
 
-        } else {
+        }  
+        
+        if (type.toLowerCase() === 'post'){
             //check for header
             axios.defaults.headers.common['Content-Type'] = 'application/json';
             if(headers === undefined){

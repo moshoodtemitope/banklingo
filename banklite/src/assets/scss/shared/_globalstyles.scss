@@ -652,3 +652,30 @@ button.togglestyle{
     color: #AEB6BF;
     font-weight: 500;
 }
+.filter-nav {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 13px;
+    >div{
+        margin-right: 10px;
+        display: block;
+        background: #EBF5FB;
+        color: #1A5276;
+        font-size: 11px;
+        padding: 4px 6px;
+        border: 1px solid #A9CCE3;
+        border-radius: 3px;
+        &:hover{
+            cursor: pointer;
+            background: #A9CCE3;
+            color: #34495E;
+            font-weight: 600;
+        }
+        &.active-type{
+            background: #5499C7;
+            color: #ffffff;
+            font-weight: 600;
+        }
+    }
+}

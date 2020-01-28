@@ -9,7 +9,7 @@ import { NavLink} from 'react-router-dom';
 
 
 import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
-import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashoboard.constants'
+import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 import "./dashboard.scss"; 
 class DashboardLanding extends React.Component {
     constructor(props) {

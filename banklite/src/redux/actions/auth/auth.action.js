@@ -104,13 +104,15 @@ function Logout(redirectType,retUrl) {
         
         saveRouteForRedirect(redirectType,retUrl);
     }
+
+    history.push('/');
     return (dispatch) => {
         dispatch(logout(redirectType,retUrl));
     }
     
     
     function logout(redirectType,retUrl) { 
-        if(retUrl===undefined){
+        if(retUrl===undefined ||retUrl===null ){
             return { type: authConstants.LOGOUT } 
         }
         if(retUrl!==undefined){

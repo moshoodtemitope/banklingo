@@ -2,21 +2,41 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-
+import { connect } from 'react-redux';
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
+import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 
 import "./activities.scss"; 
 class Activties extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            PageSize:25,
+            CurrentPage:1,
         }
         
+    }
+
+    componentDidMount(){
+        this.loadInitialData();
+    }
+
+    loadInitialData=()=>{
+        let {PageSize, CurrentPage}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        this.getActivitiesData(params);
+    }
+
+    getActivitiesData = (paramters)=>{
+        const {dispatch} = this.props;
+
+        dispatch(dashboardActions.getActivitiesData(paramters));
     }
 
     render() {
@@ -144,4 +164,10 @@ class Activties extends React.Component {
     }
 }
 
-export default Activties;
+function mapStateToProps(state) {
+    return {
+        getDashboardStats: state.dashboardReducers.getDashboardStatReducer,
+    };
+}
+
+export default connect(mapStateToProps)(Activties);
