@@ -51,4 +51,18 @@ span.txt-cta {
     height: 100%;
     margin: 0;
     border-radius: 0;
+    .form-heading{
+        display: flex;
+        justify-content: space-between;
+        
+    }
+    .close-icon {
+        width: 31px;
+        opacity: 0.6;
+        &:hover{
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+    }
 }

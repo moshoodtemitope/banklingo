@@ -16,6 +16,8 @@ import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import "./disbursements.scss"; 
 
+import closeIcon from '../../assets/img/close.svg'
+
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
 import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
 class DisbursementManagement extends React.Component {
@@ -130,6 +132,10 @@ class DisbursementManagement extends React.Component {
         // }
     }
 
+    
+    closeDetails = ()=>{
+        this.setState({showDetails:false});
+    }
 
     renderADisbursment =(transactionReference)=>{
         
@@ -140,6 +146,9 @@ class DisbursementManagement extends React.Component {
             case (disbursmentConstants.GET_A_DISBURSMENT_PENDING):
                 return (
                     <div className="card form-content details-wrap w-40">
+                        <div className="close-icon" onClick={this.closeDetails}>
+                            <img src={closeIcon} alt="" />
+                        </div>
                         <div className="loading-content">
                             <div className="loading-text">Please wait... </div>
                         </div>
@@ -156,12 +165,15 @@ class DisbursementManagement extends React.Component {
                                 <div className="card form-content details-wrap  w-40">
                                     <div className="form-heading centered mb-20">
                                         <h4>Disbursment details</h4>
+                                        <div className="close-icon" onClick={this.closeDetails}>
+                                            <img src={closeIcon} alt="" />
+                                        </div>
                                     </div>
                                     <Row>
                                         {
                                             disbursmentData.map((eachInfo, index)=>{
                                                 return(
-                                                    <Col xs={6} className="mb-10">
+                                                    <Col xs={6} className="mb-10" key={index}>
                                                         <div className="dissburseInfo">
                                                             <Form.Label className="block-level">{eachInfo.key}</Form.Label>
                                                             <span className="form-text disabled-field">{
@@ -181,8 +193,11 @@ class DisbursementManagement extends React.Component {
                     }else{
                         return(
                             <div className="card form-content details-wrap w-40">
+                                <div className="close-icon" onClick={this.closeDetails}>
+                                    <img src={closeIcon} alt="" />
+                                </div>
                                 <div className="no-records">
-                                No records found
+                                    No records found
                                 </div>
                             </div>
                         )
