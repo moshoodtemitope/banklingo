@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+
 import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
@@ -16,6 +17,7 @@ import * as Yup from 'yup';
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
+import AdminNav from './_menu'
 import "./administration.scss"; 
 class AccessPreferences extends React.Component {
     constructor(props) {
@@ -342,27 +344,7 @@ class AccessPreferences extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
-                                    <ul className="nav">
-                                        <li>
-                                            {/* <NavLink to={'/administration-generalorganization'}>General</NavLink> */}
-                                            <NavLink to={'/administration/general'}>General</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/organization'}>Organization</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/access'}>Access</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/products'}>Products</NavLink>
-                                        </li> 
-                                        <li>
-                                            <NavLink to={'/administration/sms'}>SMS</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/email'}>Email</NavLink>
-                                        </li>
-                                    </ul>
+                                    <AdminNav />
                                     <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>

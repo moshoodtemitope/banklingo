@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -11,7 +12,7 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
-
+import AdminNav from './_menu'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
@@ -341,27 +342,7 @@ class GeneralOrganization extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
-                                    <ul className="nav">
-                                        <li>
-                                            {/* <NavLink to={'/administration-generalorganization'}>General</NavLink> */}
-                                            <NavLink to={'/administration/general'}>General</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/organization'}>Organization</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/access'}>Access</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/products'}>Products</NavLink>
-                                        </li> 
-                                        <li>
-                                            <NavLink to={'/administration/sms'}>SMS</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/email'}>Email</NavLink>
-                                        </li>
-                                    </ul>
+                                    <AdminNav />
                                     <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>

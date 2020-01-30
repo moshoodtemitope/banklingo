@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import AdminNav from './_menu'
 import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';

@@ -217,7 +217,7 @@ class NewClient extends React.Component {
                                             onSubmit={handleSubmit}
                                             className="form-content card">
                                             <div className="form-heading">
-                                                <h3>Create A New User</h3>
+                                                <h3>Create {selectedCustype.name}</h3>
                                             </div>
                                             <Form.Row>
                                                 <Col>

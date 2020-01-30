@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import AdminNav from './_menu'
 
 import { NavLink} from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -1028,26 +1029,7 @@ class GeneralCurrency extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
-                                    <ul className="nav">
-                                        <li>
-                                            <NavLink to={'/administration/general'}>General</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/organization'}>Organization</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/access'}>Access</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/products'}>Products</NavLink>
-                                        </li> 
-                                        <li>
-                                            <NavLink to={'/administration/sms'}>SMS</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/administration/email'}>Email</NavLink>
-                                        </li>
-                                    </ul>
+                                    <AdminNav />
                                     <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>

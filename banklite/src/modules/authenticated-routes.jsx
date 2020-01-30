@@ -50,6 +50,8 @@ import BalanceSheet from './accountsmanagement/balance-sheet'
 
 import AdminManagement from './administration'
 
+import UploadData from './administration/uploaddata'
+
 import GeneralOrganization from './administration/general-organization'
 import GeneralCurrency from './administration/general-currency'
 import GeneralTxtChannels from './administration/general-txtchannels'
@@ -222,6 +224,7 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute exact path='/administration/general/customer-types' {...this.props} authed={this.props.user} component={GeneralCustomerTypes} /> 
                         <PrivateRoute exact path='/administration/general/control' {...this.props} authed={this.props.user} component={GeneralInternalControl} /> 
                         <PrivateRoute exact path='/administration/general/branding' {...this.props} authed={this.props.user} component={GeneralBranding} /> 
+                        <PrivateRoute exact path='/administration/uploaddata' {...this.props} authed={this.props.user} component={UploadData} /> 
                         
                         <PrivateRoute exact path='/administration/organization' {...this.props} authed={this.props.user} component={OrganizationBranches} /> 
                         <PrivateRoute exact path='/administration/organization/newbranch' {...this.props} authed={this.props.user} component={NewBranch} /> 

@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import AdminNav from './_menu'
 import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
@@ -525,7 +526,7 @@ class CreateNewUser extends React.Component {
                                                 ) : null}
                                             </Col>
                                         </Form.Row>
-                                        <Form.Row>
+                                        <Form.Row className="mb-0">
                                             
                                             <Col>
                                                 <Form.Label className="block-level">Password</Form.Label>
@@ -557,6 +558,19 @@ class CreateNewUser extends React.Component {
                                                 {errors.branchId && touched.branchId ? (
                                                     <span className="invalid-feedback">{errors.branchId}</span>
                                                 ) : null} 
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row>
+                                            <Col>
+                                                <div className="checkbox-wrap">
+                                                    <input type="checkbox" 
+                                                        id="canAccessAllBranches" 
+                                                        checked={values.canAccessAllBranches? values.canAccessAllBranches:null}
+                                                        name="canAccessAllBranches"
+                                                        onChange={handleChange} 
+                                                        value={values.canAccessAllBranches}  />
+                                                    <label className="mb-0" htmlFor="canAccessAllBranches">Can access all branches</label>
+                                                </div>
                                             </Col>
                                         </Form.Row>
                                     </div>

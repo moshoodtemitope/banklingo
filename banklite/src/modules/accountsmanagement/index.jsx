@@ -50,7 +50,7 @@ class AccountManagement extends React.Component {
         this.setState({PageSize: sizeOfPage});
 
         let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-        this.getClients(params);
+        this.getGLAccounts();
     }
 
     getGLAccounts = (tempData) =>{
@@ -354,7 +354,8 @@ class AccountManagement extends React.Component {
                 }
             
             case (accountingConstants.GET_GLACCOUNTS_SUCCESS):
-                let getGLAccountsData = getGLAccountsRequest.request_data.response.data,
+                let getGLAccountsData = getGLAccountsRequest.request_data.response.data.result,
+                    getGLAccountsStatsData = getGLAccountsRequest.request_data.response.data.result,
                     accounTypes =[],
                     unfilteredAccounTypes =[],
                     countOfAccounTypes ={},
@@ -909,7 +910,7 @@ class AccountManagement extends React.Component {
                     .required('Please provide GL Code'),
         });
         let {showEditGL, glIdToEdit, selectedAccType, selectedUsageOption} = this.state;
-        let gLAccountsList = this.props.getGLAccounts.request_data.response.data,
+        let gLAccountsList = this.props.getGLAccounts.request_data.response.data.result,
             selectGlAcc;
         
             let updateGLAccount = this.props.updateGLAccount;
