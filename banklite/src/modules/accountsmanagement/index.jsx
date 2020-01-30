@@ -16,6 +16,7 @@ import * as Yup from 'yup';
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
+import {allowNumbersOnly} from '../../shared/utils';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
 import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
@@ -266,12 +267,30 @@ class AccountManagement extends React.Component {
                                         onClick={(e)=>this.filterWithType("all")}>
                                     All({getGLAccountsData.length})
                                 </div>
-                                {accounTypes!==undefined &&
+                                <div  className={typeToShow==="assets"?'active-type':''}
+                                        onClick={(e)=>this.filterWithType("assets")}>
+                                    Assets({getGLAccountsData.length})
+                                </div>
+                                <div  className={typeToShow==="liability"?'active-type':''}
+                                        onClick={(e)=>this.filterWithType("liability")}>
+                                    Liability({getGLAccountsData.length})
+                                </div>
+                                <div  className={typeToShow==="equity"?'active-type':''}
+                                        onClick={(e)=>this.filterWithType("equity")}>
+                                    Equity({getGLAccountsData.length})
+                                </div>
+                                <div  className={typeToShow==="income"?'active-type':''}
+                                        onClick={(e)=>this.filterWithType("income")}>
+                                    Income({getGLAccountsData.length})
+                                </div>
+                                <div  className={typeToShow==="expense"?'active-type':''}
+                                        onClick={(e)=>this.filterWithType("expense")}>
+                                    Expense({getGLAccountsData.length})
+                                </div>
+                                {/* {accounTypes!==undefined &&
 
                                     accounTypes.map((eachType, index)=>{
-                                        // if(eachType){
-
-                                        // }
+                                        
                                         let typeDataLength = countOfAccounTypes[eachType].length;
                                         return(
                                             <div key={index}
@@ -282,7 +301,7 @@ class AccountManagement extends React.Component {
                                         )
                                     })
                                 
-                                }
+                                } */}
                             </div>
                             <div className="loading-text">Please wait...</div>
                             <div>
@@ -422,27 +441,45 @@ class AccountManagement extends React.Component {
                                     </Alert>
                                 }
                                 <div className="filter-nav">
-                                    <div  className={typeToShow==="all"?'active-type':''}
-                                          onClick={(e)=>this.filterWithType("all")}>
+                                    <div className={typeToShow === "all" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("all")}>
                                         All({getGLAccountsData.length})
-                                    </div>
-                                    {accounTypes!==undefined &&
+                                </div>
+                                    <div className={typeToShow === "assets" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("assets")}>
+                                        Assets({getGLAccountsData.length})
+                                </div>
+                                    <div className={typeToShow === "liability" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("liability")}>
+                                        Liability({getGLAccountsData.length})
+                                </div>
+                                    <div className={typeToShow === "equity" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("equity")}>
+                                        Equity({getGLAccountsData.length})
+                                </div>
+                                    <div className={typeToShow === "income" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("income")}>
+                                        Income({getGLAccountsData.length})
+                                </div>
+                                    <div className={typeToShow === "expense" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("expense")}>
+                                        Expense({getGLAccountsData.length})
+                                </div>
+                                    {/* {accounTypes!==undefined &&
 
-                                        accounTypes.map((eachType, index)=>{
-                                            // if(eachType){
-
-                                            // }
-                                            let typeDataLength = countOfAccounTypes[eachType].length;
-                                            return(
-                                                <div key={index}
-                                                     className={typeToShow===eachType?'active-type':''}
-                                                     onClick={(e)=>this.filterWithType(eachType)} >
-                                                         {eachType} ({typeDataLength}) 
-                                                </div>
-                                            )
-                                        })
-                                    
-                                    }
+                                    accounTypes.map((eachType, index)=>{
+                                        
+                                        let typeDataLength = countOfAccounTypes[eachType].length;
+                                        return(
+                                            <div key={index}
+                                                    className={typeToShow===eachType?'active-type':''}
+                                                    onClick={(e)=>this.filterWithType(eachType)} >
+                                                        {eachType} ({typeDataLength}) 
+                                            </div>
+                                        )
+                                    })
+                                
+                                } */}
                                 </div>
                 
                                 <TableComponent classnames="striped bordered hover">
@@ -713,7 +750,7 @@ class AccountManagement extends React.Component {
                                             <Form.Control 
                                                 type="text"
                                                 name="glCode"
-                                                value={values.glCode}
+                                                value={allowNumbersOnly(values.glCode)}
                                                 onChange={handleChange} 
                                                 className={errors.glCode && touched.glCode ? "is-invalid": null}
                                                 required />

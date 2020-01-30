@@ -150,6 +150,7 @@ class CreateNewUser extends React.Component {
                     emailAddress: '',
                     password: '',
                     branchId: '',
+                    canAccessAllBranches:false
                 }}
 
                 validationSchema={createUserValidationSchema}
@@ -182,6 +183,7 @@ class CreateNewUser extends React.Component {
                         password: values.password,
                         branchId: values.branchId,
                         note: values.note,
+                        canAccessAllBranches: values.canAccessAllBranches
                     };
                     if(values.addressLine1!==''){
                         createNewUserPayload.address.addressLine1 =values.addressLine1;

@@ -31,12 +31,14 @@ class UserLogin extends React.Component {
         let returnUrl  =  getRouteForRedirect().getPreviousRoute;
         this.redirectType  =  getRouteForRedirect().redirectType;
         
-        if(window.location.href.indexOf("retUrl")===-1 && returnUrl!==null){
+        if(window.location.href.indexOf("#")===-1 && returnUrl!==null){
+            // if(window.location.href.indexOf("retUrl")===-1 && returnUrl!==null){
             // window.location = `${window.location.href}?type=${redirectType}&retUrl=${returnUrl}`;
-            window.location = `${window.location.href}?retUrl=${returnUrl}`;
+            // window.location = `${window.location.href}?retUrl=${returnUrl}`;
+            window.location = `${window.location.href}#${returnUrl}`;
             this.state.redirectType = this.redirectType;
         }
-        console.log("++++++", this.redirectType);
+        // console.log("++++++", this.redirectType);
         
     }
 

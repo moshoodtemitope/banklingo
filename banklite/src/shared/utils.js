@@ -45,16 +45,29 @@ export const getDateFromISO =(date) =>{
 
 export const accountNumber = (accountNum)=>{
     var reg = /^\d+$/;
-    if(reg.test(accountNum)){
-        if(accountNum.toString().length<=10){
-            return accountNum;
+    let filteredNum = accountNum.replace(/\D/g,'');
+    // if(reg.test(accountNum)){
+        if(filteredNum.toString().length<=10){
+            return filteredNum;
         }else{
-            return accountNum.toString().substr(0,10);
+            return filteredNum.toString().substr(0,10);
         }
-    }else{
+    // }else{
 
-        return "";
-    }
+    //     return "";
+    // }
+}
+
+export const allowNumbersOnly = (numbers)=>{
+    var reg = /^\d+$/;
+    let filteredNum = numbers.replace(/\D/g,'');
+    return filteredNum;
+    // if(reg.test(numbers)){
+    //     return numbers;
+    // }else{
+
+    //     return "";
+    // }
 }
 
 export const numberWithCommas= (amount)=> {

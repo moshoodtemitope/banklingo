@@ -38,8 +38,10 @@ function Login   (loginPayload){
                             dispatch(success(response2.data));
 
                             
-                            if(window.location.href.indexOf('retUrl=')>-1){
-                                let retUrl = window.location.href.split('retUrl=');
+                            if(window.location.href.indexOf('#')>-1){
+                                // if(window.location.href.indexOf('retUrl=')>-1){
+                                // let retUrl = window.location.href.split('retUrl=');
+                                let retUrl = window.location.href.split('#');
                                 
                                 if(retUrl.length===2){
                                     history.push(retUrl[1]);
