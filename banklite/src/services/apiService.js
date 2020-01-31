@@ -22,6 +22,9 @@ export class ApiService {
             ],
             urlsWithoutBranchIdInRequest = [
                 "/api/branch/allowedbranches"
+            ],
+            binaryUploadUrls =[
+                "/api/Upload"
             ];
         if(localStorage.getItem("user") === null){
             // if(localStorage.getItem("user") === null && axios.defaults.headers.common["Token"]){
@@ -29,7 +32,11 @@ export class ApiService {
             delete axios.defaults.headers.common.Authorization;
             delete axios.defaults.headers.common.Bid;
         }
-        axios.defaults.headers.common['Content-Type'] = 'application/json';
+        // if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
+            axios.defaults.headers.common['Content-Type'] = 'application/json';
+        // }
+        
+        
        if(localStorage.getItem("user") !==null){
            
            let user = JSON.parse(localStorage.getItem("user")),
@@ -54,6 +61,14 @@ export class ApiService {
                 // }
                
            }
+           if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
+               console.log("=======");
+               axios.defaults.headers.common['Content-Type'] = 'application/json';
+           }
+           if (binaryUploadUrls.indexOf(serviceToTest) > -1) {
+               console.log("******");
+               axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
+           }
 
            //Exclude urlsWithoutBranchIdInRequest urls from Authenticated requests with BranchId
            
@@ -68,6 +83,17 @@ export class ApiService {
         let bodyData;
         let service;
         bodyData = noStringify ? JSON.stringify(data) : data;
+
+        let urlsToAuthenticate = [
+            "api/Login"
+        ],
+        urlsWithoutBranchIdInRequest = [
+            "/api/branch/allowedbranches"
+        ],
+        binaryUploadUrls =[
+            "/api/Upload"
+        ],
+        serviceToTest = url.split("Dars.Administration")[1];
 
         if(localStorage.getItem("user") === null){
             headers = undefined;
@@ -131,7 +157,15 @@ export class ApiService {
         
         if (type.toLowerCase() === 'post'){
             //check for header
-            axios.defaults.headers.common['Content-Type'] = 'application/json';
+            if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
+                console.log("________")
+                axios.defaults.headers.common['Content-Type'] = 'application/json';
+            }
+            if (binaryUploadUrls.indexOf(serviceToTest) > -1) {
+                console.log("+++++");
+                axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
+            }
+            // axios.defaults.headers.common['Content-Type'] = 'application/json';
             if(headers === undefined){
                 this.setTokenAuthorization(url);
             }

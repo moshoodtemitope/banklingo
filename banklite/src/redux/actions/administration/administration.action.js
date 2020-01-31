@@ -41,7 +41,8 @@ export const administrationActions = {
     getAllCurrencies,
     updateCurrency,
     setCurrencyConversionRate,
-    getNotifications
+    getNotifications,
+    uploadData
 }
 
 function getUsers  (params){
@@ -1175,5 +1176,35 @@ function getNotifications(params) {
     function request(user) { return { type: administrationConstants.GET_NOTIFICATIONS_PENDING, user } }
     function success(response) { return { type: administrationConstants.GET_NOTIFICATIONS_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.GET_NOTIFICATIONS_FAILURE, error } }
+
+}
+
+function uploadData  (uploadDataPayload){
+    if(uploadDataPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_UPLOAD_DATA, "POST", uploadDataPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPLOAD_DATA_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPLOAD_DATA_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPLOAD_DATA_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPLOAD_DATA_RESET, clear_data:""} }
 
 }

@@ -77,4 +77,7 @@ export const routes = {
 
     //Clients Endpoints
     HIT_CLIENTS: BASEURL + '/Dars.Administration/api/Clients',
+
+    //Upload Data Endpoints
+    HIT_UPLOAD_DATA: BASEURL + '/Dars.Administration/api/Upload',
 }

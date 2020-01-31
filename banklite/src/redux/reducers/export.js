@@ -37,7 +37,8 @@ import{
     getABranchReducer,
     createNewBranchReducer,
     updateABranchReducer,
-    getNotificationsReducer
+    getNotificationsReducer,
+    uploadDataReducer
 }
  from './administration/administration.reducer'
 
@@ -74,6 +75,8 @@ import{
     getDisbursementByRefReducer
     
 } from './disbursment/disbursment.reducer'
+
+
 
 
 
@@ -145,7 +148,8 @@ export const administration ={
     getABranchReducer,
     createNewBranchReducer,
     updateABranchReducer,
-    getNotificationsReducer
+    getNotificationsReducer,
+    uploadDataReducer
 }
 
 export const accounting = {

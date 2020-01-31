@@ -27,7 +27,8 @@ class UploadData extends React.Component {
         super(props);
         this.state={
             user:'',
-            
+            filename:null,
+            invalidType:false
         }
 
         
@@ -37,41 +38,61 @@ class UploadData extends React.Component {
         
     }
 
-   
+    HandleFileUpLoad = (event) => {
+        let filename = event.target.files[0].name,
+            ext = event.target.files[0].type;
+        
+            if(ext!=="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"){
+                    this.setState({invalidType: true});
+            }
+            if(ext==="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"){
+                this.setState({invalidType: false});
+            }
 
-    renderCurrencies =()=>{
-        return (
-            <div>
-                <Accordion defaultActiveKey="0">
-
-                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                        Import Data
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                        <div>
-                            
-                           
-                        </div>
-                    </Accordion.Collapse>
-                </Accordion>
-
-                <Accordion>
-                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                        Import Event
-                     </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                        <div>
-                            
-
-                        </div>
-                    </Accordion.Collapse>
-                </Accordion>
-            </div>
-        )
+        console.log(event.target.files[0]);
+     //    console.log(event.target.files[0]);
+ 
+        this.setState({docuploaded: event.target.files[0], filename});
     }
 
-    renderUploadDataWrap =()=>{
+    uploadData = async(payload)=>{
+        
 
+        const {dispatch} = this.props;
+        
+        await dispatch(administrationActions.uploadData(payload));
+    }
+
+    prepareUpload =()=>{
+        const formData = new FormData();
+        formData.append('Document', this.state.docuploaded);
+        
+
+        this.uploadData(formData)
+            .then(
+                ()=>{
+                    if (this.props.uploadDataRequest.request_status === administrationConstants.UPLOAD_DATA_SUCCESS) {
+
+
+                        setTimeout(() => {
+                            this.props.dispatch(administrationActions.uploadData("CLEAR"));
+                            
+                        }, 3000);
+                    } else {
+                        setTimeout(() => {
+                            this.props.dispatch(administrationActions.uploadData("CLEAR"))
+                        }, 6000);
+                    }
+                }
+            )
+    }
+
+   
+
+    
+
+    renderUploadDataWrap =()=>{
+        let uploadDataRequest =  this.props.uploadDataRequest;
         return(
             <div>
                 
@@ -81,8 +102,70 @@ class UploadData extends React.Component {
                     Import Data
                 </Accordion.Toggle>
                     <Accordion.Collapse eventKey="0">
-                        <div>
-                            
+                        <div className="upload-wrap">
+                            <div className="card upload-card">
+                                <h4>Download Template</h4>
+                                <div className="desc-msg">
+                                Download your custom Excel template and fill in the details to import
+                                </div>
+                                <div className="footer-with-cta centered">
+                                    
+                                    <Button
+                                        type="submit"> Download Template</Button>
+                                </div>
+                            </div>
+                            <div className="card upload-card">
+                                <h4>Validate And Import</h4>
+                                <div className="desc-msg">Upload your Excel template file with your data filled-in for validation and import</div>
+                                
+                                <div className="footer-with-cta centered mb-0">
+                                    
+                                    {/* <Button
+                                        type="submit"> Upload data</Button> */}
+                                        {uploadDataRequest.request_status !== administrationConstants.UPLOAD_DATA_PENDING &&
+                                            <label htmlFor="file-upload3" className="btn btn-primary">Upload data</label>
+                                        }
+                                        
+                                        {/* <input name="docuploaded" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" type="file" id="file-upload3"  onChange={this.HandleFileUpLoad}/> */}
+                                        <input name="docuploaded" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" type="file" id="file-upload3"  onChange={this.HandleFileUpLoad}/>
+                                     
+                                </div>
+                                {this.state.filename!==null && 
+                                
+                                    <div className="filename">
+                                        {this.state.filename}
+                                    </div>
+                                }
+                                {/* <span className="filename">{this.state.filename}</span> */}
+                                {this.state.invalidType===true &&
+                                    <Alert variant="danger">
+                                        Only XLSX files can be processed. Please select an XLSX file.
+                                    </Alert>
+                                }
+                                
+                                {(this.state.filename!==null && this.state.invalidType===false) &&
+                                    <div className="footer-with-cta centered mb-0">
+                                    
+                                        <Button
+                                            variant="success"
+                                            onClick={this.prepareUpload}
+                                            type="submit "> {uploadDataRequest.is_request_processing?'Uploading data...': 'Upload data'}</Button>
+                                            
+                                    </div>
+                                }
+                                {uploadDataRequest.request_status === administrationConstants.UPLOAD_DATA_SUCCESS && 
+                                    <Alert variant="success" className="mt-20">
+                                        {uploadDataRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+                                {uploadDataRequest.request_status === administrationConstants.UPLOAD_DATA_FAILURE && 
+                                    <Alert variant="danger" className="mt-20">
+                                        {uploadDataRequest.request_data.error}
+                                
+                                    </Alert>
+                                }
+                                
+                            </div>
                         </div>
                     </Accordion.Collapse>
                 </Accordion>
@@ -170,9 +253,7 @@ class UploadData extends React.Component {
 function mapStateToProps(state) {
     return {
         
-        
-        
-        
+        uploadDataRequest : state.administrationReducers.uploadDataReducer,
     };
 }
 
