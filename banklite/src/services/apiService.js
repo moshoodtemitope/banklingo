@@ -62,11 +62,11 @@ export class ApiService {
                
            }
            if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
-               console.log("=======");
+            //    console.log("=======");
                axios.defaults.headers.common['Content-Type'] = 'application/json';
            }
            if (binaryUploadUrls.indexOf(serviceToTest) > -1) {
-               console.log("******");
+            //    console.log("******");
                axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
            }
 

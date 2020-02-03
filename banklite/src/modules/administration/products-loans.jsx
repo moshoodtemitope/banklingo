@@ -2,6 +2,7 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import { connect } from 'react-redux';
 import AdminNav from './_menu'
 
 import { NavLink} from 'react-router-dom';
@@ -12,15 +13,285 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 // import  SidebarElement from '../../shared/elements/sidebar'
+import { productActions } from '../../redux/actions/products/products.action';
+import { productsConstants } from '../../redux/actiontypes/products/products.constants'
+
 import "./administration.scss"; 
 class ProductLoans extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            PageSize:25,
+            CurrentPage:1,
+            isRefresh:false
         }
 
         
+    }
+
+    componentDidMount(){
+        this.loadInitialData();
+    }
+
+    loadInitialData=()=>{
+        let {PageSize, CurrentPage}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        this.getAllLoanProducts(params);
+    }
+
+    getAllLoanProducts = (paramters)=>{
+        const {dispatch} = this.props;
+
+        dispatch(productActions.getAllLoanProducts(paramters));
+    }
+
+    setPagesize = (PageSize)=>{
+        // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
+        let {CurrentPage}= this.state;
+        
+
+        let sizeOfPage = PageSize.target.value;
+
+        this.setState({PageSize: sizeOfPage, isRefresh: true});
+        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+
+        
+       
+        dispatch(productActions.getActivitiesData(params));
+    }
+
+    renderLoanProducts=()=>{
+        let getAllLoanProductsRequestData = this.props.getAllLoanProductsRequest,
+            {isRefresh} = this.state;
+
+            if(getAllLoanProductsRequestData.request_status ===productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING){
+                return(
+                    <div className="loading-content">
+                        <div className="heading-with-cta">
+                            <Form className="one-liner">
+
+                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                    <Form.Control as="select" size="sm">
+                                        <option>No Filter</option>
+                                        <option>Add New Filter</option>
+                                        <option>Custom Filter</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                            </Form>
+
+                            <div className="pagination-wrap">
+                                <label htmlFor="toshow">Show</label>
+                                <select id="toshow" className="countdropdown form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="200">200</option>
+                                </select>
+                                <div className="move-page-actions">
+                                    <div className="each-page-action">
+                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                    </div>
+                                    <div className="page-count">
+                                        <span>1-20</span>  of <span>20000</span>
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Loan Product Name</th>
+                                    <th>Loan Product Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
+                        <div className="loading-text">Please wait... </div>
+                        {/* <div className="footer-with-cta toleft">
+                            <NavLink to={'/administration/products/newloan-product'} className="btn btn-primary">New Loan Product</NavLink>
+
+                        </div> */}
+                    </div>
+                )
+            }
+
+            if(getAllLoanProductsRequestData.request_status ===productsConstants.GET_ALL_LOAN_PRODUCTS_SUCCESS){
+                let allLoanProductsData = getAllLoanProductsRequestData.request_data.response.data;
+                if(allLoanProductsData!==undefined){
+                   if(allLoanProductsData.length>=1){
+                        return(
+                            <div>
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" 
+                                            onChange={this.setPagesize}
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        <div className="move-page-actions">
+                                            <div className="each-page-action">
+                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                            </div>
+                                            <div className="page-count">
+                                                <span>1-20</span>  of <span>20000</span>
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Loan Product Name</th>
+                                            <th>Loan Product Code</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {allLoanProductsData.map((eachLoanProduct, index)=>{
+                                            return(
+                                                <Fragment key={index}>
+                                                    <tr>
+                                                        <td>{eachLoanProduct.loanProductName}</td>
+                                                        <td>{eachLoanProduct.loanProductCode}</td>
+                                                    </tr>
+                                                </Fragment>
+                                                
+                                            )
+                                        })}
+                                        
+                                    </tbody>
+                                </TableComponent>
+                                <div className="footer-with-cta toleft">
+                                    <NavLink to={'/administration/products/newloan-product'} className="btn btn-primary">New Loan Product</NavLink>
+
+                                </div>
+                            </div>
+                        )
+                   }
+                   else{
+                    return(
+                        <div>
+                            <div className="heading-with-cta">
+                                <Form className="one-liner">
+
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                </Form>
+
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                    <div className="move-page-actions">
+                                        <div className="each-page-action">
+                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                        </div>
+                                        <div className="page-count">
+                                            <span>1-20</span>  of <span>20000</span>
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Loan Product Name</th>
+                                        <th>Loan Product Code</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                            <div className="footer-with-cta toleft">
+                                <NavLink to={'/administration/products/newloan-product'} className="btn btn-primary">New Loan Product</NavLink>
+
+                            </div>
+                        </div>
+                    )
+                   }
+                }else{
+                    return null
+                }
+            }
+
+            if (getAllLoanProductsRequestData.request_status === productsConstants.GET_ALL_LOAN_PRODUCTS_FAILURE){
+                return (
+                    <div className="loading-content errormsg">
+                        <div>{getAllLoanProductsRequestData.request_data.error}</div>
+                    </div>
+                )
+            }
     }
 
     render() {
@@ -63,133 +334,7 @@ class ProductLoans extends React.Component {
                                         
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <div className="heading-with-cta">
-                                                    <Form className="one-liner">
-
-                                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                            <Form.Control as="select" size="sm">
-                                                                <option>No Filter</option>
-                                                                <option>Add New Filter</option>
-                                                                <option>Custom Filter</option>
-                                                            </Form.Control>
-                                                        </Form.Group>
-                                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                                    </Form>
-
-                                                    <div className="pagination-wrap">
-                                                        <label htmlFor="toshow">Show</label>
-                                                        <select id="toshow" className="countdropdown form-control form-control-sm">
-                                                            <option value="10">10</option>
-                                                            <option value="25">25</option>
-                                                            <option value="50">50</option>
-                                                            <option value="200">200</option>
-                                                        </select>
-                                                        <div className="move-page-actions">
-                                                            <div className="each-page-action">
-                                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                            </div>
-                                                            <div className="each-page-action">
-                                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                            </div>
-                                                            <div className="page-count">
-                                                                <span>1-20</span>  of <span>20000</span>
-                                                            </div>
-                                                            <div className="each-page-action">
-                                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                            </div>
-                                                            <div className="each-page-action">
-                                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                
-                                                <TableComponent classnames="striped bordered hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Product</th>
-                                                            <th>ID</th>
-                                                            <th>Product Type</th>
-                                                            <th>Last Modified</th>
-                                                            <th>Active</th>
-                                                            {/* <th></th> */}
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                        </tr>
-                                                        {/* <tr>
-                                                            <td>(Discontinued)Payrolla - Private</td>
-                                                            <td>payrolla_private</td>
-                                                            <td>Fixed Term Loan</td>
-                                                            <td>03-12-2018</td>
-                                                            <td>Activated</td>
-                                                            <td>
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="activeCurrency"
-                                                                    className="customone"
-                                                                >
-                                                                    <NavLink className="dropdown-item" to={'/administration/products/editloan-product'}>Edit</NavLink>
-                                                                    <NavLink className="dropdown-item" to={'/administration/products/newloan-product'}>Copy Product</NavLink>
-                                                                    <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
-                                                                </DropdownButton>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>(Discontinued)Payrolla - Private</td>
-                                                            <td>payrolla_private</td>
-                                                            <td>Fixed Term Loan</td>
-                                                            <td>03-12-2018</td>
-                                                            <td>Activated</td>
-                                                            <td>
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="activeCurrency"
-                                                                    className="customone"
-                                                                >
-                                                                    <NavLink className="dropdown-item" to={'/administration/products/editloan-product'}>Edit</NavLink>
-                                                                    <NavLink className="dropdown-item" to={'/administration/products/newloan-product'}>Copy Product</NavLink>
-                                                                    <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
-                                                                </DropdownButton>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>(Discontinued)Payrolla - Private</td>
-                                                            <td>payrolla_private</td>
-                                                            <td>Fixed Term Loan</td>
-                                                            <td>03-12-2018</td>
-                                                            <td>Activated</td>
-                                                            <td>
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="activeCurrency"
-                                                                    className="customone"
-                                                                >
-                                                                    <NavLink className="dropdown-item" to={'/administration/products/editloan-product'}>Edit</NavLink>
-                                                                    <NavLink className="dropdown-item" to={'/administration/products/newloan-product'}>Copy Product</NavLink>
-                                                                    <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
-                                                                </DropdownButton>
-                                                            </td>
-                                                        </tr> */}
-                                                    </tbody>
-                                                </TableComponent>
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <NavLink to={'/administration/products/newloan-product'} className="btn btn-primary">New Loan Product</NavLink>
-                                                    
-                                                </div> */}
+                                                {this.renderLoanProducts()}
                                             </div>
                                         </div>
                                     </div>
@@ -203,4 +348,10 @@ class ProductLoans extends React.Component {
     }
 }
 
-export default ProductLoans;
+function mapStateToProps(state) {
+    return {
+        getAllLoanProductsRequest: state.loanProductReducers.getAllLoanProductsReducer,
+    };
+}
+
+export default connect(mapStateToProps)(ProductLoans);

@@ -64,6 +64,13 @@ import{
     
 } from './loans/loans.reducer'
 
+import{
+    getAllLoanProductsReducer,
+    getSingleLoanProductsReducer,
+    createLoanProductReducer,
+    
+} from './products/products.reducer'
+
 
 import{
     getDisbursementsReducer,
@@ -87,6 +94,7 @@ import{
 
 import{
     getDashboardStatReducer,
+    getActivitiesReducer
     
 } from './dashboard/dashboard.reducer'
 
@@ -174,6 +182,7 @@ export const auth = {
 
 export const dashboard = {
     getDashboardStatReducer,
+    getActivitiesReducer
 }
 
 export const deposits = {
@@ -199,4 +208,10 @@ export const disbursment ={
     approveOrRejectPostDisbursementReducer,
     rejectPostDisbursementReducer,
     getDisbursementByRefReducer
+}
+
+export const loanProducts ={
+    getAllLoanProductsReducer,
+    getSingleLoanProductsReducer,
+    createLoanProductReducer,
 }

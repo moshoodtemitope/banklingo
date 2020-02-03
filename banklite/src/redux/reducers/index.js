@@ -7,7 +7,8 @@ import {
     loans,
     deposits,
     clients,
-    disbursment} from "./export";
+    disbursment,
+    loanProducts} from "./export";
 
 import {LoginReducer} from "./auth/auth.reducer";
 
@@ -98,6 +99,7 @@ const authReducers = combineReducers({
 
 const dashboardReducers = combineReducers({
     getDashboardStatReducer: dashboard.getDashboardStatReducer, 
+    getActivitiesReducer: dashboard.getActivitiesReducer, 
    
 })
 
@@ -122,6 +124,13 @@ const disbursmentReducers = combineReducers({
     getDisbursementByRefReducer: disbursment.getDisbursementByRefReducer, 
 })
 
+const loanProductReducers = combineReducers({
+    createLoanProductReducer: loanProducts.createLoanProductReducer, 
+    getAllLoanProductsReducer: loanProducts.getAllLoanProductsReducer, 
+    getSingleLoanProductsReducer: loanProducts.getSingleLoanProductsReducer, 
+    
+})
+
 
 
 const appReducer = combineReducers({
@@ -132,6 +141,7 @@ const appReducer = combineReducers({
     clientsReducers,
     disbursmentReducers,
     // LoginReducer,
+    loanProductReducers,
     authReducers,
     dashboardReducers
 })

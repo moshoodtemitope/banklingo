@@ -121,12 +121,21 @@ class NewBranch extends React.Component {
                             () => {
 
                                 if (this.props.adminCreateNewBranch.request_status === administrationConstants.CREATE_NEW_BRANCH_SUCCESS) {
-                                    resetForm();
+
+
+                                    setTimeout(() => {
+                                        this.props.dispatch(administrationActions.createNewBranch("CLEAR"))
+                                        resetForm();
+                                    }, 3000);
+                                } else {
+                                    setTimeout(() => {
+                                        this.props.dispatch(administrationActions.createNewBranch("CLEAR"))
+                                    }, 3000);
                                 }
 
-                                setTimeout(() => {
-                                    this.props.dispatch(administrationActions.createNewBranch("CLEAR"))
-                                }, 3000);
+                               
+
+                               
 
                             }
                         )

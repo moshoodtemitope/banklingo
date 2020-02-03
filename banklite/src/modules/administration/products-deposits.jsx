@@ -185,9 +185,9 @@ class ProductDeposits extends React.Component {
                                                         </tr> */}
                                                     </tbody>
                                                 </TableComponent>
-                                                {/* <div className="footer-with-cta toleft">
+                                                <div className="footer-with-cta toleft">
                                                     <NavLink to={'/administration/products/newdeposits-product'} className="btn btn-primary">New Deposit Product</NavLink>
-                                                </div> */}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

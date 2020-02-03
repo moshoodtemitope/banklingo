@@ -98,6 +98,27 @@ class AccountManagement extends React.Component {
         
     }
 
+    returnGLTypeCount =(glType, glAccountsStats)=>{
+        let filteredStat;
+        
+            if(glAccountsStats.length>=0){
+                
+                filteredStat = glAccountsStats.filter(eachStat=>eachStat.accountTypeDesctiption===glType);
+                
+                if(filteredStat!==undefined && filteredStat.length>=1){
+                   
+                    return filteredStat[0].count;
+                }
+                else{
+                    return 0;
+                }
+            }else{
+                return 0;
+            }
+            
+
+    }
+
     renderAllGL = ()=>{
 
         let getGLAccountsRequest = this.props.getGLAccounts,
@@ -109,7 +130,7 @@ class AccountManagement extends React.Component {
         
         switch(getGLAccountsRequest.request_status){
             case (accountingConstants.GET_GLACCOUNTS_PENDING):
-                console.log("data is", saveRequestData);
+                
                 if(saveRequestData===undefined){
                     return (
                         <div className="loading-content"> 
@@ -355,7 +376,7 @@ class AccountManagement extends React.Component {
             
             case (accountingConstants.GET_GLACCOUNTS_SUCCESS):
                 let getGLAccountsData = getGLAccountsRequest.request_data.response.data.result,
-                    getGLAccountsStatsData = getGLAccountsRequest.request_data.response.data.result,
+                    getGLAccountsStatsData = getGLAccountsRequest.request_data.response.data.result2,
                     accounTypes =[],
                     unfilteredAccounTypes =[],
                     countOfAccounTypes ={},
@@ -448,23 +469,23 @@ class AccountManagement extends React.Component {
                                 </div>
                                     <div className={typeToShow === "assets" ? 'active-type' : ''}
                                         onClick={(e) => this.filterWithType("assets")}>
-                                        Assets({getGLAccountsData.length})
+                                        Assets({this.returnGLTypeCount("Assets", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "liability" ? 'active-type' : ''}
                                         onClick={(e) => this.filterWithType("liability")}>
-                                        Liability({getGLAccountsData.length})
+                                        Liability({this.returnGLTypeCount("Liability", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "equity" ? 'active-type' : ''}
                                         onClick={(e) => this.filterWithType("equity")}>
-                                        Equity({getGLAccountsData.length})
+                                        Equity({this.returnGLTypeCount("Equity", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "income" ? 'active-type' : ''}
                                         onClick={(e) => this.filterWithType("income")}>
-                                        Income({getGLAccountsData.length})
+                                        Income({this.returnGLTypeCount("Income", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "expense" ? 'active-type' : ''}
                                         onClick={(e) => this.filterWithType("expense")}>
-                                        Expense({getGLAccountsData.length})
+                                        Expense({this.returnGLTypeCount("Expense", getGLAccountsStatsData)})
                                 </div>
                                     {/* {accounTypes!==undefined &&
 

@@ -31,21 +31,21 @@ class NewClient extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:JSON.parse(localStorage.getItem("user")),
         }
 
         
     }
 
     componentDidMount(){
-        // this.getCustomerTypes();
+        this.getAllUsers();
     }
 
-    // getCustomerTypes = ()=>{
-    //     const {dispatch} = this.props;
+    getAllUsers = ()=>{
+        const {dispatch} = this.props;
         
-    //     dispatch(administrationActions.getAllCustomerTypes());
-    // }
+        dispatch(administrationActions.getAllUsers(1));
+    }
 
     handleCreateNewCustomer = async (createNewCustomerpayload)=>{
         const {dispatch} = this.props;
@@ -62,6 +62,10 @@ class NewClient extends React.Component {
         LName:  Yup.string()
             .min(1, 'Valid response required')
             .max(50, 'Max limit reached')
+            .required('Required'),
+        clientBranchEncodedKey:  Yup.string()
+            .required('Required'),
+        accountOfficerEncodedKey:  Yup.string()
             .required('Required'),
         MName:  Yup.string()
             .min(1, 'Valid response required')
@@ -102,33 +106,45 @@ class NewClient extends React.Component {
             .min(11, 'Valid response required')
             .max(16, 'Max limit reached'),
         notes:  Yup.string()
-            .min(3, 'Valid response required'),
+            .min(3, 'Valid response required'), 
       });
 
     renderCreateNewCustomer = ()=>{
         let createAClientRequest = this.props.createAClient,
-            adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
+            adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes,
+            getAllUsersRequest = this.props.getAllUsers,
+            userAllowedBraches = this.state.user.AllowedBranches,
+            selecBranchList = [];
 
-        switch(adminGetCustomerTypesRequest.request_status){
-            case (administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING):
-                return (
-                    <div className="loading-content card"> 
-                        <div className="loading-text">Please wait... </div>
-                    </div>
-                )
+            userAllowedBraches.map((branch, id)=>{
+                selecBranchList.push({label: branch.name, value:branch.id});
+            })
 
-            case (administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS):
-                
-                let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data,
-                    allCustomerTypes=[],
-                    allCustomerTypesList;
+        
+                if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_PENDING
+                    || adminGetCustomerTypesRequest.request_status ===administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING){
+                    return (
+                        <div className="loading-content card"> 
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+                }
 
-                let selectedCustype = allCustomerTypesData.filter(CustType=>parseInt(CustType.id)===parseInt(this.props.match.params.custTypeid))[0];
-                
-                
-                    if(allCustomerTypesData.length>=1){
-                        allCustomerTypesData.map((eachType, id)=>{
-                            allCustomerTypes.push({label: eachType.name, value:eachType.id});
+           
+                if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_SUCCESS
+                    && adminGetCustomerTypesRequest.request_status ===administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS){
+                    
+                        let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data,
+                        allUsersData = getAllUsersRequest.request_data.response.data,
+                        allUserDataList=[],
+                        allCustomerTypesList;
+                        console.log("+++++",allCustomerTypesData);
+                    let selectedCustype = allCustomerTypesData.filter(CustType=>CustType.id===parseInt(this.props.match.params.custTypeid))[0];
+                    
+                    console.log("--------",this.props.match.params.custTypeid);
+                    if(allUsersData.length>=1){
+                        allUsersData.map((eachUser, id)=>{
+                            allUserDataList.push({label: eachUser.name, value:eachUser.key});
                         })
                         return (
                             <Formik
@@ -150,7 +166,9 @@ class NewClient extends React.Component {
                                     nextOfKinMobile: '',
                                     gender:'',
                                     dateOfBirth:'',
-                                    notes:''
+                                    notes:'',
+                                    clientBranchEncodedKey:'',
+                                    accountOfficerEncodedKey:''
                                 }}
                 
                                 validationSchema={this.createCustomerValidationSchema}
@@ -181,10 +199,13 @@ class NewClient extends React.Component {
                                         },
                                         gender:values.gender,
                                         dateOfBirth: values.dateOfBirth!==''?values.dateOfBirth.toISOString():null,
-                                        notes: values.notes
+                                        notes: values.notes,
+                                        clientBranchEncodedKey:values.clientBranchEncodedKey.toString(),
+                                        accountOfficerEncodedKey: values.accountOfficerEncodedKey
                                     }
                 
                 
+                                    
                 
                                     this.handleCreateNewCustomer(createNewCustomerPayload)
                                         .then(
@@ -335,6 +356,48 @@ class NewClient extends React.Component {
                                                     </Form.Group>
                                                 </Col>
                                                 
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Customer branch</Form.Label>
+                                                    <Select
+                                                        options={selecBranchList}
+                                                        onChange={(selectedBranch) => {
+                                                            this.setState({ selectedBranch });
+                                                            errors.clientBranchEncodedKey = null
+                                                            values.clientBranchEncodedKey = selectedBranch.value
+                                                        }}
+                                                        className={errors.clientBranchEncodedKey && touched.clientBranchEncodedKey ? "is-invalid" : null}
+                                                        // value={values.accountUsage}
+                                                        name="clientBranchEncodedKey"
+                                                        // value={values.currencyCode}
+                                                        required
+                                                    />
+                                                    
+                                                    {errors.clientBranchEncodedKey && touched.clientBranchEncodedKey ? (
+                                                        <span className="invalid-feedback">{errors.clientBranchEncodedKey}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Account officer</Form.Label>
+                                                    <Select
+                                                        options={allUserDataList}
+                                                        onChange={(selectedOfficer) => {
+                                                            this.setState({ selectedOfficer });
+                                                            errors.accountOfficerEncodedKey = null
+                                                            values.accountOfficerEncodedKey = selectedOfficer.value
+                                                        }}
+                                                        className={errors.accountOfficerEncodedKey && touched.accountOfficerEncodedKey ? "is-invalid" : null}
+                                                        // value={values.accountUsage}
+                                                        name="accountOfficerEncodedKey"
+                                                        // value={values.currencyCode}
+                                                        required
+                                                    />
+
+                                                    {errors.accountOfficerEncodedKey && touched.accountOfficerEncodedKey ? (
+                                                        <span className="invalid-feedback">{errors.accountOfficerEncodedKey}</span>
+                                                    ) : null}
+                                                </Col>
                                             </Form.Row>
                                             <Accordion defaultActiveKey="0">
                                                 <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
@@ -555,20 +618,29 @@ class NewClient extends React.Component {
                     }else{
                         return(
                             <div className="loading-content card"> 
-                                <div>No Customer Type found. Please contact Admin</div>
+                                <div>No Account Officer. Please contact Admin</div>
                             </div>
                         )
                     }
+                }
                     
-            case (administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE):
-                return (
-                    <div className="loading-content card"> 
-                        <div>{adminGetCustomerTypesRequest.request_data.error}</div>
-                    </div>
-                )
-            default :
-            return null;
-        }
+           
+                if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_FAILURE){
+                    return (
+                        <div className="loading-content card"> 
+                            <div>{getAllUsersRequest.request_data.error}</div>
+                        </div>
+                    )
+                }
+
+                if(adminGetCustomerTypesRequest.request_status ===administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE){
+                    return (
+                        <div className="loading-content card"> 
+                            <div>{adminGetCustomerTypesRequest.request_data.error}</div>
+                        </div>
+                    )
+                }
+            
         
     }
 
@@ -606,6 +678,7 @@ class NewClient extends React.Component {
 function mapStateToProps(state) {
     return {
         adminGetCustomerTypes : state.administrationReducers.getAllCustomerTypesReducer,
+        getAllUsers : state.administrationReducers.adminGetAllUsersReducer,
         createAClient : state.clientsReducers.createAClientReducer,
     };
 }

@@ -127,11 +127,16 @@ function failure(error) { return { type: administrationConstants.GET_A_USER_FAIL
 
 }
 
-function getAllUsers  (){
+function getAllUsers  (RoleSearchType){
     
     return dispatch =>{
-        
-        let consume = ApiService.request(routes.HIT_USERS+`/all`, "GET", null);
+        let consume
+        if(RoleSearchType!==null && RoleSearchType!==undefined){
+            consume = ApiService.request(routes.HIT_USERS+`/all?RoleSearchType=${RoleSearchType}`, "GET", null);
+        }else{
+            consume = ApiService.request(routes.HIT_USERS+`/all`, "GET", null);
+        }
+         
         dispatch(request(consume));
         return consume
             .then(response =>{

@@ -76,7 +76,7 @@ class UploadData extends React.Component {
 
                         setTimeout(() => {
                             this.props.dispatch(administrationActions.uploadData("CLEAR"));
-                            
+                            this.setState({docuploaded: '', filename:''});
                         }, 3000);
                     } else {
                         setTimeout(() => {
@@ -111,7 +111,7 @@ class UploadData extends React.Component {
                                 <div className="footer-with-cta centered">
                                     
                                     <Button
-                                        type="submit"> Download Template</Button>
+                                        type="button"><a href="/assets/DataTemplate.xlsx" download>Download Template</a> </Button>
                                 </div>
                             </div>
                             <div className="card upload-card">

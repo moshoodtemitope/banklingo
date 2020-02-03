@@ -80,4 +80,7 @@ export const routes = {
 
     //Upload Data Endpoints
     HIT_UPLOAD_DATA: BASEURL + '/Dars.Administration/api/Upload',
+
+    //Loan Product Endpoints
+    HIT_LOAN_PRODUCTS: BASEURL + '/Dars.Administration/api/LoanProducts',
 }

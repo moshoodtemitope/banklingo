@@ -212,7 +212,7 @@ class ActiveClients extends React.Component {
                                                     return(
                                                         <Fragment key={index}>
                                                             <tr>
-                                                                <td>{eachClient.firstName} {eachClient.lastName}</td>
+                                                                <td><NavLink to={`/customer/${eachClient.id}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
                                                                 <td>{eachClient.clientStateDescription}</td>
                                                                 <td>{eachClient.accountOfficer}</td>
                                                                 <td>{eachClient.currency}</td>

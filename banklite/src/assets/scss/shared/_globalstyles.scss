@@ -619,8 +619,9 @@ button.togglestyle{
         display: block;
     }
 }
-.withcustom{
-    min-height: 38px;
+.withcustom, .form-control.withcustom{
+    min-height: 38px!important;
+    height: 38px!important;
 }
 .css-1uccc91-singleValue{
     font-size: 13px;

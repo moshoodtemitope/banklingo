@@ -1,0 +1,95 @@
+import {productsConstants} from '../../actiontypes/products/products.constants'
+
+export function getAllLoanProductsReducer(state=[], action) {
+    switch (action.type) {
+        case productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING:
+            return {
+                request_status: productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case productsConstants.GET_ALL_LOAN_PRODUCTS_SUCCESS:
+            return {
+                request_status: productsConstants.GET_ALL_LOAN_PRODUCTS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case productsConstants.GET_ALL_LOAN_PRODUCTS_FAILURE:
+            return {
+                request_status: productsConstants.GET_ALL_LOAN_PRODUCTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+
+export function getSingleLoanProductsReducer(state=[], action) {
+    switch (action.type) {
+        case productsConstants.GET_A_LOAN_PRODUCT_PENDING:
+            return {
+                request_status: productsConstants.GET_A_LOAN_PRODUCT_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case productsConstants.GET_A_LOAN_PRODUCT_SUCCESS:
+            return {
+                request_status: productsConstants.GET_A_LOAN_PRODUCT_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case productsConstants.GET_A_LOAN_PRODUCT_FAILURE:
+            return {
+                request_status: productsConstants.GET_A_LOAN_PRODUCT_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+
+
+export function createLoanProductReducer(state=[], action) {
+    switch (action.type) {
+        case productsConstants.CREATE_A_LOAN_PRODUCT_PENDING:
+            return {
+                request_status: productsConstants.CREATE_A_LOAN_PRODUCT_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS:
+            return {
+                request_status: productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case productsConstants.CREATE_A_LOAN_PRODUCT_FAILURE:
+            return {
+                request_status: productsConstants.CREATE_A_LOAN_PRODUCT_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case productsConstants.CREATE_A_LOAN_PRODUCT_RESET:
+            return {
+                request_status: productsConstants.CREATE_A_LOAN_PRODUCT_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+
+
+
+
+
+

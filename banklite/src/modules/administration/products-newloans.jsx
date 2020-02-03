@@ -1,6 +1,6 @@
 import * as React from "react";
 // import {Router} from "react-router";
-
+import { connect } from 'react-redux';
 import {Fragment} from "react";
 import AdminNav from './_menu'
 
@@ -9,9 +9,19 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
-// import Select from 'react-select';
+import Select from 'react-select';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
+import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
+import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
+
+import Alert from 'react-bootstrap/Alert'
+import { productActions } from '../../redux/actions/products/products.action';
+import { productsConstants } from '../../redux/actiontypes/products/products.constants'
 import "./administration.scss"; 
 class NewLoanProduct extends React.Component {
     constructor(props) {
@@ -20,7 +30,489 @@ class NewLoanProduct extends React.Component {
             user:''
         }
 
+    }
+
+    componentDidMount(){
+        this.getAllGLAccounts();
+     }
+
+    getAllGLAccounts = () =>{
+        const {dispatch} = this.props;
+
+        dispatch(acoountingActions.getAllGLAccounts());
+    }
+
+    handleCreateNewLoanProduct = async(newLoanProductPayload)=>{
+        const {dispatch} = this.props;
+       
+        await dispatch(productActions.createLoanProduct(newLoanProductPayload));
+
+    }
+
+
+    renderCreateLoanProduct =()=>{
+        let createLoanProductRequest = this.props.createLoanProductReducer,
+            getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
+
+        let loanProductValidationSchema = Yup.object().shape({
+            key: Yup.string()
+                .min(1, 'Response required')
+                .required('Required'),
+            productName:  Yup.string()
+                .min(2, 'Valid response required')
+                .required('Required'),
+            loanProductType: Yup.string()
+                .required('Required'),
+            description:  Yup.string()
+                .min(5, 'Valid response required')
+                .required('Required'),
+          });
+
+          let allProductTypes =[
+            {value: '0', label: 'Fixed Term Loan'},
+            {value: '1', label: 'Dynamic Term Loan'},
+            {value: '2', label: 'Interest Free Loan'},
+            {value: '3', label: 'Tranched Loan'},
+            {value: '4', label: 'Revolving Credit'},
+        ];
         
+        switch(getAllGLAccountsRequest.request_status){
+            case (accountingConstants.GET_ALL_GLACCOUNTS_PENDING):
+                return (
+                    <div className="loading-content card"> 
+                        <div className="loading-text">Please wait... </div>
+                    </div>
+                )
+            case (accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS):
+                let allGlAccounts = [],
+                    glAccountsList;
+                    
+
+                    
+
+                if(getAllGLAccountsRequest.request_data.response.data.length>=1){
+                    glAccountsList= getAllGLAccountsRequest.request_data.response.data;
+                    glAccountsList.map((channel, id)=>{
+                        allGlAccounts.push({label: channel.accountDescription, value:channel.id, accType:channel.accountTypeId});
+                    })
+                    let portfolioControlAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        transactionSourceAccount =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        writeOffExpenseAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===5),
+                        interestReceivableAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        feeReceivableAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        penaltyReceivableAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        feeIncomeAccounts =[],
+                        interestIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4),
+                        penaltyIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4);
+                        // console.log("+++++", penaltyIncomeAccounts)
+                    return(
+                        
+                            <Formik
+                            initialValues={{
+                                key: '',
+                                productName: '',
+                                loanProductType: '',
+                                description: '',
+                                portfolioControlAccountId: '',
+                                transactionSourceAccountId: '',
+                                writeOffExpenseAccountId: '',
+                                interestReceivableAccountId: '',
+                                feeReceivableAccountId: '',
+                                penaltyReceivableAccountId: '',
+                                feeIncomeAccountId: '',
+                                interestIncomeAccountId: '',
+                                penaltyIncomeAccountId: '',
+                                methodology: 0,
+                                isActive: true,
+                            }}
+
+                            validationSchema={loanProductValidationSchema}
+                            onSubmit={(values, { resetForm }) => {
+
+                                let createNewLoanProductPayload = {
+                                    key: values.key,
+                                    productName: values.productName,
+                                    loanProductType: values.loanProductType,
+                                    description: values.description,
+                                    loanProductAccountingRuleModel :{
+                                        id:0,
+                                        portfolioControlAccountId: values.portfolioControlAccountId,
+                                        transactionSourceAccountId: values.transactionSourceAccountId,
+                                        writeOffExpenseAccountId: values.writeOffExpenseAccountId,
+                                        interestReceivableAccountId: values.interestReceivableAccountId,
+                                        feeReceivableAccountId: values.feeReceivableAccountId,
+                                        penaltyReceivableAccountId: values.penaltyReceivableAccountId,
+                                        feeIncomeAccountId: values.feeIncomeAccountId,
+                                        interestIncomeAccountId: values.interestIncomeAccountId,
+                                        penaltyIncomeAccountId: values.penaltyIncomeAccountId,
+                                    },
+                                    methodology: values.methodology,
+                                    isActive: values.isActive
+                                    
+                                }
+
+
+
+                                this.handleCreateNewLoanProduct(createNewLoanProductPayload)
+                                    .then(
+                                        () => {
+
+                                            if (this.props.createLoanProductReducer.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS) {
+                                                setTimeout(() => {
+                                                    resetForm();
+                                                    this.props.dispatch(productActions.createLoanProduct("CLEAR"))
+                                                }, 3000);
+                                            }else{
+                                                setTimeout(() => {
+                                                    this.props.dispatch(productActions.createLoanProduct("CLEAR"))
+                                                }, 3000);
+                                            }
+
+                                        
+
+                                        }
+                                    )
+
+                            }}
+                        >
+                            {({ handleSubmit,
+                                handleChange,
+                                handleBlur,
+                                resetForm,
+                                values,
+                                touched,
+                                isValid,
+                                errors, }) => (
+                            <Form 
+                                noValidate 
+                                onSubmit={handleSubmit}
+                                className="form-content card">
+                                <div className="form-heading">
+                                    <h3>Create A New Loan Product</h3>
+                                </div>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label className="block-level">Product Name</Form.Label>
+                                        <Form.Control 
+                                            type="text"
+                                            onChange={handleChange}
+                                            value={values.productName}
+                                            className={errors.productName && touched.productName ? "is-invalid" : null}
+                                            name="productName" required />
+                                        {errors.productName && touched.productName ? (
+                                            <span className="invalid-feedback">{errors.productName}</span>
+                                        ) : null}
+                                    </Col>
+                                    <Col>
+                                        <Form.Label className="block-level">Product Key</Form.Label>
+                                        <Form.Control 
+                                            type="text"
+                                            onChange={handleChange}
+                                            value={values.key}
+                                            className={errors.key && touched.key ? "is-invalid" : null}
+                                            name="key" required />
+                                        {errors.key && touched.key ? (
+                                            <span className="invalid-feedback">{errors.key}</span>
+                                        ) : null}
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label className="block-level">Product Type</Form.Label>
+                                        
+                                        <Select
+                                            options={allProductTypes}
+                                            onChange={(selectedProductType) => {
+                                                this.setState({ selectedProductType });
+                                                errors.loanProductType = null
+                                                values.loanProductType = selectedProductType.value
+                                            }}
+                                            className={errors.loanProductType && touched.loanProductType ? "is-invalid" : null}
+                                            
+                                            
+                                            name="loanProductType"
+                                            
+                                            required
+                                        />
+                                        {errors.loanProductType && touched.loanProductType ? (
+                                            <span className="invalid-feedback">{errors.loanProductType}</span>
+                                        ) : null}
+                                    </Col>
+                                    <Col>
+                                    </Col>
+                                </Form.Row>
+                                
+                                
+
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Loan Product Description
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div className="each-formsection">
+                                            <Form.Group>
+                                                <Form.Control as="textarea" rows="3"
+                                                    onChange={handleChange}
+                                                    value={values.description}
+                                                    className={errors.description && touched.description ? "is-invalid" : null}
+                                                    name="description"  />
+                                                {errors.description && touched.description ? (
+                                                    <span className="invalid-feedback">{errors.description}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Loan Product Rules
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Portfolio Control Account</Form.Label>
+                                                    <Select
+                                                        options={portfolioControlAccounts}
+                                                        onChange={(selectedPortfolioAcct) => {
+                                                            this.setState({ selectedPortfolioAcct });
+                                                            errors.portfolioControlAccountId = null
+                                                            values.portfolioControlAccountId = selectedPortfolioAcct.value
+                                                        }}
+                                                        className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : null}
+                                                        
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        name="portfolioControlAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Transaction Source Account</Form.Label>
+                                                    <Select
+                                                        options={transactionSourceAccount}
+                                                        onChange={(selectedTxtSourceAcct) => {
+                                                            this.setState({ selectedTxtSourceAcct });
+                                                            errors.transactionSourceAccountId = null
+                                                            values.transactionSourceAccountId = selectedTxtSourceAcct.value
+                                                        }}
+                                                        className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="transactionSourceAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Write-off Expense Account</Form.Label>
+                                                    <Select
+                                                        options={writeOffExpenseAccounts}
+                                                        onChange={(selectedWriteOffExpenseAcct) => {
+                                                            this.setState({ selectedWriteOffExpenseAcct });
+                                                            errors.writeOffExpenseAccountId = null
+                                                            values.writeOffExpenseAccountId = selectedWriteOffExpenseAcct.value
+                                                        }}
+                                                        className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="writeOffExpenseAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Interest Receivable Account</Form.Label>
+                                                    <Select
+                                                        options={interestReceivableAccounts}
+                                                        onChange={(selectedInterestReceivableAcct) => {
+                                                            this.setState({ selectedInterestReceivableAcct });
+                                                            errors.interestReceivableAccountId = null
+                                                            values.interestReceivableAccountId = selectedInterestReceivableAcct.value
+                                                        }}
+                                                        className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="interestReceivableAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Fee Receivable Account</Form.Label>
+                                                    <Select
+                                                        options={feeReceivableAccounts}
+                                                        onChange={(selectedFeeReceivableAcct) => {
+                                                            this.setState({ selectedFeeReceivableAcct });
+                                                            errors.feeReceivableAccountId = null
+                                                            values.feeReceivableAccountId = selectedFeeReceivableAcct.value
+                                                        }}
+                                                        className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="feeReceivableAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Penalty Receivable Account</Form.Label>
+                                                    <Select
+                                                        options={penaltyReceivableAccounts}
+                                                        onChange={(selectedPenaltyReceivableAcct) => {
+                                                            this.setState({ selectedPenaltyReceivableAcct });
+                                                            errors.penaltyReceivableAccountId = null
+                                                            values.penaltyReceivableAccountId = selectedPenaltyReceivableAcct.value
+                                                        }}
+                                                        className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="penaltyReceivableAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Fee Income Account</Form.Label>
+                                                    <Select
+                                                        options={allGlAccounts}
+                                                        onChange={(selectedFeeIncomeAcct) => {
+                                                            this.setState({ selectedFeeIncomeAcct });
+                                                            errors.feeIncomeAccountId = null
+                                                            values.feeIncomeAccountId = selectedFeeIncomeAcct.value
+                                                        }}
+                                                        className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="feeIncomeAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Interest Income Account</Form.Label>
+                                                    <Select
+                                                        options={interestIncomeAccounts}
+                                                        onChange={(selectedInterestIncomeAcct) => {
+                                                            this.setState({ selectedInterestIncomeAcct });
+                                                            errors.interestIncomeAccountId = null
+                                                            values.interestIncomeAccountId = selectedInterestIncomeAcct.value
+                                                        }}
+                                                        className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="interestIncomeAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Penalty Income Account</Form.Label>
+                                                    <Select
+                                                        options={penaltyIncomeAccounts}
+                                                        onChange={(selectedPenaltyIncomeAcct) => {
+                                                            this.setState({ selectedPenaltyIncomeAcct });
+                                                            errors.penaltyIncomeAccountId = null
+                                                            values.penaltyIncomeAccountId = selectedPenaltyIncomeAcct.value
+                                                        }}
+                                                        className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="penaltyIncomeAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Methodology</Form.Label>
+                                                    <select id="toshow" 
+                                                            onChange={handleChange}
+                                                            value={values.methodology}
+                                                            className="countdropdown form-control form-control-sm">
+                                                        <option value="0">None</option>
+                                                        <option value="1">Cash</option>
+                                                        <option value="2">Accrual</option>
+                                                    </select>
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                
+                                                    <div className="checkbox-wrap">
+                                                        <input type="checkbox" 
+                                                            id="isActive" 
+                                                            checked={values.isActive? values.isActive:null}
+                                                            name="isActive"
+                                                            onChange={handleChange} 
+                                                            value={values.isActive}  />
+                                                        <label htmlFor="isActive">Active state</label>
+                                                    </div>
+                                                </Col>
+                                                <Col>
+                                                    
+                                                </Col>
+                                            </Form.Row>
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+
+                            
+
+
+
+
+
+                                <div className="footer-with-cta toleft">
+                                    
+                                    <NavLink to={'/administration/products'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                    <Button
+                                        type="submit"
+                                        disabled={createLoanProductRequest.is_request_processing}>
+                                        {createLoanProductRequest.is_request_processing?"Please wait...": "Save Product"}
+                                    </Button>
+                                </div>
+                                {createLoanProductRequest.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS && 
+                                    <Alert variant="success">
+                                        {createLoanProductRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+                                {createLoanProductRequest.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_FAILURE && 
+                                    <Alert variant="danger">
+                                        {createLoanProductRequest.request_data.error}
+                                    </Alert>
+                                }
+                            </Form>
+                        
+                        
+                        )}
+                        </Formik>
+                        
+                    )
+                }else{
+                    return(
+                        <div className="loading-content card"> 
+                            <div>No GL Account found</div>
+                        </div>
+                    )
+                }
+
+            case (accountingConstants.GET_ALL_GLACCOUNTS_FAILURE):
+                return (
+                    <div className="loading-content card"> 
+                        <div>{getAllGLAccountsRequest.request_data.error}</div>
+                    </div>
+                )
+            default :
+            return null;
+        }
     }
 
     render() {
@@ -36,152 +528,7 @@ class NewLoanProduct extends React.Component {
                                     <div className="col-sm-12">
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
-                                                <Form className="form-content card">
-                                                    <div className="form-heading">
-                                                        <h3>Creating A New Loan Product</h3>
-                                                    </div>
-                                                    <Form.Group>
-                                                        <Form.Label className="block-level">Product</Form.Label>
-                                                            <Form.Control type="text" />
-                                                    </Form.Group>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">ID</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Product Type</Form.Label>
-                                                            <Form.Control as="select" size="sm">
-                                                                    <option>Fixed Term Loan</option>
-                                                                    <option>Dynamic Term Loan</option>
-                                                                    <option>Interest-Free Loan</option>
-                                                                    <option>Tranched Loan</option>
-                                                                    <option>Revolving Credit</option>
-                                                            </Form.Control>
-                                                        </Col>
-                                                    </Form.Row>
-                                                    
-                                                    <Accordion defaultActiveKey="0">
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                        Product Description
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div className="each-formsection">
-                                                               <Form.Group>
-                                                                    <Form.Control as="textarea" rows="3" />
-                                                               </Form.Group>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                    <Accordion defaultActiveKey="0">
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Product Availability
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <Form.Label>Product Availability</Form.Label>
-                                                                
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-1" />
-                                                                    <label htmlFor="pick-1">Customers</label>
-                                                                </div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-2" />
-                                                                    <label htmlFor="pick-2">Groups</label>
-                                                                </div>
-                                                            
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-5" disabled />
-                                                                    <label htmlFor="pick-5">Groups (Solidarity)</label>
-                                                                </div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-4" />
-                                                                    <label htmlFor="pick-4">All Branches</label>
-                                                                </div>
-                                                                <Form.Label>Branch</Form.Label>
-                                                                <div className="each-formsection branchselection">
-                                                                        
-                                                                    <Form.Control as="select" size="sm">
-                                                                        <option>Ikeja</option>
-                                                                        <option>Head office</option>
-                                                                        <option>Badagry</option>
-                                                                        <option>Thursday</option>
-                                                                        <option>Marina</option>
-                                                                    </Form.Control>
-                                                                    <Button className="btn small-btnprimary">Add Branch</Button>
-                                                                </div>
-                                                                <div className="each-formsection addedbranches">
-                                                                   <div className="eachbranch">
-                                                                       <div className="branchname">Ikeja</div>
-                                                                       <div className="removebranch"></div>
-                                                                   </div>
-                                                                   <div className="eachbranch">
-                                                                       <div className="branchname">Badagry</div>
-                                                                       <div className="removebranch"></div>
-                                                                   </div>
-                                                                </div>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                    
-                                                    <Accordion defaultActiveKey="0">
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Product Links
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-3"/>
-                                                                    <label htmlFor="pick-3">Enable Linking</label>
-                                                                </div>
-                                                                <div className="each-formsection  two-sided">
-                                                                    <div>
-                                                                        <Form.Label>Linked Deposit Product</Form.Label>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option>Any</option>
-                                                                            <option>NIGTB 02-SEP-2019</option>
-                                                                        </Form.Control>
-                                                                    </div>
-                                                                    {/* Display if NIGTB 02-SEP-2019 is selected */}
-                                                                    <div className="pl-20">
-                                                                        <Form.Label>Deposit Account Options</Form.Label>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-6" />
-                                                                            <label htmlFor="pick-6">Auto-Set Settlement Accounts on Creation</label>
-                                                                        </div>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-6" />
-                                                                            <label htmlFor="pick-6">Auto-Create Settlement Account</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    
-                                                                </div>
-                                                                <div className="each-formsection w-40">
-                                                                    <Form.Label>Settlement Options</Form.Label>
-                                                                    <Form.Control as="select" size="sm">
-                                                                        <option>Only transfer full dues</option>
-                                                                        <option>Allow partial transfers</option>
-                                                                        <option>No automated transfers</option>
-                                                                    </Form.Control>
-                                                                </div>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                   
-
-                                                    
-
-
-                                                    <div className="footer-with-cta toleft">
-                                                        {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
-                                                        <NavLink to={'/administration/products'} className="btn btn-secondary grayed-out">Cancel</NavLink>
-                                                        <Button>Save Product</Button>
-                                                    </div>
-                                                </Form>
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                                {this.renderCreateLoanProduct()}
                                             </div>
                                         </div>
                                     </div>
@@ -195,4 +542,12 @@ class NewLoanProduct extends React.Component {
     }
 }
 
-export default NewLoanProduct;
+function mapStateToProps(state) {
+    return {
+        createLoanProductReducer : state.loanProductReducers.createLoanProductReducer,
+        getAllGLAccountsReducer : state.accountingReducers.getAllGLAccountsReducer,
+    };
+}
+
+
+export default connect(mapStateToProps)(NewLoanProduct);

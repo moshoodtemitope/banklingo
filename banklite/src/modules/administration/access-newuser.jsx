@@ -213,7 +213,7 @@ class CreateNewUser extends React.Component {
                         createNewUserPayload.contact.contactEmail =values.contactEmail;
                     }
 
-                    console.log('payload is ',createNewUserPayload);
+                    
 
                     this.createUserRequest(createNewUserPayload)
                         .then(

@@ -19,6 +19,7 @@ class Activties extends React.Component {
             user:'',
             PageSize:25,
             CurrentPage:1,
+            isRefresh:false
         }
         
     }
@@ -38,6 +39,268 @@ class Activties extends React.Component {
 
         dispatch(dashboardActions.getActivitiesData(paramters));
     }
+
+    setPagesize = (PageSize)=>{
+        // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
+        let {CurrentPage}= this.state;
+        
+
+        let sizeOfPage = PageSize.target.value;
+
+        this.setState({PageSize: sizeOfPage, isRefresh: true});
+        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+
+        
+       
+        dispatch(dashboardActions.getActivitiesData(params));
+    }
+
+    renderActivities=()=>{
+        let getActivitiesRequestData = this.props.getActivitiesRequest,
+            {isRefresh} = this.state;
+        if(getActivitiesRequestData.request_status ===dashboardConstants.GET_ACTIVITIES_DATA_PENDING
+            ){
+                return(
+                    <div className="loading-content">
+                        <div className="heading-with-cta">
+                            <Form className="one-liner">
+
+                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                    <Form.Control as="select" size="sm">
+                                        <option>No Filter</option>
+                                        <option>Add New Filter</option>
+                                        <option>Custom Filter</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                            </Form>
+
+                            <div className="pagination-wrap">
+                                <label htmlFor="toshow">Show</label>
+                                <select id="toshow"
+
+                                    className="countdropdown form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25" >25</option>
+                                    <option value="50">50</option>
+                                    <option value="200">200</option>
+                                </select>
+                                <div className="move-page-actions">
+                                    <div className="each-page-action">
+                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                    </div>
+                                    <div className="page-count">
+                                        <span>1-20</span>  of <span>20000</span>
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                    <div className="each-page-action">
+                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Date Created</th>
+                                    <th>Username</th>
+                                    <th>Action</th>
+                                    <th>Affected Customer</th>
+                                    {/* <th></th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
+                        <div className="loading-text">Please wait... </div>
+                    </div>
+                )
+        }
+
+        if(getActivitiesRequestData.request_status ===dashboardConstants.GET_ACTIVITIES_DATA_SUCCESS
+            ){
+                let allActivitiesData = getActivitiesRequestData.request_data.response.data;
+
+                if(allActivitiesData.result!==undefined){
+                    if(allActivitiesData.result.length>=1){
+                        return(
+                            <div>
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" 
+                                                onChange={this.setPagesize}
+                                                value={this.state.PageSize}
+                                                className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        <div className="move-page-actions">
+                                            <div className="each-page-action">
+                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                            </div>
+                                            <div className="page-count">
+                                                <span>1-20</span>  of <span>20000</span>
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Date Created</th>
+                                            <th>Username</th>
+                                            <th>Action</th>
+                                            <th>Affected Customer</th>
+                                            {/* <th></th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            allActivitiesData.result.map((eachActivity, index)=>{
+                                                return(
+                                                    <Fragment key={index}>
+                                                        <tr>
+                                                            <td>{eachActivity.id}</td>
+                                                            <td>{eachActivity.creationDate}</td>
+                                                            <td>{eachActivity.userName}</td>
+                                                            <td>{eachActivity.action}</td>
+                                                            <td>{eachActivity.affectedCustomerName}</td>
+                                                        </tr>
+                                                    </Fragment>
+                                                )
+                                            })
+                                        }
+                                       
+                                    </tbody>
+                                </TableComponent>
+
+                            </div>
+                        )
+                    }else{
+                        return(
+                            <div>
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow"
+                                                onChange={this.setPagesize}
+                                                value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25" >25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        <div className="move-page-actions">
+                                            <div className="each-page-action">
+                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                            </div>
+                                            <div className="page-count">
+                                                <span>1-20</span>  of <span>20000</span>
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Date Created</th>
+                                            <th>Username</th>
+                                            <th>Action</th>
+                                            <th>Affected Customer</th>
+                                            {/* <th></th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                            </div>
+                        )
+                    }
+                }else{
+                    return null
+                }
+        }
+
+        if (getActivitiesRequestData.request_status === dashboardConstants.GET_ACTIVITIES_DATA_FAILURE
+        ) {
+            return (
+                <div className="loading-content errormsg">
+                    <div>{getActivitiesRequestData.request_data.error}</div>
+                </div>
+            )
+        }
+
+    }
+
 
     render() {
         return (
@@ -64,93 +327,7 @@ class Activties extends React.Component {
                                         </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                <div className="heading-with-cta">
-                                                    <Form className="one-liner">
-
-                                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                            <Form.Control as="select" size="sm">
-                                                                <option>No Filter</option>
-                                                                <option>Add New Filter</option>
-                                                                <option>Custom Filter</option>
-                                                            </Form.Control>
-                                                        </Form.Group>
-                                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                                    </Form>
-
-                                                    <div className="pagination-wrap">
-                                                        <label htmlFor="toshow">Show</label>
-                                                        <select id="toshow" className="countdropdown form-control form-control-sm">
-                                                            <option value="10">10</option>
-                                                            <option value="25">25</option>
-                                                            <option value="50">50</option>
-                                                            <option value="200">200</option>
-                                                        </select>
-                                                        <div className="move-page-actions">
-                                                            <div className="each-page-action">
-                                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                            </div>
-                                                            <div className="each-page-action">
-                                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                            </div>
-                                                            <div className="page-count">
-                                                                <span>1-20</span>  of <span>20000</span>
-                                                            </div>
-                                                            <div className="each-page-action">
-                                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                            </div>
-                                                            <div className="each-page-action">
-                                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <TableComponent classnames="striped bordered hover">
-                                                    <thead>
-                                                        <tr>
-                                                        <th>Creation Date</th>
-                                                        <th>User</th>
-                                                        <th>Action</th>
-                                                        <th>Affected Item Name</th>
-                                                        <th>Affected Item ID</th>
-                                                        <th>Affected Customer Name</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>some text</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-                                                            <td>30</td>
-                                                            <td>30</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </TableComponent>
+                                                {this.renderActivities()}
                                             </div>
                                         </div>
                                     </div>
@@ -166,7 +343,7 @@ class Activties extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        getDashboardStats: state.dashboardReducers.getDashboardStatReducer,
+        getActivitiesRequest: state.dashboardReducers.getActivitiesReducer,
     };
 }
 

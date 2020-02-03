@@ -107,16 +107,16 @@ class EditBranch extends React.Component {
                     return (
                         <Formik
                             initialValues={{
-                                key: branchDetails.key !== '' ? branchDetails.key : '',
-                                name: branchDetails.name !== '' ? branchDetails.name : '',
-                                addressLine1: branchDetails.address.addressLine1 !== '' ? branchDetails.address.addressLine1 : '',
-                                addressLine2: branchDetails.address.addressLine2 !== '' ? branchDetails.address.addressLine2 : '',
-                                addressCity: branchDetails.address.addressCity !== '' ? branchDetails.address.addressCity : '',
-                                addressState: branchDetails.address.addressState !== '' ? branchDetails.address.addressState : '',
-                                addressCountry: branchDetails.address.addressCountry !== '' ? branchDetails.address.addressCountry : '',
-                                zipCode: branchDetails.address.zipCode !== '' ? branchDetails.address.zipCode : '',
-                                contactMobile: branchDetails.contact.contactMobile !== '' ? branchDetails.contact.contactMobile : '',
-                                contactEmail: branchDetails.contact.contactEmail !== '' ? branchDetails.contact.contactEmail : '',
+                                key: (branchDetails.key !== '' && branchDetails.key !== null) ? branchDetails.key : '',
+                                name: (branchDetails.name !== '' && branchDetails.name !== null) ? branchDetails.name : '',
+                                addressLine1: (branchDetails.address.addressLine1 !=='' && branchDetails.address.addressLine1 !==null) ? branchDetails.address.addressLine1 : '',
+                                addressLine2: (branchDetails.address.addressLine2 !== '' && branchDetails.address.addressLine2 !== null) ? branchDetails.address.addressLine2 : '',
+                                addressCity: (branchDetails.address.addressCity !== '' && branchDetails.address.addressCity !== null) ? branchDetails.address.addressCity : '',
+                                addressState: (branchDetails.address.addressState !== '' && branchDetails.address.addressState !== null) ? branchDetails.address.addressState : '',
+                                addressCountry: (branchDetails.address.addressCountry !== '' && branchDetails.address.addressCountry !== null) ? branchDetails.address.addressCountry : '',
+                                zipCode: (branchDetails.address.zipCode !== '' & branchDetails.address.zipCode !== null) ? branchDetails.address.zipCode : '',
+                                contactMobile: (branchDetails.contact.contactMobile !== '' && branchDetails.address.zipCode !== null) ? branchDetails.contact.contactMobile : '',
+                                contactEmail: (branchDetails.contact.contactEmail !== '' && branchDetails.contact.contactEmail !== null) ? branchDetails.contact.contactEmail : '',
                             }}
             
                             validationSchema={this.updateBranchValidationSchema}
