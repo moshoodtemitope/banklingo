@@ -124,7 +124,7 @@ const disbursmentReducers = combineReducers({
     getDisbursementByRefReducer: disbursment.getDisbursementByRefReducer, 
 })
 
-const loanProductReducers = combineReducers({
+const productReducers = combineReducers({
     createLoanProductReducer: products.createLoanProductReducer, 
     getAllLoanProductsReducer: products.getAllLoanProductsReducer, 
     getSingleLoanProductsReducer: products.getSingleLoanProductsReducer, 
@@ -145,7 +145,7 @@ const appReducer = combineReducers({
     clientsReducers,
     disbursmentReducers,
     // LoginReducer,
-    loanProductReducers,
+    productReducers,
     authReducers,
     dashboardReducers
 })

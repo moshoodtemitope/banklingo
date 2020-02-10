@@ -350,7 +350,7 @@ class ProductLoans extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        getAllLoanProductsRequest: state.loanProductReducers.getAllLoanProductsReducer,
+        getAllLoanProductsRequest: state.productReducers.getAllLoanProductsReducer,
     };
 }
 

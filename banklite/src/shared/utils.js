@@ -1,7 +1,12 @@
 export const handleRequestErrors = (error)=>{
-    console.log('error type',  error, typeof error);
-    if(error.toString().indexOf("'closed' of undefined")>-1){
-        // window.location.reload();
+    console.log('error type',  error.toString());
+    if(error.toString().indexOf("'closed' of undefined")>-1  
+        // error.toString().indexOf("code 401")>-1
+    ){
+        // setTimeout(() => {
+            //  window.location.reload();
+        // }, 1000);
+       
     }
     if(error!==undefined && error!==null){
         // if(error!==undefined && error!==null && error.toString().indexOf("'closed' of undefined")===-1){

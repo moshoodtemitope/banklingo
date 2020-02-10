@@ -42,28 +42,26 @@ class NewDepositsProduct extends React.Component {
         dispatch(acoountingActions.getAllGLAccounts());
     }
 
-    handleCreateNewLoanProduct = async(newLoanProductPayload)=>{
+    handleCreateNewDepositProduct = async(newDepositProductPayload)=>{
         const {dispatch} = this.props;
        
-        await dispatch(productActions.createLoanProduct(newLoanProductPayload));
+        await dispatch(productActions.createDepositProduct(newDepositProductPayload));
 
     }
 
 
-    renderCreateLoanProduct =()=>{
-        let createLoanProductRequest = this.props.createDepositProductReducer,
+    renderCreateDepositProduct =()=>{
+        let createDepositProductRequest = this.props.createDepositProductReducer,
             getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
 
-        let loanProductValidationSchema = Yup.object().shape({
+        let depositProductValidationSchema = Yup.object().shape({
             key: Yup.string()
                 .min(1, 'Response required')
                 .required('Required'),
             productName:  Yup.string()
                 .min(2, 'Valid response required')
                 .required('Required'),
-            depositAccountTypeEnum: Yup.string()
-                .required('Required'),
-            description:  Yup.string()
+            depositAccountType:  Yup.string()
                 .min(5, 'Valid response required')
                 .required('Required'),
           });
@@ -81,6 +79,22 @@ class NewDepositsProduct extends React.Component {
             {value: '1', label: 'Cash'},
             {value: '2', label: 'Accrual'},
         ];
+
+
+        let interestRateTerms =[
+            {value: 1, label: '% per year'},
+            {value: 2, label: '% per month'},
+            {value: 3, label: '% per 4 weeks'},
+            {value: 4, label: '% per week'},
+            {value: 5, label: '% per x days'},
+        ];
+
+        let interestBalanceCalculations =[
+            {value: '1', label: 'Minimum Daily Balance'},
+            {value: '2', label: 'Maximum Daily Balance'},
+            {value: '3', label: 'End of Day Balance'},
+        ];
+
 
         let interestAccruedMethodList =[
             {value: '1', label: 'Daily'},
@@ -122,59 +136,97 @@ class NewDepositsProduct extends React.Component {
                             initialValues={{
                                 key: '',
                                 productName: '',
-                                loanProductType: '',
+                                depositAccountType: '',
                                 description: '',
                                 savingsControlAccountId: '',
                                 transactionSourceAccountId: '',
                                 interestExpenseAccountId: '',
-                                interestReceivableAccountId: '',
-                                feeReceivableAccountId: '',
-                                penaltyReceivableAccountId: '',
                                 feeIncomeAccountId: '',
                                 interestAccruedMethod: '',
-                                // penaltyIncomeAccountId: '',
                                 methodology: 0,
                                 isActive: true,
+                                currencyCode:'',
+                                automaticallySetAccountAsDormant:false,
+                                dormancyAfterXDays:'',
+                                // interestAccruedMethod:'',
+                                maximumWithdrawalAmount:'',
+                                recommendedDepositAmount:'',
+                                interestPaid:true,
+                                interestRateTerms:'',
+                                interestBalanceCalculation:'',
+                                interestRateDefault:'',
+                                interestRateMin:'',
+                                interestRateMax:'',
+                                xInterestDays:'',
+                                defaultOpeningBalance:'',
+                                minimumOpeningBalance:'',
+                                maxmimumOpeningBalance:'',
+                                term:'',
+                                defaultTermLength:'',
+                                minimumTermLength:'',
+                                maxmimumTermLength:'',
                             }}
 
-                            validationSchema={loanProductValidationSchema}
+                            validationSchema={depositProductValidationSchema}
                             onSubmit={(values, { resetForm }) => {
 
-                                let createNewLoanProductPayload = {
+                                let createNewDepositProductPayload = {
                                     key: values.key,
                                     productName: values.productName,
-                                    loanProductType: values.loanProductType,
+                                    depositAccountType: values.depositAccountType,
                                     description: values.description,
-                                    loanProductAccountingRuleModel :{
-                                        id:0,
-                                        portfolioControlAccountId: values.portfolioControlAccountId,
+                                    depositProductAccountingRule:{
+                                        savingsControlAccountId: values.savingsControlAccountId,
                                         transactionSourceAccountId: values.transactionSourceAccountId,
-                                        writeOffExpenseAccountId: values.writeOffExpenseAccountId,
-                                        interestReceivableAccountId: values.interestReceivableAccountId,
-                                        feeReceivableAccountId: values.feeReceivableAccountId,
-                                        penaltyReceivableAccountId: values.penaltyReceivableAccountId,
+                                        interestExpenseAccountId: values.interestExpenseAccountId,
                                         feeIncomeAccountId: values.feeIncomeAccountId,
-                                        interestIncomeAccountId: values.interestIncomeAccountId,
+                                        interestAccruedMethod: values.interestAccruedMethod,
                                     },
                                     methodology: values.methodology,
-                                    isActive: values.isActive
+                                    isActive: values.isActive,
+                                    currencyCode: values.currencyCode,
+                                    automaticallySetAccountAsDormant: values.automaticallySetAccountAsDormant,
+                                    dormancyAfterXDays: values.dormancyAfterXDays,
+                                    interestAccruedMethod: values.interestAccruedMethod,
+                                    depositSavingsSettingModel:{
+                                        maximumWithdrawalAmount: values.maximumWithdrawalAmount,
+                                        recommendedDepositAmount: values.recommendedDepositAmount,
+                                    },
+                                    depositProductInterestSettingModel:{
+                                        interestPaid: values.interestPaid,
+                                        interestRateTerms: values.interestRateTerms,
+                                        interestBalanceCalculation: values.interestBalanceCalculation,
+                                        interestRateDefault: values.interestRateDefault,
+                                        interestRateMin: values.interestRateMin,
+                                        interestRateMax: values.interestRateMax,
+                                        xInterestDays: values.xInterestDays,
+                                    },
+                                    depositFixedSettingModel:{
+                                        defaultOpeningBalance: values.defaultOpeningBalance,
+                                        minimumOpeningBalance: values.minimumOpeningBalance,
+                                        maxmimumOpeningBalance: values.maxmimumOpeningBalance,
+                                        term: values.term,
+                                        defaultTermLength: values.defaultTermLength,
+                                        minimumTermLength: values.minimumTermLength,
+                                        maxmimumTermLength: values.maxmimumTermLength,
+                                    },
                                     
                                 }
 
 
 
-                                this.handleCreateNewLoanProduct(createNewLoanProductPayload)
+                                this.handleCreateNewDepositProduct(createNewDepositProductPayload)
                                     .then(
                                         () => {
 
-                                            if (this.props.createLoanProductReducer.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS) {
+                                            if (this.props.createDepositProductReducer.request_status === productsConstants.CREATE_A_DEPOSIT_PRODUCT_SUCCESS) {
                                                 setTimeout(() => {
                                                     resetForm();
-                                                    this.props.dispatch(productActions.createLoanProduct("CLEAR"))
+                                                    this.props.dispatch(productActions.createDepositProduct("CLEAR"))
                                                 }, 3000);
                                             }else{
                                                 setTimeout(() => {
-                                                    this.props.dispatch(productActions.createLoanProduct("CLEAR"))
+                                                    this.props.dispatch(productActions.createDepositProduct("CLEAR"))
                                                 }, 3000);
                                             }
 
@@ -234,18 +286,18 @@ class NewDepositsProduct extends React.Component {
                                             options={allProductTypes}
                                             onChange={(selectedProductType) => {
                                                 this.setState({ selectedProductType });
-                                                errors.depositAccountTypeEnum = null
-                                                values.depositAccountTypeEnum = selectedProductType.value
+                                                errors.depositAccountType = null
+                                                values.depositAccountType = selectedProductType.value
                                             }}
-                                            className={errors.depositAccountTypeEnum && touched.depositAccountTypeEnum ? "is-invalid" : null}
+                                            className={errors.depositAccountType && touched.depositAccountType ? "is-invalid" : null}
                                             
                                             
-                                            name="depositAccountTypeEnum"
+                                            name="depositAccountType"
                                             
                                             required
                                         />
-                                        {errors.depositAccountTypeEnum && touched.depositAccountTypeEnum ? (
-                                            <span className="invalid-feedback">{errors.depositAccountTypeEnum}</span>
+                                        {errors.depositAccountType && touched.depositAccountType ? (
+                                            <span className="invalid-feedback">{errors.depositAccountType}</span>
                                         ) : null}
                                     </Col>
                                     <Col>
@@ -385,11 +437,11 @@ class NewDepositsProduct extends React.Component {
                                                     <Form.Control 
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={values.productName}
-                                                        className={errors.productName && touched.productName ? "is-invalid" : null}
-                                                        name="productName" required />
-                                                    {errors.productName && touched.productName ? (
-                                                        <span className="invalid-feedback">{errors.productName}</span>
+                                                        value={values.maximumWithdrawalAmount}
+                                                        className={errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? "is-invalid" : null}
+                                                        name="maximumWithdrawalAmount"  />
+                                                    {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
+                                                        <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
                                                     ) : null}
                                                 </Col>
                                                 <Col>
@@ -397,16 +449,253 @@ class NewDepositsProduct extends React.Component {
                                                     <Form.Control 
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={values.productName}
-                                                        className={errors.productName && touched.productName ? "is-invalid" : null}
-                                                        name="productName" required />
-                                                    {errors.productName && touched.productName ? (
-                                                        <span className="invalid-feedback">{errors.productName}</span>
+                                                        value={values.recommendedDepositAmount}
+                                                        className={errors.recommendedDepositAmount && touched.recommendedDepositAmount ? "is-invalid" : null}
+                                                        name="recommendedDepositAmount" />
+                                                    {errors.recommendedDepositAmount && touched.recommendedDepositAmount ? (
+                                                        <span className="invalid-feedback">{errors.recommendedDepositAmount}</span>
                                                     ) : null}
                                                 </Col>
                                                
                                             </Form.Row>
                                             
+                                            
+                                            
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Deposit Product Interest Settings
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <div className="checkbox-wrap">
+                                                        <input type="checkbox" 
+                                                            id="interestPaid" 
+                                                            checked={values.interestPaid? values.interestPaid:null}
+                                                            name="interestPaid"
+                                                            onChange={handleChange} 
+                                                            value={values.interestPaid}  />
+                                                        <label htmlFor="interestPaid">Is interest paid</label>
+                                                    </div>
+                                                </Col>
+                                               
+                                            </Form.Row>
+                                            {values.interestPaid===true &&
+                                                <div>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest rate terms</Form.Label>
+                                                            <Select
+                                                                options={interestRateTerms}
+                                                                onChange={(selectedInterestRateTerm) => {
+                                                                    this.setState({ selectedInterestRateTerm });
+                                                                    errors.interestRateTerms = null
+                                                                    values.interestRateTerms = selectedInterestRateTerm.value
+                                                                }}
+                                                                className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
+                                                                // noOptionsMessage ={() => "No accounts available"}
+                                                                
+                                                                name="interestRateTerms"
+                                                                
+                                                                
+                                                            />
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest Balance Calculation</Form.Label>
+                                                            <Select
+                                                                options={interestBalanceCalculations}
+                                                                onChange={(selectedBalanceCalculation) => {
+                                                                    this.setState({ selectedBalanceCalculation });
+                                                                    errors.interestBalanceCalculation = null
+                                                                    values.interestBalanceCalculation = selectedBalanceCalculation.value
+                                                                }}
+                                                                className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
+                                                                // noOptionsMessage ={() => "No accounts available"}
+                                                                
+                                                                name="interestBalanceCalculation"
+                                                                
+                                                                
+                                                            />
+                                                        </Col>
+                                                        
+                                                    </Form.Row>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest Rate Default</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={values.interestRateDefault}
+                                                                className={errors.interestRateDefault && touched.interestRateDefault ? "is-invalid" : null}
+                                                                name="interestRateDefault"  />
+                                                            {errors.interestRateDefault && touched.interestRateDefault ? (
+                                                                <span className="invalid-feedback">{errors.interestRateDefault}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest Rate Min</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={values.interestRateMin}
+                                                                className={errors.interestRateMin && touched.interestRateMin ? "is-invalid" : null}
+                                                                name="interestRateMin"  />
+                                                            {errors.interestRateMin && touched.interestRateMin ? (
+                                                                <span className="invalid-feedback">{errors.interestRateMin}</span>
+                                                            ) : null}
+                                                        </Col>
+
+                                                        
+
+                                                    </Form.Row>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest Rate Max</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={values.interestRateMax}
+                                                                className={errors.interestRateMax && touched.interestRateMax ? "is-invalid" : null}
+                                                                name="interestRateMax"  />
+                                                            {errors.interestRateMax && touched.interestRateMax ? (
+                                                                <span className="invalid-feedback">{errors.interestRateMax}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        {values.interestRateTerms!==5 && 
+                                                            <Col>
+                                                            </Col>
+                                                        }
+                                                        {values.interestRateTerms===5  &&
+                                                        <Col>
+                                                            <Form.Label className="block-level">Number of Interest Days</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={values.xInterestDays}
+                                                                className={errors.xInterestDays && touched.xInterestDays ? "is-invalid" : null}
+                                                                name="xInterestDays"  />
+                                                            {errors.xInterestDays && touched.xInterestDays ? (
+                                                                <span className="invalid-feedback">{errors.xInterestDays}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        }
+
+                                                    </Form.Row>
+                                                </div>
+                                            }
+                                            
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Deposit Fixed Settings
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Default Opening Balance</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.defaultOpeningBalance}
+                                                        className={errors.defaultOpeningBalance && touched.defaultOpeningBalance ? "is-invalid" : null}
+                                                        name="defaultOpeningBalance"  />
+                                                    {errors.defaultOpeningBalance && touched.defaultOpeningBalance ? (
+                                                        <span className="invalid-feedback">{errors.defaultOpeningBalance}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Minimum Opening Balance</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.minimumOpeningBalance}
+                                                        className={errors.minimumOpeningBalance && touched.minimumOpeningBalance ? "is-invalid" : null}
+                                                        name="minimumOpeningBalance"  />
+                                                    {errors.minimumOpeningBalance && touched.minimumOpeningBalance ? (
+                                                        <span className="invalid-feedback">{errors.minimumOpeningBalance}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Maximum Opening Balance</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.maxmimumOpeningBalance}
+                                                        className={errors.maxmimumOpeningBalance && touched.maxmimumOpeningBalance ? "is-invalid" : null}
+                                                        name="maxmimumOpeningBalance"  />
+                                                    {errors.maxmimumOpeningBalance && touched.maxmimumOpeningBalance ? (
+                                                        <span className="invalid-feedback">{errors.maxmimumOpeningBalance}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Term</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.term}
+                                                        className={errors.term && touched.term ? "is-invalid" : null}
+                                                        name="term"  />
+                                                    {errors.term && touched.term ? (
+                                                        <span className="invalid-feedback">{errors.term}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Default Term Length</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.defaultTermLength}
+                                                        className={errors.defaultTermLength && touched.defaultTermLength ? "is-invalid" : null}
+                                                        name="defaultTermLength"  />
+                                                    {errors.defaultTermLength && touched.defaultTermLength ? (
+                                                        <span className="invalid-feedback">{errors.defaultTermLength}</span>
+                                                    ) : null}
+                                                </Col>
+
+                                                <Col>
+                                                    <Form.Label className="block-level">Minimum Term Length</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.minimumTermLength}
+                                                        className={errors.minimumTermLength && touched.minimumTermLength ? "is-invalid" : null}
+                                                        name="minimumTermLength"  />
+                                                    {errors.minimumTermLength && touched.minimumTermLength ? (
+                                                        <span className="invalid-feedback">{errors.minimumTermLength}</span>
+                                                    ) : null}
+                                                </Col>
+
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Maxmimum Term Length</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.maxmimumTermLength}
+                                                        className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : null}
+                                                        name="maxmimumTermLength"  />
+                                                    {errors.maxmimumTermLength && touched.maxmimumTermLength ? (
+                                                        <span className="invalid-feedback">{errors.maxmimumTermLength}</span>
+                                                    ) : null}
+                                                </Col>
+
+                                                <Col>
+                                                </Col>
+
+                                            </Form.Row>
                                             
                                             
                                         </div>
@@ -450,16 +739,25 @@ class NewDepositsProduct extends React.Component {
                                 </Form.Row>
                                 <Form.Row>
                                     <Col>
-                                        <Form.Label className="block-level">Dormant after how many days</Form.Label>
-                                        <Form.Control 
-                                            type="text"
-                                            onChange={handleChange}
-                                            value={values.productName}
-                                            className={errors.productName && touched.productName ? "is-invalid" : null}
-                                            name="productName" required />
-                                        {errors.productName && touched.productName ? (
-                                            <span className="invalid-feedback">{errors.productName}</span>
-                                        ) : null}
+                                        <div className="checkbox-wrap">
+                                            <input type="checkbox" 
+                                                id="automaticallySetAccountAsDormant" 
+                                                checked={values.automaticallySetAccountAsDormant? values.automaticallySetAccountAsDormant:null}
+                                                name="automaticallySetAccountAsDormant"
+                                                onChange={handleChange} 
+                                                value={values.automaticallySetAccountAsDormant}  />
+                                            <label htmlFor="automaticallySetAccountAsDormant">Automatically set account as dormant</label>
+                                        </div>
+                                        <div className="checkbox-wrap">
+                                            <input type="checkbox" 
+                                                id="isActive" 
+                                                checked={values.isActive? values.isActive:null}
+                                                name="isActive"
+                                                onChange={handleChange} 
+                                                value={values.isActive}  />
+                                            <label htmlFor="isActive">Active state</label>
+                                        </div>
+                                        
                                     </Col>
                                     <Col>
                                         <Form.Label className="block-level">Interest Accrued Method</Form.Label>
@@ -480,25 +778,23 @@ class NewDepositsProduct extends React.Component {
                                 <Form.Row>
                                     
                                     <Col>
-                                        <div className="checkbox-wrap">
-                                            <input type="checkbox" 
-                                                id="isActive" 
-                                                checked={values.isActive? values.isActive:null}
-                                                name="isActive"
-                                                onChange={handleChange} 
-                                                value={values.isActive}  />
-                                            <label htmlFor="isActive">Automatically setAccount as dormant</label>
-                                        </div>
-                                        <div className="checkbox-wrap">
-                                            <input type="checkbox" 
-                                                id="isActive" 
-                                                checked={values.isActive? values.isActive:null}
-                                                name="isActive"
-                                                onChange={handleChange} 
-                                                value={values.isActive}  />
-                                            <label htmlFor="isActive">Active state</label>
-                                        </div>
+                                        {values.automaticallySetAccountAsDormant===true && 
+                                            <div>
+                                                <Form.Label className="block-level">Dormant after how many days</Form.Label>
+                                                <Form.Control 
+                                                    type="text"
+                                                    onChange={handleChange}
+                                                    value={values.dormancyAfterXDays}
+                                                    className={errors.dormancyAfterXDays && touched.dormancyAfterXDays ? "is-invalid" : null}
+                                                    name="dormancyAfterXDays"  />
+                                                {errors.dormancyAfterXDays && touched.dormancyAfterXDays ? (
+                                                    <span className="invalid-feedback">{errors.dormancyAfterXDays}</span>
+                                                ) : null}
+                                            </div>
+                                        }
+                                        
                                     </Col>
+                                    <Col></Col>
                                 </Form.Row>
 
                             
@@ -512,18 +808,18 @@ class NewDepositsProduct extends React.Component {
                                     <NavLink to={'/administration/products'} className="btn btn-secondary grayed-out">Cancel</NavLink>
                                     <Button
                                         type="submit"
-                                        disabled={createLoanProductRequest.is_request_processing}>
-                                        {createLoanProductRequest.is_request_processing?"Please wait...": "Save Product"}
+                                        disabled={createDepositProductRequest.is_request_processing}>
+                                        {createDepositProductRequest.is_request_processing?"Please wait...": "Save Product"}
                                     </Button>
                                 </div>
-                                {createLoanProductRequest.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS && 
+                                {createDepositProductRequest.request_status === productsConstants.CREATE_A_DEPOSIT_PRODUCT_SUCCESS && 
                                     <Alert variant="success">
-                                        {createLoanProductRequest.request_data.response.data.message}
+                                        {createDepositProductRequest.request_data.response.data.message}
                                     </Alert>
                                 }
-                                {createLoanProductRequest.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_FAILURE && 
+                                {createDepositProductRequest.request_status === productsConstants.CREATE_A_DEPOSIT_PRODUCT_FAILURE && 
                                     <Alert variant="danger">
-                                        {createLoanProductRequest.request_data.error}
+                                        {createDepositProductRequest.request_data.error}
                                     </Alert>
                                 }
                             </Form>
@@ -565,7 +861,7 @@ class NewDepositsProduct extends React.Component {
                                     <div className="col-sm-12">
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
-                                                {this.renderCreateLoanProduct()}
+                                                {this.renderCreateDepositProduct()}
                                             </div>
                                         </div>
                                     </div>
@@ -581,7 +877,7 @@ class NewDepositsProduct extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        createDepositProductReducer : state.loanProductReducers.createDepositProductReducer,
+        createDepositProductReducer : state.productReducers.createDepositProductReducer,
         getAllGLAccountsReducer : state.accountingReducers.getAllGLAccountsReducer,
     };
 }

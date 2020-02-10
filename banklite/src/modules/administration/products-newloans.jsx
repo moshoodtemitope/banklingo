@@ -544,7 +544,7 @@ class NewLoanProduct extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        createLoanProductReducer : state.loanProductReducers.createLoanProductReducer,
+        createLoanProductReducer : state.productReducers.createLoanProductReducer,
         getAllGLAccountsReducer : state.accountingReducers.getAllGLAccountsReducer,
     };
 }

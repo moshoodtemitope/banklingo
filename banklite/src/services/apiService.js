@@ -44,7 +44,7 @@ export class ApiService {
               
             //Exclude urlsToAuthenticate urls from Authenticated requests with Token
            if (urlsToAuthenticate.indexOf(serviceToTest) === -1) {
-               // axios.defaults.headers.common['Token'] = user.token;
+               axios.defaults.headers.common['Token'] = user.token;
             //    axios.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
                axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
             //    console.log("user is", user);
@@ -62,11 +62,11 @@ export class ApiService {
                
            }
            if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
-            //    console.log("=======");
+           
                axios.defaults.headers.common['Content-Type'] = 'application/json';
            }
            if (binaryUploadUrls.indexOf(serviceToTest) > -1) {
-            //    console.log("******");
+           
                axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
            }
 
@@ -133,9 +133,13 @@ export class ApiService {
                     if (error.response.status === 401) {
                         let currentRoute = window.location.pathname,
                         type = "unauthorized";
+                        console.log("routing" , currentRoute);
 
-                       
-                        dispatch(authActions.Logout(type,currentRoute));
+                        // dispatch(authActions.Logout("unauthorized",currentRoute));
+                        // setTimeout(() => {
+                            dispatch(authActions.Logout(type,currentRoute));    
+                        // }, 1000);
+                        
                         
                        
                         
@@ -158,11 +162,11 @@ export class ApiService {
         if (type.toLowerCase() === 'post'){
             //check for header
             if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
-                console.log("________")
+               
                 axios.defaults.headers.common['Content-Type'] = 'application/json';
             }
             if (binaryUploadUrls.indexOf(serviceToTest) > -1) {
-                console.log("+++++");
+                
                 axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
             }
             // axios.defaults.headers.common['Content-Type'] = 'application/json';

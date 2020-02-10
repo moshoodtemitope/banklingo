@@ -100,7 +100,7 @@ function Login   (loginPayload){
 function Logout(redirectType,retUrl) {
     
     localStorage.clear();
-    
+    console.log("testwe",retUrl);
     
     if(retUrl!==undefined){
         
