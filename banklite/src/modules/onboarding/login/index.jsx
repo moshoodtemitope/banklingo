@@ -18,7 +18,9 @@ import {authConstants} from '../../../redux/actiontypes/auth/auth.constants';
 import {getRouteForRedirect} from "../../../shared/utils";
 
 import Alert from 'react-bootstrap/Alert'
-import loginIcon from '../../../assets/img/enter.svg'
+import bankIcon from '../../../assets/img/bank-icon.svg'
+import loginBg from '../../../assets/img/loginbg.png'
+import bgLogin from '../../../assets/img/bglogin.png'
 
 import "../onboarding.scss"; 
 class UserLogin extends React.Component {
@@ -81,6 +83,9 @@ class UserLogin extends React.Component {
         
         return(
             <div className="login-page">
+                <div className="loginbg-wrap">
+                    {/* <img className="loginbg" src={bgLogin} /> */}
+                </div>
                 
                 <Formik
                         initialValues={{
@@ -128,20 +133,21 @@ class UserLogin extends React.Component {
                                     onSubmit={handleSubmit}
                                     className="form-content w-30 ">
                                         
-                                    <div className="login-heading">
-                                        <h3>Empire Trust</h3>
-                                    </div>
-                                    <div className="login-wrap card">
-
                                     
-                                        <div className="logo-wrap">
-                                            <h4>Sign In</h4>
-                                            <img src={loginIcon} alt="" />
+                                    <div className="login-wrap card">
+                                        <div className="login-heading">
+                                            <img src={bankIcon} alt="" /> 
+                                            <h3> Core Banking</h3>
+                                        </div>
+                                    
+                                        <div className="subheading-wrap">
+                                            <h4>Welcome back!</h4>
+                                            <div className="heading-txt">Enter email address to login.</div>
                                         </div>
                                     <Form.Row>
                                         
                                             <Form.Label className={errors.userEmail && touched.userEmail? "witherror block-level": "block-level"}>
-                                                Username 
+                                                {/* Username  */}
                                                 {errors.userEmail && touched.userEmail ? (
                                                     <span className="invalid-feedback">{errors.userEmail}</span>
                                             ) : null}
@@ -150,6 +156,7 @@ class UserLogin extends React.Component {
                                             <Form.Control 
                                                 type="text" 
                                                 name="userEmail"
+                                                placeholder="Email"
                                                 onChange={handleChange} 
                                                 value={values.userEmail}
                                                 className={errors.userEmail && touched.userEmail ? "is-invalid": null}
@@ -158,7 +165,7 @@ class UserLogin extends React.Component {
                                     </Form.Row>
                                     <Form.Row>
                                             <Form.Label className={errors.userPassword && touched.userPassword? "witherror block-level": "block-level"}>
-                                                Password
+                                                {/* Password */}
                                                 {errors.userPassword && touched.userPassword ? (
                                                         <span className="invalid-feedback">{errors.userPassword}</span>
                                                 ) : null}
@@ -166,6 +173,7 @@ class UserLogin extends React.Component {
                                             <Form.Control 
                                                 type="password" 
                                                 name="userPassword"
+                                                placeholder="Password"
                                                 onChange={handleChange} 
                                                 value={values.userPassword}
                                                 className={errors.userPassword && touched.userPassword ? "is-invalid": null}
@@ -178,9 +186,9 @@ class UserLogin extends React.Component {
         
         
                                     <div className=" form-cta">
-                                        <Button variant="success" type="submit"
+                                        <Button  type="submit"
                                             disabled={loginRequest.is_request_processing}
-                                            className="ml-20"
+                                            className="ml-20 btn-block submitbtn"
                                         >
                                             {loginRequest.is_request_processing ? "Please wait..." : "Log In"}
                                         </Button>
@@ -218,6 +226,7 @@ class UserLogin extends React.Component {
                                 }
                                    
                                    </div>
+                                   <div className="poweredby-txt">Powered by NIDCOM Solutions</div>
                                 </Form>
                             )}
                     </Formik>

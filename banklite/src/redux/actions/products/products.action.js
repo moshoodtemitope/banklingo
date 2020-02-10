@@ -7,8 +7,12 @@ import { handleRequestErrors } from "../../../shared/utils";
 export const productActions = {
     getAllLoanProducts,
     getSingleLoanProduct,
-    createLoanProduct
-    
+    createLoanProduct,
+    updateLoanProduct,
+    getAllDepositProducts,
+    getSingleDepositProduct,
+    createDepositProduct,
+    updateDespositProduct
 }
 
 function getAllLoanProducts  (params){
@@ -84,5 +88,140 @@ function createLoanProduct  (loanProductPayload){
     function success(response) { return { type: productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS, response } }
     function failure(error) { return { type: productsConstants.CREATE_A_LOAN_PRODUCT_FAILURE, error } }
     function clear() { return { type: productsConstants.CREATE_A_LOAN_PRODUCT_RESET, clear_data:""} }
+
+}
+
+function updateLoanProduct  (loanProductPayload){
+    if(loanProductPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_LOAN_PRODUCTS, "POST", loanProductPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: productsConstants.EDIT_A_LOAN_PRODUCT_PENDING, user } }
+    function success(response) { return { type: productsConstants.EDIT_A_LOAN_PRODUCT_SUCCESS, response } }
+    function failure(error) { return { type: productsConstants.EDIT_A_LOAN_PRODUCT_FAILURE, error } }
+    function clear() { return { type: productsConstants.EDIT_A_LOAN_PRODUCT_RESET, clear_data:""} }
+
+}
+
+
+function getAllDepositProducts  (params){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`/all?${params}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user) { return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING, user } }
+    function success(response) { return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS, response } }
+    function failure(error) { return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_FAILURE, error } }
+
+}
+
+function getSingleDepositProduct  (encodedKey){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`/${encodedKey}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user) { return { type: productsConstants.GET_A_DEPOSIT_PRODUCT_PENDING, user } }
+    function success(response) { return { type: productsConstants.GET_A_DEPOSIT_PRODUCT_SUCCESS, response } }
+    function failure(error) { return { type: productsConstants.GET_A_DEPOSIT_PRODUCT_FAILURE, error } }
+
+}
+
+
+function createDepositProduct  (depositProductPayload){
+    if(depositProductPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS, "POST", depositProductPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: productsConstants.CREATE_A_DEPOSIT_PRODUCT_PENDING, user } }
+    function success(response) { return { type: productsConstants.CREATE_A_DEPOSIT_PRODUCT_SUCCESS, response } }
+    function failure(error) { return { type: productsConstants.CREATE_A_DEPOSIT_PRODUCT_FAILURE, error } }
+    function clear() { return { type: productsConstants.CREATE_A_DEPOSIT_PRODUCT_RESET, clear_data:""} }
+
+}
+
+function updateDespositProduct  (depositProductPayload){
+    if(depositProductPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS, "POST", depositProductPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: productsConstants.EDIT_ADEPOSITPRODUCT_PENDING, user } }
+    function success(response) { return { type: productsConstants.EDIT_A_DEPOSIT_PRODUCT_SUCCESS, response } }
+    function failure(error) { return { type: productsConstants.EDIT_A_DEPOSIT_PRODUCT_FAILURE, error } }
+    function clear() { return { type: productsConstants.EDIT_A_DEPOSIT_PRODUCT_RESET, clear_data:""} }
 
 }

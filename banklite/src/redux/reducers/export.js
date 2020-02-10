@@ -68,6 +68,11 @@ import{
     getAllLoanProductsReducer,
     getSingleLoanProductsReducer,
     createLoanProductReducer,
+    updateLoanProductReducer,
+    getAllDepositProductsReducer,
+    getSingleDepositProductsReducer,
+    createDepositProductReducer,
+    updateDepositProductReducer
     
 } from './products/products.reducer'
 
@@ -210,8 +215,13 @@ export const disbursment ={
     getDisbursementByRefReducer
 }
 
-export const loanProducts ={
+export const products ={
     getAllLoanProductsReducer,
     getSingleLoanProductsReducer,
     createLoanProductReducer,
+    updateLoanProductReducer,
+    getSingleDepositProductsReducer,
+    getAllDepositProductsReducer,
+    createDepositProductReducer,
+    updateDepositProductReducer
 }

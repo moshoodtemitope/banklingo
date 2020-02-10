@@ -1,6 +1,6 @@
 import * as React from "react";
 // import {Router} from "react-router";
-
+import { connect } from 'react-redux';
 import {Fragment} from "react";
 import AdminNav from './_menu'
 
@@ -9,10 +9,19 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
-// import Select from 'react-select';
+import Select from 'react-select';
 import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
+
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
+import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
+import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
+
+import Alert from 'react-bootstrap/Alert'
+import { productActions } from '../../redux/actions/products/products.action';
+import { productsConstants } from '../../redux/actiontypes/products/products.constants'
 import "./administration.scss"; 
 class NewDepositsProduct extends React.Component {
     constructor(props) {
@@ -21,7 +30,526 @@ class NewDepositsProduct extends React.Component {
             user:''
         }
 
+    }
+
+    componentDidMount(){
+        this.getAllGLAccounts();
+     }
+
+    getAllGLAccounts = () =>{
+        const {dispatch} = this.props;
+
+        dispatch(acoountingActions.getAllGLAccounts());
+    }
+
+    handleCreateNewLoanProduct = async(newLoanProductPayload)=>{
+        const {dispatch} = this.props;
+       
+        await dispatch(productActions.createLoanProduct(newLoanProductPayload));
+
+    }
+
+
+    renderCreateLoanProduct =()=>{
+        let createLoanProductRequest = this.props.createDepositProductReducer,
+            getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
+
+        let loanProductValidationSchema = Yup.object().shape({
+            key: Yup.string()
+                .min(1, 'Response required')
+                .required('Required'),
+            productName:  Yup.string()
+                .min(2, 'Valid response required')
+                .required('Required'),
+            depositAccountTypeEnum: Yup.string()
+                .required('Required'),
+            description:  Yup.string()
+                .min(5, 'Valid response required')
+                .required('Required'),
+          });
+
+        let allProductTypes =[
+            {value: '1', label: 'Current Account'},
+            {value: '2', label: 'Fixed Deposit'},
+            {value: '3', label: 'Funding Account'},
+            {value: '4', label: 'Savings Account'},
+            {value: '5', label: 'Savings Plan'},
+        ];
+
+        let methodologyList =[
+            {value: '0', label: 'None'},
+            {value: '1', label: 'Cash'},
+            {value: '2', label: 'Accrual'},
+        ];
+
+        let interestAccruedMethodList =[
+            {value: '1', label: 'Daily'},
+            {value: '2', label: 'Monthly'},
+        ];
         
+        switch(getAllGLAccountsRequest.request_status){
+            case (accountingConstants.GET_ALL_GLACCOUNTS_PENDING):
+                return (
+                    <div className="loading-content card"> 
+                        <div className="loading-text">Please wait... </div>
+                    </div>
+                )
+            case (accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS):
+                let allGlAccounts = [],
+                    glAccountsList;
+                    
+
+                    
+
+                if(getAllGLAccountsRequest.request_data.response.data.length>=1){
+                    glAccountsList= getAllGLAccountsRequest.request_data.response.data;
+                    glAccountsList.map((channel, id)=>{
+                        allGlAccounts.push({label: channel.accountDescription, value:channel.id, accType:channel.accountTypeId});
+                    })
+                    let savingsControlAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        transactionSourceAccount =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        interestExpenseAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===5),
+                        interestReceivableAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        feeReceivableAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        penaltyReceivableAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
+                        feeIncomeAccounts =[];
+                        // interestIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4),
+                        // penaltyIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4);
+                        // console.log("+++++", penaltyIncomeAccounts)
+                    return(
+                        
+                            <Formik
+                            initialValues={{
+                                key: '',
+                                productName: '',
+                                loanProductType: '',
+                                description: '',
+                                savingsControlAccountId: '',
+                                transactionSourceAccountId: '',
+                                interestExpenseAccountId: '',
+                                interestReceivableAccountId: '',
+                                feeReceivableAccountId: '',
+                                penaltyReceivableAccountId: '',
+                                feeIncomeAccountId: '',
+                                interestAccruedMethod: '',
+                                // penaltyIncomeAccountId: '',
+                                methodology: 0,
+                                isActive: true,
+                            }}
+
+                            validationSchema={loanProductValidationSchema}
+                            onSubmit={(values, { resetForm }) => {
+
+                                let createNewLoanProductPayload = {
+                                    key: values.key,
+                                    productName: values.productName,
+                                    loanProductType: values.loanProductType,
+                                    description: values.description,
+                                    loanProductAccountingRuleModel :{
+                                        id:0,
+                                        portfolioControlAccountId: values.portfolioControlAccountId,
+                                        transactionSourceAccountId: values.transactionSourceAccountId,
+                                        writeOffExpenseAccountId: values.writeOffExpenseAccountId,
+                                        interestReceivableAccountId: values.interestReceivableAccountId,
+                                        feeReceivableAccountId: values.feeReceivableAccountId,
+                                        penaltyReceivableAccountId: values.penaltyReceivableAccountId,
+                                        feeIncomeAccountId: values.feeIncomeAccountId,
+                                        interestIncomeAccountId: values.interestIncomeAccountId,
+                                    },
+                                    methodology: values.methodology,
+                                    isActive: values.isActive
+                                    
+                                }
+
+
+
+                                this.handleCreateNewLoanProduct(createNewLoanProductPayload)
+                                    .then(
+                                        () => {
+
+                                            if (this.props.createLoanProductReducer.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS) {
+                                                setTimeout(() => {
+                                                    resetForm();
+                                                    this.props.dispatch(productActions.createLoanProduct("CLEAR"))
+                                                }, 3000);
+                                            }else{
+                                                setTimeout(() => {
+                                                    this.props.dispatch(productActions.createLoanProduct("CLEAR"))
+                                                }, 3000);
+                                            }
+
+                                        
+
+                                        }
+                                    )
+
+                            }}
+                        >
+                            {({ handleSubmit,
+                                handleChange,
+                                handleBlur,
+                                resetForm,
+                                values,
+                                touched,
+                                isValid,
+                                errors, }) => (
+                            <Form 
+                                noValidate 
+                                onSubmit={handleSubmit}
+                                className="form-content card">
+                                <div className="form-heading">
+                                    <h3>Create A New Deposit Product</h3>
+                                </div>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label className="block-level">Product Name</Form.Label>
+                                        <Form.Control 
+                                            type="text"
+                                            onChange={handleChange}
+                                            value={values.productName}
+                                            className={errors.productName && touched.productName ? "is-invalid" : null}
+                                            name="productName" required />
+                                        {errors.productName && touched.productName ? (
+                                            <span className="invalid-feedback">{errors.productName}</span>
+                                        ) : null}
+                                    </Col>
+                                    <Col>
+                                        <Form.Label className="block-level">Product Key</Form.Label>
+                                        <Form.Control 
+                                            type="text"
+                                            onChange={handleChange}
+                                            value={values.key}
+                                            className={errors.key && touched.key ? "is-invalid" : null}
+                                            name="key" required />
+                                        {errors.key && touched.key ? (
+                                            <span className="invalid-feedback">{errors.key}</span>
+                                        ) : null}
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label className="block-level">Product Type</Form.Label>
+                                        
+                                        <Select
+                                            options={allProductTypes}
+                                            onChange={(selectedProductType) => {
+                                                this.setState({ selectedProductType });
+                                                errors.depositAccountTypeEnum = null
+                                                values.depositAccountTypeEnum = selectedProductType.value
+                                            }}
+                                            className={errors.depositAccountTypeEnum && touched.depositAccountTypeEnum ? "is-invalid" : null}
+                                            
+                                            
+                                            name="depositAccountTypeEnum"
+                                            
+                                            required
+                                        />
+                                        {errors.depositAccountTypeEnum && touched.depositAccountTypeEnum ? (
+                                            <span className="invalid-feedback">{errors.depositAccountTypeEnum}</span>
+                                        ) : null}
+                                    </Col>
+                                    <Col>
+                                    </Col>
+                                </Form.Row>
+                                
+                                
+
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Deposit Product Description
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div className="each-formsection">
+                                            <Form.Group>
+                                                <Form.Control as="textarea" rows="3"
+                                                    onChange={handleChange}
+                                                    value={values.description}
+                                                    className={errors.description && touched.description ? "is-invalid" : null}
+                                                    name="description"  />
+                                                {errors.description && touched.description ? (
+                                                    <span className="invalid-feedback">{errors.description}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Deposit Product Rules
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Savings Control Account</Form.Label>
+                                                    <Select
+                                                        options={savingsControlAccounts}
+                                                        onChange={(selectedSavingsControlAcct) => {
+                                                            this.setState({ selectedSavingsControlAcct });
+                                                            errors.savingsControlAccountId = null
+                                                            values.savingsControlAccountId = selectedSavingsControlAcct.value
+                                                        }}
+                                                        className={errors.savingsControlAccountId && touched.savingsControlAccountId ? "is-invalid" : null}
+                                                        
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        name="savingsControlAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Transaction Source Account</Form.Label>
+                                                    <Select
+                                                        options={transactionSourceAccount}
+                                                        onChange={(selectedTxtSourceAcct) => {
+                                                            this.setState({ selectedTxtSourceAcct });
+                                                            errors.transactionSourceAccountId = null
+                                                            values.transactionSourceAccountId = selectedTxtSourceAcct.value
+                                                        }}
+                                                        className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="transactionSourceAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Interest Expense Account</Form.Label>
+                                                    <Select
+                                                        options={interestExpenseAccounts}
+                                                        onChange={(selectedInterestExpenseAccount) => {
+                                                            this.setState({ selectedInterestExpenseAccount });
+                                                            errors.interestExpenseAccountId = null
+                                                            values.interestExpenseAccountId = selectedInterestExpenseAccount.value
+                                                        }}
+                                                        className={errors.interestExpenseAccountId && touched.interestExpenseAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="interestExpenseAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Fee Income Account</Form.Label>
+                                                    <Select
+                                                        options={allGlAccounts}
+                                                        onChange={(selectedFeeIncomeAcct) => {
+                                                            this.setState({ selectedFeeIncomeAcct });
+                                                            errors.feeIncomeAccountId = null
+                                                            values.feeIncomeAccountId = selectedFeeIncomeAcct.value
+                                                        }}
+                                                        className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                        noOptionsMessage ={() => "No accounts available"}
+                                                        
+                                                        name="feeIncomeAccountId"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Interest Accrued Method</Form.Label>
+                                                    <Select
+                                                        options={interestAccruedMethodList}
+                                                        onChange={(selectedInterestAccruedMethod) => {
+                                                            this.setState({ selectedInterestAccruedMethod });
+                                                            errors.interestAccruedMethod = null
+                                                            values.interestAccruedMethod = selectedInterestAccruedMethod.value
+                                                        }}
+                                                        className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
+                                                        name="interestAccruedMethod"
+                                                        
+                                                        
+                                                    />
+                                                </Col>
+                                                <Col></Col>
+                                            </Form.Row>
+                                            
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Deposit Savings Settings
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Maximum Withdrawal Amount</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.productName}
+                                                        className={errors.productName && touched.productName ? "is-invalid" : null}
+                                                        name="productName" required />
+                                                    {errors.productName && touched.productName ? (
+                                                        <span className="invalid-feedback">{errors.productName}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Recommended Deposit Amount</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={values.productName}
+                                                        className={errors.productName && touched.productName ? "is-invalid" : null}
+                                                        name="productName" required />
+                                                    {errors.productName && touched.productName ? (
+                                                        <span className="invalid-feedback">{errors.productName}</span>
+                                                    ) : null}
+                                                </Col>
+                                               
+                                            </Form.Row>
+                                            
+                                            
+                                            
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label className="block-level">Methodology</Form.Label>
+                                        <Select
+                                            options={methodologyList}
+                                            onChange={(selectedMethodology) => {
+                                                this.setState({ selectedMethodology });
+                                                errors.methodology = null
+                                                values.methodology = selectedMethodology.value
+                                            }}
+                                            className={errors.methodology && touched.methodology ? "is-invalid" : null}
+                                            
+                                            
+                                            name="methodology"
+                                            
+                                            
+                                        />
+                                    </Col>
+                                    <Col>
+                                        <Form.Label className="block-level">Currency</Form.Label>
+                                        <Select
+                                            options={methodologyList}
+                                            onChange={(selectedMethodology) => {
+                                                this.setState({ selectedMethodology });
+                                                errors.methodology = null
+                                                values.methodology = selectedMethodology.value
+                                            }}
+                                            className={errors.methodology && touched.methodology ? "is-invalid" : null}
+                                            
+                                            
+                                            name="methodology"
+                                            
+                                            
+                                        />
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label className="block-level">Dormant after how many days</Form.Label>
+                                        <Form.Control 
+                                            type="text"
+                                            onChange={handleChange}
+                                            value={values.productName}
+                                            className={errors.productName && touched.productName ? "is-invalid" : null}
+                                            name="productName" required />
+                                        {errors.productName && touched.productName ? (
+                                            <span className="invalid-feedback">{errors.productName}</span>
+                                        ) : null}
+                                    </Col>
+                                    <Col>
+                                        <Form.Label className="block-level">Interest Accrued Method</Form.Label>
+                                        <Select
+                                            options={interestAccruedMethodList}
+                                            onChange={(selectedInterestAccruedMethod) => {
+                                                this.setState({ selectedInterestAccruedMethod });
+                                                errors.interestAccruedMethod = null
+                                                values.interestAccruedMethod = selectedInterestAccruedMethod.value
+                                            }}
+                                            className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
+                                            name="interestAccruedMethod"
+                                            
+                                            
+                                        />
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row>
+                                    
+                                    <Col>
+                                        <div className="checkbox-wrap">
+                                            <input type="checkbox" 
+                                                id="isActive" 
+                                                checked={values.isActive? values.isActive:null}
+                                                name="isActive"
+                                                onChange={handleChange} 
+                                                value={values.isActive}  />
+                                            <label htmlFor="isActive">Automatically setAccount as dormant</label>
+                                        </div>
+                                        <div className="checkbox-wrap">
+                                            <input type="checkbox" 
+                                                id="isActive" 
+                                                checked={values.isActive? values.isActive:null}
+                                                name="isActive"
+                                                onChange={handleChange} 
+                                                value={values.isActive}  />
+                                            <label htmlFor="isActive">Active state</label>
+                                        </div>
+                                    </Col>
+                                </Form.Row>
+
+                            
+
+
+
+
+
+                                <div className="footer-with-cta toleft">
+                                    
+                                    <NavLink to={'/administration/products'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                    <Button
+                                        type="submit"
+                                        disabled={createLoanProductRequest.is_request_processing}>
+                                        {createLoanProductRequest.is_request_processing?"Please wait...": "Save Product"}
+                                    </Button>
+                                </div>
+                                {createLoanProductRequest.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS && 
+                                    <Alert variant="success">
+                                        {createLoanProductRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+                                {createLoanProductRequest.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_FAILURE && 
+                                    <Alert variant="danger">
+                                        {createLoanProductRequest.request_data.error}
+                                    </Alert>
+                                }
+                            </Form>
+                        
+                        
+                        )}
+                        </Formik>
+                        
+                    )
+                }else{
+                    return(
+                        <div className="loading-content card"> 
+                            <div>No GL Account found</div>
+                        </div>
+                    )
+                }
+
+            case (accountingConstants.GET_ALL_GLACCOUNTS_FAILURE):
+                return (
+                    <div className="loading-content card"> 
+                        <div>{getAllGLAccountsRequest.request_data.error}</div>
+                    </div>
+                )
+            default :
+            return null;
+        }
     }
 
     render() {
@@ -37,746 +565,7 @@ class NewDepositsProduct extends React.Component {
                                     <div className="col-sm-12">
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
-                                                <Form className="form-content card">
-                                                    <div className="form-heading">
-                                                        <h3>Creating A New Deposit Product</h3>
-                                                    </div>
-                                                    <Form.Group>
-                                                        <Form.Label className="block-level">Product</Form.Label>
-                                                            <Form.Control type="text" />
-                                                    </Form.Group>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">ID</Form.Label>
-                                                            <Form.Control type="text" />
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Product Type</Form.Label>
-                                                            <Form.Control as="select" size="sm">
-                                                                <option>Current Account</option>
-                                                                <option>Savings Account</option>
-                                                                <option>Fixed Deposit</option>
-                                                                <option>Savings Plan</option>
-                                                                <option>Funding Account</option>
-                                                            </Form.Control>
-                                                        </Col>
-                                                    </Form.Row>
-                                                    <Form.Label className="block-level">State</Form.Label>
-                                                    <div className="checkbox-wrap">
-                                                        <input type="checkbox" name="" id="pick-1" />
-                                                        <label htmlFor="pick-1">Active</label>
-                                                        <div className="hint-text">
-                                                            A transactional account where a customer may perform regular deposit and withdrawals, accrue interest and may optionally be allowed to go into overdraft.
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <Accordion >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                        Product Description
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div className="each-formsection">
-                                                               <Form.Group>
-                                                                    <Form.Control as="textarea" rows="3" 
-                                                                    />
-                                                               </Form.Group>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                    <Accordion >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Product Availability
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <Form.Label>Product Availability</Form.Label>
-                                                                
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-1" checked />
-                                                                    <label htmlFor="pick-1">Customers</label>
-                                                                </div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-2" checked />
-                                                                    <label htmlFor="pick-2">Groups</label>
-                                                                </div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-4" />
-                                                                    <label htmlFor="pick-4">All Branches</label>
-                                                                </div>
-                                                                <Form.Label>Branch</Form.Label>
-                                                                <div className="each-formsection branchselection">
-                                                                        
-                                                                    <Form.Control as="select" size="sm">
-                                                                        <option>Ikeja</option>
-                                                                        <option>Head office</option>
-                                                                        <option>Badagry</option>
-                                                                        <option>Thursday</option>
-                                                                        <option>Marina</option>
-                                                                    </Form.Control>
-                                                                    <Button className="btn small-btnprimary">Add Branch</Button>
-                                                                </div>
-                                                                <div className="each-formsection addedbranches">
-                                                                   <div className="eachbranch">
-                                                                       <div className="branchname">Ikeja</div>
-                                                                       <div className="removebranch"></div>
-                                                                   </div>
-                                                                   <div className="eachbranch">
-                                                                       <div className="branchname">Badagry</div>
-                                                                       <div className="removebranch"></div>
-                                                                   </div>
-                                                                </div>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    <Accordion >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            New Account Settings
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">ID Type</Form.Label>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option>Incremental Number</option>
-                                                                            <option>Random Pattern</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col>
-                                                                         <Form.Group>
-                                                                            <Form.Label className="block-level">Using template</Form.Label>
-                                                                                <Form.Control type="text" value="@@@@###" />
-                                                                        </Form.Group>
-                                                                        {/* if Incremental is selected */}
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Starting from</Form.Label>
-                                                                                <Form.Control type="text"  />
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                                
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    <Accordion>
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Currencies
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                    <Form.Group className="w-60">
-                                                                        <Form.Label className="block-level">Currency</Form.Label>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option>Nigerian naira (NGN)</option>
-                                                                            <option>CFA Franc BCEAO (XOF)</option>
-                                                                        </Form.Control>
-                                                                    </Form.Group>
-                                                                
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    <Accordion >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Interest Rate
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-11" />
-                                                                    <label htmlFor="pick-11">Interest paid into account</label>
-                                                                </div>
-                                                                {/* If Interest paid is checked */}
-                                                                    <Form.Row>
-                                                                        
-                                                                        <Col>
-                                                                            <div className="each-formsection no-margins">
-                                                                                <Form.Label>
-                                                                                    Interest Rate Terms
-                                                                                </Form.Label>
-                                                                                <Form.Control as="select" size="sm">
-                                                                                    <option value="FIXED">Fixed</option>
-                                                                                    <option value="TIERED">Tiered per Balance</option>
-                                                                                    <option value="TIERED_PERIOD">Tiered per Period</option>
-                                                                                </Form.Control>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col>
-                                                                            <div className="each-formsection no-margins">
-                                                                                <Form.Label>
-                                                                                    How is the Interest rate charged?
-                                                                                </Form.Label>
-                                                                                <Form.Control as="select" size="sm">
-                                                                                    <option>% per year</option>
-                                                                                    <option>% per month</option>
-                                                                                    <option selected>% per 4 weeks</option>
-                                                                                    <option>% per week</option>
-                                                                                    <option>% per days</option>
-                                                                                </Form.Control>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Form.Row>
-
-                                                                    {/* if fixed is selected from rate terms */}
-                                                                        <Form.Label>Interest Rate Constraints (%)</Form.Label>
-                                                                        <Form.Row>
-                                                                            <Col>
-                                                                                <Form.Group>
-                                                                                    <Form.Label className="block-level">Default</Form.Label>
-                                                                                        <Form.Control type="text"  />
-                                                                                </Form.Group>
-                                                                                <Form.Group>
-                                                                                    <Form.Label className="block-level">Min</Form.Label>
-                                                                                        <Form.Control type="text"   />
-                                                                                </Form.Group>
-                                                                            </Col>
-                                                                            <Col>
-                                                                                <Form.Group>
-                                                                                    <Form.Label className="block-level">Max</Form.Label>
-                                                                                        <Form.Control type="text"   />
-                                                                                </Form.Group>
-                                                                            </Col>
-                                                                        </Form.Row>
-                                                                        {/* if fixed is selected from rate terms */}
-
-                                                                     {/* if fixed is NOT selected from rate terms */}
-                                                                    <Form.Group as={Row} className="center-aligned">
-
-                                                                        <Form.Label column sm={2} className="block-level">Tier 1</Form.Label>
-                                                                        <Col sm={2}>
-                                                                            <Form.Control type="text" size="sm" />
-                                                                        </Col>
-                                                                        <Form.Label column sm={1} className="block-level">to</Form.Label>
-                                                                        <Col sm={2}>
-                                                                            <Form.Control type="text" size="sm" />
-                                                                        </Col>
-                                                                        <Form.Label column sm={2} className="block-level">days</Form.Label>
-                                                                        <Col sm={2}>
-                                                                            <Form.Control type="text" size="sm" />
-                                                                        </Col>
-                                                                        <Form.Label column sm={2} className="block-level">% per 4weeks</Form.Label>
-                                                                        <div className="add-new">
-                                                                            <img alt="add" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqElEQVR42sWT3Q6CMAyF+5K8ragENsfPNkUT9Zrn2Mq6BLihQITEJr1ZTr+22SlACGvbREjVpZcMT+frYpJG3FRHNTAUbymcA0UIdeZEjTZY1pqF0CTAdZeqQu89OucwywU7BXB0be44BME43bGAQiqsws6U7893BLTP1/hOmlmAsY+481qQhqY7HrB7hf/9Am+kcpuRlqxcRys3vJVD7f5j+umc5XTOPaW2ScUMEqMjAAAAAElFTkSuQmCC" width="16" height="16"/>
-                                                                        </div>
-                                                                    </Form.Group>
-                                                                    {/* if fixed is NOT selected from rate terms */}
-
-                                                                    <Form.Row>
-                                                                        
-                                                                        <Col>
-                                                                            <div className="each-formsection no-margins">
-                                                                                <Form.Label>
-                                                                                    What Account Balance is Used for Calculations?
-                                                                                </Form.Label>
-                                                                                <Form.Control as="select" size="sm">
-                                                                                    <option value="MINIMUM">Minimum daily balance</option>
-                                                                                    <option value="AVERAGE">Average daily balance</option>
-                                                                                    <option value="END_OF_DAY">End of Day Balance</option>
-                                                                                </Form.Control>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col>
-                                                                            <div className="each-formsection no-margins">
-                                                                                <Form.Label>
-                                                                                    When is the Interest Paid Into the Account?
-                                                                                </Form.Label>
-                                                                                <Form.Control as="select" size="sm">
-                                                                                    <option value="FIRST_DAY_OF_MONTH">First day of every month</option>
-                                                                                    <option value="EVERY_WEEK">Every week</option>
-                                                                                    <option value="EVERY_OTHER_WEEK">Every other week</option>
-                                                                                    <option value="EVERY_MONTH">Every month</option>
-                                                                                    <option value="EVERY_3_MONTHS">Every three months</option>
-                                                                                    <option value="ON_FIXED_DATES">On Fixed Dates</option>
-                                                                                </Form.Control>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Form.Row>
-
-                                                                    <Form.Row>
-                                                                        
-                                                                        <Col>
-                                                                            <div className="each-formsection no-margins w-40">
-                                                                                <Form.Label>
-                                                                                    Days In Year
-                                                                                </Form.Label>
-                                                                                <Form.Control as="select" size="sm">
-                                                                                    <option value="ACTUAL_365_FIXED">Actual/365 Fixed (365 days)</option>
-                                                                                    <option value="ACTUAL_360">Actual/360 (360 days)</option>
-                                                                                    <option value="ACTUAL_ACTUAL_ISDA">Actual/Actual ISDA</option>
-                                                                                    <option value="E30_360">30E/360 ISDA (30/360 German)</option>
-                                                                                </Form.Control>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Form.Row>
-
-
-                                                                {/* If Interest paid is checked */}
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    <Accordion  >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Deposits and Withdrawals
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Label className="block-level">Recommended Deposit Amount</Form.Label>
-                                                                        <Form.Control type="text"  />
-                                                                        <span>CFA</span>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Maximum Withdrawal Amount</Form.Label>
-                                                                            <Form.Control type="text"  />
-                                                                            <span>CFA</span>
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                                
-                                                                
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    <Accordion >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Overdraft Conditions
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-81" />
-                                                                    <label htmlFor="pick-81">Allow Overdrafts</label>
-                                                                </div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-34" />
-                                                                    <label htmlFor="pick-34">Allow Technical Overdrafts</label>
-                                                                </div>
-                                                                <Form.Row>
-
-                                                                    <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                Interest Rate Terms
-                                                                        </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option value="FIXED">Fixed</option>
-                                                                                <option value="TIERED">Tiered per Balance</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                How is the Interest rate charged?
-                                                                        </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option value="ANNUALIZED">% per year</option>
-                                                                                <option value="EVERY_MONTH">% per month</option>
-                                                                                <option value="EVERY_FOUR_WEEKS">% per 4 weeks</option>
-                                                                                <option value="EVERY_WEEK">% per week</option>
-                                                                                <option value="EVERY_X_DAYS" selected>% per X days</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                                {/* if Fixed Interest Rate Terms is selected */}
-                                                                <Form.Label>Interest Rate Constraints (%)</Form.Label>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Default</Form.Label>
-                                                                            <Form.Control type="text" />
-                                                                        </Form.Group>
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Min</Form.Label>
-                                                                            <Form.Control type="text" />
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Form.Group>
-                                                                            <Form.Label className="block-level">Max</Form.Label>
-                                                                            <Form.Control type="text" />
-                                                                        </Form.Group>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                                {/* if Fixed Interest Rate Terms is selected */}
-
-                                                                {/* if Tiered per Balance Interest Rate Terms is selected */}
-
-                                                                <Form.Group as={Row} className="center-aligned">
-
-                                                                    <Form.Label column sm={2} className="block-level">Tier 1</Form.Label>
-                                                                    <Col sm={2}>
-                                                                        <Form.Control type="text" size="sm" value="0.00" />
-                                                                    </Col>
-                                                                    <Form.Label column sm={1} className="block-level">to</Form.Label>
-                                                                    <Col sm={2}>
-                                                                        <Form.Control type="text" size="sm" value="0.00" />
-                                                                    </Col>
-                                                                    <Form.Label column sm={2} className="block-level">days</Form.Label>
-                                                                    <Col sm={2}>
-                                                                        <Form.Control type="text" size="sm" />
-                                                                    </Col>
-                                                                    <Form.Label column sm={2} className="block-level">% per 4weeks</Form.Label>
-                                                                    <div className="add-new">
-                                                                        <img alt="add" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqElEQVR42sWT3Q6CMAyF+5K8ragENsfPNkUT9Zrn2Mq6BLihQITEJr1ZTr+22SlACGvbREjVpZcMT+frYpJG3FRHNTAUbymcA0UIdeZEjTZY1pqF0CTAdZeqQu89OucwywU7BXB0be44BME43bGAQiqsws6U7893BLTP1/hOmlmAsY+481qQhqY7HrB7hf/9Am+kcpuRlqxcRys3vJVD7f5j+umc5XTOPaW2ScUMEqMjAAAAAElFTkSuQmCC" width="16" height="16" />
-                                                                    </div>
-                                                                </Form.Group>
-
-                                                                <Form.Group className="w-40">
-                                                                    <Form.Label className="block-level">Max Overdraft Limit (₦)</Form.Label>
-                                                                    <Form.Control type="text" />
-                                                                </Form.Group>
-
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                Days In Year
-                                                                        </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option value="ACTUAL_365_FIXED">Actual/365 Fixed (365 days)</option>
-                                                                                <option value="ACTUAL_360">Actual/360 (360 days)</option>
-                                                                                <option value="ACTUAL_ACTUAL_ISDA">Actual/Actual ISDA</option>
-                                                                                <option value="E30_360">30E/360 ISDA (30/360 German)</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <div className="each-formsection no-margins">
-                                                                            <Form.Label>
-                                                                                Accounts managed under Credit Arrangement
-                                                                        </Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option value="OPTIONAL">Optional</option>
-                                                                                <option value="REQUIRED">Required</option>
-                                                                                <option value="NOT_REQUIRED">No</option>
-                                                                            </Form.Control>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Form.Row>
-
-
-
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    
-                                                    <Accordion >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Internal Controls
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <div className="checkbox-wrap">
-                                                                    <input type="checkbox" name="" id="pick-1" />
-                                                                    <label htmlFor="pick-1">Automatically set accounts as Dormant after</label>
-                                                                </div>
-                                                                <Form.Control className="w-20" type="text" />
-                                                                <span>days</span>
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    <Accordion >
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Product Fees
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <Form.Row>
-                                                                    <Col>
-                                                                    <div className="checkbox-wrap">
-                                                                        <input type="checkbox" name="" id="pick-29" />
-                                                                        <label htmlFor="pick-29">Allow Arbitrary Fees</label>
-                                                                    </div>
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <div className="checkbox-wrap">
-                                                                            <input type="checkbox" name="" id="pick-2c" />
-                                                                            <label htmlFor="pick-1">Show Inactive Fees</label>
-                                                                            <Button variant="secondary"  className="grayed-out custom">Add Fee</Button>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Form.Row>
-                                                               
-                                                                <div className="new-fee-wrap">
-                                                                    <Form.Row>
-                                                                        <Col>
-                                                                            <Form.Label className="block-level">Name</Form.Label>
-                                                                            <Form.Control type="text" />
-                                                                        </Col>
-                                                                        <Col>
-                                                                            <Form.Label className="block-level">Type</Form.Label>
-                                                                            <Form.Control as="select" size="sm">
-                                                                                <option>Manual</option>
-                                                                                <option>Monthly Fee</option>
-                                                                            </Form.Control>
-                                                                        </Col>
-                                                                    </Form.Row>
-                                                                    <Form.Row>
-                                                                        <Col>
-                                                                            <Form.Label className="block-level">Fee Payment</Form.Label>
-                                                                            <span>Flat (CFA)</span>
-                                                                        </Col>
-                                                                        <Col>
-                                                                            <Form.Label className="block-level">Amount (₦)</Form.Label>
-                                                                            <Form.Control type="text" />
-                                                                            <span>CFA</span>
-                                                                        </Col>
-                                                                        
-                                                                    </Form.Row>
-                                                                    {/* If monthly fee is selected */}
-                                                                    <Form.Group className="w-50">
-                                                                        <Form.Label className="block-level">Apply Date Method</Form.Label>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option>Monthly from Activation</option>
-                                                                            <option>First Day of Every Month</option>
-                                                                        </Form.Control>
-                                                                    </Form.Group>
-                                                                     {/* If monthly fee is selected */}
-                                                                    
-
-                                                                </div>
-                                                                 
-                                                                
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-
-                                                    
-                                                    
-                                                    
-                                                    <Accordion>
-                                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                                            Accounting Rules
-                                                        </Accordion.Toggle>
-                                                        <Accordion.Collapse eventKey="0">
-                                                            <div>
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Methodology</Form.Label>
-                                                                    <Col sm={7}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option>None</option>
-                                                                            <option>Cash</option>
-                                                                            <option>Accrual</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                </Form.Group>
-
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Transaction Source</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
-                                                                            <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
-                                                                            <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
-                                                                            <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
-                                                                            <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
-                                                                            <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
-                                                                            <option value="110100106">110100106 - CASH IMPREST - EPE</option>
-                                                                            <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
-                                                                            <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
-                                                                            <option value="110101002">110101002 - Branch Suspense Account</option>
-                                                                            <option value="112010001">112010001 - BALANCE WITH CBN</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col sm={2}>
-                                                                        <span>Asset</span>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Savings Control</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
-                                                                            <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
-                                                                            <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
-                                                                            <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
-                                                                            <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
-                                                                            <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
-                                                                            <option value="110100106">110100106 - CASH IMPREST - EPE</option>
-                                                                            <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
-                                                                            <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
-                                                                            <option value="110101002">110101002 - Branch Suspense Account</option>
-                                                                            <option value="112010001">112010001 - BALANCE WITH CBN</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col sm={2}>
-                                                                        <span>Liability</span>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Interest Expense</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
-                                                                            <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
-                                                                            <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
-                                                                            <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
-                                                                            <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
-                                                                            <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
-                                                                            <option value="110100106">110100106 - CASH IMPREST - EPE</option>
-                                                                            <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
-                                                                            <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
-                                                                            <option value="110101002">110101002 - Branch Suspense Account</option>
-                                                                            <option value="112010001">112010001 - BALANCE WITH CBN</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col sm={2}>
-                                                                        <span>Expense</span>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Fee Income</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
-                                                                            <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
-                                                                            <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
-                                                                            <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
-                                                                            <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
-                                                                            <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
-                                                                            <option value="110100106">110100106 - CASH IMPREST - EPE</option>
-                                                                            <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
-                                                                            <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
-                                                                            <option value="110101002">110101002 - Branch Suspense Account</option>
-                                                                            <option value="112010001">112010001 - BALANCE WITH CBN</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col sm={2}>
-                                                                        <span>Any GL Account</span>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Overdraft Write-Off Expense</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
-                                                                            <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
-                                                                            <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
-                                                                            <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
-                                                                            <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
-                                                                            <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
-                                                                            <option value="110100106">110100106 - CASH IMPREST - EPE</option>
-                                                                            <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
-                                                                            <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
-                                                                            <option value="110101002">110101002 - Branch Suspense Account</option>
-                                                                            <option value="112010001">112010001 - BALANCE WITH CBN</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col sm={2}>
-                                                                        <span>Expense</span>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Overdraft Control</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
-                                                                            <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
-                                                                            <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
-                                                                            <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
-                                                                            <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
-                                                                            <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
-                                                                            <option value="110100106">110100106 - CASH IMPREST - EPE</option>
-                                                                            <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
-                                                                            <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
-                                                                            <option value="110101002">110101002 - Branch Suspense Account</option>
-                                                                            <option value="112010001">112010001 - BALANCE WITH CBN</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col sm={2}>
-                                                                        <span>Asset</span>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                {/* if acrual is selcted */}
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Overdraft Interest Receivable</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
-                                                                            <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
-                                                                            <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
-                                                                            <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
-                                                                            <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
-                                                                            <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
-                                                                            <option value="110100106">110100106 - CASH IMPREST - EPE</option>
-                                                                            <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
-                                                                            <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
-                                                                            <option value="110101002">110101002 - Branch Suspense Account</option>
-                                                                            <option value="112010001">112010001 - BALANCE WITH CBN</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col sm={2}>
-                                                                        <span>Asset</span>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                {/* if acrual is selcted */}
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Overdraft Interest Income</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">110100100 - CASH IMPREST - HEAD OFFICE</option>
-                                                                            <option value="110100101">110100101 - CASH IMPREST - AKURE</option>
-                                                                            <option value="110100102">110100102 - CASH IMPREST - IKEJA</option>
-                                                                            <option value="110100103">110100103 - CASH IMPREST - IBADAN</option>
-                                                                            <option value="110100104">110100104 - CASH IMPREST - ABUJA</option>
-                                                                            <option value="110100105">110100105 - CASH IMPREST - IKORODU</option>
-                                                                            <option value="110100106">110100106 - CASH IMPREST - EPE</option>
-                                                                            <option value="110100107">110100107 - CASH IMPREST - BADAGRY</option>
-                                                                            <option value="110101001">110101001 - INTERBRANCH  CASH  ACCOUNT (CMU)</option>
-                                                                            <option value="110101002">110101002 - Branch Suspense Account</option>
-                                                                            <option value="112010001">112010001 - BALANCE WITH CBN</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                    <Col sm={2}>
-                                                                        <span>Income</span>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                {/* if acrual is selcted */}
-                                                                <Form.Group as={Row} className="center-aligned">
-                                                                    <Form.Label column sm={4} className="block-level">Interest Accrued Method</Form.Label>
-                                                                    <Col sm={6}>
-                                                                        <Form.Control as="select" size="sm">
-                                                                            <option value="">----------</option>
-                                                                            <option value="110100100">Daily</option>
-                                                                            <option value="110100101">Monthly</option>
-                                                                        </Form.Control>
-                                                                    </Col>
-                                                                </Form.Group>
-                                                                {/* if acrual is selcted */}
-                                                                
-                                                            </div>
-                                                        </Accordion.Collapse>
-                                                    </Accordion>
-                                                   
-
-                                                    <div className="footer-with-cta toleft">
-                                                        {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
-                                                        <NavLink to={'/administration/products/deposits'} className="btn btn-secondary grayed-out">Cancel</NavLink>
-                                                        <Button>Save Product</Button>
-                                                    </div>
-                                                </Form>
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                                {this.renderCreateLoanProduct()}
                                             </div>
                                         </div>
                                     </div>
@@ -790,4 +579,12 @@ class NewDepositsProduct extends React.Component {
     }
 }
 
-export default NewDepositsProduct;
+function mapStateToProps(state) {
+    return {
+        createDepositProductReducer : state.loanProductReducers.createDepositProductReducer,
+        getAllGLAccountsReducer : state.accountingReducers.getAllGLAccountsReducer,
+    };
+}
+
+
+export default connect(mapStateToProps)(NewDepositsProduct);

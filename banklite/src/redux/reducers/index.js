@@ -8,7 +8,7 @@ import {
     deposits,
     clients,
     disbursment,
-    loanProducts} from "./export";
+    products} from "./export";
 
 import {LoginReducer} from "./auth/auth.reducer";
 
@@ -125,10 +125,14 @@ const disbursmentReducers = combineReducers({
 })
 
 const loanProductReducers = combineReducers({
-    createLoanProductReducer: loanProducts.createLoanProductReducer, 
-    getAllLoanProductsReducer: loanProducts.getAllLoanProductsReducer, 
-    getSingleLoanProductsReducer: loanProducts.getSingleLoanProductsReducer, 
-    
+    createLoanProductReducer: products.createLoanProductReducer, 
+    getAllLoanProductsReducer: products.getAllLoanProductsReducer, 
+    getSingleLoanProductsReducer: products.getSingleLoanProductsReducer, 
+    updateLoanProductReducer: products.updateLoanProductReducer, 
+    getAllDepositProductsReducer: products.getAllDepositProductsReducer, 
+    getSingleDepositProductsReducer: products.getSingleDepositProductsReducer, 
+    createDepositProductReducer: products.createDepositProductReducer, 
+    updateDepositProductReducer: products.updateDepositProductReducer, 
 })
 
 

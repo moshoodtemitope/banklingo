@@ -84,4 +84,7 @@ export const routes = {
 
     //Loan Product Endpoints
     HIT_LOAN_PRODUCTS: BASEURL + '/api/LoanProducts',
+
+     //Loan Deposit Endpoints
+     HIT_DEPOSIT_PRODUCTS: BASEURL + '/api/DepositProducts',
 }
