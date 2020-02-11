@@ -131,7 +131,7 @@ class AccountManagement extends React.Component {
         switch(getGLAccountsRequest.request_status){
             case (accountingConstants.GET_GLACCOUNTS_PENDING):
                 
-                if(saveRequestData===undefined){
+                if(saveRequestData===null || saveRequestData===undefined){
                     return (
                         <div className="loading-content"> 
                             {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
@@ -205,12 +205,16 @@ class AccountManagement extends React.Component {
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
-                }else{
+                }
+                else{
                     let unfilteredAccounTypes =[],
                         countOfAccounTypes ={},
+                        accounTypes =[],
                         {accounTypesData} = this.state;
-
-                        saveRequestData.map((eachGL, index)=>{
+                    let getGLAccountsData = saveRequestData.result,
+                        getGLAccountsStatsData = saveRequestData.result2;
+                        // console.log("cdfdfdf", saveRequestData);
+                        saveRequestData.result.map((eachGL, index)=>{
                             if(accounTypes.indexOf(eachGL.accountTypeDescription)===-1){
                                 accounTypes.push(eachGL.accountTypeDescription)
                             }
@@ -340,7 +344,7 @@ class AccountManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.map((eachGL, index)=>{
+                                            saveRequestData.result.map((eachGL, index)=>{
                                                 return (
                                                     <tr key={index}>
                                                         <td>{eachGL.glCode}</td>
