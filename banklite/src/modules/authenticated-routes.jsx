@@ -236,10 +236,10 @@ class AuthenticatedRoutes extends React.Component {
                         
                         <PrivateRoute exact path='/administration/products' {...this.props} authed={this.props.user} component={ProductLoans} /> 
                         <PrivateRoute exact path='/administration/products/deposits' {...this.props} authed={this.props.user} component={ProductDeposits} /> 
-                        <PrivateRoute exact path='/administration/products/edita-depositsproduct' {...this.props} authed={this.props.user} component={EditADepositsProduct} /> 
+                        <PrivateRoute exact path='/administration/products/deposit/edit/:encodedKey' {...this.props} authed={this.props.user} component={EditADepositsProduct} /> 
                         <PrivateRoute exact path='/administration/products/newdeposits-product' {...this.props} authed={this.props.user} component={NewDepositsProduct} /> 
                         <PrivateRoute exact path='/administration/products/newloan-product' {...this.props} authed={this.props.user} component={NewLoanProduct} /> 
-                        <PrivateRoute exact path='/administration/products/editloan-product' {...this.props} authed={this.props.user} component={EditLoanProduct} /> 
+                        <PrivateRoute exact path='/administration/products/loans/edit/:encodedKey' {...this.props} authed={this.props.user} component={EditLoanProduct} /> 
                         
                         <PrivateRoute exact path='/administration/access' {...this.props} authed={this.props.user} component={AccessRoles} /> 
                         <PrivateRoute exact path='/administration/access/new-role' {...this.props} authed={this.props.user} component={CreateNewRole} /> 

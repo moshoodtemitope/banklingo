@@ -1,5 +1,31 @@
 import {productsConstants} from '../../actiontypes/products/products.constants'
 
+export function getLoanProductsReducer(state=[], action) {
+    switch (action.type) {
+        case productsConstants.GET_LOAN_PRODUCTS_PENDING:
+            return {
+                request_status: productsConstants.GET_LOAN_PRODUCTS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case productsConstants.GET_LOAN_PRODUCTS_SUCCESS:
+            return {
+                request_status: productsConstants.GET_LOAN_PRODUCTS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case productsConstants.GET_LOAN_PRODUCTS_FAILURE:
+            return {
+                request_status: productsConstants.GET_LOAN_PRODUCTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getAllLoanProductsReducer(state=[], action) {
     switch (action.type) {
         case productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING:
@@ -119,6 +145,34 @@ export function updateLoanProductReducer(state=[], action) {
     }
 }
 
+
+export function getDepositProductsReducer(state=[], action) {
+    switch (action.type) {
+        case productsConstants.GET_DEPOSIT_PRODUCTS_PENDING:
+            return {
+                request_status: productsConstants.GET_DEPOSIT_PRODUCTS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case productsConstants.GET_DEPOSIT_PRODUCTS_SUCCESS:
+            return {
+                request_status: productsConstants.GET_DEPOSIT_PRODUCTS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case productsConstants.GET_DEPOSIT_PRODUCTS_FAILURE:
+            return {
+                request_status: productsConstants.GET_DEPOSIT_PRODUCTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+
 export function getAllDepositProductsReducer(state=[], action) {
     switch (action.type) {
         case productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING:
@@ -144,7 +198,6 @@ export function getAllDepositProductsReducer(state=[], action) {
             return { ...state }
     }
 }
-
 
 export function getSingleDepositProductsReducer(state=[], action) {
     switch (action.type) {

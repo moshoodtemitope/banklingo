@@ -5,14 +5,39 @@ import {productsConstants} from '../../actiontypes/products/products.constants'
 import { handleRequestErrors } from "../../../shared/utils";
 
 export const productActions = {
+    getLoanProducts,
     getAllLoanProducts,
     getSingleLoanProduct,
     createLoanProduct,
     updateLoanProduct,
+    getDepositProducts,
     getAllDepositProducts,
     getSingleDepositProduct,
     createDepositProduct,
     updateDespositProduct
+}
+
+function getLoanProducts  (params){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_LOAN_PRODUCTS+`?${params}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user) { return { type: productsConstants.GET_LOAN_PRODUCTS_PENDING, user } }
+    function success(response) { return { type: productsConstants.GET_LOAN_PRODUCTS_SUCCESS, response } }
+    function failure(error) { return { type: productsConstants.GET_LOAN_PRODUCTS_FAILURE, error } }
+
 }
 
 function getAllLoanProducts  (params){
@@ -117,6 +142,30 @@ function updateLoanProduct  (loanProductPayload){
     function success(response) { return { type: productsConstants.EDIT_A_LOAN_PRODUCT_SUCCESS, response } }
     function failure(error) { return { type: productsConstants.EDIT_A_LOAN_PRODUCT_FAILURE, error } }
     function clear() { return { type: productsConstants.EDIT_A_LOAN_PRODUCT_RESET, clear_data:""} }
+
+}
+
+
+function getDepositProducts  (params){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`?${params}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user) { return { type: productsConstants.GET_DEPOSIT_PRODUCTS_PENDING, user } }
+    function success(response) { return { type: productsConstants.GET_DEPOSIT_PRODUCTS_SUCCESS, response } }
+    function failure(error) { return { type: productsConstants.GET_DEPOSIT_PRODUCTS_FAILURE, error } }
 
 }
 

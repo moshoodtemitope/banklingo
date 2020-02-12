@@ -126,9 +126,11 @@ const disbursmentReducers = combineReducers({
 
 const productReducers = combineReducers({
     createLoanProductReducer: products.createLoanProductReducer, 
+    getLoanProductsReducer: products.getLoanProductsReducer, 
     getAllLoanProductsReducer: products.getAllLoanProductsReducer, 
     getSingleLoanProductsReducer: products.getSingleLoanProductsReducer, 
     updateLoanProductReducer: products.updateLoanProductReducer, 
+    getDepositProductsReducer: products.getDepositProductsReducer, 
     getAllDepositProductsReducer: products.getAllDepositProductsReducer, 
     getSingleDepositProductsReducer: products.getSingleDepositProductsReducer, 
     createDepositProductReducer: products.createDepositProductReducer, 

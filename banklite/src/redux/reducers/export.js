@@ -65,6 +65,8 @@ import{
 } from './loans/loans.reducer'
 
 import{
+    getLoanProductsReducer,
+    getDepositProductsReducer,
     getAllLoanProductsReducer,
     getSingleLoanProductsReducer,
     createLoanProductReducer,
@@ -216,6 +218,8 @@ export const disbursment ={
 }
 
 export const products ={
+    getLoanProductsReducer,
+    getDepositProductsReducer,
     getAllLoanProductsReducer,
     getSingleLoanProductsReducer,
     createLoanProductReducer,

@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/Col'
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -32,7 +33,8 @@ class NewDepositsProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            typeDesc:''
         }
 
     }
@@ -78,16 +80,31 @@ class NewDepositsProduct extends React.Component {
                 .min(2, 'Valid response required')
                 .required('Required'),
             depositAccountType:  Yup.string()
-                .min(5, 'Valid response required')
+                .min(1, 'Valid response required')
                 .required('Required'),
           });
 
         let allProductTypes =[
-            {value: '1', label: 'Current Account'},
-            {value: '2', label: 'Fixed Deposit'},
-            {value: '3', label: 'Funding Account'},
-            {value: '4', label: 'Savings Account'},
-            {value: '5', label: 'Savings Plan'},
+            {   value: '1', 
+                label: 'Current Account', 
+                desc:   'A transactional account where a customer may perform regular deposit and withdrawals, accrue interest and may optionally be allowed to go into overdraft.'
+            },
+            {   value: '2', 
+                label: 'Fixed Deposit',
+                desc:   'A type of deposit where an account is being opened with a certain balance and is fixed for a certain time period with a given interest rate after which point the customer may withdraw their money.'
+            },
+            {   value: '3', 
+                label: 'Funding Account',
+                desc:   'A type of account used for investing funds in other borrowers loan accounts. The customer earns interest after loan investments, instead of the traditional interest paid into account by the organization.'
+            },
+            {   value: '4', 
+                label: 'Savings Account',
+                desc:   'A standard savings account where a customer may perform regular deposit and withdrawals and accrue interest over time.'
+            },
+            {   value: '5', 
+                label: 'Savings Plan',
+                desc:   'A type of deposit product with a maturity before which withdrawals cannot be made. Ideally, a certain amount is deposited into the account at regular interval to reach a deposit goal.'
+            },
         ];
 
         let methodologyList =[
@@ -141,7 +158,7 @@ class NewDepositsProduct extends React.Component {
                         glAccountsList= getAllGLAccountsRequest.request_data.response.data;
                         currenciesList = getAllCurrencies.request_data.response.data;
 
-                        console.log("---+++",currenciesList);
+                        
                         glAccountsList.map((channel, id)=>{
                             allGlAccounts.push({label: channel.accountDescription, value:channel.id, accType:channel.accountTypeId});
                         })
@@ -151,7 +168,7 @@ class NewDepositsProduct extends React.Component {
                         })
 
 
-                        console.log("---+++====",allCurrencies);
+                        
 
                         let savingsControlAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===2),
                             transactionSourceAccount =allGlAccounts.filter(glAccount=>glAccount.accType===1),
@@ -176,7 +193,7 @@ class NewDepositsProduct extends React.Component {
                                     isActive: true,
                                     currencyCode:'',
                                     automaticallySetAccountAsDormant:false,
-                                    dormancyAfterXDays:'',
+                                    dormancyAfterXDays:'0',
                                     // interestAccruedMethod:'',
                                     maximumWithdrawalAmount:'',
                                     recommendedDepositAmount:'',
@@ -202,69 +219,69 @@ class NewDepositsProduct extends React.Component {
                                     let createNewDepositProductPayload = {
                                         key: values.key,
                                         productName: values.productName,
-                                        depositAccountType: values.depositAccountType,
+                                        depositAccountType: parseInt(values.depositAccountType),
                                         description: values.description,
                                         depositProductAccountingRule:{
                                             savingsControlAccountId: values.savingsControlAccountId,
                                             transactionSourceAccountId: values.transactionSourceAccountId,
                                             interestExpenseAccountId: values.interestExpenseAccountId,
                                             feeIncomeAccountId: values.feeIncomeAccountId,
-                                            interestAccruedMethod: values.interestAccruedMethod,
+                                            interestAccruedMethod: values.interestAccruedMethod!=='' ? parseInt(values.interestAccruedMethod):'',
                                         },
-                                        methodology: values.methodology,
+                                        methodology:values.methodology!==''? parseInt(values.methodology):'',
                                         isActive: values.isActive,
                                         currencyCode: values.currencyCode,
                                         automaticallySetAccountAsDormant: values.automaticallySetAccountAsDormant,
-                                        dormancyAfterXDays: values.dormancyAfterXDays,
-                                        interestAccruedMethod: values.interestAccruedMethod,
+                                        dormancyAfterXDays:values.dormancyAfterXDays!==''? parseInt(values.dormancyAfterXDays):0,
+                                        // interestAccruedMethod: values.interestAccruedMethod,
                                         depositSavingsSettingModel:{
-                                            maximumWithdrawalAmount: values.maximumWithdrawalAmount,
-                                            recommendedDepositAmount: values.recommendedDepositAmount,
+                                            maximumWithdrawalAmount:values.maximumWithdrawalAmount!==''? parseFloat(values.maximumWithdrawalAmount.replace(/,/g, '')):0,
+                                            recommendedDepositAmount: values.recommendedDepositAmount!==''? parseFloat(values.recommendedDepositAmount.replace(/,/g, '')):0,
                                         },
                                         depositProductInterestSettingModel:{
                                             interestPaid: values.interestPaid,
                                             interestRateTerms: values.interestRateTerms,
-                                            interestBalanceCalculation: values.interestBalanceCalculation,
-                                            interestRateDefault: values.interestRateDefault,
-                                            interestRateMin: values.interestRateMin,
-                                            interestRateMax: values.interestRateMax,
-                                            xInterestDays: values.xInterestDays,
+                                            interestBalanceCalculation: values.interestBalanceCalculation!==''? parseInt(values.interestBalanceCalculation):0,
+                                            interestRateDefault: values.interestRateDefault!==''? parseFloat(values.interestRateDefault.replace(/,/g, '')):0,
+                                            interestRateMin:values.interestRateMin!==''? parseFloat(values.interestRateMin.replace(/,/g, '')):0,
+                                            interestRateMax:values.interestRateMax!==''? parseFloat(values.interestRateMax.replace(/,/g, '')):0,
+                                            xInterestDays: values.xInterestDays !=='' ? parseInt(values.xInterestDays):0,
                                         },
                                         depositFixedSettingModel:{
-                                            defaultOpeningBalance: values.defaultOpeningBalance,
-                                            minimumOpeningBalance: values.minimumOpeningBalance,
-                                            maxmimumOpeningBalance: values.maxmimumOpeningBalance,
-                                            term: values.term,
-                                            defaultTermLength: values.defaultTermLength,
-                                            minimumTermLength: values.minimumTermLength,
-                                            maxmimumTermLength: values.maxmimumTermLength,
+                                            defaultOpeningBalance:values.defaultOpeningBalance!=='' ? parseFloat(values.defaultOpeningBalance.replace(/,/g, '')):0,
+                                            minimumOpeningBalance:values.minimumOpeningBalance!==''? parseFloat(values.minimumOpeningBalance.replace(/,/g, '')):0,
+                                            maxmimumOpeningBalance:values.maxmimumOpeningBalance!==''? parseFloat(values.maxmimumOpeningBalance.replace(/,/g, '')):0,
+                                            term:values.term!==''? parseInt(values.term):0,
+                                            defaultTermLength:values.defaultTermLength!==''? parseFloat(values.defaultTermLength.replace(/,/g, '')):0,
+                                            minimumTermLength:values.minimumTermLength!==''? parseFloat(values.minimumTermLength.replace(/,/g, '')):0,
+                                            maxmimumTermLength:values.maxmimumTermLength!==''? parseFloat(values.maxmimumTermLength.replace(/,/g, '')):0,
                                         },
                                         
                                     }
 
 
-                                    console.log("--+++----", createNewDepositProductPayload);
+                                    // console.log("--+++----", createNewDepositProductPayload);
 
 
-                                    // this.handleCreateNewDepositProduct(createNewDepositProductPayload)
-                                    //     .then(
-                                    //         () => {
+                                    this.handleCreateNewDepositProduct(createNewDepositProductPayload)
+                                        .then(
+                                            () => {
 
-                                    //             if (this.props.createDepositProductReducer.request_status === productsConstants.CREATE_A_DEPOSIT_PRODUCT_SUCCESS) {
-                                    //                 setTimeout(() => {
-                                    //                     resetForm();
-                                    //                     this.props.dispatch(productActions.createDepositProduct("CLEAR"))
-                                    //                 }, 3000);
-                                    //             }else{
-                                    //                 setTimeout(() => {
-                                    //                     this.props.dispatch(productActions.createDepositProduct("CLEAR"))
-                                    //                 }, 3000);
-                                    //             }
+                                                if (this.props.createDepositProductReducer.request_status === productsConstants.CREATE_A_DEPOSIT_PRODUCT_SUCCESS) {
+                                                    setTimeout(() => {
+                                                        resetForm();
+                                                        this.props.dispatch(productActions.createDepositProduct("CLEAR"))
+                                                    }, 3000);
+                                                }else{
+                                                    setTimeout(() => {
+                                                        this.props.dispatch(productActions.createDepositProduct("CLEAR"))
+                                                    }, 3000);
+                                                }
 
                                             
 
-                                    //         }
-                                    //     )
+                                            }
+                                        )
 
                                 }}
                             >
@@ -316,9 +333,10 @@ class NewDepositsProduct extends React.Component {
                                             <Select
                                                 options={allProductTypes}
                                                 onChange={(selectedProductType) => {
-                                                    this.setState({ selectedProductType });
+                                                    this.setState({ selectedProductType, typeDesc: selectedProductType.desc});
                                                     errors.depositAccountType = null
-                                                    values.depositAccountType = selectedProductType.value
+                                                    values.depositAccountType = selectedProductType.value;
+                                                    
                                                 }}
                                                 className={errors.depositAccountType && touched.depositAccountType ? "is-invalid" : null}
                                                 
@@ -332,12 +350,39 @@ class NewDepositsProduct extends React.Component {
                                             ) : null}
                                         </Col>
                                         <Col>
+                                            {/* <Form.Label className="block-level">Methodology</Form.Label>
+                                            <Select
+                                                options={methodologyList}
+                                                onChange={(selectedMethodology) => {
+                                                    this.setState({ selectedMethodology });
+                                                    errors.methodology = null
+                                                    values.methodology = selectedMethodology.value
+                                                }}
+                                                className={errors.methodology && touched.methodology ? "is-invalid" : null}
+                                                
+                                                
+                                                name="methodology"
+                                                
+                                                
+                                            /> */}
                                         </Col>
                                     </Form.Row>
-                                    
+                                        <Form.Label className="block-level">State</Form.Label>
+                                            <div className="checkbox-wrap">
+                                                <input type="checkbox" 
+                                                    id="isActive" 
+                                                    checked={values.isActive? values.isActive:null}
+                                                    name="isActive"
+                                                    onChange={handleChange} 
+                                                    value={values.isActive}  />
+                                                <label htmlFor="isActive">Active state</label>
+                                                <div className="hint-text">
+                                                    {this.state.typeDesc}
+                                                </div>
+                                            </div>
                                     
 
-                                    <Accordion defaultActiveKey="0">
+                                    <Accordion>
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                             Deposit Product Description
                                         </Accordion.Toggle>
@@ -356,148 +401,38 @@ class NewDepositsProduct extends React.Component {
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
-                                    <Accordion defaultActiveKey="0">
+                                    <Accordion>
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Deposit Product Rules
+                                            Currencies
                                         </Accordion.Toggle>
                                         <Accordion.Collapse eventKey="0">
                                             <div>
                                                 <Form.Row>
                                                     <Col>
-                                                        <Form.Label className="block-level">Savings Control Account</Form.Label>
+                                                        <Form.Label className="block-level">Currency</Form.Label>
                                                         <Select
-                                                            options={savingsControlAccounts}
-                                                            onChange={(selectedSavingsControlAcct) => {
-                                                                this.setState({ selectedSavingsControlAcct });
-                                                                errors.savingsControlAccountId = null
-                                                                values.savingsControlAccountId = selectedSavingsControlAcct.value
+                                                            options={allCurrencies}
+                                                            onChange={(selectedCurrency) => {
+                                                                this.setState({ selectedCurrency });
+                                                                errors.currencyCode = null
+                                                                values.currencyCode = selectedCurrency.value
                                                             }}
-                                                            className={errors.savingsControlAccountId && touched.savingsControlAccountId ? "is-invalid" : null}
-                                                            
-                                                            noOptionsMessage ={() => "No accounts available"}
-                                                            name="savingsControlAccountId"
-                                                            
-                                                            
-                                                        />
-                                                    </Col>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Transaction Source Account</Form.Label>
-                                                        <Select
-                                                            options={transactionSourceAccount}
-                                                            onChange={(selectedTxtSourceAcct) => {
-                                                                this.setState({ selectedTxtSourceAcct });
-                                                                errors.transactionSourceAccountId = null
-                                                                values.transactionSourceAccountId = selectedTxtSourceAcct.value
-                                                            }}
-                                                            className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
-                                                            noOptionsMessage ={() => "No accounts available"}
-                                                            
-                                                            name="transactionSourceAccountId"
-                                                            
-                                                            
-                                                        />
-                                                    </Col>
-                                                </Form.Row>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Interest Expense Account</Form.Label>
-                                                        <Select
-                                                            options={interestExpenseAccounts}
-                                                            onChange={(selectedInterestExpenseAccount) => {
-                                                                this.setState({ selectedInterestExpenseAccount });
-                                                                errors.interestExpenseAccountId = null
-                                                                values.interestExpenseAccountId = selectedInterestExpenseAccount.value
-                                                            }}
-                                                            className={errors.interestExpenseAccountId && touched.interestExpenseAccountId ? "is-invalid" : null}
-                                                            noOptionsMessage ={() => "No accounts available"}
-                                                            
-                                                            name="interestExpenseAccountId"
-                                                            
-                                                            
-                                                        />
-                                                    </Col>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Fee Income Account</Form.Label>
-                                                        <Select
-                                                            options={allGlAccounts}
-                                                            onChange={(selectedFeeIncomeAcct) => {
-                                                                this.setState({ selectedFeeIncomeAcct });
-                                                                errors.feeIncomeAccountId = null
-                                                                values.feeIncomeAccountId = selectedFeeIncomeAcct.value
-                                                            }}
-                                                            className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
-                                                            noOptionsMessage ={() => "No accounts available"}
-                                                            
-                                                            name="feeIncomeAccountId"
-                                                            
-                                                            
-                                                        />
-                                                    </Col>
-                                                </Form.Row>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Interest Accrued Method</Form.Label>
-                                                        <Select
-                                                            options={interestAccruedMethodList}
-                                                            onChange={(selectedInterestAccruedMethod) => {
-                                                                this.setState({ selectedInterestAccruedMethod });
-                                                                errors.interestAccruedMethod = null
-                                                                values.interestAccruedMethod = selectedInterestAccruedMethod.value
-                                                            }}
-                                                            className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
-                                                            name="interestAccruedMethod"
-                                                            
-                                                            
+                                                            className={errors.currencyCode && touched.currencyCode ? "is-invalid" : null}
+
+
+                                                            name="currencyCode"
+
+
                                                         />
                                                     </Col>
                                                     <Col></Col>
                                                 </Form.Row>
-                                                
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
-                                    <Accordion defaultActiveKey="0">
+                                    <Accordion>
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Deposit Savings Settings
-                                        </Accordion.Toggle>
-                                        <Accordion.Collapse eventKey="0">
-                                            <div>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Maximum Withdrawal Amount</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.maximumWithdrawalAmount)}
-                                                            className={errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? "is-invalid" : null}
-                                                            name="maximumWithdrawalAmount"  />
-                                                        {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
-                                                            <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
-                                                        ) : null}
-                                                    </Col>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Recommended Deposit Amount</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.recommendedDepositAmount)}
-                                                            className={errors.recommendedDepositAmount && touched.recommendedDepositAmount ? "is-invalid" : null}
-                                                            name="recommendedDepositAmount" />
-                                                        {errors.recommendedDepositAmount && touched.recommendedDepositAmount ? (
-                                                            <span className="invalid-feedback">{errors.recommendedDepositAmount}</span>
-                                                        ) : null}
-                                                    </Col>
-                                                
-                                                </Form.Row>
-                                                
-                                                
-                                                
-                                            </div>
-                                        </Accordion.Collapse>
-                                    </Accordion>
-                                    <Accordion defaultActiveKey="0">
-                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Deposit Product Interest Settings
+                                            Interest Rates
                                         </Accordion.Toggle>
                                         <Accordion.Collapse eventKey="0">
                                             <div>
@@ -622,10 +557,9 @@ class NewDepositsProduct extends React.Component {
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
-
-                                    <Accordion defaultActiveKey="0">
+                                    <Accordion>
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Deposit Fixed Settings
+                                            Opening Balance
                                         </Accordion.Toggle>
                                         <Accordion.Collapse eventKey="0">
                                             <div>
@@ -668,6 +602,18 @@ class NewDepositsProduct extends React.Component {
                                                             <span className="invalid-feedback">{errors.maxmimumOpeningBalance}</span>
                                                         ) : null}
                                                     </Col>
+                                                    <Col></Col>
+                                                </Form.Row>
+                                            </div>
+                                        </Accordion.Collapse>
+                                    </Accordion>
+                                    <Accordion >
+                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                            Term Length
+                                        </Accordion.Toggle>
+                                        <Accordion.Collapse eventKey="0">
+                                            <div>
+                                                <Form.Row>
                                                     <Col>
                                                         <Form.Label className="block-level">Term</Form.Label>
                                                         <Form.Control 
@@ -678,6 +624,18 @@ class NewDepositsProduct extends React.Component {
                                                             name="term"  />
                                                         {errors.term && touched.term ? (
                                                             <span className="invalid-feedback">{errors.term}</span>
+                                                        ) : null}
+                                                    </Col>
+                                                    <Col>
+                                                        <Form.Label className="block-level">Maxmimum Term Length</Form.Label>
+                                                        <Form.Control 
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={numberWithCommas(values.maxmimumTermLength)}
+                                                            className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : null}
+                                                            name="maxmimumTermLength"  />
+                                                        {errors.maxmimumTermLength && touched.maxmimumTermLength ? (
+                                                            <span className="invalid-feedback">{errors.maxmimumTermLength}</span>
                                                         ) : null}
                                                     </Col>
                                                 </Form.Row>
@@ -709,104 +667,246 @@ class NewDepositsProduct extends React.Component {
                                                     </Col>
 
                                                 </Form.Row>
-                                                <Form.Row>
+                                            </div>
+                                        </Accordion.Collapse>
+                                    </Accordion>
+                                    <Accordion >
+                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                            Internal Controls
+                                        </Accordion.Toggle>
+                                        <Accordion.Collapse eventKey="0">
+                                            <Form.Row>
+                                                <Col>
+                                                    <div className="checkbox-wrap">
+                                                        <input type="checkbox" 
+                                                            id="automaticallySetAccountAsDormant" 
+                                                            checked={values.automaticallySetAccountAsDormant? values.automaticallySetAccountAsDormant:null}
+                                                            name="automaticallySetAccountAsDormant"
+                                                            onChange={handleChange} 
+                                                            value={values.automaticallySetAccountAsDormant}  />
+                                                        <label htmlFor="automaticallySetAccountAsDormant">Automatically set account as dormant</label>
+                                                    </div>
+                                                    
+                                                    
+                                                </Col>
+                                                {values.automaticallySetAccountAsDormant===true && 
                                                     <Col>
-                                                        <Form.Label className="block-level">Maxmimum Term Length</Form.Label>
+                                                        <Form.Label className="block-level">Dormant after how many days</Form.Label>
                                                         <Form.Control 
                                                             type="text"
                                                             onChange={handleChange}
-                                                            value={numberWithCommas(values.maxmimumTermLength)}
-                                                            className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : null}
-                                                            name="maxmimumTermLength"  />
-                                                        {errors.maxmimumTermLength && touched.maxmimumTermLength ? (
-                                                            <span className="invalid-feedback">{errors.maxmimumTermLength}</span>
+                                                            value={allowNumbersOnly(values.dormancyAfterXDays)}
+                                                            className={errors.dormancyAfterXDays && touched.dormancyAfterXDays ? "is-invalid" : null}
+                                                            name="dormancyAfterXDays"  />
+                                                         <span>days</span>
+                                                        {errors.dormancyAfterXDays && touched.dormancyAfterXDays ? (
+                                                            <span className="invalid-feedback">{errors.dormancyAfterXDays}</span>
+                                                        ) : null}
+                                                        
+                                                    </Col>
+                                                }
+                                                {values.automaticallySetAccountAsDormant===false  && <Col></Col>}
+                                            </Form.Row>
+                                            {/* <div>
+                                                <div className="checkbox-wrap">
+                                                    <input type="checkbox" name="" id="pick-1" />
+                                                    <label htmlFor="pick-1">Automatically set accounts as Dormant after</label>
+                                                </div>
+                                                <Form.Control className="w-20" type="text" />
+                                                <span>days</span>
+                                            </div> */}
+                                        </Accordion.Collapse>
+                                    </Accordion>
+                                    <Accordion>
+                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                            Deposit Savings Settings
+                                        </Accordion.Toggle>
+                                        <Accordion.Collapse eventKey="0">
+                                            <div>
+                                                <Form.Row>
+                                                    <Col>
+                                                        <Form.Label className="block-level">Maximum Withdrawal Amount</Form.Label>
+                                                        <Form.Control 
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={numberWithCommas(values.maximumWithdrawalAmount)}
+                                                            className={errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? "is-invalid" : null}
+                                                            name="maximumWithdrawalAmount"  />
+                                                        {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
+                                                            <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
                                                         ) : null}
                                                     </Col>
-
                                                     <Col>
+                                                        <Form.Label className="block-level">Recommended Deposit Amount</Form.Label>
+                                                        <Form.Control 
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={numberWithCommas(values.recommendedDepositAmount)}
+                                                            className={errors.recommendedDepositAmount && touched.recommendedDepositAmount ? "is-invalid" : null}
+                                                            name="recommendedDepositAmount" />
+                                                        {errors.recommendedDepositAmount && touched.recommendedDepositAmount ? (
+                                                            <span className="invalid-feedback">{errors.recommendedDepositAmount}</span>
+                                                        ) : null}
                                                     </Col>
-
+                                                
                                                 </Form.Row>
+                                                
                                                 
                                                 
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
-                                    <Form.Row>
-                                        <Col>
-                                            <Form.Label className="block-level">Methodology</Form.Label>
-                                            <Select
-                                                options={methodologyList}
-                                                onChange={(selectedMethodology) => {
-                                                    this.setState({ selectedMethodology });
-                                                    errors.methodology = null
-                                                    values.methodology = selectedMethodology.value
-                                                }}
-                                                className={errors.methodology && touched.methodology ? "is-invalid" : null}
+                                    
+                                    <Accordion defaultActiveKey="0">
+                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                            Accounting Rules
+                                        </Accordion.Toggle>
+                                        <Accordion.Collapse eventKey="0">
+                                            <div>
+                                                <Form.Group as={Row} className="center-aligned">
+                                                    <Form.Label column sm={4} className="block-level">Methodology</Form.Label>
+                                                    <Col sm={7}>
+                                                        
+                                                        <Select
+                                                            options={methodologyList}
+                                                            onChange={(selectedMethodology) => {
+                                                                this.setState({ selectedMethodology });
+                                                                errors.methodology = null
+                                                                values.methodology = selectedMethodology.value
+                                                            }}
+                                                            className={errors.methodology && touched.methodology ? "is-invalid" : null}
+                                                            
+                                                            
+                                                            name="methodology"
+                                                            
+                                                            
+                                                        />
+                                                    </Col>
+                                                </Form.Group>
+
+                                                <Form.Group as={Row} className="center-aligned">
+                                                    <Form.Label column sm={4} className="block-level">Transaction Source</Form.Label>
+                                                    <Col sm={6}>
+                                                        
+                                                            <Select
+                                                                options={transactionSourceAccount}
+                                                                onChange={(selectedTxtSourceAcct) => {
+                                                                    this.setState({ selectedTxtSourceAcct });
+                                                                    errors.transactionSourceAccountId = null
+                                                                    values.transactionSourceAccountId = selectedTxtSourceAcct.value
+                                                                }}
+                                                                className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                                noOptionsMessage ={() => "No accounts available"}
+                                                                
+                                                                name="transactionSourceAccountId"
+                                                                
+                                                                
+                                                            />
+                                                    </Col>
+                                                    <Col sm={2}>
+                                                        <span>Asset</span>
+                                                    </Col>
+                                                </Form.Group>
+                                                <Form.Group as={Row} className="center-aligned">
+                                                    <Form.Label column sm={4} className="block-level">Savings Control Account</Form.Label>
+                                                    <Col sm={6}>
+                                                        <Select
+                                                            options={savingsControlAccounts}
+                                                            onChange={(selectedSavingsControlAcct) => {
+                                                                this.setState({ selectedSavingsControlAcct });
+                                                                errors.savingsControlAccountId = null
+                                                                values.savingsControlAccountId = selectedSavingsControlAcct.value
+                                                            }}
+                                                            className={errors.savingsControlAccountId && touched.savingsControlAccountId ? "is-invalid" : null}
+                                                            
+                                                            noOptionsMessage ={() => "No accounts available"}
+                                                            name="savingsControlAccountId"
+                                                            
+                                                            
+                                                        />
+                                                    </Col>
+                                                    <Col sm={2}>
+                                                        <span>Liability</span>
+                                                    </Col>
+                                                </Form.Group>
+                                                <Form.Group as={Row} className="center-aligned">
+                                                    <Form.Label column sm={4} className="block-level">Interest Expense Account</Form.Label>
+                                                    <Col sm={6}>
+                                                        <Select
+                                                            options={interestExpenseAccounts}
+                                                            onChange={(selectedInterestExpenseAccount) => {
+                                                                this.setState({ selectedInterestExpenseAccount });
+                                                                errors.interestExpenseAccountId = null
+                                                                values.interestExpenseAccountId = selectedInterestExpenseAccount.value
+                                                            }}
+                                                            className={errors.interestExpenseAccountId && touched.interestExpenseAccountId ? "is-invalid" : null}
+                                                            noOptionsMessage ={() => "No accounts available"}
+                                                            
+                                                            name="interestExpenseAccountId"
+                                                                
+                                                                
+                                                            />
+                                                    </Col>
+                                                    <Col sm={2}>
+                                                        <span>Expense</span>
+                                                    </Col>
+                                                </Form.Group>
+                                                <Form.Group as={Row} className="center-aligned">
+                                                    <Form.Label column sm={4} className="block-level">Fee Income</Form.Label>
+                                                    <Col sm={6}>
+                                                        <Select
+                                                            options={allGlAccounts}
+                                                            onChange={(selectedFeeIncomeAcct) => {
+                                                                this.setState({ selectedFeeIncomeAcct });
+                                                                errors.feeIncomeAccountId = null
+                                                                values.feeIncomeAccountId = selectedFeeIncomeAcct.value
+                                                            }}
+                                                            className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                            noOptionsMessage ={() => "No accounts available"}
+                                                            
+                                                            name="feeIncomeAccountId"
+                                                                
+                                                                
+                                                            />
+                                                    </Col>
+                                                    <Col sm={2}>
+                                                        <span>Any GL Account</span>
+                                                    </Col>
+                                                </Form.Group>
+                                                <Form.Group as={Row} className="center-aligned">
+                                                    <Form.Label column sm={4} className="block-level">Interest Accrued Method</Form.Label>
+                                                    <Col sm={6}>
+                                                        <Select
+                                                            options={interestAccruedMethodList}
+                                                            onChange={(selectedInterestAccruedMethod) => {
+                                                                this.setState({ selectedInterestAccruedMethod });
+                                                                errors.interestAccruedMethod = null
+                                                                values.interestAccruedMethod = selectedInterestAccruedMethod.value
+                                                            }}
+                                                            className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
+                                                            name="interestAccruedMethod"
+                                                            
+                                                            
+                                                        />
+                                                    </Col>
+                                                    {/* <Col sm={2}>
+                                                        <span>Expense</span>
+                                                    </Col> */}
+                                                </Form.Group>
                                                 
                                                 
-                                                name="methodology"
                                                 
                                                 
-                                            />
-                                        </Col>
-                                        <Col>
-                                            <Form.Label className="block-level">Currency</Form.Label>
-                                            <Select
-                                                options={allCurrencies}
-                                                onChange={(selectedCurrency) => {
-                                                    this.setState({ selectedCurrency });
-                                                    errors.currencyCode = null
-                                                    values.currencyCode = selectedCurrency.value
-                                                }}
-                                                className={errors.currencyCode && touched.currencyCode ? "is-invalid" : null}
                                                 
-                                                
-                                                name="currencyCode"
-                                                
-                                                
-                                            />
-                                        </Col>
-                                    </Form.Row>
-                                    <Form.Row>
-                                        <Col>
-                                            <div className="checkbox-wrap">
-                                                <input type="checkbox" 
-                                                    id="automaticallySetAccountAsDormant" 
-                                                    checked={values.automaticallySetAccountAsDormant? values.automaticallySetAccountAsDormant:null}
-                                                    name="automaticallySetAccountAsDormant"
-                                                    onChange={handleChange} 
-                                                    value={values.automaticallySetAccountAsDormant}  />
-                                                <label htmlFor="automaticallySetAccountAsDormant">Automatically set account as dormant</label>
                                             </div>
-                                            <div className="checkbox-wrap">
-                                                <input type="checkbox" 
-                                                    id="isActive" 
-                                                    checked={values.isActive? values.isActive:null}
-                                                    name="isActive"
-                                                    onChange={handleChange} 
-                                                    value={values.isActive}  />
-                                                <label htmlFor="isActive">Active state</label>
-                                            </div>
-                                            
-                                        </Col>
-                                        {values.automaticallySetAccountAsDormant===true && 
-                                            <Col>
-                                                <Form.Label className="block-level">Dormant after how many days</Form.Label>
-                                                <Form.Control 
-                                                    type="text"
-                                                    onChange={handleChange}
-                                                    value={allowNumbersOnly(values.dormancyAfterXDays)}
-                                                    className={errors.dormancyAfterXDays && touched.dormancyAfterXDays ? "is-invalid" : null}
-                                                    name="dormancyAfterXDays"  />
-                                                {errors.dormancyAfterXDays && touched.dormancyAfterXDays ? (
-                                                    <span className="invalid-feedback">{errors.dormancyAfterXDays}</span>
-                                                ) : null}
-                                                
-                                            </Col>
-                                        }
-                                        {values.automaticallySetAccountAsDormant===false  && <Col></Col>}
-                                    </Form.Row>
+                                        </Accordion.Collapse>
+                                    </Accordion>
+                                    
+                                    
+
+                                    
+                                    
+                                    
 
                                 
 

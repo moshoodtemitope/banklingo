@@ -23,6 +23,7 @@ class ProductLoans extends React.Component {
         this.state={
             user:'',
             PageSize:25,
+            FullDetails: false,
             CurrentPage:1,
             isRefresh:false
         }
@@ -37,36 +38,48 @@ class ProductLoans extends React.Component {
     loadInitialData=()=>{
         let {PageSize, CurrentPage}= this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getAllLoanProducts(params);
+        this.getLoanProducts(params);
     }
 
-    getAllLoanProducts = (paramters)=>{
+    getLoanProducts = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(productActions.getAllLoanProducts(paramters));
+        dispatch(productActions.getLoanProducts(paramters));
     }
 
     setPagesize = (PageSize)=>{
-        // console.log('----here', PageSize.target.value);
-        const {dispatch} = this.props;
-        let {CurrentPage}= this.state;
         
+        const {dispatch} = this.props;
 
-        let sizeOfPage = PageSize.target.value;
+
+        let sizeOfPage = PageSize.target.value,
+            {FullDetails, CurrentPage} = this.state;
 
         this.setState({PageSize: sizeOfPage, isRefresh: true});
-        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+
+        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
 
         
        
-        dispatch(productActions.getActivitiesData(params));
+        dispatch(productActions.getLoanProducts(params));
+    }
+
+    setShowDetails = (FullDetails)=>{
+        // console.log('----here', PageSize.target.value);
+        let showDetails = FullDetails.target.checked,
+            {CurrentPage, PageSize} = this.state;
+
+        this.setState({FullDetails: showDetails});
+
+        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        this.getLoanProducts(params);
     }
 
     renderLoanProducts=()=>{
-        let getAllLoanProductsRequestData = this.props.getAllLoanProductsRequest,
+        let getAllLoanProductsRequestData = this.props.getLoanProductsRequest,
             {isRefresh} = this.state;
 
-            if(getAllLoanProductsRequestData.request_status ===productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING){
+            if(getAllLoanProductsRequestData.request_status ===productsConstants.GET_LOAN_PRODUCTS_PENDING){
                 return(
                     <div className="loading-content">
                         <div className="heading-with-cta">
@@ -116,10 +129,16 @@ class ProductLoans extends React.Component {
                                 <tr>
                                     <th>Loan Product Name</th>
                                     <th>Loan Product Code</th>
+                                    <th>Loan Product Type</th>
+                                    <th>Last Modified</th>
+                                    <th>Active</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -134,7 +153,7 @@ class ProductLoans extends React.Component {
                 )
             }
 
-            if(getAllLoanProductsRequestData.request_status ===productsConstants.GET_ALL_LOAN_PRODUCTS_SUCCESS){
+            if(getAllLoanProductsRequestData.request_status ===productsConstants.GET_LOAN_PRODUCTS_SUCCESS){
                 let allLoanProductsData = getAllLoanProductsRequestData.request_data.response.data;
                 if(allLoanProductsData!==undefined){
                    if(allLoanProductsData.length>=1){
@@ -183,13 +202,22 @@ class ProductLoans extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-
+                                <div className="table-helper mb-10">
+                                    <input type="checkbox" name="" 
+                                        onChange={this.setShowDetails}
+                                        checked={this.state.FullDetails}
+                                        id="showFullDetails" />
+                                    <label htmlFor="showFullDetails">Show full details</label>
+                                </div>
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
                                             <th>Loan Product Name</th>
                                             <th>Loan Product Code</th>
+                                            <th>Loan Product Type</th>
+                                            <th>Last Modified</th>
+                                            <th>Active</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -197,8 +225,14 @@ class ProductLoans extends React.Component {
                                             return(
                                                 <Fragment key={index}>
                                                     <tr>
-                                                        <td>{eachLoanProduct.loanProductName}</td>
-                                                        <td>{eachLoanProduct.loanProductCode}</td>
+                                                        <td>
+                                                        <NavLink to={`/administration/products/loans/edit/${eachLoanProduct.productName}`}></NavLink>
+                                                            
+                                                        </td>
+                                                        <td>{eachLoanProduct.productCode}</td>
+                                                        <td>{eachLoanProduct.loanProductTypeDescription}</td>
+                                                        <td>{eachLoanProduct.lastModified}</td>
+                                                        <td>{eachLoanProduct.isActive}</td>
                                                     </tr>
                                                 </Fragment>
                                                 
@@ -264,10 +298,16 @@ class ProductLoans extends React.Component {
                                     <tr>
                                         <th>Loan Product Name</th>
                                         <th>Loan Product Code</th>
+                                        <th>Loan Product Type</th>
+                                        <th>Last Modified</th>
+                                        <th>Active</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                     </tr>
@@ -285,7 +325,7 @@ class ProductLoans extends React.Component {
                 }
             }
 
-            if (getAllLoanProductsRequestData.request_status === productsConstants.GET_ALL_LOAN_PRODUCTS_FAILURE){
+            if (getAllLoanProductsRequestData.request_status === productsConstants.GET_LOAN_PRODUCTS_FAILURE){
                 return (
                     <div className="loading-content errormsg">
                         <div>{getAllLoanProductsRequestData.request_data.error}</div>
@@ -351,6 +391,7 @@ class ProductLoans extends React.Component {
 function mapStateToProps(state) {
     return {
         getAllLoanProductsRequest: state.productReducers.getAllLoanProductsReducer,
+        getLoanProductsRequest: state.productReducers.getLoanProductsReducer,
     };
 }
 
