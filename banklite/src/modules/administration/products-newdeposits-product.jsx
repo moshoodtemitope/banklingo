@@ -916,7 +916,7 @@ class NewDepositsProduct extends React.Component {
 
                                     <div className="footer-with-cta toleft">
                                         
-                                        <NavLink to={'/administration/products'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                        <NavLink to={'/administration/products/deposits'} className="btn btn-secondary grayed-out">Cancel</NavLink>
                                         <Button
                                             type="submit"
                                             disabled={createDepositProductRequest.is_request_processing}>
