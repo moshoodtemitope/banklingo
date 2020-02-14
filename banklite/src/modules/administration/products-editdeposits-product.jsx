@@ -76,9 +76,10 @@ class EditADepositsProduct extends React.Component {
     }
 
 
-    renderCreateDepositProduct =()=>{
+    renderEditDepositProduct =()=>{
         let updateDepositProductRequest = this.props.updateLoanProductReducer,
             getAllGLAccountsRequest = this.props.getAllGLAccountsReducer,
+            getSingleLoanProductsRequest =  this.props.getSingleDepositProductsReducer,
             getAllCurrencies =  this.props.adminGetAllCurrencies;
 
         let depositProductValidationSchema = Yup.object().shape({
@@ -145,7 +146,8 @@ class EditADepositsProduct extends React.Component {
         
         // switch(getAllGLAccountsRequest.request_status){
             if (getAllGLAccountsRequest.request_status ===accountingConstants.GET_ALL_GLACCOUNTS_PENDING ||
-                getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_PENDING){
+                getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_PENDING ||
+                getSingleLoanProductsRequest.request_status ===productsConstants.GET_A_DEPOSIT_PRODUCT_PENDING){
                 return (
                     <div className="loading-content card"> 
                         <div className="loading-text">Please wait... </div>
@@ -153,11 +155,14 @@ class EditADepositsProduct extends React.Component {
                 )
             }
             if (getAllGLAccountsRequest.request_status === accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS &&
-                getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_SUCCESS){
+                getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_SUCCESS &&
+                getSingleLoanProductsRequest.request_status ===productsConstants.GET_A_DEPOSIT_PRODUCT_SUCCESS){
                     let allGlAccounts = [],
                         allCurrencies = [],
                         glAccountsList,
-                        currenciesList;
+                        currenciesList,
+                        depositProductDetails;
+                        
 
                         
 
@@ -166,7 +171,9 @@ class EditADepositsProduct extends React.Component {
 
                         glAccountsList= getAllGLAccountsRequest.request_data.response.data;
                         currenciesList = getAllCurrencies.request_data.response.data;
+                        depositProductDetails = getSingleLoanProductsRequest.request_data.response.data;
 
+                        console.log("+++++", depositProductDetails);
                         
                         glAccountsList.map((channel, id)=>{
                             allGlAccounts.push({label: channel.accountDescription, value:channel.id, accType:channel.accountTypeId});
@@ -189,37 +196,37 @@ class EditADepositsProduct extends React.Component {
                             
                                 <Formik
                                 initialValues={{
-                                    key: '',
-                                    productName: '',
+                                    key: (depositProductDetails.key!==undefined && depositProductDetails.key!==null)?depositProductDetails.key:'',
+                                    productName: (depositProductDetails.productName!==undefined && depositProductDetails.productName!==null)?depositProductDetails.productName.toString():'',
                                     depositAccountType: '',
-                                    description: '',
+                                    description: (depositProductDetails.description!==undefined && depositProductDetails.description!==null)?depositProductDetails.description.toString():'',
                                     savingsControlAccountId: '',
                                     transactionSourceAccountId: '',
                                     interestExpenseAccountId: '',
                                     feeIncomeAccountId: '',
                                     interestAccruedMethod: '',
                                     methodology: 0,
-                                    isActive: true,
+                                    isActive: (depositProductDetails.isActive!==undefined && depositProductDetails.isActive!==null)?depositProductDetails.isActive:'',
                                     currencyCode:'',
-                                    automaticallySetAccountAsDormant:false,
-                                    dormancyAfterXDays:'0',
+                                    automaticallySetAccountAsDormant:(depositProductDetails.automaticallySetAccountAsDormant!==undefined && depositProductDetails.automaticallySetAccountAsDormant!==null)?depositProductDetails.automaticallySetAccountAsDormant.toString():'',
+                                    dormancyAfterXDays: (depositProductDetails.dormancyAfterXDays!==undefined && depositProductDetails.dormancyAfterXDays!==null)?depositProductDetails.dormancyAfterXDays.toString():'',
                                     // interestAccruedMethod:'',
                                     maximumWithdrawalAmount:'',
                                     recommendedDepositAmount:'',
-                                    interestPaid:true,
+                                    interestPaid:(depositProductDetails.depositProductInterestSettingModel!==undefined && depositProductDetails.depositProductInterestSettingModel!==null)?depositProductDetails.depositProductInterestSettingModel.interestPaid:'',
                                     interestRateTerms:'',
                                     interestBalanceCalculation:'',
-                                    interestRateDefault:'',
+                                    interestRateDefault:(depositProductDetails.depositProductInterestSettingModel!==undefined && depositProductDetails.depositProductInterestSettingModel!==null)?depositProductDetails.depositProductInterestSettingModel.interestRateDefault.toString():0,
                                     interestRateMin:'',
                                     interestRateMax:'',
                                     xInterestDays:'',
-                                    defaultOpeningBalance:'',
-                                    minimumOpeningBalance:'',
-                                    maxmimumOpeningBalance:'',
-                                    term:'',
-                                    defaultTermLength:'',
-                                    minimumTermLength:'',
-                                    maxmimumTermLength:'',
+                                    defaultOpeningBalance:  (depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString():'',
+                                    minimumOpeningBalance:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.minimumOpeningBalance.toString():'',
+                                    maxmimumOpeningBalance: (depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.maxmimumOpeningBalance.toString():'',
+                                    term:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.term.toString():'',
+                                    defaultTermLength:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.defaultTermLength.toString():'',
+                                    minimumTermLength:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.minimumTermLength.toString():'',
+                                    maxmimumTermLength:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.maxmimumTermLength.toString():'',
                                 }}
 
                                 validationSchema={depositProductValidationSchema}
@@ -971,6 +978,14 @@ class EditADepositsProduct extends React.Component {
                     </div>
                 )
             }
+
+            if(getSingleLoanProductsRequest.request_status === productsConstants.GET_A_DEPOSIT_PRODUCT_FAILURE){
+                return (
+                    <div className="loading-content card"> 
+                        <div>{getSingleLoanProductsRequest.request_data.error}</div>
+                    </div>
+                )
+            }
         // }
     }
 
@@ -987,7 +1002,7 @@ class EditADepositsProduct extends React.Component {
                                     <div className="col-sm-12">
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
-                                                {this.renderCreateDepositProduct()}
+                                                {this.renderEditDepositProduct()}
                                             </div>
                                         </div>
                                     </div>
@@ -1002,7 +1017,7 @@ class EditADepositsProduct extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        getSingleLoanProductsReducer : state.productReducers.getSingleLoanProductsReducer,
+        getSingleDepositProductsReducer : state.productReducers.getSingleDepositProductsReducer,
         updateLoanProductReducer : state.productReducers.updateLoanProductReducer,
         adminGetAllCurrencies : state.administrationReducers.adminGetAllCurrenciesReducer,
         getAllGLAccountsReducer : state.accountingReducers.getAllGLAccountsReducer,

@@ -32,7 +32,8 @@ class AccountManagement extends React.Component {
             showEditGL:false,
             CurrentPage: 1,
             PageSize: 25,
-            typeToShow: "all"
+            typeToShow: "all",
+            accountTypeToFetch:0
         }
 
         
@@ -57,7 +58,8 @@ class AccountManagement extends React.Component {
         const {dispatch} = this.props;
         let payload ={
             PageSize: this.state.PageSize,
-            CurrentPage:this.state.CurrentPage
+            CurrentPage:this.state.CurrentPage,
+            AccountTypeId: this.state.accountTypeToFetch
         }
 
         if(tempData){
@@ -89,31 +91,52 @@ class AccountManagement extends React.Component {
     
     handleEditGlShow = (glIdToEdit, accountToEdit) => this.setState({showEditGL:true, glIdToEdit, accountToEdit});
 
-    filterWithType = (typeToShow)=>{
-        if(typeToShow===this.state.typeToShow){
-            this.setState({typeToShow: "all"})
-        }else{
-            this.setState({typeToShow})
-        }
+    filterWithType = (typeToShow, filterType)=>{
+
+        let getGLAccountsRequest = this.props.getGLAccounts;
+
+            let allAccountsData = (this.props.getGLAccounts.request_data!==undefined && this.props.getGLAccounts.request_data.response!==undefined)
+            ? this.props.getGLAccounts.request_data.response.data :null;
+        // let saveRequestData= getGLAccountsRequest.request_data!==undefined?getGLAccountsRequest.request_data.tempData:null;
+
+        this.setState({accountTypeToFetch:filterType},
+            ()=>this.getGLAccounts(allAccountsData)
+        )
+        // if(typeToShow===this.state.typeToShow){
+        //     this.setState({typeToShow: "all"})
+        // }else{
+        //     this.setState({typeToShow})
+        // }
+        this.setState({typeToShow})
+        // this.getGLAccounts
         
     }
 
-    returnGLTypeCount =(glType, glAccountsStats)=>{
-        let filteredStat;
-        
-            if(glAccountsStats.length>=0){
-                
-                filteredStat = glAccountsStats.filter(eachStat=>eachStat.accountTypeDesctiption===glType);
-                
-                if(filteredStat!==undefined && filteredStat.length>=1){
-                   
-                    return filteredStat[0].count;
-                }
-                else{
+    returnGLTypeCount =(glType, glAccountsStats, isAll)=>{
+        let filteredStat,
+             allCount=0;
+            if(isAll===undefined || isAll===null){
+                if(glAccountsStats.length>=0){
+                    
+                    filteredStat = glAccountsStats.filter(eachStat=>eachStat.accountTypeDesctiption===glType);
+                    
+                    if(filteredStat!==undefined && filteredStat.length>=1){
+                    
+                        return filteredStat[0].count;
+                    }
+                    else{
+                        return 0;
+                    }
+                }else{
                     return 0;
                 }
-            }else{
-                return 0;
+            }
+            else{
+                glAccountsStats.forEach(function(eachCount){
+                    allCount +=eachCount.count;
+                })
+
+                return allCount;
             }
             
 
@@ -202,7 +225,7 @@ class AccountManagement extends React.Component {
                                     </tr>
                                 </tbody>
                             </TableComponent>
-                            <div className="loading-text">Please wait... </div>
+                            <div className="loading-text mb-20">Please wait... </div>
                         </div>
                     )
                 }
@@ -212,6 +235,7 @@ class AccountManagement extends React.Component {
                         accounTypes =[],
                         {accounTypesData} = this.state;
                     let getGLAccountsData = saveRequestData.result,
+                        getGLAccountsDataCount =0 ,
                         getGLAccountsStatsData = saveRequestData.result2;
                         // console.log("cdfdfdf", saveRequestData);
                         saveRequestData.result.map((eachGL, index)=>{
@@ -288,30 +312,33 @@ class AccountManagement extends React.Component {
                                 </div>
                             </div>
                             <div className="filter-nav">
-                                <div  className={typeToShow==="all"?'active-type':''}
-                                        onClick={(e)=>this.filterWithType("all")}>
-                                    All({getGLAccountsData.length})
+                                 {/* <div className="filter-nav"> */}
+                                    <div className={typeToShow === "all" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("all",0)}>
+                                        All({this.returnGLTypeCount("All", getGLAccountsStatsData, "all")})
                                 </div>
-                                <div  className={typeToShow==="assets"?'active-type':''}
-                                        onClick={(e)=>this.filterWithType("assets")}>
-                                    Assets({getGLAccountsData.length})
+                                    <div className={typeToShow === "assets" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("assets",1)}>
+                                        Asset({this.returnGLTypeCount("Asset", getGLAccountsStatsData)})
                                 </div>
-                                <div  className={typeToShow==="liability"?'active-type':''}
-                                        onClick={(e)=>this.filterWithType("liability")}>
-                                    Liability({getGLAccountsData.length})
+                                    <div className={typeToShow === "liability" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("liability",2)}>
+                                        Liability({this.returnGLTypeCount("Liability", getGLAccountsStatsData)})
                                 </div>
-                                <div  className={typeToShow==="equity"?'active-type':''}
-                                        onClick={(e)=>this.filterWithType("equity")}>
-                                    Equity({getGLAccountsData.length})
+                                    <div className={typeToShow === "equity" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("equity",3)}>
+                                        Equity({this.returnGLTypeCount("Equity", getGLAccountsStatsData)})
                                 </div>
-                                <div  className={typeToShow==="income"?'active-type':''}
-                                        onClick={(e)=>this.filterWithType("income")}>
-                                    Income({getGLAccountsData.length})
+                                    <div className={typeToShow === "income" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("income",4)}>
+                                        Income({this.returnGLTypeCount("Income", getGLAccountsStatsData)})
                                 </div>
-                                <div  className={typeToShow==="expense"?'active-type':''}
-                                        onClick={(e)=>this.filterWithType("expense")}>
-                                    Expense({getGLAccountsData.length})
+                                    <div className={typeToShow === "expense" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("expense",5)}>
+                                        Expense({this.returnGLTypeCount("Expense", getGLAccountsStatsData)})
                                 </div>
+
+                                
                                 {/* {accounTypes!==undefined &&
 
                                     accounTypes.map((eachType, index)=>{
@@ -328,7 +355,7 @@ class AccountManagement extends React.Component {
                                 
                                 } */}
                             </div>
-                            <div className="loading-text">Please wait...</div>
+                            <div className="loading-text mb-20">Please wait...</div>
                             <div>
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -351,8 +378,8 @@ class AccountManagement extends React.Component {
                                                         <td>{eachGL.accountName}</td>
                                                         <td>{eachGL.accountTypeDescription}</td>
                                                         <td>{eachGL.accountUsageDescription}</td>
-                                                        <td>{eachGL.inUse.toString()}</td>
-                                                        <td>{eachGL.manualEntriesAllowed.toString()}</td>
+                                                        <td>{eachGL.inUse.toString()==="true"?"In Use":"Not In Use"}</td>
+                                                        <td>{eachGL.manualEntriesAllowed.toString()==="true"?"Allowed":"Not Allowed"}</td>
                                                         <td>
                                                             <DropdownButton
                                                                 size="sm"
@@ -468,27 +495,27 @@ class AccountManagement extends React.Component {
                                 }
                                 <div className="filter-nav">
                                     <div className={typeToShow === "all" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("all")}>
-                                        All({getGLAccountsData.length})
+                                        onClick={(e) => this.filterWithType("all",0)}>
+                                        All({this.returnGLTypeCount("All", getGLAccountsStatsData, "all")})
                                 </div>
                                     <div className={typeToShow === "assets" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("assets")}>
-                                        Assets({this.returnGLTypeCount("Assets", getGLAccountsStatsData)})
+                                        onClick={(e) => this.filterWithType("assets",1)}>
+                                        Asset({this.returnGLTypeCount("Asset", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "liability" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("liability")}>
+                                        onClick={(e) => this.filterWithType("liability",2)}>
                                         Liability({this.returnGLTypeCount("Liability", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "equity" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("equity")}>
+                                        onClick={(e) => this.filterWithType("equity",3)}>
                                         Equity({this.returnGLTypeCount("Equity", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "income" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("income")}>
+                                        onClick={(e) => this.filterWithType("income",4)}>
                                         Income({this.returnGLTypeCount("Income", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "expense" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("expense")}>
+                                        onClick={(e) => this.filterWithType("expense",5)}>
                                         Expense({this.returnGLTypeCount("Expense", getGLAccountsStatsData)})
                                 </div>
                                     {/* {accounTypes!==undefined &&
@@ -523,15 +550,15 @@ class AccountManagement extends React.Component {
                                     <tbody>
                                         {
                                             getGLAccountsData.map((eachGL, index)=>{
-                                                if(typeToShow === eachGL.accountTypeDescription){
+                                                // if(typeToShow === eachGL.accountTypeDescription){
                                                     return (
                                                         <tr key={index}>
                                                             <td>{eachGL.glCode}</td>
                                                             <td>{eachGL.accountName}</td>
                                                             <td>{eachGL.accountTypeDescription}</td>
                                                             <td>{eachGL.accountUsageDescription}</td>
-                                                            <td>{eachGL.inUse.toString()}</td>
-                                                            <td>{eachGL.manualEntriesAllowed.toString()}</td>
+                                                            <td>{eachGL.inUse.toString()==="true"?"In Use":"Not In Use"}</td>
+                                                            <td>{eachGL.manualEntriesAllowed.toString()==="true"?"Allowed":"Not Allowed"}</td>
                                                             <td>
                                                                 <DropdownButton
                                                                     size="sm"
@@ -545,31 +572,31 @@ class AccountManagement extends React.Component {
                                                             </td>
                                                         </tr>
                                                     )
-                                                }
+                                                // }
 
-                                                if(typeToShow === "all"){
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>{eachGL.glCode}</td>
-                                                            <td>{eachGL.accountName}</td>
-                                                            <td>{eachGL.accountTypeDescription}</td>
-                                                            <td>{eachGL.accountUsageDescription}</td>
-                                                            <td>{eachGL.inUse.toString()}</td>
-                                                            <td>{eachGL.manualEntriesAllowed.toString()}</td>
-                                                            <td>
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="glAccountActions"
-                                                                    // drop="left"
-                                                                    className="customone"
-                                                                >
-                                                                    <Dropdown.Item eventKey="1" onClick={()=>this.handleEditGlShow(eachGL.glCode, eachGL.accountTypeDescription)}>Edit</Dropdown.Item>
-                                                                </DropdownButton>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                }
+                                                // if(typeToShow === "all"){
+                                                //     return (
+                                                //         <tr key={index}>
+                                                //             <td>{eachGL.glCode}</td>
+                                                //             <td>{eachGL.accountName}</td>
+                                                //             <td>{eachGL.accountTypeDescription}</td>
+                                                //             <td>{eachGL.accountUsageDescription}</td>
+                                                //             <td>{eachGL.inUse.toString()==="true"?"In Use":"Not In Use"}</td>
+                                                //             <td>{eachGL.manualEntriesAllowed.toString()==="true"?"Allowed":"Not Allowed"}</td>
+                                                //             <td>
+                                                //                 <DropdownButton
+                                                //                     size="sm"
+                                                //                     title="Actions"
+                                                //                     key="glAccountActions"
+                                                //                     // drop="left"
+                                                //                     className="customone"
+                                                //                 >
+                                                //                     <Dropdown.Item eventKey="1" onClick={()=>this.handleEditGlShow(eachGL.glCode, eachGL.accountTypeDescription)}>Edit</Dropdown.Item>
+                                                //                 </DropdownButton>
+                                                //             </td>
+                                                //         </tr>
+                                                //     )
+                                                // }
                                             })
                                         }
                                         

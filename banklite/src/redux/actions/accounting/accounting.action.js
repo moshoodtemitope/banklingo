@@ -23,7 +23,7 @@ function getGLAccounts  (payload, tempData){
                 
             // }
 
-            url = routes.HIT_GLACCOUNTS+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            url = routes.HIT_GLACCOUNTS+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}&AccountTypeId=${payload.AccountTypeId}`;
 
         let consume = ApiService.request(url, "GET", null);
         dispatch(request(consume, tempData));
