@@ -141,7 +141,7 @@ class NewClient extends React.Component {
                         console.log("+++++",allCustomerTypesData);
                     let selectedCustype = allCustomerTypesData.filter(CustType=>CustType.id===parseInt(this.props.match.params.custTypeid))[0];
                     
-                    console.log("--------",this.props.match.params.custTypeid);
+                   
                     if(allUsersData.length>=1){
                         allUsersData.map((eachUser, id)=>{
                             allUserDataList.push({label: eachUser.name, value:eachUser.key});
@@ -204,7 +204,7 @@ class NewClient extends React.Component {
                                         accountOfficerEncodedKey: values.accountOfficerEncodedKey
                                     }
                 
-                
+                                    
                                     
                 
                                     this.handleCreateNewCustomer(createNewCustomerPayload)
@@ -213,6 +213,7 @@ class NewClient extends React.Component {
                 
                                                 if (this.props.createAClient.request_status === clientsConstants.CREATE_A_CLIENT_SUCCESS) {
                                                     resetForm();
+                                                    // value = {null}
                                                 }
                 
                                                 setTimeout(() => {

@@ -118,6 +118,7 @@ class InactiveClients extends React.Component {
                                 <thead>
                                     <tr>
                                         <th>Customer Name</th>
+                                        <th>Customer ID</th>
                                         <th>Customer Status</th>
                                         <th>Account Officer</th>
                                         <th>Account Currency</th>
@@ -128,6 +129,7 @@ class InactiveClients extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -200,6 +202,7 @@ class InactiveClients extends React.Component {
                                         <thead>
                                             <tr>
                                                 <th>Customer Name</th>
+                                                <th>Customer ID</th>
                                                 <th>Customer Status</th>
                                                 <th>Account Officer</th>
                                                 <th>Account Currency</th>
@@ -215,6 +218,7 @@ class InactiveClients extends React.Component {
                                                         <Fragment key={index}>
                                                             <tr>
                                                                 <td><NavLink to={`/customer/${eachClient.id}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
+                                                                <td><NavLink to={`/customer/${eachClient.id}`}>{eachClient.id} </NavLink></td>
                                                                 <td>{eachClient.clientStateDescription}</td>
                                                                 <td>{eachClient.accountOfficer}</td>
                                                                 <td>{eachClient.currency}</td>
@@ -294,6 +298,7 @@ class InactiveClients extends React.Component {
                                         <thead>
                                             <tr>
                                                 <th>Customer Name</th>
+                                                <th>Customer ID</th>
                                                 <th>Customer Status</th>
                                                 <th>Account Officer</th>
                                                 <th>Account Currency</th>
@@ -304,6 +309,7 @@ class InactiveClients extends React.Component {
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>

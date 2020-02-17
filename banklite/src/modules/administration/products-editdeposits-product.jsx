@@ -34,15 +34,16 @@ class EditADepositsProduct extends React.Component {
         super(props);
         this.state={
             user:'',
-            typeDesc:''
+            typeDesc:null
         }
+        this.productDesc ="";
 
     }
 
     componentDidMount(){
         this.getAllGLAccounts();
         this.getAllCurrencies();
-        console.log("logfss",this.props.match);
+        
         this.getADepositProduct(this.props.match.params.encodedKey)
      }
 
@@ -68,18 +69,18 @@ class EditADepositsProduct extends React.Component {
         }
     }
 
-    handleCreateNewDepositProduct = async(newDepositProductPayload)=>{
+    handleUpdateDepositProduct = async(updateDepositProductPayload)=>{
         const {dispatch} = this.props;
        
-        await dispatch(productActions.createDepositProduct(newDepositProductPayload));
+        await dispatch(productActions.updateDespositProduct(updateDepositProductPayload, this.props.match.params.encodedKey));
 
     }
 
 
     renderEditDepositProduct =()=>{
-        let updateDepositProductRequest = this.props.updateLoanProductReducer,
+        let updateDepositProductRequest = this.props.updateDepositProductReducer,
             getAllGLAccountsRequest = this.props.getAllGLAccountsReducer,
-            getSingleLoanProductsRequest =  this.props.getSingleDepositProductsReducer,
+            getSingleDepositProductsRequest =  this.props.getSingleDepositProductsReducer,
             getAllCurrencies =  this.props.adminGetAllCurrencies;
 
         let depositProductValidationSchema = Yup.object().shape({
@@ -147,7 +148,7 @@ class EditADepositsProduct extends React.Component {
         // switch(getAllGLAccountsRequest.request_status){
             if (getAllGLAccountsRequest.request_status ===accountingConstants.GET_ALL_GLACCOUNTS_PENDING ||
                 getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_PENDING ||
-                getSingleLoanProductsRequest.request_status ===productsConstants.GET_A_DEPOSIT_PRODUCT_PENDING){
+                getSingleDepositProductsRequest.request_status ===productsConstants.GET_A_DEPOSIT_PRODUCT_PENDING){
                 return (
                     <div className="loading-content card"> 
                         <div className="loading-text">Please wait... </div>
@@ -156,7 +157,7 @@ class EditADepositsProduct extends React.Component {
             }
             if (getAllGLAccountsRequest.request_status === accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS &&
                 getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_SUCCESS &&
-                getSingleLoanProductsRequest.request_status ===productsConstants.GET_A_DEPOSIT_PRODUCT_SUCCESS){
+                getSingleDepositProductsRequest.request_status ===productsConstants.GET_A_DEPOSIT_PRODUCT_SUCCESS){
                     let allGlAccounts = [],
                         allCurrencies = [],
                         glAccountsList,
@@ -171,10 +172,17 @@ class EditADepositsProduct extends React.Component {
 
                         glAccountsList= getAllGLAccountsRequest.request_data.response.data;
                         currenciesList = getAllCurrencies.request_data.response.data;
-                        depositProductDetails = getSingleLoanProductsRequest.request_data.response.data;
+                        depositProductDetails = getSingleDepositProductsRequest.request_data.response.data;
 
-                        console.log("+++++", depositProductDetails);
                         
+                        let productTypeSelect =allProductTypes.filter(eachType=>parseInt(eachType.value)===depositProductDetails.depositAccountType)[0];
+                        this.productDesc= productTypeSelect.desc;
+                        
+                        let rateTerms = interestRateTerms.filter(eachTerm=>eachTerm.value===depositProductDetails.depositProductInterestSettingModel.interestRateTerms)[0];
+                        let interestCalc = interestBalanceCalculations.filter(eachItem=>eachItem.value===depositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation.toString())[0];
+                        
+
+                        // this.setState({ selectedProductType:productTypeSelect, typeDesc: productTypeSelect.desc});
                         glAccountsList.map((channel, id)=>{
                             allGlAccounts.push({label: channel.accountDescription, value:channel.id, accType:channel.accountTypeId});
                         })
@@ -182,8 +190,10 @@ class EditADepositsProduct extends React.Component {
                         currenciesList.map((currency, id)=>{
                             allCurrencies.push({label: `${currency.name} (${currency.symbol})`, value:currency.code});
                         })
+                        
+                        let currencyData = allCurrencies.filter(eachCurrrency=>eachCurrrency.value===depositProductDetails.currencyCode)[0];
 
-
+                        // console.log("===", currencyData);
                         
 
                         let savingsControlAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===2),
@@ -191,35 +201,42 @@ class EditADepositsProduct extends React.Component {
                             interestExpenseAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===5);
                             // interestIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4),
                             // penaltyIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4);
-                            // console.log("+++++", penaltyIncomeAccounts)
+                            
+
+                            let methodologyReturned = methodologyList.filter(eachItem=>eachItem.value===depositProductDetails.methodology.toString())[0];
+                            let txtSrcReturned = transactionSourceAccount.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.transactionSourceAccountId)[0];
+                            let savingsAccReturned = savingsControlAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.savingsControlAccountId)[0];
+                            let interestExpenseAccReturned = interestExpenseAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.interestExpenseAccountId)[0];
+                            let feeIncomeAccReturned = allGlAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.feeIncomeAccountId)[0];
+                            let incomeAcruedMethodReturned = interestAccruedMethodList.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.interestAccruedMethod.toString())[0];
                         return(
                             
                                 <Formik
                                 initialValues={{
                                     key: (depositProductDetails.key!==undefined && depositProductDetails.key!==null)?depositProductDetails.key:'',
                                     productName: (depositProductDetails.productName!==undefined && depositProductDetails.productName!==null)?depositProductDetails.productName.toString():'',
-                                    depositAccountType: '',
+                                    depositAccountType: (depositProductDetails.depositAccountType!==undefined && depositProductDetails.depositAccountType!==null)?depositProductDetails.depositAccountType:'',
                                     description: (depositProductDetails.description!==undefined && depositProductDetails.description!==null)?depositProductDetails.description.toString():'',
-                                    savingsControlAccountId: '',
-                                    transactionSourceAccountId: '',
-                                    interestExpenseAccountId: '',
-                                    feeIncomeAccountId: '',
-                                    interestAccruedMethod: '',
-                                    methodology: 0,
+                                    savingsControlAccountId: (depositProductDetails.depositProductAccountingRule.savingsControlAccountId!==undefined && depositProductDetails.depositProductAccountingRule.savingsControlAccountId!==null)?depositProductDetails.depositProductAccountingRule.savingsControlAccountId:'',
+                                    transactionSourceAccountId: (depositProductDetails.depositProductAccountingRule.transactionSourceAccountId!==undefined && depositProductDetails.depositProductAccountingRule.transactionSourceAccountId!==null)?depositProductDetails.depositProductAccountingRule.transactionSourceAccountId:'',
+                                    interestExpenseAccountId: (depositProductDetails.depositProductAccountingRule.interestExpenseAccountId!==undefined && depositProductDetails.depositProductAccountingRule.interestExpenseAccountId!==null)?depositProductDetails.depositProductAccountingRule.interestExpenseAccountId:'',
+                                    feeIncomeAccountId: (depositProductDetails.depositProductAccountingRule.feeIncomeAccountId!==undefined && depositProductDetails.depositProductAccountingRule.feeIncomeAccountId!==null)?depositProductDetails.depositProductAccountingRule.feeIncomeAccountId:'',
+                                    interestAccruedMethod: (depositProductDetails.depositProductAccountingRule.interestAccruedMethod!==undefined && depositProductDetails.depositProductAccountingRule.interestAccruedMethod!==null)?depositProductDetails.depositProductAccountingRule.interestAccruedMethod:'',
+                                    methodology: (depositProductDetails.methodology!==undefined && depositProductDetails.methodology!==null)?depositProductDetails.methodology:'',
                                     isActive: (depositProductDetails.isActive!==undefined && depositProductDetails.isActive!==null)?depositProductDetails.isActive:'',
-                                    currencyCode:'',
-                                    automaticallySetAccountAsDormant:(depositProductDetails.automaticallySetAccountAsDormant!==undefined && depositProductDetails.automaticallySetAccountAsDormant!==null)?depositProductDetails.automaticallySetAccountAsDormant.toString():'',
+                                    currencyCode:(depositProductDetails.currencyCode!==undefined && depositProductDetails.currencyCode!==null)?depositProductDetails.currencyCode:'',
+                                    automaticallySetAccountAsDormant:(depositProductDetails.automaticallySetAccountAsDormant!==undefined && depositProductDetails.automaticallySetAccountAsDormant!==null)?depositProductDetails.automaticallySetAccountAsDormant:'',
                                     dormancyAfterXDays: (depositProductDetails.dormancyAfterXDays!==undefined && depositProductDetails.dormancyAfterXDays!==null)?depositProductDetails.dormancyAfterXDays.toString():'',
                                     // interestAccruedMethod:'',
-                                    maximumWithdrawalAmount:'',
-                                    recommendedDepositAmount:'',
+                                    maximumWithdrawalAmount:(depositProductDetails.depositSavingsSettingModel!==undefined && depositProductDetails.depositSavingsSettingModel!==null)?depositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString():0,
+                                    recommendedDepositAmount:(depositProductDetails.depositSavingsSettingModel!==undefined && depositProductDetails.depositSavingsSettingModel!==null)?depositProductDetails.depositSavingsSettingModel.recommendedDepositAmount.toString():0,
                                     interestPaid:(depositProductDetails.depositProductInterestSettingModel!==undefined && depositProductDetails.depositProductInterestSettingModel!==null)?depositProductDetails.depositProductInterestSettingModel.interestPaid:'',
-                                    interestRateTerms:'',
-                                    interestBalanceCalculation:'',
+                                    interestRateTerms:(depositProductDetails.depositProductInterestSettingModel.interestRateTerms!==undefined && depositProductDetails.depositProductInterestSettingModel.interestRateTerms!==null)?depositProductDetails.depositProductInterestSettingModel.interestRateTerms:'',
+                                    interestBalanceCalculation:(depositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation!==undefined && depositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation!==null)?depositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation:'',
                                     interestRateDefault:(depositProductDetails.depositProductInterestSettingModel!==undefined && depositProductDetails.depositProductInterestSettingModel!==null)?depositProductDetails.depositProductInterestSettingModel.interestRateDefault.toString():0,
-                                    interestRateMin:'',
-                                    interestRateMax:'',
-                                    xInterestDays:'',
+                                    interestRateMin:(depositProductDetails.depositProductInterestSettingModel!==undefined && depositProductDetails.depositProductInterestSettingModel!==null)?depositProductDetails.depositProductInterestSettingModel.interestRateMin.toString():0,
+                                    interestRateMax:(depositProductDetails.depositProductInterestSettingModel!==undefined && depositProductDetails.depositProductInterestSettingModel!==null)?depositProductDetails.depositProductInterestSettingModel.interestRateMax.toString():0,
+                                    xInterestDays:(depositProductDetails.depositProductInterestSettingModel!==undefined && depositProductDetails.depositProductInterestSettingModel!==null)?depositProductDetails.depositProductInterestSettingModel.xInterestDays.toString():0,
                                     defaultOpeningBalance:  (depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString():'',
                                     minimumOpeningBalance:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.minimumOpeningBalance.toString():'',
                                     maxmimumOpeningBalance: (depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.maxmimumOpeningBalance.toString():'',
@@ -228,11 +245,12 @@ class EditADepositsProduct extends React.Component {
                                     minimumTermLength:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.minimumTermLength.toString():'',
                                     maxmimumTermLength:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.maxmimumTermLength.toString():'',
                                 }}
-
-                                validationSchema={depositProductValidationSchema}
+                                // enableReinitialize={true}
+                                // validationSchema={depositProductValidationSchema}
+                                validator={() => ({})}
                                 onSubmit={(values, { resetForm }) => {
 
-                                    let createNewDepositProductPayload = {
+                                    let updateDepositProductPayload = {
                                         key: values.key,
                                         productName: values.productName,
                                         depositAccountType: parseInt(values.depositAccountType),
@@ -276,21 +294,22 @@ class EditADepositsProduct extends React.Component {
                                     }
 
 
-                                    // console.log("--+++----", createNewDepositProductPayload);
+                                    // console.log("--+++----", updateDepositProductPayload);
+                                    // console.log("+++++", depositProductDetails);
+                                    // console.log("=====", updateDepositProductPayload);
 
-
-                                    this.handleCreateNewDepositProduct(createNewDepositProductPayload)
+                                    this.handleUpdateDepositProduct(updateDepositProductPayload)
                                         .then(
                                             () => {
 
-                                                if (this.props.updateLoanProductReducer.request_status === productsConstants.EDIT_A_DEPOSIT_PRODUCT_SUCCESS) {
+                                                if (this.props.updateDepositProductReducer.request_status === productsConstants.EDIT_A_DEPOSIT_PRODUCT_SUCCESS) {
                                                     setTimeout(() => {
                                                         resetForm();
-                                                        this.props.dispatch(productActions.createDepositProduct("CLEAR"))
+                                                        this.props.dispatch(productActions.updateDespositProduct("CLEAR"))
                                                     }, 3000);
                                                 }else{
                                                     setTimeout(() => {
-                                                        this.props.dispatch(productActions.createDepositProduct("CLEAR"))
+                                                        this.props.dispatch(productActions.updateDespositProduct("CLEAR"))
                                                     }, 3000);
                                                 }
 
@@ -310,11 +329,12 @@ class EditADepositsProduct extends React.Component {
                                     isValid,
                                     errors, }) => (
                                 <Form 
-                                    noValidate 
+                                    // noValidate 
+                                    // validate={true}
                                     onSubmit={handleSubmit}
                                     className="form-content card">
                                     <div className="form-heading">
-                                        <h3>Edit New Deposit Product</h3>
+                                    <h3>Edit {depositProductDetails.productName}</h3>
                                     </div>
                                     <Form.Row>
                                         <Col>
@@ -348,7 +368,10 @@ class EditADepositsProduct extends React.Component {
                                             
                                             <Select
                                                 options={allProductTypes}
+                                                defaultValue ={{label:productTypeSelect!==null?productTypeSelect.label:null, 
+                                                    value:productTypeSelect!==null? productTypeSelect.value:null}}
                                                 onChange={(selectedProductType) => {
+                                                    this.productDesc= selectedProductType.desc;
                                                     this.setState({ selectedProductType, typeDesc: selectedProductType.desc});
                                                     errors.depositAccountType = null
                                                     values.depositAccountType = selectedProductType.value;
@@ -393,7 +416,8 @@ class EditADepositsProduct extends React.Component {
                                                     value={values.isActive}  />
                                                 <label htmlFor="isActive">Active state</label>
                                                 <div className="hint-text">
-                                                    {this.state.typeDesc}
+                                                    {/* {this.state.typeDesc} */}
+                                                    {this.state.typeDesc || this.productDesc}
                                                 </div>
                                             </div>
                                     
@@ -428,6 +452,8 @@ class EditADepositsProduct extends React.Component {
                                                         <Form.Label className="block-level">Currency</Form.Label>
                                                         <Select
                                                             options={allCurrencies}
+                                                            defaultValue ={{label:currencyData!==null?currencyData.label:null, 
+                                                                value:currencyData!==null? currencyData.value:null}}
                                                             onChange={(selectedCurrency) => {
                                                                 this.setState({ selectedCurrency });
                                                                 errors.currencyCode = null
@@ -473,6 +499,8 @@ class EditADepositsProduct extends React.Component {
                                                                 <Form.Label className="block-level">Interest rate terms</Form.Label>
                                                                 <Select
                                                                     options={interestRateTerms}
+                                                                    defaultValue ={{label:rateTerms!==null?rateTerms.label:null, 
+                                                                        value:rateTerms!==null? rateTerms.value:null}}
                                                                     onChange={(selectedInterestRateTerm) => {
                                                                         this.setState({ selectedInterestRateTerm });
                                                                         errors.interestRateTerms = null
@@ -490,6 +518,8 @@ class EditADepositsProduct extends React.Component {
                                                                 <Form.Label className="block-level">Interest Balance Calculation</Form.Label>
                                                                 <Select
                                                                     options={interestBalanceCalculations}
+                                                                    defaultValue ={{label:interestCalc!==null?interestCalc.label:null, 
+                                                                        value:interestCalc!==null? interestCalc.value:null}}
                                                                     onChange={(selectedBalanceCalculation) => {
                                                                         this.setState({ selectedBalanceCalculation });
                                                                         errors.interestBalanceCalculation = null
@@ -785,6 +815,8 @@ class EditADepositsProduct extends React.Component {
                                                         
                                                         <Select
                                                             options={methodologyList}
+                                                            defaultValue ={{label:methodologyReturned!==null?methodologyReturned.label:null, 
+                                                                value:methodologyReturned!==null? methodologyReturned.value:null}}
                                                             onChange={(selectedMethodology) => {
                                                                 this.setState({ selectedMethodology });
                                                                 errors.methodology = null
@@ -806,6 +838,8 @@ class EditADepositsProduct extends React.Component {
                                                         
                                                             <Select
                                                                 options={transactionSourceAccount}
+                                                                defaultValue ={{label:txtSrcReturned!==null?txtSrcReturned.label:null, 
+                                                                    value:txtSrcReturned!==null? txtSrcReturned.value:null}}
                                                                 onChange={(selectedTxtSourceAcct) => {
                                                                     this.setState({ selectedTxtSourceAcct });
                                                                     errors.transactionSourceAccountId = null
@@ -828,6 +862,8 @@ class EditADepositsProduct extends React.Component {
                                                     <Col sm={6}>
                                                         <Select
                                                             options={savingsControlAccounts}
+                                                            defaultValue ={{label:savingsAccReturned!==null?savingsAccReturned.label:null, 
+                                                                value:savingsAccReturned!==null? savingsAccReturned.value:null}}
                                                             onChange={(selectedSavingsControlAcct) => {
                                                                 this.setState({ selectedSavingsControlAcct });
                                                                 errors.savingsControlAccountId = null
@@ -850,6 +886,8 @@ class EditADepositsProduct extends React.Component {
                                                     <Col sm={6}>
                                                         <Select
                                                             options={interestExpenseAccounts}
+                                                            defaultValue ={{label:interestExpenseAccReturned!==null?interestExpenseAccReturned.label:null, 
+                                                                value:interestExpenseAccReturned!==null? interestExpenseAccReturned.value:null}}
                                                             onChange={(selectedInterestExpenseAccount) => {
                                                                 this.setState({ selectedInterestExpenseAccount });
                                                                 errors.interestExpenseAccountId = null
@@ -872,6 +910,8 @@ class EditADepositsProduct extends React.Component {
                                                     <Col sm={6}>
                                                         <Select
                                                             options={allGlAccounts}
+                                                            defaultValue ={{label:feeIncomeAccReturned!==null?feeIncomeAccReturned.label:null, 
+                                                                value:feeIncomeAccReturned!==null? feeIncomeAccReturned.value:null}}
                                                             onChange={(selectedFeeIncomeAcct) => {
                                                                 this.setState({ selectedFeeIncomeAcct });
                                                                 errors.feeIncomeAccountId = null
@@ -894,6 +934,8 @@ class EditADepositsProduct extends React.Component {
                                                     <Col sm={6}>
                                                         <Select
                                                             options={interestAccruedMethodList}
+                                                            defaultValue ={{label:incomeAcruedMethodReturned!==null?incomeAcruedMethodReturned.label:null, 
+                                                                value:incomeAcruedMethodReturned!==null? incomeAcruedMethodReturned.value:null}}
                                                             onChange={(selectedInterestAccruedMethod) => {
                                                                 this.setState({ selectedInterestAccruedMethod });
                                                                 errors.interestAccruedMethod = null
@@ -971,7 +1013,7 @@ class EditADepositsProduct extends React.Component {
                     </div>
                 )
             }
-            if(getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_PENDING){
+            if(getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_FAILURE){
                 return (
                     <div className="loading-content card"> 
                         <div>{getAllCurrencies.request_data.error}</div>
@@ -979,10 +1021,10 @@ class EditADepositsProduct extends React.Component {
                 )
             }
 
-            if(getSingleLoanProductsRequest.request_status === productsConstants.GET_A_DEPOSIT_PRODUCT_FAILURE){
+            if(getSingleDepositProductsRequest.request_status === productsConstants.GET_A_DEPOSIT_PRODUCT_FAILURE){
                 return (
                     <div className="loading-content card"> 
-                        <div>{getSingleLoanProductsRequest.request_data.error}</div>
+                        <div>{getSingleDepositProductsRequest.request_data.error}</div>
                     </div>
                 )
             }
@@ -1018,7 +1060,7 @@ class EditADepositsProduct extends React.Component {
 function mapStateToProps(state) {
     return {
         getSingleDepositProductsReducer : state.productReducers.getSingleDepositProductsReducer,
-        updateLoanProductReducer : state.productReducers.updateLoanProductReducer,
+        updateDepositProductReducer : state.productReducers.updateDepositProductReducer,
         adminGetAllCurrencies : state.administrationReducers.adminGetAllCurrenciesReducer,
         getAllGLAccountsReducer : state.accountingReducers.getAllGLAccountsReducer,
     };

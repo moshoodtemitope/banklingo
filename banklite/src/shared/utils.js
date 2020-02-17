@@ -82,7 +82,7 @@ export const numberWithCommas= (amount)=> {
     
     if(amount!==undefined && amount!==''){
         let amountFiltered, splittedDecimal, amountTemp;
-        amount = amount.replace(/[^0-9.,]/g,'');
+        amount = amount.toString().replace(/[^0-9.,]/g,'');
 
         // if(!testSequence.test(amount)){
         //     return "";

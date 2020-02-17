@@ -116,10 +116,10 @@ function createLoanProduct  (loanProductPayload){
 
 }
 
-function updateLoanProduct  (loanProductPayload){
+function updateLoanProduct  (loanProductPayload, encodedKey){
     if(loanProductPayload!=="CLEAR"){
         return dispatch =>{
-            let consume = ApiService.request(routes.HIT_LOAN_PRODUCTS, "POST", loanProductPayload);
+            let consume = ApiService.request(routes.HIT_LOAN_PRODUCTS+`/${encodedKey}`, "POST", loanProductPayload);
             dispatch(request(consume));
             return consume
                 .then(response =>{
@@ -201,7 +201,14 @@ function getSingleDepositProduct  (encodedKey){
         dispatch(request(consume));
         return consume
             .then(response =>{
-                dispatch(success(response));
+                console.log("####", response);
+                if(response.status===200){
+                    dispatch(success(response));
+                }
+                if(response.status===204){
+                    dispatch(failure("The Deposit Product you requested does not exist"));
+                }
+                
             }).catch(error =>{
                 
                 dispatch(failure(handleRequestErrors(error)));
@@ -246,10 +253,10 @@ function createDepositProduct  (depositProductPayload){
 
 }
 
-function updateDespositProduct  (depositProductPayload){
+function updateDespositProduct  (depositProductPayload, encodedKey){
     if(depositProductPayload!=="CLEAR"){
         return dispatch =>{
-            let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS, "POST", depositProductPayload);
+            let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`/${encodedKey}`, "POST", depositProductPayload);
             dispatch(request(consume));
             return consume
                 .then(response =>{
