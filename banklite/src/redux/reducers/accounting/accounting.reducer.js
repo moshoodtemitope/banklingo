@@ -175,6 +175,84 @@ export function createJournalEntriesReducer(state=[], action) {
     }
 }
 
+export function getTrialBalanceReducer(state=[], action) {
+    switch (action.type) {
+        case accountingConstants.GET_TRIAL_BALANCE_PENDING:
+            return {
+                request_status: accountingConstants.GET_TRIAL_BALANCE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case accountingConstants.GET_TRIAL_BALANCE_SUCCESS:
+            return {
+                request_status: accountingConstants.GET_TRIAL_BALANCE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case accountingConstants.GET_TRIAL_BALANCE_FAILURE:
+            return {
+                request_status: accountingConstants.GET_TRIAL_BALANCE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getProfitAndLossReducer(state=[], action) {
+    switch (action.type) {
+        case accountingConstants.GET_PROFIT_AND_LOSS_PENDING:
+            return {
+                request_status: accountingConstants.GET_PROFIT_AND_LOSS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case accountingConstants.GET_PROFIT_AND_LOSS_SUCCESS:
+            return {
+                request_status: accountingConstants.GET_PROFIT_AND_LOSS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case accountingConstants.GET_PROFIT_AND_LOSS_FAILURE:
+            return {
+                request_status: accountingConstants.GET_PROFIT_AND_LOSS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getBalanceSheetReducer(state=[], action) {
+    switch (action.type) {
+        case accountingConstants.GET_BALANCE_SHEET_PENDING:
+            return {
+                request_status: accountingConstants.GET_BALANCE_SHEET_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case accountingConstants.GET_BALANCE_SHEET_SUCCESS:
+            return {
+                request_status: accountingConstants.GET_BALANCE_SHEET_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case accountingConstants.GET_BALANCE_SHEET_FAILURE:
+            return {
+                request_status: accountingConstants.GET_BALANCE_SHEET_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 
 
 

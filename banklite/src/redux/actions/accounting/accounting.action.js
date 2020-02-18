@@ -11,6 +11,10 @@ export const acoountingActions = {
     getAllGLAccounts,
     getJournalEntries,
     createJournalEntry,
+
+    getTrialBalance,
+    getProfitAndLoss,
+    getBalanceSheet
 }
 
 function getGLAccounts  (payload, tempData){
@@ -243,4 +247,106 @@ function createJournalEntry   (createJournalEntryPayload){
 
 }
 
+function getTrialBalance  (payload, tempData){
+    
+    return dispatch =>{
+        let url,
+            branchId = parseInt(JSON.parse(localStorage.getItem("user")).BranchId)
+            
 
+            url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.GET_TRIAL_BALANCE_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: accountingConstants.GET_TRIAL_BALANCE_PENDING, user, tempData } 
+        }
+    }
+    function success(response) { return { type: accountingConstants.GET_TRIAL_BALANCE_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.GET_TRIAL_BALANCE_FAILURE, error } }
+
+}
+
+function getProfitAndLoss  (payload, tempData){
+    
+    return dispatch =>{
+        let url,
+            branchId = parseInt(JSON.parse(localStorage.getItem("user")).BranchId)
+            
+
+            url = routes.HIT_PROFIT_LOSS+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.GET_PROFIT_AND_LOSS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: accountingConstants.GET_PROFIT_AND_LOSS_PENDING, user, tempData } 
+        }
+    }
+    function success(response) { return { type: accountingConstants.GET_PROFIT_AND_LOSS_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.GET_PROFIT_AND_LOSS_FAILURE, error } }
+
+}
+
+function getBalanceSheet  (payload, tempData){
+    
+    return dispatch =>{
+        let url;
+            
+
+            url = routes.HIT_BALANCE_SHEET+`?BranchId=${payload.branchId}&Month=${payload.Month}&Year=${payload.Year}&PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.GET_BALANCE_SHEET_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: accountingConstants.GET_BALANCE_SHEET_PENDING, user, tempData } 
+        }
+    }
+    function success(response) { return { type: accountingConstants.GET_BALANCE_SHEET_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.GET_BALANCE_SHEET_FAILURE, error } }
+
+}

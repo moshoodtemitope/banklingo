@@ -63,9 +63,14 @@ export const accountNumber = (accountNum)=>{
     // }
 }
 
-export const allowNumbersOnly = (numbers)=>{
+export const allowNumbersOnly = (numbers, maxLength)=>{
     var reg = /^\d+$/;
     let filteredNum = numbers.replace(/\D/g,'');
+
+    if(maxLength!==null && maxLength!==undefined && typeof maxLength ==="number" && filteredNum.toString().length>maxLength){
+        filteredNum = parseInt(filteredNum.toString().substring(0,4));
+    }
+
     return filteredNum;
     // if(reg.test(numbers)){
     //     return numbers;

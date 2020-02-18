@@ -73,6 +73,10 @@ const accountingReducers = combineReducers({
     getAllGLAccountsReducer: accounting.getAllGLAccountsReducer, 
     getJournalEntriesReducer: accounting.getJournalEntriesReducer, 
     createJournalEntriesReducer: accounting.createJournalEntriesReducer, 
+
+    getTrialBalanceReducer: accounting.getTrialBalanceReducer, 
+    getProfitAndLossReducer: accounting.getProfitAndLossReducer, 
+    getBalanceSheetReducer: accounting.getBalanceSheetReducer, 
    
 })
 

@@ -50,6 +50,10 @@ import{
     getAllGLAccountsReducer,
     getJournalEntriesReducer,
     createJournalEntriesReducer,
+    getTrialBalanceReducer,
+    getProfitAndLossReducer,
+    getBalanceSheetReducer
+    
     
 } from './accounting/accounting.reducer'
 
@@ -174,6 +178,10 @@ export const accounting = {
     getAllGLAccountsReducer,
     getJournalEntriesReducer,
     createJournalEntriesReducer,
+    getTrialBalanceReducer,
+    getProfitAndLossReducer,
+    getBalanceSheetReducer
+    
 }
 
 export const loans = {

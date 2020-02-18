@@ -85,6 +85,15 @@ export const routes = {
     //Loan Product Endpoints
     HIT_LOAN_PRODUCTS: BASEURL + '/api/LoanProducts',
 
-     //Loan Deposit Endpoints
+    //Loan Deposit Endpoints
      HIT_DEPOSIT_PRODUCTS: BASEURL + '/api/DepositProducts',
+
+    //Balance sheet Report Endpoints
+    HIT_BALANCE_SHEET: BASEURL + '/api/AccountingReport/balancesheet',
+
+    //Trial Balance Endpoints
+    HIT_TRIAL_BALANCE: BASEURL + '/api/AccountingReport/trialbalance',
+
+    //Profit Loss Endpoints
+    HIT_PROFIT_LOSS: BASEURL + '/api/AccountingReport/profitandloss',
 }
