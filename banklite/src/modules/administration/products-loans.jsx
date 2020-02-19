@@ -226,7 +226,7 @@ class ProductLoans extends React.Component {
                                                 <Fragment key={index}>
                                                     <tr>
                                                         <td>
-                                                        <NavLink to={`/administration/products/loans/edit/${eachLoanProduct.productName}`}></NavLink>
+                                                        <NavLink to={`/administration/products/loans/edit/${eachLoanProduct.productEncodedKey}`}>{eachLoanProduct.productName}</NavLink>
                                                             
                                                         </td>
                                                         <td>{eachLoanProduct.productCode}</td>

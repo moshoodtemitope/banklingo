@@ -65,7 +65,7 @@ class NewLoanProduct extends React.Component {
                 .required('Required'),
             description:  Yup.string()
                 .min(5, 'Valid response required')
-                .required('Required'),
+                // .required('Required'),
           });
 
           let allProductTypes =[
@@ -132,21 +132,21 @@ class NewLoanProduct extends React.Component {
                                 let createNewLoanProductPayload = {
                                     key: values.key,
                                     productName: values.productName,
-                                    loanProductType: values.loanProductType,
+                                    loanProductType: parseInt(values.loanProductType),
                                     description: values.description,
                                     loanProductAccountingRuleModel :{
                                         id:0,
-                                        portfolioControlAccountId: values.portfolioControlAccountId,
-                                        transactionSourceAccountId: values.transactionSourceAccountId,
-                                        writeOffExpenseAccountId: values.writeOffExpenseAccountId,
-                                        interestReceivableAccountId: values.interestReceivableAccountId,
-                                        feeReceivableAccountId: values.feeReceivableAccountId,
-                                        penaltyReceivableAccountId: values.penaltyReceivableAccountId,
-                                        feeIncomeAccountId: values.feeIncomeAccountId,
-                                        interestIncomeAccountId: values.interestIncomeAccountId,
-                                        penaltyIncomeAccountId: values.penaltyIncomeAccountId,
+                                        portfolioControlAccountId: parseInt(values.portfolioControlAccountId),
+                                        transactionSourceAccountId: parseInt(values.transactionSourceAccountId),
+                                        writeOffExpenseAccountId: parseInt(values.writeOffExpenseAccountId),
+                                        interestReceivableAccountId: parseInt(values.interestReceivableAccountId),
+                                        feeReceivableAccountId: parseInt(values.feeReceivableAccountId),
+                                        penaltyReceivableAccountId: parseInt(values.penaltyReceivableAccountId),
+                                        feeIncomeAccountId: parseInt(values.feeIncomeAccountId),
+                                        interestIncomeAccountId: parseInt(values.interestIncomeAccountId),
+                                        penaltyIncomeAccountId: parseInt(values.penaltyIncomeAccountId),
                                     },
-                                    methodology: values.methodology,
+                                    methodology: parseInt(values.methodology),
                                     isActive: values.isActive
                                     
                                 }

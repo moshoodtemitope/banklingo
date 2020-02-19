@@ -225,6 +225,7 @@ class CreateNewUser extends React.Component {
                                     setTimeout(() => {
                                         this.props.dispatch(administrationActions.createUser("CLEAR"));
                                         resetForm();
+                                        values.roleId = null;
                                     }, 3000);
                                 } else {
                                     setTimeout(() => {
@@ -301,7 +302,7 @@ class CreateNewUser extends React.Component {
                                         className={errors.roleId && touched.roleId ? "is-invalid" : null}
                                         // value="roleId"
                                         name="roleId"
-                                        // value={values.roleId}
+                                        // value={values.roleId || ''}
                                         required
                                     />
                                     {errors.roleId && touched.roleId ? (
@@ -552,7 +553,7 @@ class CreateNewUser extends React.Component {
                                                     className={errors.branchId && touched.branchId ? "is-invalid" : null}
                                                     // value="branchId"
                                                     name="branchId"
-                                                    // value={values.branchId}
+                                                    // value={values.branchId || ''}
                                                     required
                                                 />
                                                 {errors.branchId && touched.branchId ? (
