@@ -389,6 +389,10 @@ button.accordion-headingLink.btn.btn-link {
     font-weight: 500;
     font-size: 15px;
 }
+.btn-primary.disabled, .btn-primary:disabled{
+    background-color: rgba(52, 73, 94, 0.6)!important;
+    border-color: rgba(52, 73, 94, 0.6)!important;
+}
 .dropdown.customone, .heading-ctas{
     .dropdown-item{
         font-size: 12px;
@@ -645,6 +649,12 @@ button.togglestyle{
         &.toleft{
             text-align: left;
         }
+    }
+}
+.loading-text{
+    font-size: 23px;
+    &.toleft{
+        text-align: left;
     }
 }
 .no-records{

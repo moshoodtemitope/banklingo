@@ -285,11 +285,10 @@ function getTrialBalance  (payload, tempData){
 function getProfitAndLoss  (payload, tempData){
     
     return dispatch =>{
-        let url,
-            branchId = parseInt(JSON.parse(localStorage.getItem("user")).BranchId)
+        let url;
             
 
-            url = routes.HIT_PROFIT_LOSS+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
+            url = routes.HIT_PROFIT_LOSS+`?BranchId=${payload.branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
 
         let consume = ApiService.request(url, "GET", null);
         dispatch(request(consume, tempData));

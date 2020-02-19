@@ -16,7 +16,7 @@ import * as Yup from 'yup';
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
-import {allowNumbersOnly} from '../../shared/utils';
+import {allowNumbersOnly, numberWithCommas} from '../../shared/utils';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
 import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
@@ -32,6 +32,7 @@ class BalanceSheet extends React.Component {
             monthProvided:'',
             CurrentPage: 1,
             PageSize: 25,
+            branchId:1
         }
 
         
@@ -50,11 +51,11 @@ class BalanceSheet extends React.Component {
     setPagesize = (PageSize, tempData)=>{
         const {dispatch} = this.props;
         this.setState({PageSize: PageSize.target.value})
-        let {monthProvided,yearProvided,CurrentPage}= this.state;
+        let {monthProvided,yearProvided,CurrentPage,branchId}= this.state;
 
 
         let payload ={
-            branchId: "",
+            branchId:branchId,
             Month:parseInt(monthProvided),
             Year:yearProvided,
             PageSize:parseInt(PageSize.target.value),
@@ -71,12 +72,12 @@ class BalanceSheet extends React.Component {
     fetchBalanceSheet = (e,tempData)=>{
         e.preventDefault();
         const {dispatch} = this.props;
-            let {monthProvided,yearProvided,PageSize,CurrentPage}= this.state;
+            let {monthProvided,yearProvided,PageSize,CurrentPage,branchId}= this.state;
 
 
         if(monthProvided!=="" && yearProvided!==""){
             let payload ={
-                branchId: 1,
+                branchId: branchId,
                 Month:parseInt(monthProvided),
                 Year:parseInt(yearProvided),
                 PageSize:parseInt(PageSize),
@@ -141,7 +142,8 @@ class BalanceSheet extends React.Component {
                             size="sm" />
                     </Form.Group>
                     {/* <Button variant="secondary" type="button">More >> </Button> */}
-                    <Button variant="primary" type="submit">Generate Balance Sheet</Button>
+                    <Button variant="primary"
+                         type="submit">Generate Balance Sheet</Button>
                 </Form>
                 <div className="actions-wrap">
                     <Button className="action-icon" variant="outline-secondary" type="button">
@@ -166,53 +168,8 @@ class BalanceSheet extends React.Component {
                 if(saveRequestData===null || saveRequestData===undefined){
                     return(
                         <div className="loading-content">
-                            <div className="heading-with-cta">
-                                {/* <h3 className="section-title">Balance Sheet</h3> */}
-                                {/* <Button>New Journal Entry</Button> */}
-                            </div>
-                            {/* <div className="heading-actions">
-                                <Form className="one-liner">
-                                    <Form.Group controlId="periodOptionChosen">
-                                        <Form.Label>Show</Form.Label>
-                                        <Form.Control as="select" size="sm">
-                                            <option>Month</option>
-                                            <option>Date</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="monthsDropdown">
-                                        <Form.Label>Month</Form.Label>
-                                        <Form.Control as="select" size="sm">
-                                            <option>Choose month</option>
-                                            <option>January</option>
-                                            <option>February</option>
-                                            <option>March</option>
-                                            <option>April</option>
-                                            <option>May</option>
-                                            <option>June</option>
-                                            <option>July</option>
-                                            <option>August</option>
-                                            <option>September</option>
-                                            <option>October</option>
-                                            <option>November</option>
-                                            <option>December</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="periodOptionChosen">
-                                        <Form.Label>Year</Form.Label>
-                                        <Form.Control type="text" size="sm" />
-                                    </Form.Group>
-                                    <Button variant="secondary" type="button">More >> </Button>
-                                    <Button variant="primary" type="submit">Generate Balance Sheet</Button>
-                                </Form>
-                                <div className="actions-wrap">
-                                    <Button className="action-icon" variant="outline-secondary" type="button">
-                                        <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
-                                    </Button>
-                                    <Button className="action-icon" variant="outline-secondary" type="button">
-                                        <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" />
-                                    </Button>
-                                </div>
-                            </div> */}
+                            <div className="loading-text mb-20">Please wait... </div>
+                            
                             <div className="heading-with-cta">
                                 <Form className="one-liner">
 
@@ -259,37 +216,16 @@ class BalanceSheet extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th></th>
+                                        <th>Balance</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                     <tr>
-                                        <td colSpan="3"> <h5>Assets</h5></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>023839</td>
-                                        <td>some text</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>023839</td>
-                                        <td>Debit</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>023839</td>
-                                        <td>Debit</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>023839</td>
-                                        <td>Debit</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
 
                                     </tr>
                                 </tbody>
@@ -297,55 +233,263 @@ class BalanceSheet extends React.Component {
                         </div>
                     )
                 }else{
+                    
                     return(
-                        <div className="loading-content">
+                        <div className="">
+                            
                             <div className="heading-with-cta">
-                                {/* <h3 className="section-title">Balance Sheet</h3> */}
-                                {/* <Button>New Journal Entry</Button> */}
                             </div>
-                            {/* <div className="heading-actions">
+                            
+                            <div className="heading-with-cta">
                                 <Form className="one-liner">
-                                    <Form.Group controlId="periodOptionChosen">
-                                        <Form.Label>Show</Form.Label>
+
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                         <Form.Control as="select" size="sm">
-                                            <option>Month</option>
-                                            <option>Date</option>
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
                                         </Form.Control>
                                     </Form.Group>
-                                    <Form.Group controlId="monthsDropdown">
-                                        <Form.Label>Month</Form.Label>
-                                        <Form.Control as="select" size="sm">
-                                            <option>Choose month</option>
-                                            <option>January</option>
-                                            <option>February</option>
-                                            <option>March</option>
-                                            <option>April</option>
-                                            <option>May</option>
-                                            <option>June</option>
-                                            <option>July</option>
-                                            <option>August</option>
-                                            <option>September</option>
-                                            <option>October</option>
-                                            <option>November</option>
-                                            <option>December</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Form.Group controlId="periodOptionChosen">
-                                        <Form.Label>Year</Form.Label>
-                                        <Form.Control type="text" size="sm" />
-                                    </Form.Group>
-                                    <Button variant="secondary" type="button">More >> </Button>
-                                    <Button variant="primary" type="submit">Generate Balance Sheet</Button>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
                                 </Form>
-                                <div className="actions-wrap">
-                                    <Button className="action-icon" variant="outline-secondary" type="button">
-                                        <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
-                                    </Button>
-                                    <Button className="action-icon" variant="outline-secondary" type="button">
-                                        <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" />
-                                    </Button>
+
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow" 
+                                        className="countdropdown form-control form-control-sm"
+                                        onChange={this.setPagesize}
+                                        value={this.state.PageSize}>
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                    <div className="move-page-actions">
+                                        <div className="each-page-action">
+                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                        </div>
+                                        <div className="page-count">
+                                            <span>1-20</span>  of <span>20000</span>
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div> */}
+                            </div>
+                            <div className="loading-text mb-20">Please wait... </div>
+
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>GL Code</th>
+                                        <th>Account Name</th>
+                                        <th>Balance</th>
+
+                                    </tr>
+                                </thead>
+                                {/* <tbody> */}
+                                    {
+                                        saveRequestData.map((eachResult, index)=>{
+                                            return(
+                                                <tbody key={`key-${index}`}>
+                                                    <tr className="sheetheading">
+                                                        <td colSpan="3"> <h5>{eachResult.accountTypeDescription}</h5></td>
+                                                    </tr>
+                                                    {
+                                                        eachResult.balanceSheetModels.map((eachModelData, keyIndex)=>{
+                                                            if(eachModelData.glCode!==null){
+                                                                return(
+                                                                    <tr key={`datakey-${keyIndex}`}>
+                                                                        <td>{eachModelData.glCode}</td>
+                                                                        <td>{eachModelData.accountName}</td>
+                                                                        <td>{numberWithCommas(eachModelData.balance)}</td>
+
+                                                                    </tr>
+                                                                )
+                                                            }
+                                                        })
+                                                    }
+                                                    <tr className="totalrow">
+                                                        <td></td>
+                                                        <td>Total {eachResult.accountTypeDescription}</td>
+                                                        <td>{numberWithCommas(eachResult.totalBalance)}</td>
+                                                    </tr>
+                                                </tbody>
+                                            )
+                                        })
+                                    }
+                                    
+                                    {/* <tr>
+                                        <td>1</td>
+                                        <td>023839</td>
+                                        <td>some text</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>023839</td>
+                                        <td>Debit</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>023839</td>
+                                        <td>Debit</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>023839</td>
+                                        <td>Debit</td>
+
+                                    </tr>
+                                </tbody> */}
+                            </TableComponent>
+                        </div>
+                    )
+                }
+
+            case (accountingConstants.GET_BALANCE_SHEET_SUCCESS):
+                let getBalanceSheetData = getBalanceSheetRequest.request_data.response.data,
+                    getBalanceSheetResult = getBalanceSheetData.result;
+                
+                // console.log("data is", getBalanceSheetData);
+                if(getBalanceSheetResult.length>=1){
+                    
+                        return(
+                            <div className="">
+                                <div className="heading-with-cta">
+                                    {/* <h3 className="section-title">Balance Sheet</h3> */}
+                                    {/* <Button>New Journal Entry</Button> */}
+                                </div>
+                                
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" 
+                                            className="countdropdown form-control form-control-sm"
+                                            onChange={(e)=>this.setPagesize(e, getBalanceSheetResult)}
+                                            value={this.state.PageSize}>
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        <div className="move-page-actions">
+                                            <div className="each-page-action">
+                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                            </div>
+                                            <div className="page-count">
+                                                <span>1-20</span>  of <span>20000</span>
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>GL Code</th>
+                                            <th>Account Name</th>
+                                            <th>Balance</th>
+
+                                        </tr>
+                                    </thead>
+                                    {/* <tbody> */}
+                                        {
+                                            getBalanceSheetResult.map((eachResult, index)=>{
+                                                return(
+                                                    <tbody key={`key-${index}`}>
+                                                        <tr className="sheetheading">
+                                                            <td colSpan="3"> <h5>{eachResult.accountTypeDescription}</h5></td>
+                                                        </tr>
+                                                        {
+                                                            eachResult.balanceSheetModels.map((eachModelData, keyIndex)=>{
+                                                                if(eachModelData.glCode!==null){
+                                                                    return(
+                                                                        <tr key={`datakey-${keyIndex}`}>
+                                                                            <td>{eachModelData.glCode}</td>
+                                                                            <td>{eachModelData.accountName}</td>
+                                                                            <td>{numberWithCommas(eachModelData.balance)}</td>
+
+                                                                        </tr>
+                                                                    )
+                                                                }
+                                                            })
+                                                        }
+                                                        <tr className="totalrow">
+                                                            <td></td>
+                                                            <td>Total {eachResult.accountTypeDescription}</td>
+                                                            <td>{numberWithCommas(eachResult.totalBalance)}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                )
+                                            })
+                                        }
+                                        
+                                        {/* <tr>
+                                            <td>1</td>
+                                            <td>023839</td>
+                                            <td>some text</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>023839</td>
+                                            <td>Debit</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>023839</td>
+                                            <td>Debit</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>023839</td>
+                                            <td>Debit</td>
+
+                                        </tr>
+                                    </tbody> */}
+                                </TableComponent>
+                            </div>
+                        )
+                    
+
+                }else{
+                    return(
+                        <div className="">
+                       
+                        
                             <div className="heading-with-cta">
                                 <Form className="one-liner">
 
@@ -388,144 +532,27 @@ class BalanceSheet extends React.Component {
                             </div>
 
                             <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        <th>GL Code</th>
-                                        <th>Account Name</th>
-                                        <th></th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colSpan="3"> <h5>Assets</h5></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>023839</td>
-                                        <td>some text</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>023839</td>
-                                        <td>Debit</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>023839</td>
-                                        <td>Debit</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>023839</td>
-                                        <td>Debit</td>
-
-                                    </tr>
-                                </tbody>
-                            </TableComponent>
-                        </div>
-                    )
-                }
-
-            case (accountingConstants.GET_BALANCE_SHEET_SUCCESS):
-                let getBalanceSheetData = getBalanceSheetRequest.request_data.response.data;
-                
-                // console.log("data is", getBalanceSheetData);
-
-                return(
-                    <div className="">
-                        <div className="heading-with-cta">
-                            {/* <h3 className="section-title">Balance Sheet</h3> */}
-                            {/* <Button>New Journal Entry</Button> */}
-                        </div>
-                        
-                        <div className="heading-with-cta">
-                            <Form className="one-liner">
-
-                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                    <Form.Control as="select" size="sm">
-                                        <option>No Filter</option>
-                                        <option>Add New Filter</option>
-                                        <option>Custom Filter</option>
-                                    </Form.Control>
-                                </Form.Group>
-                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                            </Form>
-
-                            <div className="pagination-wrap">
-                                <label htmlFor="toshow">Show</label>
-                                <select id="toshow" className="countdropdown form-control form-control-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="200">200</option>
-                                </select>
-                                <div className="move-page-actions">
-                                    <div className="each-page-action">
-                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                    </div>
-                                    <div className="page-count">
-                                        <span>1-20</span>  of <span>20000</span>
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
                                     <th>GL Code</th>
                                     <th>Account Name</th>
-                                    <th></th>
+                                    <th>Balance</th>
 
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 <tr>
-                                    <td colSpan="3"> <h5>Assets</h5></td>
-
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>023839</td>
-                                    <td>some text</td>
-
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>023839</td>
-                                    <td>Debit</td>
-
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>023839</td>
-                                    <td>Debit</td>
-
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>023839</td>
-                                    <td>Debit</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
 
                                 </tr>
                             </tbody>
                         </TableComponent>
-                    </div>
-                )
+                        </div>
+                    )
+                }
 
             case (accountingConstants.GET_BALANCE_SHEET_FAILURE):
                 return (

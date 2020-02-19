@@ -27,3 +27,26 @@
     border-width: 0;
     border-radius: 3px;
 }
+
+.table-bordered tr.totalrow td {
+    border: none;
+    &:nth-of-type(2){
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 14px;    
+    }
+    &:nth-of-type(3){
+        font-weight: 600;
+        font-size: 14px;    
+    }
+}
+
+.table-bordered tr.netrow {
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.table-striped tbody tr.sheetheading, .table-hover tbody tr.sheetheading:hover,
+.table-striped tbody tr.sheetheading:nth-of-type(odd){
+    background: #D4E6F1;
+}
