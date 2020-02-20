@@ -30,15 +30,17 @@
 
 .table-bordered tr.totalrow td {
     border: none;
+    font-weight: 600;
+    font-size: 14px; 
     &:nth-of-type(2){
-        font-weight: 600;
+        // font-weight: 600;
         text-transform: uppercase;
-        font-size: 14px;    
+        // font-size: 14px;    
     }
-    &:nth-of-type(3){
-        font-weight: 600;
-        font-size: 14px;    
-    }
+    // &:nth-of-type(3){
+    //     font-weight: 600;
+    //     font-size: 14px;    
+    // }
 }
 
 .table-bordered tr.netrow {
