@@ -993,6 +993,33 @@ export function getAllBranchesReducer(state=[], action) {
 
 }
 
+export function fetchBranchesListReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.FETCH_BRANCHES_LIST_PENDING:
+            return {
+                request_status: administrationConstants.FETCH_BRANCHES_LIST_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.FETCH_BRANCHES_LIST_SUCCESS:
+            return {
+                request_status: administrationConstants.FETCH_BRANCHES_LIST_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.FETCH_BRANCHES_LIST_FAILURE:
+            return {
+                request_status: administrationConstants.FETCH_BRANCHES_LIST_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
 export function getABranchReducer(state=[], action) {
     switch (action.type) {
         case administrationConstants.GET_A_BRANCH_PENDING:

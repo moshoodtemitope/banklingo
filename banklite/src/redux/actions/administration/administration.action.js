@@ -35,6 +35,7 @@ export const administrationActions = {
     getInternalControl,
     updateInternalControlSettings,
     getAllBranches,
+    fetchBranchesList,
     getABranch,
     createNewBranch,
     updateABranch,
@@ -1060,6 +1061,29 @@ function getAllBranches  (params){
 function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
 function success(response) { return { type: administrationConstants.GET_ALL_BRANCHES_SUCCESS, response } }
 function failure(error) { return { type: administrationConstants.GET_ALL_BRANCHES_FAILURE, error } }
+
+}
+
+function fetchBranchesList  (params){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.GET_BRANCHES+'/all', "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user) { return { type: administrationConstants.FETCH_BRANCHES_LIST_PENDING, user } }
+    function success(response) { return { type: administrationConstants.FETCH_BRANCHES_LIST_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.FETCH_BRANCHES_LIST_FAILURE, error } }
 
 }
 

@@ -24,6 +24,9 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
 import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
 
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+
 import Alert from 'react-bootstrap/Alert'
 import "./accountsmanagement.scss"; 
 
@@ -34,10 +37,23 @@ class ProfitAndLoss extends React.Component {
             user:'',
             startDate:'',
             endDate:'',
-            branchId:1,
+            branchId:'',
             invalidDate:false
         }
 
+        
+    }
+
+
+    componentDidMount(){
+        this.fetchBranchesList();
+    }
+
+    fetchBranchesList = (tempData) =>{
+        const {dispatch} = this.props;
+        
+
+        dispatch(administrationActions.fetchBranchesList());
         
     }
 
@@ -79,140 +95,205 @@ class ProfitAndLoss extends React.Component {
     }
 
     renderOptions = ()=>{
-        let getProfitAndLossRequest = this.props.getProfitAndLossReducer
+        let getProfitAndLossRequest = this.props.getProfitAndLossReducer,
+            fetchBranchesListRequest = this.props.fetchBranchesListReducer;
         let {branchId, invalidDate}= this.state;
 
-        let  validationSchema = Yup.object().shape({
-                endDate: Yup.string()
-                    .required('Please select end date'),
-                startDate: Yup.string()
-                    .required('Please select start date')
-            });
-        return(
-            <div className="heading-actions">
-                <Formik
-                        initialValues={{
-                            // entryDate: '',
-                            endDate: '',
-                            startDate:''
-                        }}
-                        validationSchema={validationSchema}
-                        onSubmit={(values, { resetForm }, errors,) => {
-                            let startDateTemp = new Date(values.startDate),
-                                endDateTemp = new Date(values.endDate);
-                            if(startDateTemp <= endDateTemp){
-                                
-                                this.setState({invalidDate:false});
 
-                                let payload ={
-                                    branchId: branchId,
-                                    StartDate:values.startDate.toISOString(),
-                                    EndDate:values.endDate.toISOString(),
-                                }
-    
-                                // console.log("-----", values.endDate);
-                                let saveRequestData= this.props.getProfitAndLossReducer.request_data!==undefined && this.props.getProfitAndLossReducer.request_data.response!==undefined && this.props.getProfitAndLossReducer.request_data.response.data!==undefined ? this.props.getProfitAndLossReducer.request_data.response.data:null;
-                                // let saveRequestData= this.props.getProfitAndLossReducer.request_data!==undefined ?this.props.getProfitAndLossReducer.request_data.data:null;
-                               
-                                    if(saveRequestData!==null){
+        switch (fetchBranchesListRequest.request_status){
+            case (administrationConstants.FETCH_BRANCHES_LIST_PENDING):
+                return(
+                    <div className="loading-content"> 
+                        <div className="loading-text mb-20">Please wait... </div>
+                    </div>
+                )
+            case (administrationConstants.FETCH_BRANCHES_LIST_SUCCESS):
+                let  validationSchema = Yup.object().shape({
+                    endDate: Yup.string()
+                        .required('Please select end date').nullable(),
+                    startDate: Yup.string()
+                        .required('Please select start date').nullable(),
+                    branchId: Yup.string()
+                        .required('Please select a branch').nullable()
+                });
+
+                let branchList = fetchBranchesListRequest.request_data.response.data;
+                if(branchList.length>=1){
+                    let branchData = [];
+
+                    branchList.map((eachBranch, index)=>{
+                        branchData.push({value:eachBranch.id, label:eachBranch.name})
+                    })
+                    return(
+                        <div className="heading-actions">
+                            <Formik
+                                    initialValues={{
+                                        branchId: '',
+                                        endDate: '',
+                                        startDate:''
+                                    }}
+                                    validationSchema={validationSchema}
+                                    onSubmit={(values, { resetForm }, errors,) => {
+                                        let startDateTemp = new Date(values.startDate),
+                                            endDateTemp = new Date(values.endDate);
+                                        if(startDateTemp <= endDateTemp){
+                                            
+                                            this.setState({ invalidDate: false, branchId:values.branchId.value });
+            
+                                            let payload ={
+                                                branchId: values.branchId.value,
+                                                StartDate:values.startDate.toISOString(),
+                                                EndDate:values.endDate.toISOString(),
+                                            }
+                
+                                            // console.log("-----", values.endDate);
+                                            let saveRequestData= this.props.getProfitAndLossReducer.request_data!==undefined && this.props.getProfitAndLossReducer.request_data.response!==undefined && this.props.getProfitAndLossReducer.request_data.response.data!==undefined ? this.props.getProfitAndLossReducer.request_data.response.data:null;
+                                            // let saveRequestData= this.props.getProfitAndLossReducer.request_data!==undefined ?this.props.getProfitAndLossReducer.request_data.data:null;
                                         
-                                        this.fetchProfitAndLoss(payload, saveRequestData.result);
-                                    }else{
+                                                if(saveRequestData!==null){
+                                                    
+                                                    this.fetchProfitAndLoss(payload, saveRequestData.result);
+                                                }else{
+                                                    
+                                                    this.fetchProfitAndLoss(payload);
+                                                }
+            
+                                            
+                                        }else{
+                                            this.setState({invalidDate:true})
+                                        }
                                         
-                                        this.fetchProfitAndLoss(payload);
-                                    }
-
-                                
-                            }else{
-                                this.setState({invalidDate:true})
-                            }
-                            
-                            
-
-                        }}
-                    >
-                        {({ handleSubmit,
-                            handleChange,
-                            handleBlur,
-                            resetForm,
-                            values,
-                            setFieldValue,
-                            touched,
-                            isValid,
-                            errors, }) => (
-
-                            <Form className="one-liner"
-                                noValidate
-                                onSubmit={handleSubmit}>
-                                <Form.Group controlId="periodOptionChosen"
-                                            className={errors.startDate && touched.startDate ? "has-invaliderror" : null}
+                                        
+            
+                                    }}
                                 >
-                                    <Form.Label>From</Form.Label>
+                                    {({ handleSubmit,
+                                        handleChange,
+                                        handleBlur,
+                                        resetForm,
+                                        values,
+                                        setFieldValue,
+                                        setFieldTouched,
+                                        touched,
+                                        isValid,
+                                        errors, }) => (
+            
+                                        <Form className="one-liner"
+                                            noValidate
+                                            onSubmit={handleSubmit}>
 
-                                    <DatePicker placeholderText="Choose start date"
-                                        // selected={this.state.startDate} 
-                                        onChange={setFieldValue}
-                                        value={values.startDate}
-                                        // onChangeRaw={(e)=>this.handleChange(e)}
-                                        dateFormat="d MMMM, yyyy"
-                                        className="form-control form-control-sm"
-                                        peekNextMonth
-                                        showMonthDropdown
-                                        showYearDropdown
-                                        name="startDate"
-                                        className={errors.startDate && touched.startDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
-                                        dropdownMode="select"
-                                        maxDate={new Date()}
-                                    />
-                                    {errors.startDate && touched.startDate ? (
-                                        <span className="invalid-feedback">{errors.startDate}</span>
-                                    ) : null}
-                                </Form.Group>
-                                <Form.Group controlId="monthsDropdown"
-                                            className={errors.endDate && touched.endDate ? "has-invaliderror" : null}
-                                >
-                                    <Form.Label>To</Form.Label>
-                                    <DatePicker placeholderText="Choose end date"
-                                        // selected={this.state.endDate} 
-                                        onChange={setFieldValue}
-                                        value={values.endDate}
-                                        // onChangeRaw={(e)=>this.handleChange(e)}
-                                        dateFormat="d MMMM, yyyy"
-                                        className="form-control form-control-sm"
-                                        peekNextMonth
-                                        showMonthDropdown
-                                        showYearDropdown
-                                        dropdownMode="select"
-                                        name="endDate"
-                                        className={errors.endDate && touched.endDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
-                                        maxDate={new Date()}
-                                    />
-                                    {errors.endDate && touched.endDate ? (
-                                        <span className="invalid-feedback">{errors.endDate}</span>
-                                    ) : null}
-                                </Form.Group>
 
-                                <Button variant="secondary" type="button">More >> </Button>
-                                <Button variant="primary"
-                                     type="submit"
-                                     disabled={getProfitAndLossRequest.is_request_processing}>{getProfitAndLossRequest.is_request_processing?"Generating...":" Generate Profit & Loss"}</Button>
+                                            <Form.Group controlId="periodOptionChosen"
+                                                    className={errors.branchId && touched.branchId ? "has-invaliderror" : null}>
+                                                <Form.Label>Branch</Form.Label>
+                                                <Select
+                                                    options={branchData}
+                                                    onChange={(value) => setFieldValue('branchId', value)}
+                                                    onBlur={()=> setFieldTouched('branchId', true)}
 
-                                
-                            </Form>
-                           
-                            
-                    )}
-                </Formik>
-                <div className="actions-wrap">
-                    <Button className="action-icon" variant="outline-secondary" type="button">
-                        <img alt="download excel"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" /> 
-                    </Button>
-                    <Button className="action-icon" variant="outline-secondary" type="button">
-                        <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" /> 
-                    </Button>
-                </div>
-            </div>
-        )
+                                                    // onChange={(selectedBranch) => {
+                                                    //     this.setState({ selectedBranch, branchId:parseInt(selectedBranch.value) });
+                                                    //     errors.branchId = null
+                                                    //     values.branchId = selectedBranch.value
+                                                    // }}
+                                                    // onBlur={handleBlur}
+                                                    className={errors.branchId && touched.branchId ? "is-invalid branchfilter" : "branchfilter"}
+                                                    // value="branchId"
+                                                    name="branchId"
+                                                    // value={values.branchId || ''}
+                                                    required
+                                                />
+                                                {errors.branchId && touched.branchId ? (
+                                                    <span className="invalid-feedback">{errors.branchId}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                            <Form.Group controlId="periodOptionChosen"
+                                                        className={errors.startDate && touched.startDate ? "has-invaliderror" : null}>
+                                                <Form.Label>From</Form.Label>
+            
+                                                <DatePicker placeholderText="Choose start date"
+                                                    // selected={this.state.startDate} 
+                                                    onChange={setFieldValue}
+                                                    value={values.startDate}
+                                                    // onChangeRaw={(e)=>this.handleChange(e)}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    className="form-control form-control-sm"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    name="startDate"
+                                                    className={errors.startDate && touched.startDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
+                                                    dropdownMode="select"
+                                                    maxDate={new Date()}
+                                                />
+                                                {errors.startDate && touched.startDate ? (
+                                                    <span className="invalid-feedback">{errors.startDate}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                            <Form.Group controlId="monthsDropdown"
+                                                        className={errors.endDate && touched.endDate ? "has-invaliderror" : null}
+                                            >
+                                                <Form.Label>To</Form.Label>
+                                                <DatePicker placeholderText="Choose end date"
+                                                    // selected={this.state.endDate} 
+                                                    onChange={setFieldValue}
+                                                    value={values.endDate}
+                                                    // onChangeRaw={(e)=>this.handleChange(e)}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    className="form-control form-control-sm"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    name="endDate"
+                                                    className={errors.endDate && touched.endDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
+                                                    maxDate={new Date()}
+                                                />
+                                                {errors.endDate && touched.endDate ? (
+                                                    <span className="invalid-feedback">{errors.endDate}</span>
+                                                ) : null}
+                                            </Form.Group>
+            
+                                            <Button variant="secondary" type="button">More >> </Button>
+                                            <Button variant="primary"
+                                                type="submit"
+                                                disabled={getProfitAndLossRequest.is_request_processing}>{getProfitAndLossRequest.is_request_processing?"Generating...":" Generate Profit & Loss"}</Button>
+            
+                                            
+                                        </Form>
+                                    
+                                        
+                                )}
+                            </Formik>
+                            <div className="actions-wrap">
+                                <Button className="action-icon" variant="outline-secondary" type="button">
+                                    <img alt="download excel"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" /> 
+                                </Button>
+                                <Button className="action-icon" variant="outline-secondary" type="button">
+                                    <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" /> 
+                                </Button>
+                            </div>
+                        </div>
+                    )
+                }else{
+                    return(
+                        <div className="loading-content"> 
+                            <div className="loading-text mb-20">No branches found</div>
+                        </div>
+                    )
+                }
+
+            case (administrationConstants.FETCH_BRANCHES_LIST_FAILURE):
+                return (
+                    <div className="loading-content errormsg"> 
+                        <div>{fetchBranchesListRequest.request_data.error}</div>
+                    </div>
+                )
+            default :
+            return null;
+        }
+
+        
     }
 
     
@@ -529,6 +610,7 @@ class ProfitAndLoss extends React.Component {
 function mapStateToProps(state) {
     return {
         getProfitAndLossReducer : state.accountingReducers.getProfitAndLossReducer,
+        fetchBranchesListReducer : state.administrationReducers.fetchBranchesListReducer,
     };
 }
 export default connect(mapStateToProps)(ProfitAndLoss);
