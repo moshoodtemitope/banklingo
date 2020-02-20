@@ -20,7 +20,7 @@ class TableComponent extends React.Component{
         
         return(
             
-                <Table striped bordered hover>
+                <Table striped bordered hover className={this.props.classnames}>
                     {this.props.children}
                 </Table>
         )

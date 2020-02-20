@@ -36,7 +36,8 @@ class TrialBalance extends React.Component {
             startDate:'',
             endDate:'',
             branchId:1,
-            invalidDate:false
+            invalidDate:false,
+            isPrintable:false
         }
 
         
@@ -54,7 +55,7 @@ class TrialBalance extends React.Component {
 
     
 
-    fetchProfitAndLoss = (payload, tempData)=>{
+    fetchTrialBalance = (payload, tempData)=>{
         
         const {dispatch} = this.props;
             // let {endDate,startDate,PageSize,CurrentPage,branchId}= this.state;
@@ -81,6 +82,11 @@ class TrialBalance extends React.Component {
         
     }
 
+
+    
+    makePrintable =()=>{
+        this.setState({isPrintable:true});
+    }
     renderOptions = ()=>{
         let getTrialBalanceRequest = this.props.getTrialBalanceReducer
         let {branchId, invalidDate}= this.state;
@@ -120,10 +126,10 @@ class TrialBalance extends React.Component {
                                 
                                         if(saveRequestData!==null){
                                             
-                                            this.fetchProfitAndLoss(payload, saveRequestData.result);
+                                            this.fetchTrialBalance(payload, saveRequestData.result);
                                         }else{
                                             
-                                            this.fetchProfitAndLoss(payload);
+                                            this.fetchTrialBalance(payload);
                                         }
 
                                     
@@ -207,14 +213,16 @@ class TrialBalance extends React.Component {
                                 
                         )}
                     </Formik>
-                    <div className="actions-wrap">
-                        <Button className="action-icon" variant="outline-secondary" type="button">
-                            <img alt="download excel"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" /> 
-                        </Button>
-                        <Button className="action-icon" variant="outline-secondary" type="button">
-                            <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" /> 
-                        </Button>
-                    </div>
+                    {getTrialBalanceRequest.request_status===accountingConstants.GET_TRIAL_BALANCE_SUCCESS &&
+                        <div className="actions-wrap">
+                            <Button className="action-icon"  variant="outline-secondary" type="button">
+                                <img alt="download excel"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" /> 
+                            </Button>
+                            <Button className="action-icon" onClick={this.makePrintable} variant="outline-secondary" type="button">
+                                <img alt="download print" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" /> 
+                            </Button>
+                        </div>
+                    }
                 </div>
                 <div className="heading-with-cta toright compact">
                     <div className="eachitem">
@@ -234,7 +242,256 @@ class TrialBalance extends React.Component {
         )
     }
 
+    renderTrialBalance =()=>{
+        let getTrialBalanceRequest = this.props.getTrialBalanceReducer;
+        let {isPrintable} = this.state;
+        let saveRequestData= getTrialBalanceRequest.request_data!==undefined?getTrialBalanceRequest.request_data.tempData:null;
+
+        // if()
+        switch(getTrialBalanceRequest.request_status){
+            case (accountingConstants.GET_TRIAL_BALANCE_PENDING):
+                if(saveRequestData===null || saveRequestData===undefined){
+                    return(
+                        <div className="">
+                            <div className="loading-text mb-20">Please wait... </div>
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>GL Code</th>
+                                        <th>Account Name</th>
+                                        <th>Opening Balance</th>
+                                        <th>Debits</th>
+                                        <th>Credits</th>
+                                        <th>Net Change</th>
+                                        <th>Closing Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                        </div>
+                    )
+                }else{
+                    let openingBalanceTotal=0,
+                        debitTotal=0,
+                        creditTotal=0,
+                        netChangeTotal=0,
+                        closingBalanceTotal=0;
+                    return(
+                        <div className="">
+                            <div className="loading-text mb-20">Please wait... </div>
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>GL Code</th>
+                                        <th>Account Name</th>
+                                        <th>Opening Balance</th>
+                                        <th>Debits</th>
+                                        <th>Credits</th>
+                                        <th>Net Change</th>
+                                        <th>Closing Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        saveRequestData.map((eachResult, index)=>{
+                                            if(typeof eachResult.openingBalance=== "number"){
+                                                openingBalanceTotal+=eachResult.openingBalance;
+                                            }
+
+                                            if(typeof eachResult.debits=== "number"){
+                                                debitTotal+=eachResult.debits;
+                                            }
+                                            if(typeof eachResult.credits=== "number"){
+                                                creditTotal+=eachResult.credits;
+                                            }
+                                            if(typeof eachResult.netChange=== "number"){
+                                                netChangeTotal+=eachResult.netChange;
+                                            }
+                                            if(typeof eachResult.closingBalance=== "number"){
+                                                closingBalanceTotal+=eachResult.closingBalance;
+                                            }
+
+                                            return(
+                                                <tr key={`key-${index}`}>
+                                                    <td>{eachResult.glCode}</td>
+                                                    <td>{eachResult.accountName}</td>
+                                                    <td>{numberWithCommas(eachResult.openingBalance)}</td>
+                                                    <td>{numberWithCommas(eachResult.debits)}</td>
+                                                    <td>{numberWithCommas(eachResult.credits)}</td>
+                                                    <td>{eachResult.isNetInBracket===false? numberWithCommas(eachResult.netChange):`(${numberWithCommas(eachResult.netChange)})`}</td>
+                                                    <td>{eachResult.isNetInBracket===false? numberWithCommas(eachResult.closingBalance):`(${numberWithCommas(eachResult.closingBalance)})`}</td>
+                                                    {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
+
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                    <tr className="totalrow netrow">
+                                        <td></td>
+                                        <td>Totals</td>
+                                        <td>{numberWithCommas(openingBalanceTotal)}</td>
+                                        <td>{numberWithCommas(debitTotal)}</td>
+                                        <td>{numberWithCommas(creditTotal)}</td>
+                                        <td>{numberWithCommas(netChangeTotal)}</td>
+                                        <td>{numberWithCommas(closingBalanceTotal)}</td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                        </div>
+                    )
+                }
+
+            case (accountingConstants.GET_TRIAL_BALANCE_SUCCESS):
+                let trialBalanceData = getTrialBalanceRequest.request_data.response.data,
+                    trialBalanceResult = trialBalanceData.result;
+                
+                // console.log("data is", profitAndLossData);
+                if(trialBalanceResult.length>=1){
+                    
+                    let openingBalanceTotal=0,
+                    debitTotal=0,
+                    creditTotal=0,
+                    netChangeTotal=0,
+                    closingBalanceTotal=0;
+                    return (
+                        <div className={isPrintable?'is-printable':''}>
+                            {isPrintable &&
+                                <div className="form-ctas centered">
+                                    <Button variant="light" 
+                                        onClick={()=>this.setState({isPrintable:false})}
+                                        className="btn btn-light"> Cancel</Button>
+                                    <Button variant="success"
+                                        className="mr-20px"
+                                        onClick={()=>window.print()}
+                                        type="button"
+                                        >
+                                        Print
+                                    </Button>
+                                    
+                                
+                                </div>
+                            }
+                            <div className="tablewrapper">
+                                
+                                <TableComponent>
+                                    <thead>
+                                        <tr>
+                                            <th>GL Code</th>
+                                            <th>Account Name</th>
+                                            <th>Opening Balance</th>
+                                            <th>Debits</th>
+                                            <th>Credits</th>
+                                            <th>Net Change</th>
+                                            <th>Closing Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            trialBalanceResult.map((eachResult, index) => {
+                                                if (typeof eachResult.openingBalance === "number") {
+                                                    openingBalanceTotal += eachResult.openingBalance;
+                                                }
+
+                                                if (typeof eachResult.debits === "number") {
+                                                    debitTotal += eachResult.debits;
+                                                }
+                                                if (typeof eachResult.credits === "number") {
+                                                    creditTotal += eachResult.credits;
+                                                }
+                                                if (typeof eachResult.netChange === "number") {
+                                                    netChangeTotal += eachResult.netChange;
+                                                }
+                                                if (typeof eachResult.closingBalance === "number") {
+                                                    closingBalanceTotal += eachResult.closingBalance;
+                                                }
+
+                                                return (
+                                                    <tr key={`key-${index}`}>
+                                                        <td>{eachResult.glCode}</td>
+                                                        <td>{eachResult.accountName}</td>
+                                                        <td>{numberWithCommas(eachResult.openingBalance)}</td>
+                                                        <td>{numberWithCommas(eachResult.debits)}</td>
+                                                        <td>{numberWithCommas(eachResult.credits)}</td>
+                                                        <td>{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.netChange) : `(${numberWithCommas(eachResult.netChange)})`}</td>
+                                                        <td>{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.closingBalance) : `(${numberWithCommas(eachResult.closingBalance)})`}</td>
+                                                        {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
+
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                        <tr className="totalrow netrow">
+                                            <td></td>
+                                            <td>Totals</td>
+                                            <td>{numberWithCommas(openingBalanceTotal)}</td>
+                                            <td>{numberWithCommas(debitTotal)}</td>
+                                            <td>{numberWithCommas(creditTotal)}</td>
+                                            <td>{numberWithCommas(netChangeTotal)}</td>
+                                            <td>{numberWithCommas(closingBalanceTotal)}</td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                            </div>
+                        </div>
+                    )
+                    
+
+                }else{
+                    return(
+                        <div className="">
+                            <TableComponent>
+                                <thead>
+                                    <tr>
+                                        <th>GL Code</th>
+                                        <th>Account Name</th>
+                                        <th>Opening Balance</th>
+                                        <th>Debits</th>
+                                        <th>Credits</th>
+                                        <th>Net Change</th>
+                                        <th>Closing Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                        </div>
+                    )
+                }
+
+            case (accountingConstants.GET_TRIAL_BALANCE_FAILURE):
+                return (
+                    <div className="loading-content"> 
+                        <div>{getTrialBalanceRequest.request_data.error}</div>
+                    </div>
+                )
+            default :
+            return null;
+        }
+    }
+
     render() {
+        let {invalidDate}= this.state;
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -303,10 +560,16 @@ class TrialBalance extends React.Component {
                                                     {/* <Button>New Journal Entry</Button> */}
                                                 </div>
                                                 {this.renderOptions()}
+
+                                                {invalidDate && 
+                                                    <Alert variant="danger">
+                                                    Start date must be earlier than End date
+                                                </Alert>
+                                                }
+                                                {this.renderTrialBalance()}
                                                 
                                                 
-                                                
-                                                <TableComponent classnames="striped bordered hover">
+                                                {/* <TableComponent classnames="striped bordered hover">
                                                     <thead>
                                                         <tr>
                                                             <th>GL Code</th>
@@ -351,7 +614,7 @@ class TrialBalance extends React.Component {
 
                                                         </tr>
                                                     </tbody>
-                                                </TableComponent>
+                                                </TableComponent> */}
                                             </div>
                                         </div>
                                     </div>

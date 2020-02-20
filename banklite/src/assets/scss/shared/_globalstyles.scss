@@ -325,6 +325,12 @@ select, select.form-control{
 .form-ctas{
     margin-top: 10px;
     margin-bottom: 10px;
+    &.centered{
+        text-align: center;
+        button{
+            margin: 18px 15px;
+        }
+    }
 }
 
 .mr-20px{
@@ -646,13 +652,34 @@ button.togglestyle{
     }
     .loading-text{
         font-size: 23px;
+        text-align: center;
         &.toleft{
             text-align: left;
         }
     }
 }
+.is-printable{
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 18px;
+    .tablewrapper{
+        border: 1px solid #ccc;
+        padding: 20px;
+        table{
+            margin-bottom: 0;
+        }
+    }
+}
 .loading-text{
     font-size: 23px;
+    text-align: center;
     &.toleft{
         text-align: left;
     }

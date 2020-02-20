@@ -254,7 +254,8 @@ function getTrialBalance  (payload, tempData){
             branchId = parseInt(JSON.parse(localStorage.getItem("user")).BranchId)
             
 
-            url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+            // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
 
         let consume = ApiService.request(url, "GET", null);
         dispatch(request(consume, tempData));
