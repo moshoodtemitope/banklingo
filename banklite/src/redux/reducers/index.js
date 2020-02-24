@@ -58,6 +58,7 @@ const administrationReducers = combineReducers({
     adminCreateNewBranchReducer: administration.createNewBranchReducer,
     adminUpdateABranchReducer: administration.updateABranchReducer,
     adminGetAllBranchesReducer: administration.getAllBranchesReducer,
+    fetchBranchesListReducer: administration.fetchBranchesListReducer,
     adminGetABranchReducer: administration.getABranchReducer,
     adminGetAllCurrenciesReducer: administration.getAllCurrenciesReducer,
     adminUpdateCurrencyReducer: administration.updateCurrencyReducer,

@@ -250,11 +250,11 @@ function createJournalEntry   (createJournalEntryPayload){
 function getTrialBalance  (payload, tempData){
     
     return dispatch =>{
-        let url,
-            branchId = parseInt(JSON.parse(localStorage.getItem("user")).BranchId)
+        let url;
+            // branchId = parseInt(JSON.parse(localStorage.getItem("user")).BranchId)
             
 
-            url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+            url = routes.HIT_TRIAL_BALANCE+`?BranchId=${payload.branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
             // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
 
         let consume = ApiService.request(url, "GET", null);

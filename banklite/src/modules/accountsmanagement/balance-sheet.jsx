@@ -20,6 +20,10 @@ import {allowNumbersOnly, numberWithCommas} from '../../shared/utils';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
 import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
+
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+
 import Alert from 'react-bootstrap/Alert'
 import "./accountsmanagement.scss"; 
 
@@ -35,6 +39,18 @@ class BalanceSheet extends React.Component {
             branchId:1
         }
 
+        
+    }
+
+    componentDidMount(){
+        this.fetchBranchesList();
+    }
+
+    fetchBranchesList = (tempData) =>{
+        const {dispatch} = this.props;
+        
+
+        dispatch(administrationActions.fetchBranchesList());
         
     }
 
@@ -74,7 +90,12 @@ class BalanceSheet extends React.Component {
         const {dispatch} = this.props;
             let {monthProvided,yearProvided,PageSize,CurrentPage,branchId}= this.state;
 
+            let getBalanceSheetRequest = this.props.getBalanceSheetReducer;
 
+            let saveRequestData= getBalanceSheetRequest.request_data!==undefined?getBalanceSheetRequest.request_data.response.data:null;
+
+            console.log("datadsdsd", saveRequestData);
+    
         if(monthProvided!=="" && yearProvided!==""){
             let payload ={
                 branchId: branchId,
@@ -83,12 +104,18 @@ class BalanceSheet extends React.Component {
                 PageSize:parseInt(PageSize),
                 CurrentPage:parseInt(CurrentPage),
             }
-
+           
             if(tempData){
                 dispatch(acoountingActions.getBalanceSheet(payload, tempData));
             }else{
-                dispatch(acoountingActions.getBalanceSheet(payload));
+                if(saveRequestData){
+                    dispatch(acoountingActions.getBalanceSheet(payload, saveRequestData));
+                }else{
+                    dispatch(acoountingActions.getBalanceSheet(payload));
+                }
+                
             }
+
         }else{
             return false;
         }
@@ -96,7 +123,7 @@ class BalanceSheet extends React.Component {
     }
 
     renderOptions = (e)=>{
-        
+        let getBalanceSheetRequest = this.props.getBalanceSheetReducer;
         let {yearProvided}= this.state;
         return(
             <div className="heading-actions">
@@ -143,7 +170,8 @@ class BalanceSheet extends React.Component {
                     </Form.Group>
                     {/* <Button variant="secondary" type="button">More >> </Button> */}
                     <Button variant="primary"
-                         type="submit">Generate Balance Sheet</Button>
+                        disabled={getBalanceSheetRequest.is_request_processing}
+                         type="submit">{getBalanceSheetRequest.is_request_processing?"Generating...":"Generate Balance Sheet"} </Button>
                 </Form>
                 <div className="actions-wrap">
                     <Button className="action-icon" variant="outline-secondary" type="button">
@@ -165,7 +193,7 @@ class BalanceSheet extends React.Component {
         // if()
         switch(getBalanceSheetRequest.request_status){
             case (accountingConstants.GET_BALANCE_SHEET_PENDING):
-                if(saveRequestData===null || saveRequestData===undefined){
+                if((saveRequestData===null || saveRequestData===undefined) || (saveRequestData!==null && saveRequestData.result.length>=1) ){
                     return(
                         <div className="loading-content">
                             <div className="loading-text mb-20">Please wait... </div>
@@ -296,7 +324,7 @@ class BalanceSheet extends React.Component {
                                 </thead>
                                 {/* <tbody> */}
                                     {
-                                        saveRequestData.map((eachResult, index)=>{
+                                        saveRequestData.result.map((eachResult, index)=>{
                                             return(
                                                 <tbody key={`key-${index}`}>
                                                     <tr className="sheetheading">
@@ -631,6 +659,7 @@ class BalanceSheet extends React.Component {
 function mapStateToProps(state) {
     return {
         getBalanceSheetReducer : state.accountingReducers.getBalanceSheetReducer,
+        fetchBranchesListReducer : state.accountingReducers.fetchBranchesListReducer,
     };
 }
 
