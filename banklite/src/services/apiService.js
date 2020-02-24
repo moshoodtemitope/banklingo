@@ -40,7 +40,7 @@ export class ApiService {
        if(localStorage.getItem("user") !==null){
            
            let user = JSON.parse(localStorage.getItem("user")),
-                serviceToTest = url.split("Dars.Administration")[1];
+                serviceToTest = url.split("Banklot")[1];
               
             //Exclude urlsToAuthenticate urls from Authenticated requests with Token
            if (urlsToAuthenticate.indexOf(serviceToTest) === -1) {
@@ -93,7 +93,7 @@ export class ApiService {
         binaryUploadUrls =[
             "/api/Upload"
         ],
-        serviceToTest = url.split("Dars.Administration")[1];
+        serviceToTest = url.split("Banklot")[1];
 
         if(localStorage.getItem("user") === null){
             headers = undefined;
