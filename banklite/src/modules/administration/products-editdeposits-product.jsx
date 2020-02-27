@@ -28,6 +28,8 @@ import { productsConstants } from '../../redux/actiontypes/products/products.con
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
+
+import {noWhiteSpaces} from "../../shared/utils"
 import "./administration.scss"; 
 class EditADepositsProduct extends React.Component {
     constructor(props) {
@@ -354,7 +356,7 @@ class EditADepositsProduct extends React.Component {
                                             <Form.Control 
                                                 type="text"
                                                 onChange={handleChange}
-                                                value={values.key}
+                                                value={noWhiteSpaces(values.key)}
                                                 className={errors.key && touched.key ? "is-invalid" : null}
                                                 name="key" required />
                                             {errors.key && touched.key ? (

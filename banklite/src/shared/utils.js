@@ -63,6 +63,18 @@ export const accountNumber = (accountNum)=>{
     // }
 }
 
+
+export const noWhiteSpaces = (value)=>{
+    let filteredValue = value.trim().replace(/\s/g,'');
+    // if(reg.test(accountNum)){
+        return filteredValue;
+        // if(filteredValue.toString().length<=1){
+        //     return filteredValue;
+        // }
+}
+
+
+
 export const allowNumbersOnly = (numbers, maxLength)=>{
     var reg = /^\d+$/;
     let filteredNum = numbers.replace(/\D/g,'');

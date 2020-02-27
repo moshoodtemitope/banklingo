@@ -137,7 +137,7 @@ class SMSSettings extends React.Component {
                                                 value={values.smsSettingsGateway}
                                                 className={errors.smsSettingsGateway && touched.smsSettingsGateway ? "is-invalid": null}
                                                     required>
-                                                <option>Select gateway</option>
+                                                {/* <option>Select gateway</option> */}
                                                 <option value="0">None</option>
                                                 <option value="1">Twilio</option>
                                                 <option value="2">Infobip</option>

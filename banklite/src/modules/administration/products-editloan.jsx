@@ -23,6 +23,8 @@ import Alert from 'react-bootstrap/Alert'
 import { productActions } from '../../redux/actions/products/products.action';
 import { productsConstants } from '../../redux/actiontypes/products/products.constants'
 
+import {noWhiteSpaces} from "../../shared/utils"
+
 import "./administration.scss"; 
 class EditLoanProduct extends React.Component {
     constructor(props) {
@@ -251,7 +253,7 @@ class EditLoanProduct extends React.Component {
                                     <Form.Control 
                                         type="text"
                                         onChange={handleChange}
-                                        value={values.key}
+                                        value={noWhiteSpaces(values.key)}
                                         className={errors.key && touched.key ? "is-invalid" : null}
                                         name="key" required />
                                     {errors.key && touched.key ? (

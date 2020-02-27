@@ -17,12 +17,12 @@ export const productActions = {
     updateDespositProduct
 }
 
-function getLoanProducts  (params){
+function getLoanProducts  (params, tempData){
     
     return dispatch =>{
         
         let consume = ApiService.request(routes.HIT_LOAN_PRODUCTS+`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response =>{
                 dispatch(success(response));
@@ -32,9 +32,19 @@ function getLoanProducts  (params){
             });
         
     }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: productsConstants.GET_LOAN_PRODUCTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: productsConstants.GET_LOAN_PRODUCTS_PENDING, user, tempData } 
+        }
+        
+    }
     
 
-    function request(user) { return { type: productsConstants.GET_LOAN_PRODUCTS_PENDING, user } }
+    // function request(user) { return { type: productsConstants.GET_LOAN_PRODUCTS_PENDING, user } }
     function success(response) { return { type: productsConstants.GET_LOAN_PRODUCTS_SUCCESS, response } }
     function failure(error) { return { type: productsConstants.GET_LOAN_PRODUCTS_FAILURE, error } }
 
@@ -146,12 +156,12 @@ function updateLoanProduct  (loanProductPayload, encodedKey){
 }
 
 
-function getDepositProducts  (params){
+function getDepositProducts  (params, tempData){
     
     return dispatch =>{
         
         let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response =>{
                 dispatch(success(response));
@@ -161,9 +171,20 @@ function getDepositProducts  (params){
             });
         
     }
+
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: productsConstants.GET_DEPOSIT_PRODUCTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: productsConstants.GET_DEPOSIT_PRODUCTS_PENDING, user, tempData } 
+        }
+        
+    }
     
 
-    function request(user) { return { type: productsConstants.GET_DEPOSIT_PRODUCTS_PENDING, user } }
+    // function request(user) { return { type: productsConstants.GET_DEPOSIT_PRODUCTS_PENDING, user } }
     function success(response) { return { type: productsConstants.GET_DEPOSIT_PRODUCTS_SUCCESS, response } }
     function failure(error) { return { type: productsConstants.GET_DEPOSIT_PRODUCTS_FAILURE, error } }
 

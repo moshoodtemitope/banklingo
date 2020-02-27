@@ -28,6 +28,8 @@ import { productsConstants } from '../../redux/actiontypes/products/products.con
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
+import {noWhiteSpaces} from "../../shared/utils"
+
 import "./administration.scss"; 
 class NewDepositsProduct extends React.Component {
     constructor(props) {
@@ -318,7 +320,7 @@ class NewDepositsProduct extends React.Component {
                                             <Form.Control 
                                                 type="text"
                                                 onChange={handleChange}
-                                                value={values.key}
+                                                value={noWhiteSpaces(values.key)}
                                                 className={errors.key && touched.key ? "is-invalid" : null}
                                                 name="key" required />
                                             {errors.key && touched.key ? (
@@ -765,7 +767,7 @@ class NewDepositsProduct extends React.Component {
                                             <div>
                                                 <Form.Group as={Row} className="center-aligned">
                                                     <Form.Label column sm={4} className="block-level">Methodology</Form.Label>
-                                                    <Col sm={7}>
+                                                    <Col sm={6}>
                                                         
                                                         <Select
                                                             options={methodologyList}
@@ -781,6 +783,9 @@ class NewDepositsProduct extends React.Component {
                                                             
                                                             
                                                         />
+                                                    </Col>
+                                                    <Col sm={2}>
+                                                    
                                                     </Col>
                                                 </Form.Group>
 

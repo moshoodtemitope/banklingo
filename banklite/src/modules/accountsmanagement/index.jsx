@@ -43,15 +43,28 @@ class AccountManagement extends React.Component {
        this.getGLAccounts();
     }
 
-    setPagesize = (PageSize)=>{
+    setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             {CurrentPage, BranchId,ClientState} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
         let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-        this.getGLAccounts();
+
+        let payload ={
+            PageSize: this.state.PageSize,
+            CurrentPage:this.state.CurrentPage,
+            AccountTypeId: this.state.accountTypeToFetch
+        }
+
+        // this.getGLAccounts();
+        if(tempData){
+            dispatch(acoountingActions.getGLAccounts(payload, tempData));
+        }else{
+            dispatch(acoountingActions.getGLAccounts(payload));
+        }
     }
 
     getGLAccounts = (tempData) =>{
@@ -455,7 +468,7 @@ class AccountManagement extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={this.setPagesize}
+                                            onChange={(e)=>this.setPagesize(e, getGLAccountsRequest.request_data.response.data)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>

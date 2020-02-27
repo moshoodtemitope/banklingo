@@ -288,7 +288,7 @@ class GeneralOrganization extends React.Component {
                                                     disabled={adminUpdateOrganizationDetailsRequest.is_request_processing}>
                                                         {adminUpdateOrganizationDetailsRequest.is_request_processing?"Please wait...": "Update"}
                                                 </Button>
-                                                <Button variant="light" type="button"> Cancel</Button>
+                                                {/* <Button variant="light" type="button"> Cancel</Button> */}
                                             </div>
                                             {adminUpdateOrganizationDetailsRequest.request_status === administrationConstants.UPDATE_ORGANIZATION_DETAILS_SUCCESS && 
                                                 <Alert variant="success">

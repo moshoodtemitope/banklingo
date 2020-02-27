@@ -19,6 +19,7 @@ import Alert from 'react-bootstrap/Alert'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import {noWhiteSpaces} from "../../shared/utils"
 import "./administration.scss"; 
 class NewBranch extends React.Component {
     constructor(props) {
@@ -175,7 +176,7 @@ class NewBranch extends React.Component {
                                     <Form.Control type="text"
                                          name="key"
                                          onChange={handleChange} 
-                                         value={values.key}
+                                         value={noWhiteSpaces(values.key)}
                                          className={errors.key && touched.key ? "is-invalid": null}
                                          required />
                                     {errors.key && touched.key ? (

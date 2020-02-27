@@ -70,7 +70,7 @@ class GeneralTxtChannels extends React.Component {
         this.setState({PageSize: sizeOfPage});
 
         let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-        this.getTransactionChannels(params);
+        // this.getTransactionChannels(params);
 
 
         if(tempData){
@@ -247,7 +247,7 @@ class GeneralTxtChannels extends React.Component {
                     let allChannelsData = adminGetTransactionChannelsRequest.request_data.response.data;
                         
                         if(allChannelsData!==undefined){
-                            if(allChannelsData.length>=1){
+                            if(allChannelsData.result.length>=1){
                                 return (
                                     <div>
                                         <div className="heading-with-cta">
@@ -266,7 +266,7 @@ class GeneralTxtChannels extends React.Component {
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
                                                 <select id="toshow" 
-                                                    onChange={(e)=>this.setPagesize(e, allChannelsData)}
+                                                    onChange={(e)=>this.setPagesize(e, allChannelsData.result)}
                                                     value={this.state.PageSize}
                                                     className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
@@ -305,7 +305,7 @@ class GeneralTxtChannels extends React.Component {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    allChannelsData.map((eachChannel, index)=>{
+                                                    allChannelsData.result.map((eachChannel, index)=>{
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
@@ -455,7 +455,7 @@ class GeneralTxtChannels extends React.Component {
             glAccountList.map((channel, id)=>{
                 allGlAccounts.push({label: channel.accountDescription, value:channel.id});
             })
-            selectTxtChannel = txtChannelList.filter((channel, index)=>channel.encodedKey===encodedKey)[0];
+            selectTxtChannel = txtChannelList.result.filter((channel, index)=>channel.encodedKey===encodedKey)[0];
         if(selectTxtChannel!==undefined){
             selectTxtChannelGl = allGlAccounts.filter((glInfo, index)=>glInfo.value===selectTxtChannel.glAccountId)[0];
 

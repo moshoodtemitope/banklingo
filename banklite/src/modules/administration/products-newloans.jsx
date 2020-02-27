@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/Col'
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -22,6 +23,8 @@ import {accountingConstants} from '../../redux/actiontypes/accounting/accounting
 import Alert from 'react-bootstrap/Alert'
 import { productActions } from '../../redux/actions/products/products.action';
 import { productsConstants } from '../../redux/actiontypes/products/products.constants'
+
+import {noWhiteSpaces} from "../../shared/utils"
 import "./administration.scss"; 
 class NewLoanProduct extends React.Component {
     constructor(props) {
@@ -208,7 +211,7 @@ class NewLoanProduct extends React.Component {
                                         <Form.Control 
                                             type="text"
                                             onChange={handleChange}
-                                            value={values.key}
+                                            value={noWhiteSpaces(values.key)}
                                             className={errors.key && touched.key ? "is-invalid" : null}
                                             name="key" required />
                                         {errors.key && touched.key ? (
@@ -242,7 +245,23 @@ class NewLoanProduct extends React.Component {
                                     </Col>
                                 </Form.Row>
                                 
-                                
+                                <Form.Row>
+                                    <Col>
+                                    
+                                        <div className="checkbox-wrap">
+                                            <input type="checkbox" 
+                                                id="isActive" 
+                                                checked={values.isActive? values.isActive:null}
+                                                name="isActive"
+                                                onChange={handleChange} 
+                                                value={values.isActive}  />
+                                            <label htmlFor="isActive">Active state</label>
+                                        </div>
+                                    </Col>
+                                    <Col>
+                                        
+                                    </Col>
+                                </Form.Row>
 
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
@@ -269,9 +288,30 @@ class NewLoanProduct extends React.Component {
                                     </Accordion.Toggle>
                                     <Accordion.Collapse eventKey="0">
                                         <div>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Portfolio Control Account</Form.Label>
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Methodology</Form.Label>
+                                                <Col sm={6}>
+                                                    
+                                                <select id="toshow" 
+                                                        name="methodology"
+                                                        onChange={handleChange}
+                                                        value={values.methodology}
+                                                        className="countdropdown form-control form-control-sm">
+                                                    <option value="0">None</option>
+                                                    <option value="1">Cash</option>
+                                                    <option value="2">Accrual</option>
+                                                </select>
+                                                </Col>
+                                                <Col sm={2}>
+                                                    
+                                                </Col>
+                                            </Form.Group>
+
+
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Portfolio Control Account</Form.Label>
+                                                <Col sm={6}>
+                                                    
                                                     <Select
                                                         options={portfolioControlAccounts}
                                                         onChange={(selectedPortfolioAcct) => {
@@ -287,9 +327,15 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                                <Col>
-                                                    <Form.Label className="block-level">Transaction Source Account</Form.Label>
-                                                    <Select
+                                                <Col sm={2}>
+                                                    <span>Asset</span>
+                                                </Col>
+                                            </Form.Group>
+
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Transaction Control Account</Form.Label>
+                                                <Col sm={6}>
+                                                <Select
                                                         options={transactionSourceAccount}
                                                         onChange={(selectedTxtSourceAcct) => {
                                                             this.setState({ selectedTxtSourceAcct });
@@ -304,11 +350,15 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Write-off Expense Account</Form.Label>
-                                                    <Select
+                                                <Col sm={2}>
+                                                    <span>Asset</span>
+                                                </Col>
+                                            </Form.Group>
+
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Write-off Expense Account</Form.Label>
+                                                <Col sm={6}>
+                                                <Select
                                                         options={writeOffExpenseAccounts}
                                                         onChange={(selectedWriteOffExpenseAcct) => {
                                                             this.setState({ selectedWriteOffExpenseAcct });
@@ -323,9 +373,16 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                                <Col>
-                                                    <Form.Label className="block-level">Interest Receivable Account</Form.Label>
-                                                    <Select
+                                                <Col sm={2}>
+                                                    <span>Expense</span>
+                                                </Col>
+                                            </Form.Group>
+                                            { values.methodology!=="1" && 
+                                            <div>
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Interest Receivable Account</Form.Label>
+                                                <Col sm={6}>
+                                                <Select
                                                         options={interestReceivableAccounts}
                                                         onChange={(selectedInterestReceivableAcct) => {
                                                             this.setState({ selectedInterestReceivableAcct });
@@ -340,11 +397,15 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Fee Receivable Account</Form.Label>
-                                                    <Select
+                                                <Col sm={2}>
+                                                    <span>Asset</span>
+                                                </Col>
+                                            </Form.Group>
+
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Fee Receivable Account</Form.Label>
+                                                <Col sm={6}>
+                                                <Select
                                                         options={feeReceivableAccounts}
                                                         onChange={(selectedFeeReceivableAcct) => {
                                                             this.setState({ selectedFeeReceivableAcct });
@@ -359,9 +420,15 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                                <Col>
-                                                    <Form.Label className="block-level">Penalty Receivable Account</Form.Label>
-                                                    <Select
+                                                <Col sm={2}>
+                                                    <span>Asset</span>
+                                                </Col>
+                                            </Form.Group>
+
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Penalty Receivable Account</Form.Label>
+                                                <Col sm={6}>
+                                                <Select
                                                         options={penaltyReceivableAccounts}
                                                         onChange={(selectedPenaltyReceivableAcct) => {
                                                             this.setState({ selectedPenaltyReceivableAcct });
@@ -376,11 +443,17 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Fee Income Account</Form.Label>
-                                                    <Select
+                                                <Col sm={2}>
+                                                    <span>Asset</span>
+                                                </Col>
+                                            </Form.Group>
+                                            </div>
+                                            }
+
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Fee Income Account</Form.Label>
+                                                <Col sm={6}>
+                                                <Select
                                                         options={allGlAccounts}
                                                         onChange={(selectedFeeIncomeAcct) => {
                                                             this.setState({ selectedFeeIncomeAcct });
@@ -395,9 +468,15 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                                <Col>
-                                                    <Form.Label className="block-level">Interest Income Account</Form.Label>
-                                                    <Select
+                                                <Col sm={2}>
+                                                    <span>Any GL Account</span>
+                                                </Col>
+                                            </Form.Group>
+
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Interest Income Account</Form.Label>
+                                                <Col sm={6}>
+                                                <Select
                                                         options={interestIncomeAccounts}
                                                         onChange={(selectedInterestIncomeAcct) => {
                                                             this.setState({ selectedInterestIncomeAcct });
@@ -412,11 +491,15 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Penalty Income Account</Form.Label>
-                                                    <Select
+                                                <Col sm={2}>
+                                                    <span>Income</span>
+                                                </Col>
+                                            </Form.Group>
+
+                                            <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Penalty Income Account</Form.Label>
+                                                <Col sm={6}>
+                                                <Select
                                                         options={penaltyIncomeAccounts}
                                                         onChange={(selectedPenaltyIncomeAcct) => {
                                                             this.setState({ selectedPenaltyIncomeAcct });
@@ -431,35 +514,13 @@ class NewLoanProduct extends React.Component {
                                                         
                                                     />
                                                 </Col>
-                                                <Col>
-                                                    <Form.Label className="block-level">Methodology</Form.Label>
-                                                    <select id="toshow" 
-                                                            onChange={handleChange}
-                                                            value={values.methodology}
-                                                            className="countdropdown form-control form-control-sm">
-                                                        <option value="0">None</option>
-                                                        <option value="1">Cash</option>
-                                                        <option value="2">Accrual</option>
-                                                    </select>
+                                                <Col sm={2}>
+                                                    <span>Income</span>
                                                 </Col>
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Col>
-                                                
-                                                    <div className="checkbox-wrap">
-                                                        <input type="checkbox" 
-                                                            id="isActive" 
-                                                            checked={values.isActive? values.isActive:null}
-                                                            name="isActive"
-                                                            onChange={handleChange} 
-                                                            value={values.isActive}  />
-                                                        <label htmlFor="isActive">Active state</label>
-                                                    </div>
-                                                </Col>
-                                                <Col>
-                                                    
-                                                </Col>
-                                            </Form.Row>
+                                            </Form.Group>
+                                        
+                                           
+                                            
                                         </div>
                                     </Accordion.Collapse>
                                 </Accordion>

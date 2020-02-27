@@ -46,12 +46,12 @@ export const administrationActions = {
     uploadData
 }
 
-function getUsers  (params){
+function getUsers  (params, tempData){
     
     return dispatch =>{
         
         let consume = ApiService.request(routes.HIT_USERS+`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response =>{
                 dispatch(success(response));
@@ -61,9 +61,19 @@ function getUsers  (params){
             });
         
     }
+
+function request(user, tempData) { 
+    if(tempData===undefined){
+        return { type: administrationConstants.GET_USERS_PENDING, user } 
+    }
+    if(tempData!==undefined){
+        return { type: administrationConstants.GET_USERS_PENDING, user, tempData } 
+    }
+    
+}
     
 
-function request(user) { return { type: administrationConstants.GET_USERS_PENDING, user } }
+// function request(user) { return { type: administrationConstants.GET_USERS_PENDING, user } }
 function success(response) { return { type: administrationConstants.GET_USERS_SUCCESS, response } }
 function failure(error) { return { type: administrationConstants.GET_USERS_FAILURE, error } }
 
@@ -278,10 +288,10 @@ function getTransactionChannels  (params, tempData){
    
     return dispatch =>{
         // let {PageSize, CurrentPage}= payload;
-       
+        var tempValue = tempData;
         let consume = ApiService.request(routes.HIT_TRANSACTION_CHANNEL+`?${params}`, "GET", null);
         dispatch(request(consume, tempData));
-        let tempValue = tempData;
+        // let tempValue = tempData;
         return consume
             .then(response =>{
                 
@@ -382,12 +392,12 @@ function updateARole  (updateRolePayload){
     function clear() { return { type: administrationConstants.UPDATE_A_ROLE_RESET, clear_data:""} }
 }
 
-function getRoles  (getRolesPayload){
+function getRoles  (getRolesPayload, tempData){
     
     return dispatch =>{
         let {PageSize, CurrentPage}= getRolesPayload;
         let consume = ApiService.request(routes.HIT_ROLE+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response =>{
                 dispatch(success(response));
@@ -396,10 +406,19 @@ function getRoles  (getRolesPayload){
             });
         
     }
+   
+    function request(user, tempData) { 
         
-    
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_ROLES_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_ROLES_PENDING, user, tempData } 
+        }
+        
+    }
 
-    function request(user) { return { type: administrationConstants.GET_ROLES_PENDING, user } }
+    
     function success(response) { return { type: administrationConstants.GET_ROLES_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.GET_ROLES_FAILURE, error } }
 
@@ -1052,12 +1071,12 @@ function updateInternalControlSettings  (internalControlSettingsPayload){
 
 }
 
-function getAllBranches  (params){
+function getAllBranches  (params, tempData){
     
     return dispatch =>{
         
         let consume = ApiService.request(routes.GET_BRANCHES+'?'+params, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response =>{
                 dispatch(success(response));
@@ -1067,9 +1086,18 @@ function getAllBranches  (params){
             });
         
     }
-    
 
-function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
+function request(user, tempData) { 
+    if(tempData===undefined){
+        return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } 
+    }
+    if(tempData!==undefined){
+        return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user, tempData } 
+    }
+    
+}
+
+// function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
 function success(response) { return { type: administrationConstants.GET_ALL_BRANCHES_SUCCESS, response } }
 function failure(error) { return { type: administrationConstants.GET_ALL_BRANCHES_FAILURE, error } }
 

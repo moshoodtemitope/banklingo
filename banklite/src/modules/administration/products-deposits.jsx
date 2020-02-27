@@ -24,7 +24,8 @@ class ProductDeposits extends React.Component {
             user:'',
             PageSize:25,
             CurrentPage:1,
-            isRefresh:false
+            isRefresh:false,
+            FullDetails:false
         }
 
         
@@ -46,7 +47,7 @@ class ProductDeposits extends React.Component {
         dispatch(productActions.getDepositProducts(paramters));
     }
 
-    setPagesize = (PageSize)=>{
+    setPagesize = (PageSize, tempData)=>{
         
         const {dispatch} = this.props;
 
@@ -58,104 +59,213 @@ class ProductDeposits extends React.Component {
 
         let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
 
-        
+        if(tempData){
+            
+            dispatch(productActions.getDepositProducts(params,tempData));
+        }else{
+            dispatch(productActions.getDepositProducts(params));
+        }
        
-        dispatch(productActions.getDepositProducts(params));
+        // dispatch(productActions.getDepositProducts(params));
     }
 
-    setShowDetails = (FullDetails)=>{
+    setShowDetails = (FullDetails, tempData)=>{
         // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
         let showDetails = FullDetails.target.checked,
             {CurrentPage, PageSize} = this.state;
 
         this.setState({FullDetails: showDetails});
 
         let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getDepositProducts(params);
+        // this.getDepositProducts(params);
+
+        if(tempData){
+            
+            dispatch(productActions.getDepositProducts(params,tempData));
+        }else{
+            dispatch(productActions.getDepositProducts(params));
+        }
     }
 
     renderDepositProducts=()=>{
         let getDepositProductsRequestData = this.props.getDepositProductsRequest,
             {isRefresh} = this.state;
 
+
+            let saveRequestData= getDepositProductsRequestData.request_data!==undefined?getDepositProductsRequestData.request_data.tempData:null;
+
             if(getDepositProductsRequestData.request_status ===productsConstants.GET_DEPOSIT_PRODUCTS_PENDING){
-                return(
-                    <div className="loading-content">
-                        <div className="heading-with-cta">
-                            <Form className="one-liner">
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                    return(
+                        <div className="loading-content">
+                            <div className="heading-with-cta">
+                                <Form className="one-liner">
 
-                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                    <Form.Control as="select" size="sm">
-                                        <option>No Filter</option>
-                                        <option>Add New Filter</option>
-                                        <option>Custom Filter</option>
-                                    </Form.Control>
-                                </Form.Group>
-                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                            </Form>
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                </Form>
 
-                            <div className="pagination-wrap">
-                                <label htmlFor="toshow">Show</label>
-                                <select id="toshow" className="countdropdown form-control form-control-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="200">200</option>
-                                </select>
-                                <div className="move-page-actions">
-                                    <div className="each-page-action">
-                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                    </div>
-                                    <div className="page-count">
-                                        <span>1-20</span>  of <span>20000</span>
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                    <div className="move-page-actions">
+                                        <div className="each-page-action">
+                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                        </div>
+                                        <div className="page-count">
+                                            <span>1-20</span>  of <span>20000</span>
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Deposit Product Name</th>
+                                        <th>Deposit Product Code</th>
+                                        <th>Deposit Product Type</th>
+                                        <th>Last Modified</th>
+                                        <th>Active</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                            <div className="loading-text">Please wait... </div>
+                            {/* <div className="footer-with-cta toleft">
+                                <NavLink to={'/administration/products/newloan-product'} className="btn btn-primary">New Deposit Product</NavLink>
+
+                            </div> */}
                         </div>
+                    )
+                }else{
+                    return(
+                        <div>
+                            <div className="heading-with-cta">
+                                <Form className="one-liner">
 
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                </Form>
 
-                        <TableComponent classnames="striped bordered hover">
-                            <thead>
-                                <tr>
-                                    <th>Deposit Product Name</th>
-                                    <th>Deposit Product Code</th>
-                                    <th>Deposit Product Type</th>
-                                    <th>Last Modified</th>
-                                    <th>Active</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </TableComponent>
-                        <div className="loading-text">Please wait... </div>
-                        {/* <div className="footer-with-cta toleft">
-                            <NavLink to={'/administration/products/newloan-product'} className="btn btn-primary">New Deposit Product</NavLink>
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow" 
+                                        // onChange={this.setPagesize}
+                                        value={this.state.PageSize}
+                                        className="countdropdown form-control form-control-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                    <div className="move-page-actions">
+                                        <div className="each-page-action">
+                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                        </div>
+                                        <div className="page-count">
+                                            <span>1-20</span>  of <span>20000</span>
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                        <div className="each-page-action">
+                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="table-helper mb-10">
+                                <input type="checkbox" name="" 
+                                    onChange={this.setShowDetails}
+                                    checked={this.state.FullDetails}
+                                    id="showFullDetails" />
+                                <label htmlFor="showFullDetails">Show full details</label>
+                            </div>
+                            <div className="loading-text">Please wait... </div>
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Deposit Product Name</th>
+                                        <th>Deposit Product Code</th>
+                                        <th>Deposit Product Type</th>
+                                        <th>Last Modified</th>
+                                        <th>Active</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {saveRequestData.map((eachDepositProduct, index)=>{
+                                        return(
+                                            <Fragment key={index}>
+                                                <tr>
+                                                    <td>
+                                                        <NavLink to={`/administration/products/deposit/edit/${eachDepositProduct.productEncodedKey}`}>{eachDepositProduct.productName}</NavLink>
+                                                        
+                                                    </td>
+                                                    <td>{eachDepositProduct.productCode}</td>
+                                                    <td>{eachDepositProduct.depositAccountTypeDescription}</td>
+                                                    <td>{eachDepositProduct.lastModified}</td>
+                                                    <td>{eachDepositProduct.isActive.toString()==="true"?"Active":"Not Active"}</td>
+                                                </tr>
+                                            </Fragment>
+                                            
+                                        )
+                                    })}
+                                    
+                                </tbody>
+                            </TableComponent>
+                            <div className="footer-with-cta toleft">
+                                <NavLink to={'/administration/products/newdeposits-product'} className="btn btn-primary">New Deposit Product</NavLink>
 
-                        </div> */}
-                    </div>
-                )
+                            </div>
+                        </div>
+                    )
+                }
             }
 
             if(getDepositProductsRequestData.request_status ===productsConstants.GET_DEPOSIT_PRODUCTS_SUCCESS){
                 let allDepositProductsData = getDepositProductsRequestData.request_data.response.data;
                 if(allDepositProductsData!==undefined){
-                   if(allDepositProductsData.length>=1){
+                   if(allDepositProductsData.result.length>=1){
                         return(
                             <div>
                                 <div className="heading-with-cta">
@@ -174,7 +284,8 @@ class ProductDeposits extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={this.setPagesize}
+                                            onChange={(e)=>this.setPagesize(e, allDepositProductsData.result)}
+                                            // onChange={this.setPagesize}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -203,7 +314,8 @@ class ProductDeposits extends React.Component {
                                 </div>
                                 <div className="table-helper mb-10">
                                     <input type="checkbox" name="" 
-                                        onChange={this.setShowDetails}
+                                        onChange={(e)=>this.setShowDetails(e, allDepositProductsData.result)}
+                                        // onChange={this.setShowDetails}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
@@ -216,11 +328,11 @@ class ProductDeposits extends React.Component {
                                             <th>Deposit Product Code</th>
                                             <th>Deposit Product Type</th>
                                             <th>Last Modified</th>
-                                            <th>Active</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {allDepositProductsData.map((eachDepositProduct, index)=>{
+                                        {allDepositProductsData.result.map((eachDepositProduct, index)=>{
                                             return(
                                                 <Fragment key={index}>
                                                     <tr>
@@ -231,7 +343,7 @@ class ProductDeposits extends React.Component {
                                                         <td>{eachDepositProduct.productCode}</td>
                                                         <td>{eachDepositProduct.depositAccountTypeDescription}</td>
                                                         <td>{eachDepositProduct.lastModified}</td>
-                                                        <td>{eachDepositProduct.isActive.toString()}</td>
+                                                        <td>{eachDepositProduct.isActive.toString()==="true"?"Active":"Not Active"}</td>
                                                     </tr>
                                                 </Fragment>
                                                 

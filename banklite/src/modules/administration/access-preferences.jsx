@@ -113,8 +113,8 @@ class AccessPreferences extends React.Component {
                         onSubmit={(values, { resetForm }) => {
         
                             let updatePreferencesPayload = {
-                                    timeOutSession: values.timeOutSession,
-                                    minPasswordLength: values.minPasswordLength,
+                                    timeOutSession: parseInt(values.timeOutSession),
+                                    minPasswordLength: parseInt(values.minPasswordLength),
                                     automaticExpiryOfPassword: values.automaticExpiryOfPassword,
                                     passwordExpiryDays: parseInt(values.passwordExpiryDays),
                                     lockUserAfterFailedLogin: values.lockUserAfterFailedLogin,
@@ -291,7 +291,7 @@ class AccessPreferences extends React.Component {
                                             disabled={adminAccessPreferencesRequest.is_request_processing}>
                                                 {adminAccessPreferencesRequest.is_request_processing?"Please wait...": "Save Changes"}
                                         </Button>
-                                        <Button variant="light" type="button"> Cancel</Button>
+                                        {/* <Button variant="light" type="button"> Cancel</Button> */}
                                     </div>
         
                                     {adminAccessPreferencesRequest.request_status === administrationConstants.UPDATE_ACCESS_PREFERENCE_SUCCESS && 
