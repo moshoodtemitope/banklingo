@@ -134,7 +134,7 @@ class GeneralInternalControl extends React.Component {
                                     creditArrangementInitialState: parseInt(values.creditArrangementInitialState),
                                     separateUsersForApprovalsAndDisbursals: 
                                         values.separateUsersForApprovalsAndDisbursals===true ? 1: 0,
-                                    maximumExposureToCustomerAmount: parseFloat(values.maximumExposureToCustomerAmount.replace(/,/g, ''))
+                                    maximumExposureToCustomerAmount: parseFloat(values.maximumExposureToCustomerAmount.toString().replace(/,/g, ''))
                                 }
             
                                 if(parseInt(values.maximumExposureToCustomer)===1){
@@ -217,7 +217,7 @@ class GeneralInternalControl extends React.Component {
                                             <Form.Row>
             
                                                 <Col>
-                                                    <Form.Group controlId="minimum-days">
+                                                    <Form.Group controlId="minimum-days-2">
                                                         <Form.Label className="block-level">Maximum Amount for Maximum Exposure To A Customer</Form.Label>
                                                         <Form.Control type="text" size="sm" 
                                                             name="maximumExposureToCustomerAmount"

@@ -81,16 +81,24 @@ class GeneralCustomerTypes extends React.Component {
         
     }
 
-    setPagesize = (PageSize)=>{
+    setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             {CurrentPage} = this.state;
+        
         
 
         this.setState({PageSize: sizeOfPage});
 
         let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-        this.getCustomerTypes(params);
+
+        if(tempData){
+            dispatch(administrationActions.getCustomerTypes(params, tempData));
+        }else{
+            dispatch(administrationActions.getCustomerTypes(params));
+        }
+        
     }
 
     handleClose = () => this.setState({show:false});
@@ -134,7 +142,7 @@ class GeneralCustomerTypes extends React.Component {
         switch(adminGetCustomerTypesRequest.request_status){
             case(administrationConstants.GET_CUSTOMERTYPES_PENDING):
             
-                if(saveRequestData===undefined){
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                     return (
                         <div className="loading-content"> 
                             <div className="heading-with-cta">
@@ -251,7 +259,7 @@ class GeneralCustomerTypes extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                            <div className="loading-text toleft">Please wait... </div>
+                            <div className="loading-text">Please wait... </div>
                             <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
@@ -326,7 +334,7 @@ class GeneralCustomerTypes extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={this.setPagesize}
+                                            onChange={(e)=>this.setPagesize(e, allCustomerTypesData)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>

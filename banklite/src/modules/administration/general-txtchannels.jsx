@@ -61,8 +61,9 @@ class GeneralTxtChannels extends React.Component {
         dispatch(administrationActions.getTransactionChannels(params));
     }
 
-    setPagesize = (PageSize)=>{
-        // console.log('----here', PageSize.target.value);
+    setPagesize = (PageSize, tempData)=>{
+        
+        const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             {CurrentPage} = this.state;
 
@@ -70,79 +71,178 @@ class GeneralTxtChannels extends React.Component {
 
         let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
         this.getTransactionChannels(params);
+
+
+        if(tempData){
+            dispatch(administrationActions.getTransactionChannels(params,tempData));
+        }else{
+            dispatch(administrationActions.getTransactionChannels(params));
+        }
     }
     
 
     renderAllChannels =()=>{
         let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels;
 
+        let saveRequestData= adminGetTransactionChannelsRequest.request_data!==undefined?adminGetTransactionChannelsRequest.request_data.tempData:null;
             switch (adminGetTransactionChannelsRequest.request_status){
+                
                 case (administrationConstants.GET_TRANSACTION_CHANNELS_PENDING):
-                    return (
-                        <div className="loading-content"> 
-                            <div className="heading-with-cta">
-                                <Form className="one-liner">
+                    
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                        return (
+                            <div className="loading-content"> 
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
 
-                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                        <Form.Control as="select" size="sm">
-                                            <option>No Filter</option>
-                                            <option>Add New Filter</option>
-                                            <option>Custom Filter</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                </Form>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
 
-                                <div className="pagination-wrap">
-                                    <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" className="countdropdown form-control form-control-sm">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="200">200</option>
-                                    </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        <div className="move-page-actions">
+                                            <div className="each-page-action">
+                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                            </div>
+                                            <div className="page-count">
+                                                <span>1-20</span>  of <span>20000</span>
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Created</th>
+                                            <th>Created by</th>
+                                            {/* <th>Active</th> */}
+                                            {/* <th></th> */}
+                                        </tr>
+                                    </thead>
+                                        
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            {/* <td></td> */}
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                                <div className="loading-text">Please wait... </div>
                             </div>
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Created</th>
-                                        <th>Created by</th>
-                                        {/* <th>Active</th> */}
-                                        {/* <th></th> */}
-                                    </tr>
-                                </thead>
-                                    
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        {/* <td></td> */}
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </TableComponent>
-                            <div className="loading-text">Please wait... </div>
-                        </div>
-                    )
+                        )
+                    }else{
+                        return (
+                            <div>
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" 
+                                            onChange={this.setPagesize}
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        <div className="move-page-actions">
+                                            <div className="each-page-action">
+                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                                            </div>
+                                            <div className="page-count">
+                                                <span>1-20</span>  of <span>20000</span>
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                            <div className="each-page-action">
+                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="loading-text">Please wait... </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Created</th>
+                                            <th>Created by</th>
+                                            <th>Active</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            saveRequestData.map((eachChannel, index)=>{
+                                                return(
+                                                    <Fragment key={index}>
+                                                        <tr>
+                                                            <td>{eachChannel.name}</td>
+                                                            <td>{eachChannel.dateCreated}</td>
+                                                            <td>{eachChannel.createdBy!==null?eachChannel.createdBy:''}</td>
+                                                            <td>{eachChannel.objectStateDescription}</td>
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    className="customone"
+                                                                >
+                                                                    {/* <NavLink className="dropdown-item" to={'/administration/general/new-txt-channels'}>Edit</NavLink> */}
+                                                                    <Dropdown.Item eventKey="1" onClick={()=>this.handleShowEdit(eachChannel.encodedKey)}>Edit</Dropdown.Item>
+                                                                </DropdownButton>
+                                                            </td>
+                                                        </tr>
+                                                    </Fragment>
+                                                )
+                                            })
+                                        }
+                                        
+                                    </tbody>
+                                </TableComponent>
+                            </div>
+                        )
+                    }
                 case(administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS):
                     let allChannelsData = adminGetTransactionChannelsRequest.request_data.response.data;
                         
@@ -166,7 +266,7 @@ class GeneralTxtChannels extends React.Component {
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
                                                 <select id="toshow" 
-                                                    onChange={this.setPagesize}
+                                                    onChange={(e)=>this.setPagesize(e, allChannelsData)}
                                                     value={this.state.PageSize}
                                                     className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>

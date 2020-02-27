@@ -274,18 +274,21 @@ function updateOrganizationDetails   (updateOrgPayload){
 
 }
 
-function getTransactionChannels  (params){
-    
+function getTransactionChannels  (params, tempData){
+   
     return dispatch =>{
         // let {PageSize, CurrentPage}= payload;
+       
         let consume = ApiService.request(routes.HIT_TRANSACTION_CHANNEL+`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
+        let tempValue = tempData;
         return consume
             .then(response =>{
                 
                 let consume2 = ApiService.request(routes.ALL_GLACCOUNTS, "GET", null);
 
-                dispatch(request(consume2));
+                console.log("ddsdsbd", tempValue);
+                dispatch(request(consume2, tempValue));
 
                 return consume2
                     .then(response2 =>{
@@ -305,7 +308,15 @@ function getTransactionChannels  (params){
     }
     
 
-function request(user) { return { type: administrationConstants.GET_TRANSACTION_CHANNELS_PENDING, user } }
+function request(user, tempData) { 
+    if(tempData===undefined){
+        return { type: administrationConstants.GET_TRANSACTION_CHANNELS_PENDING, user } 
+    }
+    if(tempData!==undefined){
+        return { type: administrationConstants.GET_TRANSACTION_CHANNELS_PENDING, user, tempData } 
+    }
+    
+}
 function success(response, response2) { return { type: administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS, response, response2 } }
 function failure(error) { return { type: administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE, error } }
 

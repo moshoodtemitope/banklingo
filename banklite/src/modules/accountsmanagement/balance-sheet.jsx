@@ -193,7 +193,7 @@ class BalanceSheet extends React.Component {
         // if()
         switch(getBalanceSheetRequest.request_status){
             case (accountingConstants.GET_BALANCE_SHEET_PENDING):
-                if((saveRequestData===null || saveRequestData===undefined) || (saveRequestData!==null && saveRequestData.result.length>=1) ){
+                if((saveRequestData===null || saveRequestData===undefined) || (saveRequestData!==null && saveRequestData!==undefined && saveRequestData.length<1) ){
                     return(
                         <div className="loading-content">
                             <div className="loading-text mb-20">Please wait... </div>
@@ -324,7 +324,7 @@ class BalanceSheet extends React.Component {
                                 </thead>
                                 {/* <tbody> */}
                                     {
-                                        saveRequestData.result.map((eachResult, index)=>{
+                                        saveRequestData.map((eachResult, index)=>{
                                             return(
                                                 <tbody key={`key-${index}`}>
                                                     <tr className="sheetheading">
