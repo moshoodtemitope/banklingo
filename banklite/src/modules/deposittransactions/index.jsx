@@ -141,7 +141,7 @@ class DepositTransactions extends React.Component {
             case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_SUCCESS):
                 let allDepositTransactions = getDepositTransactionRequest.request_data.response.data;
                 if (allDepositTransactions !== undefined) {
-                    if (allDepositTransactions.length >= 1) {
+                    if (allDepositTransactions.result.length >= 1) {
                         return (
                             <div>
                                 <div className="heading-with-cta">
@@ -210,7 +210,7 @@ class DepositTransactions extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            allDepositTransactions.map((eachTransaction, index) => {
+                                            allDepositTransactions.result.map((eachTransaction, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>

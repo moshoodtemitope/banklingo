@@ -12,6 +12,7 @@ import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 // import  SidebarElement from '../../shared/elements/sidebar'
 
 import { productActions } from '../../redux/actions/products/products.action';
@@ -69,6 +70,24 @@ class ProductDeposits extends React.Component {
         // dispatch(productActions.getDepositProducts(params));
     }
 
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+
+
+        if(tempData){
+            dispatch(productActions.getDepositProducts(params,tempData));
+        }else{
+            dispatch(productActions.getDepositProducts(params));
+        }
+    }
+
     setShowDetails = (FullDetails, tempData)=>{
         // console.log('----here', PageSize.target.value);
         const {dispatch} = this.props;
@@ -120,23 +139,6 @@ class ProductDeposits extends React.Component {
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -195,23 +197,6 @@ class ProductDeposits extends React.Component {
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div className="table-helper mb-10">
@@ -293,23 +278,15 @@ class ProductDeposits extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
+                                        <TablePagination
+                                            totalPages={allDepositProductsData.totalPages}
+                                            currPage={allDepositProductsData.currentPage}
+                                            currRecordsCount={allDepositProductsData.result.length}
+                                            totalRows={allDepositProductsData.totalRows}
+                                            tempData={allDepositProductsData.result}
+                                            pagesCountToshow={4}
+                                            refreshFunc={this.loadNextPage}
+                                        />
                                     </div>
                                 </div>
                                 <div className="table-helper mb-10">

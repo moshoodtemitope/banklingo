@@ -10,6 +10,7 @@ export const routes = {
     // Administration endpoints
     
     LOGIN_USER: BASEURL + '/api/Login',
+    REFRESH_TOKEN: BASEURL + '/api/refreshtoken',
     HIT_DASHBOARD: BASEURL + '/api/Dashboard',
 
 

@@ -144,7 +144,7 @@ class ClientsManagement extends React.Component {
                 case(clientsConstants.GET_CLIENTS_SUCCESS):
                     let allClientsData = getClientsRequest.request_data.response.data;
                     if(allClientsData!==undefined){
-                        if(allClientsData.length>=1){
+                        if(allClientsData.result.length>=1){
                             return(
                                 <div>
                                     <div className="table-helper">
@@ -211,7 +211,7 @@ class ClientsManagement extends React.Component {
                                         </thead>
                                         <tbody>
                                             {
-                                                allClientsData.map((eachClient, index)=>{
+                                                allClientsData.result.map((eachClient, index)=>{
                                                     return(
                                                         <Fragment key={index}>
                                                             <tr>

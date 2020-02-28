@@ -15,6 +15,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
@@ -99,6 +100,24 @@ class GeneralCustomerTypes extends React.Component {
             dispatch(administrationActions.getCustomerTypes(params));
         }
         
+    }
+
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+
+
+        if(tempData){
+            dispatch(administrationActions.getCustomerTypes(params,tempData));
+        }else{
+            dispatch(administrationActions.getCustomerTypes(params));
+        }
     }
 
     handleClose = () => this.setState({show:false});

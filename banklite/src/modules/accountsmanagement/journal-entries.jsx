@@ -14,6 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 
 import { Formik, FieldArray, ErrorMessage } from 'formik';
@@ -76,6 +77,8 @@ class JournalEntries extends React.Component {
     //     // this.props.onChange(this.props.id, dateofEntry);
     // }
 
+    
+
     handleDateChange(e){
         e.preventDefault();
 
@@ -90,7 +93,7 @@ class JournalEntries extends React.Component {
         
     }
 
-    setPagesize = (PageSize)=>{
+    setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
         let sizeOfPage = PageSize.target.value,
             {CurrentPage, BranchId,ClientState} = this.state;
@@ -101,7 +104,40 @@ class JournalEntries extends React.Component {
         // this.getJournalEntries(params);
         let getJournalEntriesRequest = this.props.getJournalEntries;
         let saveRequestData= getJournalEntriesRequest.request_data!==undefined?getJournalEntriesRequest.request_data.tempData:null;
-        this.getJournalEntries(saveRequestData);
+        // this.getJournalEntries(saveRequestData);
+
+        const {dispatch} = this.props;
+         let payload ={
+             PageSize: this.state.PageSize,
+             CurrentPage:this.state.CurrentPage
+         }
+         if(tempData){
+            dispatch(acoountingActions.getJournalEntries(payload, tempData));
+         }else{
+            dispatch(acoountingActions.getJournalEntries(payload));
+         }
+    }
+
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+
+        let payload ={
+            PageSize: this.state.PageSize,
+            CurrentPage:nextPage
+        }
+
+        if(tempData){
+            dispatch(acoountingActions.getJournalEntries(payload,tempData));
+        }else{
+            dispatch(acoountingActions.getJournalEntries(payload));
+        }
     }
 
 
@@ -484,10 +520,6 @@ class JournalEntries extends React.Component {
                                                                         <span className="invalid-feedback">{errors.jornalEntries[index].entryAmount}</span>
                                                                        
                                                                 )}
-                                                                {/* <ErrorMessage name="entryAmount" /> */}
-                                                                {/* {errors.entryAmount && touched.entryAmount ? (
-                                                                    <span className="invalid-feedback">{errors.entryAmount}</span>
-                                                                ) : null} */}
                                                             </Col>
                                                             {
                                                                entry.removable===true &&
@@ -499,56 +531,10 @@ class JournalEntries extends React.Component {
                                                                     </Button>
                                                             }
                                                             
-                                                            
-                                                            {/* <div className="col"> */}
-                                                                {/* <label htmlFor={`jornalEntries.${index}.name`}>Name</label> */}
-                                                                {/* <Field
-                                                                    name={`jornalEntries.${index}.name`}
-                                                                    placeholder="Jane Doe"
-                                                                    type="text"
-                                                                /> */}
-                                                                {/* {errors.jornalEntries &&
-                                                                    errors.jornalEntries[index] &&
-                                                                    errors.jornalEntries[index].name &&
-                                                                    touched.jornalEntries &&
-                                                                    touched.jornalEntries[index].name && (
-                                                                        <div className="field-error">
-                                                                            {errors.jornalEntries[index].name}
-                                                                        </div>
-                                                                    )} */}
-                                                            {/* </div> */}
-                                                            {/* <div className="col">
-                                                                <label htmlFor={`jornalEntries.${index}.email`}>
-                                                                    Email
-                          </label>
-                                                                <Field
-                                                                    name={`jornalEntries.${index}.email`}
-                                                                    placeholder="jane@acme.com"
-                                                                    type="email"
-                                                                />
-                                                                {errors.jornalEntries &&
-                                                                    errors.jornalEntries[index] &&
-                                                                    errors.jornalEntries[index].email &&
-                                                                    touched.jornalEntries &&
-                                                                    touched.jornalEntries[index].email && (
-                                                                        <div className="field-error">
-                                                                            {errors.jornalEntries[index].email}
-                                                                        </div>
-                                                                    )}
-                                                            </div>
-                                                            <div className="col">
-                                                                <button
-                                                                    type="button"
-                                                                    className="secondary"
-                                                                    onClick={() => remove(index)}
-                                                                >
-                                                                    X
-                          </button>
-                                                            </div> */}
                                                             </Form.Row>
                                                         /* </div> */
                                                     ))}
-                                                    {/* { Object.keys(errors).length<1 && */}
+                                                    
                                                         <div className="footer-with-cta toleft">
                                                             <Button
                                                                 type="button"
@@ -560,103 +546,12 @@ class JournalEntries extends React.Component {
                                                                     <span>+</span>New
                                                             </Button>
                                                         </div>
-                                                    {/* // } */}
-                                                    
-                                                {/* <button
-                                                    type="button"
-                                                    className="secondary"
-                                                    onClick={() => push({ name: "", email: "" })}
-                                                >
-                                                    Add Friend
-                  </button> */}
+                                                  
                                             </div>
                                         )}
                                     />
 
-                                    {/* <Form.Row>
-                                        <Col>
-                                            <Form.Label className="block-level">GL Account</Form.Label>
-                                            <Select
-                                                options={allGlAccounts}
-                                                
-                                                onChange={(selectedGlAccount) => {
-                                                    this.setState({ selectedGlAccount });
-                                                    errors.glAcountlId = null
-                                                    values.glAcountlId = selectedGlAccount.value
-
-
-                                                }}
-                                                className={errors.glAcountlId && touched.glAcountlId ? "is-invalid" : null}
-
-                                                name="glAcountlId"
-                                                required
-                                            />
-                                            {errors.glAcountlId && touched.glAcountlId ? (
-                                                <span className="invalid-feedback">{errors.glAcountlId}</span>
-                                            ) : null}
-                                        </Col>
-                                        <Col>
-                                            <Form.Label className="block-level">Branch</Form.Label>
-                                            <Select
-                                                options={allBranches}
-                                                
-                                                onChange={(selectedBranch) => {
-                                                    this.setState({ selectedBranch });
-                                                    errors.branchId = null
-                                                    values.branchId = selectedBranch.value
-
-
-                                                }}
-                                                className={errors.branchId && touched.branchId ? "is-invalid" : null}
-
-                                                name="branchId"
-                                            />
-                                            {errors.branchId && touched.branchId ? (
-                                                <span className="invalid-feedback">{errors.branchId}</span>
-                                            ) : null}
-                                        </Col> */}
-                                    {/* </Form.Row>
-                                    <Form.Row> */}
-                                        {/* <Col>
-                                            <Form.Label className="block-level">Journal Entry Type</Form.Label>
-                                            <Select
-                                                options={entryTypes}
-                                                
-                                                onChange={(selectedType) => {
-                                                    this.setState({ selectedType });
-                                                    errors.entryTypeId = null
-                                                    values.entryTypeId = selectedType.value
-
-
-                                                }}
-                                                className={errors.entryTypeId && touched.entryTypeId ? "is-invalid" : null}
-
-                                                name="entryTypeId"
-                                                required
-                                            />
-                                            {errors.entryTypeId && touched.entryTypeId ? (
-                                                <span className="invalid-feedback">{errors.entryTypeId}</span>
-                                            ) : null}
-                                        </Col>
-                                        <Col>
-                                            <Form.Label className="block-level">Amount</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                onChange={handleChange}
-                                                value={values.entryAmount}
-                                                className={errors.entryAmount && touched.entryAmount ? "is-invalid withcustom" : "withcustom"}
-                                                name="entryAmount" required />
-                                            {errors.entryAmount && touched.entryAmount ? (
-                                                <span className="invalid-feedback">{errors.entryAmount}</span>
-                                            ) : null}
-                                        </Col>
-                                        <Button
-                                            type="button"
-                                            variant="secondary"
-                                            className="addnew-btn">
-                                                <span>+</span>New
-                                        </Button>
-                                    </Form.Row> */}
+                                    
                                     <Form.Row>
                                         <Col>
                                             <Form.Group controlId="debitLocation" className={errors.entryDate && touched.entryDate ? "has-invaliderror" : null}>
@@ -761,29 +656,15 @@ class JournalEntries extends React.Component {
 
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" className="countdropdown form-control form-control-sm">
+                                    <select id="toshow" 
+                                        value={this.state.PageSize}
+                                        className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <TableComponent classnames="striped bordered hover">
@@ -813,7 +694,7 @@ class JournalEntries extends React.Component {
                         </div>
                     )
                 }else{
-                    
+                    let getJournalData = (saveRequestData.result!==undefined)?saveRequestData.result:saveRequestData;
                     return(
                         <div>
                             {createJournalEntryRequest.request_status === accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS &&
@@ -847,26 +728,10 @@ class JournalEntries extends React.Component {
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
-
+                            <div className="loading-text">Please wait... </div>
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
@@ -879,7 +744,7 @@ class JournalEntries extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {saveRequestData.result.map((eachJournal, key)=>{
+                                {getJournalData.map((eachJournal, key)=>{
                                     return(
                                         <tr key={key}>
                                             <td>{eachJournal.id}</td>
@@ -929,7 +794,7 @@ class JournalEntries extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={this.setPagesize}
+                                            onChange={(e)=>this.setPagesize(e, JournalEntriesData)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -937,23 +802,15 @@ class JournalEntries extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
+                                        <TablePagination
+                                            totalPages={JournalEntriesData.totalPages}
+                                            currPage={JournalEntriesData.currentPage}
+                                            currRecordsCount={JournalEntriesData.result.length}
+                                            totalRows={JournalEntriesData.totalRows}
+                                            tempData={JournalEntriesData.result}
+                                            pagesCountToshow={4}
+                                            refreshFunc={this.loadNextPage}
+                                        />
                                     </div>
                                 </div>
 

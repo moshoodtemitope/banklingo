@@ -16,6 +16,7 @@ import Col from 'react-bootstrap/Col'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Modal from 'react-bootstrap/Modal'
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
@@ -29,7 +30,7 @@ class GeneralTxtChannels extends React.Component {
         this.state={
             user:'',
             showEdit: false,
-            PageSize: 30,
+            PageSize: 25,
             CurrentPage:1
         }
 
@@ -51,6 +52,128 @@ class GeneralTxtChannels extends React.Component {
 
     handleShowEdit = (encodedKey) => this.setState({showEdit:true, encodedKey});
 
+    renderPagination =(totalPages,currPage,currRecordsCount, totalRows, tempData, pagesCountToshow, refreshFunc)=>{
+        let isMorePagesLeft,
+            pagingTemplate=[],
+            pagesToshow =pagesCountToshow||4;
+
+            if(currRecordsCount===totalRows){
+                isMorePagesLeft = false;
+            }
+
+            if(currRecordsCount<totalRows){
+                if(currPage<totalPages){
+                    isMorePagesLeft = true;
+                }
+                else{
+                    isMorePagesLeft = false;
+                }
+            }
+            if(totalPages<=pagesToshow){
+                for(var eachPage=1; eachPage<=totalPages ; eachPage++){
+                    pagingTemplate.push(<span 
+                                            className="each-pagenum"
+                                            onClick={refreshFunc(eachPage,tempData)}
+                                            >{eachPage}</span>
+                                        );
+                }
+            }else{
+                for(var eachPage=1; eachPage<=pagesToshow; eachPage++){
+                    if(eachPage<pagesToshow-1){
+                        pagingTemplate.push(<span 
+                                                className="each-pagenum"
+                                                onClick={refreshFunc(eachPage,tempData)}
+                                                >{eachPage}</span>
+                                            );
+                    }
+                    if(eachPage===pagesToshow-1){
+                        pagingTemplate.push(<span 
+                                                className="middot"
+                                                onClick={refreshFunc(eachPage,tempData)}
+                                                >...</span>
+                                            );
+                    }
+                    if(eachPage===pagesToshow){
+                        pagingTemplate.push(<span 
+                                                className="each-pagenum"
+                                                onClick={refreshFunc(totalPages,tempData)}
+                                                >{totalPages}</span>
+                                            );
+                    }
+                }
+            }
+
+        return(
+            <div className={isMorePagesLeft===true?"move-page-actions":"move-page-actions unaallowed"}>
+                <div 
+                    className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
+                    onClick={isMorePagesLeft===true?refreshFunc(currPage+1,tempData):null}>
+                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
+                </div>
+                <div 
+                    className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
+                    onClick={isMorePagesLeft===true?refreshFunc(currPage+1,tempData):null}>
+                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
+                </div>
+
+                {/* {currPage===1 && 
+                    <div className="page-count">
+                        <span>{currPage}-{currRecordsCount}</span>  of <span>{totalRows}</span>
+                    </div>
+                } */}
+
+                {pagingTemplate}
+
+                {/* {
+                    (totalPages>4 && (totalPages-currPage)>=4) &&
+                    <div className="page-count">
+                        <span className="each-pagenum" onClick={refreshFunc(currPage,tempData)} >{currPage}</span>
+                        <span className="each-pagenum" onClick={refreshFunc(currPage+1,tempData)}>{currPage+1}</span>
+                        <span className="each-pagenum" onClick={refreshFunc(currPage+2,tempData)}>{currPage+2}</span>
+                        <span className="middot" onClick={refreshFunc(currPage+4,tempData)}>{currPage+2}>...</span>
+                        <span className="each-pagenum" onClick={refreshFunc(totalPages,tempData)}>{totalPages}</span>
+                    </div>
+                }
+                {totalPages<=4 && 
+                    <div className="page-count">
+                        {pagingTemplate}
+                    </div>
+                } */}
+                
+                
+                
+                
+                <div 
+                    className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
+                    onClick={isMorePagesLeft===true?refreshFunc(currPage+1,tempData):null}>
+                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
+                </div>
+                <div 
+                    className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
+                    onClick={isMorePagesLeft===true?refreshFunc(currPage+1,tempData):null}>
+                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
+                </div>
+            </div>
+        )
+    }
+
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+
+
+        if(tempData){
+            dispatch(administrationActions.getTransactionChannels(params,tempData));
+        }else{
+            dispatch(administrationActions.getTransactionChannels(params));
+        }
+    }
 
     getTransactionChannels = (params)=>{
         const {dispatch} = this.props;
@@ -113,23 +236,7 @@ class GeneralTxtChannels extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 <TableComponent classnames="striped bordered hover">
@@ -182,23 +289,7 @@ class GeneralTxtChannels extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 <div className="loading-text">Please wait... </div>
@@ -274,7 +365,23 @@ class GeneralTxtChannels extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
+                                                <TablePagination
+                                                    totalPages={allChannelsData.totalPages}
+                                                    currPage={allChannelsData.currentPage}
+                                                    currRecordsCount={allChannelsData.result.length}
+                                                    totalRows={allChannelsData.totalRows}
+                                                    tempData={allChannelsData.result}
+                                                    pagesCountToshow={4}
+                                                    refreshFunc={this.loadNextPage}
+                                                />
+                                                {/* {this.renderPagination(allChannelsData.totalPages,
+                                                                        allChannelsData.currentPage,
+                                                                        allChannelsData.result.length,
+                                                                        allChannelsData.totalRows,
+                                                                        allChannelsData.result,
+                                                                        4,
+                                                                        this.loadNextPage)} */}
+                                                {/* <div className="move-page-actions">
                                                     <div className="each-page-action">
                                                         <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
                                                     </div>
@@ -290,7 +397,7 @@ class GeneralTxtChannels extends React.Component {
                                                     <div className="each-page-action">
                                                         <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">

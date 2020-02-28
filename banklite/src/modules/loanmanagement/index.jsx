@@ -148,7 +148,7 @@ class LoansManagement extends React.Component {
             case (loanAndDepositsConstants.GET_LOANS_SUCCESS):
                 let allLoans = getLoansRequest.request_data.response.data;
                 if (allLoans !== undefined) {
-                    if (allLoans.length >= 1) {
+                    if (allLoans.result.length >= 1) {
                         return (
                             <div>
                                 <div className="heading-with-cta">
@@ -218,7 +218,7 @@ class LoansManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            allLoans.map((eachLoan, index) => {
+                                            allLoans.result.map((eachLoan, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>

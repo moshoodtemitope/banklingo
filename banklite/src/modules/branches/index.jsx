@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -17,7 +18,7 @@ class BranchesManagement extends React.Component {
         super(props);
         this.state={
             user:'',
-            PageSize:'30',
+            PageSize:30,
             FullDetails: false,
             CurrentPage:1,
             CurrentSelectedPage:1
@@ -30,7 +31,9 @@ class BranchesManagement extends React.Component {
     }
 
     loadInitialData=()=>{
-        let params = `PageSize=30`;
+        // let params = `PageSize=30`;
+
+        let params= `FullDetails=${this.state.FullDetails}&PageSize=${this.state.PageSize}&CurrentPage=${this.state.CurrentPage}&CurrentSelectedPage=${this.state.CurrentSelectedPage}`;
         this.getAllBranches(params);
     }
 
@@ -51,6 +54,24 @@ class BranchesManagement extends React.Component {
         this.getAllBranches(params);
     }
 
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize,CurrentPage,FullDetails} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+        let params= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
+
+        if(tempData){
+            dispatch(administrationActions.getAllBranches(params,tempData));
+        }else{
+            dispatch(administrationActions.getAllBranches(params));
+        }
+    }
+
     setShowDetails = (FullDetails)=>{
         // console.log('----here', PageSize.target.value);
         let showDetails = FullDetails.target.checked,
@@ -64,76 +85,135 @@ class BranchesManagement extends React.Component {
 
     renderAllBranches =()=>{
         let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
+
+        let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined?adminGetAllBranchesRequest.request_data.tempData:null;
             switch (adminGetAllBranchesRequest.request_status){
                 case (administrationConstants.GET_ALL_BRANCHES_PENDING):
-                    return (
-                        <div className="loading-content"> 
-                            <div className="heading-with-cta">
-                                <Form className="one-liner">
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                        return (
+                            <div className="loading-content"> 
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
 
-                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                        <Form.Control as="select" size="sm">
-                                            <option>No Filter</option>
-                                            <option>Add New Filter</option>
-                                            <option>Custom Filter</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                </Form>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
 
-                                <div className="pagination-wrap">
-                                    <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" className="countdropdown form-control form-control-sm">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="200">200</option>
-                                    </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        
                                     </div>
                                 </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Branch Name</th>
+                                            <th>Branch State</th>
+                                            <th>Created</th>
+                                            <th>Last Modified</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                                <div className="loading-text">Please wait... </div>
                             </div>
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        <th>Branch Name</th>
-                                        <th>Branch State</th>
-                                        <th>Created</th>
-                                        <th>Last Modified</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </TableComponent>
-                            <div className="loading-text">Please wait... </div>
-                        </div>
-                    )
+                        )
+                    }else{
+                        return(
+                            <div>
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" 
+                                            // onChange={this.setPagesize}
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="table-helper mb-20">
+                                    <input type="checkbox" name="" 
+                                        onChange={this.setShowDetails}
+                                        checked={this.state.FullDetails}
+                                        id="showFullDetails" />
+                                    <label htmlFor="showFullDetails">Show full details</label>
+                                </div>
+                                <div className="loading-text">Please wait... </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Branch Name</th>
+                                            <th>Branch State</th>
+                                            {this.state.FullDetails && <th>Address</th> }
+                                            {this.state.FullDetails && <th>Contact</th> }
+                                            <th>Created</th>
+                                            <th>Last Modified</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            saveRequestData.map((eachBranch, index)=>{
+                                                return(
+                                                    <Fragment key={index}>
+                                                        <tr>
+                                                            <td>{eachBranch.name}</td>
+                                                            <td>{eachBranch.objectStateDescription}</td>
+                                                            {this.state.FullDetails && <th>{eachBranch.address}</th> }
+                                                            {this.state.FullDetails && <th>{eachBranch.contact}</th> }
+                                                            <td>{eachBranch.dateCreated}</td>
+                                                            <td>{eachBranch.lastUpdated}</td>
+                                                            
+                                                        </tr>
+                                                    </Fragment>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </TableComponent>
+                                
+                            </div>
+                        )
+                    }
                 
                 case(administrationConstants.GET_ALL_BRANCHES_SUCCESS):
                     let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
                     if(allBranchesData!==undefined){
-                        if(allBranchesData.length>=1){
+                        if(allBranchesData.result.length>=1){
                             return(
                                 <div>
                                     <div className="heading-with-cta">
@@ -160,23 +240,15 @@ class BranchesManagement extends React.Component {
                                                 <option value="50">50</option>
                                                 <option value="200">200</option>
                                             </select>
-                                            <div className="move-page-actions">
-                                                <div className="each-page-action">
-                                                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                </div>
-                                                <div className="page-count">
-                                                    <span>1-20</span>  of <span>20000</span>
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                            </div>
+                                            <TablePagination
+                                                totalPages={allBranchesData.totalPages}
+                                                currPage={allBranchesData.currentPage}
+                                                currRecordsCount={allBranchesData.result.length}
+                                                totalRows={allBranchesData.totalRows}
+                                                tempData={allBranchesData.result}
+                                                pagesCountToshow={4}
+                                                refreshFunc={this.loadNextPage}
+                                            />
                                         </div>
                                     </div>
                                     <div className="table-helper mb-20">
@@ -200,7 +272,7 @@ class BranchesManagement extends React.Component {
                                         </thead>
                                         <tbody>
                                             {
-                                                allBranchesData.map((eachBranch, index)=>{
+                                                allBranchesData.result.map((eachBranch, index)=>{
                                                     return(
                                                         <Fragment key={index}>
                                                             <tr>
@@ -239,29 +311,16 @@ class BranchesManagement extends React.Component {
 
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
-                                            <select id="toshow" className="countdropdown form-control form-control-sm">
+                                            <select id="toshow" 
+                                                onChange={this.setPagesize}
+                                                value={this.state.PageSize}
+                                                className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>
                                                 <option value="25">25</option>
                                                 <option value="50">50</option>
                                                 <option value="200">200</option>
                                             </select>
-                                            <div className="move-page-actions">
-                                                <div className="each-page-action">
-                                                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                </div>
-                                                <div className="page-count">
-                                                    <span>1-20</span>  of <span>20000</span>
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                     <TableComponent classnames="striped bordered hover">

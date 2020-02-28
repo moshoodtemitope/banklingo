@@ -297,7 +297,7 @@ function getTransactionChannels  (params, tempData){
                 
                 let consume2 = ApiService.request(routes.ALL_GLACCOUNTS, "GET", null);
 
-                console.log("ddsdsbd", tempValue);
+                // console.log("ddsdsbd", tempValue);
                 dispatch(request(consume2, tempValue));
 
                 return consume2

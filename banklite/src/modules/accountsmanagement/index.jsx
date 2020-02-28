@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form'
@@ -62,6 +63,29 @@ class AccountManagement extends React.Component {
         // this.getGLAccounts();
         if(tempData){
             dispatch(acoountingActions.getGLAccounts(payload, tempData));
+        }else{
+            dispatch(acoountingActions.getGLAccounts(payload));
+        }
+    }
+
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+
+        let payload ={
+            PageSize: this.state.PageSize,
+            CurrentPage:nextPage,
+            AccountTypeId: this.state.accountTypeToFetch
+        }
+
+        if(tempData){
+            dispatch(acoountingActions.getGLAccounts(payload,tempData));
         }else{
             dispatch(acoountingActions.getGLAccounts(payload));
         }
@@ -190,29 +214,15 @@ class AccountManagement extends React.Component {
 
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" className="countdropdown form-control form-control-sm">
+                                    <select id="toshow" 
+                                        value={this.state.PageSize}
+                                        className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <TableComponent classnames="striped bordered hover">
@@ -247,11 +257,11 @@ class AccountManagement extends React.Component {
                         countOfAccounTypes ={},
                         accounTypes =[],
                         {accounTypesData} = this.state;
-                    let getGLAccountsData = saveRequestData.result,
+                    let getGLAccountsData = (saveRequestData.result!==undefined)?saveRequestData.result:saveRequestData,
                         getGLAccountsDataCount =0 ,
-                        getGLAccountsStatsData = saveRequestData.result2;
+                        getGLAccountsStatsData = (saveRequestData.result2!==undefined)?saveRequestData.result2:saveRequestData;
                         // console.log("cdfdfdf", saveRequestData);
-                        saveRequestData.result.map((eachGL, index)=>{
+                        getGLAccountsData.map((eachGL, index)=>{
                             if(accounTypes.indexOf(eachGL.accountTypeDescription)===-1){
                                 accounTypes.push(eachGL.accountTypeDescription)
                             }
@@ -299,29 +309,14 @@ class AccountManagement extends React.Component {
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
                                     <select id="toshow" 
+                                        value={this.state.PageSize}
                                         className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <div className="filter-nav">
@@ -384,7 +379,7 @@ class AccountManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.result.map((eachGL, index)=>{
+                                            getGLAccountsData.map((eachGL, index)=>{
                                                 return (
                                                     <tr key={index}>
                                                         <td>{eachGL.glCode}</td>
@@ -476,23 +471,15 @@ class AccountManagement extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
+                                        <TablePagination
+                                            totalPages={getGLAccountsRequest.request_data.response.data.totalPages}
+                                            currPage={getGLAccountsRequest.request_data.response.data.currentPage}
+                                            currRecordsCount={getGLAccountsData.length}
+                                            totalRows={getGLAccountsRequest.request_data.response.data.totalRows}
+                                            tempData={getGLAccountsRequest.request_data.response.data}
+                                            pagesCountToshow={4}
+                                            refreshFunc={this.loadNextPage}
+                                        />
                                     </div>
                                 </div>
                                 {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 

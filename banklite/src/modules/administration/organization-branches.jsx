@@ -12,6 +12,7 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -62,6 +63,24 @@ class OrganizationBranches extends React.Component {
 
         if(tempData){
             dispatch(administrationActions.getAllBranches(params, tempData));
+        }else{
+            dispatch(administrationActions.getAllBranches(params));
+        }
+    }
+
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+
+
+        if(tempData){
+            dispatch(administrationActions.getAllBranches(params,tempData));
         }else{
             dispatch(administrationActions.getAllBranches(params));
         }
@@ -289,23 +308,15 @@ class OrganizationBranches extends React.Component {
                                                 <option value="50">50</option>
                                                 <option value="200">200</option>
                                             </select>
-                                            <div className="move-page-actions">
-                                                <div className="each-page-action">
-                                                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                </div>
-                                                <div className="page-count">
-                                                    <span>1-20</span>  of <span>20000</span>
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                                <div className="each-page-action">
-                                                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                </div>
-                                            </div>
+                                            <TablePagination
+                                                    totalPages={allBranchesData.totalPages}
+                                                    currPage={allBranchesData.currentPage}
+                                                    currRecordsCount={allBranchesData.result.length}
+                                                    totalRows={allBranchesData.totalRows}
+                                                    tempData={allBranchesData.result}
+                                                    pagesCountToshow={4}
+                                                    refreshFunc={this.loadNextPage}
+                                                />
                                         </div>
                                     </div>
                                     <div className="table-helper mb-10">

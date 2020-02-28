@@ -7,6 +7,7 @@ import { handleRequestErrors, saveRouteForRedirect, removeRouteForRedirect } fro
 export const authActions = {
     Login,
     Logout,
+    ResfreshToken,
     initStore
 }
 
@@ -93,6 +94,74 @@ function Login   (loginPayload){
     function success(response) { return { type: authConstants.LOGIN_USER_SUCCESS, response } }
     function failure(error) { return { type: authConstants.LOGIN_USER_FAILURE, error } }
     function clear() { return { type: authConstants.LOGIN_USER_RESET, clear_data:""} }
+
+}
+
+
+function ResfreshToken   (refreshTokenPayload){
+    if(refreshTokenPayload!=="CLEAR"){
+        let userData;
+        return dispatch =>{
+            let consume = ApiService.request(routes.REFRESH_TOKEN, "POST", refreshTokenPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    if(response.data.token!==undefined){
+                        
+                        localStorage.setItem('user', JSON.stringify(response.data));
+                        userData = response.data;
+                        let consume2 = ApiService.request(routes.ADD_BRANCH+'/allowedbranches', "GET", null);
+                        dispatch(request(consume2));
+
+                        return consume2
+                        .then(response2 =>{
+                            // localStorage.setItem('user', JSON.stringify(response.data));
+                            let user = JSON.parse(localStorage.getItem("user"));
+                                user.AllowedBranches = response2.data;
+                                user.BranchId = response2.data[0].id;
+                                user.BranchName = response2.data[0].name;
+                                localStorage.setItem('user', JSON.stringify(user));
+                        
+                            dispatch(success(response2.data));
+
+                            
+                            
+                            
+                        })
+                        .catch(error =>{
+                            
+                            if(error.response.status===401){
+                                dispatch(failure(handleRequestErrors("An Error occurred")))
+                            }else{
+                                dispatch(failure(handleRequestErrors(error)));
+                            }
+                            
+                            
+                        });
+
+                        
+                    }
+                    
+                    
+                }).catch(error =>{
+                    // console.log('error is', error)
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: authConstants.REFRESH_TOKEN_PENDING, user } }
+    function success(response) { return { type: authConstants.REFRESH_TOKEN_SUCCESS, response } }
+    function failure(error) { return { type: authConstants.REFRESH_TOKEN_FAILURE, error } }
+    function clear() { return { type: authConstants.REFRESH_TOKEN_RESET, clear_data:""} }
 
 }
 

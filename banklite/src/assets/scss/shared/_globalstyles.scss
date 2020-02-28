@@ -271,12 +271,31 @@ select, select.form-control{
         align-items: center;
         font-size: 14px;
         margin-left: 15px;
-        &:hover{
-            cursor: pointer;
+        // &:hover{
+        //     cursor: pointer;
+        // }
+        &.unaallowed{
+            opacity: 0.7;
+            pointer-events: none;
+            &:hover{
+                pointer-events: none;
+                cursor:not-allowed;
+            }
+            
         }
     }
     .each-page-action,.page-count {
         margin-right: 5px;
+        cursor: pointer;
+        &.unaallowed{
+            opacity: 0.7;
+            pointer-events: none;
+            &:hover{
+                pointer-events: none;
+                cursor:not-allowed;
+            }
+            
+        }
     }
     
 }
