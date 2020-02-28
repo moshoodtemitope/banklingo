@@ -45,8 +45,8 @@ export class ApiService {
             //Exclude urlsToAuthenticate urls from Authenticated requests with Token
            if (urlsToAuthenticate.indexOf(serviceToTest) === -1) {
                axios.defaults.headers.common['Token'] = user.token;
-            //    axios.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
-               axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+               axios.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
+            //    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
             //    console.log("user is", user);
                 delete axios.defaults.headers.common.Bid;
                 
@@ -85,7 +85,8 @@ export class ApiService {
         bodyData = noStringify ? JSON.stringify(data) : data;
 
         let urlsToAuthenticate = [
-            "api/Login"
+            "api/Login",
+            "api/Login/refreshtoken",
         ],
         urlsWithoutBranchIdInRequest = [
             "/api/branch/allowedbranches"
@@ -129,18 +130,28 @@ export class ApiService {
                 return service;
             }).catch(function (error) {
                 if (error.response) {
-                    
-                    if (error.response.status === 401) {
-                        let currentRoute = window.location.pathname,
-                        type = "unauthorized";
-                        console.log("routing" , currentRoute);
 
-                        // dispatch(authActions.Logout("unauthorized",currentRoute));
-                        // setTimeout(() => {
-                            dispatch(authActions.Logout(type,currentRoute));    
-                        // }, 1000);
+                    if (error.response.status === 401) {
                         
+                        if((urlsToAuthenticate.indexOf(serviceToTest) === -1)){
+                            let user = JSON.parse(localStorage.getItem("user")),
+                                refreshTokenPayload={
+                                    username: user.userName,
+                                    refreshToken: user.refreshToken
+                                  }
+                                  dispatch(authActions.ResfreshToken(refreshTokenPayload));
+
+                        }else{
+                            let currentRoute = window.location.pathname,
+                            type = "unauthorized";
+                            // console.log("routing" , currentRoute);
+
+                            // dispatch(authActions.Logout("unauthorized",currentRoute));
+                            // setTimeout(() => {
+                                dispatch(authActions.Logout(type,currentRoute));    
+                            // }, 1000);
                         
+                        }
                        
                         
                     } else {
