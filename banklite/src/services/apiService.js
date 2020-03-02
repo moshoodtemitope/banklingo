@@ -3,7 +3,7 @@ import { authActions } from "../redux/actions/auth/auth.action";
 import {history} from "../_helpers/history";
 import {saveRouteForRedirect} from "../shared/utils";
 
-
+import { routes } from "./urls";
 
 
 
@@ -45,8 +45,8 @@ export class ApiService {
             //Exclude urlsToAuthenticate urls from Authenticated requests with Token
            if (urlsToAuthenticate.indexOf(serviceToTest) === -1) {
                axios.defaults.headers.common['Token'] = user.token;
-               axios.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
-            //    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+            //    axios.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
+               axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
             //    console.log("user is", user);
                 delete axios.defaults.headers.common.Bid;
                 
@@ -78,6 +78,14 @@ export class ApiService {
        }
     }
 
+    static    refreshUserToken  (refreshTokenPayload){
+        
+          dispatch(authActions.ResfreshToken(refreshTokenPayload));
+
+        
+
+    }
+
 
     static request(url, type, data, headers = undefined, noStringify=false){
         let bodyData;
@@ -86,7 +94,7 @@ export class ApiService {
 
         let urlsToAuthenticate = [
             "api/Login",
-            "api/Login/refreshtoken",
+            // "api/Login/refreshtoken",
         ],
         urlsWithoutBranchIdInRequest = [
             "/api/branch/allowedbranches"
@@ -99,6 +107,8 @@ export class ApiService {
         if(localStorage.getItem("user") === null){
             headers = undefined;
         }
+
+        let that =  this;
 
         if (type.toLowerCase() === 'get') {
             if(headers === undefined){
@@ -115,7 +125,7 @@ export class ApiService {
             return service.then(function (response) {
                 // let currentRoute = window.location.pathname;
                 // dispatch(authActions.Logout("unauthorized",currentRoute));
-                // console.log("dsdsds csds", response.status)
+               
                 // if (response.status === 200) {
                 //     let currentRoute = window.location.pathname,
                 //     type = "unauthorized";
@@ -127,31 +137,55 @@ export class ApiService {
                     
                 // }
 
+
+                
+
                 return service;
             }).catch(function (error) {
                 if (error.response) {
 
                     if (error.response.status === 401) {
-                        
-                        if((urlsToAuthenticate.indexOf(serviceToTest) === -1)){
-                            let user = JSON.parse(localStorage.getItem("user")),
-                                refreshTokenPayload={
-                                    username: user.userName,
-                                    refreshToken: user.refreshToken
-                                  }
-                                  dispatch(authActions.ResfreshToken(refreshTokenPayload));
-
-                        }else{
-                            let currentRoute = window.location.pathname,
+                        let currentRoute = window.location.pathname,
                             type = "unauthorized";
-                            // console.log("routing" , currentRoute);
-
-                            // dispatch(authActions.Logout("unauthorized",currentRoute));
-                            // setTimeout(() => {
-                                dispatch(authActions.Logout(type,currentRoute));    
-                            // }, 1000);
+                            
+                            dispatch(authActions.Logout(type,currentRoute));
+                        // if((urlsToAuthenticate.indexOf(serviceToTest) === -1)){
+                            
+                        //     let user = JSON.parse(localStorage.getItem("user")),
+                        //         refreshTokenPayload={
+                        //             username: user.userName,
+                        //             refreshToken: user.refreshToken
+                        //           };
+                                  
+                        //                 let refreshService = axios.post(routes.REFRESH_TOKEN, refreshTokenPayload);
                         
-                        }
+                        //                 return refreshService.then(function(response) {
+                                            
+                        //                     if(response.status===200){
+                        //                         localStorage.setItem('user', JSON.stringify(response.data));
+                        //                     }
+                        //                     return axios.get(url, bodyData);
+                        //                 }).catch(function (error) {
+                        //                     if (error.response.status === 401) {
+                        //                         let currentRoute = window.location.pathname,
+                        //                         type = "unauthorized";
+                        //                         // console.log("routing" , currentRoute);
+
+                        //                         // dispatch(authActions.Logout("unauthorized",currentRoute));
+                        //                         // setTimeout(() => {
+                        //                             dispatch(authActions.Logout(type,currentRoute));
+                        //                     }
+                        //                 })
+
+
+
+                        // }else{
+                        //     let currentRoute = window.location.pathname,
+                        //     type = "unauthorized";
+                            
+                        //         dispatch(authActions.Logout(type,currentRoute));  
+                        
+                        // }
                        
                         
                     } else {
@@ -199,9 +233,52 @@ export class ApiService {
               if (error.response) {
                 
                  if (error.response.status === 401) {
-                        let currentRoute = window.location.pathname;
-                        dispatch(authActions.Logout("unauthorized",currentRoute));
-                        //history.push('/');
+
+                        let currentRoute = window.location.pathname,
+                            type = "unauthorized";
+                            
+                                dispatch(authActions.Logout(type,currentRoute));
+                        // let currentRoute = window.location.pathname;
+                        // dispatch(authActions.Logout("unauthorized",currentRoute));
+                        // //history.push('/');
+
+                        // if((urlsToAuthenticate.indexOf(serviceToTest) === -1)){
+                            
+                        //     let user = JSON.parse(localStorage.getItem("user")),
+                        //         refreshTokenPayload={
+                        //             username: user.userName,
+                        //             refreshToken: user.refreshToken
+                        //           };
+                                  
+                        //                 let refreshService = axios.post(routes.REFRESH_TOKEN, refreshTokenPayload);
+                        
+                        //                 return refreshService.then(function(response) {
+                                            
+                        //                     if(response.status===200){
+                        //                         localStorage.setItem('user', JSON.stringify(response.data));
+                        //                     }
+                        //                     return axios.get(url, bodyData);
+                        //                 }).catch(function (error) {
+                        //                     if (error.response.status === 401) {
+                        //                         let currentRoute = window.location.pathname,
+                        //                         type = "unauthorized";
+                        //                         // console.log("routing" , currentRoute);
+
+                        //                         // dispatch(authActions.Logout("unauthorized",currentRoute));
+                        //                         // setTimeout(() => {
+                        //                             dispatch(authActions.Logout(type,currentRoute));
+                        //                     }
+                        //                 })
+
+
+
+                        // }else{
+                        //     let currentRoute = window.location.pathname,
+                        //     type = "unauthorized";
+                            
+                        //         dispatch(authActions.Logout(type,currentRoute));  
+                        
+                        // }
                     }else {
                         
                         return service;

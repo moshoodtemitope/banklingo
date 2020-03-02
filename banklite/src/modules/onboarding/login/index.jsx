@@ -33,7 +33,7 @@ class UserLogin extends React.Component {
         let returnUrl  =  getRouteForRedirect().getPreviousRoute;
         this.redirectType  =  getRouteForRedirect().redirectType;
         
-        console.log("jsdhjs", returnUrl);
+        // console.log("jsdhjs", returnUrl);
         if(window.location.href.indexOf("#")===-1 && returnUrl!==null){
             // if(window.location.href.indexOf("retUrl")===-1 && returnUrl!==null){
             // window.location = `${window.location.href}?type=${redirectType}&retUrl=${returnUrl}`;

@@ -52,6 +52,41 @@ export function LoginReducer(state=initialState, action) {
     }
 }
 
+export function RefreshTokenReducer(state=initialState, action) {
+    
+    switch (action.type) {
+        case authConstants.REFRESH_TOKEN_PENDING:
+            return {
+                request_status: authConstants.REFRESH_TOKEN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case authConstants.REFRESH_TOKEN_SUCCESS:
+            return {
+                request_status: authConstants.REFRESH_TOKEN_SUCCESS,
+                loggedIn: true,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.REFRESH_TOKEN_FAILURE:
+            return {
+                request_status: authConstants.REFRESH_TOKEN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.REFRESH_TOKEN_RESET:
+            return {
+                request_status: authConstants.REFRESH_TOKEN_RESET,
+                is_request_processing: false,
+                request_data: {},
+            };
+        
+
+        default:
+            return { ...state }
+    }
+}
+
 
 
 

@@ -12,12 +12,12 @@ export const clientsActions = {
     updateAClient
 }
 
-function getClients  (params){
+function getClients  (params, tempData){
     
     return dispatch =>{
         
         let consume = ApiService.request(routes.HIT_CLIENTS+`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume,tempData));
         return consume
             .then(response =>{
                 dispatch(success(response));
@@ -27,9 +27,18 @@ function getClients  (params){
             });
         
     }
+
+function request(user, tempData) { 
+    if(tempData===undefined){
+        return { type: clientsConstants.GET_CLIENTS_PENDING, user } 
+    }
+    if(tempData!==undefined){
+        return { type: clientsConstants.GET_CLIENTS_PENDING, user, tempData } 
+    }
+}
     
 
-function request(user) { return { type: clientsConstants.GET_CLIENTS_PENDING, user } }
+// function request(user) { return { type: clientsConstants.GET_CLIENTS_PENDING, user } }
 function success(response) { return { type: clientsConstants.GET_CLIENTS_SUCCESS, response } }
 function failure(error) { return { type: clientsConstants.GET_CLIENTS_FAILURE, error } }
 

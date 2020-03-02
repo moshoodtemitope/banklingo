@@ -48,14 +48,15 @@ export const getDateFromISO =(date) =>{
     // console.log(year+'-' + month + '-'+dt) 
 }
 
-export const accountNumber = (accountNum)=>{
+export const accountNumber = (accountNum, maxChars)=>{
     var reg = /^\d+$/;
     let filteredNum = accountNum.replace(/\D/g,'');
     // if(reg.test(accountNum)){
-        if(filteredNum.toString().length<=10){
+        let maxNoOfChars = (maxChars!==null && maxChars!==undefined)?parseInt(maxChars):10
+        if(filteredNum.toString().length<=maxNoOfChars){
             return filteredNum;
         }else{
-            return filteredNum.toString().substr(0,10);
+            return filteredNum.toString().substr(0,maxNoOfChars);
         }
     // }else{
 

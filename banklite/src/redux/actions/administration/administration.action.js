@@ -565,17 +565,24 @@ function getCustomerTypes  (customerTypesPayload, tempData){
 }
 
 function getAllCustomerTypes  (){
-    
+        let userInfo = JSON.parse(localStorage.getItem("user"));
         return dispatch =>{
-            
-            let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/all`, "GET", null);
-            dispatch(request(consume));
-            return consume
-                .then(response =>{
-                    dispatch(success(response));
-                }).catch(error =>{
-                    dispatch(failure(handleRequestErrors(error)));
-                });
+            if(userInfo.custTypes===null || userInfo.custTypes===undefined){
+                let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/all`, "GET", null);
+                dispatch(request(consume));
+                return consume
+                    .then(response =>{
+                        userInfo.custTypes = response.data;
+                        localStorage.setItem('user', JSON.stringify(userInfo));
+                        dispatch(success(response));
+                    }).catch(error =>{
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+
+            }
+            else{
+                dispatch(success(userInfo.custTypes));
+            }
             
         }
         
@@ -1224,12 +1231,12 @@ function updateABranch  (updateABranchPayload){
 
 }
 
-function getNotifications(params) {
+function getNotifications(params,tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_NOTIFICATIONS +`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume,tempData));
         return consume
             .then(response => {
                 dispatch(success(response));
@@ -1240,8 +1247,18 @@ function getNotifications(params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_NOTIFICATIONS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_NOTIFICATIONS_PENDING, user, tempData } 
+        }
+        
+    }
 
-    function request(user) { return { type: administrationConstants.GET_NOTIFICATIONS_PENDING, user } }
+
+    // function request(user) { return { type: administrationConstants.GET_NOTIFICATIONS_PENDING, user } }
     function success(response) { return { type: administrationConstants.GET_NOTIFICATIONS_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.GET_NOTIFICATIONS_FAILURE, error } }
 

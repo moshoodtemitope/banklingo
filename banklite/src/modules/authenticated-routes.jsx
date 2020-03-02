@@ -127,7 +127,10 @@ class AuthenticatedRoutes extends React.Component {
         }
         
     }
+
+
     
+
 
 
 
@@ -173,12 +176,13 @@ class AuthenticatedRoutes extends React.Component {
 
                         <PrivateRoute exact path='/all-loans' {...this.props} authed={this.props.user} component={LoansManagement} />  
 
+                        <PrivateRoute exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
 
                         <PrivateRoute exact path='/all-loans/:clientId' {...this.props} authed={this.props.user} component={LoanClient} />  
                         {/* <Route exact path='/all-loans/:clientId' render={(props) => <LoanClient clientId={props.match.params.clientId} {...this.props} />} /> */}
 
                         {/* <Route exact path='/all-loans/newloan-account' render={(props) => <NewLoanAccount {...this.props} />} /> */}
-                        <PrivateRoute exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
+                        
 
                         <PrivateRoute exact path='/disbursements' {...this.props} authed={this.props.user} component={DisbursementManagement} />  
                         <PrivateRoute exact path='/disbursements/initiate' {...this.props} authed={this.props.user} component={InitiateDisbursement} />  
@@ -189,9 +193,10 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute exact path='/deposits' {...this.props} authed={this.props.user} component={DepositManagement} /> 
                         {/* <Route exact path='/deposits' render={(props) => <DepositManagement {...this.props} />} /> */}
 
+                        <PrivateRoute exact path='/deposits/newaccount' {...this.props} authed={this.props.user} component={NewDepositAccount} /> 
                         <PrivateRoute exact path='/deposits/:clientId' {...this.props} authed={this.props.user} component={DepositClient} /> 
                         {/* <Route exact path='/deposits/:clientId' render={(props) => <DepositClient clientId={props.match.params.clientId} {...this.props} />} /> */}
-                        <PrivateRoute exact path='/deposits/newaccount' {...this.props} authed={this.props.user} component={NewDepositAccount} /> 
+                        
                        
                         <PrivateRoute exact path='/loan-transactions' {...this.props} authed={this.props.user} component={LoanTransactions} /> 
                         <PrivateRoute exact path='/loan-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={LoanAccountTransactions} /> 

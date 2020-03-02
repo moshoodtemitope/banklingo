@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -50,6 +51,24 @@ class EmailCommunications extends React.Component {
     
             let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&NotificationType=${NotificationType}`;
             this.getNotifications(params);
+        }
+
+        loadNextPage = (nextPage, tempData)=>{
+        
+            const {dispatch} = this.props;
+            let {PageSize,CurrentPage,NotificationType} = this.state;
+    
+            // this.setState({PageSize: sizeOfPage});
+    
+            // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+            // this.getTransactionChannels(params);
+            let params= `PageSize=${PageSize}&CurrentPage=${nextPage}&NotificationType=${NotificationType}`;
+    
+            if(tempData){
+                dispatch(administrationActions.getNotifications(params,tempData));
+            }else{
+                dispatch(administrationActions.getNotifications(params));
+            }
         }
     
         

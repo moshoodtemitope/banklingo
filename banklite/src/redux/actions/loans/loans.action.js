@@ -11,12 +11,12 @@ export const loanActions = {
     getAccountLoanTransaction
 }
 
-function getLoans(params) {
+function getLoans(params,tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_LOAN +`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume,tempData));
         return consume
             .then(response => {
                 dispatch(success(response));
@@ -27,8 +27,17 @@ function getLoans(params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_LOANS_PENDING, user, tempData } 
+        }
+    }
 
-    function request(user) { return { type: loanAndDepositsConstants.GET_LOANS_PENDING, user } }
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_LOANS_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_LOANS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_LOANS_FAILURE, error } }
 

@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer';
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
@@ -49,15 +50,22 @@ class DisbursementManagement extends React.Component {
         dispatch(disbursementActions.getDisbursement(paramters));
     }
 
-    setPagesize = (PageSize)=>{
+    setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             {CurrentPage} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
         let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-        this.getDisbursements(params);
+        // this.getDisbursements(params);
+
+        if(tempData){
+            dispatch(disbursementActions.getDisbursement(params,tempData));
+        }else{
+            dispatch(disbursementActions.getDisbursement(params));
+        }
     }
 
     getADisbursment =(transactionReference)=>{
@@ -68,68 +76,27 @@ class DisbursementManagement extends React.Component {
 
     showDetails = (transactionReference)=>{
         
-        this.setState({showDetails: true, transactionReference}, ()=>console.log('dsdsds===='))
+        this.setState({showDetails: true, transactionReference})
         this.getADisbursment(transactionReference);
-        // this.getADisbursment(transactionReference);
+       
+    }
+
+    loadNextPage = (nextPage, tempData)=>{
         
-        // let getDisbursementByRefRequest = this.props.getDisbursementByRefReducer;
+        const {dispatch} = this.props;
+        let {PageSize,CurrentPage} = this.state;
 
-        // switch (getDisbursementByRefRequest.request_status){
-        //     case (disbursmentConstants.GET_DISBURSMENTS_PENDING):
-        //         return (
-        //             <div className="card form-content">
-        //                 <div className="loading-content">
-        //                     <div className="loading-text">Please wait... </div>
-        //                 </div>
-        //             </div>
-                   
-        //         )
-        //     case(disbursmentConstants.GET_DISBURSMENTS_SUCCESS):
-        //         let disbursmentData = getDisbursementByRefRequest.request_data.response.data;
-                
-        //         if(disbursmentData!==undefined){
-        //             if(disbursmentData.length>=1){
-        //                 return(
-        //                     <div className="card form-content">
-        //                         {
-        //                             disbursmentData.map((eachInfo, index)=>{
-        //                                 return(
-        //                                     <Col xs={6}>
-        //                                         <Form.Label className="block-level">{eachInfo.key}</Form.Label>
-        //                                         <span className="form-text disabled-field">{eachInfo.value}}</span>
+        // this.setState({PageSize: sizeOfPage});
 
-        //                                     </Col>
-        //                                 )
-        //                             })
-        //                         }
-                                
-        //                     </div>
-        //                 )
-        //             }else{
-        //                 return(
-        //                     <div className="card form-content">
-        //                         <div className="no-records">
-        //                         No records found
-        //                         </div>
-        //                     </div>
-        //                 )
-        //             }
-        //         }else{
-        //             return null;
-        //         }
+        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+        let params= `&PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
 
-        //     case (disbursmentConstants.GET_DISBURSMENTS_FAILURE):
-        //         return (
-        //             <div className="card form-content">
-        //                <div className="loading-content errormsg"> 
-        //                     <div>{getDisbursementByRefRequest.request_data.error}</div>
-        //                 </div>
-        //             </div>
-                    
-        //         )
-        //     default :
-        //     return null;
-        // }
+        if(tempData){
+            dispatch(disbursementActions.getDisbursement(params,tempData));
+        }else{
+            dispatch(disbursementActions.getDisbursement(params));
+        }
     }
 
     

@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button'
 // import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
-
+import  TablePagination from '../../shared/elements/table/pagination'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 // import Alert from 'react-bootstrap/Alert'
@@ -60,6 +60,25 @@ class AccessUsers extends React.Component {
         }
         
        
+    }
+
+
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize, CurrentPage} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        // this.getTransactionChannels(params);
+
+
+        if(tempData){
+            dispatch(administrationActions.getUsers(params,tempData));
+        }else{
+            dispatch(administrationActions.getUsers(params));
+        }
     }
 
     getUsers = (paramters)=>{
@@ -172,7 +191,7 @@ class AccessUsers extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
+                                        {/* <div className="move-page-actions">
                                             <div className="each-page-action">
                                                 <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
                                             </div>
@@ -188,7 +207,7 @@ class AccessUsers extends React.Component {
                                             <div className="each-page-action">
                                                 <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                                 <div className="loading-text">Please wait... </div>
@@ -278,23 +297,15 @@ class AccessUsers extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
-                                                    <div className="each-page-action">
-                                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                    </div>
-                                                    <div className="page-count">
-                                                        <span>1-20</span>  of <span>20000</span>
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                </div>
+                                                <TablePagination
+                                                    totalPages={allUsersData.totalPages}
+                                                    currPage={allUsersData.currentPage}
+                                                    currRecordsCount={allUsersData.result.length}
+                                                    totalRows={allUsersData.totalRows}
+                                                    tempData={allUsersData.result}
+                                                    pagesCountToshow={4}
+                                                    refreshFunc={this.loadNextPage}
+                                                />
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">
@@ -375,23 +386,7 @@ class AccessUsers extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
-                                                    <div className="each-page-action">
-                                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                    </div>
-                                                    <div className="page-count">
-                                                        <span>1-20</span>  of <span>20000</span>
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">

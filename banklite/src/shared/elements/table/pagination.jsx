@@ -31,7 +31,7 @@ class TablePagination extends React.Component{
                         refreshFunc= this.props.refreshFunc
                         )=>{
 
-        console.log("dsdsds", tempData);
+        
         let isMorePagesLeft,
             pagingTemplate=[],
             pagesToshow =pagesCountToshow||4;

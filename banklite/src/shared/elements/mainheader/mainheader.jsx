@@ -78,9 +78,9 @@ class MainHeader extends React.Component{
         let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
         switch(adminGetCustomerTypesRequest.request_status){
             case (administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS):{
-                let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data,
+                let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data||adminGetCustomerTypesRequest.request_data.response,
                     allCustomerTypes=[];
-                    
+                    // console.log("====", allCustomerTypesData);
                 if(allCustomerTypesData.length>=1){
                     return(
                     
@@ -101,7 +101,7 @@ class MainHeader extends React.Component{
                                     })
                                 }
                                 <NavLink to={'/dashboard'}>Group</NavLink>
-                                <NavLink to={'/all-loans/newloan-account'}>Loan Account</NavLink>
+                                <NavLink exact to={'/all-loans/newloan-account'}>Loan Account</NavLink>
                                 <NavLink to={'/deposits/newaccount'}>Deposit Account</NavLink>
                                 <NavLink to={'/administration/access/new-user'}>User</NavLink>
                             </DropdownButton>
@@ -171,10 +171,10 @@ class MainHeader extends React.Component{
                                 <NavLink to={'/loan-transactions'}>Loan Transactions</NavLink>
                                 {/* <NavLink to={'/dashboard'}>Installments</NavLink> */}
                                 <NavLink to={'/deposits'}>Deposit Accounts</NavLink>
-                                <NavLink to={'/deposits-transactions'}>Deposit Transactions</NavLink>
+                                <NavLink to={'/deposit-transactions'}>Deposit Transactions</NavLink>
                                 <NavLink to={'/activities'}>System Activities</NavLink>
                                 <NavLink to={'/branches'}>Branches</NavLink>
-                                <NavLink to={'/dashboard'}>Centers</NavLink>
+                                {/* <NavLink to={'/dashboard'}>Centers</NavLink> */}
                                 <NavLink to={'/user-management'}>Users</NavLink>
                                 <NavLink to={'/communications'}>Communications</NavLink>
                             </DropdownButton>

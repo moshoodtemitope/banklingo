@@ -22,8 +22,11 @@ function Login   (loginPayload){
             return consume
                 .then(response =>{
                     if(response.data.token!==undefined){
-                        localStorage.setItem('user', JSON.stringify(response.data));
-                        userData = response.data;
+                        userData = {...response.data};
+                        userData.lastLogForAuth = Date.now();
+                        
+                        localStorage.setItem('user', JSON.stringify(userData));
+                        // userData = response.data;
                         let consume2 = ApiService.request(routes.ADD_BRANCH+'/allowedbranches', "GET", null);
                         dispatch(request(consume2));
 
@@ -99,64 +102,69 @@ function Login   (loginPayload){
 
 
 function ResfreshToken   (refreshTokenPayload){
+    
     if(refreshTokenPayload!=="CLEAR"){
+        
         let userData;
         return dispatch =>{
             let consume = ApiService.request(routes.REFRESH_TOKEN, "POST", refreshTokenPayload);
             dispatch(request(consume));
+            
             return consume
                 .then(response =>{
-                    if(response.data.token!==undefined){
-                        
-                        localStorage.setItem('user', JSON.stringify(response.data));
-                        userData = response.data;
-                        let consume2 = ApiService.request(routes.ADD_BRANCH+'/allowedbranches', "GET", null);
-                        dispatch(request(consume2));
+                    console.log("response is",response.status);
+                    if(response.status===200){
+                        if(response.data.token!==undefined){
+                            
+                            userData = JSON.parse(localStorage.getItem("user"));;
+                            userData.lastLogForAuth = Date.now();
+                            userData.statusCode = response.status;
+                            userData.token = response.data.token;
+                            localStorage.setItem('user', JSON.stringify(userData));
+                            // let consume2 = ApiService.request(routes.ADD_BRANCH+'/allowedbranches', "GET", null);
+                            // dispatch(request(consume2));
+                            dispatch(success(userData));
+                            // return consume2
+                            // .then(response2 =>{
+                                
+                            //     let user = JSON.parse(localStorage.getItem("user"));
+                            //         user.AllowedBranches = response2.data;
+                            //         user.BranchId = response2.data[0].id;
+                            //         user.BranchName = response2.data[0].name;
+                            //         localStorage.setItem('user', JSON.stringify(user));
+                            
 
-                        return consume2
-                        .then(response2 =>{
-                            // localStorage.setItem('user', JSON.stringify(response.data));
-                            let user = JSON.parse(localStorage.getItem("user"));
-                                user.AllowedBranches = response2.data;
-                                user.BranchId = response2.data[0].id;
-                                user.BranchName = response2.data[0].name;
-                                localStorage.setItem('user', JSON.stringify(user));
-                        
-                            dispatch(success(response2.data));
+                                
+                                
+                                
+                            // })
+                            // .catch(error =>{
+                                
+                                
+                            // });
 
                             
-                            
-                            
-                        })
-                        .catch(error =>{
-                            
-                            if(error.response.status===401){
-                                dispatch(failure(handleRequestErrors("An Error occurred")))
-                            }else{
-                                dispatch(failure(handleRequestErrors(error)));
-                            }
-                            
-                            
-                        });
-
-                        
+                        }
+                    }else{
+                        let userInfo = JSON.parse(localStorage.getItem("user"))
+                        userInfo.lastLogForAuth = Date.now();
+                        localStorage.setItem('user', JSON.stringify(userInfo));
                     }
                     
                     
                 }).catch(error =>{
-                    // console.log('error is', error)
-                    dispatch(failure(handleRequestErrors(error)));
+                   this.Logout();
                 });
             
         }
         
     }
 
-    return dispatch =>{
+    // return dispatch =>{
         
-        dispatch(clear());
+    //     dispatch(clear());
         
-    }
+    // }
 
     function request(user) { return { type: authConstants.REFRESH_TOKEN_PENDING, user } }
     function success(response) { return { type: authConstants.REFRESH_TOKEN_SUCCESS, response } }
@@ -169,7 +177,7 @@ function ResfreshToken   (refreshTokenPayload){
 function Logout(redirectType,retUrl) {
     
     localStorage.clear();
-    console.log("testwe",retUrl);
+    // console.log("testwe",retUrl);
     
     if(retUrl!==undefined){
         

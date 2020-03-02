@@ -74,7 +74,6 @@ class InitiateDisbursement extends React.Component {
             initiateDisburmentValidationSchema = Yup.object().shape({
                 bankCode: Yup.string()
                     .min(1, 'Please select a Bank')
-                    .max(50, 'Valid response required')
                     .required('Please select a Bank'),
                 destinationAccount: Yup.string()
                     .min(1, 'Please provide account number')
@@ -82,11 +81,9 @@ class InitiateDisbursement extends React.Component {
                     .required('Account number is required'),
                 amount: Yup.string()
                     .min(1, 'Please provide amount')
-                    .max(15, 'Max Limit reached')
                     .required('Amount is required'),
                 transactionSource: Yup.string()
                     .min(1, 'Please select source')
-                    .max(200, 'Valid response required')
                     .required('Transaction source is required'),
                 narration: Yup.string()
                     .min(1, 'Please provide narration')
@@ -94,8 +91,8 @@ class InitiateDisbursement extends React.Component {
                     .required('Narration is required'),
                 sourceAccount: Yup.string()
                     .min(1, 'Please provide a valid source account')
-                    .max(15, 'Valid response required')
-                    .required('Source is required'),
+                    .max(15, 'Max Limit reached')
+                    .required('Source account is required'),
             }),
             allBanksList=[],
             transactionSourceList = [
@@ -142,7 +139,7 @@ class InitiateDisbursement extends React.Component {
                                                 narration: dataToEdit!==null?dataToEdit.narration:'',
                                                 sourceAccount: dataToEdit!==null?dataToEdit.sourceAccount:'',
                                             }}
-                                            // validationSchema={initiateDisburmentValidationSchema}
+                                            validationSchema={initiateDisburmentValidationSchema}
                                             onSubmit={(values, { resetForm }) => {
                                                 let initiationPayload = {
                                                         bankCode:values.bankCode,
@@ -177,12 +174,14 @@ class InitiateDisbursement extends React.Component {
                                                 handleBlur,
                                                 resetForm,
                                                 values,
+                                                setFieldValue,
+                                                setFieldTouched,
                                                 touched,
                                                 isValid,
                                                 errors, }) => (
                                                     <Form
                                                         className="form-content w-60 card"
-                                                        // noValidate
+                                                        noValidate
                                                         onSubmit={handleSubmit}
                                                         >
                                                         <Accordion defaultActiveKey="0">
@@ -205,14 +204,17 @@ class InitiateDisbursement extends React.Component {
                                                                                     <Select
                                                                                         options={transactionSourceList}
                                                                                         className={errors.transactionSource && touched.transactionSource ? "is-invalid" : null}
-                                                                                        onBlur={handleBlur}
+                                                                                        // onBlur={handleBlur}
                                                                                         defaultValue ={{label:txtSourceToEdit.label, value: txtSourceToEdit.value}}
-                                                                                        onChange={(selectedTxtSource) => {
-                                                                                            this.setState({ selectedTxtSource });
-                                                                                            errors.transactionSource = null
-                                                                                            touched.transactionSource = true
-                                                                                            values.transactionSource = selectedTxtSource.value
-                                                                                        }}
+                                                                                        // onChange={(selectedTxtSource) => {
+                                                                                        //     this.setState({ selectedTxtSource });
+                                                                                        //     errors.transactionSource = null
+                                                                                        //     touched.transactionSource = true
+                                                                                        //     values.transactionSource = selectedTxtSource.value
+                                                                                        // }}
+                                                                                        
+                                                                                        onChange={(selected) => setFieldValue('transactionSource', selected.value)}
+                                                                                        onBlur={()=> setFieldTouched('transactionSource', true)}
                                                                                         name="transactionSource"
                                                                                         required
                                                                                     />
@@ -222,13 +224,15 @@ class InitiateDisbursement extends React.Component {
                                                                                     <Select
                                                                                         options={transactionSourceList}
                                                                                         className={errors.transactionSource && touched.transactionSource ? "is-invalid" : null}
-                                                                                        onBlur={handleBlur}
-                                                                                        onChange={(selectedTxtSource) => {
-                                                                                            this.setState({ selectedTxtSource });
-                                                                                            errors.transactionSource = null
-                                                                                            touched.transactionSource = true
-                                                                                            values.transactionSource = selectedTxtSource.value
-                                                                                        }}
+                                                                                        // onBlur={handleBlur}
+                                                                                        // onChange={(selectedTxtSource) => {
+                                                                                        //     this.setState({ selectedTxtSource });
+                                                                                        //     errors.transactionSource = null
+                                                                                        //     touched.transactionSource = true
+                                                                                        //     values.transactionSource = selectedTxtSource.value
+                                                                                        // }}
+                                                                                        onChange={(selected) => setFieldValue('transactionSource', selected.value)}
+                                                                                        onBlur={()=> setFieldTouched('transactionSource', true)}
                                                                                         name="transactionSource"
                                                                                         required
                                                                                     />
@@ -256,8 +260,17 @@ class InitiateDisbursement extends React.Component {
                                                                             <Form.Control
                                                                                 type="text"
                                                                                 name="sourceAccount"
+                                                                                onBlur={handleBlur}
                                                                                 onChange={handleChange}
-                                                                                value={accountNumber(values.sourceAccount)}
+                                                                                // onChange={(value)=>{
+                                                                                    
+                                                                                //     // values.branchId = selectedBranch.value;
+                                                                                //     handleChange("sourceAccount")(value);
+                                                                                //     errors.sourceAccount = null;
+                                                                                // }}
+                                                                                // onChange={(value) => setFieldValue('sourceAccount', accountNumber(values.sourceAccount, 15))}
+                                                                                // onBlur={()=> setFieldTouched('sourceAccount', true)}
+                                                                                value={accountNumber(values.sourceAccount, 15)}
                                                                                 className={errors.sourceAccount && touched.sourceAccount ? "is-invalid withcustom" : "withcustom"} />
                         
                                                                             {errors.sourceAccount && touched.sourceAccount ? (
@@ -285,13 +298,15 @@ class InitiateDisbursement extends React.Component {
                                                                                         options={allBanksList}
                                                                                         className={errors.bankCode && touched.bankCode ? "is-invalid" : null}
                                                                                         defaultValue ={{label:destinationBankToEdit.bankName, value: destinationBankToEdit.bankCode}}
-                                                                                        onBlur={handleBlur}
-                                                                                        onChange={(selectedBank) => {
-                                                                                            this.setState({ selectedBank });
-                                                                                            errors.bankCode = null
-                                                                                            touched.bankCode = true
-                                                                                            values.bankCode = selectedBank.value
-                                                                                        }}
+                                                                                        // onBlur={handleBlur}
+                                                                                        // onChange={(selectedBank) => {
+                                                                                        //     this.setState({ selectedBank });
+                                                                                        //     errors.bankCode = null
+                                                                                        //     touched.bankCode = true
+                                                                                        //     values.bankCode = selectedBank.value
+                                                                                        // }}
+                                                                                        onChange={(selected) => setFieldValue('bankCode', selected.value)}
+                                                                                        onBlur={()=> setFieldTouched('bankCode', true)}
                                                                                         name="bankCode"
                                                                                         required
                                                                                     />
@@ -301,13 +316,15 @@ class InitiateDisbursement extends React.Component {
                                                                                     <Select
                                                                                         options={allBanksList}
                                                                                         className={errors.bankCode && touched.bankCode ? "is-invalid" : null}
-                                                                                        onBlur={handleBlur}
-                                                                                        onChange={(selectedBank) => {
-                                                                                            this.setState({ selectedBank });
-                                                                                            errors.bankCode = null
-                                                                                            touched.bankCode = true
-                                                                                            values.bankCode = selectedBank.value
-                                                                                        }}
+                                                                                        // onBlur={handleBlur}
+                                                                                        // onChange={(selectedBank) => {
+                                                                                        //     this.setState({ selectedBank });
+                                                                                        //     errors.bankCode = null
+                                                                                        //     touched.bankCode = true
+                                                                                        //     values.bankCode = selectedBank.value
+                                                                                        // }}
+                                                                                        onChange={(selected) => setFieldValue('bankCode', selected.value)}
+                                                                                        onBlur={()=> setFieldTouched('bankCode', true)}
                                                                                         name="bankCode"
                                                                                         required
                                                                                     />
@@ -324,9 +341,12 @@ class InitiateDisbursement extends React.Component {
                                                                                 <Form.Control
                                                                                     type="text"
                                                                                     name="destinationAccount"
+                                                                                    onBlur={handleBlur}
                                                                                     // maxLength="10"
                                                                                     onChange={handleChange}
-                                                                                    value={accountNumber(values.destinationAccount)}
+                                                                                    // onChange={(value) => setFieldValue('destinationAccount', value)}
+                                                                                    // onBlur={()=> setFieldTouched('destinationAccount', true)}
+                                                                                    value={accountNumber(values.destinationAccount, 10)}
                                                                                     className={errors.destinationAccount && touched.destinationAccount ? "is-invalid withcustom" : "withcustom"} />
                         
                                                                                 {errors.destinationAccount && touched.destinationAccount ? (
