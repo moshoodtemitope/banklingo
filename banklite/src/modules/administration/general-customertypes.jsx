@@ -57,7 +57,7 @@ class GeneralCustomerTypes extends React.Component {
           .required('Id is required'),
         custTypeDesc: Yup.string()
           .min(2, 'Please provide detailed information')
-          .required('Description is required')
+        //   .required('Description is required')
     });
 
     loadInitialData=()=>{

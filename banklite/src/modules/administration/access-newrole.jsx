@@ -76,6 +76,7 @@ class CreateNewRole extends React.Component {
                     roleIsAdministrator: false,
                     roleHasPortalAccessRight: false,
                     roleHasApiAccessRight: false,
+                    isAccountOfficer:false,
                     note: ''
                 }}
 
@@ -88,6 +89,7 @@ class CreateNewRole extends React.Component {
                         isAdministrator: values.roleIsAdministrator,
                         hasPortalAccessRight: values.roleHasPortalAccessRight,
                         hasApiAccessRight: values.roleHasApiAccessRight,
+                        isAccountOfficer:values.isAccountOfficer,
                         note:values.note,
                         permissionCodes:permissionsSelected
                     }
@@ -179,6 +181,16 @@ class CreateNewRole extends React.Component {
                                                          value={values.roleIsTeller}  />
                                                     <label htmlFor="roleIsTeller">Teller</label>
                                                 </div>
+                                                <div className="checkbox-wrap">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        id="isAccountOfficer" 
+                                                        checked={values.isAccountOfficer? values.isAccountOfficer:null}
+                                                        name="isAccountOfficer"
+                                                        onChange={handleChange} 
+                                                        value={values.isAccountOfficer}  />
+                                                    <label htmlFor="isAccountOfficer">Account Officer</label>
+                                                </div>
                                             </Col>
                                             <Col>
                                                 <Form.Label>Access Rights</Form.Label>
@@ -203,6 +215,7 @@ class CreateNewRole extends React.Component {
                                                     <label htmlFor="roleHasApiAccessRight">API</label>
                                                 </div>
                                             </Col>
+                                            
                                         </Form.Row>
                                     </div>
                                 </Accordion.Collapse>

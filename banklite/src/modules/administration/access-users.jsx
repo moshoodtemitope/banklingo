@@ -270,7 +270,7 @@ class AccessUsers extends React.Component {
                 case(administrationConstants.GET_USERS_SUCCESS):
                     let allUsersData = adminGetUsersRequest.request_data.response.data;
                         if(allUsersData!==undefined){
-                            if(allUsersData.length>=1){
+                            if(allUsersData.result.length>=1){
                                 return(
                                     <div>
                                         <div className="heading-with-cta">
@@ -323,7 +323,7 @@ class AccessUsers extends React.Component {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            allUsersData.map((eachUser, index)=>{
+                                                            allUsersData.result.map((eachUser, index)=>{
                                                                 return(
                                                                     <Fragment key={index}>
                                                                         <tr>

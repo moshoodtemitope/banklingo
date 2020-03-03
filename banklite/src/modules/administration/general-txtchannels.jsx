@@ -471,7 +471,7 @@ class GeneralTxtChannels extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
+                                                {/* <div className="move-page-actions">
                                                     <div className="each-page-action">
                                                         <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
                                                     </div>
@@ -487,7 +487,7 @@ class GeneralTxtChannels extends React.Component {
                                                     <div className="each-page-action">
                                                         <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                         {/* No Channels have been created */}
