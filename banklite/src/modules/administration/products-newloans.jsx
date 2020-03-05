@@ -20,6 +20,8 @@ import * as Yup from 'yup';
 import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
 import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
 
+import { numberWithCommas, allowNumbersOnly} from '../../shared/utils';
+
 import Alert from 'react-bootstrap/Alert'
 import { productActions } from '../../redux/actions/products/products.action';
 import { productsConstants } from '../../redux/actiontypes/products/products.constants'
@@ -125,6 +127,12 @@ class NewLoanProduct extends React.Component {
                                 feeIncomeAccountId: '',
                                 interestIncomeAccountId: '',
                                 penaltyIncomeAccountId: '',
+                                arearsTolerancePeriodInDaysDefault:'',
+                                arearsTolerancePeriodInDaysMin:'',
+                                arearsTolerancePeriodInDaysMax:'',
+                                defaultLoanAmount:'',
+                                minimumLoanAmount:'',
+                                maximumLoanAmount:'',
                                 methodology: 0,
                                 isActive: true,
                             }}
@@ -149,6 +157,18 @@ class NewLoanProduct extends React.Component {
                                         interestIncomeAccountId: parseInt(values.interestIncomeAccountId),
                                         penaltyIncomeAccountId: parseInt(values.penaltyIncomeAccountId),
                                     },
+                                    arrearsSetting: {
+                                        arearsTolerancePeriodInDaysDefault: parseInt(values.arearsTolerancePeriodInDaysDefault),
+                                        // arrearsDaysCalculatedFrom: parseInt(),
+                                        arearsTolerancePeriodInDaysMin: parseInt(values.arearsTolerancePeriodInDaysMin),
+                                        arearsTolerancePeriodInDaysMax: parseInt(values.arearsTolerancePeriodInDaysMax)
+                                    },
+                                    loanAmountSetting: {
+                                        loanAmountDefault: parseFloat(values.defaultLoanAmount),
+                                        loanAmountMinimun: parseFloat(values.minimumLoanAmount),
+                                        loanAmountMaximum: parseFloat(values.maximumLoanAmount)
+                                    },
+
                                     methodology: parseInt(values.methodology),
                                     isActive: values.isActive
                                     
@@ -262,10 +282,9 @@ class NewLoanProduct extends React.Component {
                                         
                                     </Col>
                                 </Form.Row>
-
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                        Loan Product Description
+                                        Loan Product Description 
                                     </Accordion.Toggle>
                                     <Accordion.Collapse eventKey="0">
                                         <div className="each-formsection">
@@ -282,6 +301,120 @@ class NewLoanProduct extends React.Component {
                                         </div>
                                     </Accordion.Collapse>
                                 </Accordion>
+
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Loan Amount Settings
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div className="each-formsection">
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Default Loan Amount</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.defaultLoanAmount)}
+                                                        className={errors.defaultLoanAmount && touched.defaultLoanAmount ? "is-invalid" : null}
+                                                        name="defaultLoanAmount" required />
+                                                    {errors.defaultLoanAmount && touched.defaultLoanAmount ? (
+                                                        <span className="invalid-feedback">{errors.defaultLoanAmount}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Minimum Loan Amount</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.minimumLoanAmount)}
+                                                        className={errors.minimumLoanAmount && touched.minimumLoanAmount ? "is-invalid" : null}
+                                                        name="minimumLoanAmount" required />
+                                                    {errors.minimumLoanAmount && touched.minimumLoanAmount ? (
+                                                        <span className="invalid-feedback">{errors.minimumLoanAmount}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Maximum Loan Amount</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.maximumLoanAmount)}
+                                                        className={errors.maximumLoanAmount && touched.maximumLoanAmount ? "is-invalid" : null}
+                                                        name="maximumLoanAmount" required />
+                                                    {errors.maximumLoanAmount && touched.maximumLoanAmount ? (
+                                                        <span className="invalid-feedback">{errors.maximumLoanAmount}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                </Col>
+                                            </Form.Row>
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Arrears Settings
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div className="each-formsection">
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Arrears Tolerance Period (days) Default</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.arearsTolerancePeriodInDaysDefault)}
+                                                        className={errors.arearsTolerancePeriodInDaysDefault && touched.arearsTolerancePeriodInDaysDefault ? "is-invalid" : null}
+                                                        name="arearsTolerancePeriodInDaysDefault" required />
+                                                    {errors.arearsTolerancePeriodInDaysDefault && touched.arearsTolerancePeriodInDaysDefault ? (
+                                                        <span className="invalid-feedback">{errors.arearsTolerancePeriodInDaysDefault}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Arrears Tolerance Period (days) Minimum</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.arearsTolerancePeriodInDaysMin)}
+                                                        className={errors.arearsTolerancePeriodInDaysMin && touched.arearsTolerancePeriodInDaysMin ? "is-invalid" : null}
+                                                        name="arearsTolerancePeriodInDaysMin" required />
+                                                    {errors.arearsTolerancePeriodInDaysMin && touched.arearsTolerancePeriodInDaysMin ? (
+                                                        <span className="invalid-feedback">{errors.arearsTolerancePeriodInDaysMin}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Arrears Tolerance Period (days) Maximum</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.arearsTolerancePeriodInDaysMax)}
+                                                        className={errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? "is-invalid" : null}
+                                                        name="arearsTolerancePeriodInDaysMax" required />
+                                                    {errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? (
+                                                        <span className="invalid-feedback">{errors.arearsTolerancePeriodInDaysMax}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Arrears Days Calculated From</Form.Label>
+                                                    {/* <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={allowNumbersOnly(values.arearsTolerancePeriodInDaysMax)}
+                                                        className={errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? "is-invalid" : null}
+                                                        name="arearsTolerancePeriodInDaysMax" required />
+                                                    {errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? (
+                                                        <span className="invalid-feedback">{errors.arearsTolerancePeriodInDaysMax}</span>
+                                                    ) : null} */}
+                                                </Col>
+                                            </Form.Row>
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                         Loan Product Rules
