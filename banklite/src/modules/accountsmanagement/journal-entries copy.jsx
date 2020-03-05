@@ -108,7 +108,7 @@ class JournalEntries extends React.Component {
 
         const {dispatch} = this.props;
          let payload ={
-             PageSize: sizeOfPage,
+             PageSize: this.state.PageSize,
              CurrentPage:this.state.CurrentPage
          }
          if(tempData){
@@ -263,10 +263,8 @@ class JournalEntries extends React.Component {
                                 jornalEntryModel =[]
                                 values.jornalEntries.forEach(eachEntry=>{
                                     if(eachEntry.entryTypeId===1){
-                                        console.log("each credit value",eachEntry.entryAmount);
                                         creditTotal+=parseFloat(eachEntry.entryAmount);
                                     }else{
-                                        console.log("each debit value",eachEntry.entryAmount);
                                         debitTotal +=parseFloat(eachEntry.entryAmount);
                                     }
                                     jornalEntryModel.push({
@@ -278,8 +276,8 @@ class JournalEntries extends React.Component {
                                 })
 
                                 if(creditTotal!==debitTotal){
-                                    console.log("Credit total",creditTotal);
-                                    console.log("Debit total",debitTotal);
+                                    console.log("#####",creditTotal);
+                                    console.log("+++++",debitTotal);
                                     this.setState({totalComparison:false});
                                 }else{
                                     this.setState({totalComparison:true});
@@ -313,7 +311,7 @@ class JournalEntries extends React.Component {
                                                 this.handleClose();
                                                 setTimeout(() => {
                                                     this.getJournalEntries(saveRequestData);
-                                                    this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
+                                                    // this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
                                                     
                                                     
                                                 }, 2000);
@@ -337,6 +335,7 @@ class JournalEntries extends React.Component {
                             resetForm,
                             values,
                             setFieldValue,
+                            setFieldTouched,
                             touched,
                             isValid,
                             errors, }) => (
@@ -357,7 +356,7 @@ class JournalEntries extends React.Component {
                                                                     <Form.Label className="block-level" htmlFor={`jornalEntries.${index}.branchId`}>Branch</Form.Label>
                                                                     <Select
                                                                         options={allBranches}
-                                                                        onBlur={handleBlur}
+                                                                        // onBlur={handleBlur}
                                                                         className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') 
                                                                                     && errors.jornalEntries[index].hasOwnProperty('branchId') 
                                                                                     && (touched.jornalEntries && typeof touched.jornalEntries[index] !== 'undefined')
@@ -372,6 +371,9 @@ class JournalEntries extends React.Component {
                                                                                   enumerable: true
                                                                                 })
                                                                             );
+
+                                                                            // setFieldValue(`jornalEntries.${index}.branchId`, selectedBranch.value)
+
                                                                             values.jornalEntries[index].branchId = selectedBranch.value
 
                                                                             if( errors.jornalEntries && errors.jornalEntries[index] !==undefined){
@@ -387,7 +389,7 @@ class JournalEntries extends React.Component {
 
 
                                                                         }}
-                                                                        
+                                                                        onBlur={()=> setFieldTouched(`jornalEntries.${index}.branchId`, true)}
 
                                                                         name={`jornalEntries.${index}.branchId`}
                                                                     />
@@ -404,7 +406,7 @@ class JournalEntries extends React.Component {
                                                                     <Form.Label className="block-level" htmlFor={`jornalEntries.${index}.glAcountlId`}>GL Account</Form.Label>
                                                                     <Select
                                                                         options={allGlAccounts}
-                                                                        onBlur={handleBlur}
+                                                                        // onBlur={handleBlur}
                                                                         
                                                                         className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') 
                                                                                     && errors.jornalEntries[index].hasOwnProperty('glAcountlId') 
@@ -418,6 +420,7 @@ class JournalEntries extends React.Component {
                                                                                 })
                                                                             );
                                                                             
+                                                                            setFieldValue(`jornalEntries.${index}.glAcountlId`, selectedGlAccount.value)
                                                                             
                                                                             values.jornalEntries[index].glAcountlId = selectedGlAccount.value 
                                                                             
@@ -433,6 +436,9 @@ class JournalEntries extends React.Component {
                                                                                 touched.jornalEntries[index].glAcountlId  = null
                                                                             }
                                                                         }}
+
+                                                                        // onChange={(selected) => setFieldValue(`jornalEntries.${index}.glAcountlId`, selected.value)}
+                                                                        onBlur={()=> setFieldTouched(`jornalEntries.${index}.glAcountlId`, true)}
                                                                         // className={errors.glAcountlId && touched.glAcountlId ? "is-invalid" : null}
                                                                         
                                                                         name={`jornalEntries.${index}.glAcountlId`}
@@ -454,7 +460,7 @@ class JournalEntries extends React.Component {
                                                                     htmlFor={`jornalEntries.${index}.entryTypeId`}>Journal Entry Type</Form.Label>
                                                                 <Select
                                                                     options={entryTypes}
-                                                                    onBlur={handleBlur}
+                                                                    // onBlur={handleBlur}
                                                                     className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') &&  errors.jornalEntries[index].entryTypeId && touched.jornalEntries &&  touched.jornalEntries[index].entryTypeId ? "is-invalid" : null}
                                                                     onChange={(selectedType) => {
                                                                         
@@ -472,7 +478,9 @@ class JournalEntries extends React.Component {
                                                                             touched.jornalEntries[index].entryTypeId  = null
                                                                         }
 
-                                                                        console.log("type is",selectedType.value, typeof selectedType.value);
+                                                                        // console.log("type is",selectedType.value, typeof selectedType.value);
+
+                                                                        setFieldValue(`jornalEntries.${index}.entryTypeId`, selectedType.value)
                                                                         
                                                                         // values.jornalEntries[index].entryTypeId = selectedType.value
                                                                         values.jornalEntries[index].entryTypeId = parseInt(selectedType.value)
@@ -481,6 +489,9 @@ class JournalEntries extends React.Component {
                                                                        
 
                                                                     }}
+
+                                                                    // onChange={(selected) => setFieldValue(`jornalEntries.${index}.entryTypeId`, selected.value)}
+                                                                    onBlur={()=> setFieldTouched(`jornalEntries.${index}.entryTypeId`, true)}
                                                                     
                                                                     
 
@@ -508,7 +519,10 @@ class JournalEntries extends React.Component {
                                                                 <Form.Control
                                                                     type="text"
                                                                     // onBlur={handleBlur}
+
                                                                     onChange={handleChange}
+                                                                    
+
                                                                     value={numberWithCommas(values.jornalEntries[index].entryAmount)}
                                                                     className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') && errors.jornalEntries[index].entryAmount && touched.jornalEntries && touched.jornalEntries[index].entryAmount ? "is-invalid withcustom" : "withcustom"}
                                                                     
@@ -659,7 +673,7 @@ class JournalEntries extends React.Component {
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
                                     <select id="toshow" 
-                                        value={this.state.PageSize}
+                                        // value={this.state.PageSize}
                                         className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
@@ -722,7 +736,7 @@ class JournalEntries extends React.Component {
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
                                     <select id="toshow" 
-                                        onChange={(e)=>this.setPagesize(e, getJournalData)}
+                                        onChange={this.setPagesize}
                                         value={this.state.PageSize}
                                         className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
