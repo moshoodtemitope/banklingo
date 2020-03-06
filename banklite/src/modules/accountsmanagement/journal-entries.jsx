@@ -119,7 +119,7 @@ class JournalEntries extends React.Component {
     }
 
     loadNextPage = (nextPage, tempData)=>{
-        
+        console.log("dsdsd", nextPage);
         const {dispatch} = this.props;
         let {PageSize} = this.state;
 
@@ -127,7 +127,7 @@ class JournalEntries extends React.Component {
 
         let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-
+        
         let payload ={
             PageSize: this.state.PageSize,
             CurrentPage:nextPage
@@ -264,10 +264,10 @@ class JournalEntries extends React.Component {
                                 values.jornalEntries.forEach(eachEntry=>{
                                     if(eachEntry.entryTypeId===1){
                                         console.log("each credit value",eachEntry.entryAmount);
-                                        creditTotal+=parseFloat(eachEntry.entryAmount);
+                                        creditTotal+=parseFloat(eachEntry.entryAmount.replace(/,/g, ''));
                                     }else{
                                         console.log("each debit value",eachEntry.entryAmount);
-                                        debitTotal +=parseFloat(eachEntry.entryAmount);
+                                        debitTotal +=parseFloat(eachEntry.entryAmount.replace(/,/g, ''));
                                     }
                                     jornalEntryModel.push({
                                                     glAccountId: eachEntry.glAcountlId,
@@ -799,6 +799,7 @@ class JournalEntries extends React.Component {
                                             onChange={(e)=>this.setPagesize(e, JournalEntriesData)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
+                                            <option value="3">3</option>
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -901,6 +902,7 @@ class JournalEntries extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

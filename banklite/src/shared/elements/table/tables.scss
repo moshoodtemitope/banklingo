@@ -11,6 +11,10 @@ span.each-pagenum {
     padding: 2px 5px;
     font-size: 11px;
     margin: 0 3px;
+    &.active{
+        background: #5499C7;
+        color: #ffffff;
+    }
     &:hover{
         cursor: pointer;
         background: #A9CCE3;

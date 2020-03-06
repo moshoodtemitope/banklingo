@@ -73,13 +73,35 @@ class NewLoanProduct extends React.Component {
                 // .required('Required'),
           });
 
-          let allProductTypes =[
-            {value: '0', label: 'Fixed Term Loan'},
-            {value: '1', label: 'Dynamic Term Loan'},
-            {value: '2', label: 'Interest Free Loan'},
-            {value: '3', label: 'Tranched Loan'},
-            {value: '4', label: 'Revolving Credit'},
-        ];
+        let allProductTypes = [
+                { value: '0', label: 'Fixed Term Loan' },
+                { value: '1', label: 'Dynamic Term Loan' },
+                { value: '2', label: 'Interest Free Loan' },
+                { value: '3', label: 'Tranched Loan' },
+                { value: '4', label: 'Revolving Credit' },
+            ],
+            arrearsDaysCalculation=[
+                { value: '1', label: 'Date Arrears first went Into Arrears' },
+                { value: '2', label: 'Date Of The Oldest Currently Late Repayment' },
+            ],
+            interestRateTermsOptions=[
+                { value: '1', label: '% per year' },
+                { value: '2', label: '% per month' },
+                { value: '3', label: '% per 4 weeks' },
+                { value: '4', label: '% per week' },
+                { value: '5', label: '% per x days' },
+            ],
+            interestBalanceCalculationOptions=[
+                { value: '1', label: 'Flat' },
+                { value: '2', label: 'Declining Balance' },
+                { value: '3', label: 'Declining Balance Equal Installments' }
+            ],
+            repaymentPeriodOptions=[
+                { value: '1', label: 'Years' },
+                { value: '2', label: 'Months' },
+                { value: '3', label: 'Weeks' },
+                { value: '4', label: 'Days' }
+            ];
         
         switch(getAllGLAccountsRequest.request_status){
             case (accountingConstants.GET_ALL_GLACCOUNTS_PENDING):
@@ -130,11 +152,28 @@ class NewLoanProduct extends React.Component {
                                 arearsTolerancePeriodInDaysDefault:'',
                                 arearsTolerancePeriodInDaysMin:'',
                                 arearsTolerancePeriodInDaysMax:'',
+                                arrearsDaysCalculationChosen:'',
                                 defaultLoanAmount:'',
                                 minimumLoanAmount:'',
                                 maximumLoanAmount:'',
                                 methodology: 0,
                                 isActive: true,
+                                interestPaid:true,
+                                interestRateTerms:'',
+                                interestBalanceCalculation:'',
+                                interestRateDefault:'',
+                                interestRateMin:'',
+                                interestRateMax:'',
+                                repaymentEvery:'',
+                                repaymentPeriod:'',
+                                interestBalanceCalculationSelected:'',
+                                firstDueDateOffsetConstraintDefault:'',
+                                firstDueDateOffsetConstraintMin:'',
+                                firstDueDateOffsetConstraintMax:'',
+                                repaymentInterestRateDefault:'',
+                                repaymentInterestRateMin:'',
+                                repaymentInterestRateMax:'',
+                                collectPrincipalEveryRepayments:'',
                             }}
 
                             validationSchema={loanProductValidationSchema}
@@ -159,14 +198,35 @@ class NewLoanProduct extends React.Component {
                                     },
                                     arrearsSetting: {
                                         arearsTolerancePeriodInDaysDefault: parseInt(values.arearsTolerancePeriodInDaysDefault),
-                                        // arrearsDaysCalculatedFrom: parseInt(),
+                                        arrearsDaysCalculatedFrom: parseInt(values.arrearsDaysCalculationChosen),
                                         arearsTolerancePeriodInDaysMin: parseInt(values.arearsTolerancePeriodInDaysMin),
                                         arearsTolerancePeriodInDaysMax: parseInt(values.arearsTolerancePeriodInDaysMax)
                                     },
+                                    loanProductInterestSetting: {
+                                        interestPaid: values.interestPaid,
+                                        interestRateTerms: parseInt(values.interestRateTerms),
+                                        interestBalanceCalculation: parseInt(values.interestBalanceCalculation),
+                                        interestRateDefault: parseFloat(values.interestRateDefault.replace(/,/g, '')),
+                                        interestRateMin: parseFloat(values.interestRateMin.replace(/,/g, '')),
+                                        interestRateMax: parseFloat(values.interestRateMax.replace(/,/g, '')),
+                                      },
                                     loanAmountSetting: {
                                         loanAmountDefault: parseFloat(values.defaultLoanAmount),
                                         loanAmountMinimun: parseFloat(values.minimumLoanAmount),
                                         loanAmountMaximum: parseFloat(values.maximumLoanAmount)
+                                    },
+
+                                    repaymentReschedulingModel: {
+                                        repaymentEvery: parseInt(values.repaymentEvery),
+                                        repaymentPeriod: parseInt(values.repaymentPeriod),
+                                        interestBalanceCalculation: parseInt(values.interestBalanceCalculationSelected),
+                                        firstDueDateOffsetConstraintDefault: parseInt(values.firstDueDateOffsetConstraintDefault),
+                                        firstDueDateOffsetConstraintMin: parseInt(values.firstDueDateOffsetConstraintMin),
+                                        firstDueDateOffsetConstraintMax: parseInt(values.firstDueDateOffsetConstraintMax),
+                                        interestRateDefault: parseFloat(values.repaymentInterestRateDefault.replace(/,/g, '')),
+                                        interestRateMin: parseFloat(values.repaymentInterestRateMin.replace(/,/g, '')),
+                                        interestRateMax: parseFloat(values.repaymentInterestRateMax.replace(/,/g, '')),
+                                        collectPrincipalEveryRepayments: parseInt(values.collectPrincipalEveryRepayments)
                                     },
 
                                     methodology: parseInt(values.methodology),
@@ -400,15 +460,293 @@ class NewLoanProduct extends React.Component {
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Arrears Days Calculated From</Form.Label>
-                                                    {/* <Form.Control
+                                        
+                                                    <Select
+                                                        options={arrearsDaysCalculation}
+                                                        onChange={(selectedArrearsDaysCalculation) => {
+                                                            this.setState({ selectedArrearsDaysCalculation });
+                                                            errors.arrearsDaysCalculationChosen = null
+                                                            values.arrearsDaysCalculationChosen = selectedArrearsDaysCalculation.value
+                                                        }}
+                                                        className={errors.arrearsDaysCalculationChosen && touched.arrearsDaysCalculationChosen ? "is-invalid" : null}
+                                                        
+                                                        
+                                                        name="arrearsDaysCalculationChosen"
+                                                        
+                                                        required
+                                                    />
+                                                    {errors.arrearsDaysCalculationChosen && touched.arrearsDaysCalculationChosen ? (
+                                                        <span className="invalid-feedback">{errors.arrearsDaysCalculationChosen}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Interest Rate
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div className="each-formsection">
+                                            <Form.Row>
+                                                <Col>
+                                                    <div className="checkbox-wrap">
+                                                        <input type="checkbox"
+                                                            id="interestPaid"
+                                                            checked={values.interestPaid ? values.interestPaid : null}
+                                                            name="interestPaid"
+                                                            onChange={handleChange}
+                                                            value={values.interestPaid} />
+                                                        <label htmlFor="interestPaid">Interest Paid</label>
+                                                    </div>
+                                                </Col>
+                                            </Form.Row>
+                                            {values.interestPaid===true &&
+                                                <div>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest Calculation Method</Form.Label>
+                                                            <Select
+                                                                options={interestBalanceCalculationOptions}
+                                                                onChange={(selectedInterestBalanceCalculationOptions) => {
+                                                                    this.setState({ selectedInterestBalanceCalculationOptions });
+                                                                    errors.interestBalanceCalculation = null
+                                                                    values.interestBalanceCalculation = selectedInterestBalanceCalculationOptions.value
+                                                                }}
+                                                                className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
+
+
+                                                                name="interestBalanceCalculation"
+
+                                                                required
+                                                            />
+                                                            {errors.interestBalanceCalculation && touched.interestBalanceCalculation ? (
+                                                                <span className="invalid-feedback">{errors.interestBalanceCalculation}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">How is the Interest rate charged?</Form.Label>
+
+                                                            <Select
+                                                                options={interestRateTermsOptions}
+                                                                onChange={(selectedInterestRateTermsOptions) => {
+                                                                    this.setState({ selectedInterestRateTermsOptions });
+                                                                    errors.interestRateTerms = null
+                                                                    values.interestRateTerms = selectedInterestRateTermsOptions.value
+                                                                }}
+                                                                className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
+
+
+                                                                name="interestRateTerms"
+
+                                                                required
+                                                            />
+                                                            {errors.interestRateTerms && touched.interestRateTerms ? (
+                                                                <span className="invalid-feedback">{errors.interestRateTerms}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                    </Form.Row>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest Rate Default (%)</Form.Label>
+                                                            <Form.Control
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.interestRateDefault)}
+                                                                className={errors.interestRateDefault && touched.interestRateDefault ? "is-invalid" : null}
+                                                                name="interestRateDefault" required />
+                                                            {errors.interestRateDefault && touched.interestRateDefault ? (
+                                                                <span className="invalid-feedback">{errors.interestRateDefault}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest Rate Minimum (%)</Form.Label>
+                                                            <Form.Control
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.interestRateMin)}
+                                                                className={errors.interestRateMin && touched.interestRateMin ? "is-invalid" : null}
+                                                                name="interestRateMin" required />
+                                                            {errors.interestRateMin && touched.interestRateMin ? (
+                                                                <span className="invalid-feedback">{errors.interestRateMin}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                    </Form.Row>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Interest Rate Maximum (%)</Form.Label>
+                                                            <Form.Control
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.interestRateMax)}
+                                                                className={errors.interestRateMax && touched.interestRateMax ? "is-invalid" : null}
+                                                                name="interestRateMax" required />
+                                                            {errors.interestRateMax && touched.interestRateMax ? (
+                                                                <span className="invalid-feedback">{errors.interestRateMax}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                        </Col>
+                                                    </Form.Row>
+                                                </div>
+                                            }
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Repayment Scheduling
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Repayments Are Made Every</Form.Label>
+                                                    <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={allowNumbersOnly(values.arearsTolerancePeriodInDaysMax)}
-                                                        className={errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? "is-invalid" : null}
-                                                        name="arearsTolerancePeriodInDaysMax" required />
-                                                    {errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? (
-                                                        <span className="invalid-feedback">{errors.arearsTolerancePeriodInDaysMax}</span>
-                                                    ) : null} */}
+                                                        value={numberWithCommas(values.repaymentEvery)}
+                                                        className={errors.repaymentEvery && touched.repaymentEvery ? "is-invalid" : null}
+                                                        name="repaymentEvery" required />
+                                                    {errors.repaymentEvery && touched.repaymentEvery ? (
+                                                        <span className="invalid-feedback">{errors.repaymentEvery}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Repayments Period</Form.Label>
+
+                                                    <Select
+                                                        options={repaymentPeriodOptions}
+                                                        onChange={(selectedRepaymentPeriodOptions) => {
+                                                            this.setState({ selectedRepaymentPeriodOptions });
+                                                            errors.repaymentPeriod = null
+                                                            values.repaymentPeriod = selectedRepaymentPeriodOptions.value
+                                                        }}
+                                                        className={errors.repaymentPeriod && touched.repaymentPeriod ? "is-invalid" : null}
+
+
+                                                        name="repaymentPeriod"
+
+                                                        required
+                                                    />
+                                                    {errors.repaymentPeriod && touched.repaymentPeriod ? (
+                                                        <span className="invalid-feedback">{errors.repaymentPeriod}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Interest Calculation Method</Form.Label>
+                                                    <Select
+                                                        options={interestBalanceCalculationOptions}
+                                                        onChange={(selectedInterestBalanceCalculation) => {
+                                                            this.setState({ selectedInterestBalanceCalculation });
+                                                            errors.interestBalanceCalculationSelected = null
+                                                            values.interestBalanceCalculationSelected = selectedInterestBalanceCalculation.value
+                                                        }}
+                                                        className={errors.interestBalanceCalculationSelected && touched.interestBalanceCalculationSelected ? "is-invalid" : null}
+
+
+                                                        name="interestBalanceCalculationSelected"
+
+                                                        required
+                                                    />
+                                                    {errors.interestBalanceCalculationSelected && touched.interestBalanceCalculationSelected ? (
+                                                        <span className="invalid-feedback">{errors.interestBalanceCalculationSelected}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">First Due Date Offset Default (days)</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.firstDueDateOffsetConstraintDefault)}
+                                                        className={errors.firstDueDateOffsetConstraintDefault && touched.firstDueDateOffsetConstraintDefault ? "is-invalid" : null}
+                                                        name="firstDueDateOffsetConstraintDefault" required />
+                                                    {errors.firstDueDateOffsetConstraintDefault && touched.firstDueDateOffsetConstraintDefault ? (
+                                                        <span className="invalid-feedback">{errors.firstDueDateOffsetConstraintDefault}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">First Due Date Offset Minimum (days)</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.firstDueDateOffsetConstraintMin)}
+                                                        className={errors.firstDueDateOffsetConstraintMin && touched.firstDueDateOffsetConstraintMin ? "is-invalid" : null}
+                                                        name="firstDueDateOffsetConstraintMin" required />
+                                                    {errors.firstDueDateOffsetConstraintMin && touched.firstDueDateOffsetConstraintMin ? (
+                                                        <span className="invalid-feedback">{errors.firstDueDateOffsetConstraintMin}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">First Due Date Offset Maximum (days)</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.firstDueDateOffsetConstraintMax)}
+                                                        className={errors.firstDueDateOffsetConstraintMax && touched.firstDueDateOffsetConstraintMax ? "is-invalid" : null}
+                                                        name="firstDueDateOffsetConstraintMax" required />
+                                                    {errors.firstDueDateOffsetConstraintMax && touched.firstDueDateOffsetConstraintMax ? (
+                                                        <span className="invalid-feedback">{errors.firstDueDateOffsetConstraintMax}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Interest Rate Default (%) </Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.repaymentInterestRateDefault)}
+                                                        className={errors.repaymentInterestRateDefault && touched.repaymentInterestRateDefault ? "is-invalid" : null}
+                                                        name="repaymentInterestRateDefault" required />
+                                                    {errors.repaymentInterestRateDefault && touched.repaymentInterestRateDefault ? (
+                                                        <span className="invalid-feedback">{errors.repaymentInterestRateDefault}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Interest Rate Minimum (%) </Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.repaymentInterestRateMin)}
+                                                        className={errors.repaymentInterestRateMin && touched.repaymentInterestRateMin ? "is-invalid" : null}
+                                                        name="repaymentInterestRateMin" required />
+                                                    {errors.repaymentInterestRateMin && touched.repaymentInterestRateMin ? (
+                                                        <span className="invalid-feedback">{errors.repaymentInterestRateMin}</span>
+                                                    ) : null}
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Interest Rate Maximum (%) </Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.repaymentInterestRateMax)}
+                                                        className={errors.repaymentInterestRateMax && touched.repaymentInterestRateMax ? "is-invalid" : null}
+                                                        name="repaymentInterestRateMax" required />
+                                                    {errors.repaymentInterestRateMax && touched.repaymentInterestRateMax ? (
+                                                        <span className="invalid-feedback">{errors.repaymentInterestRateMax}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Collect Principal Every </Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.collectPrincipalEveryRepayments)}
+                                                        className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid" : null}
+                                                        name="collectPrincipalEveryRepayments" required />
+                                                        <small>Repayments</small>
+                                                    {errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? (
+                                                        <span className="invalid-feedback">{errors.collectPrincipalEveryRepayments}</span>
+                                                    ) : null}
                                                 </Col>
                                             </Form.Row>
                                         </div>

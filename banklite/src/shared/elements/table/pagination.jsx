@@ -33,6 +33,7 @@ class TablePagination extends React.Component{
 
         
         let isMorePagesLeft,
+            isPreviousPagesLeft,          
             pagingTemplate=[],
             pagesToshow =pagesCountToshow||4;
 
@@ -48,20 +49,34 @@ class TablePagination extends React.Component{
                     isMorePagesLeft = false;
                 }
             }
+
+            if(currPage>=2 && currRecordsCount<totalRows){
+                isPreviousPagesLeft = true;
+            }else{
+                isPreviousPagesLeft = false;
+            }
+
             if(totalPages<=pagesToshow){
                 if(totalPages>=1){
-                    for(var eachPage=1; eachPage<=totalPages ; eachPage++){
+                    let {activePage}= this.state;
+                    for(let eachPage=1; eachPage<=totalPages ; eachPage++){
+                        console.log("here", eachPage);
                         pagingTemplate.push(<span 
                                                 key={`${eachPage}-int`}
-                                                className="each-pagenum"
-                                                onClick={()=>refreshFunc(eachPage,tempData)}
+                                                className={currPage===eachPage?"each-pagenum active":"each-pagenum"}
+                                                onClick={()=>
+                                                    {
+                                                        this.setState({activePage:eachPage})
+                                                        refreshFunc(eachPage,tempData)
+                                                    }
+                                                }
                                                 >{eachPage}</span>
                                             );
                     }
                 }else{
                     if(tempData.length>=1){
                         pagingTemplate.push(<span 
-                            key={`${eachPage}-int`}
+                            key={`${totalPages}-int`}
                             className="each-pagenum"
                             onClick={()=>refreshFunc(1,tempData)}
                             >1</span>
@@ -69,7 +84,7 @@ class TablePagination extends React.Component{
                     }
                 }
             }else{
-                for(var eachPage=1; eachPage<=pagesToshow; eachPage++){
+                for(let eachPage=1; eachPage<=pagesToshow; eachPage++){
                     if(eachPage<pagesToshow-1){
                         pagingTemplate.push(<span 
                                                 key={`${eachPage}-int`}
@@ -100,13 +115,13 @@ class TablePagination extends React.Component{
         return(
             <div className={(isMorePagesLeft===true || tempData.length>=1)?"move-page-actions":"move-page-actions unaallowed"}>
                 <div 
-                    className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
-                    onClick={isMorePagesLeft===true?()=>refreshFunc(currPage+1,tempData):null}>
+                    className={isPreviousPagesLeft===true?"each-page-action":"each-page-action unaallowed"}
+                    onClick={isPreviousPagesLeft===true?()=>refreshFunc(1,tempData):null}>
                     <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
                 </div>
                 <div 
-                    className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
-                    onClick={isMorePagesLeft===true?()=>refreshFunc(currPage+1,tempData):null}>
+                    className={isPreviousPagesLeft===true?"each-page-action":"each-page-action unaallowed"}
+                    onClick={isPreviousPagesLeft===true?()=>refreshFunc(currPage-1,tempData):null}>
                     <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
                 </div>
 
@@ -146,7 +161,7 @@ class TablePagination extends React.Component{
                 </div>
                 <div 
                     className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
-                    onClick={isMorePagesLeft===true?()=>refreshFunc(currPage+1,tempData):null}>
+                    onClick={isMorePagesLeft===true?()=>refreshFunc(totalPages,tempData):null}>
                     <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
                 </div>
             </div>
