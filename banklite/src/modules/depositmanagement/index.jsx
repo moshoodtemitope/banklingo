@@ -44,26 +44,58 @@ class DepositManagement extends React.Component {
         dispatch(depositActions.getDeposits(paramters));
     }
 
-    setPagesize = (PageSize) => {
-        // console.log('----here', PageSize.target.value);
+    setPagesize = (PageSize, tempData) => {
+        const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             { FullDetails, CurrentPage, CurrentSelectedPage } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
+        
+        
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getDeposits(params);
+
+        if(tempData){
+            dispatch(depositActions.getDeposits(params, tempData));
+        }else{
+            dispatch(depositActions.getDeposits(params));
+        }
     }
 
-    setShowDetails = (FullDetails) => {
-        // console.log('----here', PageSize.target.value);
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize,CurrentPage,FullDetails} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
+
+        if(tempData){
+            dispatch(depositActions.getDeposits(params, tempData));
+        }else{
+            dispatch(depositActions.getDeposits(params));
+        }
+    }
+
+    setShowDetails = (FullDetails, tempData) => {
+        const {dispatch} = this.props;
         let showDetails = FullDetails.target.checked,
             { CurrentPage, CurrentSelectedPage, PageSize } = this.state;
 
         this.setState({ FullDetails: showDetails });
 
+        
+        
         let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getDeposits(params);
+
+        if(tempData){
+            dispatch(depositActions.getDeposits(params, tempData));
+        }else{
+            dispatch(depositActions.getDeposits(params));
+        }
     }
 
     renderDeposits = () => {
@@ -146,7 +178,7 @@ class DepositManagement extends React.Component {
                                     <label htmlFor="toshow">Show</label>
                                     <select id="toshow"
                                         className="countdropdown form-control form-control-sm"
-                                        // onChange={this.setPagesize}
+                                        
                                         value={this.state.PageSize}>
                                         <option value="10">10</option>
                                         <option value="25">25</option>
@@ -159,7 +191,7 @@ class DepositManagement extends React.Component {
                             </div>
                             <div className="table-helper">
                                 <input type="checkbox" name=""
-                                    onChange={this.setShowDetails}
+                                    
                                     checked={this.state.FullDetails}
                                     id="showFullDetails" />
                                 <label htmlFor="showFullDetails">Show full details</label>
@@ -248,7 +280,7 @@ class DepositManagement extends React.Component {
                                 </div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={this.setShowDetails}
+                                        onChange={(e)=>this.setShowDetails(e, allDeposits)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>

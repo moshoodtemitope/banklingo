@@ -34,12 +34,12 @@ function getDashboardData() {
 
 }
 
-function getActivitiesData(params) {
+function getActivitiesData(params, tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_ACTIVITIES+`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response => {
                 dispatch(success(response));
@@ -50,8 +50,17 @@ function getActivitiesData(params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: dashboardConstants.GET_ACTIVITIES_DATA_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: dashboardConstants.GET_ACTIVITIES_DATA_PENDING, user, tempData } 
+        }
+    }
 
-    function request(user) { return { type: dashboardConstants.GET_ACTIVITIES_DATA_PENDING, user } }
+
+    // function request(user) { return { type: dashboardConstants.GET_ACTIVITIES_DATA_PENDING, user } }
     function success(response) { return { type: dashboardConstants.GET_ACTIVITIES_DATA_SUCCESS, response } }
     function failure(error) { return { type: dashboardConstants.GET_ACTIVITIES_DATA_FAILURE, error } }
 

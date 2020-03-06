@@ -70,7 +70,7 @@ class AccessUsers extends React.Component {
 
         // this.setState({PageSize: sizeOfPage});
 
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        let params = `PageSize=${PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
 
 

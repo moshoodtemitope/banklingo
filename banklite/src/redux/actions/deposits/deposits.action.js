@@ -11,12 +11,12 @@ export const depositActions = {
     getAccountDepositTransaction
 }
 
-function getDeposits(params) {
+function getDeposits(params , tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_DEPOSITS + `?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response => {
                 dispatch(success(response));
@@ -27,19 +27,28 @@ function getDeposits(params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_DEPOSITS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_DEPOSITS_PENDING, user, tempData } 
+        }
+    }
 
-    function request(user) { return { type: loanAndDepositsConstants.GET_DEPOSITS_PENDING, user } }
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_DEPOSITS_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_DEPOSITS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_DEPOSITS_FAILURE, error } }
 
 }
 
-function getClientDeposits(clientId,params) {
+function getClientDeposits(clientId,params, tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_DEPOSITS + `/client/${clientId}?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume,tempData));
         return consume
             .then(response => {
                 if(response.status===200){
@@ -55,8 +64,17 @@ function getClientDeposits(clientId,params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_CLIENTDEPOSITS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_CLIENTDEPOSITS_PENDING, user, tempData } 
+        }
+    }
 
-    function request(user) { return { type: loanAndDepositsConstants.GET_CLIENTDEPOSITS_PENDING, user } }
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_CLIENTDEPOSITS_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_CLIENTDEPOSITS_FAILURE, error } }
 
@@ -85,12 +103,12 @@ function getDepositTransaction(params) {
 
 }
 
-function getAccountDepositTransaction(accountEncodedKey,params) {
+function getAccountDepositTransaction(accountEncodedKey,params, tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_DEPOSITS_TRANSACTIONS + `/account/${accountEncodedKey}?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume,tempData));
         return consume
             .then(response => {
                 if(response.status===200){
@@ -104,6 +122,15 @@ function getAccountDepositTransaction(accountEncodedKey,params) {
                 dispatch(failure(handleRequestErrors(error)));
             });
 
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING, user, tempData } 
+        }
     }
 
 

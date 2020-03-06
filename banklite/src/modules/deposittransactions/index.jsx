@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -42,35 +43,117 @@ class DepositTransactions extends React.Component {
         dispatch(depositActions.getDepositTransaction(paramters));
     }
 
-    setPagesize = (PageSize) => {
-        // console.log('----here', PageSize.target.value);
+    setPagesize = (PageSize,tempData) => {
+        const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             { FullDetails, CurrentPage, CurrentSelectedPage } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getDepositTransaction(params);
+        if(tempData){
+            dispatch(depositActions.getDepositTransaction(params,tempData));
+        }else{
+            dispatch(depositActions.getDepositTransaction(params));
+        }
     }
 
-    setShowDetails = (FullDetails) => {
-        // console.log('----here', PageSize.target.value);
+    setShowDetails = (FullDetails,tempData) => {
+        const {dispatch} = this.props;
         let showDetails = FullDetails.target.checked,
             { CurrentPage, CurrentSelectedPage, PageSize } = this.state;
 
         this.setState({ FullDetails: showDetails });
 
         let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getDepositTransaction(params);
+        if(tempData){
+            dispatch(depositActions.getDepositTransaction(params,tempData));
+        }else{
+            dispatch(depositActions.getDepositTransaction(params));
+        }
+    }
+
+    loadNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        let {PageSize,CurrentPage,FullDetails} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
+
+        if(tempData){
+            dispatch(depositActions.getDepositTransaction(params,tempData));
+        }else{
+            dispatch(depositActions.getDepositTransaction(params));
+        }
     }
 
     renderDepositTransactions = () => {
         let getDepositTransactionRequest = this.props.getDepositTransactionRequest;
+
+        let saveRequestData= getDepositTransactionRequest.request_data!==undefined?getDepositTransactionRequest.request_data.tempData:null;
         switch (getDepositTransactionRequest.request_status) {
             case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING):
-                return (
-                    <div className="loading-content">
-                        <div className="heading-with-cta">
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
+                    return (
+                        <div className="loading-content">
+                            <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Deposit Account Number</th>
+                                        <th>Type</th>
+                                        <th>Transaction Amount</th>
+                                        <th>User Name</th>
+                                        <th>Entry Date</th>
+                                        <th>Date Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+                    )
+                }else{
+                    return (
+                        <div>
+                            <div className="heading-with-cta">
                                 <Form className="one-liner">
 
                                     <Form.Group controlId="filterDropdown" className="no-margins pr-10">
@@ -85,58 +168,62 @@ class DepositTransactions extends React.Component {
 
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" className="countdropdown form-control form-control-sm">
+                                    <select id="toshow" 
+                                        value={this.state.PageSize}
+                                        className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                        <TableComponent classnames="striped bordered hover">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Deposit Account Number</th>
-                                    <th>Type</th>
-                                    <th>Transaction Amount</th>
-                                    <th>User Name</th>
-                                    <th>Entry Date</th>
-                                    <th>Date Created</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </TableComponent>
-                        <div className="loading-text">Please wait... </div>
-                    </div>
-                )
+                            <div className="table-helper">
+                                <input type="checkbox" name=""
+                                    checked={this.state.FullDetails}
+                                    id="showFullDetails" />
+                                <label htmlFor="showFullDetails">Show full details</label>
+                            </div>
+                            
+
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Deposit Account Number</th>
+                                        <th>Type</th>
+                                        <th>Transaction Amount</th>
+                                        <th>User Name</th>
+                                        <th>Entry Date</th>
+                                        <th>Date Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        saveRequestData.result.map((eachTransaction, index) => {
+                                            return (
+                                                <Fragment key={index}>
+                                                    <tr>
+                                                        <td>{eachTransaction.user}</td>
+                                                        <td><NavLink to={`/deposit-transactions/${eachTransaction.accountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
+                                                        <td>{eachTransaction.typeDescription}</td>
+                                                        <td>{eachTransaction.transactionAmount}</td>
+                                                        <td>{eachTransaction.userName}</td>
+                                                        <td>{eachTransaction.entryDate}</td>
+                                                        <td>{eachTransaction.dateCreated}</td>
+                                                    </tr>
+                                                </Fragment>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </TableComponent>
+                            {/* <div className="footer-with-cta toleft">
+                                <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
+                            </div> */}
+                        </div>
+                    )
+                }
 
             case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_SUCCESS):
                 let allDepositTransactions = getDepositTransactionRequest.request_data.response.data;
@@ -160,7 +247,7 @@ class DepositTransactions extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={this.setPagesize}
+                                            onChange={(e)=>this.setPagesize(e, allDepositTransactions)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -168,28 +255,21 @@ class DepositTransactions extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
+                                        
+                                        <TablePagination
+                                            totalPages={allDepositTransactions.totalPages}
+                                            currPage={allDepositTransactions.currentPage}
+                                            currRecordsCount={allDepositTransactions.result.length}
+                                            totalRows={allDepositTransactions.totalRows}
+                                            tempData={allDepositTransactions.result}
+                                            pagesCountToshow={4}
+                                            refreshFunc={this.loadNextPage}
+                                        />
                                     </div>
                                 </div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={this.setShowDetails}
+                                        onChange={(e)=>this.setShowDetails(e, allDepositTransactions)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
@@ -257,23 +337,6 @@ class DepositTransactions extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <TableComponent classnames="striped bordered hover">

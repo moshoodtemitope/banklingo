@@ -76,8 +76,8 @@ class AccessRoles extends React.Component {
         // this.getTransactionChannels(params);
 
         let params ={
-            PageSize
-            ,CurrentPage
+            PageSize,
+            CurrentPage:nextPage
         };
 
         if(tempData){

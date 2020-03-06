@@ -90,7 +90,7 @@ class DisbursementManagement extends React.Component {
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params= `&PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        let params= `&PageSize=${PageSize}&CurrentPage=${nextPage}`;
 
         if(tempData){
             dispatch(disbursementActions.getDisbursement(params,tempData));
@@ -189,85 +189,145 @@ class DisbursementManagement extends React.Component {
 
     renderAllDisbursments=()=>{
         let getDisbursementsRequest = this.props.getDisbursementsReducer;
+        let saveRequestData= getDisbursementsRequest.request_data!==undefined?getDisbursementsRequest.request_data.tempData:null;
             switch (getDisbursementsRequest.request_status){
+                
                 case (disbursmentConstants.GET_DISBURSMENTS_PENDING):
-                    return (
-                        <div className="loading-content"> 
-                            <div className="heading-with-cta">
-                                <Form className="one-liner">
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
+                        return (
+                            <div className="loading-content"> 
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
 
-                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                        <Form.Control as="select" size="sm">
-                                            <option>No Filter</option>
-                                            <option>Add New Filter</option>
-                                            <option>Custom Filter</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                </Form>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
 
-                                <div className="pagination-wrap">
-                                    <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" className="countdropdown form-control form-control-sm">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="200">200</option>
-                                    </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
 
-                                        <th>Transaction Ref</th>
-                                        <th>Source Account</th>
-                                        <th>Destination Account</th>
-                                        <th>Destination Bank</th>
-                                        <th>Amount (NGN)</th>
-                                        <th>Inititated By</th>
-                                        <th>Approved By</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </TableComponent>
-                            <div className="loading-text">Please wait... </div>
-                        </div>
-                    )
+                                            <th>Transaction Ref</th>
+                                            <th>Source Account</th>
+                                            <th>Destination Account</th>
+                                            <th>Destination Bank</th>
+                                            <th>Amount (NGN)</th>
+                                            <th>Inititated By</th>
+                                            <th>Approved By</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                                <div className="loading-text">Please wait... </div>
+                            </div>
+                        )
+                    }else{
+                        return(
+                            <div>
+
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow"
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+
+                                            <th>Transaction Ref</th>
+                                            <th>Source Account</th>
+                                            <th>Destination Account</th>
+                                            <th>Destination Bank</th>
+                                            <th>Amount (NGN)</th>
+                                            <th>Inititated By</th>
+                                            <th>Approved By</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            saveRequestData.result.map((eachDisburment, index) => {
+                                                return (
+                                                    <Fragment key={index}>
+                                                        <tr>
+
+                                                            <td>
+                                                                <span className="txt-cta" onClick={() => this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span>
+                                                            </td>
+                                                            <td>{eachDisburment.sourceAccount}</td>
+                                                            <td>{eachDisburment.destinationAccount}</td>
+                                                            {/* <td>{eachDisburment.destinationBank}</td> */}
+                                                            <td>-</td>
+                                                            <td>{eachDisburment.amount}.00</td>
+                                                            {/* <td>{eachDisburment.initiatedBy}</td> */}
+                                                            <td>-</td>
+                                                            {/* <td>{eachDisburment.approvedBy}</td> */}
+                                                            <td>-</td>
+                                                            <td>{eachDisburment.disbursmentStatusDescription}</td>
+                                                        </tr>
+                                                    </Fragment>
+                                                )
+                                            })
+                                        }
+
+                                    </tbody>
+                                </TableComponent>
+                            </div>
+                        )
+                    }
                 case(disbursmentConstants.GET_DISBURSMENTS_SUCCESS):
                     let allDisbursments = getDisbursementsRequest.request_data.response.data;
                         
                         if(allDisbursments!==undefined){
-                            if(allDisbursments.length>=1){
+                            if(allDisbursments.result.length>=1){
                                 return(
                                     <div>
                                         
@@ -287,7 +347,7 @@ class DisbursementManagement extends React.Component {
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
                                                 <select id="toshow" 
-                                                    onChange={this.setPagesize}
+                                                    onChange={(e)=>this.setPagesize(e, allDisbursments)}
                                                     value={this.state.PageSize}
                                                     className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
@@ -295,23 +355,15 @@ class DisbursementManagement extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
-                                                    <div className="each-page-action">
-                                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                    </div>
-                                                    <div className="page-count">
-                                                        <span>1-20</span>  of <span>20000</span>
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                </div>
+                                                <TablePagination
+                                                    totalPages={allDisbursments.totalPages}
+                                                    currPage={allDisbursments.currentPage}
+                                                    currRecordsCount={allDisbursments.result.length}
+                                                    totalRows={allDisbursments.totalRows}
+                                                    tempData={allDisbursments.result}
+                                                    pagesCountToshow={4}
+                                                    refreshFunc={this.loadNextPage}
+                                                />
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">
@@ -330,7 +382,7 @@ class DisbursementManagement extends React.Component {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    allDisbursments.map((eachDisburment, index)=>{
+                                                    allDisbursments.result.map((eachDisburment, index)=>{
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
@@ -382,23 +434,6 @@ class DisbursementManagement extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
-                                                    <div className="each-page-action">
-                                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                    </div>
-                                                    <div className="page-count">
-                                                        <span>1-20</span>  of <span>20000</span>
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">

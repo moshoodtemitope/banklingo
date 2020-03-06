@@ -90,7 +90,7 @@ class ClientsBlacklisted extends React.Component {
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
+        let params= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
 
         if(tempData){
             dispatch(clientsActions.getClients(params,tempData));
@@ -105,7 +105,7 @@ class ClientsBlacklisted extends React.Component {
         let saveRequestData= getClientsRequest.request_data!==undefined?getClientsRequest.request_data.tempData:null;
             switch (getClientsRequest.request_status){
                 case (clientsConstants.GET_CLIENTS_PENDING):
-                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
                         return (
                             <div className="loading-content"> 
                             <div className="heading-with-cta ">
@@ -187,7 +187,7 @@ class ClientsBlacklisted extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow"
-                                            // onChange={this.setPagesize}
+                                           onChange={(e)=>this.setPagesize(e, saveRequestData)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -212,7 +212,7 @@ class ClientsBlacklisted extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.map((eachClient, index) => {
+                                            saveRequestData.result.map((eachClient, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
@@ -274,7 +274,7 @@ class ClientsBlacklisted extends React.Component {
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow" 
-                                                onChange={this.setPagesize}
+                                                onChange={(e)=>this.setPagesize(e, allClientsData)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>
@@ -362,7 +362,7 @@ class ClientsBlacklisted extends React.Component {
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow"
-                                                onChange={this.setPagesize}
+                                                
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>

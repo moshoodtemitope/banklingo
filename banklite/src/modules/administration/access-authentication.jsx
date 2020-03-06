@@ -9,8 +9,6 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
-// import  TableComponent from '../../shared/elements/table'
-// import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
 class AccessAuth extends React.Component {
     constructor(props) {

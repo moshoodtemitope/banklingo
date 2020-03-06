@@ -43,12 +43,12 @@ function getLoans(params,tempData) {
 
 }
 
-function getClientLoans(clientId,params) {
+function getClientLoans(clientId,params,tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_LOAN + `/client/${clientId}?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume,tempData));
         return consume
             .then(response => {
                 dispatch(success(response));
@@ -59,8 +59,17 @@ function getClientLoans(clientId,params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_CLIENTLOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_CLIENTLOANS_PENDING, user, tempData } 
+        }
+    }
 
-    function request(user) { return { type: loanAndDepositsConstants.GET_CLIENTLOANS_PENDING, user } }
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_CLIENTLOANS_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_CLIENTLOANS_FAILURE, error } }
 

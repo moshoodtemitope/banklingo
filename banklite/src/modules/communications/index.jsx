@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -40,15 +41,39 @@ class CommunicationsManagement extends React.Component {
             dispatch(administrationActions.getNotifications(paramters));
         }
     
-        setPagesize = (PageSize)=>{
-            // console.log('----here', PageSize.target.value);
+        setPagesize = (PageSize, tempData)=>{
+            const {dispatch} = this.props;
             let sizeOfPage = PageSize.target.value,
                 {CurrentPage, NotificationType} = this.state;
     
             this.setState({PageSize: sizeOfPage});
     
             let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&NotificationType=${NotificationType}`;
-            this.getNotifications(params);
+            // this.getNotifications(params);
+
+            if(tempData){
+                dispatch(administrationActions.getNotifications(params,tempData));
+            }else{
+                dispatch(administrationActions.getNotifications(params));
+            }
+        }
+
+        loadNextPage = (nextPage, tempData)=>{
+        
+            const {dispatch} = this.props;
+            let {PageSize,CurrentPage,NotificationType} = this.state;
+    
+            // this.setState({PageSize: sizeOfPage});
+    
+            // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+            // this.getTransactionChannels(params);
+            let params= `PageSize=${PageSize}&CurrentPage=${nextPage}&NotificationType=${NotificationType}`;
+    
+            if(tempData){
+                dispatch(administrationActions.getNotifications(params,tempData));
+            }else{
+                dispatch(administrationActions.getNotifications(params));
+            }
         }
     
         
@@ -56,10 +81,13 @@ class CommunicationsManagement extends React.Component {
 
         renderAllNotifications =()=>{
             let adminGetNotificationsRequest = this.props.adminGetNotifications;
+
+            let saveRequestData= adminGetNotificationsRequest.request_data!==undefined?adminGetNotificationsRequest.request_data.tempData:null;
                 switch (adminGetNotificationsRequest.request_status){
                     case (administrationConstants.GET_NOTIFICATIONS_PENDING):
-                        return (
-                            <div className="loading-content"> 
+                        if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
+                            return (
+                                <div className="loading-content"> 
                                 <div className="heading-with-cta">
                                     <Form className="one-liner">
 
@@ -81,57 +109,125 @@ class CommunicationsManagement extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
-                                <TableComponent classnames="striped bordered hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Sent By</th>
-                                            <th>Destination</th>
-                                            <th>Message</th>
-                                            <th>Type</th>
-                                            <th>Status</th>
-                                            <th>Date Sent</th>
-                                            <th>Failure reason</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </TableComponent>
-                                <div className="loading-text">Please wait... </div>
-                            </div>
-                        )
+                                    <TableComponent classnames="striped bordered hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Sent By</th>
+                                                <th>Destination</th>
+                                                <th>Message</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                                <th>Date Sent</th>
+                                                <th>Failure reason</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </TableComponent>
+                                    <div className="loading-text">Please wait... </div>
+                                </div>
+                            )
+                        }else{
+
+                            return(
+                                <div>
+                                        <div className="table-helper">
+                                            {/* <input type="checkbox" name="" 
+                                                onChange={this.setShowDetails}
+                                                checked={this.state.FullDetails}
+                                                id="showFullDetails" /> */}
+                                            {/* <label htmlFor="showFullDetails">Show full details</label> */}
+                                            {/* <Form className="one-liner">
+                                                        
+                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                <Form.Label>Filter </Form.Label>
+                                                    <Form.Control as="select" size="sm">
+                                                        <option>No Filter</option>
+                                                        <option>Add New Filter</option>
+                                                        <option>Custom Filter</option>
+                                                    </Form.Control>
+                                                </Form.Group>
+                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                            </Form> */}
+                                        </div>
+                                        <div className="heading-with-cta">
+                                            <Form className="one-liner">
+
+                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                    <Form.Control as="select" size="sm">
+                                                        <option>No Filter</option>
+                                                        <option>Add New Filter</option>
+                                                        <option>Custom Filter</option>
+                                                    </Form.Control>
+                                                </Form.Group>
+                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                            </Form>
+
+                                            <div className="pagination-wrap">
+                                                <label htmlFor="toshow">Show</label>
+                                                <select id="toshow" 
+                                                    
+                                                    
+                                                    value={this.state.PageSize}
+                                                    className="countdropdown form-control form-control-sm">
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="200">200</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <TableComponent classnames="striped bordered hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sent By</th>
+                                                    <th>Destination</th>
+                                                    <th>Message</th>
+                                                    <th>Type</th>
+                                                    <th>Status</th>
+                                                    <th>Date Sent</th>
+                                                    <th>Failure reason</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    saveRequestData.result.map((eachNotification, index)=>{
+                                                        return(
+                                                            <Fragment key={index}>
+                                                                <tr>
+                                                                    <td>{eachNotification.sentBy}</td>
+                                                                    <td>{eachNotification.destination}</td>
+                                                                    <td>{eachNotification.message}</td>
+                                                                    <td>{eachNotification.communicationTypeDescription}</td>
+                                                                    <td>{eachNotification.communicationStateDescription}</td>
+                                                                    <td>{eachNotification.dateSent}</td>
+                                                                    <td>{eachNotification.failureReason}</td>
+                                                                </tr>
+                                                            </Fragment>
+                                                        )
+                                                    })
+                                                }
+                                            </tbody>
+                                        </TableComponent>
+                                    </div>
+                            )
+                        }
                     
                     case(administrationConstants.GET_NOTIFICATIONS_SUCCESS):
                         let allNotificationsData = adminGetNotificationsRequest.request_data.response.data;
                         if(allNotificationsData!==undefined){
-                            if(allNotificationsData.length>=1){
+                            if(allNotificationsData.result.length>=1){
                                 return(
                                     <div>
                                         <div className="table-helper">
@@ -169,7 +265,7 @@ class CommunicationsManagement extends React.Component {
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
                                                 <select id="toshow" 
-                                                    onChange={this.setPagesize}
+                                                    onChange={(e)=>this.setPagesize(e, allNotificationsData)}
                                                     value={this.state.PageSize}
                                                     className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
@@ -177,23 +273,15 @@ class CommunicationsManagement extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
-                                                    <div className="each-page-action">
-                                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                    </div>
-                                                    <div className="page-count">
-                                                        <span>1-20</span>  of <span>20000</span>
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                </div>
+                                                <TablePagination
+                                                    totalPages={allNotificationsData.totalPages}
+                                                    currPage={allNotificationsData.currentPage}
+                                                    currRecordsCount={allNotificationsData.result.length}
+                                                    totalRows={allNotificationsData.totalRows}
+                                                    tempData={allNotificationsData.result}
+                                                    pagesCountToshow={4}
+                                                    refreshFunc={this.loadNextPage}
+                                                />
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">
@@ -210,7 +298,7 @@ class CommunicationsManagement extends React.Component {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    allNotificationsData.map((eachNotification, index)=>{
+                                                    allNotificationsData.result.map((eachNotification, index)=>{
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
@@ -255,23 +343,6 @@ class CommunicationsManagement extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
-                                                    <div className="each-page-action">
-                                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                    </div>
-                                                    <div className="page-count">
-                                                        <span>1-20</span>  of <span>20000</span>
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">
