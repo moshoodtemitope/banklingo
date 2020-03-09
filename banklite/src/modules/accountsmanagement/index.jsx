@@ -716,6 +716,8 @@ class AccountManagement extends React.Component {
 
         let allAccountsData = (this.props.getGLAccounts.request_data!==undefined && this.props.getGLAccounts.request_data.response!==undefined)
             ? this.props.getGLAccounts.request_data.response.data :null;
+        
+        
         return(
             <Modal show={showCreateGL} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
                 <Modal.Header>

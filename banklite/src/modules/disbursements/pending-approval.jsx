@@ -154,10 +154,22 @@ class DisbursementPendingApproval extends React.Component {
                                         .then(
                                             () => {
                                                 if(this.props.approveOrRejectPostDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS){
+                                                    const {dispatch} = this.props;
+                                                    let  {CurrentPage, PageSize} = this.state;
+
+                                                    this.setState({PageSize: PageSize});
+
+                                                    let params= `&PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+
+                                                    let getDisbursementsRequest = this.props.getDisbursementsReducer;
+
+                                                    let saveRequestData= getDisbursementsRequest.request_data!==undefined?getDisbursementsRequest.request_data.tempData:null;
+
                                                     
+
                                                     
                                                     setTimeout(() => {
-                                                        this.loadInitialData();
+                                                        dispatch(disbursementActions.getDisbursement(params,saveRequestData));
                                                         this.props.dispatch(disbursementActions.approveOrRejectPostDisbursement("CLEAR"));
                                                         this.handleClose();
                                                     }, 2000);
@@ -352,7 +364,7 @@ class DisbursementPendingApproval extends React.Component {
 
     showDetails=(transactionReference)=>{
         let getDisbursementsRequest = this.props.getDisbursementsReducer,
-            allDisbursments = getDisbursementsRequest.request_data.response.data,
+            allDisbursments = getDisbursementsRequest.request_data.response.data.result,
             transacTionSelected = allDisbursments.filter(txt=>txt.transactionReference===transactionReference)[0];
 
             this.setState({transacTionSelected, showDetails:true})
@@ -772,7 +784,7 @@ class DisbursementPendingApproval extends React.Component {
                         securityCode: '',
                         comment: '',
                     }}
-                    // validationSchema={processDisburmentValidationSchema}
+                    validationSchema={processDisburmentValidationSchema}
                     onSubmit={(values, { resetForm }) => {
 
 
@@ -789,11 +801,21 @@ class DisbursementPendingApproval extends React.Component {
                             .then(
                                 () => {
                                     if (this.props.approveOrRejectPostDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS) {
+                                        const {dispatch} = this.props;
+                                                    let {CurrentPage, PageSize} = this.state;
 
+                                                    this.setState({PageSize: PageSize});
+
+                                                    let params= `&PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+
+                                                    let getDisbursementsRequest = this.props.getDisbursementsReducer;
+
+                                                    let saveRequestData= getDisbursementsRequest.request_data!==undefined?getDisbursementsRequest.request_data.tempData:null;
 
                                         setTimeout(() => {
                                             this.setState({showDetails:false})
-                                            this.loadInitialData();
+                                            // this.loadInitialData();
+                                            dispatch(disbursementActions.getDisbursement(params,saveRequestData));
                                             this.props.dispatch(disbursementActions.approveOrRejectPostDisbursement("CLEAR"));
                                             this.handleClose();
                                         }, 2000);

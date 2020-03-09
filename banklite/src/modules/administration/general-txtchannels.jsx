@@ -305,7 +305,7 @@ class GeneralTxtChannels extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.map((eachChannel, index)=>{
+                                            saveRequestData.result.map((eachChannel, index)=>{
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>
@@ -576,11 +576,17 @@ class GeneralTxtChannels extends React.Component {
                                         .then(
                                             () => {
                                                 if(this.props.adminUpdateTransactionChannel.request_status === administrationConstants.UPDATE_TRANSACTION_CHANNEL_SUCCESS){
+                                                    const {dispatch} = this.props;
                                                     let {PageSize, CurrentPage}= this.state;
                                                     let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+
+                                                    let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels;
+
+                                                    let saveRequestData= adminGetTransactionChannelsRequest.request_data!==undefined?adminGetTransactionChannelsRequest.request_data.tempData:null;
                                                     
                                                     setTimeout(() => {
-                                                        this.getTransactionChannels(params); 
+                                                        // this.getTransactionChannels(params); 
+                                                        dispatch(administrationActions.getTransactionChannels(params,saveRequestData));
                                                         this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"));
                                                         this.handleCloseEdit();
                                                     }, 3000);

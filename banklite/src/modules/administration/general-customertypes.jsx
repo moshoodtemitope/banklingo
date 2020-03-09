@@ -57,7 +57,7 @@ class GeneralCustomerTypes extends React.Component {
           .required('Id is required'),
         custTypeDesc: Yup.string()
           .min(2, 'Please provide detailed information')
-        //   .required('Description is required')
+          .required('Description is required')
     });
 
     loadInitialData=()=>{
@@ -260,7 +260,7 @@ class GeneralCustomerTypes extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.map((eachCustomerype, index)=>{
+                                            saveRequestData.result.map((eachCustomerype, index)=>{
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>
