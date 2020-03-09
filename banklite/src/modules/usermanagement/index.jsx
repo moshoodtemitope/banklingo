@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -35,7 +36,7 @@ class UserManagement extends React.Component {
         this.getUsers(params);
     }
 
-    setPagesize = (PageSize)=>{
+    setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
         const {dispatch} = this.props;
         let {CurrentPage}= this.state;
@@ -46,9 +47,14 @@ class UserManagement extends React.Component {
         this.setState({PageSize: sizeOfPage});
         let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
 
+
+        if(tempData){
+            
+            dispatch(administrationActions.getUsers(params,tempData));
+        }else{
+            dispatch(administrationActions.getUsers(params));
+        }
         
-       
-        dispatch(administrationActions.getUsers(params));
     }
 
     getUsers = (paramters)=>{
@@ -60,82 +66,133 @@ class UserManagement extends React.Component {
     renderAllUsers =()=>{
         let adminGetAllUsers = this.props.adminGetAllUsers;
 
+        let saveRequestData= adminGetAllUsers.request_data!==undefined?adminGetAllUsers.request_data.tempData:null;
             switch (adminGetAllUsers.request_status){
                 case (administrationConstants.GET_USERS_PENDING):
-                    return (
-                        <div className="loading-content"> 
-                            <div className="heading-with-cta">
-                                <Form className="one-liner">
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                        return (
+                            <div className="loading-content"> 
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
 
-                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                        <Form.Control as="select" size="sm">
-                                            <option>No Filter</option>
-                                            <option>Add New Filter</option>
-                                            <option>Custom Filter</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                </Form>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
 
-                                <div className="pagination-wrap">
-                                    <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" className="countdropdown form-control form-control-sm">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="200">200</option>
-                                    </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
                                     </div>
                                 </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Fullame</th>
+                                            <th>User Name</th>
+                                            <th>Title</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Last updated</th>
+                                            <th>State</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                                <div className="loading-text">Please wait... </div>
                             </div>
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        <th>Fullame</th>
-                                        <th>User Name</th>
-                                        <th>Title</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Last updated</th>
-                                        <th>State</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </TableComponent>
-                            <div className="loading-text">Please wait... </div>
-                        </div>
-                    )
+                        )
+                    }else{
+                        return(
+                            <div>
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
+
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form>
+
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" 
+                                            // value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <TableComponent classnames="striped bordered hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fullname</th>
+                                                    <th>User Name</th>
+                                                    <th>Title</th>
+                                                    <th>Email</th>
+                                                    <th>Role</th>
+                                                    <th>Last updated</th>
+                                                    <th>State</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    saveRequestData.result.map((eachUser, index)=>{
+                                                        return(
+                                                            <Fragment key={index}>
+                                                                <tr>
+                                                                    <td>{eachUser.name}</td>
+                                                                    <td>{eachUser.userName}</td>
+                                                                    
+                                                                    <td>{eachUser.title}</td>
+                                                                    <td>{eachUser.emailAddress}</td>
+                                                                    <td>{eachUser.role}</td>
+                                                                    <td>{eachUser.lastUpdated}</td>
+                                                                    <td>{eachUser.objectStateDescription}</td>
+                                                                </tr>
+                                                            </Fragment>
+                                                        )
+                                                    })
+                                                }
+                                            </tbody>
+                                </TableComponent>
+                                
+
+                            </div>
+                        )
+                    }
 
                 case(administrationConstants.GET_USERS_SUCCESS):
                     let allUsersData = adminGetAllUsers.request_data.response.data;
                         if(allUsersData!==undefined){
-                            if(allUsersData.length>=1){
+                            if(allUsersData.result.length>=1){
                                 return(
                                     <div>
                                         <div className="heading-with-cta">
@@ -154,7 +211,7 @@ class UserManagement extends React.Component {
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
                                                 <select id="toshow" 
-                                                    onChange={this.setPagesize}
+                                                    onChange={(e)=>this.setPagesize(e, allUsersData)}
                                                     value={this.state.PageSize}
                                                     className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
@@ -162,23 +219,15 @@ class UserManagement extends React.Component {
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
-                                                <div className="move-page-actions">
-                                                    <div className="each-page-action">
-                                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                    </div>
-                                                    <div className="page-count">
-                                                        <span>1-20</span>  of <span>20000</span>
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                    <div className="each-page-action">
-                                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                    </div>
-                                                </div>
+                                                <TablePagination
+                                                    totalPages={allUsersData.totalPages}
+                                                    currPage={allUsersData.currentPage}
+                                                    currRecordsCount={allUsersData.result.length}
+                                                    totalRows={allUsersData.totalRows}
+                                                    tempData={allUsersData.result}
+                                                    pagesCountToshow={4}
+                                                    refreshFunc={this.loadNextPage}
+                                                />
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">
@@ -195,7 +244,7 @@ class UserManagement extends React.Component {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            allUsersData.map((eachUser, index)=>{
+                                                            allUsersData.result.map((eachUser, index)=>{
                                                                 return(
                                                                     <Fragment key={index}>
                                                                         <tr>
@@ -242,23 +291,6 @@ class UserManagement extends React.Component {
                                                         <option value="50">50</option>
                                                         <option value="200">200</option>
                                                     </select>
-                                                    <div className="move-page-actions">
-                                                        <div className="each-page-action">
-                                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                        </div>
-                                                        <div className="each-page-action">
-                                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                                        </div>
-                                                        <div className="page-count">
-                                                            <span>1-20</span>  of <span>20000</span>
-                                                        </div>
-                                                        <div className="each-page-action">
-                                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                                        </div>
-                                                        <div className="each-page-action">
-                                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         <TableComponent classnames="striped bordered hover">

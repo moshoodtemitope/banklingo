@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import TableComponent from '../../shared/elements/table'
+import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -42,106 +43,179 @@ class LoanAccountTransactions extends React.Component {
         dispatch(loanActions.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,paramters));
     }
 
-    setPagesize = (PageSize) => {
+    setPagesize = (PageSize,tempData) => {
         // console.log('----here', PageSize.target.value);
+        const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             { FullDetails, CurrentPage, CurrentSelectedPage } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,params);
+
+        if(tempData){
+            
+            dispatch(loanActions.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,params,tempData));
+        }else{
+            dispatch(loanActions.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,params));
+        }
+        // this.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,params);
     }
 
-    setShowDetails = (FullDetails) => {
-        // console.log('----here', PageSize.target.value);
+    setShowDetails = (FullDetails, tempData) => {
+        const {dispatch} = this.props;
         let showDetails = FullDetails.target.checked,
             { CurrentPage, CurrentSelectedPage, PageSize } = this.state;
 
         this.setState({ FullDetails: showDetails });
 
         let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getAccountLoanTransaction(params);
+        
+        if(tempData){
+            
+            dispatch(loanActions.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,params,tempData));
+        }else{
+            dispatch(loanActions.getAccountLoanTransaction(this.props.match.params.accountEncodedKey,params));
+        }
+
+        // this.getAccountLoanTransaction(params);
+        
     }
 
     renderLoanAccountTransactions = () => {
         let getAccountLoanTransactionRequest = this.props.getAccountLoanTransactionRequest;
+
+        let saveRequestData= getAccountLoanTransactionRequest.request_data!==undefined?getAccountLoanTransactionRequest.request_data.tempData:null;
         switch (getAccountLoanTransactionRequest.request_status) {
             case (loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING):
-                return (
-                    <div className="loading-content">
-                        <div className="heading-with-cta">
-                            <Form className="one-liner">
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                    return (
+                        <div className="loading-content">
+                            <div className="heading-with-cta">
+                                <Form className="one-liner">
 
-                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                    <Form.Control as="select" size="sm">
-                                        <option>No Filter</option>
-                                        <option>Add New Filter</option>
-                                        <option>Custom Filter</option>
-                                    </Form.Control>
-                                </Form.Group>
-                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                            </Form>
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                </Form>
 
-                            <div className="pagination-wrap">
-                                <label htmlFor="toshow">Show</label>
-                                <select id="toshow" className="countdropdown form-control form-control-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="200">200</option>
-                                </select>
-                                <div className="move-page-actions">
-                                    <div className="each-page-action">
-                                        <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                    </div>
-                                    <div className="page-count">
-                                        <span>1-20</span>  of <span>20000</span>
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                    </div>
-                                    <div className="each-page-action">
-                                        <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                    </div>
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
                                 </div>
                             </div>
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Loan Account Number</th>
+                                        <th>Account Holder Name</th>
+                                        <th>Transaction Type</th>
+                                        <th>Transaction Amount</th>
+                                        <th>Username</th>
+                                        <th>Transaction Date</th>
+                                        <th>Entry Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </TableComponent>
+                            <div className="loading-text">Please wait... </div>
                         </div>
-                        <TableComponent classnames="striped bordered hover">
-                            <thead>
-                                <tr>
-                                    <th>Loan Account Number</th>
-                                    <th>Account Holder Name</th>
-                                    <th>Transaction Type</th>
-                                    <th>Transaction Amount</th>
-                                    <th>Username</th>
-                                    <th>Transaction Date</th>
-                                    <th>Entry Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </TableComponent>
-                        <div className="loading-text">Please wait... </div>
-                    </div>
-                )
+                    )
+                }else{
+                    return (
+                        <div>
+                            <div className="heading-with-cta">
+                                <Form className="one-liner">
+
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                </Form>
+
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow" 
+                                        
+                                        value={this.state.PageSize}
+                                        className="countdropdown form-control form-control-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            
+
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Loan Account Number</th>
+                                        <th>Account Holder Name</th>
+                                        <th>Transaction Type</th>
+                                        <th>Transaction Amount</th>
+                                        <th>Username</th>
+                                        <th>Transaction Date</th>
+                                        <th>Entry Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        saveRequestData.result.map((eachTransactions, index) => {
+                                            return (
+                                                <Fragment key={index}>
+                                                    <tr>
+                                                        <td>{eachTransactions.loanAccountNumber}</td>
+                                                        <td>{eachTransactions.accountHolderName}</td>
+                                                        <td>{eachTransactions.typeDescription}</td>
+                                                        <td>{eachTransactions.transactionAmount}</td>
+                                                        <td>{eachTransactions.userName}</td>
+                                                        <td>{eachTransactions.transactionDate}</td>
+                                                        <td>{eachTransactions.entryDate}</td>
+                                                    </tr>
+                                                </Fragment>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </TableComponent>
+                            {/* <div className="footer-with-cta toleft">
+                                <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
+                            </div> */}
+                        </div>
+                    )
+                }
 
             case (loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_SUCCESS):
                 let allLoanTransactions = getAccountLoanTransactionRequest.request_data.response.data;
                 if (allLoanTransactions !== undefined) {
-                    if (allLoanTransactions.length >= 1) {
+                    if (allLoanTransactions.result.length >= 1) {
                         return (
                             <div>
                                 <div className="heading-with-cta">
@@ -160,7 +234,7 @@ class LoanAccountTransactions extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={this.setPagesize}
+                                            onChange={(e)=>this.setPagesize(e, allLoanTransactions)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -168,28 +242,20 @@ class LoanAccountTransactions extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
+                                        <TablePagination
+                                            totalPages={allLoanTransactions.totalPages}
+                                            currPage={allLoanTransactions.currentPage}
+                                            currRecordsCount={allLoanTransactions.result.length}
+                                            totalRows={allLoanTransactions.totalRows}
+                                            tempData={allLoanTransactions.result}
+                                            pagesCountToshow={4}
+                                            refreshFunc={this.loadNextPage}
+                                        />
                                     </div>
                                 </div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={this.setShowDetails}
+                                        onChange={(e)=>this.setShowDetails(e, allLoanTransactions)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
@@ -210,7 +276,7 @@ class LoanAccountTransactions extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            allLoanTransactions.map((eachTransactions, index) => {
+                                            allLoanTransactions.result.map((eachTransactions, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
@@ -257,23 +323,6 @@ class LoanAccountTransactions extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        <div className="move-page-actions">
-                                            <div className="each-page-action">
-                                                <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                            </div>
-                                            <div className="page-count">
-                                                <span>1-20</span>  of <span>20000</span>
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                            <div className="each-page-action">
-                                                <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <TableComponent classnames="striped bordered hover">

@@ -167,13 +167,6 @@ class InactiveClients extends React.Component {
                     }else{
                         return(
                             <div>
-                                <div className="table-helper">
-                                    <input type="checkbox" name=""
-                                        onChange={this.setShowDetails}
-                                        checked={this.state.FullDetails}
-                                        id="showFullDetails" />
-                                    <label htmlFor="showFullDetails">Show full details</label>
-                                </div>
                                 <div className="heading-with-cta ">
                                     <Form className="one-liner">
 
@@ -189,7 +182,7 @@ class InactiveClients extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow"
-                                           onChange={(e)=>this.setPagesize(e, saveRequestData)}
+                                           
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -256,7 +249,7 @@ class InactiveClients extends React.Component {
                                 <div>
                                     <div className="table-helper">
                                         <input type="checkbox" name="" 
-                                            onChange={this.setShowDetails}
+                                            onChange={(e)=>this.setShowDetails(e, allClientsData)}
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>

@@ -167,7 +167,6 @@ class ActiveClients extends React.Component {
                             <div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={this.setShowDetails}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
@@ -254,7 +253,7 @@ class ActiveClients extends React.Component {
                                 <div>
                                     <div className="table-helper">
                                         <input type="checkbox" name="" 
-                                            onChange={this.setShowDetails}
+                                            onChange={(e)=>this.setShowDetails(e, allClientsData)}
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>

@@ -75,12 +75,12 @@ function getClientLoans(clientId,params,tempData) {
 
 }
 
-function getLoanTransactions(params) {
+function getLoanTransactions(params, tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_LOAN_TRANSACTIONS +`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume,tempData));
         return consume
             .then(response => {
                 dispatch(success(response));
@@ -91,19 +91,28 @@ function getLoanTransactions(params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_PENDING, user, tempData } 
+        }
+    }
 
-    function request(user) { return { type: loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_PENDING, user } }
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_FAILURE, error } }
 
 }
 
-function getAccountLoanTransaction(accountEncodedKey,params) {
+function getAccountLoanTransaction(accountEncodedKey,params,tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_LOAN_TRANSACTIONS + `/account/${accountEncodedKey}?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response => {
                 dispatch(success(response));
@@ -114,8 +123,17 @@ function getAccountLoanTransaction(accountEncodedKey,params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING, user, tempData } 
+        }
+    }
 
-    function request(user) { return { type: loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING, user } }
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_FAILURE, error } }
 

@@ -195,13 +195,7 @@ class LoansManagement extends React.Component {
                                         
                                     </div>
                                 </div>
-                                <div className="table-helper">
-                                    <input type="checkbox" name=""
-                                        onChange={this.setShowDetails}
-                                        checked={this.state.FullDetails}
-                                        id="showFullDetails" />
-                                    <label htmlFor="showFullDetails">Show full details</label>
-                                </div>
+                                
                                 <div className="loading-text">Please wait... </div>
 
                                 <TableComponent classnames="striped bordered hover">
@@ -288,7 +282,7 @@ class LoansManagement extends React.Component {
                                 </div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={this.setShowDetails}
+                                        onChange={(e)=>this.setShowDetails(e, allLoans)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>

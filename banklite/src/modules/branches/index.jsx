@@ -43,15 +43,22 @@ class BranchesManagement extends React.Component {
         dispatch(administrationActions.getAllBranches(paramters));
     }
 
-    setPagesize = (PageSize)=>{
-        // console.log('----here', PageSize.target.value);
+    setPagesize = (PageSize, tempData)=>{
+        const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             {FullDetails, CurrentPage, CurrentSelectedPage} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
         let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getAllBranches(params);
+        // this.getAllBranches(params);
+
+        if(tempData){
+            
+            dispatch(administrationActions.getAllBranches(params,tempData));
+        }else{
+            dispatch(administrationActions.getAllBranches(params));
+        }
     }
 
     loadNextPage = (nextPage, tempData)=>{
@@ -72,15 +79,21 @@ class BranchesManagement extends React.Component {
         }
     }
 
-    setShowDetails = (FullDetails)=>{
-        // console.log('----here', PageSize.target.value);
+    setShowDetails = (FullDetails, tempData)=>{
+        const {dispatch} = this.props;
         let showDetails = FullDetails.target.checked,
             {CurrentPage, CurrentSelectedPage, PageSize} = this.state;
 
         this.setState({FullDetails: showDetails});
 
         let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        this.getAllBranches(params);
+        if(tempData){
+            dispatch(administrationActions.getAllBranches(params,tempData));
+        }else{
+            dispatch(administrationActions.getAllBranches(params));
+        }
+        
+        // this.getAllBranches(params);
     }
 
     renderAllBranches =()=>{
@@ -156,7 +169,6 @@ class BranchesManagement extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            // onChange={this.setPagesize}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -166,13 +178,7 @@ class BranchesManagement extends React.Component {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="table-helper mb-20">
-                                    <input type="checkbox" name="" 
-                                        onChange={this.setShowDetails}
-                                        checked={this.state.FullDetails}
-                                        id="showFullDetails" />
-                                    <label htmlFor="showFullDetails">Show full details</label>
-                                </div>
+                                
                                 <div className="loading-text">Please wait... </div>
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -232,7 +238,7 @@ class BranchesManagement extends React.Component {
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow" 
-                                                onChange={this.setPagesize}
+                                                onChange={(e)=>this.setPagesize(e, allBranchesData)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>
@@ -253,7 +259,8 @@ class BranchesManagement extends React.Component {
                                     </div>
                                     <div className="table-helper mb-20">
                                         <input type="checkbox" name="" 
-                                            onChange={this.setShowDetails}
+                                            onChange={(e)=>this.setShowDetails(e, allBranchesData)}
+                                            
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>
@@ -312,7 +319,6 @@ class BranchesManagement extends React.Component {
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow" 
-                                                onChange={this.setPagesize}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>

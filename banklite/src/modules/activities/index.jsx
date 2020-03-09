@@ -41,7 +41,7 @@ class Activties extends React.Component {
         dispatch(dashboardActions.getActivitiesData(paramters));
     }
 
-    setPagesize = (PageSize)=>{
+    setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
         const {dispatch} = this.props;
         let {CurrentPage}= this.state;
@@ -52,9 +52,15 @@ class Activties extends React.Component {
         this.setState({PageSize: sizeOfPage, isRefresh: true});
         let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
 
+
+        if(tempData){
+            dispatch(dashboardActions.getActivitiesData(params, tempData));
+        }else{
+            dispatch(dashboardActions.getActivitiesData(params));
+        }
         
        
-        dispatch(dashboardActions.getActivitiesData(params));
+        // dispatch(dashboardActions.getActivitiesData(params));
     }
 
     loadNextPage = (nextPage, tempData)=>{
@@ -109,23 +115,7 @@ class Activties extends React.Component {
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    <div className="move-page-actions">
-                                        <div className="each-page-action">
-                                            <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="6" height="11" />
-                                        </div>
-                                        <div className="page-count">
-                                            <span>1-20</span>  of <span>20000</span>
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                        <div className="each-page-action">
-                                            <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="12" height="11" />
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <TableComponent classnames="striped bordered hover">
@@ -172,7 +162,6 @@ class Activties extends React.Component {
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
                                     <select id="toshow" 
-                                            onChange={this.setPagesize}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
@@ -242,7 +231,7 @@ class Activties extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                                onChange={this.setPagesize}
+                                                onChange={(e)=>this.setPagesize(e, allActivitiesData)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -313,7 +302,7 @@ class Activties extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow"
-                                                onChange={this.setPagesize}
+                                                // onChange={this.setPagesize}
                                                 value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>

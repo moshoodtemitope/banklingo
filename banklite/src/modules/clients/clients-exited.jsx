@@ -165,13 +165,6 @@ class ClientsExited extends React.Component {
                     }else{
                         return(
                             <div>
-                                <div className="table-helper">
-                                    <input type="checkbox" name=""
-                                        onChange={this.setShowDetails}
-                                        checked={this.state.FullDetails}
-                                        id="showFullDetails" />
-                                    <label htmlFor="showFullDetails">Show full details</label>
-                                </div>
                                 <div className="heading-with-cta ">
                                     <Form className="one-liner">
 
@@ -254,7 +247,7 @@ class ClientsExited extends React.Component {
                                 <div>
                                     <div className="table-helper">
                                         <input type="checkbox" name="" 
-                                            onChange={this.setShowDetails}
+                                            onChange={(e)=>this.setShowDetails(e, allClientsData)}
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>
