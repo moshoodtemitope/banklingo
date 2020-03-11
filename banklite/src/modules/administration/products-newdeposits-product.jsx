@@ -455,7 +455,7 @@ class NewDepositsProduct extends React.Component {
                                                 {values.interestPaid===true &&
                                                     <div>
                                                         <Form.Row>
-                                                            <Col>
+                                                            <Col sm={6}>
                                                                 <Form.Label className="block-level">Interest rate terms</Form.Label>
                                                                 <Select
                                                                     options={interestRateTerms}
@@ -472,7 +472,21 @@ class NewDepositsProduct extends React.Component {
                                                                     
                                                                 />
                                                             </Col>
-                                                            <Col>
+                                                            {values.interestRateTerms===5  &&
+                                                                <Col sm={6}>
+                                                                    <Form.Label className="block-level">Number of Interest Days</Form.Label>
+                                                                    <Form.Control 
+                                                                        type="text"
+                                                                        onChange={handleChange}
+                                                                        value={numberWithCommas(values.xInterestDays)}
+                                                                        className={errors.xInterestDays && touched.xInterestDays ? "is-invalid h-38px" : "h-38px"}
+                                                                        name="xInterestDays"  />
+                                                                    {errors.xInterestDays && touched.xInterestDays ? (
+                                                                        <span className="invalid-feedback">{errors.xInterestDays}</span>
+                                                                    ) : null}
+                                                                </Col>
+                                                            }
+                                                            <Col sm={6} className={values.interestRateTerms===5?"mt-20":""}>
                                                                 <Form.Label className="block-level">Interest Balance Calculation</Form.Label>
                                                                 <Select
                                                                     options={interestBalanceCalculations}
@@ -490,27 +504,27 @@ class NewDepositsProduct extends React.Component {
                                                                 />
                                                             </Col>
                                                             
-                                                        </Form.Row>
-                                                        <Form.Row>
-                                                            <Col>
+                                                        {/* </Form.Row>
+                                                        <Form.Row> */}
+                                                            <Col sm={6} className="mt-20">
                                                                 <Form.Label className="block-level">Interest Rate Default</Form.Label>
                                                                 <Form.Control 
                                                                     type="text"
                                                                     onChange={handleChange}
                                                                     value={numberWithCommas(values.interestRateDefault)}
-                                                                    className={errors.interestRateDefault && touched.interestRateDefault ? "is-invalid" : null}
+                                                                    className={errors.interestRateDefault && touched.interestRateDefault ? "is-invalid h-38px" : "h-38px"}
                                                                     name="interestRateDefault"  />
                                                                 {errors.interestRateDefault && touched.interestRateDefault ? (
                                                                     <span className="invalid-feedback">{errors.interestRateDefault}</span>
                                                                 ) : null}
                                                             </Col>
-                                                            <Col>
+                                                            <Col sm={6} className="mt-20">
                                                                 <Form.Label className="block-level">Interest Rate Min</Form.Label>
                                                                 <Form.Control 
                                                                     type="text"
                                                                     onChange={handleChange}
                                                                     value={numberWithCommas(values.interestRateMin)}
-                                                                    className={errors.interestRateMin && touched.interestRateMin ? "is-invalid" : null}
+                                                                    className={errors.interestRateMin && touched.interestRateMin ? "is-invalid h-38px" : "h-38px"}
                                                                     name="interestRateMin"  />
                                                                 {errors.interestRateMin && touched.interestRateMin ? (
                                                                     <span className="invalid-feedback">{errors.interestRateMin}</span>
@@ -519,40 +533,61 @@ class NewDepositsProduct extends React.Component {
 
                                                             
 
-                                                        </Form.Row>
-                                                        <Form.Row>
-                                                            <Col>
+                                                        {/* </Form.Row>
+                                                        <Form.Row> */}
+                                                            <Col sm={6} className="mt-20">
                                                                 <Form.Label className="block-level">Interest Rate Max</Form.Label>
                                                                 <Form.Control 
                                                                     type="text"
                                                                     onChange={handleChange}
                                                                     value={numberWithCommas(values.interestRateMax)}
-                                                                    className={errors.interestRateMax && touched.interestRateMax ? "is-invalid" : null}
+                                                                    className={errors.interestRateMax && touched.interestRateMax ? "is-invalid h-38px" : "h-38px"}
                                                                     name="interestRateMax"  />
                                                                 {errors.interestRateMax && touched.interestRateMax ? (
                                                                     <span className="invalid-feedback">{errors.interestRateMax}</span>
                                                                 ) : null}
                                                             </Col>
-                                                            {values.interestRateTerms!==5 && 
+                                                            {/* {values.interestRateTerms!==5 && 
                                                                 <Col>
                                                                 </Col>
-                                                            }
-                                                            {values.interestRateTerms===5  &&
-                                                            <Col>
-                                                                <Form.Label className="block-level">Number of Interest Days</Form.Label>
-                                                                <Form.Control 
-                                                                    type="text"
-                                                                    onChange={handleChange}
-                                                                    value={numberWithCommas(values.xInterestDays)}
-                                                                    className={errors.xInterestDays && touched.xInterestDays ? "is-invalid" : null}
-                                                                    name="xInterestDays"  />
-                                                                {errors.xInterestDays && touched.xInterestDays ? (
-                                                                    <span className="invalid-feedback">{errors.xInterestDays}</span>
-                                                                ) : null}
+                                                            } */}
+                                                            
+                                                            <Col sm={6} className="mt-20">
+                                                                <Form.Label className="block-level">Interest Accrued Method</Form.Label>
+                                                                {/* <Form.Label className="block-level">When is the interest paid into the account?</Form.Label> */}
+                                                                <Select
+                                                                    options={interestAccruedMethodList}
+                                                                    onChange={(selectedInterestAccruedMethod) => {
+                                                                        this.setState({ selectedInterestAccruedMethod });
+                                                                        errors.interestAccruedMethod = null
+                                                                        values.interestAccruedMethod = selectedInterestAccruedMethod.value
+                                                                    }}
+                                                                    className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
+                                                                    name="interestAccruedMethod"
+                                                                    
+                                                                    
+                                                                />
                                                             </Col>
-                                                            }
 
                                                         </Form.Row>
+                                                        {/* <Form.Row>
+                                                            <Col sm={3}>
+                                                                <Form.Label className="block-level">Interest Accrued Method</Form.Label>
+                                                                <Select
+                                                                    options={interestAccruedMethodList}
+                                                                    onChange={(selectedInterestAccruedMethod) => {
+                                                                        this.setState({ selectedInterestAccruedMethod });
+                                                                        errors.interestAccruedMethod = null
+                                                                        values.interestAccruedMethod = selectedInterestAccruedMethod.value
+                                                                    }}
+                                                                    className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
+                                                                    name="interestAccruedMethod"
+                                                                    
+                                                                    
+                                                                />
+                                                            </Col>
+                                                            <Col></Col>
+                                                        </Form.Row> */}
                                                     </div>
                                                 }
                                                 
@@ -878,7 +913,7 @@ class NewDepositsProduct extends React.Component {
                                                         <span>Any GL Account</span>
                                                     </Col>
                                                 </Form.Group>
-                                                <Form.Group as={Row} className="center-aligned">
+                                                {/* <Form.Group as={Row} className="center-aligned">
                                                     <Form.Label column sm={4} className="block-level">Interest Accrued Method</Form.Label>
                                                     <Col sm={6}>
                                                         <Select
@@ -894,10 +929,7 @@ class NewDepositsProduct extends React.Component {
                                                             
                                                         />
                                                     </Col>
-                                                    {/* <Col sm={2}>
-                                                        <span>Expense</span>
-                                                    </Col> */}
-                                                </Form.Group>
+                                                </Form.Group> */}
                                                 
                                                 
                                                 

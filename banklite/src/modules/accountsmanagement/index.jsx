@@ -55,7 +55,7 @@ class AccountManagement extends React.Component {
         let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
 
         let payload ={
-            PageSize: this.state.PageSize,
+            PageSize: sizeOfPage,
             CurrentPage:this.state.CurrentPage,
             AccountTypeId: this.state.accountTypeToFetch
         }

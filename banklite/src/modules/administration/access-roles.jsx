@@ -181,7 +181,7 @@ class AccessRoles extends React.Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        saveRequestData.map((eachRole, index) => {
+                                        saveRequestData.result.map((eachRole, index) => {
                                             return (
                                                 <Fragment key={index}>
                                                     <tr>
@@ -262,7 +262,7 @@ class AccessRoles extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            rolesDataData.map((eachRole, index) => {
+                                            rolesDataData.result.map((eachRole, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
