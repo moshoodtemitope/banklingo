@@ -138,17 +138,20 @@ class EditLoanProduct extends React.Component {
                     penaltyIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4);
                     // console.log("+++++", penaltyIncomeAccounts)
 
+                    
 
-                let txtSrcReturned = transactionSourceAccount.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.transactionSourceAccountId)[0],
-                    portfolioControlAccountReturned = portfolioControlAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.portfolioControlAccountId)[0],
-                    writeOffExpenseAccountReturned = writeOffExpenseAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.writeOffExpenseAccountId)[0],
-                    interestReceivableAccountReturned = interestReceivableAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.interestReceivableAccountId)[0],
-                    feeReceivableAccountReturned = feeReceivableAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.feeReceivableAccountId)[0],
-                    penaltyReceivableAccountReturned = penaltyReceivableAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.penaltyReceivableAccountId)[0],
-                    feeIncomeAccReturned = allGlAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.feeIncomeAccountId)[0],
-                    interestIncomeAccountReturned = interestIncomeAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.interestIncomeAccountId)[0],
-                    penaltyIncomeAccountReturned = penaltyIncomeAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.penaltyIncomeAccountId)[0],
-                    methodologyReturned = methodologyList.filter(eachItem=>eachItem.value===loanProductDetails.methodology.toString())[0];
+                let txtSrcReturned = transactionSourceAccount.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.transactionSourceAccountId)[0]||null,
+                    portfolioControlAccountReturned = portfolioControlAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.portfolioControlAccountId)[0]||null,
+                    writeOffExpenseAccountReturned = writeOffExpenseAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.writeOffExpenseAccountId)[0]||null,
+                    interestReceivableAccountReturned = interestReceivableAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.interestReceivableAccountId)[0]||null,
+                    feeReceivableAccountReturned = feeReceivableAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.feeReceivableAccountId)[0]||null,
+                    penaltyReceivableAccountReturned = penaltyReceivableAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.penaltyReceivableAccountId)[0]||null,
+                    feeIncomeAccReturned = allGlAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.feeIncomeAccountId)[0]||null,
+                    interestIncomeAccountReturned = interestIncomeAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.interestIncomeAccountId)[0]||null,
+                    penaltyIncomeAccountReturned = penaltyIncomeAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.penaltyIncomeAccountId)[0]||null,
+                    methodologyReturned = methodologyList.filter(eachItem=>eachItem.value===loanProductDetails.methodology.toString())[0]||null;
+
+                    console.log("djksjd", interestReceivableAccountReturned);
                 return(
                     
                         <Formik
@@ -160,9 +163,12 @@ class EditLoanProduct extends React.Component {
                             portfolioControlAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.portfolioControlAccountId.toString():0,
                             transactionSourceAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.transactionSourceAccountId.toString():0,
                             writeOffExpenseAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.writeOffExpenseAccountId.toString():0,
-                            interestReceivableAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.interestReceivableAccountId.toString():0,
-                            feeReceivableAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.feeReceivableAccountId.toString():0,
-                            penaltyReceivableAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.penaltyReceivableAccountId.toString():0,
+                            interestReceivableAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null && loanProductDetails.loanProductAccountingRuleModel.interestReceivableAccountId!==null)
+                                                            ?loanProductDetails.loanProductAccountingRuleModel.interestReceivableAccountId.toString():0,
+                            feeReceivableAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null && loanProductDetails.loanProductAccountingRuleModel.feeReceivableAccountId!==null)
+                                                            ?loanProductDetails.loanProductAccountingRuleModel.feeReceivableAccountId.toString():0,
+                            penaltyReceivableAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null && loanProductDetails.loanProductAccountingRuleModel.penaltyReceivableAccountId!==null)
+                                                                        ?loanProductDetails.loanProductAccountingRuleModel.penaltyReceivableAccountId.toString():0,
                             feeIncomeAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.feeIncomeAccountId.toString():0,
                             interestIncomeAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.interestIncomeAccountId.toString():0,
                             penaltyIncomeAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null)?loanProductDetails.loanProductAccountingRuleModel.penaltyIncomeAccountId.toString():0,
@@ -288,7 +294,23 @@ class EditLoanProduct extends React.Component {
                                 <Col>
                                 </Col>
                             </Form.Row>
-                            
+                            <Form.Row>
+                                <Col>
+                                
+                                    <div className="checkbox-wrap">
+                                        <input type="checkbox" 
+                                            id="isActive" 
+                                            checked={values.isActive? values.isActive:null}
+                                            name="isActive"
+                                            onChange={handleChange} 
+                                            value={values.isActive}  />
+                                        <label htmlFor="isActive">Active state</label>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    
+                                </Col>
+                            </Form.Row>
                             
 
                             <Accordion defaultActiveKey="0">
@@ -525,23 +547,7 @@ class EditLoanProduct extends React.Component {
                                                 />
                                             </Col>
                                         </Form.Row>
-                                        <Form.Row>
-                                            <Col>
-                                            
-                                                <div className="checkbox-wrap">
-                                                    <input type="checkbox" 
-                                                        id="isActive" 
-                                                        checked={values.isActive? values.isActive:null}
-                                                        name="isActive"
-                                                        onChange={handleChange} 
-                                                        value={values.isActive}  />
-                                                    <label htmlFor="isActive">Active state</label>
-                                                </div>
-                                            </Col>
-                                            <Col>
-                                                
-                                            </Col>
-                                        </Form.Row>
+                                        
                                     </div>
                                 </Accordion.Collapse>
                             </Accordion>

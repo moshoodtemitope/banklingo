@@ -170,9 +170,9 @@ class NewLoanProduct extends React.Component {
                                 firstDueDateOffsetConstraintDefault:'',
                                 firstDueDateOffsetConstraintMin:'',
                                 firstDueDateOffsetConstraintMax:'',
-                                repaymentInterestRateDefault:'',
-                                repaymentInterestRateMin:'',
-                                repaymentInterestRateMax:'',
+                                installmentsDefault:'',
+                                installmentsMin:'',
+                                installmentsMax:'',
                                 collectPrincipalEveryRepayments:'',
                             }}
 
@@ -223,9 +223,9 @@ class NewLoanProduct extends React.Component {
                                         firstDueDateOffsetConstraintDefault: parseInt(values.firstDueDateOffsetConstraintDefault),
                                         firstDueDateOffsetConstraintMin: parseInt(values.firstDueDateOffsetConstraintMin),
                                         firstDueDateOffsetConstraintMax: parseInt(values.firstDueDateOffsetConstraintMax),
-                                        interestRateDefault: parseFloat(values.repaymentInterestRateDefault.replace(/,/g, '')),
-                                        interestRateMin: parseFloat(values.repaymentInterestRateMin.replace(/,/g, '')),
-                                        interestRateMax: parseFloat(values.repaymentInterestRateMax.replace(/,/g, '')),
+                                        installmentsDefault: parseFloat(values.installmentsDefault.replace(/,/g, '')),
+                                        installmentsMin: parseFloat(values.installmentsMin.replace(/,/g, '')),
+                                        installmentsMax: parseFloat(values.installmentsMax.replace(/,/g, '')),
                                         collectPrincipalEveryRepayments: parseInt(values.collectPrincipalEveryRepayments)
                                     },
 
@@ -698,41 +698,41 @@ class NewLoanProduct extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Interest Rate Default (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments Rate Default (%) </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.repaymentInterestRateDefault)}
-                                                        className={errors.repaymentInterestRateDefault && touched.repaymentInterestRateDefault ? "is-invalid" : null}
-                                                        name="repaymentInterestRateDefault" required />
-                                                    {errors.repaymentInterestRateDefault && touched.repaymentInterestRateDefault ? (
-                                                        <span className="invalid-feedback">{errors.repaymentInterestRateDefault}</span>
+                                                        value={numberWithCommas(values.installmentsDefault)}
+                                                        className={errors.installmentsDefault && touched.installmentsDefault ? "is-invalid" : null}
+                                                        name="installmentsDefault" required />
+                                                    {errors.installmentsDefault && touched.installmentsDefault ? (
+                                                        <span className="invalid-feedback">{errors.installmentsDefault}</span>
                                                     ) : null}
                                                 </Col>
                                                 <Col>
-                                                    <Form.Label className="block-level">Interest Rate Minimum (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments Rate Minimum (%) </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.repaymentInterestRateMin)}
-                                                        className={errors.repaymentInterestRateMin && touched.repaymentInterestRateMin ? "is-invalid" : null}
-                                                        name="repaymentInterestRateMin" required />
-                                                    {errors.repaymentInterestRateMin && touched.repaymentInterestRateMin ? (
-                                                        <span className="invalid-feedback">{errors.repaymentInterestRateMin}</span>
+                                                        value={numberWithCommas(values.installmentsMin)}
+                                                        className={errors.installmentsMin && touched.installmentsMin ? "is-invalid" : null}
+                                                        name="installmentsMin" required />
+                                                    {errors.installmentsMin && touched.installmentsMin ? (
+                                                        <span className="invalid-feedback">{errors.installmentsMin}</span>
                                                     ) : null}
                                                 </Col>
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Interest Rate Maximum (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments Rate Maximum (%) </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.repaymentInterestRateMax)}
-                                                        className={errors.repaymentInterestRateMax && touched.repaymentInterestRateMax ? "is-invalid" : null}
-                                                        name="repaymentInterestRateMax" required />
-                                                    {errors.repaymentInterestRateMax && touched.repaymentInterestRateMax ? (
-                                                        <span className="invalid-feedback">{errors.repaymentInterestRateMax}</span>
+                                                        value={numberWithCommas(values.installmentsMax)}
+                                                        className={errors.installmentsMax && touched.installmentsMax ? "is-invalid" : null}
+                                                        name="installmentsMax" required />
+                                                    {errors.installmentsMax && touched.installmentsMax ? (
+                                                        <span className="invalid-feedback">{errors.installmentsMax}</span>
                                                     ) : null}
                                                 </Col>
                                                 <Col>
