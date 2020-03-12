@@ -114,7 +114,7 @@ class ProductLoans extends React.Component {
             let saveRequestData= getAllLoanProductsRequestData.request_data!==undefined?getAllLoanProductsRequestData.request_data.tempData:null;
 
             if(getAllLoanProductsRequestData.request_status ===productsConstants.GET_LOAN_PRODUCTS_PENDING){
-                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result!==undefined && saveRequestData.result.length<1)){
                     return(
                         <div className="loading-content">
                             <div className="heading-with-cta">
@@ -161,6 +161,7 @@ class ProductLoans extends React.Component {
                         </div>
                     )
                 }else{
+                    saveRequestData = (saveRequestData.result!==undefined)?saveRequestData.result:saveRequestData;
                     return(
                         <div>
                             <div className="heading-with-cta">
@@ -252,7 +253,7 @@ class ProductLoans extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={(e)=>this.setPagesize(e, allLoanProductsData.result)}
+                                            onChange={(e)=>this.setPagesize(e, allLoanProductsData)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>

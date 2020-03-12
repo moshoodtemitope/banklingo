@@ -296,7 +296,7 @@ function updateDespositProduct  (depositProductPayload, encodedKey){
         
     }
 
-    function request(user) { return { type: productsConstants.EDIT_ADEPOSITPRODUCT_PENDING, user } }
+    function request(user) { return { type: productsConstants.EDIT_A_DEPOSIT_PRODUCT_PENDING, user } }
     function success(response) { return { type: productsConstants.EDIT_A_DEPOSIT_PRODUCT_SUCCESS, response } }
     function failure(error) { return { type: productsConstants.EDIT_A_DEPOSIT_PRODUCT_FAILURE, error } }
     function clear() { return { type: productsConstants.EDIT_A_DEPOSIT_PRODUCT_RESET, clear_data:""} }

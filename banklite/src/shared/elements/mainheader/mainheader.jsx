@@ -27,9 +27,9 @@ class MainHeader extends React.Component{
             activeBranch:JSON.parse(localStorage.getItem("user")).BranchName,
             showDropdown: false
         }
-    //    if(Object.keys(this.props.user).length<=1){
-    //         history.push('/');
-    //    }
+       if(Object.keys(this.props.user).length<=1){
+            history.push('/');
+       }
     
     }
 

@@ -40,8 +40,9 @@ class EditLoanProduct extends React.Component {
     }
 
     componentDidMount(){
+        this.props.dispatch(productActions.updateLoanProduct("CLEAR"));
         this.getAllGLAccounts();
-        this.getALoanProduct(this.props.match.params.encodedKey)
+        this.getALoanProduct(this.props.match.params.encodedKey);
      }
 
     getAllGLAccounts = () =>{
@@ -80,7 +81,7 @@ class EditLoanProduct extends React.Component {
     renderUpdateLoanProduct =()=>{
         // let createLoanProductRequest = this.props.createLoanProductReducer,
         //     getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
-
+        
         let updateLoanProductRequest = this.props.updateLoanProductReducer,
             getSingleLoanProductRequest = this.props.getSingleLoanProductsReducer,
             getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
@@ -267,6 +268,7 @@ class EditLoanProduct extends React.Component {
                             validationSchema={loanProductValidationSchema}
                             onSubmit={(values, { resetForm }) => {
 
+                                console.log("sdsds",values.interestRateDefault);
                                 let updateLoanProductPayload = {
                                     key: values.key,
                                     productName: values.productName,
@@ -294,9 +296,9 @@ class EditLoanProduct extends React.Component {
                                         interestPaid: values.interestPaid,
                                         interestRateTerms: parseInt(values.interestRateTerms),
                                         interestBalanceCalculation: parseInt(values.interestBalanceCalculation),
-                                        interestRateDefault: parseFloat(values.interestRateDefault.replace(/,/g, '')),
-                                        interestRateMin: parseFloat(values.interestRateMin.replace(/,/g, '')),
-                                        interestRateMax: parseFloat(values.interestRateMax.replace(/,/g, '')),
+                                        interestRateDefault: parseFloat(values.interestRateDefault.toString().replace(/,/g, '')),
+                                        interestRateMin: parseFloat(values.interestRateMin.toString().replace(/,/g, '')),
+                                        interestRateMax: parseFloat(values.interestRateMax.toString().replace(/,/g, '')),
                                       },
                                     loanAmountSetting: {
                                         loanAmountDefault: parseFloat(values.defaultLoanAmount),
@@ -311,9 +313,9 @@ class EditLoanProduct extends React.Component {
                                         firstDueDateOffsetConstraintDefault: parseInt(values.firstDueDateOffsetConstraintDefault),
                                         firstDueDateOffsetConstraintMin: parseInt(values.firstDueDateOffsetConstraintMin),
                                         firstDueDateOffsetConstraintMax: parseInt(values.firstDueDateOffsetConstraintMax),
-                                        installmentsDefault: parseFloat(values.installmentsDefault.replace(/,/g, '')),
-                                        installmentsMin: parseFloat(values.installmentsMin.replace(/,/g, '')),
-                                        installmentsMax: parseFloat(values.installmentsMax.replace(/,/g, '')),
+                                        installmentsDefault: parseFloat(values.installmentsDefault.toString().replace(/,/g, '')),
+                                        installmentsMin: parseFloat(values.installmentsMin.toString().replace(/,/g, '')),
+                                        installmentsMax: parseFloat(values.installmentsMax.toString().replace(/,/g, '')),
                                         collectPrincipalEveryRepayments: parseInt(values.collectPrincipalEveryRepayments)
                                     },
 
@@ -330,7 +332,7 @@ class EditLoanProduct extends React.Component {
 
                                             if (this.props.updateLoanProductReducer.request_status === productsConstants.EDIT_A_LOAN_PRODUCT_SUCCESS) {
                                                 setTimeout(() => {
-                                                    resetForm();
+                                                    // resetForm();
                                                     this.props.dispatch(productActions.updateLoanProduct("CLEAR"))
                                                 }, 3000);
                                             }else{
