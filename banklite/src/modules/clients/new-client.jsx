@@ -116,6 +116,7 @@ class NewClient extends React.Component {
             userAllowedBraches = this.state.user.AllowedBranches,
             selecBranchList = [];
 
+            
             userAllowedBraches.map((branch, id)=>{
                 selecBranchList.push({label: branch.name, value:branch.id});
             })
@@ -134,11 +135,12 @@ class NewClient extends React.Component {
                 if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_SUCCESS
                     && adminGetCustomerTypesRequest.request_status ===administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS){
                     
-                        let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data,
+                        let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response,
                         allUsersData = getAllUsersRequest.request_data.response.data,
                         allUserDataList=[],
                         allCustomerTypesList;
-                        console.log("+++++",allCustomerTypesData);
+                        
+                        // console.log("+++++",adminGetCustomerTypesRequest.request_data.response);
                     let selectedCustype = allCustomerTypesData.filter(CustType=>CustType.id===parseInt(this.props.match.params.custTypeid))[0];
                     
                    

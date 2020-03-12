@@ -84,6 +84,9 @@ class NewDepositsProduct extends React.Component {
             depositAccountType:  Yup.string()
                 .min(1, 'Valid response required')
                 .required('Required'),
+            currencyCode:  Yup.string()
+                .min(1, 'Valid response required')
+                .required('Required'),
           });
 
         let allProductTypes =[
@@ -128,6 +131,12 @@ class NewDepositsProduct extends React.Component {
             {value: '1', label: 'Minimum Daily Balance'},
             {value: '2', label: 'Maximum Daily Balance'},
             {value: '3', label: 'End of Day Balance'},
+        ];
+
+        let termsOptions =[
+            {value: '1', label: 'Days'},
+            {value: '2', label: 'Weeks'},
+            {value: '3', label: 'Months'},
         ];
 
 
@@ -190,7 +199,7 @@ class NewDepositsProduct extends React.Component {
                                     transactionSourceAccountId: '',
                                     interestExpenseAccountId: '',
                                     feeIncomeAccountId: '',
-                                    interestAccruedMethod: '',
+                                    interestAccruedMethod: 0,
                                     methodology: 0,
                                     isActive: true,
                                     currencyCode:'',
@@ -228,7 +237,7 @@ class NewDepositsProduct extends React.Component {
                                             transactionSourceAccountId: values.transactionSourceAccountId,
                                             interestExpenseAccountId: values.interestExpenseAccountId,
                                             feeIncomeAccountId: values.feeIncomeAccountId,
-                                            interestAccruedMethod: values.interestAccruedMethod!=='' ? parseInt(values.interestAccruedMethod):'',
+                                            interestAccruedMethod: values.interestAccruedMethod!=='' ? parseInt(values.interestAccruedMethod):null,
                                         },
                                         methodology:values.methodology!==''? parseInt(values.methodology):'',
                                         isActive: values.isActive,
@@ -242,21 +251,24 @@ class NewDepositsProduct extends React.Component {
                                         },
                                         depositProductInterestSettingModel:{
                                             interestPaid: values.interestPaid,
-                                            interestRateTerms: values.interestRateTerms,
+                                            interestRateTerms: values.interestRateTerms!==''?values.interestRateTerms:0,
                                             interestBalanceCalculation: values.interestBalanceCalculation!==''? parseInt(values.interestBalanceCalculation):0,
                                             interestRateDefault: values.interestRateDefault!==''? parseFloat(values.interestRateDefault.replace(/,/g, '')):0,
                                             interestRateMin:values.interestRateMin!==''? parseFloat(values.interestRateMin.replace(/,/g, '')):0,
                                             interestRateMax:values.interestRateMax!==''? parseFloat(values.interestRateMax.replace(/,/g, '')):0,
                                             xInterestDays: values.xInterestDays !=='' ? parseInt(values.xInterestDays):0,
                                         },
-                                        depositFixedSettingModel:{
-                                            defaultOpeningBalance:values.defaultOpeningBalance!=='' ? parseFloat(values.defaultOpeningBalance.replace(/,/g, '')):0,
-                                            minimumOpeningBalance:values.minimumOpeningBalance!==''? parseFloat(values.minimumOpeningBalance.replace(/,/g, '')):0,
-                                            maxmimumOpeningBalance:values.maxmimumOpeningBalance!==''? parseFloat(values.maxmimumOpeningBalance.replace(/,/g, '')):0,
+                                        depositTermSettingModel:{
                                             term:values.term!==''? parseInt(values.term):0,
                                             defaultTermLength:values.defaultTermLength!==''? parseFloat(values.defaultTermLength.replace(/,/g, '')):0,
                                             minimumTermLength:values.minimumTermLength!==''? parseFloat(values.minimumTermLength.replace(/,/g, '')):0,
                                             maxmimumTermLength:values.maxmimumTermLength!==''? parseFloat(values.maxmimumTermLength.replace(/,/g, '')):0,
+                                        },
+                                        depositFixedSettingModel:{
+                                            defaultOpeningBalance:values.defaultOpeningBalance!=='' ? parseFloat(values.defaultOpeningBalance.replace(/,/g, '')):0,
+                                            minimumOpeningBalance:values.minimumOpeningBalance!==''? parseFloat(values.minimumOpeningBalance.replace(/,/g, '')):0,
+                                            maxmimumOpeningBalance:values.maxmimumOpeningBalance!==''? parseFloat(values.maxmimumOpeningBalance.replace(/,/g, '')):0,
+                                            
                                         },
                                         
                                     }
@@ -275,9 +287,9 @@ class NewDepositsProduct extends React.Component {
                                                         this.props.dispatch(productActions.createDepositProduct("CLEAR"))
                                                     }, 3000);
                                                 }else{
-                                                    setTimeout(() => {
-                                                        this.props.dispatch(productActions.createDepositProduct("CLEAR"))
-                                                    }, 3000);
+                                                    // setTimeout(() => {
+                                                    //     this.props.dispatch(productActions.createDepositProduct("CLEAR"))
+                                                    // }, 3000);
                                                 }
 
                                             
@@ -403,7 +415,7 @@ class NewDepositsProduct extends React.Component {
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
-                                    <Accordion>
+                                    <Accordion defaultActiveKey="0">
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                             Currencies
                                         </Accordion.Toggle>
@@ -426,6 +438,9 @@ class NewDepositsProduct extends React.Component {
 
 
                                                         />
+                                                        {errors.currencyCode && touched.currencyCode ? (
+                                                            <span className="invalid-feedback">{errors.currencyCode}</span>
+                                                        ) : null}
                                                     </Col>
                                                     <Col></Col>
                                                 </Form.Row>
@@ -644,6 +659,7 @@ class NewDepositsProduct extends React.Component {
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
+                                    {(parseInt(values.depositAccountType)===2 || parseInt(values.depositAccountType)===5) &&
                                     <Accordion >
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                             Term Length
@@ -653,7 +669,21 @@ class NewDepositsProduct extends React.Component {
                                                 <Form.Row>
                                                     <Col>
                                                         <Form.Label className="block-level">Term</Form.Label>
-                                                        <Form.Control 
+                                                        <Select
+                                                            options={termsOptions}
+                                                            onChange={(selectedTerm) => {
+                                                                this.setState({ selectedTerm });
+                                                                errors.term = null
+                                                                values.term = parseInt(selectedTerm.value)
+                                                            }}
+                                                            className={errors.term && touched.term ? "is-invalid" : null}
+                                                            
+                                                            
+                                                            name="term"
+                                                            
+                                                            
+                                                        />
+                                                        {/* <Form.Control 
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={numberWithCommas(values.term)}
@@ -661,7 +691,7 @@ class NewDepositsProduct extends React.Component {
                                                             name="term"  />
                                                         {errors.term && touched.term ? (
                                                             <span className="invalid-feedback">{errors.term}</span>
-                                                        ) : null}
+                                                        ) : null} */}
                                                     </Col>
                                                     <Col>
                                                         <Form.Label className="block-level">Maxmimum Term Length</Form.Label>
@@ -707,6 +737,7 @@ class NewDepositsProduct extends React.Component {
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
+                                    }
                                     <Accordion >
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                             Internal Controls
@@ -756,7 +787,7 @@ class NewDepositsProduct extends React.Component {
                                     </Accordion>
                                     <Accordion>
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Deposit Savings Settings
+                                            Deposits and Withdrawals
                                         </Accordion.Toggle>
                                         <Accordion.Collapse eventKey="0">
                                             <div>

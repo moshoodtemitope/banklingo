@@ -206,11 +206,13 @@ class EditADepositsProduct extends React.Component {
                             
 
                             let methodologyReturned = methodologyList.filter(eachItem=>eachItem.value===depositProductDetails.methodology.toString())[0];
-                            let txtSrcReturned = transactionSourceAccount.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.transactionSourceAccountId)[0];
-                            let savingsAccReturned = savingsControlAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.savingsControlAccountId)[0];
-                            let interestExpenseAccReturned = interestExpenseAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.interestExpenseAccountId)[0];
-                            let feeIncomeAccReturned = allGlAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.feeIncomeAccountId)[0];
-                            let incomeAcruedMethodReturned = interestAccruedMethodList.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.interestAccruedMethod.toString())[0];
+                            let txtSrcReturned = transactionSourceAccount.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.transactionSourceAccountId)[0]||null;
+                            let savingsAccReturned = savingsControlAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.savingsControlAccountId)[0]||null;
+                            let interestExpenseAccReturned = interestExpenseAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.interestExpenseAccountId)[0]||null;
+                            let feeIncomeAccReturned = allGlAccounts.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.feeIncomeAccountId)[0]||null;
+                            let incomeAcruedMethodReturned = interestAccruedMethodList.filter(eachItem=>eachItem.value===depositProductDetails.depositProductAccountingRule.interestAccruedMethod.toString())[0]||null;
+
+                            
                         return(
                             
                                 <Formik
@@ -242,10 +244,10 @@ class EditADepositsProduct extends React.Component {
                                     defaultOpeningBalance:  (depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString():'',
                                     minimumOpeningBalance:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.minimumOpeningBalance.toString():'',
                                     maxmimumOpeningBalance: (depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.maxmimumOpeningBalance.toString():'',
-                                    term:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.term.toString():'',
-                                    defaultTermLength:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.defaultTermLength.toString():'',
-                                    minimumTermLength:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.minimumTermLength.toString():'',
-                                    maxmimumTermLength:(depositProductDetails.depositFixedSettingModel!==undefined && depositProductDetails.depositFixedSettingModel!==null)?depositProductDetails.depositFixedSettingModel.maxmimumTermLength.toString():'',
+                                    term:(depositProductDetails.depositTermSettingModel!==undefined && depositProductDetails.depositTermSettingModel!==null)?depositProductDetails.depositTermSettingModel.term.toString():'',
+                                    defaultTermLength:(depositProductDetails.depositTermSettingModel!==undefined && depositProductDetails.depositTermSettingModel!==null)?depositProductDetails.depositTermSettingModel.defaultTermLength.toString():'',
+                                    minimumTermLength:(depositProductDetails.depositTermSettingModel!==undefined && depositProductDetails.depositTermSettingModel!==null)?depositProductDetails.depositTermSettingModel.minimumTermLength.toString():'',
+                                    maxmimumTermLength:(depositProductDetails.depositTermSettingModel!==undefined && depositProductDetails.depositTermSettingModel!==null)?depositProductDetails.depositTermSettingModel.maxmimumTermLength.toString():'',
                                 }}
                                 // enableReinitialize={true}
                                 // validationSchema={depositProductValidationSchema}
@@ -936,7 +938,7 @@ class EditADepositsProduct extends React.Component {
                                                     <Col sm={6}>
                                                         <Select
                                                             options={interestAccruedMethodList}
-                                                            defaultValue ={{label:incomeAcruedMethodReturned!==null?incomeAcruedMethodReturned.label:null, 
+                                                            defaultValue ={{label:(incomeAcruedMethodReturned!==null)?incomeAcruedMethodReturned.label:null, 
                                                                 value:incomeAcruedMethodReturned!==null? incomeAcruedMethodReturned.value:null}}
                                                             onChange={(selectedInterestAccruedMethod) => {
                                                                 this.setState({ selectedInterestAccruedMethod });
