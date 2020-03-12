@@ -121,8 +121,9 @@ class EditAClient extends React.Component {
             case (clientsConstants.GET_A_CLIENT_SUCCESS):
                 
                 let allCustomerData = getAClientRequest.request_data.response.data;
-                    console.log('Customer is', allCustomerData);
-                let custTypes = this.props.adminGetCustomerTypes.request_data.response.data,
+
+                // console.log('Customer is', this.props.adminGetCustomerTypes.request_data.response);
+                let custTypes = this.props.adminGetCustomerTypes.request_data.response,
                     selectedCustype  = custTypes.filter(type=>type.id===allCustomerData.clientTypeId)[0];
                     if(Object.keys(allCustomerData).length>=1){
                         
@@ -518,7 +519,7 @@ class EditAClient extends React.Component {
                                             <div className="footer-with-cta toleft">
                                                 {/* <Button variant="light" className="btn btn-light">
                                                     Cancel</Button> */}
-                                                <NavLink to={'/active-clients'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                                <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink>
                                                 <Button variant="success" type="submit"
                                                     disabled={updateAClientRequest.is_request_processing} 
                                                     className="ml-20"   

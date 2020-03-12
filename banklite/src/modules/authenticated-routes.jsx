@@ -71,7 +71,7 @@ import EmailSettings from './administration/email-settings'
 
 import ProductLoans from './administration/products-loans'
 import NewLoanProduct from './administration/products-newloans'
-import EditLoanProduct from './administration/products-editloan'
+import EditLoanProduct from './administration/products-editloan2'
 import ProductDeposits from './administration/products-deposits'
 import NewDepositsProduct from './administration/products-newdeposits-product'
 import EditADepositsProduct from './administration/products-editdeposits-product'
