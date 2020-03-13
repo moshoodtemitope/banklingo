@@ -1008,7 +1008,7 @@ class NewLoanProduct extends React.Component {
                                     <Button
                                         type="submit"
                                         disabled={createLoanProductRequest.is_request_processing}>
-                                        {createLoanProductRequest.is_request_processing?"Please wait...": "Save Product"}
+                                        {createLoanProductRequest.is_request_processing?"Please wait...": "Create Product"}
                                     </Button>
                                 </div>
                                 {createLoanProductRequest.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS && 

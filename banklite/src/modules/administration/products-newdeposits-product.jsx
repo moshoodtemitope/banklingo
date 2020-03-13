@@ -988,7 +988,7 @@ class NewDepositsProduct extends React.Component {
                                         <Button
                                             type="submit"
                                             disabled={createDepositProductRequest.is_request_processing}>
-                                            {createDepositProductRequest.is_request_processing?"Please wait...": "Save Product"}
+                                            {createDepositProductRequest.is_request_processing?"Please wait...": "Create Product"}
                                         </Button>
                                     </div>
                                     {createDepositProductRequest.request_status === productsConstants.CREATE_A_DEPOSIT_PRODUCT_SUCCESS && 

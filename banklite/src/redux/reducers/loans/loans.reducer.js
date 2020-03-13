@@ -104,6 +104,38 @@ export function getAccountLoanTransactionReducer(state=[], action) {
     }
 }
 
+export function createLoanAccountReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_RESET:
+            return {
+                request_status: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 
 
 

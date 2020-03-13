@@ -8,7 +8,8 @@ export const loanActions = {
     getLoans,
     getClientLoans,
     getLoanTransactions,
-    getAccountLoanTransaction
+    getAccountLoanTransaction,
+    createLoanAccount
 }
 
 function getLoans(params,tempData) {
@@ -137,4 +138,36 @@ function getAccountLoanTransaction(accountEncodedKey,params,tempData) {
     function success(response) { return { type: loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_FAILURE, error } }
 
+}
+
+
+function createLoanAccount(loanDetailsPayload,loanType) {
+    if(loanDetailsPayload!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(routes.HIT_LOAN + `/${loanType}`, "POST", loanDetailsPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+    
+
+
+    function request(user) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_RESET, clear_data:""} }
 }

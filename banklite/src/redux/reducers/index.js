@@ -94,6 +94,7 @@ const loansReducers = combineReducers({
     getClientLoansReducer: loans.getClientLoansReducer, 
     getLoanTransactionsReducer: loans.getLoanTransactionsReducer, 
     getAccountLoanTransactionReducer: loans.getAccountLoanTransactionReducer, 
+    createLoanAccountReducer: loans.createLoanAccountReducer, 
    
 })
 

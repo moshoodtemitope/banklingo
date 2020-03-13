@@ -66,6 +66,7 @@ import{
     getClientLoansReducer,
     getLoanTransactionsReducer,
     getAccountLoanTransactionReducer,
+    createLoanAccountReducer
     
 } from './loans/loans.reducer'
 
@@ -191,6 +192,7 @@ export const loans = {
     getClientLoansReducer,
     getLoanTransactionsReducer,
     getAccountLoanTransactionReducer,
+    createLoanAccountReducer
 }
 
 export const auth = {
