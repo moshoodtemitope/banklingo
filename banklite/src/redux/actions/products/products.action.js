@@ -7,6 +7,7 @@ import { handleRequestErrors } from "../../../shared/utils";
 export const productActions = {
     getLoanProducts,
     getAllLoanProducts,
+    getFullLoanProducts,
     getSingleLoanProduct,
     createLoanProduct,
     updateLoanProduct,
@@ -99,6 +100,35 @@ function getAllLoanProducts  (params, fetchDetailsOfFirstProduct){
         return { type: productsConstants.GET_ALL_LOAN_PRODUCTS_SUCCESS, response } 
     }
     function failure(error) { return { type: productsConstants.GET_ALL_LOAN_PRODUCTS_FAILURE, error } }
+
+}
+
+function getFullLoanProducts  (){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_LOAN_PRODUCTS+`/loanproductsfull`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+
+                if(response.status===200){
+                    dispatch(success(response));
+                }else{
+                    dispatch(failure("No results found"));
+                }
+                
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user) { return { type: productsConstants.GET_FULL_LOAN_PRODUCTS_PENDING, user } }
+    function success(response, ) { return { type: productsConstants.GET_FULL_LOAN_PRODUCTS_SUCCESS, response } }
+    function failure(error) { return { type: productsConstants.GET_FULL_LOAN_PRODUCTS_FAILURE, error } }
 
 }
 
@@ -220,7 +250,7 @@ function getDepositProducts  (params, tempData){
 }
 
 
-function getAllDepositProducts  (params){
+function getAllDepositProducts  (params, fetchDetailsOfFirstProduct){
     
     return dispatch =>{
         
@@ -228,7 +258,29 @@ function getAllDepositProducts  (params){
         dispatch(request(consume));
         return consume
             .then(response =>{
-                dispatch(success(response));
+                if(response.status===200){
+                    if(fetchDetailsOfFirstProduct===true && response.data.length>=1){
+                        let encodedKey = response.data[0].productEncodedKey;
+                        
+
+                        let consume2 = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`/${encodedKey}`, "GET", null);
+                        dispatch(request(consume2));
+                        return consume2
+                            .then(response2 =>{
+                                dispatch(success(response, response2));
+                            }).catch(error =>{
+                                
+                                dispatch(failure(handleRequestErrors(error)));
+                            });
+                    }else{
+
+                        dispatch(success(response));
+                    }
+
+
+                }else{
+                    dispatch(failure("No results found"));
+                }
             }).catch(error =>{
                 
                 dispatch(failure(handleRequestErrors(error)));
@@ -238,12 +290,18 @@ function getAllDepositProducts  (params){
     
 
     function request(user) { return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING, user } }
-    function success(response) { return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS, response } }
+    function success(response, response2) { 
+        if(response2){
+            return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS, response, response2 }     
+        }
+        return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS, response } 
+    }
+    // function success(response) { return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS, response } }
     function failure(error) { return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_FAILURE, error } }
 
 }
 
-function getSingleDepositProduct  (encodedKey){
+function getSingleDepositProduct  (encodedKey,){
     
     return dispatch =>{
         

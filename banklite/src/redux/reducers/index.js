@@ -86,6 +86,7 @@ const depositsReducers = combineReducers({
     getClientDepositsReducer: deposits.getClientDepositsReducer, 
     getDepositTransactionReducer: deposits.getDepositTransactionReducer, 
     getAccountDepositTransactionReducer: deposits.getAccountDepositTransactionReducer, 
+    createDepositAccountReducer: deposits.createDepositAccountReducer, 
    
 })
 
@@ -134,6 +135,7 @@ const productReducers = combineReducers({
     createLoanProductReducer: products.createLoanProductReducer, 
     getLoanProductsReducer: products.getLoanProductsReducer, 
     getAllLoanProductsReducer: products.getAllLoanProductsReducer, 
+    getFullLoanProductsReducer: products.getFullLoanProductsReducer, 
     getSingleLoanProductsReducer: products.getSingleLoanProductsReducer, 
     updateLoanProductReducer: products.updateLoanProductReducer, 
     getDepositProductsReducer: products.getDepositProductsReducer, 

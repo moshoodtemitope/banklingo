@@ -32,7 +32,7 @@ class NewLoanAccount extends React.Component {
         super(props);
         this.state={
             user:'',
-            PageSize:25,
+            PageSize:100,
             CurrentPage:1,
         }
         this.selectedLoanProductDetails="";
@@ -47,6 +47,7 @@ class NewLoanAccount extends React.Component {
         let {PageSize, CurrentPage}= this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
         this.getAllLoanProducts(params);
+        this.getFullLoanProducts();
     }
 
 
@@ -56,9 +57,36 @@ class NewLoanAccount extends React.Component {
         dispatch(productActions.getAllLoanProducts(paramters, true));
     }
 
+    getFullLoanProducts = ()=>{
+        const {dispatch} = this.props;
+
+        dispatch(productActions.getFullLoanProducts());
+    }
+
+    getSingleLoanProduct = async(encodedKey)=>{
+        const {dispatch} = this.props;
+       
+        await dispatch(productActions.getSingleLoanProduct(encodedKey));
+        
+    }
+
+    getALoanProduct =  (encodedKey)=>{
+        // const {dispatch} = this.props;
+       
+        
+        //  dispatch(productActions.getSingleDepositProduct(encodedKey));
+         this.getSingleLoanProduct(encodedKey)
+            .then(productDetails=>{
+                
+                this.selectedLoanProductDetails = this.props.getSingleLoanProductsReducer.request_data.response.data;
+                this.setState({selectedLoanProductDetails: this.selectedLoanProductDetails})
+            })
+    }
+
     renderCreateLoanAccount = ()=>{
         let getAllLoanProductsRequest = this.props.getAllLoanProductsReducer,
-            createLoanAccountRequest = this.props.createLoanAccountReducer;
+            createLoanAccountRequest = this.props.createLoanAccountReducer,
+            {selectedLoanProductDetails} = this.state;
         
         switch(getAllLoanProductsRequest.request_status){
             case (productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING):
@@ -104,14 +132,17 @@ class NewLoanAccount extends React.Component {
                     // defaultProduct = getAllLoanProductsRequest.request_data.response2 ? getAllLoanProductsRequest.request_data.response2.data:null;
                     
                     // console.log("default",defaultProduct);
-
-                    if(getAllLoanProductsRequest.request_data.response2){
-                        this.selectedLoanProductDetails =getAllLoanProductsRequest.request_data.response2.data
+                    if(selectedLoanProductDetails===undefined){
+                        if(getAllLoanProductsRequest.request_data.response2){
+                            this.selectedLoanProductDetails =getAllLoanProductsRequest.request_data.response2.data
+                        }
+                    }else{
+                        this.selectedLoanProductDetails = selectedLoanProductDetails;
                     }
 
                     let loanProductType = allProductTypes.filter((eachType)=>eachType.value=== this.selectedLoanProductDetails.loanProductType.toString())[0];
 
-                    console.log("produt type", this.selectedLoanProductDetails);
+                    console.log("prod data", this.selectedLoanProductDetails);
                     
                     let loanAccountValidationSchema = Yup.object().shape({
                        
@@ -151,13 +182,17 @@ class NewLoanAccount extends React.Component {
                                         <Form.Row>
                                             <Col>
                                                 <Form.Label className="block-level">Product</Form.Label>
-                                                {/* <Form.Control type="text" /> */}
+                                                
                                                 <Select
                                                     options={allLoanProductsList}
                                                     defaultValue ={{label:allLoanProductsList!==null?allLoanProductsList[0].label:null, 
                                                         value:allLoanProductsList!==null? allLoanProductsList[0].value:null}}
                                                     
-                                                    onChange={(selected) => setFieldValue('productEncodedKey', selected.value)}
+                                                    onChange={(selected) => {
+                                                        values.productDisplayName = selected.label;
+                                                        setFieldValue('productEncodedKey', selected.value)
+                                                        this.getALoanProduct(selected.value);
+                                                    }}
                                                     onBlur={()=> setFieldTouched('productEncodedKey', true)}
                                                     // onChange={(selectedLoanProduct) => {
                                                     //     this.setState({ selectedLoanProduct });
@@ -182,7 +217,7 @@ class NewLoanAccount extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.productDisplayName}
-                                                    className={errors.interestRate && touched.productDisplayName ? "is-invalid h-38px" : "h-38px"}
+                                                    className={errors.productDisplayName && touched.productDisplayName ? "is-invalid h-38px" : "h-38px"}
                                                     name="productDisplayName" required />
                                                 {errors.productDisplayName && touched.productDisplayName ? (
                                                     <span className="invalid-feedback">{errors.productDisplayName}</span>
@@ -214,7 +249,7 @@ class NewLoanAccount extends React.Component {
                                                         <Col>
                                                             <Form.Label className="block-level">Loan Amount (&#8358;)</Form.Label>
                                                             <Form.Control type="text" />
-                                                            <span className="input-helptext">
+                                                            <span className="input-helptext form-text">
                                                                 {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==null &&
                                                                     <span>Min: &#8358;{this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun}</span>
                                                                 }
@@ -242,9 +277,9 @@ class NewLoanAccount extends React.Component {
                                                             {errors.interestRate && touched.interestRate ? (
                                                                 <span className="invalid-feedback">{errors.interestRate}</span>
                                                             ) : null}
-                                                            <span className="input-helptext">
+                                                            <span className="input-helptext form-text">
                                                                 {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin!==null &&
-                                                                    <span>Min: %{this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin}</span>
+                                                                    <span >Min: %{this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin}</span>
                                                                 }
                                                                 {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax!==null &&
                                                                     <span>  Max: %{this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax}</span>
@@ -619,6 +654,12 @@ class NewLoanAccount extends React.Component {
                                 )}
                         </Formik>
                     )
+                }else{
+                    return(
+                        <div className="loading-content card"> 
+                            <div className="loading-text">No Loan Products Found</div>
+                        </div>
+                    )
                 }
 
             case (productsConstants.GET_ALL_LOAN_PRODUCTS_FAILURE):
@@ -662,7 +703,8 @@ function mapStateToProps(state) {
     return {
         // createLoanProductReducer : state.productReducers.createLoanProductReducer,
         getAllLoanProductsReducer : state.productReducers.getAllLoanProductsReducer,
-        createLoanAccountReducer : state.loansReducers.createLoanAccountReducer,
+        getSingleLoanProductsReducer : state.productReducers.getSingleLoanProductsReducer,
+        getFullLoanProductsReducer : state.loansReducers.getFullLoanProductsReducer,
     };
 }
 

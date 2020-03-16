@@ -305,6 +305,8 @@ class NewDepositsProduct extends React.Component {
                                     resetForm,
                                     values,
                                     touched,
+                                    setFieldValue,
+                                    setFieldTouched,
                                     isValid,
                                     errors, }) => (
                                 <Form 
@@ -346,12 +348,14 @@ class NewDepositsProduct extends React.Component {
                                             
                                             <Select
                                                 options={allProductTypes}
-                                                onChange={(selectedProductType) => {
-                                                    this.setState({ selectedProductType, typeDesc: selectedProductType.desc});
-                                                    errors.depositAccountType = null
-                                                    values.depositAccountType = selectedProductType.value;
+                                                // onChange={(selectedProductType) => {
+                                                //     this.setState({ selectedProductType, typeDesc: selectedProductType.desc});
+                                                //     errors.depositAccountType = null
+                                                //     values.depositAccountType = selectedProductType.value;
                                                     
-                                                }}
+                                                // }}
+                                                onChange={(selected) => setFieldValue('depositAccountType', selected.value)}
+                                                onBlur={()=> setFieldTouched('depositAccountType', true)}
                                                 className={errors.depositAccountType && touched.depositAccountType ? "is-invalid" : null}
                                                 
                                                 
@@ -426,11 +430,13 @@ class NewDepositsProduct extends React.Component {
                                                         <Form.Label className="block-level">Currency</Form.Label>
                                                         <Select
                                                             options={allCurrencies}
-                                                            onChange={(selectedCurrency) => {
-                                                                this.setState({ selectedCurrency });
-                                                                errors.currencyCode = null
-                                                                values.currencyCode = selectedCurrency.value
-                                                            }}
+                                                            // onChange={(selectedCurrency) => {
+                                                            //     this.setState({ selectedCurrency });
+                                                            //     errors.currencyCode = null
+                                                            //     values.currencyCode = selectedCurrency.value
+                                                            // }}
+                                                            onChange={(selected) => setFieldValue('currencyCode', selected.value)}
+                                                            onBlur={()=> setFieldTouched('currencyCode', true)}
                                                             className={errors.currencyCode && touched.currencyCode ? "is-invalid" : null}
 
 
@@ -474,11 +480,13 @@ class NewDepositsProduct extends React.Component {
                                                                 <Form.Label className="block-level">Interest rate terms</Form.Label>
                                                                 <Select
                                                                     options={interestRateTerms}
-                                                                    onChange={(selectedInterestRateTerm) => {
-                                                                        this.setState({ selectedInterestRateTerm });
-                                                                        errors.interestRateTerms = null
-                                                                        values.interestRateTerms = selectedInterestRateTerm.value
-                                                                    }}
+                                                                    // onChange={(selectedInterestRateTerm) => {
+                                                                    //     this.setState({ selectedInterestRateTerm });
+                                                                    //     errors.interestRateTerms = null
+                                                                    //     values.interestRateTerms = selectedInterestRateTerm.value
+                                                                    // }}
+                                                                    onChange={(selected) => setFieldValue('interestRateTerms', selected.value)}
+                                                                    onBlur={()=> setFieldTouched('interestRateTerms', true)}
                                                                     className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
                                                                     // noOptionsMessage ={() => "No accounts available"}
                                                                     
@@ -505,11 +513,13 @@ class NewDepositsProduct extends React.Component {
                                                                 <Form.Label className="block-level">Interest Balance Calculation</Form.Label>
                                                                 <Select
                                                                     options={interestBalanceCalculations}
-                                                                    onChange={(selectedBalanceCalculation) => {
-                                                                        this.setState({ selectedBalanceCalculation });
-                                                                        errors.interestBalanceCalculation = null
-                                                                        values.interestBalanceCalculation = selectedBalanceCalculation.value
-                                                                    }}
+                                                                    // onChange={(selectedBalanceCalculation) => {
+                                                                    //     this.setState({ selectedBalanceCalculation });
+                                                                    //     errors.interestBalanceCalculation = null
+                                                                    //     values.interestBalanceCalculation = selectedBalanceCalculation.value
+                                                                    // }}
+                                                                    onChange={(selected) => setFieldValue('interestBalanceCalculation', selected.value)}
+                                                                    onBlur={()=> setFieldTouched('interestBalanceCalculation', true)}
                                                                     className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
                                                                     // noOptionsMessage ={() => "No accounts available"}
                                                                     
@@ -572,11 +582,13 @@ class NewDepositsProduct extends React.Component {
                                                                 {/* <Form.Label className="block-level">When is the interest paid into the account?</Form.Label> */}
                                                                 <Select
                                                                     options={interestAccruedMethodList}
-                                                                    onChange={(selectedInterestAccruedMethod) => {
-                                                                        this.setState({ selectedInterestAccruedMethod });
-                                                                        errors.interestAccruedMethod = null
-                                                                        values.interestAccruedMethod = selectedInterestAccruedMethod.value
-                                                                    }}
+                                                                    // onChange={(selectedInterestAccruedMethod) => {
+                                                                    //     this.setState({ selectedInterestAccruedMethod });
+                                                                    //     errors.interestAccruedMethod = null
+                                                                    //     values.interestAccruedMethod = selectedInterestAccruedMethod.value
+                                                                    // }}
+                                                                    onChange={(selected) => setFieldValue('interestAccruedMethod', selected.value)}
+                                                                    onBlur={()=> setFieldTouched('interestAccruedMethod', true)}
                                                                     className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
                                                                     name="interestAccruedMethod"
                                                                     
@@ -671,11 +683,13 @@ class NewDepositsProduct extends React.Component {
                                                         <Form.Label className="block-level">Term</Form.Label>
                                                         <Select
                                                             options={termsOptions}
-                                                            onChange={(selectedTerm) => {
-                                                                this.setState({ selectedTerm });
-                                                                errors.term = null
-                                                                values.term = parseInt(selectedTerm.value)
-                                                            }}
+                                                            // onChange={(selectedTerm) => {
+                                                            //     this.setState({ selectedTerm });
+                                                            //     errors.term = null
+                                                            //     values.term = parseInt(selectedTerm.value)
+                                                            // }}
+                                                            onChange={(selected) => setFieldValue('term', selected.value)}
+                                                            onBlur={()=> setFieldTouched('term', true)}
                                                             className={errors.term && touched.term ? "is-invalid" : null}
                                                             
                                                             
@@ -837,11 +851,13 @@ class NewDepositsProduct extends React.Component {
                                                         
                                                         <Select
                                                             options={methodologyList}
-                                                            onChange={(selectedMethodology) => {
-                                                                this.setState({ selectedMethodology });
-                                                                errors.methodology = null
-                                                                values.methodology = selectedMethodology.value
-                                                            }}
+                                                            // onChange={(selectedMethodology) => {
+                                                            //     this.setState({ selectedMethodology });
+                                                            //     errors.methodology = null
+                                                            //     values.methodology = selectedMethodology.value
+                                                            // }}
+                                                            onChange={(selected) => setFieldValue('methodology', selected.value)}
+                                                            onBlur={()=> setFieldTouched('methodology', true)}
                                                             className={errors.methodology && touched.methodology ? "is-invalid" : null}
                                                             
                                                             
@@ -861,11 +877,13 @@ class NewDepositsProduct extends React.Component {
                                                         
                                                             <Select
                                                                 options={transactionSourceAccount}
-                                                                onChange={(selectedTxtSourceAcct) => {
-                                                                    this.setState({ selectedTxtSourceAcct });
-                                                                    errors.transactionSourceAccountId = null
-                                                                    values.transactionSourceAccountId = selectedTxtSourceAcct.value
-                                                                }}
+                                                                // onChange={(selectedTxtSourceAcct) => {
+                                                                //     this.setState({ selectedTxtSourceAcct });
+                                                                //     errors.transactionSourceAccountId = null
+                                                                //     values.transactionSourceAccountId = selectedTxtSourceAcct.value
+                                                                // }}
+                                                                onChange={(selected) => setFieldValue('transactionSourceAccountId', selected.value)}
+                                                                onBlur={()=> setFieldTouched('transactionSourceAccountId', true)}
                                                                 className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
                                                                 noOptionsMessage ={() => "No accounts available"}
                                                                 
@@ -883,11 +901,13 @@ class NewDepositsProduct extends React.Component {
                                                     <Col sm={6}>
                                                         <Select
                                                             options={savingsControlAccounts}
-                                                            onChange={(selectedSavingsControlAcct) => {
-                                                                this.setState({ selectedSavingsControlAcct });
-                                                                errors.savingsControlAccountId = null
-                                                                values.savingsControlAccountId = selectedSavingsControlAcct.value
-                                                            }}
+                                                            // onChange={(selectedSavingsControlAcct) => {
+                                                            //     this.setState({ selectedSavingsControlAcct });
+                                                            //     errors.savingsControlAccountId = null
+                                                            //     values.savingsControlAccountId = selectedSavingsControlAcct.value
+                                                            // }}
+                                                            onChange={(selected) => setFieldValue('savingsControlAccountId', selected.value)}
+                                                            onBlur={()=> setFieldTouched('savingsControlAccountId', true)}
                                                             className={errors.savingsControlAccountId && touched.savingsControlAccountId ? "is-invalid" : null}
                                                             
                                                             noOptionsMessage ={() => "No accounts available"}
@@ -905,11 +925,13 @@ class NewDepositsProduct extends React.Component {
                                                     <Col sm={6}>
                                                         <Select
                                                             options={interestExpenseAccounts}
-                                                            onChange={(selectedInterestExpenseAccount) => {
-                                                                this.setState({ selectedInterestExpenseAccount });
-                                                                errors.interestExpenseAccountId = null
-                                                                values.interestExpenseAccountId = selectedInterestExpenseAccount.value
-                                                            }}
+                                                            // onChange={(selectedInterestExpenseAccount) => {
+                                                            //     this.setState({ selectedInterestExpenseAccount });
+                                                            //     errors.interestExpenseAccountId = null
+                                                            //     values.interestExpenseAccountId = selectedInterestExpenseAccount.value
+                                                            // }}
+                                                            onChange={(selected) => setFieldValue('interestExpenseAccountId', selected.value)}
+                                                            onBlur={()=> setFieldTouched('interestExpenseAccountId', true)}
                                                             className={errors.interestExpenseAccountId && touched.interestExpenseAccountId ? "is-invalid" : null}
                                                             noOptionsMessage ={() => "No accounts available"}
                                                             
@@ -927,11 +949,13 @@ class NewDepositsProduct extends React.Component {
                                                     <Col sm={6}>
                                                         <Select
                                                             options={allGlAccounts}
-                                                            onChange={(selectedFeeIncomeAcct) => {
-                                                                this.setState({ selectedFeeIncomeAcct });
-                                                                errors.feeIncomeAccountId = null
-                                                                values.feeIncomeAccountId = selectedFeeIncomeAcct.value
-                                                            }}
+                                                            // onChange={(selectedFeeIncomeAcct) => {
+                                                            //     this.setState({ selectedFeeIncomeAcct });
+                                                            //     errors.feeIncomeAccountId = null
+                                                            //     values.feeIncomeAccountId = selectedFeeIncomeAcct.value
+                                                            // }}
+                                                            onChange={(selected) => setFieldValue('interestExpenseAccountId', selected.value)}
+                                                            onBlur={()=> setFieldTouched('interestExpenseAccountId', true)}
                                                             className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
                                                             noOptionsMessage ={() => "No accounts available"}
                                                             

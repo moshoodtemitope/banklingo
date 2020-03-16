@@ -52,6 +52,32 @@ export function getAllLoanProductsReducer(state=[], action) {
     }
 }
 
+export function getFullLoanProductsReducer(state=[], action) {
+    switch (action.type) {
+        case productsConstants.GET_FULL_LOAN_PRODUCTS_PENDING:
+            return {
+                request_status: productsConstants.GET_FULL_LOAN_PRODUCTS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case productsConstants.GET_FULL_LOAN_PRODUCTS_SUCCESS:
+            return {
+                request_status: productsConstants.GET_FULL_LOAN_PRODUCTS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case productsConstants.GET_FULL_LOAN_PRODUCTS_FAILURE:
+            return {
+                request_status: productsConstants.GET_FULL_LOAN_PRODUCTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 
 export function getSingleLoanProductsReducer(state=[], action) {
     switch (action.type) {

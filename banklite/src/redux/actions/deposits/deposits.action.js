@@ -8,7 +8,8 @@ export const depositActions = {
     getDeposits,
     getClientDeposits,
     getDepositTransaction,
-    getAccountDepositTransaction
+    getAccountDepositTransaction,
+    createDepositAccount
 }
 
 function getDeposits(params , tempData) {
@@ -126,16 +127,47 @@ function getAccountDepositTransaction(accountEncodedKey,params, tempData) {
 
     function request(user, tempData) { 
         if(tempData===undefined){
-            return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING, user } 
+            return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_PENDING, user } 
         }
         if(tempData!==undefined){
-            return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING, user, tempData } 
+            return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_PENDING, user, tempData } 
         }
     }
 
 
-    function request(user) { return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING, user } }
-    function success(response) { return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_SUCCESS, response } }
-    function failure(error) { return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_FAILURE, error } }
+    function request(user) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_FAILURE, error } }
 
+}
+
+function createDepositAccount(depositAccountDetailsPayload,accountType) {
+    if(depositAccountDetailsPayload!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(routes.HIT_DEPOSITS + `/${accountType}`, "POST", depositAccountDetailsPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+    
+
+
+    function request(user) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_RESET, clear_data:""} }
 }

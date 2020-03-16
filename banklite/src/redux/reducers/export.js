@@ -74,6 +74,7 @@ import{
     getLoanProductsReducer,
     getDepositProductsReducer,
     getAllLoanProductsReducer,
+    getFullLoanProductsReducer,
     getSingleLoanProductsReducer,
     createLoanProductReducer,
     updateLoanProductReducer,
@@ -116,6 +117,7 @@ import{
     getClientDepositsReducer,
     getDepositTransactionReducer,
     getAccountDepositTransactionReducer,
+    createDepositAccountReducer
     
 } from './deposits/deposits.reducer'
 
@@ -209,6 +211,7 @@ export const deposits = {
     getClientDepositsReducer,
     getDepositTransactionReducer,
     getAccountDepositTransactionReducer,
+    createDepositAccountReducer
 }
 
 export const clients ={
@@ -233,6 +236,7 @@ export const products ={
     getLoanProductsReducer,
     getDepositProductsReducer,
     getAllLoanProductsReducer,
+    getFullLoanProductsReducer,
     getSingleLoanProductsReducer,
     createLoanProductReducer,
     updateLoanProductReducer,
