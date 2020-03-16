@@ -23,6 +23,9 @@ import { numberWithCommas, allowNumbersOnly} from '../../shared/utils';
 import Alert from 'react-bootstrap/Alert'
 import { productActions } from '../../redux/actions/products/products.action';
 import { productsConstants } from '../../redux/actiontypes/products/products.constants'
+
+import {clientsActions} from '../../redux/actions/clients/clients.action';
+import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
 import "./depositmanagement.scss"; 
 class NewDepositAccount extends React.Component {
     constructor(props) {
@@ -44,6 +47,14 @@ class NewDepositAccount extends React.Component {
         let {PageSize, CurrentPage}= this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
         this.getAllDepositProducts(params);
+        this.getAllClients(params);
+    }
+
+
+    getAllClients = (paramters)=>{
+        const {dispatch} = this.props;
+
+        dispatch(clientsActions.getAllClients(paramters));
     }
 
     getAllDepositProducts = (paramters)=>{
@@ -136,8 +147,9 @@ class NewDepositAccount extends React.Component {
 
                         let depositProductType = allProductTypes.filter((eachType)=>eachType.value=== this.selectedDepositProductDetails.depositAccountType.toString())[0];
                         
-                        let depositInterestCalculation = interestBalanceCalculations.filter((eachType)=>eachType.value=== this.selectedDepositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation.toString())[0];
+                        let depositInterestCalculation = interestBalanceCalculations.filter((eachType)=>eachType.value === this.selectedDepositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation.toString())[0];
 
+                        // console.log("sdsdsds", depositInterestCalculation);
                         let depositAccountValidationSchema = Yup.object().shape({
                        
                         });
@@ -180,6 +192,38 @@ class NewDepositAccount extends React.Component {
                                         <div className="form-heading">
                                             <h3>Creating A New Deposit Account</h3>
                                         </div>
+                                        <Form.Row>
+                                            <Col>
+                                                <Form.Label className="block-level">Customer Name</Form.Label>
+                                                <Select
+                                                    options={allDepositProductsList}
+                                                    defaultValue ={{label:allDepositProductsList!==null?allDepositProductsList[0].label:null, 
+                                                        value:allDepositProductsList!==null? allDepositProductsList[0].value:null}}
+                                                    
+                                                    onChange={(selected) => {
+                                                        
+                                                        values.depositProductName = selected.label;
+                                                        setFieldValue('depositProductEncodedKey', selected.value)
+                                                        this.getADepositProduct(selected.value)
+                                                    }}
+                                                    onBlur={()=> setFieldTouched('depositProductEncodedKey', true)}
+                                                    // onChange={(selectedLoanProduct) => {
+                                                    //     this.setState({ selectedLoanProduct });
+                                                    //     errors.depositProductEncodedKey = null
+                                                    //     values.depositProductEncodedKey = selectedLoanProduct.value
+                                                    // }}
+                                                    className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : null}
+                                                    
+                                                    
+                                                    name="depositProductEncodedKey"
+                                                    
+                                                    required
+                                                />
+                                                {errors.depositProductEncodedKey && touched.depositProductEncodedKey ? (
+                                                    <span className="invalid-feedback">{errors.depositProductEncodedKey}</span>
+                                                ) : null}
+                                            </Col>
+                                        </Form.Row>
                                         <Form.Row>
                                             <Col>
                                                 <Form.Label className="block-level">Product</Form.Label>
@@ -263,7 +307,7 @@ class NewDepositAccount extends React.Component {
                                                     <Form.Row>
                                                         <Col>
                                                             <Form.Label className="block-level">Interest Calculated Using</Form.Label>
-                                                            <span className="form-text">{depositInterestCalculation}</span>
+                                                            <span className="form-text">{(depositInterestCalculation!==undefined && depositInterestCalculation!==null) ?depositInterestCalculation.label:"N/A"}</span>
                                                         </Col>
                                                         <Col>
                                                             {/* <Form.Label className="block-level">Maximum Balance (₦)</Form.Label>
@@ -273,7 +317,7 @@ class NewDepositAccount extends React.Component {
                                                     <Form.Row>
                                                         <Col>
                                                             <Form.Label className="block-level">Interest paid into account</Form.Label>
-                                                            <span className="form-text">On Account Maturity</span>
+                                                            {/* <span className="form-text">On Account Maturity</span> */}
                                                         </Col>
                                                         <Col>
                                                             <Form.Label className="block-level">Opening Balance</Form.Label>
