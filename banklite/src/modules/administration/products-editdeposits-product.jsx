@@ -180,8 +180,8 @@ class EditADepositsProduct extends React.Component {
                         let productTypeSelect =allProductTypes.filter(eachType=>parseInt(eachType.value)===depositProductDetails.depositAccountType)[0];
                         this.productDesc= productTypeSelect.desc;
                         
-                        let rateTerms = interestRateTerms.filter(eachTerm=>eachTerm.value===depositProductDetails.depositProductInterestSettingModel.interestRateTerms)[0];
-                        let interestCalc = interestBalanceCalculations.filter(eachItem=>eachItem.value===depositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation.toString())[0];
+                        let rateTerms = interestRateTerms.filter(eachTerm=>eachTerm.value===depositProductDetails.depositProductInterestSettingModel.interestRateTerms)[0]||null;
+                        let interestCalc = interestBalanceCalculations.filter(eachItem=>eachItem.value===depositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation.toString())[0]||null;
                         
 
                         // this.setState({ selectedProductType:productTypeSelect, typeDesc: productTypeSelect.desc});
@@ -195,7 +195,7 @@ class EditADepositsProduct extends React.Component {
                         
                         let currencyData = allCurrencies.filter(eachCurrrency=>eachCurrrency.value===depositProductDetails.currencyCode)[0];
 
-                        // console.log("===", currencyData);
+                        console.log("==dssdds=", rateTerms);
                         
 
                         let savingsControlAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===2),
@@ -657,69 +657,71 @@ class EditADepositsProduct extends React.Component {
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
-                                    <Accordion >
-                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Term Length
-                                        </Accordion.Toggle>
-                                        <Accordion.Collapse eventKey="0">
-                                            <div>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Term</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.term)}
-                                                            className={errors.term && touched.term ? "is-invalid" : null}
-                                                            name="term"  />
-                                                        {errors.term && touched.term ? (
-                                                            <span className="invalid-feedback">{errors.term}</span>
-                                                        ) : null}
-                                                    </Col>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Maxmimum Term Length</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.maxmimumTermLength)}
-                                                            className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : null}
-                                                            name="maxmimumTermLength"  />
-                                                        {errors.maxmimumTermLength && touched.maxmimumTermLength ? (
-                                                            <span className="invalid-feedback">{errors.maxmimumTermLength}</span>
-                                                        ) : null}
-                                                    </Col>
-                                                </Form.Row>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Default Term Length</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.defaultTermLength)}
-                                                            className={errors.defaultTermLength && touched.defaultTermLength ? "is-invalid" : null}
-                                                            name="defaultTermLength"  />
-                                                        {errors.defaultTermLength && touched.defaultTermLength ? (
-                                                            <span className="invalid-feedback">{errors.defaultTermLength}</span>
-                                                        ) : null}
-                                                    </Col>
+                                    {(parseInt(values.depositAccountType)===2 || parseInt(values.depositAccountType)===5) &&
+                                        <Accordion >
+                                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                                Term Length
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="0">
+                                                <div>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Term</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.term)}
+                                                                className={errors.term && touched.term ? "is-invalid" : null}
+                                                                name="term"  />
+                                                            {errors.term && touched.term ? (
+                                                                <span className="invalid-feedback">{errors.term}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Maxmimum Term Length</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.maxmimumTermLength)}
+                                                                className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : null}
+                                                                name="maxmimumTermLength"  />
+                                                            {errors.maxmimumTermLength && touched.maxmimumTermLength ? (
+                                                                <span className="invalid-feedback">{errors.maxmimumTermLength}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                    </Form.Row>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Default Term Length</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.defaultTermLength)}
+                                                                className={errors.defaultTermLength && touched.defaultTermLength ? "is-invalid" : null}
+                                                                name="defaultTermLength"  />
+                                                            {errors.defaultTermLength && touched.defaultTermLength ? (
+                                                                <span className="invalid-feedback">{errors.defaultTermLength}</span>
+                                                            ) : null}
+                                                        </Col>
 
-                                                    <Col>
-                                                        <Form.Label className="block-level">Minimum Term Length</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.minimumTermLength)}
-                                                            className={errors.minimumTermLength && touched.minimumTermLength ? "is-invalid" : null}
-                                                            name="minimumTermLength"  />
-                                                        {errors.minimumTermLength && touched.minimumTermLength ? (
-                                                            <span className="invalid-feedback">{errors.minimumTermLength}</span>
-                                                        ) : null}
-                                                    </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Minimum Term Length</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.minimumTermLength)}
+                                                                className={errors.minimumTermLength && touched.minimumTermLength ? "is-invalid" : null}
+                                                                name="minimumTermLength"  />
+                                                            {errors.minimumTermLength && touched.minimumTermLength ? (
+                                                                <span className="invalid-feedback">{errors.minimumTermLength}</span>
+                                                            ) : null}
+                                                        </Col>
 
-                                                </Form.Row>
-                                            </div>
-                                        </Accordion.Collapse>
-                                    </Accordion>
+                                                    </Form.Row>
+                                                </div>
+                                            </Accordion.Collapse>
+                                        </Accordion>
+                                    }
                                     <Accordion >
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                             Internal Controls
