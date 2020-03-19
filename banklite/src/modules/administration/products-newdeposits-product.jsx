@@ -144,6 +144,14 @@ class NewDepositsProduct extends React.Component {
             {value: '1', label: 'Daily'},
             {value: '2', label: 'Monthly'},
         ];
+
+        let whenInterestIsPaidList =[
+            {value: '1', label: 'First day of every month'},
+            {value: '2', label: 'Every week'},
+            {value: '3', label: 'Every other week'},
+            {value: '4', label: 'Every month'},
+            {value: '5', label: 'Every three months'},
+        ];
         
         // switch(getAllGLAccountsRequest.request_status){
             if (getAllGLAccountsRequest.request_status ===accountingConstants.GET_ALL_GLACCOUNTS_PENDING ||
@@ -183,8 +191,8 @@ class NewDepositsProduct extends React.Component {
 
                         let savingsControlAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===2),
                             transactionSourceAccount =allGlAccounts.filter(glAccount=>glAccount.accType===1),
-                            interestExpenseAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===5);
-                            // interestIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4),
+                            interestExpenseAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===5),
+                            interestPayableAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===2);
                             // penaltyIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4);
                             // console.log("+++++", penaltyIncomeAccounts)
                         return(
@@ -193,14 +201,15 @@ class NewDepositsProduct extends React.Component {
                                 initialValues={{
                                     key: '',
                                     productName: '',
-                                    depositAccountType: '',
+                                    depositAccountType: '1',
                                     description: '',
                                     savingsControlAccountId: '',
                                     transactionSourceAccountId: '',
+                                    interestPayableAccountId:'',
                                     interestExpenseAccountId: '',
                                     feeIncomeAccountId: '',
                                     interestAccruedMethod: 0,
-                                    methodology: 0,
+                                    methodology: '0',
                                     isActive: true,
                                     currencyCode:'',
                                     automaticallySetAccountAsDormant:false,
@@ -208,7 +217,7 @@ class NewDepositsProduct extends React.Component {
                                     // interestAccruedMethod:'',
                                     maximumWithdrawalAmount:'',
                                     recommendedDepositAmount:'',
-                                    interestPaid:true,
+                                    interestPaid:false,
                                     interestRateTerms:'',
                                     interestBalanceCalculation:'',
                                     interestRateDefault:'',
@@ -218,6 +227,7 @@ class NewDepositsProduct extends React.Component {
                                     defaultOpeningBalance:'',
                                     minimumOpeningBalance:'',
                                     maxmimumOpeningBalance:'',
+                                    whenInterestIsPaid:'',
                                     term:'',
                                     defaultTermLength:'',
                                     minimumTermLength:'',
@@ -236,6 +246,7 @@ class NewDepositsProduct extends React.Component {
                                             savingsControlAccountId: values.savingsControlAccountId,
                                             transactionSourceAccountId: values.transactionSourceAccountId,
                                             interestExpenseAccountId: values.interestExpenseAccountId,
+                                            interestPayableAccountId: values.interestPayableAccountId,
                                             feeIncomeAccountId: values.feeIncomeAccountId,
                                             interestAccruedMethod: values.interestAccruedMethod!=='' ? parseInt(values.interestAccruedMethod):null,
                                         },
@@ -253,6 +264,7 @@ class NewDepositsProduct extends React.Component {
                                             interestPaid: values.interestPaid,
                                             interestRateTerms: values.interestRateTerms!==''?values.interestRateTerms:0,
                                             interestBalanceCalculation: values.interestBalanceCalculation!==''? parseInt(values.interestBalanceCalculation):0,
+                                            whenInterestIsPaid: values.whenInterestIsPaid!==''? parseInt(values.whenInterestIsPaid):0,
                                             interestRateDefault: values.interestRateDefault!==''? parseFloat(values.interestRateDefault.replace(/,/g, '')):0,
                                             interestRateMin:values.interestRateMin!==''? parseFloat(values.interestRateMin.replace(/,/g, '')):0,
                                             interestRateMax:values.interestRateMax!==''? parseFloat(values.interestRateMax.replace(/,/g, '')):0,
@@ -348,13 +360,18 @@ class NewDepositsProduct extends React.Component {
                                             
                                             <Select
                                                 options={allProductTypes}
+                                                defaultValue ={{label:allProductTypes!==null?allProductTypes[0].label:null, 
+                                                    value:allProductTypes!==null? allProductTypes[0].value:null}}
                                                 // onChange={(selectedProductType) => {
                                                 //     this.setState({ selectedProductType, typeDesc: selectedProductType.desc});
                                                 //     errors.depositAccountType = null
                                                 //     values.depositAccountType = selectedProductType.value;
                                                     
                                                 // }}
-                                                onChange={(selected) => setFieldValue('depositAccountType', selected.value)}
+                                                onChange={(selected) => {
+                                                    setFieldValue('depositAccountType', selected.value)
+                                                    this.setState({ typeDesc: selected.desc})
+                                                }}
                                                 onBlur={()=> setFieldTouched('depositAccountType', true)}
                                                 className={errors.depositAccountType && touched.depositAccountType ? "is-invalid" : null}
                                                 
@@ -368,21 +385,7 @@ class NewDepositsProduct extends React.Component {
                                             ) : null}
                                         </Col>
                                         <Col>
-                                            {/* <Form.Label className="block-level">Methodology</Form.Label>
-                                            <Select
-                                                options={methodologyList}
-                                                onChange={(selectedMethodology) => {
-                                                    this.setState({ selectedMethodology });
-                                                    errors.methodology = null
-                                                    values.methodology = selectedMethodology.value
-                                                }}
-                                                className={errors.methodology && touched.methodology ? "is-invalid" : null}
-                                                
-                                                
-                                                name="methodology"
-                                                
-                                                
-                                            /> */}
+                                            
                                         </Col>
                                     </Form.Row>
                                         <Form.Label className="block-level">State</Form.Label>
@@ -453,174 +456,153 @@ class NewDepositsProduct extends React.Component {
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
-                                    <Accordion>
-                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Interest Rates
-                                        </Accordion.Toggle>
-                                        <Accordion.Collapse eventKey="0">
-                                            <div>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <div className="checkbox-wrap">
-                                                            <input type="checkbox" 
-                                                                id="interestPaid" 
-                                                                checked={values.interestPaid? values.interestPaid:null}
-                                                                name="interestPaid"
-                                                                onChange={handleChange} 
-                                                                value={values.interestPaid}  />
-                                                            <label htmlFor="interestPaid">Is interest paid</label>
-                                                        </div>
-                                                    </Col>
-                                                
-                                                </Form.Row>
-                                                {values.interestPaid===true &&
-                                                    <div>
-                                                        <Form.Row>
-                                                            <Col sm={6}>
-                                                                <Form.Label className="block-level">Interest rate terms</Form.Label>
-                                                                <Select
-                                                                    options={interestRateTerms}
-                                                                    // onChange={(selectedInterestRateTerm) => {
-                                                                    //     this.setState({ selectedInterestRateTerm });
-                                                                    //     errors.interestRateTerms = null
-                                                                    //     values.interestRateTerms = selectedInterestRateTerm.value
-                                                                    // }}
-                                                                    onChange={(selected) => setFieldValue('interestRateTerms', selected.value)}
-                                                                    onBlur={()=> setFieldTouched('interestRateTerms', true)}
-                                                                    className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
-                                                                    // noOptionsMessage ={() => "No accounts available"}
-                                                                    
-                                                                    name="interestRateTerms"
-                                                                    
-                                                                    
-                                                                />
-                                                            </Col>
-                                                            {values.interestRateTerms===5  &&
+                                    {values.depositAccountType !=='3' &&
+                                        <Accordion>
+                                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                                Interest Rates
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="0">
+                                                <div>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <div className="checkbox-wrap">
+                                                                <input type="checkbox" 
+                                                                    id="interestPaid" 
+                                                                    checked={values.interestPaid? values.interestPaid:null}
+                                                                    name="interestPaid"
+                                                                    onChange={handleChange} 
+                                                                    value={values.interestPaid}  />
+                                                                <label htmlFor="interestPaid">Is interest paid</label>
+                                                            </div>
+                                                        </Col>
+                                                    
+                                                    </Form.Row>
+                                                    {values.interestPaid===true &&
+                                                        <div>
+                                                            <Form.Row>
                                                                 <Col sm={6}>
-                                                                    <Form.Label className="block-level">Number of Interest Days</Form.Label>
+                                                                    <Form.Label className="block-level">Interest rate terms</Form.Label>
+                                                                    <Select
+                                                                        options={interestRateTerms}
+                                                                        // onChange={(selectedInterestRateTerm) => {
+                                                                        //     this.setState({ selectedInterestRateTerm });
+                                                                        //     errors.interestRateTerms = null
+                                                                        //     values.interestRateTerms = selectedInterestRateTerm.value
+                                                                        // }}
+                                                                        onChange={(selected) => setFieldValue('interestRateTerms', selected.value)}
+                                                                        onBlur={()=> setFieldTouched('interestRateTerms', true)}
+                                                                        className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
+                                                                        // noOptionsMessage ={() => "No accounts available"}
+                                                                        
+                                                                        name="interestRateTerms"
+                                                                        
+                                                                        
+                                                                    />
+                                                                </Col>
+                                                                {values.interestRateTerms===5  &&
+                                                                    <Col sm={6}>
+                                                                        <Form.Label className="block-level">Number of Interest Days</Form.Label>
+                                                                        <Form.Control 
+                                                                            type="text"
+                                                                            onChange={handleChange}
+                                                                            value={numberWithCommas(values.xInterestDays)}
+                                                                            className={errors.xInterestDays && touched.xInterestDays ? "is-invalid h-38px" : "h-38px"}
+                                                                            name="xInterestDays"  />
+                                                                        {errors.xInterestDays && touched.xInterestDays ? (
+                                                                            <span className="invalid-feedback">{errors.xInterestDays}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                }
+                                                                <Col sm={6} className={values.interestRateTerms===5?"mt-20":""}>
+                                                                    <Form.Label className="block-level">Interest Balance Calculation</Form.Label>
+                                                                    <Select
+                                                                        options={interestBalanceCalculations}
+                                                                        // onChange={(selectedBalanceCalculation) => {
+                                                                        //     this.setState({ selectedBalanceCalculation });
+                                                                        //     errors.interestBalanceCalculation = null
+                                                                        //     values.interestBalanceCalculation = selectedBalanceCalculation.value
+                                                                        // }}
+                                                                        onChange={(selected) => setFieldValue('interestBalanceCalculation', selected.value)}
+                                                                        onBlur={()=> setFieldTouched('interestBalanceCalculation', true)}
+                                                                        className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
+                                                                        // noOptionsMessage ={() => "No accounts available"}
+                                                                        
+                                                                        name="interestBalanceCalculation"
+                                                                        
+                                                                        
+                                                                    />
+                                                                </Col>
+                                                                
+                                                            {/* </Form.Row>
+                                                            <Form.Row> */}
+                                                                <Col sm={6} className="mt-20">
+                                                                    <Form.Label className="block-level">Interest Rate Default</Form.Label>
                                                                     <Form.Control 
                                                                         type="text"
                                                                         onChange={handleChange}
-                                                                        value={numberWithCommas(values.xInterestDays)}
-                                                                        className={errors.xInterestDays && touched.xInterestDays ? "is-invalid h-38px" : "h-38px"}
-                                                                        name="xInterestDays"  />
-                                                                    {errors.xInterestDays && touched.xInterestDays ? (
-                                                                        <span className="invalid-feedback">{errors.xInterestDays}</span>
+                                                                        value={numberWithCommas(values.interestRateDefault)}
+                                                                        className={errors.interestRateDefault && touched.interestRateDefault ? "is-invalid h-38px" : "h-38px"}
+                                                                        name="interestRateDefault"  />
+                                                                    {errors.interestRateDefault && touched.interestRateDefault ? (
+                                                                        <span className="invalid-feedback">{errors.interestRateDefault}</span>
                                                                     ) : null}
                                                                 </Col>
-                                                            }
-                                                            <Col sm={6} className={values.interestRateTerms===5?"mt-20":""}>
-                                                                <Form.Label className="block-level">Interest Balance Calculation</Form.Label>
-                                                                <Select
-                                                                    options={interestBalanceCalculations}
-                                                                    // onChange={(selectedBalanceCalculation) => {
-                                                                    //     this.setState({ selectedBalanceCalculation });
-                                                                    //     errors.interestBalanceCalculation = null
-                                                                    //     values.interestBalanceCalculation = selectedBalanceCalculation.value
-                                                                    // }}
-                                                                    onChange={(selected) => setFieldValue('interestBalanceCalculation', selected.value)}
-                                                                    onBlur={()=> setFieldTouched('interestBalanceCalculation', true)}
-                                                                    className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
-                                                                    // noOptionsMessage ={() => "No accounts available"}
-                                                                    
-                                                                    name="interestBalanceCalculation"
-                                                                    
-                                                                    
-                                                                />
-                                                            </Col>
-                                                            
-                                                        {/* </Form.Row>
-                                                        <Form.Row> */}
-                                                            <Col sm={6} className="mt-20">
-                                                                <Form.Label className="block-level">Interest Rate Default</Form.Label>
-                                                                <Form.Control 
-                                                                    type="text"
-                                                                    onChange={handleChange}
-                                                                    value={numberWithCommas(values.interestRateDefault)}
-                                                                    className={errors.interestRateDefault && touched.interestRateDefault ? "is-invalid h-38px" : "h-38px"}
-                                                                    name="interestRateDefault"  />
-                                                                {errors.interestRateDefault && touched.interestRateDefault ? (
-                                                                    <span className="invalid-feedback">{errors.interestRateDefault}</span>
-                                                                ) : null}
-                                                            </Col>
-                                                            <Col sm={6} className="mt-20">
-                                                                <Form.Label className="block-level">Interest Rate Min</Form.Label>
-                                                                <Form.Control 
-                                                                    type="text"
-                                                                    onChange={handleChange}
-                                                                    value={numberWithCommas(values.interestRateMin)}
-                                                                    className={errors.interestRateMin && touched.interestRateMin ? "is-invalid h-38px" : "h-38px"}
-                                                                    name="interestRateMin"  />
-                                                                {errors.interestRateMin && touched.interestRateMin ? (
-                                                                    <span className="invalid-feedback">{errors.interestRateMin}</span>
-                                                                ) : null}
-                                                            </Col>
-
-                                                            
-
-                                                        {/* </Form.Row>
-                                                        <Form.Row> */}
-                                                            <Col sm={6} className="mt-20">
-                                                                <Form.Label className="block-level">Interest Rate Max</Form.Label>
-                                                                <Form.Control 
-                                                                    type="text"
-                                                                    onChange={handleChange}
-                                                                    value={numberWithCommas(values.interestRateMax)}
-                                                                    className={errors.interestRateMax && touched.interestRateMax ? "is-invalid h-38px" : "h-38px"}
-                                                                    name="interestRateMax"  />
-                                                                {errors.interestRateMax && touched.interestRateMax ? (
-                                                                    <span className="invalid-feedback">{errors.interestRateMax}</span>
-                                                                ) : null}
-                                                            </Col>
-                                                            {/* {values.interestRateTerms!==5 && 
-                                                                <Col>
+                                                                <Col sm={6} className="mt-20">
+                                                                    <Form.Label className="block-level">Interest Rate Min</Form.Label>
+                                                                    <Form.Control 
+                                                                        type="text"
+                                                                        onChange={handleChange}
+                                                                        value={numberWithCommas(values.interestRateMin)}
+                                                                        className={errors.interestRateMin && touched.interestRateMin ? "is-invalid h-38px" : "h-38px"}
+                                                                        name="interestRateMin"  />
+                                                                    {errors.interestRateMin && touched.interestRateMin ? (
+                                                                        <span className="invalid-feedback">{errors.interestRateMin}</span>
+                                                                    ) : null}
                                                                 </Col>
-                                                            } */}
-                                                            
-                                                            <Col sm={6} className="mt-20">
-                                                                <Form.Label className="block-level">Interest Accrued Method</Form.Label>
-                                                                {/* <Form.Label className="block-level">When is the interest paid into the account?</Form.Label> */}
-                                                                <Select
-                                                                    options={interestAccruedMethodList}
-                                                                    // onChange={(selectedInterestAccruedMethod) => {
-                                                                    //     this.setState({ selectedInterestAccruedMethod });
-                                                                    //     errors.interestAccruedMethod = null
-                                                                    //     values.interestAccruedMethod = selectedInterestAccruedMethod.value
-                                                                    // }}
-                                                                    onChange={(selected) => setFieldValue('interestAccruedMethod', selected.value)}
-                                                                    onBlur={()=> setFieldTouched('interestAccruedMethod', true)}
-                                                                    className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
-                                                                    name="interestAccruedMethod"
-                                                                    
-                                                                    
-                                                                />
-                                                            </Col>
 
-                                                        </Form.Row>
-                                                        {/* <Form.Row>
-                                                            <Col sm={3}>
-                                                                <Form.Label className="block-level">Interest Accrued Method</Form.Label>
-                                                                <Select
-                                                                    options={interestAccruedMethodList}
-                                                                    onChange={(selectedInterestAccruedMethod) => {
-                                                                        this.setState({ selectedInterestAccruedMethod });
-                                                                        errors.interestAccruedMethod = null
-                                                                        values.interestAccruedMethod = selectedInterestAccruedMethod.value
-                                                                    }}
-                                                                    className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
-                                                                    name="interestAccruedMethod"
-                                                                    
-                                                                    
-                                                                />
-                                                            </Col>
-                                                            <Col></Col>
-                                                        </Form.Row> */}
-                                                    </div>
-                                                }
-                                                
-                                            </div>
-                                        </Accordion.Collapse>
-                                    </Accordion>
+                                                                
+
+                                                            {/* </Form.Row>
+                                                            <Form.Row> */}
+                                                                <Col sm={6} className="mt-20">
+                                                                    <Form.Label className="block-level">Interest Rate Max</Form.Label>
+                                                                    <Form.Control 
+                                                                        type="text"
+                                                                        onChange={handleChange}
+                                                                        value={numberWithCommas(values.interestRateMax)}
+                                                                        className={errors.interestRateMax && touched.interestRateMax ? "is-invalid h-38px" : "h-38px"}
+                                                                        name="interestRateMax"  />
+                                                                    {errors.interestRateMax && touched.interestRateMax ? (
+                                                                        <span className="invalid-feedback">{errors.interestRateMax}</span>
+                                                                    ) : null}
+                                                                </Col>
+                                                                {/* {values.interestRateTerms!==5 && 
+                                                                    <Col>
+                                                                    </Col>
+                                                                } */}
+                                                                
+                                                                <Col sm={6} className="mt-20">
+                                                                    <Form.Label className="block-level">When is the interest paid into the account?</Form.Label>
+                                                                    <Select
+                                                                        options={whenInterestIsPaidList}
+                                                                        onChange={(selected) => setFieldValue('whenInterestIsPaid', selected.value)}
+                                                                        onBlur={()=> setFieldTouched('whenInterestIsPaid', true)}
+                                                                        className={errors.whenInterestIsPaid && touched.whenInterestIsPaid ? "is-invalid" : null}
+                                                                        name="whenInterestIsPaid"
+                                                                        
+                                                                        
+                                                                    />
+                                                                </Col>
+
+                                                            </Form.Row>
+                                                            
+                                                        </div>
+                                                    }
+                                                    
+                                                </div>
+                                            </Accordion.Collapse>
+                                        </Accordion>
+                                    }
                                     <Accordion>
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                             Opening Balance
@@ -672,85 +654,85 @@ class NewDepositsProduct extends React.Component {
                                         </Accordion.Collapse>
                                     </Accordion>
                                     {(parseInt(values.depositAccountType)===2 || parseInt(values.depositAccountType)===5) &&
-                                    <Accordion >
-                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Term Length
-                                        </Accordion.Toggle>
-                                        <Accordion.Collapse eventKey="0">
-                                            <div>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Term</Form.Label>
-                                                        <Select
-                                                            options={termsOptions}
-                                                            // onChange={(selectedTerm) => {
-                                                            //     this.setState({ selectedTerm });
-                                                            //     errors.term = null
-                                                            //     values.term = parseInt(selectedTerm.value)
-                                                            // }}
-                                                            onChange={(selected) => setFieldValue('term', selected.value)}
-                                                            onBlur={()=> setFieldTouched('term', true)}
-                                                            className={errors.term && touched.term ? "is-invalid" : null}
-                                                            
-                                                            
-                                                            name="term"
-                                                            
-                                                            
-                                                        />
-                                                        {/* <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.term)}
-                                                            className={errors.term && touched.term ? "is-invalid" : null}
-                                                            name="term"  />
-                                                        {errors.term && touched.term ? (
-                                                            <span className="invalid-feedback">{errors.term}</span>
-                                                        ) : null} */}
-                                                    </Col>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Maxmimum Term Length</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.maxmimumTermLength)}
-                                                            className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : null}
-                                                            name="maxmimumTermLength"  />
-                                                        {errors.maxmimumTermLength && touched.maxmimumTermLength ? (
-                                                            <span className="invalid-feedback">{errors.maxmimumTermLength}</span>
-                                                        ) : null}
-                                                    </Col>
-                                                </Form.Row>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Default Term Length</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.defaultTermLength)}
-                                                            className={errors.defaultTermLength && touched.defaultTermLength ? "is-invalid" : null}
-                                                            name="defaultTermLength"  />
-                                                        {errors.defaultTermLength && touched.defaultTermLength ? (
-                                                            <span className="invalid-feedback">{errors.defaultTermLength}</span>
-                                                        ) : null}
-                                                    </Col>
+                                        <Accordion >
+                                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                                Term Length
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="0">
+                                                <div>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Term</Form.Label>
+                                                            <Select
+                                                                options={termsOptions}
+                                                                // onChange={(selectedTerm) => {
+                                                                //     this.setState({ selectedTerm });
+                                                                //     errors.term = null
+                                                                //     values.term = parseInt(selectedTerm.value)
+                                                                // }}
+                                                                onChange={(selected) => setFieldValue('term', selected.value)}
+                                                                onBlur={()=> setFieldTouched('term', true)}
+                                                                className={errors.term && touched.term ? "is-invalid" : null}
+                                                                
+                                                                
+                                                                name="term"
+                                                                
+                                                                
+                                                            />
+                                                            {/* <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.term)}
+                                                                className={errors.term && touched.term ? "is-invalid" : null}
+                                                                name="term"  />
+                                                            {errors.term && touched.term ? (
+                                                                <span className="invalid-feedback">{errors.term}</span>
+                                                            ) : null} */}
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Maxmimum Term Length</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.maxmimumTermLength)}
+                                                                className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : null}
+                                                                name="maxmimumTermLength"  />
+                                                            {errors.maxmimumTermLength && touched.maxmimumTermLength ? (
+                                                                <span className="invalid-feedback">{errors.maxmimumTermLength}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                    </Form.Row>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Default Term Length</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.defaultTermLength)}
+                                                                className={errors.defaultTermLength && touched.defaultTermLength ? "is-invalid" : null}
+                                                                name="defaultTermLength"  />
+                                                            {errors.defaultTermLength && touched.defaultTermLength ? (
+                                                                <span className="invalid-feedback">{errors.defaultTermLength}</span>
+                                                            ) : null}
+                                                        </Col>
 
-                                                    <Col>
-                                                        <Form.Label className="block-level">Minimum Term Length</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.minimumTermLength)}
-                                                            className={errors.minimumTermLength && touched.minimumTermLength ? "is-invalid" : null}
-                                                            name="minimumTermLength"  />
-                                                        {errors.minimumTermLength && touched.minimumTermLength ? (
-                                                            <span className="invalid-feedback">{errors.minimumTermLength}</span>
-                                                        ) : null}
-                                                    </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Minimum Term Length</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.minimumTermLength)}
+                                                                className={errors.minimumTermLength && touched.minimumTermLength ? "is-invalid" : null}
+                                                                name="minimumTermLength"  />
+                                                            {errors.minimumTermLength && touched.minimumTermLength ? (
+                                                                <span className="invalid-feedback">{errors.minimumTermLength}</span>
+                                                            ) : null}
+                                                        </Col>
 
-                                                </Form.Row>
-                                            </div>
-                                        </Accordion.Collapse>
-                                    </Accordion>
+                                                    </Form.Row>
+                                                </div>
+                                            </Accordion.Collapse>
+                                        </Accordion>
                                     }
                                     <Accordion >
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
@@ -799,45 +781,47 @@ class NewDepositsProduct extends React.Component {
                                             </div> */}
                                         </Accordion.Collapse>
                                     </Accordion>
-                                    <Accordion>
-                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                            Deposits and Withdrawals
-                                        </Accordion.Toggle>
-                                        <Accordion.Collapse eventKey="0">
-                                            <div>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Maximum Withdrawal Amount</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.maximumWithdrawalAmount)}
-                                                            className={errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? "is-invalid" : null}
-                                                            name="maximumWithdrawalAmount"  />
-                                                        {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
-                                                            <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
-                                                        ) : null}
-                                                    </Col>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Recommended Deposit Amount</Form.Label>
-                                                        <Form.Control 
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.recommendedDepositAmount)}
-                                                            className={errors.recommendedDepositAmount && touched.recommendedDepositAmount ? "is-invalid" : null}
-                                                            name="recommendedDepositAmount" />
-                                                        {errors.recommendedDepositAmount && touched.recommendedDepositAmount ? (
-                                                            <span className="invalid-feedback">{errors.recommendedDepositAmount}</span>
-                                                        ) : null}
-                                                    </Col>
-                                                
-                                                </Form.Row>
-                                                
-                                                
-                                                
-                                            </div>
-                                        </Accordion.Collapse>
-                                    </Accordion>
+                                    {(values.depositAccountType !=='3' && values.depositAccountType !=='2') &&
+                                        <Accordion>
+                                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                                Deposits and Withdrawals
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="0">
+                                                <div>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Maximum Withdrawal Amount</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.maximumWithdrawalAmount)}
+                                                                className={errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? "is-invalid" : null}
+                                                                name="maximumWithdrawalAmount"  />
+                                                            {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
+                                                                <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Recommended Deposit Amount</Form.Label>
+                                                            <Form.Control 
+                                                                type="text"
+                                                                onChange={handleChange}
+                                                                value={numberWithCommas(values.recommendedDepositAmount)}
+                                                                className={errors.recommendedDepositAmount && touched.recommendedDepositAmount ? "is-invalid" : null}
+                                                                name="recommendedDepositAmount" />
+                                                            {errors.recommendedDepositAmount && touched.recommendedDepositAmount ? (
+                                                                <span className="invalid-feedback">{errors.recommendedDepositAmount}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                    
+                                                    </Form.Row>
+                                                    
+                                                    
+                                                    
+                                                </div>
+                                            </Accordion.Collapse>
+                                        </Accordion>
+                                    }
                                     
                                     <Accordion defaultActiveKey="0">
                                         <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
@@ -851,6 +835,8 @@ class NewDepositsProduct extends React.Component {
                                                         
                                                         <Select
                                                             options={methodologyList}
+                                                            defaultValue ={{label:methodologyList!==null?methodologyList[0].label:null, 
+                                                                value:methodologyList!==null? methodologyList[0].value:null}}
                                                             // onChange={(selectedMethodology) => {
                                                             //     this.setState({ selectedMethodology });
                                                             //     errors.methodology = null
@@ -870,126 +856,154 @@ class NewDepositsProduct extends React.Component {
                                                     
                                                     </Col>
                                                 </Form.Group>
-
-                                                <Form.Group as={Row} className="center-aligned">
-                                                    <Form.Label column sm={4} className="block-level">Transaction Source</Form.Label>
-                                                    <Col sm={6}>
-                                                        
+                                                {values.methodology!=='0' && 
+                                                
+                                                <div>
+                                                    <Form.Group as={Row} className="center-aligned">
+                                                        <Form.Label column sm={4} className="block-level">Transaction Source</Form.Label>
+                                                        <Col sm={6}>
+                                                            
+                                                                <Select
+                                                                    options={transactionSourceAccount}
+                                                                    onChange={(selected) => setFieldValue('transactionSourceAccountId', selected.value)}
+                                                                    onBlur={()=> setFieldTouched('transactionSourceAccountId', true)}
+                                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                                    noOptionsMessage ={() => "No accounts available"}
+                                                                    
+                                                                    name="transactionSourceAccountId"
+                                                                    
+                                                                    
+                                                                />
+                                                        </Col>
+                                                        <Col sm={2}>
+                                                            <span>Asset</span>
+                                                        </Col>
+                                                    </Form.Group>
+                                                    <Form.Group as={Row} className="center-aligned">
+                                                        <Form.Label column sm={4} className="block-level">Savings Control Account</Form.Label>
+                                                        <Col sm={6}>
                                                             <Select
-                                                                options={transactionSourceAccount}
-                                                                // onChange={(selectedTxtSourceAcct) => {
-                                                                //     this.setState({ selectedTxtSourceAcct });
-                                                                //     errors.transactionSourceAccountId = null
-                                                                //     values.transactionSourceAccountId = selectedTxtSourceAcct.value
+                                                                options={savingsControlAccounts}
+                                                                // onChange={(selectedSavingsControlAcct) => {
+                                                                //     this.setState({ selectedSavingsControlAcct });
+                                                                //     errors.savingsControlAccountId = null
+                                                                //     values.savingsControlAccountId = selectedSavingsControlAcct.value
                                                                 // }}
-                                                                onChange={(selected) => setFieldValue('transactionSourceAccountId', selected.value)}
-                                                                onBlur={()=> setFieldTouched('transactionSourceAccountId', true)}
-                                                                className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                                onChange={(selected) => setFieldValue('savingsControlAccountId', selected.value)}
+                                                                onBlur={()=> setFieldTouched('savingsControlAccountId', true)}
+                                                                className={errors.savingsControlAccountId && touched.savingsControlAccountId ? "is-invalid" : null}
+                                                                
+                                                                noOptionsMessage ={() => "No accounts available"}
+                                                                name="savingsControlAccountId"
+                                                                
+                                                                
+                                                            />
+                                                        </Col>
+                                                        <Col sm={2}>
+                                                            <span>Liability</span>
+                                                        </Col>
+                                                    </Form.Group>
+                                                    <Form.Group as={Row} className="center-aligned">
+                                                        <Form.Label column sm={4} className="block-level">Interest Expense Account</Form.Label>
+                                                        <Col sm={6}>
+                                                            <Select
+                                                                options={interestExpenseAccounts}
+                                                                // onChange={(selectedInterestExpenseAccount) => {
+                                                                //     this.setState({ selectedInterestExpenseAccount });
+                                                                //     errors.interestExpenseAccountId = null
+                                                                //     values.interestExpenseAccountId = selectedInterestExpenseAccount.value
+                                                                // }}
+                                                                onChange={(selected) => setFieldValue('interestExpenseAccountId', selected.value)}
+                                                                onBlur={()=> setFieldTouched('interestExpenseAccountId', true)}
+                                                                className={errors.interestExpenseAccountId && touched.interestExpenseAccountId ? "is-invalid" : null}
                                                                 noOptionsMessage ={() => "No accounts available"}
                                                                 
-                                                                name="transactionSourceAccountId"
+                                                                name="interestExpenseAccountId"
+                                                                    
+                                                                    
+                                                                />
+                                                        </Col>
+                                                        <Col sm={2}>
+                                                            <span>Expense</span>
+                                                        </Col>
+                                                    </Form.Group>
+                                                    {(values.methodology==='2' && values.interestPaid===true) &&
+                                                        <Form.Group as={Row} className="center-aligned">
+                                                            <Form.Label column sm={4} className="block-level">Interest Payable Account</Form.Label>
+                                                            <Col sm={6}>
+                                                                <Select
+                                                                    options={interestPayableAccounts}
+                                                                    // onChange={(selectedInterestExpenseAccount) => {
+                                                                    //     this.setState({ selectedInterestExpenseAccount });
+                                                                    //     errors.interestExpenseAccountId = null
+                                                                    //     values.interestExpenseAccountId = selectedInterestExpenseAccount.value
+                                                                    // }}
+                                                                    onChange={(selected) => setFieldValue('interestPayableAccountId', selected.value)}
+                                                                    onBlur={()=> setFieldTouched('interestPayableAccountId', true)}
+                                                                    className={errors.interestPayableAccountId && touched.interestPayableAccountId ? "is-invalid" : null}
+                                                                    noOptionsMessage ={() => "No accounts available"}
+                                                                    
+                                                                    name="interestPayableAccountId"
+                                                                        
+                                                                        
+                                                                    />
+                                                            </Col>
+                                                            <Col sm={2}>
+                                                                <span>Liability</span>
+                                                            </Col>
+                                                        </Form.Group>
+                                                    }
+                                                    <Form.Group as={Row} className="center-aligned">
+                                                        <Form.Label column sm={4} className="block-level">Fee Income</Form.Label>
+                                                        <Col sm={6}>
+                                                            <Select
+                                                                options={allGlAccounts}
+                                                                // onChange={(selectedFeeIncomeAcct) => {
+                                                                //     this.setState({ selectedFeeIncomeAcct });
+                                                                //     errors.feeIncomeAccountId = null
+                                                                //     values.feeIncomeAccountId = selectedFeeIncomeAcct.value
+                                                                // }}
+                                                                onChange={(selected) => setFieldValue('feeIncomeAccountId', selected.value)}
+                                                                onBlur={()=> setFieldTouched('feeIncomeAccountId', true)}
+                                                                className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                                noOptionsMessage ={() => "No accounts available"}
                                                                 
-                                                                
-                                                            />
-                                                    </Col>
-                                                    <Col sm={2}>
-                                                        <span>Asset</span>
-                                                    </Col>
-                                                </Form.Group>
-                                                <Form.Group as={Row} className="center-aligned">
-                                                    <Form.Label column sm={4} className="block-level">Savings Control Account</Form.Label>
-                                                    <Col sm={6}>
-                                                        <Select
-                                                            options={savingsControlAccounts}
-                                                            // onChange={(selectedSavingsControlAcct) => {
-                                                            //     this.setState({ selectedSavingsControlAcct });
-                                                            //     errors.savingsControlAccountId = null
-                                                            //     values.savingsControlAccountId = selectedSavingsControlAcct.value
-                                                            // }}
-                                                            onChange={(selected) => setFieldValue('savingsControlAccountId', selected.value)}
-                                                            onBlur={()=> setFieldTouched('savingsControlAccountId', true)}
-                                                            className={errors.savingsControlAccountId && touched.savingsControlAccountId ? "is-invalid" : null}
-                                                            
-                                                            noOptionsMessage ={() => "No accounts available"}
-                                                            name="savingsControlAccountId"
-                                                            
-                                                            
-                                                        />
-                                                    </Col>
-                                                    <Col sm={2}>
-                                                        <span>Liability</span>
-                                                    </Col>
-                                                </Form.Group>
-                                                <Form.Group as={Row} className="center-aligned">
-                                                    <Form.Label column sm={4} className="block-level">Interest Expense Account</Form.Label>
-                                                    <Col sm={6}>
-                                                        <Select
-                                                            options={interestExpenseAccounts}
-                                                            // onChange={(selectedInterestExpenseAccount) => {
-                                                            //     this.setState({ selectedInterestExpenseAccount });
-                                                            //     errors.interestExpenseAccountId = null
-                                                            //     values.interestExpenseAccountId = selectedInterestExpenseAccount.value
-                                                            // }}
-                                                            onChange={(selected) => setFieldValue('interestExpenseAccountId', selected.value)}
-                                                            onBlur={()=> setFieldTouched('interestExpenseAccountId', true)}
-                                                            className={errors.interestExpenseAccountId && touched.interestExpenseAccountId ? "is-invalid" : null}
-                                                            noOptionsMessage ={() => "No accounts available"}
-                                                            
-                                                            name="interestExpenseAccountId"
-                                                                
-                                                                
-                                                            />
-                                                    </Col>
-                                                    <Col sm={2}>
-                                                        <span>Expense</span>
-                                                    </Col>
-                                                </Form.Group>
-                                                <Form.Group as={Row} className="center-aligned">
-                                                    <Form.Label column sm={4} className="block-level">Fee Income</Form.Label>
-                                                    <Col sm={6}>
-                                                        <Select
-                                                            options={allGlAccounts}
-                                                            // onChange={(selectedFeeIncomeAcct) => {
-                                                            //     this.setState({ selectedFeeIncomeAcct });
-                                                            //     errors.feeIncomeAccountId = null
-                                                            //     values.feeIncomeAccountId = selectedFeeIncomeAcct.value
-                                                            // }}
-                                                            onChange={(selected) => setFieldValue('interestExpenseAccountId', selected.value)}
-                                                            onBlur={()=> setFieldTouched('interestExpenseAccountId', true)}
-                                                            className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
-                                                            noOptionsMessage ={() => "No accounts available"}
-                                                            
-                                                            name="feeIncomeAccountId"
-                                                                
-                                                                
-                                                            />
-                                                    </Col>
-                                                    <Col sm={2}>
-                                                        <span>Any GL Account</span>
-                                                    </Col>
-                                                </Form.Group>
-                                                {/* <Form.Group as={Row} className="center-aligned">
-                                                    <Form.Label column sm={4} className="block-level">Interest Accrued Method</Form.Label>
-                                                    <Col sm={6}>
-                                                        <Select
-                                                            options={interestAccruedMethodList}
-                                                            onChange={(selectedInterestAccruedMethod) => {
-                                                                this.setState({ selectedInterestAccruedMethod });
-                                                                errors.interestAccruedMethod = null
-                                                                values.interestAccruedMethod = selectedInterestAccruedMethod.value
-                                                            }}
-                                                            className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
-                                                            name="interestAccruedMethod"
-                                                            
-                                                            
-                                                        />
-                                                    </Col>
-                                                </Form.Group> */}
+                                                                name="feeIncomeAccountId"
+                                                                    
+                                                                    
+                                                                />
+                                                        </Col>
+                                                        <Col sm={2}>
+                                                            <span>Any GL Account</span>
+                                                        </Col>
+                                                    </Form.Group>
+                                                    {(values.methodology==='2' && values.interestPaid===true) && 
+                                                        <Form.Group as={Row} className="center-aligned">
+                                                            <Form.Label column sm={4} className="block-level">Interest Accrued Method</Form.Label>
+                                                            <Col sm={6}>
+                                                                <Select
+                                                                        options={interestAccruedMethodList}
+                                                                        // onChange={(selectedInterestAccruedMethod) => {
+                                                                        //     this.setState({ selectedInterestAccruedMethod });
+                                                                        //     errors.interestAccruedMethod = null
+                                                                        //     values.interestAccruedMethod = selectedInterestAccruedMethod.value
+                                                                        // }}
+                                                                        onChange={(selected) => setFieldValue('interestAccruedMethod', selected.value)}
+                                                                        onBlur={()=> setFieldTouched('interestAccruedMethod', true)}
+                                                                        className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
+                                                                        name="interestAccruedMethod"
+                                                                        
+                                                                        
+                                                                    />
+                                                            </Col>
+                                                        </Form.Group>
+                                                    }
                                                 
                                                 
                                                 
                                                 
-                                                
+                                                </div>
+                                                }
                                             </div>
                                         </Accordion.Collapse>
                                     </Accordion>
