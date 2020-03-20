@@ -127,17 +127,17 @@ function getAccountDepositTransaction(accountEncodedKey,params, tempData) {
 
     function request(user, tempData) { 
         if(tempData===undefined){
-            return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_PENDING, user } 
+            return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING, user } 
         }
         if(tempData!==undefined){
-            return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_PENDING, user, tempData } 
+            return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING, user, tempData } 
         }
     }
 
 
-    function request(user) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_PENDING, user } }
-    function success(response) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_SUCCESS, response } }
-    function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_FAILURE, error } }
+    
+    function success(response) { return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_FAILURE, error } }
 
 }
 

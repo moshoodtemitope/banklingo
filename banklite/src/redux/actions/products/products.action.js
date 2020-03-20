@@ -255,11 +255,15 @@ function getAllDepositProducts  (params, fetchDetailsOfFirstProduct){
     return dispatch =>{
         
         let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`/all?${params}`, "GET", null);
+
+        let filteredProduct=[];
         dispatch(request(consume));
         return consume
             .then(response =>{
                 if(response.status===200){
                     if(fetchDetailsOfFirstProduct===true && response.data.length>=1){
+                        // filteredProduct = response.data.filter(eachProduct.)
+                        
                         let encodedKey = response.data[0].productEncodedKey;
                         
 

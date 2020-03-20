@@ -211,7 +211,7 @@ class EditADepositsProduct extends React.Component {
                         
                         let currencyData = allCurrencies.filter(eachCurrrency=>eachCurrrency.value===depositProductDetails.currencyCode)[0];
 
-                        console.log("==dssdds=", rateTerms);
+                        // console.log("==dssdds=", rateTerms);
                         
 
                         let savingsControlAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===2),
@@ -339,11 +339,12 @@ class EditADepositsProduct extends React.Component {
                                                         // resetForm();
                                                         this.props.dispatch(productActions.updateDespositProduct("CLEAR"))
                                                     }, 3000);
-                                                }else{
-                                                    setTimeout(() => {
-                                                        this.props.dispatch(productActions.updateDespositProduct("CLEAR"))
-                                                    }, 3000);
                                                 }
+                                                // else{
+                                                //     setTimeout(() => {
+                                                //         this.props.dispatch(productActions.updateDespositProduct("CLEAR"))
+                                                //     }, 3000);
+                                                // }
 
                                             
 
