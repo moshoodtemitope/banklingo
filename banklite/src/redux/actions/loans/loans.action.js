@@ -9,7 +9,17 @@ export const loanActions = {
     getClientLoans,
     getLoanTransactions,
     getAccountLoanTransaction,
-    createLoanAccount
+    createLoanAccount,
+    getLoanSchedulePreview,
+    getAClientLoanAccount,
+    getAccountLoanschedule,
+    getAccountLoansComments,
+    creatALoanComment,
+    getALoanActivities,
+    getAccountLoanAttachments,
+    creatALoanAttachment,
+    getALoanCommunications,
+    changeLoanState
 }
 
 function getLoans(params,tempData) {
@@ -170,4 +180,313 @@ function createLoanAccount(loanDetailsPayload,loanType) {
     function success(response) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_FAILURE, error } }
     function clear() { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_RESET, clear_data:""} }
+}
+
+function getLoanSchedulePreview(params) {
+    console.log("sdsds", params);
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN + `/previewschedules`, "POST", params);
+        dispatch(request(consume));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+
+
+    function request(user) { return { type: loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_FAILURE, error } }
+
+}
+
+function getAClientLoanAccount(accountEncodedKey) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN + `/${accountEncodedKey}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    
+
+
+    function request(user) { return { type: loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_FAILURE, error } }
+
+}
+
+function getAccountLoanschedule(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN + `/loanschedules?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_FAILURE, error } }
+
+}
+
+function getAccountLoansComments(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN + `/comments?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_COMMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_COMMENTS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_LOAN_COMMENTS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_LOAN_COMMENTS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_LOAN_COMMENTS_FAILURE, error } }
+
+}
+
+function creatALoanComment   (creatALoanCommentPayload){
+    if(creatALoanCommentPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.HIT_LOAN+`/addcomment`;
+            delete creatALoanCommentPayload.encodedKey;
+            let consume = ApiService.request(url, "POST", creatALoanCommentPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_RESET, clear_data:""} }
+
+}
+
+
+function getALoanActivities  (LoanEncodedKey, params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_ACTIVITIES+`/loan/${LoanEncodedKey}?&${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_PENDING, user, tempData } 
+        }
+    }
+        
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_FAILURE, error } }
+
+}
+
+function getAccountLoanAttachments(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN + `/attachments?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_FAILURE, error } }
+
+}
+
+function creatALoanAttachment   (createLoanAttachmentPayload){
+    if(createLoanAttachmentPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.HIT_LOAN+`/addattachment`;
+            delete createLoanAttachmentPayload.encodedKey;
+            let consume = ApiService.request(url, "POST", createLoanAttachmentPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_RESET, clear_data:""} }
+
+}
+
+function getALoanCommunications  (AccountEncodedKey, params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_LOAN+`/communications?AccountEncodedKey=${AccountEncodedKey}&${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_PENDING, user, tempData } 
+        }
+    }
+        
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_FAILURE, error } }
+
+}
+
+
+function changeLoanState   (newLoanStatePayload, newState){
+    if(newLoanStatePayload!=="CLEAR"){
+        return dispatch =>{
+            let 
+            url = routes.HIT_LOAN_STATE+`/${newState}`,
+                
+            consume = ApiService.request(url, "POST", newLoanStatePayload);
+
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.CHANGE_LOANSTATE_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CHANGE_LOANSTATE_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CHANGE_LOANSTATE_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.CHANGE_LOANSTATE_RESET, clear_data:""} }
+
 }

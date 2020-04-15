@@ -3,7 +3,7 @@ import * as React from "react";
 
 import {Fragment} from "react";
 
-import { NavLink} from 'react-router-dom';
+import { NavLink, Route} from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import DatePicker from "react-datepicker";
@@ -11,13 +11,19 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import Modal from 'react-bootstrap/Modal'
 import Dropdown from 'react-bootstrap/Dropdown'
-import Form from 'react-bootstrap/Form'
+
 import Col from 'react-bootstrap/Col'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Button from 'react-bootstrap/Button'
 import  TableComponent from '../../shared/elements/table'
 import "./customerprofile.scss"; 
-// import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+
+import Form from 'react-bootstrap/Form'
+import Alert from 'react-bootstrap/Alert'
+
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
@@ -26,7 +32,26 @@ import { loanActions } from '../../redux/actions/loans/loans.action';
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 
-class CustomerHeading extends React.Component {
+
+import AccountContainer from '../viewcustomer/account-container'
+
+// import ViewCustomer from '../viewcustomer'
+// import ViewCustomerAttachments from '../viewcustomer/attachments'
+// import ViewCustomerComments from '../viewcustomer/comments'
+// import ViewCustomerCommunications from '../viewcustomer/communications'
+// import ViewCustomerTasks from '../viewcustomer/tasks'
+// import NewCustomerAccount from '../viewcustomer/newcustomer'
+// import EditCustomerAccount from '../viewcustomer/editcustomer'
+// import NewInvestmentCustomerAccount from '../viewcustomer/new-investmentcustomer'
+
+// import ViewLoanAccount from '../viewcustomer/viewloanaccount'
+// import ViewSavingsAccount from '../viewcustomer/viewsavingsaccount'
+// import ViewClosedAccounts from '../viewcustomer/viewallclosedaccounts'
+// import ViewClosedAccount from '../viewcustomer/viewclosedaccount'
+
+
+
+class CustomerAccountContainer extends React.Component {
     constructor(props) {
         super(props);
 
@@ -52,6 +77,7 @@ class CustomerHeading extends React.Component {
             FullDetails:true,
             PageSize: 100,
             CurrentPage: 1,
+            changeCustomerState:false,
 
         }
         
@@ -69,6 +95,7 @@ class CustomerHeading extends React.Component {
         let { PageSize, CurrentPage,FullDetails } = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&FullDetails=${FullDetails}`;
 
+        console.log("djsdsds", this.clientEncodedKey);
         this.getCustomerDepositAccounts(this.clientEncodedKey, params);
         this.getCustomerLoanAccounts(this.clientEncodedKey, params);
         this.getClientInfo(this.clientEncodedKey);
@@ -94,11 +121,39 @@ class CustomerHeading extends React.Component {
     }
 
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.match.params.id !== this.props.match.params.id) {
+        
+        this.clientEncodedKey = nextProps.match.params.id;
+
+        this.setState({
+            generatedRoutes :{
+                customer: `/customer/${this.clientEncodedKey}`,
+                attachments: `/customer/${this.clientEncodedKey}/attachments`,
+                tasks: `/customer/${this.clientEncodedKey}/tasks`,
+                communications: `/customer/${this.clientEncodedKey}/communications`,
+                comments: `/customer/${this.clientEncodedKey}/comments`,
+                // loanaccount: `/customer/${this.clientEncodedKey}/loan/${this.props.loanId}`,
+                loanaccount: `/customer/${this.clientEncodedKey}/loanaccount/348046272`,
+                // savingsaccount: `/customer/${this.clientEncodedKey}/savingsaccount/${this.props.accountid}`,
+                savingsaccount: `/customer/${this.clientEncodedKey}/savingsaccount/77339322`,
+                allclosedaccounts: `/customer/${this.clientEncodedKey}/closedaccounts`,
+            }
+        })
+            this.loadInitialCustomerData();
+        }
+    }
+
+
 
 
     handleTaskClose = () => this.setState({showNewTask:false});
     
     handleTaskShow = () => this.setState({showNewTask:true});
+
+    handleChangeStateClose = () => this.setState({changeCustomerState:false});
+    
+    handleChangeStateShow = () => this.setState({changeCustomerState:true});
 
     handleAddFieldClose = () => this.setState({showAddField:false});
     
@@ -174,7 +229,7 @@ class CustomerHeading extends React.Component {
     addFieldBox = ()=>{
         const {showAddField} = this.state;
         return(
-            <Modal show={showAddField} onHide={this.handleAddFieldClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+            <Modal show={showAddField} onHide={this.handleChangeStateClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
                 <Modal.Header>
                     <Modal.Title>Add Field</Modal.Title>
                 </Modal.Header>
@@ -202,6 +257,135 @@ class CustomerHeading extends React.Component {
                     </Button>
                 
                 </Modal.Footer>
+            </Modal>
+        )
+    }
+
+    handleNewCustomerState = async (changeCustomerStatePayload, newStateUpdate)=>{
+        const {dispatch} = this.props;
+       
+        await dispatch(clientsActions.changeClientState(changeCustomerStatePayload, newStateUpdate));
+    } 
+
+    changeCustomerStateBox = (customerDetails)=>{
+        const {changeCustomerState, newState,ctaText, newStateUpdate} = this.state;
+        let  changeClientStateRequest = this.props.changeClientStateReducer;
+
+        let changeCustomerStateValidationSchema = Yup.object().shape({
+            Comment:  Yup.string()
+                .min(2, 'Valid comments required')
+        
+       });
+        return(
+            <Modal show={changeCustomerState} onHide={this.handleChangeStateClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+                <Formik
+                    initialValues={{
+                        Comment:""
+                    }}
+
+                    validationSchema={changeCustomerStateValidationSchema}
+                    onSubmit={(values, { resetForm }) => {
+
+                        let changeCustomerStatePayload = {
+                            comment:values.Comment,
+                            clientEncodedKey:this.clientEncodedKey
+                        }
+
+                        // let changeCustomerStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
+
+
+
+
+                        this.handleNewCustomerState(changeCustomerStatePayload,newStateUpdate )
+                            .then(
+                                () => {
+
+                                    if (this.props.changeClientStateReducer.request_status === clientsConstants.CHANGE_CLIENT_STATE_SUCCESS) {
+                                        resetForm();
+                                        // value = {null}
+
+                                        setTimeout(() => {
+                                            this.props.dispatch(clientsActions.changeClientState("CLEAR"))
+                                            this.handleChangeStateClose();
+                                            this.loadInitialCustomerData();
+                                        }, 3000);
+                                    }
+
+                                    
+
+                                }
+                            )
+
+                    }}
+                >
+                    {({ handleSubmit,
+                        handleChange,
+                        handleBlur,
+                        resetForm,
+                        values,
+                        setFieldValue,
+                        touched,
+                        isValid,
+                        errors, }) => (
+                            <Form
+                                noValidate
+                                onSubmit={handleSubmit}
+                                className="">
+                                <Modal.Header>
+                                    <Modal.Title>Change Customer State</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Form.Group>
+                                        <Form.Label className="block-level">Present State</Form.Label>
+                                        <span className="form-text">{customerDetails.clientStateDescription} </span>
+
+                                        <Form.Label className="block-level mt-20">New State</Form.Label>
+                                        <span className="form-text">{newState}</span>
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label className="block-level">Comments</Form.Label>
+                                        <Form.Control as="textarea"
+                                            rows="3"
+                                            onChange={handleChange}
+                                            name="Comment"
+                                        value={values.Comment}
+                                        className={errors.Comment && touched.Comment ? "is-invalid form-control form-control-sm" : null} 
+                                        />
+                                        {errors.Comment && touched.Comment ? (
+                                            <span className="invalid-feedback">{errors.Comment}</span>
+                                        ) : null}
+                                    </Form.Group>
+                                </Modal.Body>
+                                <Modal.Footer>
+
+                                    <Button variant="light" onClick={this.handleChangeStateClose}>
+                                        Cancel
+                                    </Button>
+                                    <Button 
+                                        variant="success"
+                                        type="submit"
+                                        disabled={changeClientStateRequest.is_request_processing}
+                                    >
+                                        {changeClientStateRequest.is_request_processing?"Please wait...":`${ctaText}`}
+                                        
+                                    </Button>
+
+                                </Modal.Footer>
+                                <div className="footer-alert">
+                                    {changeClientStateRequest.request_status === clientsConstants.CHANGE_CLIENT_STATE_SUCCESS && 
+                                        <Alert variant="success" className="w-65 mlr-auto">
+                                            {changeClientStateRequest.request_data.response.data.message}
+                                        </Alert>
+                                    }
+                                    {changeClientStateRequest.request_status === clientsConstants.CHANGE_CLIENT_STATE_FAILURE && 
+                                        <Alert variant="danger" className="w-65 mlr-auto">
+                                            {changeClientStateRequest.request_data.error}
+                                        </Alert>
+                                    }
+                                </div>
+                            </Form>
+                        )}
+                </Formik>
             </Modal>
         )
     }
@@ -316,7 +500,7 @@ class CustomerHeading extends React.Component {
         )
     }
 
-    renderHeadingCtas =()=>{
+    renderHeadingCtas =(customerDetails)=>{
 
         return(
             <div className="heading-ctas">
@@ -324,39 +508,87 @@ class CustomerHeading extends React.Component {
                     <li>
                         <Button size="sm" onClick={this.handleTaskShow}>New Task</Button>
                     </li>
-                    <li>
-                        <DropdownButton
-                            size="sm"
-                            title="New Acccount"
-                            key="inActiveCurrency"
-                            className="customone"
-                            alignRight
-                        >
-                            <NavLink className="dropdown-item" to='/all-loans/newloan-account'>New Loan Account</NavLink>
-                            <NavLink className="dropdown-item" to='/deposits/newaccount'>New Deposit Account</NavLink>
-                            {/* <Dropdown.Item eventKey="1" onClick={this.handleShow}>New Deposit Account</Dropdown.Item> */}
-                            {/* <Dropdown.Item eventKey="1">New Credit Arrangement</Dropdown.Item> */}
-                        </DropdownButton>
-                    </li>
+                    {customerDetails.clientState===4 &&
+                        <li>
+                            <DropdownButton
+                                size="sm"
+                                title="New Account"
+                                key="inActiveCurrency"
+                                className="customone"
+                                alignRight
+                            >
+                                <NavLink className="dropdown-item" to={`/all-loans/newloan-account/${customerDetails.clientEncodedKey}`}>New Loan Account</NavLink>
+                                <NavLink className="dropdown-item" to='/deposits/newaccount'>New Deposit Account</NavLink>
+                                {/* <Dropdown.Item eventKey="1" onClick={this.handleShow}>New Deposit Account</Dropdown.Item> */}
+                                {/* <Dropdown.Item eventKey="1">New Credit Arrangement</Dropdown.Item> */}
+                            </DropdownButton>
+                        </li>
+                    }
                     <li>
                         <Button size="sm">
-                            <NavLink to='/editcustomer'>Edit</NavLink>
+                            <NavLink to={`/clients/edit/${customerDetails.clientEncodedKey}`} >Edit</NavLink>
                         </Button>
                     </li>
-                    <li>
-                        <DropdownButton
-                            size="sm"
-                            title="More"
-                            key="inActiveCurrency"
-                            className="customone"
-                            alignRight
-                        >
-                            <Dropdown.Item eventKey="1" onClick={this.handleAddFieldShow}>Add Field</Dropdown.Item>
-                            <Dropdown.Item eventKey="1" onClick={this.handleSetNotificationShow}>Set Notifications</Dropdown.Item>
-                            <Dropdown.Item eventKey="1" onClick={this.handleChangeHistoryShow}>View Change History</Dropdown.Item>
-                            <Dropdown.Item eventKey="1">Blacklist Customer</Dropdown.Item>
-                        </DropdownButton>
-                    </li>
+                    {customerDetails.clientState===4 &&
+                        <li>
+                            <DropdownButton
+                                size="sm"
+                                title="More"
+                                key="inActiveCurrency"
+                                className="customone"
+                                alignRight
+                            >
+                                <Dropdown.Item eventKey="1" onClick={this.handleAddFieldShow}>Add Field</Dropdown.Item>
+                                <Dropdown.Item eventKey="1" onClick={this.handleSetNotificationShow}>Set Notifications</Dropdown.Item>
+                                <Dropdown.Item eventKey="1" onClick={this.handleChangeHistoryShow}>View Change History</Dropdown.Item>
+                                <Dropdown.Item eventKey="1" onClick={()=>{
+                                    this.setState({newState: "Blacklisted", newStateUpdate: "blacklist", ctaText:"Blacklist Customer"})
+                                    this.handleChangeStateShow()
+                                }}  >Blacklist Customer</Dropdown.Item>
+                            </DropdownButton>
+                        </li>
+                    }
+                    {customerDetails.clientState===6 &&
+                        <li>
+                            <DropdownButton
+                                size="sm"
+                                title="More"
+                                key="inActiveCurrency"
+                                className="customone"
+                                alignRight
+                            >
+                                
+                                <Dropdown.Item eventKey="1" onClick={()=>{
+                                    this.setState({newState: "Approved", newStateUpdate: "undoblacklist", ctaText:"Undo Blacklist Customer"})
+                                    this.handleChangeStateShow()
+                                }}  >Undo Blacklist Customer</Dropdown.Item>
+                            </DropdownButton>
+                        </li>
+                    }
+                    {customerDetails.clientState===3 &&
+                        <li>
+                            <DropdownButton
+                                size="sm"
+                                title="More"
+                                key="inActiveCurrency"
+                                className="customone"
+                                alignRight
+                            >
+                                <Dropdown.Item eventKey="1" onClick={()=>{
+                                    this.setState({newState: "Approved", newStateUpdate: "approve", ctaText:"Approve Customer"})
+                                    this.handleChangeStateShow()
+                                }} >Approve</Dropdown.Item>
+                                <Dropdown.Item eventKey="1" onClick={()=>{
+                                    this.setState({newState: "Rejected", newStateUpdate: "rejectcustomer", ctaText:"Reject Customer"})
+                                    this.handleChangeStateShow()
+                                }} >Reject</Dropdown.Item>
+                                <Dropdown.Item eventKey="1" onClick={()=>{
+                                    this.setState({newState: "Blacklisted", newStateUpdate: "blacklist", ctaText:"Blacklist Customer"})
+                                    this.handleChangeStateShow()
+                                }} >Blacklist Customer</Dropdown.Item>
+                            </DropdownButton>
+                        </li>
+                    }
                 </ul>
             </div>
         )
@@ -480,11 +712,12 @@ class CustomerHeading extends React.Component {
                 <div>
                     {this.newTask()}
                     {this.addFieldBox()}
+                    {this.changeCustomerStateBox(customerDetails)}
                     {this.setNotificationBox()}
                     {this.changeHistoryBox()}
                     <div className="module-heading">
                         <div className="module-title">
-                            {this.renderHeadingCtas()}
+                            {this.renderHeadingCtas(customerDetails)}
                             {this.renderCustomerName(customerDetails)}
                         </div>
                         {this.renderSubMenu(customerLoanAccounts, customerDepositAccounts)}
@@ -500,35 +733,28 @@ class CustomerHeading extends React.Component {
         
         let {generatedRoutes} = this.state;
         return (
-            // <Fragment>
-            //     {/* <InnerPageContainer {...this.props}> */}
+             <Fragment>
+                <InnerPageContainer {...this.props}>
                     <div className="content-wrapper">
                         {this.renderCustomerHeading()} 
-                        {/* {this.newTask()}
-                        {this.addFieldBox()}
-                        {this.setNotificationBox()}
-                        {this.changeHistoryBox()}
-                        {this.renderCustomerHeading()} */}
-                        {/* <div className="module-heading">
-                            <div className="module-title">
-                                {this.renderHeadingCtas()}
-                                {this.renderCustomerName()}
-                            </div>
-                            {this.renderSubMenu()}
-                        </div> */}
+                        
+                        {this.props.children}
+                        <Route exact to='/customer/:id'  component={AccountContainer} /> 
+                        
                     </div>
-            //     {/* </InnerPageContainer> */}
-            // </Fragment>
+                </InnerPageContainer>
+             </Fragment>
         );
     }
 }
 
 function mapStateToProps(state) {
     return {
+        changeClientStateReducer: state.clientsReducers.changeClientStateReducer,
         getAClientReducer: state.clientsReducers.getAClientReducer,
         getClientDepositsReducer: state.depositsReducers.getClientDepositsReducer,
         getClientLoansReducer: state.loansReducers.getClientLoansReducer,
     };
 }
 
-export default connect(mapStateToProps)(CustomerHeading);
+export default connect(mapStateToProps)(CustomerAccountContainer);

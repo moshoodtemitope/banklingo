@@ -40,7 +40,7 @@ export const routes = {
     
     HIT_ROLE: BASEURL + '/api/Role', //works
 
-    HIT_ACTIVITIES: BASEURL + '/api/Activities', //works
+    
     // ADD_TRANSACTION_CHANNEL: BASEURL + '/api/Account/transactionchannel',
     
     ADD_TRANSACTION_CHANNEL: BASEURL + '/api/TransactionChannel/transactionchannel',
@@ -79,6 +79,21 @@ export const routes = {
 
     //Clients Endpoints
     HIT_CLIENTS: BASEURL + '/api/Clients',
+
+    //Activities Endpoints
+    HIT_ACTIVITIES: BASEURL + '/api/Activities',
+
+    //Search Endpoints
+    HIT_GLOBAL_SEARCH: BASEURL + '/api/Search',
+
+    //Task Endpoints
+    HIT_TASKS: BASEURL + '/api/ApplicationTasks',
+
+    //Change Client state Endpoints
+    HIT_CLIENT_STATE: BASEURL + '/api/ChangeCustomerState',
+
+    //Change Client state Endpoints
+    HIT_LOAN_STATE: BASEURL + '/api/ChangeLoanState',
 
     //Upload Data Endpoints
     HIT_UPLOAD_DATA: BASEURL + '/api/Upload',

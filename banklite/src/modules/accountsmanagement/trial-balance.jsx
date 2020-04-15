@@ -259,10 +259,8 @@ class TrialBalance extends React.Component {
                                                     <Form.Label>From</Form.Label>
 
                                                     <DatePicker placeholderText="Choose start date"
-                                                        // selected={this.state.startDate} 
                                                         onChange={setFieldValue}
                                                         value={values.startDate}
-                                                        // onChangeRaw={(e)=>this.handleChange(e)}
                                                         dateFormat="d MMMM, yyyy"
                                                         className="form-control form-control-sm"
                                                         peekNextMonth

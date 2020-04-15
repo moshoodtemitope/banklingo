@@ -78,6 +78,32 @@ export function getAUserReducer(state=[], action) {
     }
 }
 
+export function getAUserActivitiesReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_A_USER_ACTIVITIES_PENDING:
+            return {
+                request_status: administrationConstants.GET_A_USER_ACTIVITIES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_A_USER_ACTIVITIES_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_A_USER_ACTIVITIES_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_USER_ACTIVITIES_FAILURE:
+            return {
+                request_status: administrationConstants.GET_A_USER_ACTIVITIES_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function createAUserReducer(state=[], action) {
     switch (action.type) {
         case administrationConstants.CREATE_A_USER_PENDING:

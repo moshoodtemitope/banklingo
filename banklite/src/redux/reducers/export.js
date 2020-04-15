@@ -4,6 +4,7 @@ import{
     getUsersReducer,
     getAllUsersReducer,
     getAUserReducer,
+    getAUserActivitiesReducer,
     createAUserReducer,
     updateAUserReducer,
     createRoleReducer,
@@ -66,7 +67,17 @@ import{
     getClientLoansReducer,
     getLoanTransactionsReducer,
     getAccountLoanTransactionReducer,
-    createLoanAccountReducer
+    createLoanAccountReducer,
+    getLoanSchedulePreviewReducer,
+    getAClientLoanAccountReducer,
+    getAClientLoanAccountScheduleReducer,
+    getAClientLoanAccountCommentsReducer,
+    createALoanCommentReducer,
+    getALoanAccountActivitiesReducer,
+    getALoanAccountAttachmentsReducer,
+    createALoanAttachmentReducer,
+    getALoanAccountCommunicationsReducer,
+    changeLoanStateReducer
     
 } from './loans/loans.reducer'
 
@@ -108,7 +119,9 @@ import{
 
 import{
     getDashboardStatReducer,
-    getActivitiesReducer
+    getActivitiesReducer,
+    getLoggedInUserActivitiesReducer,
+    globalSearchAnItemReducer
     
 } from './dashboard/dashboard.reducer'
 
@@ -117,7 +130,14 @@ import{
     getClientDepositsReducer,
     getDepositTransactionReducer,
     getAccountDepositTransactionReducer,
-    createDepositAccountReducer
+    createDepositAccountReducer,
+    getAClientDepositAccountReducer,
+    getADepositAccountActivitiesReducer,
+    getADepositAccountCommunicationsReducer,
+    getAClientDepositAccountCommentsReducer,
+    createADepositCommentReducer,
+    getADepositAccountAttachmentsReducer,
+    createADepositAttachmentReducer
     
 } from './deposits/deposits.reducer'
 
@@ -128,6 +148,15 @@ import{
     createAClientReducer,
     getAClientReducer,
     updateAClientReducer,
+    getAClientCommentsReducer,
+    createAClientCommentReducer,
+    getAClientAttachmentsReducer,
+    createAClientAttachmentsReducer,
+    getAClientCommunicationsReducer,
+    changeClientStateReducer,
+    getAClientActivitiesReducer,
+    createAClientTaskReducer,
+    getAClientTasksReducer
     
 } from './clients/clients.reducer'
 
@@ -138,6 +167,7 @@ export const administration ={
     getUsersReducer,
     getAllUsersReducer,
     getAUserReducer,
+    getAUserActivitiesReducer,
     createAUserReducer,
     updateAUserReducer,
     createRoleReducer,
@@ -194,7 +224,17 @@ export const loans = {
     getClientLoansReducer,
     getLoanTransactionsReducer,
     getAccountLoanTransactionReducer,
-    createLoanAccountReducer
+    createLoanAccountReducer,
+    getLoanSchedulePreviewReducer,
+    getAClientLoanAccountReducer,
+    getAClientLoanAccountScheduleReducer,
+    getAClientLoanAccountCommentsReducer,
+    createALoanCommentReducer,
+    getALoanAccountActivitiesReducer,
+    getALoanAccountAttachmentsReducer,
+    createALoanAttachmentReducer,
+    getALoanAccountCommunicationsReducer,
+    changeLoanStateReducer
 }
 
 export const auth = {
@@ -203,7 +243,9 @@ export const auth = {
 
 export const dashboard = {
     getDashboardStatReducer,
-    getActivitiesReducer
+    getActivitiesReducer,
+    getLoggedInUserActivitiesReducer,
+    globalSearchAnItemReducer
 }
 
 export const deposits = {
@@ -211,7 +253,14 @@ export const deposits = {
     getClientDepositsReducer,
     getDepositTransactionReducer,
     getAccountDepositTransactionReducer,
-    createDepositAccountReducer
+    createDepositAccountReducer,
+    getAClientDepositAccountReducer,
+    getADepositAccountActivitiesReducer,
+    getADepositAccountCommunicationsReducer,
+    getAClientDepositAccountCommentsReducer,
+    createADepositCommentReducer,
+    getADepositAccountAttachmentsReducer,
+    createADepositAttachmentReducer
 }
 
 export const clients ={
@@ -220,6 +269,15 @@ export const clients ={
     createAClientReducer,
     getAClientReducer,
     updateAClientReducer,
+    getAClientCommentsReducer,
+    createAClientCommentReducer,
+    getAClientAttachmentsReducer,
+    createAClientAttachmentsReducer,
+    getAClientCommunicationsReducer,
+    changeClientStateReducer,
+    getAClientActivitiesReducer,
+    createAClientTaskReducer,
+    getAClientTasksReducer
 }
 
 export const disbursment ={

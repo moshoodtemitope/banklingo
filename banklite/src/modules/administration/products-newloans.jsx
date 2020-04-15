@@ -20,7 +20,7 @@ import * as Yup from 'yup';
 import {acoountingActions} from '../../redux/actions/accounting/accounting.action';
 import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
 
-import { numberWithCommas, allowNumbersOnly} from '../../shared/utils';
+import { numberWithCommas, allowNumbersOnly, numberWithoutDecimals} from '../../shared/utils';
 
 import Alert from 'react-bootstrap/Alert'
 import { productActions } from '../../redux/actions/products/products.action';
@@ -89,7 +89,7 @@ class NewLoanProduct extends React.Component {
                 { value: '2', label: '% per month' },
                 { value: '3', label: '% per 4 weeks' },
                 { value: '4', label: '% per week' },
-                { value: '5', label: '% per x days' },
+                { value: '5', label: '% per day' },
             ],
             interestBalanceCalculationOptions=[
                 { value: '1', label: 'Flat' },
@@ -199,8 +199,8 @@ class NewLoanProduct extends React.Component {
                                     arrearsSetting: {
                                         arearsTolerancePeriodInDaysDefault: parseInt(values.arearsTolerancePeriodInDaysDefault),
                                         arrearsDaysCalculatedFrom: parseInt(values.arrearsDaysCalculationChosen),
-                                        arearsTolerancePeriodInDaysMin: parseInt(values.arearsTolerancePeriodInDaysMin),
-                                        arearsTolerancePeriodInDaysMax: parseInt(values.arearsTolerancePeriodInDaysMax)
+                                        arearsTolerancePeriodInDaysMin: parseInt(values.arearsTolerancePeriodInDaysMin.replace(/,/g, '')),
+                                        arearsTolerancePeriodInDaysMax: parseInt(values.arearsTolerancePeriodInDaysMax.replace(/,/g, ''))
                                     },
                                     loanProductInterestSetting: {
                                         interestPaid: values.interestPaid,
@@ -211,18 +211,18 @@ class NewLoanProduct extends React.Component {
                                         interestRateMax: parseFloat(values.interestRateMax.replace(/,/g, '')),
                                       },
                                     loanAmountSetting: {
-                                        loanAmountDefault: parseFloat(values.defaultLoanAmount),
-                                        loanAmountMinimun: parseFloat(values.minimumLoanAmount),
-                                        loanAmountMaximum: parseFloat(values.maximumLoanAmount)
+                                        loanAmountDefault: parseFloat(values.defaultLoanAmount.replace(/,/g, '')),
+                                        loanAmountMinimun: parseFloat(values.minimumLoanAmount.replace(/,/g, '')),
+                                        loanAmountMaximum: parseFloat(values.maximumLoanAmount.replace(/,/g, ''))
                                     },
 
                                     repaymentReschedulingModel: {
                                         repaymentEvery: parseInt(values.repaymentEvery),
                                         repaymentPeriod: parseInt(values.repaymentPeriod),
                                         interestBalanceCalculation: parseInt(values.interestBalanceCalculationSelected),
-                                        firstDueDateOffsetConstraintDefault: parseInt(values.firstDueDateOffsetConstraintDefault),
-                                        firstDueDateOffsetConstraintMin: parseInt(values.firstDueDateOffsetConstraintMin),
-                                        firstDueDateOffsetConstraintMax: parseInt(values.firstDueDateOffsetConstraintMax),
+                                        firstDueDateOffsetConstraintDefault: parseInt(values.firstDueDateOffsetConstraintDefault.replace(/,/g, '')),
+                                        firstDueDateOffsetConstraintMin: parseInt(values.firstDueDateOffsetConstraintMin.replace(/,/g, '')),
+                                        firstDueDateOffsetConstraintMax: parseInt(values.firstDueDateOffsetConstraintMax.replace(/,/g, '')),
                                         installmentsDefault: parseFloat(values.installmentsDefault.replace(/,/g, '')),
                                         installmentsMin: parseFloat(values.installmentsMin.replace(/,/g, '')),
                                         installmentsMax: parseFloat(values.installmentsMax.replace(/,/g, '')),
@@ -264,6 +264,8 @@ class NewLoanProduct extends React.Component {
                                 resetForm,
                                 values,
                                 touched,
+                                setFieldValue,
+                                setFieldTouched,
                                 isValid,
                                 errors, }) => (
                             <Form 
@@ -306,9 +308,10 @@ class NewLoanProduct extends React.Component {
                                         <Select
                                             options={allProductTypes}
                                             onChange={(selectedProductType) => {
-                                                this.setState({ selectedProductType });
-                                                errors.loanProductType = null
-                                                values.loanProductType = selectedProductType.value
+                                                
+                                                // errors.loanProductType = null
+                                                // values.loanProductType = selectedProductType.value
+                                                setFieldValue('loanProductType', selectedProductType.value)
                                             }}
                                             className={errors.loanProductType && touched.loanProductType ? "is-invalid" : null}
                                             
@@ -425,7 +428,7 @@ class NewLoanProduct extends React.Component {
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.arearsTolerancePeriodInDaysDefault)}
+                                                        value={numberWithoutDecimals(values.arearsTolerancePeriodInDaysDefault)}
                                                         className={errors.arearsTolerancePeriodInDaysDefault && touched.arearsTolerancePeriodInDaysDefault ? "is-invalid" : null}
                                                         name="arearsTolerancePeriodInDaysDefault" required />
                                                     {errors.arearsTolerancePeriodInDaysDefault && touched.arearsTolerancePeriodInDaysDefault ? (
@@ -437,7 +440,7 @@ class NewLoanProduct extends React.Component {
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.arearsTolerancePeriodInDaysMin)}
+                                                        value={numberWithoutDecimals(values.arearsTolerancePeriodInDaysMin)}
                                                         className={errors.arearsTolerancePeriodInDaysMin && touched.arearsTolerancePeriodInDaysMin ? "is-invalid" : null}
                                                         name="arearsTolerancePeriodInDaysMin" required />
                                                     {errors.arearsTolerancePeriodInDaysMin && touched.arearsTolerancePeriodInDaysMin ? (
@@ -451,7 +454,7 @@ class NewLoanProduct extends React.Component {
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.arearsTolerancePeriodInDaysMax)}
+                                                        value={numberWithoutDecimals(values.arearsTolerancePeriodInDaysMax)}
                                                         className={errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? "is-invalid" : null}
                                                         name="arearsTolerancePeriodInDaysMax" required />
                                                     {errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? (
@@ -464,9 +467,10 @@ class NewLoanProduct extends React.Component {
                                                     <Select
                                                         options={arrearsDaysCalculation}
                                                         onChange={(selectedArrearsDaysCalculation) => {
-                                                            this.setState({ selectedArrearsDaysCalculation });
-                                                            errors.arrearsDaysCalculationChosen = null
-                                                            values.arrearsDaysCalculationChosen = selectedArrearsDaysCalculation.value
+                                                            // this.setState({ selectedArrearsDaysCalculation });
+                                                            // errors.arrearsDaysCalculationChosen = null
+                                                            // values.arrearsDaysCalculationChosen = selectedArrearsDaysCalculation.value
+                                                            setFieldValue('arrearsDaysCalculationChosen', selectedArrearsDaysCalculation.value)
                                                         }}
                                                         className={errors.arrearsDaysCalculationChosen && touched.arrearsDaysCalculationChosen ? "is-invalid" : null}
                                                         
@@ -511,9 +515,10 @@ class NewLoanProduct extends React.Component {
                                                             <Select
                                                                 options={interestBalanceCalculationOptions}
                                                                 onChange={(selectedInterestBalanceCalculationOptions) => {
-                                                                    this.setState({ selectedInterestBalanceCalculationOptions });
-                                                                    errors.interestBalanceCalculation = null
-                                                                    values.interestBalanceCalculation = selectedInterestBalanceCalculationOptions.value
+                                                                    // this.setState({ selectedInterestBalanceCalculationOptions });
+                                                                    // errors.interestBalanceCalculation = null
+                                                                    // values.interestBalanceCalculation = selectedInterestBalanceCalculationOptions.value
+                                                                    setFieldValue('interestBalanceCalculation', selectedInterestBalanceCalculationOptions.value)
                                                                 }}
                                                                 className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
 
@@ -532,9 +537,10 @@ class NewLoanProduct extends React.Component {
                                                             <Select
                                                                 options={interestRateTermsOptions}
                                                                 onChange={(selectedInterestRateTermsOptions) => {
-                                                                    this.setState({ selectedInterestRateTermsOptions });
-                                                                    errors.interestRateTerms = null
-                                                                    values.interestRateTerms = selectedInterestRateTermsOptions.value
+                                                                    // this.setState({ selectedInterestRateTermsOptions });
+                                                                    // errors.interestRateTerms = null
+                                                                    // values.interestRateTerms = selectedInterestRateTermsOptions.value
+                                                                    setFieldValue('interestRateTerms', selectedInterestRateTermsOptions.value)
                                                                 }}
                                                                 className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
 
@@ -607,7 +613,7 @@ class NewLoanProduct extends React.Component {
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.repaymentEvery)}
+                                                        value={numberWithoutDecimals(values.repaymentEvery)}
                                                         className={errors.repaymentEvery && touched.repaymentEvery ? "is-invalid" : null}
                                                         name="repaymentEvery" required />
                                                     {errors.repaymentEvery && touched.repaymentEvery ? (
@@ -620,9 +626,10 @@ class NewLoanProduct extends React.Component {
                                                     <Select
                                                         options={repaymentPeriodOptions}
                                                         onChange={(selectedRepaymentPeriodOptions) => {
-                                                            this.setState({ selectedRepaymentPeriodOptions });
-                                                            errors.repaymentPeriod = null
-                                                            values.repaymentPeriod = selectedRepaymentPeriodOptions.value
+                                                            // this.setState({ selectedRepaymentPeriodOptions });
+                                                            // errors.repaymentPeriod = null
+                                                            // values.repaymentPeriod = selectedRepaymentPeriodOptions.value
+                                                            setFieldValue('repaymentPeriod', selectedRepaymentPeriodOptions.value)
                                                         }}
                                                         className={errors.repaymentPeriod && touched.repaymentPeriod ? "is-invalid" : null}
 
@@ -642,9 +649,11 @@ class NewLoanProduct extends React.Component {
                                                     <Select
                                                         options={interestBalanceCalculationOptions}
                                                         onChange={(selectedInterestBalanceCalculation) => {
-                                                            this.setState({ selectedInterestBalanceCalculation });
-                                                            errors.interestBalanceCalculationSelected = null
-                                                            values.interestBalanceCalculationSelected = selectedInterestBalanceCalculation.value
+                                                            // this.setState({ selectedInterestBalanceCalculation });
+                                                            // errors.interestBalanceCalculationSelected = null
+                                                            // values.interestBalanceCalculationSelected = selectedInterestBalanceCalculation.value
+
+                                                            setFieldValue('interestBalanceCalculationSelected', selectedInterestBalanceCalculation.value)
                                                         }}
                                                         className={errors.interestBalanceCalculationSelected && touched.interestBalanceCalculationSelected ? "is-invalid" : null}
 
@@ -662,7 +671,7 @@ class NewLoanProduct extends React.Component {
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.firstDueDateOffsetConstraintDefault)}
+                                                        value={numberWithoutDecimals(values.firstDueDateOffsetConstraintDefault)}
                                                         className={errors.firstDueDateOffsetConstraintDefault && touched.firstDueDateOffsetConstraintDefault ? "is-invalid" : null}
                                                         name="firstDueDateOffsetConstraintDefault" required />
                                                     {errors.firstDueDateOffsetConstraintDefault && touched.firstDueDateOffsetConstraintDefault ? (
@@ -676,7 +685,7 @@ class NewLoanProduct extends React.Component {
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.firstDueDateOffsetConstraintMin)}
+                                                        value={numberWithoutDecimals(values.firstDueDateOffsetConstraintMin)}
                                                         className={errors.firstDueDateOffsetConstraintMin && touched.firstDueDateOffsetConstraintMin ? "is-invalid" : null}
                                                         name="firstDueDateOffsetConstraintMin" required />
                                                     {errors.firstDueDateOffsetConstraintMin && touched.firstDueDateOffsetConstraintMin ? (
@@ -688,7 +697,7 @@ class NewLoanProduct extends React.Component {
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.firstDueDateOffsetConstraintMax)}
+                                                        value={numberWithoutDecimals(values.firstDueDateOffsetConstraintMax)}
                                                         className={errors.firstDueDateOffsetConstraintMax && touched.firstDueDateOffsetConstraintMax ? "is-invalid" : null}
                                                         name="firstDueDateOffsetConstraintMax" required />
                                                     {errors.firstDueDateOffsetConstraintMax && touched.firstDueDateOffsetConstraintMax ? (
@@ -698,11 +707,11 @@ class NewLoanProduct extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Installments Rate Default (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments  Default </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.installmentsDefault)}
+                                                        value={numberWithoutDecimals(values.installmentsDefault)}
                                                         className={errors.installmentsDefault && touched.installmentsDefault ? "is-invalid" : null}
                                                         name="installmentsDefault" required />
                                                     {errors.installmentsDefault && touched.installmentsDefault ? (
@@ -710,11 +719,11 @@ class NewLoanProduct extends React.Component {
                                                     ) : null}
                                                 </Col>
                                                 <Col>
-                                                    <Form.Label className="block-level">Installments Rate Minimum (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments  Minimum </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.installmentsMin)}
+                                                        value={numberWithoutDecimals(values.installmentsMin)}
                                                         className={errors.installmentsMin && touched.installmentsMin ? "is-invalid" : null}
                                                         name="installmentsMin" required />
                                                     {errors.installmentsMin && touched.installmentsMin ? (
@@ -724,11 +733,11 @@ class NewLoanProduct extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Installments Rate Maximum (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments  Maximum </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.installmentsMax)}
+                                                        value={numberWithoutDecimals(values.installmentsMax)}
                                                         className={errors.installmentsMax && touched.installmentsMax ? "is-invalid" : null}
                                                         name="installmentsMax" required />
                                                     {errors.installmentsMax && touched.installmentsMax ? (
@@ -740,7 +749,7 @@ class NewLoanProduct extends React.Component {
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
-                                                        value={numberWithCommas(values.collectPrincipalEveryRepayments)}
+                                                        value={numberWithoutDecimals(values.collectPrincipalEveryRepayments)}
                                                         className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid" : null}
                                                         name="collectPrincipalEveryRepayments" required />
                                                         <small>Repayments</small>
@@ -786,9 +795,11 @@ class NewLoanProduct extends React.Component {
                                                     <Select
                                                         options={portfolioControlAccounts}
                                                         onChange={(selectedPortfolioAcct) => {
-                                                            this.setState({ selectedPortfolioAcct });
-                                                            errors.portfolioControlAccountId = null
-                                                            values.portfolioControlAccountId = selectedPortfolioAcct.value
+                                                            // this.setState({ selectedPortfolioAcct });
+                                                            // errors.portfolioControlAccountId = null
+                                                            // values.portfolioControlAccountId = selectedPortfolioAcct.value
+
+                                                            setFieldValue('portfolioControlAccountId', selectedPortfolioAcct.value)
                                                         }}
                                                         className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : null}
                                                         
@@ -809,9 +820,11 @@ class NewLoanProduct extends React.Component {
                                                 <Select
                                                         options={transactionSourceAccount}
                                                         onChange={(selectedTxtSourceAcct) => {
-                                                            this.setState({ selectedTxtSourceAcct });
-                                                            errors.transactionSourceAccountId = null
-                                                            values.transactionSourceAccountId = selectedTxtSourceAcct.value
+                                                            // this.setState({ selectedTxtSourceAcct });
+                                                            // errors.transactionSourceAccountId = null
+                                                            // values.transactionSourceAccountId = selectedTxtSourceAcct.value
+
+                                                            setFieldValue('transactionSourceAccountId', selectedTxtSourceAcct.value)
                                                         }}
                                                         className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
                                                         noOptionsMessage ={() => "No accounts available"}
@@ -832,9 +845,10 @@ class NewLoanProduct extends React.Component {
                                                 <Select
                                                         options={writeOffExpenseAccounts}
                                                         onChange={(selectedWriteOffExpenseAcct) => {
-                                                            this.setState({ selectedWriteOffExpenseAcct });
-                                                            errors.writeOffExpenseAccountId = null
-                                                            values.writeOffExpenseAccountId = selectedWriteOffExpenseAcct.value
+                                                            // this.setState({ selectedWriteOffExpenseAcct });
+                                                            // errors.writeOffExpenseAccountId = null
+                                                            // values.writeOffExpenseAccountId = selectedWriteOffExpenseAcct.value
+                                                            setFieldValue('writeOffExpenseAccountId', selectedWriteOffExpenseAcct.value)
                                                         }}
                                                         className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : null}
                                                         noOptionsMessage ={() => "No accounts available"}
@@ -856,9 +870,11 @@ class NewLoanProduct extends React.Component {
                                                 <Select
                                                         options={interestReceivableAccounts}
                                                         onChange={(selectedInterestReceivableAcct) => {
-                                                            this.setState({ selectedInterestReceivableAcct });
-                                                            errors.interestReceivableAccountId = null
-                                                            values.interestReceivableAccountId = selectedInterestReceivableAcct.value
+                                                            // this.setState({ selectedInterestReceivableAcct });
+                                                            // errors.interestReceivableAccountId = null
+                                                            // values.interestReceivableAccountId = selectedInterestReceivableAcct.value
+
+                                                            setFieldValue('interestReceivableAccountId', selectedInterestReceivableAcct.value)
                                                         }}
                                                         className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : null}
                                                         noOptionsMessage ={() => "No accounts available"}
@@ -879,9 +895,11 @@ class NewLoanProduct extends React.Component {
                                                 <Select
                                                         options={feeReceivableAccounts}
                                                         onChange={(selectedFeeReceivableAcct) => {
-                                                            this.setState({ selectedFeeReceivableAcct });
-                                                            errors.feeReceivableAccountId = null
-                                                            values.feeReceivableAccountId = selectedFeeReceivableAcct.value
+                                                            // this.setState({ selectedFeeReceivableAcct });
+                                                            // errors.feeReceivableAccountId = null
+                                                            // values.feeReceivableAccountId = selectedFeeReceivableAcct.value
+
+                                                            setFieldValue('feeReceivableAccountId', selectedFeeReceivableAcct.value)
                                                         }}
                                                         className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : null}
                                                         noOptionsMessage ={() => "No accounts available"}
@@ -902,9 +920,11 @@ class NewLoanProduct extends React.Component {
                                                 <Select
                                                         options={penaltyReceivableAccounts}
                                                         onChange={(selectedPenaltyReceivableAcct) => {
-                                                            this.setState({ selectedPenaltyReceivableAcct });
-                                                            errors.penaltyReceivableAccountId = null
-                                                            values.penaltyReceivableAccountId = selectedPenaltyReceivableAcct.value
+                                                            // this.setState({ selectedPenaltyReceivableAcct });
+                                                            // errors.penaltyReceivableAccountId = null
+                                                            // values.penaltyReceivableAccountId = selectedPenaltyReceivableAcct.value
+
+                                                            setFieldValue('penaltyReceivableAccountId', selectedPenaltyReceivableAcct.value)
                                                         }}
                                                         className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : null}
                                                         noOptionsMessage ={() => "No accounts available"}
@@ -927,9 +947,11 @@ class NewLoanProduct extends React.Component {
                                                 <Select
                                                         options={allGlAccounts}
                                                         onChange={(selectedFeeIncomeAcct) => {
-                                                            this.setState({ selectedFeeIncomeAcct });
-                                                            errors.feeIncomeAccountId = null
-                                                            values.feeIncomeAccountId = selectedFeeIncomeAcct.value
+                                                            // this.setState({ selectedFeeIncomeAcct });
+                                                            // errors.feeIncomeAccountId = null
+                                                            // values.feeIncomeAccountId = selectedFeeIncomeAcct.value
+
+                                                            setFieldValue('feeIncomeAccountId', selectedFeeIncomeAcct.value)
                                                         }}
                                                         className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
                                                         noOptionsMessage ={() => "No accounts available"}
@@ -950,9 +972,11 @@ class NewLoanProduct extends React.Component {
                                                 <Select
                                                         options={interestIncomeAccounts}
                                                         onChange={(selectedInterestIncomeAcct) => {
-                                                            this.setState({ selectedInterestIncomeAcct });
-                                                            errors.interestIncomeAccountId = null
-                                                            values.interestIncomeAccountId = selectedInterestIncomeAcct.value
+                                                            // this.setState({ selectedInterestIncomeAcct });
+                                                            // errors.interestIncomeAccountId = null
+                                                            // values.interestIncomeAccountId = selectedInterestIncomeAcct.value
+
+                                                            setFieldValue('interestIncomeAccountId', selectedInterestIncomeAcct.value)
                                                         }}
                                                         className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : null}
                                                         noOptionsMessage ={() => "No accounts available"}
@@ -973,9 +997,11 @@ class NewLoanProduct extends React.Component {
                                                 <Select
                                                         options={penaltyIncomeAccounts}
                                                         onChange={(selectedPenaltyIncomeAcct) => {
-                                                            this.setState({ selectedPenaltyIncomeAcct });
-                                                            errors.penaltyIncomeAccountId = null
-                                                            values.penaltyIncomeAccountId = selectedPenaltyIncomeAcct.value
+                                                            // this.setState({ selectedPenaltyIncomeAcct });
+                                                            // errors.penaltyIncomeAccountId = null
+                                                            // values.penaltyIncomeAccountId = selectedPenaltyIncomeAcct.value
+
+                                                            setFieldValue('penaltyIncomeAccountId', selectedPenaltyIncomeAcct.value)
                                                         }}
                                                         className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : null}
                                                         noOptionsMessage ={() => "No accounts available"}

@@ -9,7 +9,14 @@ export const depositActions = {
     getClientDeposits,
     getDepositTransaction,
     getAccountDepositTransaction,
-    createDepositAccount
+    createDepositAccount,
+    getAClientDepositAccount,
+    getADepositAcountActivities,
+    getADepositAccountCommunications,
+    getDepositAccountComments,
+    creatADepositComment,
+    getAccountDepositAttachments,
+    creatADepositAttachment
 }
 
 function getDeposits(params , tempData) {
@@ -170,4 +177,223 @@ function createDepositAccount(depositAccountDetailsPayload,accountType) {
     function success(response) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_FAILURE, error } }
     function clear() { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_RESET, clear_data:""} }
+}
+
+
+
+function getAClientDepositAccount(accountEncodedKey) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_DEPOSITS + `/${accountEncodedKey}`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    
+
+
+    function request(user) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_DETAILS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_DETAILS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_DETAILS_FAILURE, error } }
+
+}
+
+function getADepositAcountActivities  (despositAccountEncodedKey, params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_ACTIVITIES+`/deposit/${despositAccountEncodedKey}?&${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ACTIVITIES_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ACTIVITIES_PENDING, user, tempData } 
+        }
+    }
+        
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ACTIVITIES_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ACTIVITIES_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ACTIVITIES_FAILURE, error } }
+
+}
+
+function getADepositAccountCommunications  (AccountEncodedKey, params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_DEPOSITS+`/communications?AccountEncodedKey=${AccountEncodedKey}&${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_PENDING, user, tempData } 
+        }
+    }
+        
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_FAILURE, error } }
+
+}
+
+function getDepositAccountComments(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_DEPOSITS + `/comments?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMENTS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMENTS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMENTS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMENTS_FAILURE, error } }
+
+}
+
+function creatADepositComment   (creatADepositCommentPayload){
+    if(creatADepositCommentPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.HIT_DEPOSITS+`/addcomment`;
+            delete creatADepositCommentPayload.encodedKey;
+            let consume = ApiService.request(url, "POST", creatADepositCommentPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_COMMENT_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_COMMENT_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_COMMENT_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_COMMENT_RESET, clear_data:""} }
+
+}
+
+function getAccountDepositAttachments(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_DEPOSITS + `/attachments?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ATTACHMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ATTACHMENTS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ATTACHMENTS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ATTACHMENTS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ATTACHMENTS_FAILURE, error } }
+
+}
+
+function creatADepositAttachment   (createDepositAttachmentPayload){
+    if(createDepositAttachmentPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.HIT_DEPOSITS+`/addattachment`;
+            delete createDepositAttachmentPayload.encodedKey;
+            let consume = ApiService.request(url, "POST", createDepositAttachmentPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_ATTACHMENT_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_ATTACHMENT_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_ATTACHMENT_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_ATTACHMENT_RESET, clear_data:""} }
+
 }

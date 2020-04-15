@@ -31,9 +31,9 @@ class ViewClosedAccount extends React.Component {
         console.log('props are', this.props)
         return (
             <Fragment>
-                <InnerPageContainer {...this.props}>
+                {/* <InnerPageContainer {...this.props}> */}
                     <div className="content-wrapper">
-                        <CustomerHeading {...this.props}/>
+                        {/* <CustomerHeading {...this.props}/> */}
                         <div className="module-content">
                                 <div className="content-container">
                                     <div className="row">
@@ -344,7 +344,7 @@ class ViewClosedAccount extends React.Component {
                                 </div>
                             </div>
                     </div>
-                </InnerPageContainer>
+                {/* </InnerPageContainer> */}
             </Fragment>
         );
     }

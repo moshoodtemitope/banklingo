@@ -64,7 +64,7 @@ class Activties extends React.Component {
     }
 
     loadNextPage = (nextPage, tempData)=>{
-        console.log("dsdsd", nextPage);
+        
         const {dispatch} = this.props;
         let {PageSize} = this.state;
 
@@ -92,6 +92,7 @@ class Activties extends React.Component {
                 if(saveRequestData===undefined){
                     return(
                         <div className="loading-content">
+                            <div className="loading-text">Please wait... </div>
                             <div className="heading-with-cta">
                                 <Form className="one-liner">
 
@@ -121,7 +122,7 @@ class Activties extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        {/* <th>Id</th> */}
                                         <th>Date Created</th>
                                         <th>Username</th>
                                         <th>Action</th>
@@ -131,7 +132,7 @@ class Activties extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td></td>
+                                        {/* <td></td> */}
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -139,13 +140,13 @@ class Activties extends React.Component {
                                     </tr>
                                 </tbody>
                             </TableComponent>
-                            <div className="loading-text">Please wait... </div>
                         </div>
                     )
                 }else{
-                    let getActivitiesData = (saveRequestData.result!==undefined)?saveRequestData.result:saveRequestData;
+                    
                     return(
-                        <div>
+                        <div className="loading-content">
+                            <div className="loading-text">Please wait... </div>
                             <div className="heading-with-cta">
                                 <Form className="one-liner">
 
@@ -174,7 +175,7 @@ class Activties extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        {/* <th>Id</th> */}
                                         <th>Date Created</th>
                                         <th>Username</th>
                                         <th>Action</th>
@@ -184,11 +185,11 @@ class Activties extends React.Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        saveRequestData.result.map((eachActivity, index)=>{
+                                        saveRequestData.map((eachActivity, index)=>{
                                             return(
                                                 <Fragment key={index}>
                                                     <tr>
-                                                        <td>{eachActivity.id}</td>
+                                                        {/* <td>{eachActivity.id}</td> */}
                                                         <td>{eachActivity.creationDate}</td>
                                                         <td>{eachActivity.userName}</td>
                                                         <td>{eachActivity.action}</td>
@@ -231,7 +232,7 @@ class Activties extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                                onChange={(e)=>this.setPagesize(e, allActivitiesData)}
+                                                onChange={(e)=>this.setPagesize(e, allActivitiesData.result)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -253,7 +254,7 @@ class Activties extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            {/* <th>Id</th> */}
                                             <th>Date Created</th>
                                             <th>Username</th>
                                             <th>Action</th>
@@ -267,7 +268,7 @@ class Activties extends React.Component {
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachActivity.id}</td>
+                                                            {/* <td>{eachActivity.id}</td> */}
                                                             <td>{eachActivity.creationDate}</td>
                                                             <td>{eachActivity.userName}</td>
                                                             <td>{eachActivity.action}</td>
@@ -315,7 +316,7 @@ class Activties extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            {/* <th>Id</th> */}
                                             <th>Date Created</th>
                                             <th>Username</th>
                                             <th>Action</th>
@@ -325,7 +326,7 @@ class Activties extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td></td>
+                                            {/* <td></td> */}
                                             <td></td>
                                             <td></td>
                                             <td></td>

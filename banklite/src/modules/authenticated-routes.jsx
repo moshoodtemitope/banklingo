@@ -88,19 +88,27 @@ import AccessPreferences from './administration/access-preferences'
 import AccessAuth from './administration/access-authentication'
 
 
-import ViewCustomer from './viewcustomer'
-import ViewCustomerAttachments from './viewcustomer/attachments'
-import ViewCustomerComments from './viewcustomer/comments'
-import ViewCustomerCommunications from './viewcustomer/communications'
-import ViewCustomerTasks from './viewcustomer/tasks'
-import NewCustomerAccount from './viewcustomer/newcustomer'
-import EditCustomerAccount from './viewcustomer/editcustomer'
-import NewInvestmentCustomerAccount from './viewcustomer/new-investmentcustomer'
+import CustomerAccountContainer from './viewcustomer/customeraccount-container'
 
-import ViewLoanAccount from './viewcustomer/viewloanaccount'
-import ViewSavingsAccount from './viewcustomer/viewsavingsaccount'
-import ViewClosedAccounts from './viewcustomer/viewallclosedaccounts'
-import ViewClosedAccount from './viewcustomer/viewclosedaccount'
+// import ViewCustomer from './viewcustomer'
+// import ViewCustomerAttachments from './viewcustomer/attachments'
+// import ViewCustomerComments from './viewcustomer/comments'
+// import ViewCustomerCommunications from './viewcustomer/communications'
+// import ViewCustomerTasks from './viewcustomer/tasks'
+// import NewCustomerAccount from './viewcustomer/newcustomer'
+// import EditCustomerAccount from './viewcustomer/editcustomer'
+// import NewInvestmentCustomerAccount from './viewcustomer/new-investmentcustomer'
+
+// import ViewLoanAccount from './viewcustomer/viewloanaccount'
+// import ViewSavingsAccount from './viewcustomer/viewsavingsaccount'
+// import ViewClosedAccounts from './viewcustomer/viewallclosedaccounts'
+// import ViewClosedAccount from './viewcustomer/viewclosedaccount'
+
+import UserAccountContainer from './viewuser/useraccount-container'
+
+import DepositProductInfoContainer from './view-depositproduct/product-container'
+
+import LoanProductInfoContainer from './view-loanproduct/product-container'
 
 import PageNotFound from './pagenot-found'
 import {authActions} from '../redux/actions/auth/auth.action';
@@ -177,6 +185,7 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute exact path='/all-loans' {...this.props} authed={this.props.user} component={LoansManagement} />  
 
                         <PrivateRoute exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
+                        <PrivateRoute exact path='/all-loans/newloan-account/:clientId' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
 
                         <PrivateRoute exact path='/all-loans/:clientId' {...this.props} authed={this.props.user} component={LoanClient} />  
                         {/* <Route exact path='/all-loans/:clientId' render={(props) => <LoanClient clientId={props.match.params.clientId} {...this.props} />} /> */}
@@ -258,8 +267,14 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute exact path='/administration/access/preferences' {...this.props} authed={this.props.user} component={AccessPreferences} /> 
                         <PrivateRoute exact path='/administration/access/authentication' {...this.props} authed={this.props.user} component={AccessAuth} /> 
                         
-                        <PrivateRoute exact path='/customer/:id' {...this.props} authed={this.props.user} component={ViewCustomer} /> 
-                        <PrivateRoute exact path='/createnewcustomer' {...this.props} authed={this.props.user} component={NewCustomerAccount} /> 
+                        
+                        <PrivateRoute path='/customer/:id' {...this.props} authed={this.props.user} component={CustomerAccountContainer} /> 
+                        <PrivateRoute path='/user/:userid' {...this.props} authed={this.props.user} component={UserAccountContainer} /> 
+                        <PrivateRoute path='/depositproduct/:productid' {...this.props} authed={this.props.user} component={DepositProductInfoContainer} /> 
+                        <PrivateRoute path='/loanproduct/:productid' {...this.props} authed={this.props.user} component={LoanProductInfoContainer} /> 
+                        
+                        {/* <PrivateRoute exact path='/customer/:id' {...this.props} authed={this.props.user} component={ViewCustomer} />  */}
+                        {/* <PrivateRoute exact path='/createnewcustomer' {...this.props} authed={this.props.user} component={NewCustomerAccount} /> 
                         <PrivateRoute exact path='/create-investmentcustomer' {...this.props} authed={this.props.user} component={NewInvestmentCustomerAccount} /> 
                         <PrivateRoute exact path='/editcustomer' {...this.props} authed={this.props.user} component={EditCustomerAccount} /> 
                         <PrivateRoute exact path='/customer/:id/attachments' {...this.props} authed={this.props.user} component={ViewCustomerAttachments} /> 
@@ -270,7 +285,7 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute exact path='/customer/:id/loanaccount/:loanid' {...this.props} authed={this.props.user} component={ViewLoanAccount} /> 
                         <PrivateRoute exact path='/customer/:id/savingsaccount/:accountid' {...this.props} authed={this.props.user} component={ViewSavingsAccount} /> 
                         
-                        <PrivateRoute exact path='/customer/:id/closedaccounts/:accountid' {...this.props} authed={this.props.user} component={ViewClosedAccount} /> 
+                        <PrivateRoute exact path='/customer/:id/closedaccounts/:accountid' {...this.props} authed={this.props.user} component={ViewClosedAccount} />  */}
                         
 
                         

@@ -105,7 +105,7 @@ class ClientsManagement extends React.Component {
         let saveRequestData= getClientsRequest.request_data!==undefined?getClientsRequest.request_data.tempData:null;
             switch (getClientsRequest.request_status){
                 case (clientsConstants.GET_CLIENTS_PENDING):
-                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                         return (
                             <div className="loading-content"> 
                             <div className="heading-with-cta ">
@@ -163,24 +163,15 @@ class ClientsManagement extends React.Component {
                             </div>
                         )
                     }else{
+                       
                         return(
                             <div>
                                 <div className="heading-with-cta ">
-                                    <Form className="one-liner">
-
-                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <Form.Control as="select" size="sm">
-                                                <option>No Filter</option>
-                                                <option>Add New Filter</option>
-                                                <option>Custom Filter</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                    </Form>
+                                    
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow"
-                                        //    onChange={(e)=>this.setPagesize(e, saveRequestData)}
+                                        
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -205,7 +196,7 @@ class ClientsManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.result.map((eachClient, index) => {
+                                            saveRequestData.map((eachClient, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
@@ -267,11 +258,13 @@ class ClientsManagement extends React.Component {
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow" 
-                                                onChange={(e)=>this.setPagesize(e, allClientsData)}
+                                                onChange={(e)=>this.setPagesize(e, allClientsData.result)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
+                                                
                                                 <option value="10">10</option>
                                                 <option value="25">25</option>
+                                                <option value="30">30</option>
                                                 <option value="50">50</option>
                                                 <option value="200">200</option>
                                             </select>

@@ -29,6 +29,7 @@ const administrationReducers = combineReducers({
     adminGetUsersReducer: administration.getUsersReducer, 
     adminGetAllUsersReducer: administration.getAllUsersReducer, 
     adminGetAUserReducer: administration.getAUserReducer, 
+    getAUserActivitiesReducer: administration.getAUserActivitiesReducer, 
     adminCreateAUserReducer: administration.createAUserReducer, 
     adminUpdateAUserReducer: administration.updateAUserReducer, 
     adminCreateRoleReducer: administration.createRoleReducer, 
@@ -87,6 +88,13 @@ const depositsReducers = combineReducers({
     getDepositTransactionReducer: deposits.getDepositTransactionReducer, 
     getAccountDepositTransactionReducer: deposits.getAccountDepositTransactionReducer, 
     createDepositAccountReducer: deposits.createDepositAccountReducer, 
+    getAClientDepositAccountReducer: deposits.getAClientDepositAccountReducer, 
+    getADepositAccountActivitiesReducer: deposits.getADepositAccountActivitiesReducer, 
+    getADepositAccountCommunicationsReducer: deposits.getADepositAccountCommunicationsReducer, 
+    getAClientDepositAccountCommentsReducer: deposits.getAClientDepositAccountCommentsReducer, 
+    createADepositCommentReducer: deposits.createADepositCommentReducer, 
+    getADepositAccountAttachmentsReducer: deposits.getADepositAccountAttachmentsReducer, 
+    createADepositAttachmentReducer: deposits.createADepositAttachmentReducer, 
    
 })
 
@@ -96,6 +104,16 @@ const loansReducers = combineReducers({
     getLoanTransactionsReducer: loans.getLoanTransactionsReducer, 
     getAccountLoanTransactionReducer: loans.getAccountLoanTransactionReducer, 
     createLoanAccountReducer: loans.createLoanAccountReducer, 
+    getLoanSchedulePreviewReducer: loans.getLoanSchedulePreviewReducer, 
+    getAClientLoanAccountReducer: loans.getAClientLoanAccountReducer, 
+    getAClientLoanAccountScheduleReducer: loans.getAClientLoanAccountScheduleReducer, 
+    getAClientLoanAccountCommentsReducer: loans.getAClientLoanAccountCommentsReducer, 
+    createALoanCommentReducer: loans.createALoanCommentReducer, 
+    getALoanAccountActivitiesReducer: loans.getALoanAccountActivitiesReducer, 
+    getALoanAccountAttachmentsReducer: loans.getALoanAccountAttachmentsReducer, 
+    createALoanAttachmentReducer: loans.createALoanAttachmentReducer, 
+    getALoanAccountCommunicationsReducer: loans.getALoanAccountCommunicationsReducer, 
+    changeLoanStateReducer: loans.changeLoanStateReducer, 
    
 })
 
@@ -107,6 +125,8 @@ const authReducers = combineReducers({
 const dashboardReducers = combineReducers({
     getDashboardStatReducer: dashboard.getDashboardStatReducer, 
     getActivitiesReducer: dashboard.getActivitiesReducer, 
+    getLoggedInUserActivitiesReducer: dashboard.getLoggedInUserActivitiesReducer, 
+    globalSearchAnItemReducer: dashboard.globalSearchAnItemReducer, 
    
 })
 
@@ -118,6 +138,15 @@ const clientsReducers = combineReducers({
     createAClientReducer: clients.createAClientReducer, 
     getAClientReducer: clients.getAClientReducer, 
     updateAClientReducer: clients.updateAClientReducer, 
+    getAClientCommentsReducer: clients.getAClientCommentsReducer, 
+    createAClientCommentReducer: clients.createAClientCommentReducer, 
+    createAClientAttachmentsReducer: clients.createAClientAttachmentsReducer, 
+    getAClientAttachmentsReducer: clients.getAClientAttachmentsReducer, 
+    getAClientCommunicationsReducer: clients.getAClientCommunicationsReducer, 
+    changeClientStateReducer: clients.changeClientStateReducer, 
+    getAClientActivitiesReducer: clients.getAClientActivitiesReducer, 
+    createAClientTaskReducer: clients.createAClientTaskReducer, 
+    getAClientTasksReducer: clients.getAClientTasksReducer, 
    
 })
 

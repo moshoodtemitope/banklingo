@@ -207,7 +207,7 @@ class ProductLoans extends React.Component {
                                             <Fragment key={index}>
                                                 <tr>
                                                     <td>
-                                                    <NavLink to={`/administration/products/loans/edit/${eachLoanProduct.productEncodedKey}`}>{eachLoanProduct.productName}</NavLink>
+                                                    <NavLink className="dropdown-item" to={`/administration/products/loans/edit/${eachLoanProduct.productEncodedKey}`}>{eachLoanProduct.productName}</NavLink>
                                                         
                                                     </td>
                                                     <td>{eachLoanProduct.productCode}</td>
@@ -289,6 +289,7 @@ class ProductLoans extends React.Component {
                                             <th>Loan Product Type</th>
                                             <th>Last Modified</th>
                                             <th>Status</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -297,13 +298,25 @@ class ProductLoans extends React.Component {
                                                 <Fragment key={index}>
                                                     <tr>
                                                         <td>
-                                                        <NavLink to={`/administration/products/loans/edit/${eachLoanProduct.productEncodedKey}`}>{eachLoanProduct.productName}</NavLink>
+                                                        <NavLink to={`/loanproduct/${eachLoanProduct.productEncodedKey}`}>{eachLoanProduct.productName}</NavLink>
                                                             
                                                         </td>
                                                         <td>{eachLoanProduct.productCode}</td>
                                                         <td>{eachLoanProduct.loanProductTypeDescription}</td>
                                                         <td>{eachLoanProduct.lastModified}</td>
                                                         <td>{eachLoanProduct.isActive.toString()==="true"?"Active":"Not Active"}</td>
+                                                        <td>
+                                                            <DropdownButton
+                                                                size="sm"
+                                                                title="Actions"
+                                                                key="editRole"
+                                                                className="customone"
+                                                            >
+                                                                <NavLink className="dropdown-item" to={`/administration/products/loans/edit/${eachLoanProduct.productEncodedKey}`}>Edit</NavLink>
+                                                                {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                            </DropdownButton>
+                                                        </td>
                                                     </tr>
                                                 </Fragment>
                                                 

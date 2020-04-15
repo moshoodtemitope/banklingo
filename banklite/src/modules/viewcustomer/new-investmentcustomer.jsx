@@ -28,7 +28,7 @@ class NewInvestmentCustomerAccount extends React.Component {
     render() {
         return (
             <Fragment>
-                <InnerPageContainer {...this.props}>
+                {/* <InnerPageContainer {...this.props}> */}
                     <div className="content-wrapper">
                         <div className="module-content">
                             <div className="content-container">
@@ -660,7 +660,7 @@ class NewInvestmentCustomerAccount extends React.Component {
                             </div>
                         </div>
                     </div>
-                </InnerPageContainer>
+                {/* </InnerPageContainer> */}
             </Fragment>
         );
     }

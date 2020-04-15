@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link} from 'react-router-dom';
+import { Link, useHistory} from 'react-router-dom';
 import { connect } from 'react-redux';
 import {Fragment} from "react";
 import Navbar from 'react-bootstrap/Navbar'
@@ -13,11 +13,16 @@ import {NavLink} from 'react-router-dom';
 import { history } from '../../../_helpers/history';
 import {authActions} from '../../../redux/actions/auth/auth.action';
 
+import AsyncSelect from 'react-select/async';
+
 import {saveRouteForRedirect} from "../../utils";
 // import {Nav, NavDropdown, Navbar, Form, Button, FormControl} from 'react-bootstrap'
 
 import {administrationActions} from '../../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../../redux/actiontypes/administration/administration.constants'
+
+import {dashboardActions} from '../../../redux/actions/dashboard/dashboard.action';
+import {dashboardConstants} from '../../../redux/actiontypes/dashboard/dashboard.constants'
 import "./mainheader.scss"; 
 class MainHeader extends React.Component{
     constructor(props) {
@@ -25,7 +30,8 @@ class MainHeader extends React.Component{
         this.state={
             user:JSON.parse(localStorage.getItem("user")),
             activeBranch:JSON.parse(localStorage.getItem("user")).BranchName,
-            showDropdown: false
+            showDropdown: false,
+            selectedOption: "",
         }
        if(Object.keys(this.props.user).length<=1){
             history.push('/');
@@ -50,7 +56,7 @@ class MainHeader extends React.Component{
         let user = JSON.parse(localStorage.getItem("user"));
             user.BranchId = e.target.value;
             localStorage.setItem('user', JSON.stringify(user));
-            let selectedBranch = user.AllowedBranches(branch=>branch.id===parseInt(e.target.value))[0].name;
+            let selectedBranch = user.AllowedBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].name;
         this.setState({showDropdown: false, 
                         activeBranch: selectedBranch
                     })
@@ -100,7 +106,7 @@ class MainHeader extends React.Component{
                                         //  return( <NavLink to={'/dashboard'}>dsdhsjdhshjd</NavLink>)
                                     })
                                 }
-                                <NavLink to={'/dashboard'}>Group</NavLink>
+                                
                                 <NavLink exact to={'/all-loans/newloan-account'}>Loan Account</NavLink>
                                 <NavLink to={'/deposits/newaccount'}>Deposit Account</NavLink>
                                 <NavLink to={'/administration/access/new-user'}>User</NavLink>
@@ -129,6 +135,143 @@ class MainHeader extends React.Component{
                 }
                 
             </select>
+        )
+    }
+
+    getSearchOptionValue = (option) => option.searchItemEncodedKey; // maps the result 'id' as the 'value'
+
+    getSearchOptionLabel = (option) => option.searchText; // maps the result 'name' as the 'label'
+    
+    goToSelectedSearchResult =(selectedResultData)=>{
+
+        console.log("value is", selectedResultData);
+        let resultType = selectedResultData.searchItemType,
+            searchItemEncodedKey = selectedResultData.searchItemEncodedKey,
+            clientEncodedKey = selectedResultData.clientEncodedKey;
+            
+
+            // public enum SearchItemType
+            // {
+            //     [Description("Client")]
+            //     CLIENT = 0,
+            //     [Description("User")]
+            //     USER = 1,
+            //     [Description("Loan")]
+            //     LOAN = 2,
+            //     [Description("Deposit")]
+            //     DEPOSIT = 3,
+            //     [Description("Loan Product")]
+            //     LOAN_PRODUCT = 4,
+            //     [Description("Deposit Product")]
+            //     DEPOSIT_PRODUCT = 5,
+            //     [Description("Branch")]
+            //     BRANCH = 6
+            // }
+
+            if(resultType===0){
+                history.push({
+                    pathname:`/customer/${searchItemEncodedKey}`
+                });
+            }
+            if(resultType===1){
+                history.push(`/user/${searchItemEncodedKey}`);
+            }
+            if(resultType===2 && clientEncodedKey!=="" && clientEncodedKey!==null){
+                history.push(`/customer/${clientEncodedKey}/loanaccount/${searchItemEncodedKey}`);
+            }
+
+            if(resultType===3 && clientEncodedKey!=="" && clientEncodedKey!==null){
+                history.push(`/customer/${clientEncodedKey}/savingsaccount/${searchItemEncodedKey}`);
+            }
+            // if(resultType===4 && clientEncodedKey!=="" && clientEncodedKey!==null){
+            //     history.push(`/customer/${clientEncodedKey}/savingsaccount/${searchItemEncodedKey}`);
+            // }
+    }
+
+    handleSearchInputChange = (selectedOption, {action})=> { 
+        this.setState({
+            selectedOption: selectedOption
+        });
+        // this is for update action on selectedOption
+        // will use the noop defaultProp if the dev didn't define the prop, so no need to conditionally call
+        this.goToSelectedSearchResult(selectedOption);
+    }
+
+    getSearchedItemResults = async (inputValue)=> {
+        const {dispatch} = this.props;
+
+        if (!inputValue || inputValue.length===0) {
+          return null;
+        }
+        // const response = await fetch(
+        //   `${this.state.searchApiUrl}?search=${inputValue}&limit=${this.state.limit}`
+        // );
+
+         await dispatch(dashboardActions.globalSearchAnItem(inputValue));
+
+        
+        
+        // const json = await response.json();
+        // return json.results;
+    }
+
+    
+
+
+    initiateGlobalSearchItem =(inputValue)=>{
+        let globalSearchAnItemRequest = this.props.globalSearchAnItemReducer,
+            searchResultsData,
+            searchResultsList =[];
+        this.props.dispatch(dashboardActions.globalSearchAnItem("CLEAR"));
+        if(inputValue.length>=1){
+            return this.getSearchedItemResults(inputValue)
+                    .then(
+                        ()=>{
+                        if (globalSearchAnItemRequest.request_status === dashboardConstants.GLOBAL_SEARCH_ITEM_SUCCESS) {
+                            // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
+                            searchResultsData = globalSearchAnItemRequest.request_data.response.data;
+                            console.log("serch inside", searchResultsData);
+                            return searchResultsData;
+                        }
+                        
+                    })
+        }else{
+            return null;
+        }
+        
+           
+        
+
+                
+    }
+
+    noOptionsMessage(inputValue) {
+        // if (this.props.options.length) return null;
+        // if (!inputValue) {
+        //   return i18n.get('app.commons.label.search');
+        // }
+        // return i18n.get('app.commons.errors.emptySearchResult');
+        return ""
+      }
+    
+
+    renderGlobalSearch =()=>{
+        const { selectedOption } = this.state;
+        return(
+            <Form inline className="searchfieldwrap">
+                {/* <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" /> */}
+                <AsyncSelect
+                    cacheOptions= {false}
+                    value={selectedOption}
+                    noOptionsMessage={this.noOptionsMessage}
+                    getOptionValue={this.getSearchOptionValue}
+                    getOptionLabel={this.getSearchOptionLabel}
+                    // defaultOptions={defaultOptions}
+                    loadOptions={this.initiateGlobalSearchItem}
+                    placeholder=""
+                    onChange={this.handleSearchInputChange}
+                />
+            </Form>
         )
     }
 
@@ -196,8 +339,9 @@ class MainHeader extends React.Component{
                                 <NavLink to={'/administration/access/new-user'}>User</NavLink>
                             </DropdownButton> */}
                             {this.renderCreateMenu()}
+                            {this.renderGlobalSearch()}
                             <Form inline>
-                                <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" />
+                                {/* <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" /> */}
                                 <NavDropdown title={user.displayName!==undefined?user.displayName:'Unverified Account'} id="basic-nav-dropdown">
                                     <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
                                     <NavDropdown.Item href="#action">Account settings</NavDropdown.Item>
@@ -243,6 +387,7 @@ function mapStateToProps(state) {
     return {
         user : state.authReducers.LoginReducer,
         adminGetCustomerTypes : state.administrationReducers.getAllCustomerTypesReducer,
+        globalSearchAnItemReducer : state.dashboardReducers.globalSearchAnItemReducer,
     };
 }
 

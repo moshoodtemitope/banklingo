@@ -9,6 +9,7 @@ import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import { NavLink} from 'react-router-dom';
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
@@ -168,8 +169,12 @@ class UserManagement extends React.Component {
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
-                                                                    <td>{eachUser.name}</td>
-                                                                    <td>{eachUser.userName}</td>
+                                                                    <td>
+                                                                        <NavLink to={`/user/${eachUser.encodedKey}`}>{eachUser.name}</NavLink>
+                                                                    </td>
+                                                                    <td>
+                                                                        <NavLink to={`/user/${eachUser.encodedKey}`}>{eachUser.userName}</NavLink>
+                                                                    </td>
                                                                     
                                                                     <td>{eachUser.title}</td>
                                                                     <td>{eachUser.emailAddress}</td>
@@ -248,8 +253,12 @@ class UserManagement extends React.Component {
                                                                 return(
                                                                     <Fragment key={index}>
                                                                         <tr>
-                                                                            <td>{eachUser.name}</td>
-                                                                            <td>{eachUser.userName}</td>
+                                                                            <td>
+                                                                                <NavLink to={`/user/${eachUser.encodedKey}`}>{eachUser.name}</NavLink>
+                                                                            </td>
+                                                                            <td>
+                                                                                <NavLink to={`/user/${eachUser.encodedKey}`}>{eachUser.userName}</NavLink>
+                                                                            </td>
                                                                             
                                                                             <td>{eachUser.title}</td>
                                                                             <td>{eachUser.emailAddress}</td>

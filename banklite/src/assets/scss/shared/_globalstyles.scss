@@ -17,6 +17,17 @@
 .mt-20{
     margin-top: 20px;
 }
+.mt-30{
+    margin-top: 30px;
+}
+
+.mt-40{
+    margin-top: 40px;
+}
+.mlr-auto{
+    margin-left:auto ;
+    margin-right:auto ;
+}
 select, select.form-control{
     &:not(.react-datepicker__month-select) :not(.react-datepicker__year-select){
         -webkit-appearance: none;
@@ -38,16 +49,19 @@ select, select.form-control{
     margin-left: 10px;
 }
 .mb-0{
-    margin-bottom: 0;
+    margin-bottom: 0!important;
+}
+.m-b-5{
+    margin-bottom: 5px!important;
 }
 .mb-10{
-    margin-bottom: 10px;
+    margin-bottom: 10px!important;
 }
 .mb-20{
-    margin-bottom: 20px;
+    margin-bottom: 20px!important;
 }
 .ml-0{
-    margin-left: 0;
+    margin-left: 0!important;;
 }
 .ml-50{
     margin-left: 50px!important;
@@ -311,6 +325,9 @@ select, select.form-control{
     .modal-60w{
         width: 60%;
     }
+    .modal-50w{
+        width: 50%;
+    }
     .modal-40w{
         width: 40%;
     }
@@ -466,11 +483,23 @@ button.accordion-headingLink.btn.btn-link {
 }
 
 .table-helper{
+    margin-bottom: 15px;
     label{
         font-size: 13px;
         margin-left: 6px;
         margin-bottom: 0;
+        margin-right: 25px;
     }
+}
+.table-bordered td.borderdleft, .table-bordered th.borderdleft{
+    border-left: 2px solid #AEB6BF;
+}
+.table-bordered td.borderdright, .table-bordered th.borderdright{
+    border-right: 2px solid #AEB6BF;
+}
+.table-bordered td.bolden{
+    font-weight: 600;
+    text-align: center;
 }
 // .login-attempts input{
 //     flex-basis: 35%;
@@ -614,6 +643,9 @@ button.togglestyle{
     .react-datepicker-wrapper{
         width: 100%;
     }
+}
+.react-datepicker-wrapper ~ .invalid-feedback{
+    display: block;
 }
 .heading-ctas{
     padding: 0 10px;

@@ -216,7 +216,7 @@ class ProductDeposits extends React.Component {
                                             <Fragment key={index}>
                                                 <tr>
                                                     <td>
-                                                        <NavLink to={`/administration/products/deposit/edit/${eachDepositProduct.productEncodedKey}`}>{eachDepositProduct.productName}</NavLink>
+                                                        <NavLink className="dropdown-item" to={`/administration/products/deposit/edit/${eachDepositProduct.productEncodedKey}`}>{eachDepositProduct.productName}</NavLink>
                                                         
                                                     </td>
                                                     <td>{eachDepositProduct.productCode}</td>
@@ -299,6 +299,7 @@ class ProductDeposits extends React.Component {
                                             <th>Deposit Product Type</th>
                                             <th>Last Modified</th>
                                             <th>Status</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -307,13 +308,25 @@ class ProductDeposits extends React.Component {
                                                 <Fragment key={index}>
                                                     <tr>
                                                         <td>
-                                                            <NavLink to={`/administration/products/deposit/edit/${eachDepositProduct.productEncodedKey}`}>{eachDepositProduct.productName}</NavLink>
+                                                            <NavLink to={`/depositproduct/${eachDepositProduct.productEncodedKey}`}>{eachDepositProduct.productName}</NavLink>
                                                             
                                                         </td>
                                                         <td>{eachDepositProduct.productCode}</td>
                                                         <td>{eachDepositProduct.depositAccountTypeDescription}</td>
                                                         <td>{eachDepositProduct.lastModified}</td>
                                                         <td>{eachDepositProduct.isActive.toString()==="true"?"Active":"Not Active"}</td>
+                                                        <td>
+                                                            <DropdownButton
+                                                                size="sm"
+                                                                title="Actions"
+                                                                key="editRole"
+                                                                className="customone"
+                                                            >
+                                                                <NavLink className="dropdown-item" to={`/administration/products/deposit/edit/${eachDepositProduct.productEncodedKey}`}>Edit</NavLink>
+                                                                {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                            </DropdownButton>
+                                                        </td>
                                                     </tr>
                                                 </Fragment>
                                                 

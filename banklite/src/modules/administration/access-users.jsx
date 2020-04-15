@@ -197,8 +197,12 @@ class AccessUsers extends React.Component {
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
-                                                                    <td>{eachUser.name}</td>
-                                                                    <td>{eachUser.userName}</td>
+                                                                    <td>
+                                                                       <NavLink to={`/user/${eachUser.encodedKey}`}> {eachUser.name}</NavLink>
+                                                                    </td>
+                                                                    <td>
+                                                                        <NavLink to={`/user/${eachUser.encodedKey}`}>{eachUser.userName}</NavLink>
+                                                                    </td>
                                                                     <td>{eachUser.title}</td>
                                                                     <td>{eachUser.emailAddress}</td>
                                                                     <td>{eachUser.role}</td>
@@ -294,8 +298,12 @@ class AccessUsers extends React.Component {
                                                                 return(
                                                                     <Fragment key={index}>
                                                                         <tr>
-                                                                            <td>{eachUser.name}</td>
-                                                                            <td>{eachUser.userName}</td>
+                                                                            <td>
+                                                                               <NavLink to={`/user/${eachUser.encodedKey}`}> {eachUser.name}</NavLink>
+                                                                            </td>
+                                                                            <td>
+                                                                                <NavLink to={`/user/${eachUser.encodedKey}`}>{eachUser.userName}</NavLink>
+                                                                            </td>
                                                                             <td>{eachUser.title}</td>
                                                                             <td>{eachUser.emailAddress}</td>
                                                                             <td>{eachUser.role}</td>

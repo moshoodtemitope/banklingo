@@ -141,7 +141,7 @@ class EditLoanProduct extends React.Component {
                 )
             }
             
-            if (getAllGLAccountsRequest.request_status ===accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS ||
+            if (getAllGLAccountsRequest.request_status ===accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS &&
                     getSingleLoanProductRequest.request_status ===productsConstants.GET_A_LOAN_PRODUCT_SUCCESS){
                 let allGlAccounts = [],
                     glAccountsList,
@@ -229,7 +229,7 @@ class EditLoanProduct extends React.Component {
                                                     ?loanProductDetails.loanAmountSetting.loanAmountMinimun.toString():0,
                                 maximumLoanAmount: (loanProductDetails.loanAmountSetting!==undefined && loanProductDetails.loanAmountSetting!==null && loanProductDetails.loanAmountSetting.loanAmountMaximum!==null)
                                                         ?loanProductDetails.loanAmountSetting.loanAmountMaximum.toString():0,
-                                methodology: (loanProductDetails.methodology!==undefined && loanProductDetails.methodology!==null)?loanProductDetails.methodology:'',
+                                methodology: (loanProductDetails.methodology!==undefined && loanProductDetails.methodology!==null)?loanProductDetails.methodology.toString():'',
                                 isActive: (loanProductDetails.isActive!==undefined && loanProductDetails.isActive!==null)?loanProductDetails.isActive:'',
                                 interestPaid:(loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestPaid!==null)
                                                     ?loanProductDetails.loanProductInterestSetting.interestPaid:false,
@@ -301,9 +301,9 @@ class EditLoanProduct extends React.Component {
                                         interestRateMax: parseFloat(values.interestRateMax.toString().replace(/,/g, '')),
                                       },
                                     loanAmountSetting: {
-                                        loanAmountDefault: parseFloat(values.defaultLoanAmount),
-                                        loanAmountMinimun: parseFloat(values.minimumLoanAmount),
-                                        loanAmountMaximum: parseFloat(values.maximumLoanAmount)
+                                        loanAmountDefault: parseFloat(values.defaultLoanAmount.toString().replace(/,/g, '')),
+                                        loanAmountMinimun: parseFloat(values.minimumLoanAmount.toString().replace(/,/g, '')),
+                                        loanAmountMaximum: parseFloat(values.maximumLoanAmount.toString().replace(/,/g, ''))
                                     },
 
                                     repaymentReschedulingModel: {
@@ -612,11 +612,7 @@ class EditLoanProduct extends React.Component {
                                                                 options={interestBalanceCalculationOptions}
                                                                 defaultValue ={{label:interestBalanceCalculationReturned!==null?interestBalanceCalculationReturned.label:null, 
                                                                     value:interestBalanceCalculationReturned!==null? interestBalanceCalculationReturned.value:null}}
-                                                                // onChange={(selectedInterestBalanceCalculationOptions) => {
-                                                                //     this.setState({ selectedInterestBalanceCalculationOptions });
-                                                                //     errors.interestBalanceCalculation = null
-                                                                //     values.interestBalanceCalculation = selectedInterestBalanceCalculationOptions.value
-                                                                // }}
+                                                                
                                                                 onChange={(selected) => setFieldValue('interestBalanceCalculation', selected.value)}
                                                                 onBlur={()=> setFieldTouched('interestBalanceCalculation', true)}
                                                                 className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
@@ -814,7 +810,7 @@ class EditLoanProduct extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Installments Rate Default (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments Default </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
@@ -826,7 +822,7 @@ class EditLoanProduct extends React.Component {
                                                     ) : null}
                                                 </Col>
                                                 <Col>
-                                                    <Form.Label className="block-level">Installments Rate Minimum (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments Minimum </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
@@ -840,7 +836,7 @@ class EditLoanProduct extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Installments Rate Maximum (%) </Form.Label>
+                                                    <Form.Label className="block-level">Installments Maximum</Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}

@@ -11,6 +11,7 @@ import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
+import { numberWithCommas} from '../../shared/utils';
 
 import { loanActions } from '../../redux/actions/loans/loans.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
@@ -204,6 +205,7 @@ class LoansManagement extends React.Component {
                                             <th>Account Number</th>
                                             <th>Client Name</th>
                                             <th>Product Name</th>
+                                            <th>Date Created</th>
                                             <th>Loan Amount</th>
                                             <th>Loan State</th>
                                             <th>Principal Due</th>
@@ -213,14 +215,15 @@ class LoansManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            allLoans.result.map((eachLoan, index) => {
+                                            saveRequestData.map((eachLoan, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachLoan.accountNumber}</td>
-                                                            <td><NavLink to={`/all-loans/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
+                                                            <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
                                                             <td>{eachLoan.productName}</td>
-                                                            <td>{eachLoan.loanAmount}</td>
+                                                            <td>{eachLoan.dateCreated}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.loanAmount)}</td>
                                                             <td>{eachLoan.loanStateDescription}</td>
                                                             <td>{eachLoan.principalDue}</td>
                                                             <td>{eachLoan.totalPaid}</td>
@@ -261,7 +264,7 @@ class LoansManagement extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={(e)=>this.setPagesize(e, allLoans)}
+                                            onChange={(e)=>this.setPagesize(e, allLoans.result)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -282,7 +285,7 @@ class LoansManagement extends React.Component {
                                 </div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={(e)=>this.setShowDetails(e, allLoans)}
+                                        onChange={(e)=>this.setShowDetails(e, allLoans.result)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
@@ -295,6 +298,7 @@ class LoansManagement extends React.Component {
                                             <th>Account Number</th>
                                             <th>Client Name</th>
                                             <th>Product Name</th>
+                                            <th>Date Created</th>
                                             <th>Loan Amount</th>
                                             <th>Loan State</th>
                                             <th>Principal Due</th>
@@ -308,10 +312,11 @@ class LoansManagement extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachLoan.accountNumber}</td>
-                                                            <td><NavLink to={`/all-loans/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
+                                                            <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink> </td>
+                                                            <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
                                                             <td>{eachLoan.productName}</td>
-                                                            <td>{eachLoan.loanAmount}</td>
+                                                            <td>{eachLoan.dateCreated}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.loanAmount)}</td>
                                                             <td>{eachLoan.loanStateDescription}</td>
                                                             <td>{eachLoan.principalDue}</td>
                                                             <td>{eachLoan.totalPaid}</td>

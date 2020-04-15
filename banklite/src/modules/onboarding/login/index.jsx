@@ -138,7 +138,7 @@ class UserLogin extends React.Component {
                                     <div className="login-wrap card">
                                         <div className="login-heading">
                                             <img src={bankIcon} alt="" /> 
-                                            <h3> Core Banking</h3>
+                                            <h3> BankLingo CBD</h3>
                                         </div>
                                     
                                         <div className="subheading-wrap">

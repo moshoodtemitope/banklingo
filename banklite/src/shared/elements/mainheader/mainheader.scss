@@ -107,3 +107,17 @@
         background: #1F618D;
     }
 }
+.searchfieldwrap{
+    input{
+        width: 100%!important;
+        min-width: 300px;
+    }
+    .css-1hb7zxy-IndicatorsContainer{
+        display: none;
+    }
+    .css-26l3qy-menu{
+        margin-top: 0!important;
+        border-radius: 0!important;
+        min-height: 0!important;
+    }
+}

@@ -215,8 +215,8 @@ class ActiveClients extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td><NavLink to={`/customer/${eachClient.id}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
-                                                            <td><NavLink to={`/customer/${eachClient.id}`}>{eachClient.id}</NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.clientCode}</NavLink></td>
                                                             <td>{eachClient.clientStateDescription}</td>
                                                             <td>{eachClient.accountOfficer}</td>
                                                             <td>{eachClient.currency}</td>
@@ -311,8 +311,8 @@ class ActiveClients extends React.Component {
                                                     return(
                                                         <Fragment key={index}>
                                                             <tr>
-                                                                <td><NavLink to={`/customer/${eachClient.id}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
-                                                                <td><NavLink to={`/customer/${eachClient.id}`}>{eachClient.id}</NavLink></td>
+                                                                <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
+                                                                <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.clientCode}</NavLink></td>
                                                                 <td>{eachClient.clientStateDescription}</td>
                                                                 <td>{eachClient.accountOfficer}</td>
                                                                 <td>{eachClient.currency}</td>

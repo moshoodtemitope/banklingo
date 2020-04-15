@@ -8,6 +8,7 @@ export const administrationActions = {
     getUsers,
     createUser,
     getAUser,
+    getAUserActivities,
     getAllUsers,
     updateAUser,
     addARole,
@@ -135,6 +136,30 @@ function success(response, response2, response3) {
 }
             
 function failure(error) { return { type: administrationConstants.GET_A_USER_FAILURE, error } }
+
+}
+
+function getAUserActivities  (userEncodedKey, params){
+    
+    return dispatch =>{
+        let consume = ApiService.request(`${routes.HIT_ACTIVITIES}/user/${userEncodedKey}?${params}`, "GET", null);
+        
+         
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+function request(user) { return { type: administrationConstants.GET_A_USER_ACTIVITIES_PENDING, user } }
+function success(response) { return { type: administrationConstants.GET_A_USER_ACTIVITIES_SUCCESS, response } }
+function failure(error) { return { type: administrationConstants.GET_A_USER_ACTIVITIES_FAILURE, error } }
 
 }
 

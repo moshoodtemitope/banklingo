@@ -54,16 +54,31 @@ function getLoanProducts  (params, tempData){
 function getAllLoanProducts  (params, fetchDetailsOfFirstProduct){
     
     return dispatch =>{
-        
-        let consume = ApiService.request(routes.HIT_LOAN_PRODUCTS+`/all?${params}`, "GET", null);
+        let consume;
+
+        if(fetchDetailsOfFirstProduct===true){
+            consume = ApiService.request(routes.HIT_LOAN_PRODUCTS+`?${params}`, "GET", null);
+        }else{
+         consume = ApiService.request(routes.HIT_LOAN_PRODUCTS+`/all?${params}`, "GET", null);
+        }
         dispatch(request(consume));
         return consume
             .then(response =>{
 
                 if(response.status===200){
-                    if(fetchDetailsOfFirstProduct===true && response.data.length>=1){
-                        let encodedKey = response.data[0].loanProductEncodedKey;
+                    let allLoanProducts;
+                    if(response.data.result!==undefined && response.data.result!==null){
+                        allLoanProducts = response.data.result;
+                    }else{
+                        allLoanProducts = response.data;
+                    }
+                     
+                    if(fetchDetailsOfFirstProduct===true && response.data.result!==undefined && response.data.result!==null && response.data.result.length>=1){
                         
+                        allLoanProducts = allLoanProducts.filter(product=>product.loanProductType===0)[0];
+                        // let encodedKey = response.data[0].loanProductEncodedKey;
+                        let encodedKey = allLoanProducts.productEncodedKey;
+                        console.log("aaaaaa", allLoanProducts);
 
                         let consume2 = ApiService.request(routes.HIT_LOAN_PRODUCTS+`/${encodedKey}`, "GET", null);
                         dispatch(request(consume2));
@@ -71,7 +86,6 @@ function getAllLoanProducts  (params, fetchDetailsOfFirstProduct){
                             .then(response2 =>{
                                 dispatch(success(response, response2));
                             }).catch(error =>{
-                                
                                 dispatch(failure(handleRequestErrors(error)));
                             });
                     }else{
@@ -305,7 +319,7 @@ function getAllDepositProducts  (params, fetchDetailsOfFirstProduct){
 
 }
 
-function getSingleDepositProduct  (encodedKey,){
+function getSingleDepositProduct  (encodedKey){
     
     return dispatch =>{
         

@@ -216,8 +216,8 @@ class DepositManagement extends React.Component {
                                             return (
                                                 <Fragment key={index}>
                                                     <tr>
-                                                        <td>{eachDeposit.accountNumber}</td>
-                                                        <td><NavLink to={`/deposits/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
+                                                        <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink> </td>
+                                                        <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                         <td>{eachDeposit.productName}</td>
                                                         <td>{eachDeposit.depositBalance}</td>
                                                         <td>{eachDeposit.accountStateDescription}</td>
@@ -305,8 +305,8 @@ class DepositManagement extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachDeposit.accountNumber}</td>
-                                                            <td><NavLink to={`/deposits/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
+                                                            <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                             <td>{eachDeposit.productName}</td>
                                                             <td>{eachDeposit.depositBalance}</td>
                                                             <td>{eachDeposit.accountStateDescription}</td>

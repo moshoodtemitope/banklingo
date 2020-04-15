@@ -184,7 +184,7 @@ class NewDepositAccount extends React.Component {
                                     this.selectedDepositProductDetails = selectedDepositProductDetails;
                                 }
 
-                                console.log("produc info", this.selectedDepositProductDetails);
+                                // console.log("produc info", this.selectedDepositProductDetails);
 
                                 let depositProductType = allProductTypes.filter((eachType)=>eachType.value=== this.selectedDepositProductDetails.depositAccountType.toString())[0];
                                 
@@ -277,6 +277,13 @@ class NewDepositAccount extends React.Component {
                                             () => {
 
                                                 if (this.props.createDepositAccountReducer.request_status === loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_SUCCESS) {
+                                                    setTimeout(() => {
+                                                        resetForm();
+                                                        this.props.dispatch(depositActions.createDepositAccount("CLEAR"))
+                                                    }, 3000);
+                                                }
+
+                                                if (this.props.createDepositAccountReducer.request_status === loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_FAILURE) {
                                                     setTimeout(() => {
                                                         resetForm();
                                                         this.props.dispatch(depositActions.createDepositAccount("CLEAR"))
