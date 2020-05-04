@@ -18,7 +18,7 @@ import Button from 'react-bootstrap/Button'
 import "./disbursements.scss"; 
 
 import closeIcon from '../../assets/img/close.svg'
-
+import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
 import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
 class DisbursementManagement extends React.Component {
@@ -145,7 +145,7 @@ class DisbursementManagement extends React.Component {
                                                             <Form.Label className="block-level">{eachInfo.key}</Form.Label>
                                                             <span className="form-text disabled-field">{
                                                                 (eachInfo.value!=='' && eachInfo.value!==null)?
-                                                                    (eachInfo.key==="Amount")?`₦${eachInfo.value}`:eachInfo.value
+                                                                    (eachInfo.key==="Amount")?`₦${numberWithCommas(eachInfo.value, true)}`:eachInfo.value
                                                                 :'N/A'}
                                                             </span>
                                                         </div>

@@ -264,11 +264,11 @@ function getDepositProducts  (params, tempData){
 }
 
 
-function getAllDepositProducts  (params, fetchDetailsOfFirstProduct){
+function getAllDepositProducts  (fetchDetailsOfFirstProduct){
     
     return dispatch =>{
         
-        let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`/all?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_DEPOSIT_PRODUCTS+`/all`, "GET", null);
 
         let filteredProduct=[];
         dispatch(request(consume));
@@ -291,7 +291,7 @@ function getAllDepositProducts  (params, fetchDetailsOfFirstProduct){
                                 dispatch(failure(handleRequestErrors(error)));
                             });
                     }else{
-
+                        // console.log("####", response)
                         dispatch(success(response));
                     }
 

@@ -324,13 +324,17 @@ class EditBranch extends React.Component {
             
             
                                         <div className="footer-with-cta toleft">
-                                            
+                                            <Button variant="light" 
+                                                        className="btn btn-secondary grayed-out"
+                                                        onClick={()=>this.props.history.goBack()}
+                                                >
+                                                    Cancel</Button>
                                             <Button variant="success" className="mr-20px" type="submit"
                                                 disabled={adminUpdateABranchRequest.is_request_processing}    
                                                 > 
                                                     {adminUpdateABranchRequest.is_request_processing?"Please wait...": "Update Branch"}
                                             </Button>
-                                            <NavLink to={'/administration/organization'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                            {/* <NavLink to={'/administration/organization'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
             
                                             
                                         </div>

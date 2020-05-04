@@ -11,6 +11,7 @@ import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
+import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./deposittransactions.scss"; 
@@ -97,7 +98,7 @@ class DepositTransactions extends React.Component {
         let saveRequestData= getDepositTransactionRequest.request_data!==undefined?getDepositTransactionRequest.request_data.tempData:null;
         switch (getDepositTransactionRequest.request_status) {
             case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING):
-                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                     return (
                         <div className="loading-content">
                             <div className="heading-with-cta">
@@ -126,12 +127,12 @@ class DepositTransactions extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>User</th>
+                                        <th>Account Holder</th>
                                         <th>Deposit Account Number</th>
                                         <th>Type</th>
                                         <th>Transaction Amount</th>
                                         <th>User Name</th>
-                                        <th>Entry Date</th>
+                                        {/* <th>Entry Date</th> */}
                                         <th>Date Created</th>
                                     </tr>
                                 </thead>
@@ -142,7 +143,7 @@ class DepositTransactions extends React.Component {
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
+                                        {/* <td></td> */}
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -185,31 +186,31 @@ class DepositTransactions extends React.Component {
                                 <label htmlFor="showFullDetails">Show full details</label>
                             </div>
                             
-
+                            <div className="loading-text">Please wait... </div>
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>User</th>
+                                        <th>Account Holder</th>
                                         <th>Deposit Account Number</th>
                                         <th>Type</th>
                                         <th>Transaction Amount</th>
                                         <th>User Name</th>
-                                        <th>Entry Date</th>
+                                        {/* <th>Entry Date</th> */}
                                         <th>Date Created</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        saveRequestData.result.map((eachTransaction, index) => {
+                                        saveRequestData.map((eachTransaction, index) => {
                                             return (
                                                 <Fragment key={index}>
                                                     <tr>
-                                                        <td>{eachTransaction.user}</td>
-                                                        <td><NavLink to={`/deposit-transactions/${eachTransaction.accountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
+                                                        <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
+                                                        <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/savingsaccount/${eachTransaction.depositAccountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
                                                         <td>{eachTransaction.typeDescription}</td>
-                                                        <td>{eachTransaction.transactionAmount}</td>
+                                                        <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true)}</td>
                                                         <td>{eachTransaction.userName}</td>
-                                                        <td>{eachTransaction.entryDate}</td>
+                                                        {/* <td>{eachTransaction.entryDate}</td> */}
                                                         <td>{eachTransaction.dateCreated}</td>
                                                     </tr>
                                                 </Fragment>
@@ -269,7 +270,7 @@ class DepositTransactions extends React.Component {
                                 </div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={(e)=>this.setShowDetails(e, allDepositTransactions)}
+                                        onChange={(e)=>this.setShowDetails(e, allDepositTransactions.result)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
@@ -279,12 +280,12 @@ class DepositTransactions extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>User</th>
+                                            <th>Account Holder</th>
                                             <th>Deposit Account Number</th>
                                             <th>Type</th>
                                             <th>Transaction Amount</th>
                                             <th>User Name</th>
-                                            <th>Entry Date</th>
+                                            {/* <th>Entry Date</th> */}
                                             <th>Date Created</th>
                                         </tr>
                                     </thead>
@@ -294,12 +295,12 @@ class DepositTransactions extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachTransaction.user}</td>
-                                                            <td><NavLink to={`/deposit-transactions/${eachTransaction.accountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
+                                                        <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
+                                                            <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/savingsaccount/${eachTransaction.depositAccountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
                                                             <td>{eachTransaction.typeDescription}</td>
-                                                            <td>{eachTransaction.transactionAmount}</td>
+                                                            <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true)}</td>
                                                             <td>{eachTransaction.userName}</td>
-                                                            <td>{eachTransaction.entryDate}</td>
+                                                            {/* <td>{eachTransaction.entryDate}</td> */}
                                                             <td>{eachTransaction.dateCreated}</td>
                                                         </tr>
                                                     </Fragment>
@@ -342,12 +343,12 @@ class DepositTransactions extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>User</th>
+                                            <th>Account Holder</th>
                                             <th>Deposit Account Number</th>
                                             <th>Type</th>
                                             <th>Transaction Amount</th>
                                             <th>User Name</th>
-                                            <th>Entry Date</th>
+                                            {/* <th>Entry Date</th> */}
                                             <th>Date Created</th>
                                         </tr>
                                     </thead>

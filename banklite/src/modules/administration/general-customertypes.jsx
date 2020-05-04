@@ -634,7 +634,9 @@ class GeneralCustomerTypes extends React.Component {
                                             resetForm();
                                             this.handleClose();
                                             setTimeout(() => {
-                                                this.getCustomerTypes(allCustomerTypesData);
+                                                let {PageSize, CurrentPage}= this.state;
+                                                let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+                                                this.getCustomerTypes(params,allCustomerTypesData);
                                                 
                                                 this.props.dispatch(administrationActions.addCustomerType("CLEAR"))
                                                 

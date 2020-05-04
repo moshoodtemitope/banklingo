@@ -2,11 +2,21 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import MainHeader from "../elements/mainheader/mainheader";
 import MainMenu from "../elements/mainmenu/mainmenu";
-
+import { history } from '../../_helpers/history';
 import {authActions} from '../../redux/actions/auth/auth.action';
 
 class InnerPageContainer extends React.Component{
+    constructor(props) {
+        super(props);
+        let user = localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")) : {};
 
+        // console.log("user is", user.BranchId)
+        // if(user.BranchId)
+        if(Object.keys(user).length<=1){
+            history.push('/');
+       }
+    
+    }
 
 
     componentDidMount(){
@@ -52,10 +62,13 @@ class InnerPageContainer extends React.Component{
     }
     
     render() {
-        let user = JSON.parse(localStorage.getItem("user"));
+        let user = localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")) : {};
 
         // console.log("user is", user.BranchId)
         // if(user.BranchId)
+        if(Object.keys(user).length<=1){
+            history.push('/');
+       }
         return (
             
                 <div className="innerpage-wrap">

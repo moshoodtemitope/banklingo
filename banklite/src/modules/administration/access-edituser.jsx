@@ -606,7 +606,12 @@ class EditUser extends React.Component {
 
                             <div className="footer-with-cta toleft">
                                 {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
-                                <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                {/* <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                <Button variant="light" 
+                                                        className="btn btn-secondary grayed-out"
+                                                        onClick={()=>this.props.history.goBack()}
+                                                >
+                                                    Cancel</Button>
                                 <Button 
                                     type="submit"
                                     disabled={adminUpdateAUserRequest.is_request_processing} 

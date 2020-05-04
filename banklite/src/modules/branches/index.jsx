@@ -259,7 +259,7 @@ class BranchesManagement extends React.Component {
                                     </div>
                                     <div className="table-helper mb-20">
                                         <input type="checkbox" name="" 
-                                            onChange={(e)=>this.setShowDetails(e, allBranchesData)}
+                                            onChange={(e)=>this.setShowDetails(e, allBranchesData.result)}
                                             
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />

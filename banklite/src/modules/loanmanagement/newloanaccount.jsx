@@ -68,7 +68,7 @@ class NewLoanAccount extends React.Component {
 
     componentDidMount(){
         this.loadInitialData();
-        console.log("prossss", this.props);
+        // console.log("prossss", this.props);
         
     }
 
@@ -1313,7 +1313,12 @@ class NewLoanAccount extends React.Component {
                                                                     <input type="checkbox" name="" id="create-another" />
                                                                     <label htmlFor="create-another">Create Another</label>
                                                                 </div> */}
-                                                                <NavLink to={'/all-loans'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                                                {/* <NavLink to={'/all-loans'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                                                <Button variant="light" 
+                                                                        className="btn btn-secondary grayed-out"
+                                                                        onClick={()=>this.props.history.goBack()}
+                                                                >
+                                                                    Cancel</Button>
                                                                 <Button
                                                                     type="submit"
                                                                     disabled={createLoanAccountRequest.is_request_processing}>

@@ -1,6 +1,6 @@
 import { ApiService } from "../../../services/apiService";
 import { routes } from "../../../services/urls";
-// import { history } from './../../../_helpers/history';
+import { history } from './../../../_helpers/history';
 import {clientsConstants} from '../../actiontypes/clients/clients.constants'
 import { handleRequestErrors } from "../../../shared/utils";
 
@@ -18,7 +18,8 @@ export const clientsActions = {
     changeClientState,
     getAClientActivities,
     getAClientTask,
-    createClientTask
+    createClientTask,
+    getDownload
 }
 
 function getClients  (params, tempData){
@@ -116,6 +117,10 @@ function createClient   (createClientPayload){
             return consume
                 .then(response =>{
                     dispatch(success(response));
+
+                    setTimeout(() => {
+                        history.push(`/customer/${response.data.result.encodedKey}`);
+                    }, 2500);
                 }).catch(error =>{
                     
                     dispatch(failure(handleRequestErrors(error)));
@@ -149,6 +154,11 @@ function updateAClient   (updateUserPayload){
             return consume
                 .then(response =>{
                     dispatch(success(response));
+                    setTimeout(() => {
+                        history.push(`/customer/${updateUserPayload.encodedKey}`);
+                    }, 2500);
+                    
+                    
                 }).catch(error =>{
                     
                     dispatch(failure(handleRequestErrors(error)));
@@ -477,5 +487,30 @@ function createClientTask   (newClientTaskParams){
     function success(response) { return { type: clientsConstants.CREATE_A_CLIENT_TASK_SUCCESS, response } }
     function failure(error) { return { type: clientsConstants.CREATE_A_CLIENT_TASK_FAILURE, error } }
     function clear() { return { type: clientsConstants.CREATE_A_CLIENT_TASK_RESET, clear_data:""} }
+
+}
+
+function getDownload  (filetype,identifier){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.GET_DOWNLOAD+`filetype=${filetype}&identifier=${identifier}&link=treble`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    
+        
+
+    function request(user) { return { type: clientsConstants.GET_A_DOWNLOAD_PENDING, user } }
+    function success(response) { return { type: clientsConstants.GET_A_DOWNLOAD_SUCCESS, response } }
+    function failure(error) { return { type: clientsConstants.GET_A_DOWNLOAD_FAILURE, error } }
 
 }

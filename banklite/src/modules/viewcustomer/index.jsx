@@ -13,7 +13,7 @@ import  CustomerHeading from './customerheader'
 import  TableComponent from '../../shared/elements/table'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./customerprofile.scss"; 
-import { numberWithCommas} from '../../shared/utils';
+import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 
 
 import {clientsActions} from '../../redux/actions/clients/clients.action';
@@ -79,7 +79,7 @@ class ViewCustomer extends React.Component {
                                 return(
                                     <div className="each-activity" key={index}>
                                         <span>
-                                            <NavLink to='/customer/20/savingsaccount/77339322'>Payroll - Private 2073458499</NavLink>
+                                            {/* <NavLink to='/customer/20/savingsaccount/77339322'>Payroll - Private 2073458499</NavLink> */}
                                         </span>
                                         <span className="activity-action">{eachActivity.action}</span>
                                         <div>
@@ -146,7 +146,7 @@ class ViewCustomer extends React.Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {(customerLoanAccounts.result.length>=1) &&
+                                                        {customerLoanAccounts.result!==null && (customerLoanAccounts.result.length>=1) &&
                                                             customerLoanAccounts.result.map((eachAccount, index)=>{
                                                                return(
                                                                 <tr key={index}>
@@ -157,14 +157,14 @@ class ViewCustomer extends React.Component {
                                                                     </td>
                                                                     <td>Loan</td>
                                                                     <td>{eachAccount.loanStateDescription}</td>
-                                                                    <td>₦{numberWithCommas(eachAccount.loanAmount)}</td>
+                                                                    <td>₦{numberWithCommas(eachAccount.loanAmount, true)}</td>
                                                                 </tr>
                                                                ) 
                                                             })
                                                         }
 
 
-                                                        {(customerDepositAccounts.result.length>=1) &&
+                                                        {customerDepositAccounts.result!==null && (customerDepositAccounts.result.length>=1) &&
                                                             customerDepositAccounts.result.map((eachAccount, index)=>{
                                                                return(
                                                                 <tr key={index}>
@@ -250,7 +250,7 @@ class ViewCustomer extends React.Component {
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Date Of Birth</td>
-                                                                    <td></td>
+                                                                    <td>{getDateFromISO(customerDetails.dateOfBirth)} </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>BVN</td>

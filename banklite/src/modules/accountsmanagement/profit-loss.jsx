@@ -352,7 +352,7 @@ class ProfitAndLoss extends React.Component {
                                                 <tr key={`datakey-${index}`}>
                                                     <td>{eachResult.glCode}</td>
                                                     <td>{eachResult.accountName}</td>
-                                                    <td>{numberWithCommas(eachResult.amount)}</td>
+                                                    <td>&#8358;{numberWithCommas(eachResult.amount, true)}</td>
                                                 </tr>
                                             )
                                         })
@@ -360,7 +360,7 @@ class ProfitAndLoss extends React.Component {
                                     <tr className="totalrow">
                                         <td></td>
                                         <td>Total Income</td>
-                                        <td>{numberWithCommas(saveRequestData.totalIncome)}</td>
+                                        <td>&#8358;{numberWithCommas(saveRequestData.totalIncome, true)}</td>
                                     </tr>
                                     {
                                         saveRequestData.expenses.map((eachResult, index)=>{
@@ -368,7 +368,7 @@ class ProfitAndLoss extends React.Component {
                                                 <tr key={`datakey-${index}`}>
                                                     <td>{eachResult.glCode}</td>
                                                     <td>{eachResult.accountName}</td>
-                                                    <td>{numberWithCommas(eachResult.amount)}</td>
+                                                    <td>&#8358;{numberWithCommas(eachResult.amount, true)}</td>
                                                 </tr>
                                             )
                                         })
@@ -376,13 +376,13 @@ class ProfitAndLoss extends React.Component {
                                     <tr className="totalrow">
                                         <td></td>
                                         <td>Total Expenses</td>
-                                        <td>{numberWithCommas(saveRequestData.totalExpense)}</td>
+                                        <td>&#8358;{numberWithCommas(saveRequestData.totalExpense, true)}</td>
                                     </tr>
 
                                     <tr className="totalrow netrow">
                                         <td></td>
                                         <td>NET Income</td>
-                                        <td>{numberWithCommas(saveRequestData.netIncome)}</td>
+                                        <td>&#8358;{numberWithCommas(saveRequestData.netIncome, true)}</td>
                                     </tr>
                                     
                                 </tbody>
@@ -416,7 +416,7 @@ class ProfitAndLoss extends React.Component {
                                                     <tr key={`datakey-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td>{eachResult.accountName}</td>
-                                                        <td>{numberWithCommas(eachResult.amount)}</td>
+                                                        <td>&#8358;{numberWithCommas(eachResult.amount, true)}</td>
                                                     </tr>
                                                 )
                                             })
@@ -424,7 +424,7 @@ class ProfitAndLoss extends React.Component {
                                         <tr className="totalrow">
                                             <td></td>
                                             <td>Total Income</td>
-                                            <td>{numberWithCommas(profitAndLossResult.totalIncome)}</td>
+                                            <td>&#8358;{numberWithCommas(profitAndLossResult.totalIncome, true)}</td>
                                         </tr>
                                         {
                                             profitAndLossResult.expenses.map((eachResult, index)=>{
@@ -432,7 +432,7 @@ class ProfitAndLoss extends React.Component {
                                                     <tr key={`datakey-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td>{eachResult.accountName}</td>
-                                                        <td>{numberWithCommas(eachResult.amount)}</td>
+                                                        <td>&#8358;{numberWithCommas(eachResult.amount, true)}</td>
                                                     </tr>
                                                 )
                                             })
@@ -440,12 +440,12 @@ class ProfitAndLoss extends React.Component {
                                         <tr className="totalrow">
                                             <td></td>
                                             <td>Total Expenses</td>
-                                            <td>{numberWithCommas(profitAndLossResult.totalExpense)}</td>
+                                            <td>&#8358;{numberWithCommas(profitAndLossResult.totalExpense, true)}</td>
                                         </tr>
                                         <tr className="totalrow netrow">
                                             <td></td>
                                             <td>NET Income</td>
-                                            <td>{numberWithCommas(profitAndLossResult.netIncome)}</td>
+                                            <td>&#8358;{numberWithCommas(profitAndLossResult.netIncome, true)}</td>
                                         </tr>
                                     </tbody>
                                 </TableComponent>

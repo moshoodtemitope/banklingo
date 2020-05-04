@@ -83,7 +83,7 @@ class NewTxtChannels extends React.Component {
                     glAccountsList;
                     
 
-                if(getAllGLAccountsRequest.request_data.response.data.length>=1){
+                // if(getAllGLAccountsRequest.request_data.response.data.length>=1){
                     glAccountsList= getAllGLAccountsRequest.request_data.response.data;
 
                     glAccountsList.map((channel, id)=>{
@@ -225,8 +225,12 @@ class NewTxtChannels extends React.Component {
                                         
 
                                         <div className="footer-with-cta toleft">
-                                            <NavLink to={'/administration/general/txt-channels'} className="btn btn-secondary grayed-out">Cancel</NavLink>
-
+                                            {/* <NavLink to={'/administration/general/txt-channels'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                            <Button variant="light" 
+                                                    className="btn btn-secondary grayed-out"
+                                                    onClick={()=>this.props.history.goBack()}
+                                            >
+                                                Cancel</Button>
                                             <Button
                                                 type="submit"
                                                 disabled={adminCreateTransactionChannelRequest.is_request_processing}>
@@ -247,13 +251,13 @@ class NewTxtChannels extends React.Component {
                                 )}
                         </Formik>
                     )
-                }else{
-                    return(
-                        <div className="loading-content card"> 
-                            <div>No GL Account found</div>
-                        </div>
-                    )
-                }
+                // }else{
+                //     return(
+                //         <div className="loading-content card"> 
+                //             <div>No GL Account found</div>
+                //         </div>
+                //     )
+                // }
             
             case (accountingConstants.GET_ALL_GLACCOUNTS_FAILURE):
                 return (

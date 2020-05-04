@@ -105,7 +105,7 @@ class ClientsBlacklisted extends React.Component {
         let saveRequestData= getClientsRequest.request_data!==undefined?getClientsRequest.request_data.tempData:null;
             switch (getClientsRequest.request_status){
                 case (clientsConstants.GET_CLIENTS_PENDING):
-                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                         return (
                             <div className="loading-content"> 
                             <div className="heading-with-cta ">
@@ -206,7 +206,7 @@ class ClientsBlacklisted extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.result.map((eachClient, index) => {
+                                            saveRequestData.map((eachClient, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
@@ -248,7 +248,7 @@ class ClientsBlacklisted extends React.Component {
                                 <div>
                                     <div className="table-helper">
                                         <input type="checkbox" name="" 
-                                            onChange={(e)=>this.setShowDetails(e, allClientsData)}
+                                            onChange={(e)=>this.setShowDetails(e, allClientsData.result)}
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>
@@ -268,7 +268,7 @@ class ClientsBlacklisted extends React.Component {
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow" 
-                                                onChange={(e)=>this.setPagesize(e, allClientsData)}
+                                                onChange={(e)=>this.setPagesize(e, allClientsData.result)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>

@@ -3,7 +3,7 @@ import * as React from "react";
 
 import {Fragment} from "react";
 import { connect } from 'react-redux';
-// import { NavLink} from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  CustomerHeading from './customerheader'
 // // import Form from 'react-bootstrap/Form'
@@ -157,11 +157,12 @@ class ViewCustomerComments extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>Created by</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -198,9 +199,9 @@ class ViewCustomerComments extends React.Component {
                         <TableComponent classnames="striped bordered hover ">
                             <thead>
                                 <tr>
-                                    {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>Created by</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -211,6 +212,7 @@ class ViewCustomerComments extends React.Component {
                                                 {/* <td>{eachComments.id} </td> */}
                                                 <td>{eachComments.comment} </td>
                                                 <td>{getDateFromISO(eachComments.timeStamp)} </td>
+                                                <td><NavLink to={`/user/${eachComments.createdByUserEncodedKey}`}>{eachComments.createdByUserName}</NavLink> </td>
                                             </tr>
                                         )
                                    }) 
@@ -266,6 +268,7 @@ class ViewCustomerComments extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>Created by</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -276,6 +279,7 @@ class ViewCustomerComments extends React.Component {
                                                 {/* <td>{eachComments.id} </td> */}
                                                 <td>{eachComments.comment} </td>
                                                 <td>{getDateFromISO(eachComments.timeStamp)} </td>
+                                                <td><NavLink to={`/user/${eachComments.createdByUserEncodedKey}`}>{eachComments.createdByUserName}</NavLink> </td>
                                             </tr>
                                         )
                                    }) 
@@ -315,11 +319,12 @@ class ViewCustomerComments extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>Created by</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>

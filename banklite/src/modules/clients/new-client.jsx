@@ -20,6 +20,8 @@ import Select from 'react-select';
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants';
 
+import { allowNumbersOnly} from '../../shared/utils';
+
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
@@ -66,6 +68,8 @@ class NewClient extends React.Component {
         clientBranchEncodedKey:  Yup.string()
             .required('Required'),
         accountOfficerEncodedKey:  Yup.string()
+            .required('Required'),
+        BVN:  Yup.string()
             .required('Required'),
         MName:  Yup.string()
             .min(1, 'Valid response required')
@@ -118,7 +122,7 @@ class NewClient extends React.Component {
 
             
             userAllowedBraches.map((branch, id)=>{
-                selecBranchList.push({label: branch.name, value:branch.id});
+                selecBranchList.push({label: branch.name, value:branch.encodedKey});
             })
 
         
@@ -140,8 +144,8 @@ class NewClient extends React.Component {
                         allUserDataList=[],
                         allCustomerTypesList;
                         
-                        // console.log("+++++",adminGetCustomerTypesRequest.request_data.response);
-                    let selectedCustype = allCustomerTypesData.filter(CustType=>CustType.id===parseInt(this.props.match.params.custTypeid))[0];
+                        // console.log("+++++",allCustomerTypesData);
+                    let selectedCustype = allCustomerTypesData.filter(CustType=>CustType.encodedKey===this.props.match.params.custTypeid)[0];
                     
                    
                     if(allUsersData.length>=1){
@@ -154,7 +158,7 @@ class NewClient extends React.Component {
                                     FName: '',
                                     LName: '',
                                     MName: '',
-                                    // custType: '',
+                                    BVN: '',
                                     addressLine1: '',
                                     addressLine2: '',
                                     addressCity: '',
@@ -178,7 +182,8 @@ class NewClient extends React.Component {
                 
                                     let createNewCustomerPayload = {
                                         // clientTypeId:values.custType,
-                                        clientTypeId:selectedCustype.id,
+                                        // clientTypeId:selectedCustype.id,
+                                        clientTypeEncodedKey: selectedCustype.encodedKey,
                                         firstName:values.FName,
                                         middleName:values.MName,
                                         lastName:values.LName,
@@ -199,6 +204,7 @@ class NewClient extends React.Component {
                                             nextofKinHomeAddress: values.nextOfKinAddress,
                                             nextOfKinMobileNumber: values.nextOfKinMobile,
                                         },
+                                        bvn:values.BVN,
                                         gender:values.gender,
                                         dateOfBirth: values.dateOfBirth!==''?values.dateOfBirth.toISOString():null,
                                         notes: values.notes,
@@ -303,6 +309,21 @@ class NewClient extends React.Component {
                                                                 <span className="invalid-feedback">{errors.custType}</span>
                                                         ) : null} */}
                                                 </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">BVN</Form.Label>
+                                                    <Form.Control type="text"
+                                                         name="BVN"
+                                                         onChange={handleChange} 
+                                                         value={allowNumbersOnly(values.BVN, 10)}
+                                                         className={errors.BVN && touched.BVN ? "is-invalid": null}
+                                                         required />
+                                                    {errors.BVN && touched.BVN ? (
+                                                        <span className="invalid-feedback">{errors.BVN}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col></Col>
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
@@ -594,7 +615,12 @@ class NewClient extends React.Component {
                                             <div className="footer-with-cta toleft">
                                                 {/* <Button variant="light" className="btn btn-light">
                                                     Cancel</Button> */}
-                                                <NavLink to={'/active-clients'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                                {/* <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                                <Button variant="light" 
+                                                        className="btn btn-secondary grayed-out"
+                                                        onClick={()=>this.props.history.goBack()}
+                                                >
+                                                    Cancel</Button>
                                                 <Button variant="success" type="submit"
                                                     disabled={createAClientRequest.is_request_processing} 
                                                     className="ml-20"   

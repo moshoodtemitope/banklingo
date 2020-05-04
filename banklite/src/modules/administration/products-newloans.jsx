@@ -1,12 +1,12 @@
 import * as React from "react";
-// import {Router} from "react-router";
+
 import { connect } from 'react-redux';
 import {Fragment} from "react";
 
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-// import Form from 'react-bootstrap/Form'
+
 import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
 import Select from 'react-select';
@@ -39,12 +39,19 @@ class NewLoanProduct extends React.Component {
 
     componentDidMount(){
         this.getAllGLAccounts();
+        this.getAllDepositProducts();
      }
 
     getAllGLAccounts = () =>{
         const {dispatch} = this.props;
 
         dispatch(acoountingActions.getAllGLAccounts());
+    }
+
+    getAllDepositProducts = ()=>{
+        const {dispatch} = this.props;
+
+        dispatch(productActions.getAllDepositProducts());
     }
 
     handleCreateNewLoanProduct = async(newLoanProductPayload)=>{
@@ -57,7 +64,8 @@ class NewLoanProduct extends React.Component {
 
     renderCreateLoanProduct =()=>{
         let createLoanProductRequest = this.props.createLoanProductReducer,
-            getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
+            getAllGLAccountsRequest = this.props.getAllGLAccountsReducer,
+            getAllDepositProductsRequest = this.props.getAllDepositProductsReducer;
 
         let loanProductValidationSchema = Yup.object().shape({
             key: Yup.string()
@@ -70,7 +78,6 @@ class NewLoanProduct extends React.Component {
                 .required('Required'),
             description:  Yup.string()
                 .min(5, 'Valid response required')
-                // .required('Required'),
           });
 
         let allProductTypes = [
@@ -101,20 +108,38 @@ class NewLoanProduct extends React.Component {
                 { value: '2', label: 'Months' },
                 { value: '3', label: 'Weeks' },
                 { value: '4', label: 'Days' }
+            ],
+            settlementOptionsList=[
+                { value: 0, label: 'No Automated Transfers' },
+                { value: 1, label: 'Allow Partial Transfers' },
+                { value: 2, label: 'Only Transfer Full Due' }
             ];
         
-        switch(getAllGLAccountsRequest.request_status){
-            case (accountingConstants.GET_ALL_GLACCOUNTS_PENDING):
+        
+            if (getAllGLAccountsRequest.request_status === accountingConstants.GET_ALL_GLACCOUNTS_PENDING
+                || getAllDepositProductsRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING ){
                 return (
                     <div className="loading-content card"> 
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
-            case (accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS):
+            }
+            if ( getAllGLAccountsRequest.request_status === accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS
+                && getAllDepositProductsRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS){
                 let allGlAccounts = [],
                     glAccountsList;
-                    
-
+                
+                let allDepositProducts = getAllDepositProductsRequest.request_data.response.data,
+                    allDepositProductsList      =[
+                        {
+                            label: "ANY",
+                            value: "ANY"
+                        }
+                    ];
+                
+                allDepositProducts.map((product, id)=>{
+                    allDepositProductsList.push({label: product.productName, value:product.productEncodedKey});
+                })
                     
 
                 if(getAllGLAccountsRequest.request_data.response.data.length>=1){
@@ -131,7 +156,15 @@ class NewLoanProduct extends React.Component {
                         feeIncomeAccounts =[],
                         interestIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4),
                         penaltyIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4);
-                        // console.log("+++++", penaltyIncomeAccounts)
+                        
+
+                        // public enum SettlementOptions
+                        // {
+                        //     No_Automated_Transfers = 0,
+                        //     Allow_Partial_Transfers = 1,
+                        //     Only_Transfer_Full_Due = 2
+                    
+                        // }
                     return(
                         
                             <Formik
@@ -140,40 +173,45 @@ class NewLoanProduct extends React.Component {
                                 productName: '',
                                 loanProductType: '',
                                 description: '',
-                                portfolioControlAccountId: '',
-                                transactionSourceAccountId: '',
-                                writeOffExpenseAccountId: '',
-                                interestReceivableAccountId: '',
-                                feeReceivableAccountId: '',
-                                penaltyReceivableAccountId: '',
-                                feeIncomeAccountId: '',
-                                interestIncomeAccountId: '',
-                                penaltyIncomeAccountId: '',
-                                arearsTolerancePeriodInDaysDefault:'',
-                                arearsTolerancePeriodInDaysMin:'',
-                                arearsTolerancePeriodInDaysMax:'',
-                                arrearsDaysCalculationChosen:'',
-                                defaultLoanAmount:'',
-                                minimumLoanAmount:'',
-                                maximumLoanAmount:'',
-                                methodology: 0,
+                                portfolioControlAccountId: null,
+                                transactionSourceAccountId: null,
+                                writeOffExpenseAccountId: null,
+                                interestReceivableAccountId: null,
+                                feeReceivableAccountId: null,
+                                penaltyReceivableAccountId: null,
+                                feeIncomeAccountId: null,
+                                interestIncomeAccountId: null,
+                                penaltyIncomeAccountId: null,
+                                arearsTolerancePeriodInDaysDefault:null,
+                                arearsTolerancePeriodInDaysMin:null,
+                                arearsTolerancePeriodInDaysMax:null,
+                                arrearsDaysCalculationChosen:null,
+                                defaultLoanAmount:null,
+                                minimumLoanAmount:null,
+                                maximumLoanAmount:null,
+                                methodology: '0',
                                 isActive: true,
                                 interestPaid:true,
-                                interestRateTerms:'',
-                                interestBalanceCalculation:'',
-                                interestRateDefault:'',
-                                interestRateMin:'',
-                                interestRateMax:'',
-                                repaymentEvery:'',
-                                repaymentPeriod:'',
-                                interestBalanceCalculationSelected:'',
-                                firstDueDateOffsetConstraintDefault:'',
-                                firstDueDateOffsetConstraintMin:'',
-                                firstDueDateOffsetConstraintMax:'',
-                                installmentsDefault:'',
-                                installmentsMin:'',
-                                installmentsMax:'',
-                                collectPrincipalEveryRepayments:'',
+                                interestRateTerms:null,
+                                interestBalanceCalculation:null,
+                                interestRateDefault:null,
+                                interestRateMin:null,
+                                interestRateMax:null,
+                                repaymentEvery:null,
+                                repaymentPeriod:null,
+                                interestBalanceCalculationSelected:null,
+                                firstDueDateOffsetConstraintDefault:null,
+                                firstDueDateOffsetConstraintMin:null,
+                                firstDueDateOffsetConstraintMax:null,
+                                installmentsDefault:null,
+                                installmentsMin:null,
+                                installmentsMax:null,
+                                collectPrincipalEveryRepayments:null,
+                                isEnableLinking:false,
+                                depositProductEncodedKey:allDepositProductsList!==null?allDepositProductsList[0].value:null,
+                                settlementOptions:0, 
+                                autoSetSettlementAccountOnCreation:false,
+                                autoCreateSettlementAccount: false
                             }}
 
                             validationSchema={loanProductValidationSchema}
@@ -186,47 +224,47 @@ class NewLoanProduct extends React.Component {
                                     description: values.description,
                                     loanProductAccountingRuleModel :{
                                         id:0,
-                                        portfolioControlAccountId: parseInt(values.portfolioControlAccountId),
-                                        transactionSourceAccountId: parseInt(values.transactionSourceAccountId),
-                                        writeOffExpenseAccountId: parseInt(values.writeOffExpenseAccountId),
-                                        interestReceivableAccountId: parseInt(values.interestReceivableAccountId),
-                                        feeReceivableAccountId: parseInt(values.feeReceivableAccountId),
-                                        penaltyReceivableAccountId: parseInt(values.penaltyReceivableAccountId),
-                                        feeIncomeAccountId: parseInt(values.feeIncomeAccountId),
-                                        interestIncomeAccountId: parseInt(values.interestIncomeAccountId),
-                                        penaltyIncomeAccountId: parseInt(values.penaltyIncomeAccountId),
+                                        portfolioControlAccountId: values.portfolioControlAccountId!==null? parseInt(values.portfolioControlAccountId): null,
+                                        transactionSourceAccountId: values.transactionSourceAccountId!==null? parseInt(values.transactionSourceAccountId) : null,
+                                        writeOffExpenseAccountId: values.writeOffExpenseAccountId!==null? parseInt(values.writeOffExpenseAccountId): null,
+                                        interestReceivableAccountId: values.interestReceivableAccountId!==null? parseInt(values.interestReceivableAccountId): null,
+                                        feeReceivableAccountId: values.feeReceivableAccountId!==null ? parseInt(values.feeReceivableAccountId) : null,
+                                        penaltyReceivableAccountId:values.penaltyReceivableAccountId!==null? parseInt(values.penaltyReceivableAccountId): null,
+                                        feeIncomeAccountId: values.feeIncomeAccountId!==null? parseInt(values.feeIncomeAccountId) : null,
+                                        interestIncomeAccountId: values.interestIncomeAccountId!==null? parseInt(values.interestIncomeAccountId) : null,
+                                        penaltyIncomeAccountId: values.penaltyIncomeAccountId!==null ? parseInt(values.penaltyIncomeAccountId) : null,
                                     },
                                     arrearsSetting: {
-                                        arearsTolerancePeriodInDaysDefault: parseInt(values.arearsTolerancePeriodInDaysDefault),
-                                        arrearsDaysCalculatedFrom: parseInt(values.arrearsDaysCalculationChosen),
-                                        arearsTolerancePeriodInDaysMin: parseInt(values.arearsTolerancePeriodInDaysMin.replace(/,/g, '')),
-                                        arearsTolerancePeriodInDaysMax: parseInt(values.arearsTolerancePeriodInDaysMax.replace(/,/g, ''))
+                                        arearsTolerancePeriodInDaysDefault: values.arearsTolerancePeriodInDaysDefault!==null ? parseInt(values.arearsTolerancePeriodInDaysDefault) : null,
+                                        arrearsDaysCalculatedFrom: values.arrearsDaysCalculationChosen!==null? parseInt(values.arrearsDaysCalculationChosen) : null,
+                                        arearsTolerancePeriodInDaysMin: values.arearsTolerancePeriodInDaysMin!==null? parseInt(values.arearsTolerancePeriodInDaysMin.replace(/,/g, '')): null,
+                                        arearsTolerancePeriodInDaysMax:values.arearsTolerancePeriodInDaysMax!==null ? parseInt(values.arearsTolerancePeriodInDaysMax.replace(/,/g, '')) : null,
                                     },
                                     loanProductInterestSetting: {
-                                        interestPaid: values.interestPaid,
-                                        interestRateTerms: parseInt(values.interestRateTerms),
-                                        interestBalanceCalculation: parseInt(values.interestBalanceCalculation),
-                                        interestRateDefault: parseFloat(values.interestRateDefault.replace(/,/g, '')),
-                                        interestRateMin: parseFloat(values.interestRateMin.replace(/,/g, '')),
-                                        interestRateMax: parseFloat(values.interestRateMax.replace(/,/g, '')),
+                                        interestPaid: values.interestPaid!==null ?  values.interestPaid : null,
+                                        interestRateTerms:values.interestRateTerms!==null? parseInt(values.interestRateTerms) : null,
+                                        interestBalanceCalculation:values.interestBalanceCalculation!==null?  parseInt(values.interestBalanceCalculation) : null,
+                                        interestRateDefault:values.interestRateDefault!==null? parseFloat(values.interestRateDefault.replace(/,/g, '')): null,
+                                        interestRateMin: values.interestRateMin!==null ? parseFloat(values.interestRateMin.replace(/,/g, '')) : null,
+                                        interestRateMax: values.interestRateMax!==null ? parseFloat(values.interestRateMax.replace(/,/g, '')) : null,
                                       },
                                     loanAmountSetting: {
-                                        loanAmountDefault: parseFloat(values.defaultLoanAmount.replace(/,/g, '')),
-                                        loanAmountMinimun: parseFloat(values.minimumLoanAmount.replace(/,/g, '')),
-                                        loanAmountMaximum: parseFloat(values.maximumLoanAmount.replace(/,/g, ''))
+                                        loanAmountDefault:values.defaultLoanAmount!==null ? parseFloat(values.defaultLoanAmount.replace(/,/g, '')) : null,
+                                        loanAmountMinimun:values.minimumLoanAmount!==null? parseFloat(values.minimumLoanAmount.replace(/,/g, '')) : null,
+                                        loanAmountMaximum: values.maximumLoanAmount!==null? parseFloat(values.maximumLoanAmount.replace(/,/g, '')) : null
                                     },
 
                                     repaymentReschedulingModel: {
-                                        repaymentEvery: parseInt(values.repaymentEvery),
-                                        repaymentPeriod: parseInt(values.repaymentPeriod),
-                                        interestBalanceCalculation: parseInt(values.interestBalanceCalculationSelected),
-                                        firstDueDateOffsetConstraintDefault: parseInt(values.firstDueDateOffsetConstraintDefault.replace(/,/g, '')),
-                                        firstDueDateOffsetConstraintMin: parseInt(values.firstDueDateOffsetConstraintMin.replace(/,/g, '')),
-                                        firstDueDateOffsetConstraintMax: parseInt(values.firstDueDateOffsetConstraintMax.replace(/,/g, '')),
-                                        installmentsDefault: parseFloat(values.installmentsDefault.replace(/,/g, '')),
-                                        installmentsMin: parseFloat(values.installmentsMin.replace(/,/g, '')),
-                                        installmentsMax: parseFloat(values.installmentsMax.replace(/,/g, '')),
-                                        collectPrincipalEveryRepayments: parseInt(values.collectPrincipalEveryRepayments)
+                                        repaymentEvery:values.repaymentEvery!==null ? parseInt(values.repaymentEvery) : null,
+                                        repaymentPeriod: values.repaymentPeriod!==null?  parseInt(values.repaymentPeriod) : null,
+                                        interestBalanceCalculation: values.interestBalanceCalculationSelected!==null? parseInt(values.interestBalanceCalculationSelected) : null,
+                                        firstDueDateOffsetConstraintDefault: values.firstDueDateOffsetConstraintDefault!==null? parseInt(values.firstDueDateOffsetConstraintDefault.replace(/,/g, '')): null,
+                                        firstDueDateOffsetConstraintMin: values.firstDueDateOffsetConstraintMin!==null ? parseInt(values.firstDueDateOffsetConstraintMin.replace(/,/g, '')) : null,
+                                        firstDueDateOffsetConstraintMax: values.firstDueDateOffsetConstraintMax!==null? parseInt(values.firstDueDateOffsetConstraintMax.replace(/,/g, '')): null,
+                                        installmentsDefault: values.installmentsDefault!==null? parseFloat(values.installmentsDefault.replace(/,/g, '')) : null,
+                                        installmentsMin: values.installmentsMin!==null ? parseFloat(values.installmentsMin.replace(/,/g, '')): null,
+                                        installmentsMax: values.installmentsMax!==null ? parseFloat(values.installmentsMax.replace(/,/g, '')) : null,
+                                        collectPrincipalEveryRepayments: values.collectPrincipalEveryRepayments!==null? parseInt(values.collectPrincipalEveryRepayments) : null
                                     },
 
                                     methodology: parseInt(values.methodology),
@@ -235,6 +273,29 @@ class NewLoanProduct extends React.Component {
                                 }
 
 
+                                if(values.isEnableLinking===false){
+                                    createNewLoanProductPayload.loanProductLinkModel={
+                                        enableLinking: false,
+                                        depositProductEncodedKey: null,
+                                        settlementOptions: null,
+                                        autoSetSettlementAccountOnCreation: null,
+                                        autoCreateSettlementAccount: null
+                                    }
+                                }
+
+                                if(values.isEnableLinking===true){
+                                    createNewLoanProductPayload.loanProductLinkModel={
+                                        enableLinking: true,
+                                        depositProductEncodedKey: values.depositProductEncodedKey,
+                                        settlementOptions: values.settlementOptions,
+                                        autoSetSettlementAccountOnCreation: values.autoSetSettlementAccountOnCreation,
+                                        autoCreateSettlementAccount: values.autoCreateSettlementAccount
+                                    }
+                                }
+
+                                console.log("testdsds", createNewLoanProductPayload);
+
+                                return false;
 
                                 this.handleCreateNewLoanProduct(createNewLoanProductPayload)
                                     .then(
@@ -309,8 +370,6 @@ class NewLoanProduct extends React.Component {
                                             options={allProductTypes}
                                             onChange={(selectedProductType) => {
                                                 
-                                                // errors.loanProductType = null
-                                                // values.loanProductType = selectedProductType.value
                                                 setFieldValue('loanProductType', selectedProductType.value)
                                             }}
                                             className={errors.loanProductType && touched.loanProductType ? "is-invalid" : null}
@@ -467,9 +526,6 @@ class NewLoanProduct extends React.Component {
                                                     <Select
                                                         options={arrearsDaysCalculation}
                                                         onChange={(selectedArrearsDaysCalculation) => {
-                                                            // this.setState({ selectedArrearsDaysCalculation });
-                                                            // errors.arrearsDaysCalculationChosen = null
-                                                            // values.arrearsDaysCalculationChosen = selectedArrearsDaysCalculation.value
                                                             setFieldValue('arrearsDaysCalculationChosen', selectedArrearsDaysCalculation.value)
                                                         }}
                                                         className={errors.arrearsDaysCalculationChosen && touched.arrearsDaysCalculationChosen ? "is-invalid" : null}
@@ -515,9 +571,7 @@ class NewLoanProduct extends React.Component {
                                                             <Select
                                                                 options={interestBalanceCalculationOptions}
                                                                 onChange={(selectedInterestBalanceCalculationOptions) => {
-                                                                    // this.setState({ selectedInterestBalanceCalculationOptions });
-                                                                    // errors.interestBalanceCalculation = null
-                                                                    // values.interestBalanceCalculation = selectedInterestBalanceCalculationOptions.value
+                                                                   
                                                                     setFieldValue('interestBalanceCalculation', selectedInterestBalanceCalculationOptions.value)
                                                                 }}
                                                                 className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
@@ -537,9 +591,7 @@ class NewLoanProduct extends React.Component {
                                                             <Select
                                                                 options={interestRateTermsOptions}
                                                                 onChange={(selectedInterestRateTermsOptions) => {
-                                                                    // this.setState({ selectedInterestRateTermsOptions });
-                                                                    // errors.interestRateTerms = null
-                                                                    // values.interestRateTerms = selectedInterestRateTermsOptions.value
+                                                                    
                                                                     setFieldValue('interestRateTerms', selectedInterestRateTermsOptions.value)
                                                                 }}
                                                                 className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
@@ -603,6 +655,100 @@ class NewLoanProduct extends React.Component {
                                 </Accordion>
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Product Links
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div className="each-formsection">
+                                            <Form.Row>
+                                                <Col>
+                                                    <div className="checkbox-wrap">
+                                                        <input type="checkbox"
+                                                            id="isEnableLinking"
+                                                            checked={values.isEnableLinking ? values.isEnableLinking : null}
+                                                            name="isEnableLinking"
+                                                            onChange={handleChange}
+                                                            value={values.isEnableLinking} />
+                                                        <label htmlFor="isEnableLinking">Enable Linking</label>
+                                                    </div>
+                                                </Col>
+                                            </Form.Row>
+                                            {values.isEnableLinking===true &&
+                                                <div>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Linked Deposit Product</Form.Label>
+                                                            <Select
+                                                                options={allDepositProductsList}
+                                                                defaultValue ={{label:allDepositProductsList!==null?allDepositProductsList[0].label:null, 
+                                                                    value:allDepositProductsList!==null? allDepositProductsList[0].value:null}}
+                                                                onChange={(selectedDepositProduct) => {
+                                                                    setFieldValue('depositProductEncodedKey', selectedDepositProduct.value)
+                                                                }}
+                                                                className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : null}
+
+
+                                                                name="depositProductEncodedKey"
+
+                                                                required
+                                                            />
+                                                            {errors.depositProductEncodedKey && touched.depositProductEncodedKey ? (
+                                                                <span className="invalid-feedback">{errors.depositProductEncodedKey}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Deposit Account Options</Form.Label>
+                                                            <div className="checkbox-wrap">
+                                                                <input type="checkbox"
+                                                                    id="autoSetSettlementAccountOnCreation"
+                                                                    checked={values.autoSetSettlementAccountOnCreation ? values.autoSetSettlementAccountOnCreation : null}
+                                                                    name="autoSetSettlementAccountOnCreation"
+                                                                    onChange={handleChange}
+                                                                    value={values.autoSetSettlementAccountOnCreation} />
+                                                                <label htmlFor="autoSetSettlementAccountOnCreation">Auto-Set Settlement Accounts on Creation</label>
+                                                            </div>
+                                                            <div className="checkbox-wrap">
+                                                                <input type="checkbox"
+                                                                    id="autoCreateSettlementAccount"
+                                                                    checked={values.autoCreateSettlementAccount ? values.autoCreateSettlementAccount : null}
+                                                                    name="autoCreateSettlementAccount"
+                                                                    onChange={handleChange}
+                                                                    value={values.autoCreateSettlementAccount} />
+                                                                <label htmlFor="autoCreateSettlementAccount">Auto-Create Settlement Account</label>
+                                                            </div>
+                                                            
+                                                        </Col>
+                                                    </Form.Row>
+                                                    <Form.Row>
+                                                        <Col>
+                                                        <Form.Label className="block-level">Settlement Options</Form.Label>
+                                                            <Select
+                                                                options={settlementOptionsList}
+                                                                onChange={(selectedsettlementOption) => {
+                                                                    
+                                                                    setFieldValue('settlementOptions', selectedsettlementOption.value)
+                                                                }}
+                                                                defaultValue={{label:settlementOptionsList[0].label, value: settlementOptionsList[0].value}}
+                                                                className={errors.settlementOptions && touched.settlementOptions ? "is-invalid" : null}
+
+
+                                                                name="settlementOptions"
+
+                                                                required
+                                                            />
+                                                            {errors.settlementOptions && touched.settlementOptions ? (
+                                                                <span className="invalid-feedback">{errors.settlementOptions}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                        </Col>
+                                                    </Form.Row>
+                                                </div>
+                                            }
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                         Repayment Scheduling
                                     </Accordion.Toggle>
                                     <Accordion.Collapse eventKey="0">
@@ -626,9 +772,7 @@ class NewLoanProduct extends React.Component {
                                                     <Select
                                                         options={repaymentPeriodOptions}
                                                         onChange={(selectedRepaymentPeriodOptions) => {
-                                                            // this.setState({ selectedRepaymentPeriodOptions });
-                                                            // errors.repaymentPeriod = null
-                                                            // values.repaymentPeriod = selectedRepaymentPeriodOptions.value
+                                                            
                                                             setFieldValue('repaymentPeriod', selectedRepaymentPeriodOptions.value)
                                                         }}
                                                         className={errors.repaymentPeriod && touched.repaymentPeriod ? "is-invalid" : null}
@@ -649,9 +793,7 @@ class NewLoanProduct extends React.Component {
                                                     <Select
                                                         options={interestBalanceCalculationOptions}
                                                         onChange={(selectedInterestBalanceCalculation) => {
-                                                            // this.setState({ selectedInterestBalanceCalculation });
-                                                            // errors.interestBalanceCalculationSelected = null
-                                                            // values.interestBalanceCalculationSelected = selectedInterestBalanceCalculation.value
+                                                            
 
                                                             setFieldValue('interestBalanceCalculationSelected', selectedInterestBalanceCalculation.value)
                                                         }}
@@ -768,6 +910,7 @@ class NewLoanProduct extends React.Component {
                                     </Accordion.Toggle>
                                     <Accordion.Collapse eventKey="0">
                                         <div>
+
                                             <Form.Group as={Row} className="center-aligned">
                                                 <Form.Label column sm={4} className="block-level">Methodology</Form.Label>
                                                 <Col sm={6}>
@@ -786,239 +929,220 @@ class NewLoanProduct extends React.Component {
                                                     
                                                 </Col>
                                             </Form.Group>
-
-
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Portfolio Control Account</Form.Label>
-                                                <Col sm={6}>
-                                                    
-                                                    <Select
-                                                        options={portfolioControlAccounts}
-                                                        onChange={(selectedPortfolioAcct) => {
-                                                            // this.setState({ selectedPortfolioAcct });
-                                                            // errors.portfolioControlAccountId = null
-                                                            // values.portfolioControlAccountId = selectedPortfolioAcct.value
-
-                                                            setFieldValue('portfolioControlAccountId', selectedPortfolioAcct.value)
-                                                        }}
-                                                        className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : null}
-                                                        
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        name="portfolioControlAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Asset</span>
-                                                </Col>
-                                            </Form.Group>
-
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Transaction Control Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={transactionSourceAccount}
-                                                        onChange={(selectedTxtSourceAcct) => {
-                                                            // this.setState({ selectedTxtSourceAcct });
-                                                            // errors.transactionSourceAccountId = null
-                                                            // values.transactionSourceAccountId = selectedTxtSourceAcct.value
-
-                                                            setFieldValue('transactionSourceAccountId', selectedTxtSourceAcct.value)
-                                                        }}
-                                                        className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="transactionSourceAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Asset</span>
-                                                </Col>
-                                            </Form.Group>
-
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Write-off Expense Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={writeOffExpenseAccounts}
-                                                        onChange={(selectedWriteOffExpenseAcct) => {
-                                                            // this.setState({ selectedWriteOffExpenseAcct });
-                                                            // errors.writeOffExpenseAccountId = null
-                                                            // values.writeOffExpenseAccountId = selectedWriteOffExpenseAcct.value
-                                                            setFieldValue('writeOffExpenseAccountId', selectedWriteOffExpenseAcct.value)
-                                                        }}
-                                                        className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="writeOffExpenseAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Expense</span>
-                                                </Col>
-                                            </Form.Group>
-                                            { values.methodology!=="1" && 
                                             <div>
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Interest Receivable Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={interestReceivableAccounts}
-                                                        onChange={(selectedInterestReceivableAcct) => {
-                                                            // this.setState({ selectedInterestReceivableAcct });
-                                                            // errors.interestReceivableAccountId = null
-                                                            // values.interestReceivableAccountId = selectedInterestReceivableAcct.value
+                                            { values.methodology!=="0" && 
+                                                    <div>
+                                                        <Form.Group as={Row} className="center-aligned">
+                                                            <Form.Label column sm={4} className="block-level">Portfolio Control Account</Form.Label>
+                                                            <Col sm={6}>
+                                                                
+                                                                <Select
+                                                                    options={portfolioControlAccounts}
+                                                                    onChange={(selectedPortfolioAcct) => {
+                                                                        
 
-                                                            setFieldValue('interestReceivableAccountId', selectedInterestReceivableAcct.value)
-                                                        }}
-                                                        className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="interestReceivableAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Asset</span>
-                                                </Col>
-                                            </Form.Group>
+                                                                        setFieldValue('portfolioControlAccountId', selectedPortfolioAcct.value)
+                                                                    }}
+                                                                    className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : null}
+                                                                    
+                                                                    noOptionsMessage ={() => "No accounts available"}
+                                                                    name="portfolioControlAccountId"
+                                                                    
+                                                                    
+                                                                />
+                                                            </Col>
+                                                            <Col sm={2}>
+                                                                <span>Asset</span>
+                                                            </Col>
+                                                        </Form.Group>
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Fee Receivable Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={feeReceivableAccounts}
-                                                        onChange={(selectedFeeReceivableAcct) => {
-                                                            // this.setState({ selectedFeeReceivableAcct });
-                                                            // errors.feeReceivableAccountId = null
-                                                            // values.feeReceivableAccountId = selectedFeeReceivableAcct.value
+                                                        <Form.Group as={Row} className="center-aligned">
+                                                            <Form.Label column sm={4} className="block-level">Transaction Control Account</Form.Label>
+                                                            <Col sm={6}>
+                                                                <Select
+                                                                    options={transactionSourceAccount}
+                                                                    onChange={(selectedTxtSourceAcct) => {
+                                                                        
 
-                                                            setFieldValue('feeReceivableAccountId', selectedFeeReceivableAcct.value)
-                                                        }}
-                                                        className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="feeReceivableAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Asset</span>
-                                                </Col>
-                                            </Form.Group>
+                                                                        setFieldValue('transactionSourceAccountId', selectedTxtSourceAcct.value)
+                                                                    }}
+                                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                                    noOptionsMessage ={() => "No accounts available"}
+                                                                    
+                                                                    name="transactionSourceAccountId"
+                                                                        
+                                                                        
+                                                                    />
+                                                            </Col>
+                                                            <Col sm={2}>
+                                                                <span>Asset</span>
+                                                            </Col>
+                                                        </Form.Group>
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Penalty Receivable Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={penaltyReceivableAccounts}
-                                                        onChange={(selectedPenaltyReceivableAcct) => {
-                                                            // this.setState({ selectedPenaltyReceivableAcct });
-                                                            // errors.penaltyReceivableAccountId = null
-                                                            // values.penaltyReceivableAccountId = selectedPenaltyReceivableAcct.value
+                                                        <Form.Group as={Row} className="center-aligned">
+                                                            <Form.Label column sm={4} className="block-level">Write-off Expense Account</Form.Label>
+                                                            <Col sm={6}>
+                                                            <Select
+                                                                    options={writeOffExpenseAccounts}
+                                                                    onChange={(selectedWriteOffExpenseAcct) => {
+                                                                        
+                                                                        setFieldValue('writeOffExpenseAccountId', selectedWriteOffExpenseAcct.value)
+                                                                    }}
+                                                                    className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : null}
+                                                                    noOptionsMessage ={() => "No accounts available"}
+                                                                    
+                                                                    name="writeOffExpenseAccountId"
+                                                                    
+                                                                    
+                                                                />
+                                                            </Col>
+                                                            <Col sm={2}>
+                                                                <span>Expense</span>
+                                                            </Col>
+                                                        </Form.Group>
+                                                        { values.methodology!=="1" && 
+                                                            <div>
+                                                                <Form.Group as={Row} className="center-aligned">
+                                                                    <Form.Label column sm={4} className="block-level">Interest Receivable Account</Form.Label>
+                                                                    <Col sm={6}>
+                                                                    <Select
+                                                                            options={interestReceivableAccounts}
+                                                                            onChange={(selectedInterestReceivableAcct) => {
+                                                                                
+                                                                                setFieldValue('interestReceivableAccountId', selectedInterestReceivableAcct.value)
+                                                                            }}
+                                                                            className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : null}
+                                                                            noOptionsMessage ={() => "No accounts available"}
+                                                                            
+                                                                            name="interestReceivableAccountId"
+                                                                            
+                                                                            
+                                                                        />
+                                                                    </Col>
+                                                                    <Col sm={2}>
+                                                                        <span>Asset</span>
+                                                                    </Col>
+                                                                </Form.Group>
 
-                                                            setFieldValue('penaltyReceivableAccountId', selectedPenaltyReceivableAcct.value)
-                                                        }}
-                                                        className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="penaltyReceivableAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Asset</span>
-                                                </Col>
-                                            </Form.Group>
-                                            </div>
+                                                                <Form.Group as={Row} className="center-aligned">
+                                                                    <Form.Label column sm={4} className="block-level">Fee Receivable Account</Form.Label>
+                                                                    <Col sm={6}>
+                                                                    <Select
+                                                                            options={feeReceivableAccounts}
+                                                                            onChange={(selectedFeeReceivableAcct) => {
+                                                                               
+
+                                                                                setFieldValue('feeReceivableAccountId', selectedFeeReceivableAcct.value)
+                                                                            }}
+                                                                            className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : null}
+                                                                            noOptionsMessage ={() => "No accounts available"}
+                                                                            
+                                                                            name="feeReceivableAccountId"
+                                                                            
+                                                                            
+                                                                        />
+                                                                    </Col>
+                                                                    <Col sm={2}>
+                                                                        <span>Asset</span>
+                                                                    </Col>
+                                                                </Form.Group>
+
+                                                                <Form.Group as={Row} className="center-aligned">
+                                                                    <Form.Label column sm={4} className="block-level">Penalty Receivable Account</Form.Label>
+                                                                    <Col sm={6}>
+                                                                    <Select
+                                                                            options={penaltyReceivableAccounts}
+                                                                            onChange={(selectedPenaltyReceivableAcct) => {
+                                                                                
+
+                                                                                setFieldValue('penaltyReceivableAccountId', selectedPenaltyReceivableAcct.value)
+                                                                            }}
+                                                                            className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : null}
+                                                                            noOptionsMessage ={() => "No accounts available"}
+                                                                            
+                                                                            name="penaltyReceivableAccountId"
+                                                                            
+                                                                            
+                                                                        />
+                                                                    </Col>
+                                                                    <Col sm={2}>
+                                                                        <span>Asset</span>
+                                                                    </Col>
+                                                                </Form.Group>
+                                                            </div>
+                                                        }
+
+                                                        <Form.Group as={Row} className="center-aligned">
+                                                            <Form.Label column sm={4} className="block-level">Fee Income Account</Form.Label>
+                                                            <Col sm={6}>
+                                                            <Select
+                                                                    options={allGlAccounts}
+                                                                    onChange={(selectedFeeIncomeAcct) => {
+                                                                        
+
+                                                                        setFieldValue('feeIncomeAccountId', selectedFeeIncomeAcct.value)
+                                                                    }}
+                                                                    className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                                    noOptionsMessage ={() => "No accounts available"}
+                                                                    
+                                                                    name="feeIncomeAccountId"
+                                                                    
+                                                                    
+                                                                />
+                                                            </Col>
+                                                            <Col sm={2}>
+                                                                <span>Any GL Account</span>
+                                                            </Col>
+                                                        </Form.Group>
+
+                                                        <Form.Group as={Row} className="center-aligned">
+                                                            <Form.Label column sm={4} className="block-level">Interest Income Account</Form.Label>
+                                                            <Col sm={6}>
+                                                            <Select
+                                                                    options={interestIncomeAccounts}
+                                                                    onChange={(selectedInterestIncomeAcct) => {
+                                                                        
+
+                                                                        setFieldValue('interestIncomeAccountId', selectedInterestIncomeAcct.value)
+                                                                    }}
+                                                                    className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : null}
+                                                                    noOptionsMessage ={() => "No accounts available"}
+                                                                    
+                                                                    name="interestIncomeAccountId"
+                                                                    
+                                                                    
+                                                                />
+                                                            </Col>
+                                                            <Col sm={2}>
+                                                                <span>Income</span>
+                                                            </Col>
+                                                        </Form.Group>
+
+                                                        <Form.Group as={Row} className="center-aligned">
+                                                            <Form.Label column sm={4} className="block-level">Penalty Income Account</Form.Label>
+                                                            <Col sm={6}>
+                                                            <Select
+                                                                    options={penaltyIncomeAccounts}
+                                                                    onChange={(selectedPenaltyIncomeAcct) => {
+
+                                                                        setFieldValue('penaltyIncomeAccountId', selectedPenaltyIncomeAcct.value)
+                                                                    }}
+                                                                    className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : null}
+                                                                    noOptionsMessage ={() => "No accounts available"}
+                                                                    
+                                                                    name="penaltyIncomeAccountId"
+                                                                    
+                                                                    
+                                                                />
+                                                            </Col>
+                                                            <Col sm={2}>
+                                                                <span>Income</span>
+                                                            </Col>
+                                                        </Form.Group>
+                                                    </div>
                                             }
-
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Fee Income Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={allGlAccounts}
-                                                        onChange={(selectedFeeIncomeAcct) => {
-                                                            // this.setState({ selectedFeeIncomeAcct });
-                                                            // errors.feeIncomeAccountId = null
-                                                            // values.feeIncomeAccountId = selectedFeeIncomeAcct.value
-
-                                                            setFieldValue('feeIncomeAccountId', selectedFeeIncomeAcct.value)
-                                                        }}
-                                                        className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="feeIncomeAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Any GL Account</span>
-                                                </Col>
-                                            </Form.Group>
-
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Interest Income Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={interestIncomeAccounts}
-                                                        onChange={(selectedInterestIncomeAcct) => {
-                                                            // this.setState({ selectedInterestIncomeAcct });
-                                                            // errors.interestIncomeAccountId = null
-                                                            // values.interestIncomeAccountId = selectedInterestIncomeAcct.value
-
-                                                            setFieldValue('interestIncomeAccountId', selectedInterestIncomeAcct.value)
-                                                        }}
-                                                        className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="interestIncomeAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Income</span>
-                                                </Col>
-                                            </Form.Group>
-
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Penalty Income Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={penaltyIncomeAccounts}
-                                                        onChange={(selectedPenaltyIncomeAcct) => {
-                                                            // this.setState({ selectedPenaltyIncomeAcct });
-                                                            // errors.penaltyIncomeAccountId = null
-                                                            // values.penaltyIncomeAccountId = selectedPenaltyIncomeAcct.value
-
-                                                            setFieldValue('penaltyIncomeAccountId', selectedPenaltyIncomeAcct.value)
-                                                        }}
-                                                        className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="penaltyIncomeAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Income</span>
-                                                </Col>
-                                            </Form.Group>
-                                        
-                                           
-                                            
-                                        </div>
+                                            </div>
+                                            </div>
                                     </Accordion.Collapse>
                                 </Accordion>
 
@@ -1061,16 +1185,24 @@ class NewLoanProduct extends React.Component {
                         </div>
                     )
                 }
+            }
 
-            case (accountingConstants.GET_ALL_GLACCOUNTS_FAILURE):
+            if (getAllGLAccountsRequest.request_status ===  accountingConstants.GET_ALL_GLACCOUNTS_FAILURE){
                 return (
                     <div className="loading-content card"> 
                         <div>{getAllGLAccountsRequest.request_data.error}</div>
                     </div>
                 )
-            default :
-            return null;
-        }
+            }
+
+            if(getAllDepositProductsRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_FAILURE){
+                return (
+                    <div className="loading-content card"> 
+                        <div>{getAllDepositProductsRequest.request_data.error}</div>
+                    </div>
+                )
+            }
+        
     }
 
     render() {
@@ -1104,6 +1236,7 @@ function mapStateToProps(state) {
     return {
         createLoanProductReducer : state.productReducers.createLoanProductReducer,
         getAllGLAccountsReducer : state.accountingReducers.getAllGLAccountsReducer,
+        getAllDepositProductsReducer : state.productReducers.getAllDepositProductsReducer,
     };
 }
 

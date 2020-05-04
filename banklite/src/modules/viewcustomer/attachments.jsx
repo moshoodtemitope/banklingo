@@ -3,13 +3,13 @@ import * as React from "react";
 
 import {Fragment} from "react";
 import { connect } from 'react-redux';
-// import { NavLink} from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  CustomerHeading from './customerheader'
 // // import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-// import Dropdown from 'react-bootstrap/Dropdown'
-// import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 
@@ -20,6 +20,7 @@ import Alert from 'react-bootstrap/Alert'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { getDateFromISO} from '../../shared/utils';
+import { routes} from '../../services/urls';
 import "./customerprofile.scss"; 
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
@@ -372,6 +373,7 @@ class ViewCustomerAttachments extends React.Component {
                                     <th>Description</th>
                                     <th>Created by</th>
                                     <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -384,6 +386,22 @@ class ViewCustomerAttachments extends React.Component {
                                                 <td>{eachAttachment.description} </td>
                                                 <td>{eachAttachment.createdByUserName} </td>
                                                 <td>{getDateFromISO(eachAttachment.timeStamp)} </td>
+                                                <td>
+                                                    {(eachAttachment.linkIdentifier!=="" && eachAttachment.linkIdentifier!==null && eachAttachment.linkIdentifier!==undefined) &&
+                                                        <DropdownButton
+                                                            size="sm"
+                                                            title="Actions"
+                                                            key="editUser"
+                                                            className="customone"
+                                                        >
+                                                            <a  className="dropdown-item" 
+                                                                    href={`${routes.GET_DOWNLOAD}FileType=CLIENT&EncodedKey=${this.clientEncodedKey}&Link=${eachAttachment.linkIdentifier}`}
+                                                                // <NavLink download className="dropdown-item" to={`${routes.GET_DOWNLOAD}filetype=CLIENT&identifier=${eachAttachment.linkIdentifier}&link=treble`}>Download</NavLink>
+                                                                >Download</a>
+                                                            
+                                                        </DropdownButton>
+                                                    }
+                                                </td>
                                             </tr>
                                         )
                                    }) 
@@ -439,6 +457,7 @@ class ViewCustomerAttachments extends React.Component {
                                     <th>Description</th>
                                     <th>Created by</th>
                                     <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -451,6 +470,24 @@ class ViewCustomerAttachments extends React.Component {
                                                 <td>{eachAttachment.description} </td>
                                                 <td>{eachAttachment.createdByUserName} </td>
                                                 <td>{getDateFromISO(eachAttachment.timeStamp)} </td>
+                                                <td>
+                                                    {(eachAttachment.linkIdentifier!=="" && eachAttachment.linkIdentifier!==null && eachAttachment.linkIdentifier!==undefined) &&
+                                                        <DropdownButton
+                                                            size="sm"
+                                                            title="Actions"
+                                                            key="editUser"
+                                                            className="customone"
+                                                        >
+                                                            
+                                                            <a  className="dropdown-item" 
+                                                                    href={`${routes.GET_DOWNLOAD}FileType=CLIENT&EncodedKey=${this.clientEncodedKey}&Link=${eachAttachment.linkIdentifier}`}
+                                                                // <NavLink download className="dropdown-item" to={`${routes.GET_DOWNLOAD}filetype=CLIENT&identifier=${eachAttachment.linkIdentifier}&link=treble`}>Download</NavLink>
+                                                                >Download</a>
+                                                            
+                                                            
+                                                        </DropdownButton>
+                                                    }
+                                                </td>
                                             </tr>
                                         )
                                    }) 

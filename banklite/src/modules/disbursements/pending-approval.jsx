@@ -531,7 +531,7 @@ class DisbursementPendingApproval extends React.Component {
                                                             <td>{eachDisburment.sourceAccount}</td>
                                                             <td>{eachDisburment.destinationAccount}</td>
                                                             <td>{eachDisburment.destinationBank}</td>
-                                                            <td>{numberWithCommas(eachDisburment.amount)}</td>
+                                                            <td>{numberWithCommas(eachDisburment.amount, true)}</td>
                                                             <td>{eachDisburment.initiatedBy}</td>
                                                             {/* <td>{eachDisburment.approvedBy}</td> */}
                                                             <td>{eachDisburment.disbursmentStatusDescription}</td>
@@ -670,7 +670,7 @@ class DisbursementPendingApproval extends React.Component {
                                                                     <td>{eachDisburment.sourceAccount}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
                                                                     <td>{eachDisburment.destinationBank}</td>
-                                                                    <td>{numberWithCommas(eachDisburment.amount)}</td>
+                                                                    <td>{numberWithCommas(eachDisburment.amount, true)}</td>
                                                                     <td>{eachDisburment.initiatedBy}</td>
                                                                     {/* <td>{eachDisburment.approvedBy}</td> */}
                                                                     <td>{eachDisburment.disbursmentStatusDescription}</td>
@@ -896,7 +896,7 @@ class DisbursementPendingApproval extends React.Component {
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">Amount</Form.Label>
-                                                    <span className="form-text disabled-field">&#8358;{numberWithCommas(transactionToProcess.amount)}</span>
+                                                    <span className="form-text disabled-field">&#8358;{numberWithCommas(transactionToProcess.amount, true)}</span>
                                                 </Col>
                                                 <Col>
                                                     {/* <Form.Label className="block-level">Narration</Form.Label>

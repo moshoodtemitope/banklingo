@@ -659,34 +659,6 @@ class ViewLoanAccount extends React.Component {
             }
             
             
-            // if(loanAccountActivitiesData.result.length>=1){
-            //     return(
-            //         <div className="activities-wrap">
-            //             {
-            //                 loanAccountActivitiesData.result.map((eachActivity,  index)=>{
-            //                     return(
-            //                         <div className="each-activity">
-            //                             <span>
-            //                                 <NavLink to='/customer/20/savingsaccount/77339322'>Payroll - Private 2073458499</NavLink>
-            //                             </span>
-            //                             <span className="activity-action">{eachActivity.action}</span>
-            //                             <div>
-            //                                 <span className="action-date">{eachActivity.creationDate}</span>
-            //                                 <span className="action-by"> <NavLink to='/customer/20/savingsaccount/77339322'>{eachActivity.affectedUserName}</NavLink></span>
-            //                             </div>
-            //                         </div>
-            //                     )
-            //                 })
-            //             }
-            //         </div>
-            //     )
-            // }else{
-            //     return(
-            //         <div className="activities-wrap">
-            //             <div>No activities to display</div>
-            //         </div>
-            //     )
-            // }
         }
 
 
@@ -1360,7 +1332,7 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachTxt.transactionDate)}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate)}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>{eachTxt.transactionAmount}</td>
+                                                <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
                                             </tr>
                                         )
                                     })
@@ -1424,7 +1396,7 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachTxt.transactionDate)}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate)}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>{eachTxt.transactionAmount}</td>
+                                                <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
                                             </tr>
                                         )
                                     })
@@ -1487,15 +1459,15 @@ class ViewLoanAccount extends React.Component {
                 <div className="amounts-wrap w-65">
                     <div className="eachamount">
                         <h6>Total Balance</h6>
-                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.loanAmount)}</div>
+                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.loanAmount, true)}</div>
                     </div>
                     <div className="eachamount">
                         <h6>Total Due</h6>
-                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.totalDue)}</div>
+                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.totalDue, true)}</div>
                     </div>
                     <div className="eachamount">
                         <h6>Total Paid</h6>
-                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.totalPaid)}</div>
+                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.totalPaid, true)}</div>
                     </div>
                     <div className="eachamount">
                         <h6>Installments</h6>
@@ -1547,35 +1519,35 @@ class ViewLoanAccount extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>Principal Paid</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.principalPaid)}</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.principalPaid, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Principal Due</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.principalDue)}</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.principalDue, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Paid</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.interestPaid)}</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.interestPaid, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Due</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.interestDue)}</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.interestDue, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Due</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.penaltyDue)}</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.penaltyDue, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Paid</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.penaltyPaid)}</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.penaltyPaid, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Fee Due</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.feeDue)}</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.feeDue, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Fee Paid</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.feePaid)}</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.feePaid, true)}</td>
                                 </tr>
                             </tbody>
                         </TableComponent>
@@ -2147,11 +2119,12 @@ class ViewLoanAccount extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -2191,6 +2164,7 @@ class ViewLoanAccount extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2201,6 +2175,7 @@ class ViewLoanAccount extends React.Component {
                                                 {/* <td>{eachComments.id} </td> */}
                                                 <td>{eachComments.comment} </td>
                                                 <td>{getDateFromISO(eachComments.timeStamp)} </td>
+                                                <td><NavLink to={`/user/${eachComments.userEncodedKey}`}>{eachComments.userName} </NavLink> </td>
                                             </tr>
                                         )
                                    }) 
@@ -2257,6 +2232,7 @@ class ViewLoanAccount extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2267,6 +2243,7 @@ class ViewLoanAccount extends React.Component {
                                                 {/* <td>{eachComments.id} </td> */}
                                                 <td>{eachComments.comment} </td>
                                                 <td>{getDateFromISO(eachComments.timeStamp)} </td>
+                                                <td><NavLink to={`/user/${eachComments.userEncodedKey}`}>{eachComments.userName} </NavLink> </td>
                                             </tr>
                                         )
                                    }) 
@@ -2307,11 +2284,13 @@ class ViewLoanAccount extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     {/* <td></td> */}
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -2366,7 +2345,7 @@ class ViewLoanAccount extends React.Component {
         }
 
         let changeLoanStateValidationSchema;
-        if(showDisburseLoanForm!==true){
+        if(showDisburseLoanForm!==true && newState !== "repayloan"){
             changeLoanStateValidationSchema = Yup.object().shape({
                 comment:  Yup.string()
                     .min(2, 'Valid comments required'),
@@ -2376,11 +2355,11 @@ class ViewLoanAccount extends React.Component {
             });
         }
 
-        if(showDisburseLoanForm===true){
+        if(showDisburseLoanForm===true || newState === "repayloan" ){
             changeLoanStateValidationSchema = Yup.object().shape({
                     notes:  Yup.string()
                         .min(2, 'Valid notes required'),
-                    disbursementChannelEncodedKey:  Yup.string()
+                    txtChannelEncodedKey:  Yup.string()
                         .required('Required'),
                     firstRepaymentDate:  Yup.string()
                         .when('showFirstRepayment',{
@@ -2412,7 +2391,7 @@ class ViewLoanAccount extends React.Component {
                         showFirstRepayment:false,
                         allowBackDate:false,
                         showBookingDate:false,
-                        disbursementChannelEncodedKey:"",
+                        txtChannelEncodedKey:"",
                         firstRepaymentDate:"",
                         backDateChosen:"",
                         bookingDateChosen:"",
@@ -2423,18 +2402,18 @@ class ViewLoanAccount extends React.Component {
                     onSubmit={(values, { resetForm }) => {
 
                         let changeLoanStatePayload;
-                        if(showDisburseLoanForm!==true){
+                        if(showDisburseLoanForm!==true && newState !== "repayloan"){
                             changeLoanStatePayload = {
                                 comment:values.comment,
                                 accountEncodedKey:this.loanEncodedKey
                             }
                         }
 
-                        if(showDisburseLoanForm===true){
+                        if(showDisburseLoanForm===true || newState === "repayloan"){
                             changeLoanStatePayload = {
                                 accountEncodedKey:this.loanEncodedKey,
                                 notes:values.notes,
-                                channelEncodedKey:values.disbursementChannelEncodedKey,
+                                channelEncodedKey:values.txtChannelEncodedKey,
                                 isBackDated:values.allowBackDate,
                                 backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
                                 isBookingDate: values.showBookingDate,
@@ -2493,22 +2472,26 @@ class ViewLoanAccount extends React.Component {
                                 onSubmit={handleSubmit}
                                 className="">
                                 <Modal.Header>
-                                    <Modal.Title>Change Loan State</Modal.Title>
+                                    <Modal.Title>
+                                        {newState !== "repayloan"? "Change Loan State" : "Apply A Repayment"} 
+                                    </Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
-                                    <Form.Group>
-                                        <Form.Row>
-                                            <Col>
-                                                <Form.Label className="block-level">Present State</Form.Label>
-                                                <span className="form-text">{loanDetails.loanStateDescription} </span>
-                                            </Col>
-                                            <Col>
-                                                <Form.Label className="block-level">New State</Form.Label>
-                                                <span className="form-text">{newState}</span>
-                                            </Col>
-                                        </Form.Row>
-                                    </Form.Group>
-                                    {showDisburseLoanForm!==true &&
+                                    {newState !== "repayloan" &&
+                                        <Form.Group>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Present State</Form.Label>
+                                                    <span className="form-text">{loanDetails.loanStateDescription} </span>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">New State</Form.Label>
+                                                    <span className="form-text">{newState}</span>
+                                                </Col>
+                                            </Form.Row>
+                                        </Form.Group>
+                                    }
+                                    {(showDisburseLoanForm!==true && newState !== "repayloan") &&
                                         <Form.Group>
                                             <Form.Label className="block-level">Comments</Form.Label>
                                             <Form.Control as="textarea"
@@ -2544,14 +2527,14 @@ class ViewLoanAccount extends React.Component {
                                                                     options={allChannels}
                                                                     
                                                                     onChange={(selected) => {
-                                                                        setFieldValue('disbursementChannelEncodedKey', selected.value)
+                                                                        setFieldValue('txtChannelEncodedKey', selected.value)
                                                                     }}
-                                                                    onBlur={()=> setFieldTouched('disbursementChannelEncodedKey', true)}
-                                                                    className={errors.disbursementChannelEncodedKey && touched.disbursementChannelEncodedKey ? "is-invalid" : null}
-                                                                    name="disbursementChannelEncodedKey"
+                                                                    onBlur={()=> setFieldTouched('txtChannelEncodedKey', true)}
+                                                                    className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+                                                                    name="txtChannelEncodedKey"
                                                                 />
-                                                                {errors.disbursementChannelEncodedKey || (errors.disbursementChannelEncodedKey && touched.disbursementChannelEncodedKey) ? (
-                                                                    <span className="invalid-feedback">{errors.disbursementChannelEncodedKey}</span>
+                                                                {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
+                                                                    <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
                                                                 ) : null}
                                                             </div>
                                                         }
@@ -2679,6 +2662,125 @@ class ViewLoanAccount extends React.Component {
                                             </Form.Group>
                                         </div>
                                     }
+
+                                    {
+                                        newState === "repayloan" &&
+                                        <div>
+                                            <Form.Row className="mb-10">
+                                                <Col>
+                                                    <Form.Group className="mb-0">
+                                                        <Form.Label className="block-level mb-10">Transaction Channel</Form.Label>
+                                                        {allChannels.length >=1 &&
+                                                            <div>
+                                                                <Select
+                                                                    options={allChannels}
+                                                                    
+                                                                    onChange={(selected) => {
+                                                                        setFieldValue('txtChannelEncodedKey', selected.value)
+                                                                    }}
+                                                                    onBlur={()=> setFieldTouched('txtChannelEncodedKey', true)}
+                                                                    className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+                                                                    name="txtChannelEncodedKey"
+                                                                />
+                                                                {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
+                                                                    <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
+                                                                ) : null}
+                                                            </div>
+                                                        }
+                                                        {adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+                                                            <div className="errormsg"> Unable to load Disbursment channels</div>
+                                                        }
+                                                        {/* <Form.Control
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={numberWithCommas(values.collectPrincipalEveryRepayments)}
+                                                            className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid h-38px" : "h-38px"}
+                                                            name="collectPrincipalEveryRepayments" required /> */}
+                                                        
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col className="date-wrap">
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row className="mb-10">
+                                                <Col className="date-wrap">
+                                                    <Form.Group className="table-helper m-b-5">
+                                                        <input type="checkbox"
+                                                        name="allowBackDate" 
+                                                        onChange={handleChange} 
+                                                        checked={values.allowBackDate? values.allowBackDate:null}
+                                                        value={values.allowBackDate}
+                                                        id="allowBackDate"/>
+                                                        <label htmlFor="allowBackDate">Backdate</label>
+                                                    </Form.Group>
+                                                    {values.allowBackDate===true &&
+                                                        <Form.Group className="mb-0 date-wrap">
+                                                            <DatePicker placeholderText="Choose  date" 
+                                                                dateFormat="d MMMM, yyyy"
+                                                                className="form-control form-control-sm"
+                                                                peekNextMonth
+                                                                showMonthDropdown
+                                                                name="backDateChosen"
+                                                                value={values.backDateChosen}
+                                                                onChange={setFieldValue}
+                                                                showYearDropdown
+                                                                dropdownMode="select"
+                                                                maxDate={new Date()}
+                                                                className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                                                            />
+                                                            {errors.backDateChosen && touched.backDateChosen ? (
+                                                                <span className="invalid-feedback">{errors.backDateChosen}</span>
+                                                            ) : null}
+                                                        </Form.Group>
+                                                    }
+                                                </Col>
+                                                <Col className="date-wrap">
+                                                    <Form.Group className="table-helper m-b-5">
+                                                        <input type="checkbox"
+                                                        name="showBookingDate" 
+                                                        onChange={handleChange} 
+                                                        checked={values.showBookingDate? values.showBookingDate:null}
+                                                        value={values.showBookingDate}
+                                                        id="showBookingDate"/>
+                                                        <label htmlFor="showBookingDate">Booking Date</label>
+                                                    </Form.Group>
+                                                    {values.showBookingDate===true &&
+                                                        <Form.Group className="mb-0 date-wrap">
+                                                            <DatePicker placeholderText="Choose  date" 
+                                                                dateFormat="d MMMM, yyyy"
+                                                                className="form-control form-control-sm"
+                                                                peekNextMonth
+                                                                showMonthDropdown
+                                                                name="bookingDateChosen"
+                                                                value={values.bookingDateChosen}
+                                                                onChange={setFieldValue}
+                                                                showYearDropdown
+                                                                dropdownMode="select"
+                                                                // minDate={new Date()}
+                                                                className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+                                                            />
+                                                            {errors.bookingDateChosen && touched.bookingDateChosen ? (
+                                                                <span className="invalid-feedback">{errors.bookingDateChosen}</span>
+                                                            ) : null}
+                                                        </Form.Group>
+                                                    }
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Group>
+                                                <Form.Label className="block-level">Notes</Form.Label>
+                                                <Form.Control as="textarea"
+                                                    rows="3"
+                                                    onChange={handleChange}
+                                                    name="notes"
+                                                value={values.notes}
+                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null} 
+                                                />
+                                                {errors.notes && touched.notes ? (
+                                                    <span className="invalid-feedback">{errors.notes}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                        </div>
+                                    }
                                 </Modal.Body>
                                 <Modal.Footer>
 
@@ -2760,7 +2862,12 @@ class ViewLoanAccount extends React.Component {
                     }
                     {(loanDetails.loanState ===5) &&
                         <li>
-                            <Button size="sm" >Enter Repayment</Button>
+                            <Button size="sm" 
+                                onClick={()=>{
+                                    this.setState({newState: "repayloan", newStateUpdate: "repayloan", ctaText:"Apply Repayment", showDisburseLoanForm:false})
+                                    this.handleLoanChangeStateShow()
+                                }}
+                            >Enter Repayment</Button>
                         </li>
                     }
                     {(loanDetails.loanState ===1) &&

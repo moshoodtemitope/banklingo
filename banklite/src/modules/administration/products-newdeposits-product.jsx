@@ -129,7 +129,7 @@ class NewDepositsProduct extends React.Component {
 
         let interestBalanceCalculations =[
             {value: '1', label: 'Minimum Daily Balance'},
-            {value: '2', label: 'Maximum Daily Balance'},
+            {value: '2', label: 'Average Daily Balance'},
             {value: '3', label: 'End of Day Balance'},
         ];
 
@@ -151,6 +151,7 @@ class NewDepositsProduct extends React.Component {
             {value: '3', label: 'Every other week'},
             {value: '4', label: 'Every month'},
             {value: '5', label: 'Every three months'},
+            {value: '6', label: 'On Maturity'},
         ];
         
         // switch(getAllGLAccountsRequest.request_status){
@@ -243,18 +244,18 @@ class NewDepositsProduct extends React.Component {
                                         depositAccountType: parseInt(values.depositAccountType),
                                         description: values.description,
                                         depositProductAccountingRule:{
-                                            savingsControlAccountId: values.savingsControlAccountId,
-                                            transactionSourceAccountId: values.transactionSourceAccountId,
-                                            interestExpenseAccountId: values.interestExpenseAccountId,
-                                            interestPayableAccountId: values.interestPayableAccountId,
-                                            feeIncomeAccountId: values.feeIncomeAccountId,
+                                            savingsControlAccountId: values.savingsControlAccountId!==""? values.savingsControlAccountId :null,
+                                            transactionSourceAccountId: values.transactionSourceAccountId!==""?values.transactionSourceAccountId:null,
+                                            interestExpenseAccountId: values.interestExpenseAccountId!==""?values.interestExpenseAccountId:null,
+                                            interestPayableAccountId: values.interestPayableAccountId!==""?values.interestPayableAccountId:null,
+                                            feeIncomeAccountId:values.feeIncomeAccountId!==""? values.feeIncomeAccountId : null,
                                             interestAccruedMethod: values.interestAccruedMethod!=='' ? parseInt(values.interestAccruedMethod):null,
                                         },
                                         methodology:values.methodology!==''? parseInt(values.methodology):'',
                                         isActive: values.isActive,
-                                        currencyCode: values.currencyCode,
+                                        currencyCode: values.currencyCode!==""? values.currencyCode: null,
                                         automaticallySetAccountAsDormant: values.automaticallySetAccountAsDormant,
-                                        dormancyAfterXDays:values.dormancyAfterXDays!==''? parseInt(values.dormancyAfterXDays):0,
+                                        dormancyAfterXDays:values.dormancyAfterXDays!==''? parseInt(values.dormancyAfterXDays):null,
                                         // interestAccruedMethod: values.interestAccruedMethod,
                                         depositSavingsSettingModel:{
                                             maximumWithdrawalAmount:values.maximumWithdrawalAmount!==''? parseFloat(values.maximumWithdrawalAmount.replace(/,/g, '')):0,
@@ -481,7 +482,7 @@ class NewDepositsProduct extends React.Component {
                                                         <div>
                                                             <Form.Row>
                                                                 <Col sm={6}>
-                                                                    <Form.Label className="block-level">Interest rate terms</Form.Label>
+                                                                    <Form.Label className="block-level">How is interest rate charged?</Form.Label>
                                                                     <Select
                                                                         options={interestRateTerms}
                                                                         // onChange={(selectedInterestRateTerm) => {

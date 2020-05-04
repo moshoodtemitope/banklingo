@@ -19,7 +19,7 @@ class ClientsManagement extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:'',
+            user:JSON.parse(localStorage.getItem("user")),
             PageSize:'30',
             FullDetails: false,
             CurrentPage:1,
@@ -97,6 +97,12 @@ class ClientsManagement extends React.Component {
         }else{
             dispatch(clientsActions.getClients(params));
         }
+    }
+    getCustomerTypeText = (custypeId)=>{
+
+        let customerTypeVal = this.state.user.custTypes.filter(eachType=>eachType.id===custypeId)[0];
+
+        return customerTypeVal.name;
     }
 
     renderClients =()=>{
@@ -181,11 +187,13 @@ class ClientsManagement extends React.Component {
                                         </select>
                                     </div>
                                 </div>
+                                <div className="loading-text">Please wait... </div>
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
                                             <th>Customer Name</th>
                                             <th>Customer ID</th>
+                                            <th>Customer Type</th>
                                             <th>Customer Status</th>
                                             <th>Account Officer</th>
                                             <th>Account Currency</th>
@@ -201,6 +209,7 @@ class ClientsManagement extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.clientCode}</NavLink></td>
                                                             <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.clientCode}</NavLink></td>
                                                             <td>{eachClient.clientStateDescription}</td>
                                                             <td>{eachClient.accountOfficer}</td>
@@ -238,7 +247,7 @@ class ClientsManagement extends React.Component {
                                 <div>
                                     <div className="table-helper">
                                         <input type="checkbox" name="" 
-                                            onChange={(e)=>this.setShowDetails(e, allClientsData)}
+                                            onChange={(e)=>this.setShowDetails(e, allClientsData.result)}
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>
@@ -284,6 +293,7 @@ class ClientsManagement extends React.Component {
                                             <tr>
                                                 <th>Customer Name</th>
                                                 <th>Customer ID</th>
+                                                <th>Customer Type</th>
                                                 <th>Customer Status</th>
                                                 <th>Account Officer</th>
                                                 <th>Account Currency</th>
@@ -300,6 +310,7 @@ class ClientsManagement extends React.Component {
                                                             <tr>
                                                                 <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
                                                                 <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.clientCode}</NavLink></td>
+                                                                <td>{this.getCustomerTypeText(eachClient.clientTypeId)} </td>
                                                                 <td>{eachClient.clientStateDescription}</td>
                                                                 <td>{eachClient.accountOfficer}</td>
                                                                 <td>{eachClient.currency}</td>

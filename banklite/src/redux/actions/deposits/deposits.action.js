@@ -1,6 +1,6 @@
 import { ApiService } from "../../../services/apiService";
 import { routes } from "../../../services/urls";
-// import { history } from './../../../_helpers/history';
+import { history } from './../../../_helpers/history';
 import {loanAndDepositsConstants} from '../../actiontypes/LoanAndDeposits/loananddeposits.constants'
 import { handleRequestErrors } from "../../../shared/utils";
 
@@ -16,7 +16,11 @@ export const depositActions = {
     getDepositAccountComments,
     creatADepositComment,
     getAccountDepositAttachments,
-    creatADepositAttachment
+    creatADepositAttachment,
+    changeDepositState,
+    searchAccountNumbers,
+    searchCustomerAccount,
+    searchForAccountsWithCustomerKey
 }
 
 function getDeposits(params , tempData) {
@@ -88,12 +92,12 @@ function getClientDeposits(clientId,params, tempData) {
 
 }
 
-function getDepositTransaction(params) {
+function getDepositTransaction(params, tempData) {
 
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_DEPOSITS_TRANSACTIONS +`?${params}`, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response => {
                 dispatch(success(response));
@@ -104,8 +108,16 @@ function getDepositTransaction(params) {
 
     }
 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING, user, tempData } 
+        }
+    }
 
-    function request(user) { return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING, user } }
+    // function request(user) { return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_FAILURE, error } }
 
@@ -156,7 +168,11 @@ function createDepositAccount(depositAccountDetailsPayload,accountType) {
             dispatch(request(consume));
             return consume
                 .then(response => {
+                    console.log("resultpppp", response);
                     dispatch(success(response));
+                    history.push(`/customer/${response.data.result.clientEncodedKey}/savingsaccount/${response.data.result.encodedKey}`);
+                    
+
                 }).catch(error => {
 
                     dispatch(failure(handleRequestErrors(error)));
@@ -395,5 +411,150 @@ function creatADepositAttachment   (createDepositAttachmentPayload){
     function success(response) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_ATTACHMENT_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_ATTACHMENT_FAILURE, error } }
     function clear() { return { type: loanAndDepositsConstants.CREATE_A_DEPOSIT_ACCOUNT_ATTACHMENT_RESET, clear_data:""} }
+
+}
+
+
+function changeDepositState   (newDepositStatePayload, newState){
+    if(newDepositStatePayload!=="CLEAR"){
+        return dispatch =>{
+            let 
+            url = routes.HIT_DEPOSIT_STATE+`/${newState}`;
+
+            if(newState==="setmaximumwithdrawalamount" 
+                || newState==="setrecommendeddepositamount"
+                || newState==="makewithdrawal"
+                || newState==="beginmaturity"
+                || newState==="transfer"
+            ){
+                if(newState==="makewithdrawal"){
+                    url = routes.HIT_DEPOSITS+`/withdraw`;
+                }else{
+                    url = routes.HIT_DEPOSITS+`/${newState}`;
+                }
+            }
+                
+            let consume = ApiService.request(url, "POST", newDepositStatePayload);
+
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_RESET, clear_data:""} }
+
+}
+
+function searchAccountNumbers(params) {
+    if(params!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/depositandloanitems?AccountNumberSubString=${params}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+
+
+    function request(user) { return { type: loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_RESET, clear_data:""} }
+
+}
+
+function searchCustomerAccount(params) {
+    if(params!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/clients?SearchText=${params}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+
+
+    function request(user) { return { type: loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_RESET, clear_data:""} }
+
+}
+
+
+function searchForAccountsWithCustomerKey(params) {
+    if(params!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/customerdepositandloanitems?CustomerEncodedKey=${params}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+
+
+    function request(user) { return { type: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_RESET, clear_data:""} }
 
 }

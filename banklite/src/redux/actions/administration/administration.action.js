@@ -194,7 +194,7 @@ function failure(error) { return { type: administrationConstants.GET_ALL_USERS_F
 function createUser   (newUserPayload){
     if(newUserPayload!=="CLEAR"){
         return dispatch =>{
-            if(Object.keys(newUserPayload.address).length>=1){
+            // if(Object.keys(newUserPayload.address).length>=1){
                 let consume = ApiService.request(routes.HIT_USERS, "POST", newUserPayload);
                 dispatch(request(consume));
                 return consume
@@ -204,9 +204,9 @@ function createUser   (newUserPayload){
                         
                         dispatch(failure(handleRequestErrors(error)));
                     });
-                }else{
-                    dispatch(failure(handleRequestErrors("Provide Address information")));
-                }
+            // }else{
+            //     dispatch(failure("Provide Address information"));
+            // }
         }
         
     }

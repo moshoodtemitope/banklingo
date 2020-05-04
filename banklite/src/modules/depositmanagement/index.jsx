@@ -10,7 +10,7 @@ import TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-
+import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./depositmanagement.scss";
@@ -137,6 +137,7 @@ class DepositManagement extends React.Component {
                                         <th>Account Number</th>
                                         <th>Account Holder Name</th>
                                         <th>Product</th>
+                                        <th>Product Type</th>
                                         <th>Deposit Balance</th>
                                         <th>Account State</th>
                                         <th>Date Created</th>
@@ -145,6 +146,7 @@ class DepositManagement extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -196,7 +198,7 @@ class DepositManagement extends React.Component {
                                     id="showFullDetails" />
                                 <label htmlFor="showFullDetails">Show full details</label>
                             </div>
-
+                            <div className="loading-text">Please wait... </div>
 
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
@@ -204,6 +206,7 @@ class DepositManagement extends React.Component {
                                         <th>Account Number</th>
                                         <th>Account Holder Name</th>
                                         <th>Product</th>
+                                        <th>Product Type</th>
                                         <th>Deposit Balance</th>
                                         <th>Account State</th>
                                         <th>Date Created</th>
@@ -212,17 +215,18 @@ class DepositManagement extends React.Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        saveRequestData.result.map((eachDeposit, index) => {
+                                        saveRequestData.map((eachDeposit, index) => {
                                             return (
                                                 <Fragment key={index}>
                                                     <tr>
                                                         <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink> </td>
                                                         <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                         <td>{eachDeposit.productName}</td>
-                                                        <td>{eachDeposit.depositBalance}</td>
+                                                        <td>{eachDeposit.productTypeDescription}</td>
+                                                        <td>&#8358;{numberWithCommas(eachDeposit.depositBalance, true)}</td>
                                                         <td>{eachDeposit.accountStateDescription}</td>
                                                         <td>{eachDeposit.dateCreated}</td>
-                                                        <td>{eachDeposit.depositAvailableBalance}</td>
+                                                        <td>&#8358;{numberWithCommas(eachDeposit.depositAvailableBalance, true)}</td>
                                                     </tr>
                                                 </Fragment>
                                             )
@@ -260,7 +264,7 @@ class DepositManagement extends React.Component {
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
                                             className="countdropdown form-control form-control-sm"
-                                            onChange={(e)=>this.setPagesize(e,allDeposits)}
+                                            onChange={(e)=>this.setPagesize(e,allDeposits.result)}
                                             value={this.state.PageSize}>
                                             <option value="10">10</option>
                                             <option value="25">25</option>
@@ -280,7 +284,7 @@ class DepositManagement extends React.Component {
                                 </div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={(e)=>this.setShowDetails(e, allDeposits)}
+                                        onChange={(e)=>this.setShowDetails(e, allDeposits.result)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
@@ -293,6 +297,7 @@ class DepositManagement extends React.Component {
                                             <th>Account Number</th>
                                             <th>Account Holder Name</th>
                                             <th>Product</th>
+                                            <th>Product Type</th>
                                             <th>Deposit Balance</th>
                                             <th>Account State</th>
                                             <th>Date Created</th>
@@ -308,10 +313,11 @@ class DepositManagement extends React.Component {
                                                             <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink></td>
                                                             <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                             <td>{eachDeposit.productName}</td>
-                                                            <td>{eachDeposit.depositBalance}</td>
+                                                            <td>{eachDeposit.productTypeDescription}</td>
+                                                            <td>&#8358;{numberWithCommas(eachDeposit.depositBalance, true)}</td>
                                                             <td>{eachDeposit.accountStateDescription}</td>
                                                             <td>{eachDeposit.dateCreated}</td>
-                                                            <td>{eachDeposit.depositAvailableBalance}</td>
+                                                            <td>&#8358;{numberWithCommas(eachDeposit.depositAvailableBalance, true)}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -355,6 +361,7 @@ class DepositManagement extends React.Component {
                                             <th>Account Number</th>
                                             <th>Account Holder Name</th>
                                             <th>Product</th>
+                                            <th>Product Type</th>
                                             <th>Deposit Balance</th>
                                             <th>Account State</th>
                                             <th>Date Created</th>
@@ -363,6 +370,7 @@ class DepositManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

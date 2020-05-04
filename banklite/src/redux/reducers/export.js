@@ -137,7 +137,11 @@ import{
     getAClientDepositAccountCommentsReducer,
     createADepositCommentReducer,
     getADepositAccountAttachmentsReducer,
-    createADepositAttachmentReducer
+    createADepositAttachmentReducer,
+    changeDepositStateReducer,
+    searchAccountNumbersReducer,
+    searchCustomerAccountReducer,
+    searchForAccountsWithCustomerKeyReducer
     
 } from './deposits/deposits.reducer'
 
@@ -260,7 +264,11 @@ export const deposits = {
     getAClientDepositAccountCommentsReducer,
     createADepositCommentReducer,
     getADepositAccountAttachmentsReducer,
-    createADepositAttachmentReducer
+    createADepositAttachmentReducer,
+    changeDepositStateReducer,
+    searchAccountNumbersReducer,
+    searchCustomerAccountReducer,
+    searchForAccountsWithCustomerKeyReducer
 }
 
 export const clients ={

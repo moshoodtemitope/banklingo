@@ -33,10 +33,12 @@ import "./depositmanagement.scss";
 class NewDepositAccount extends React.Component {
     constructor(props) {
         super(props);
+        this.depositParams = this.props.match.params;
         this.state={
             user:'',
             PageSize:100,
             CurrentPage:1,
+            clientEncodedKey:null
         }
 
         this.selectedDepositProductDetails="";
@@ -51,6 +53,38 @@ class NewDepositAccount extends React.Component {
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
         this.getAllDepositProducts(params);
         this.getAllClients(params);
+
+        if(Object.keys(this.depositParams).length>=1){
+            this.getClientInfo(this.depositParams.clientId);
+        }
+    }
+
+    getClientInfo = (clientEncodedKey)=>{
+        const {dispatch} = this.props;
+
+        dispatch(clientsActions.getAClient(clientEncodedKey));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let {PageSize, CurrentPage}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+
+        
+        
+        if (nextProps.match.params.clientId !== this.props.match.params.clientId) {
+        
+            this.depositParams.clientId = nextProps.match.params.clientId;
+
+            if(this.depositParams.clientId !==undefined){
+
+                
+                this.getClientInfo(this.depositParams.clientId);
+            }else{
+                
+                this.getClientInfo("CLEAR")
+                this.getAllClients(params);
+            }
+        }
     }
 
 
@@ -98,6 +132,7 @@ class NewDepositAccount extends React.Component {
         let getAllDepositProductsRequest = this.props.getAllDepositProductsReducer,
             createDepositAccountRequest = this.props.createDepositAccountReducer,
             getClientsRequest = this.props.getAllClientsReducer,
+            getAClientRequest = this.props.getAClientReducer,
             {selectedDepositProductDetails} = this.state;
 
            
@@ -112,16 +147,35 @@ class NewDepositAccount extends React.Component {
                 
             
                 if(getAllDepositProductsRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS 
-                    && getClientsRequest.request_status=== clientsConstants.GET_ALL_CLIENTS_SUCCESS){
+                    && 
+                    (  
+                        ( 
+                                Object.keys(this.depositParams).length>=1 
+                            &&
+                                getClientsRequest.request_status === clientsConstants.GET_ALL_CLIENTS_SUCCESS
+                            &&  getAClientRequest.request_status!==clientsConstants.GET_A_CLIENT_PENDING
+                        )
+
+                        || (Object.keys(this.depositParams).length<=1 
+                            && getClientsRequest.request_status === clientsConstants.GET_ALL_CLIENTS_SUCCESS)
+                    )){
                         
                         if(getAllDepositProductsRequest.request_data.response.data.length>=1){
                             if(getClientsRequest.request_data.response.data.length>=1){
                                 let allDepositProducts = getAllDepositProductsRequest.request_data.response.data,
-                                    allCustomers = getClientsRequest.request_data.response.data,
-                                    allCustomersList =[],
-                                    allDepositProductsList =[];
+                                    allCustomers                = getClientsRequest.request_data.response.data,
+                                    allCustomersList            =[],
+                                    allDepositProductsList      =[],
+                                    customerFetched             =getAClientRequest,
+                                    customerFetchedData;
 
-                                    
+                                    if(Object.keys(customerFetched).length>=1 
+                                        && getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_SUCCESS
+                                        ){
+                                            customerFetchedData =getAClientRequest.request_data.response.data;
+                                            
+                                            
+                                    }
 
                                     allDepositProducts.map((product, id)=>{
                                         allDepositProductsList.push({label: product.productName, value:product.productEncodedKey});
@@ -213,9 +267,9 @@ class NewDepositAccount extends React.Component {
                                         // productEncodedKey :'',
                                         // productDisplayName:  allLoanProductsList[0].label,
                                         // interestRate:this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault!==null ? this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault : '',
-                                        clientEncodedKey:'',
-                                        depositProductEncodedKey:'',
-                                        depositProductName:allDepositProductsList[0].label,
+                                        clientEncodedKey:(customerFetchedData!==undefined && this.props.match.params.clientId!==undefined)?customerFetchedData.encodedKey :'',
+                                        depositProductEncodedKey:allDepositProductsList!==null?allDepositProductsList[0].value:null,
+                                        // depositProductName:allDepositProductsList[0].label,
                                         notes:'',
                                         depositProductName:allDepositProductsList!==null?allDepositProductsList[0].label:null,
                                         // maximumWithdrawalAmount:this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString(),
@@ -224,6 +278,7 @@ class NewDepositAccount extends React.Component {
                                         interestRate:this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateDefault!==null ? this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateDefault.toString() : '',
                                     }}
 
+                                    enableReinitialize={false}
                                     validationSchema={depositAccountValidationSchema}
                                     onSubmit={(values, { resetForm }) => {
 
@@ -248,9 +303,9 @@ class NewDepositAccount extends React.Component {
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
                                                 depositProductEncodedKey: values.depositProductEncodedKey,
-                                                depositProductName: values.depositProductName,
-                                                notes: values.notes,
-                                                maximumWithdrawalAmount:parseFloat(values.interestRate.replace(/,/g, '')),
+                                                depositProductName:values.depositProductName!==""? values.depositProductName:null,
+                                                notes: values.notes!==""? values.notes: null,
+                                                maximumWithdrawalAmount:parseFloat(values.maximumWithdrawalAmount.replace(/,/g, '')),
                                                 interestRate :parseFloat(values.interestRate.replace(/,/g, '')),
                                                 recommendedDepositAmount :parseFloat(values.recommendedDepositAmount.replace(/,/g, ''))
                                             };
@@ -317,28 +372,38 @@ class NewDepositAccount extends React.Component {
                                                     <h3>Creating A New Deposit Account</h3>
                                                 </div>
                                                 <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Customer Name</Form.Label>
-                                                        <Select
-                                                            options={allCustomersList}
-                                                            onChange={(selected) => {
+                                                    { (customerFetchedData===undefined || this.props.match.params.clientId===undefined) &&
+                                                        <Col>
+                                                            <Form.Label className="block-level">Customer Name</Form.Label>
+                                                            <Select
+                                                                options={allCustomersList}
+                                                                onChange={(selected) => {
+                                                                    
+                                                                    
+                                                                    setFieldValue('clientEncodedKey', selected.value)
+                                                                }}
+                                                                placeholder="Search Customer"
+                                                                onBlur={()=> setFieldTouched('clientEncodedKey', true)}
+                                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
                                                                 
                                                                 
-                                                                setFieldValue('clientEncodedKey', selected.value)
-                                                            }}
-                                                            placeholder="Search Customer"
-                                                            onBlur={()=> setFieldTouched('clientEncodedKey', true)}
-                                                            className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
-                                                            
-                                                            
-                                                            name="clientEncodedKey"
-                                                            
-                                                            required
-                                                        />
-                                                        {errors.clientEncodedKey && touched.clientEncodedKey ? (
-                                                            <span className="invalid-feedback">{errors.clientEncodedKey}</span>
-                                                        ) : null}
-                                                    </Col>
+                                                                name="clientEncodedKey"
+                                                                
+                                                                required
+                                                            />
+                                                            {errors.clientEncodedKey && touched.clientEncodedKey ? (
+                                                                <span className="invalid-feedback">{errors.clientEncodedKey}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                    }
+                                                    {
+                                                        (customerFetchedData !== undefined && this.props.match.params.clientId !== undefined) &&
+                                                        <Col>
+                                                            <Form.Label className="block-level">Customer Name</Form.Label>
+                                                            <h3>{customerFetchedData.lastName} {customerFetchedData.firstName} {customerFetchedData.middleName} </h3>
+                                                        </Col>
+
+                                                    }
                                                 </Form.Row>
                                                 <Form.Row>
                                                     <Col>
@@ -422,7 +487,7 @@ class NewDepositAccount extends React.Component {
                                                                         </Col>
                                                                         <Col sm={6}>
                                                                             <Form.Label className="block-level">Opening Balance</Form.Label>
-                                                                            <span className="form-text">Min: ₦{this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance!==null?`₦${numberWithCommas(this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString())}`:"N/A"}
+                                                                            <span className="form-text">Min: {this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance!==null?`₦${numberWithCommas(this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString())}`:"N/A"}
                                                                             </span>
                                                                         </Col>
                                                                     </Form.Row>
@@ -511,7 +576,12 @@ class NewDepositAccount extends React.Component {
 
 
                                                 <div className="footer-with-cta toleft">
-                                                    <NavLink to={'/deposits'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                                    {/* <NavLink to={'/deposits'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                                    <Button variant="light" 
+                                                            className="btn btn-secondary grayed-out"
+                                                            onClick={()=>this.props.history.goBack()}
+                                                    >
+                                                        Cancel</Button>
                                                     <Button
                                                         type="submit"
                                                         disabled={createDepositAccountRequest.is_request_processing}>
@@ -607,6 +677,7 @@ function mapStateToProps(state) {
         createDepositAccountReducer : state.depositsReducers.createDepositAccountReducer,
         getAllDepositProductsReducer : state.productReducers.getAllDepositProductsReducer,
         getAllClientsReducer : state.clientsReducers.getAllClientsReducer,
+        getAClientReducer: state.clientsReducers.getAClientReducer,
     };
 }
 

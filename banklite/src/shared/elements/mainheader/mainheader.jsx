@@ -27,6 +27,13 @@ import "./mainheader.scss";
 class MainHeader extends React.Component{
     constructor(props) {
         super(props);
+        let user = localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")) : {};
+
+        // console.log("user is", user.BranchId)
+        // if(user.BranchId)
+        if(Object.keys(user).length<=1){
+            history.push('/');
+       }
         this.state={
             user:JSON.parse(localStorage.getItem("user")),
             activeBranch:JSON.parse(localStorage.getItem("user")).BranchName,
@@ -36,12 +43,26 @@ class MainHeader extends React.Component{
        if(Object.keys(this.props.user).length<=1){
             history.push('/');
        }
+       
     
     }
 
     componentDidMount(){
         this.getCustomerTypes();
+        document.addEventListener("mousedown",this.handleBodyClick, false);
     }
+
+    // componentWillMount(){
+    //     document.addEventListener("mousedown",this.handleBodyClick, false);
+    // }
+    componentWillUnmount(){
+        document.removeEventListener("mousedown",this.handleBodyClick, false);
+    }
+
+
+    
+
+   
 
     handleCurrentBranchClicked = () =>{
         let {user} = this.state;
@@ -101,7 +122,7 @@ class MainHeader extends React.Component{
                                         // allCustomerTypes.push({label: eachType.name, value:eachType.id});
                                         let custType = eachType.name.split(' ').join('');
                                         return(
-                                            <NavLink className="menu-grouplist" key={id} exact to={`/clients/new/${custType}/${eachType.id}`}>{eachType.name}</NavLink>
+                                            <NavLink className="menu-grouplist" key={id} exact to={`/clients/new/${custType}/${eachType.encodedKey}`}>{eachType.name}</NavLink>
                                         )
                                         //  return( <NavLink to={'/dashboard'}>dsdhsjdhshjd</NavLink>)
                                     })
@@ -122,7 +143,6 @@ class MainHeader extends React.Component{
 
     renderAllowedBranches =()=>{
         let {AllowedBranches} = this.state.user;
-        console.log('branches are', AllowedBranches);
         return(
             <select name="" id="" onBlur={this.chooseBranch} onChange={this.chooseBranch}>
                 {
@@ -144,7 +164,7 @@ class MainHeader extends React.Component{
     
     goToSelectedSearchResult =(selectedResultData)=>{
 
-        console.log("value is", selectedResultData);
+
         let resultType = selectedResultData.searchItemType,
             searchItemEncodedKey = selectedResultData.searchItemEncodedKey,
             clientEncodedKey = selectedResultData.clientEncodedKey;
@@ -183,6 +203,7 @@ class MainHeader extends React.Component{
             if(resultType===3 && clientEncodedKey!=="" && clientEncodedKey!==null){
                 history.push(`/customer/${clientEncodedKey}/savingsaccount/${searchItemEncodedKey}`);
             }
+            this.props.dispatch(dashboardActions.globalSearchAnItem("CLEAR"));
             // if(resultType===4 && clientEncodedKey!=="" && clientEncodedKey!==null){
             //     history.push(`/customer/${clientEncodedKey}/savingsaccount/${searchItemEncodedKey}`);
             // }
@@ -230,7 +251,7 @@ class MainHeader extends React.Component{
                         if (globalSearchAnItemRequest.request_status === dashboardConstants.GLOBAL_SEARCH_ITEM_SUCCESS) {
                             // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
                             searchResultsData = globalSearchAnItemRequest.request_data.response.data;
-                            console.log("serch inside", searchResultsData);
+                            
                             return searchResultsData;
                         }
                         
@@ -252,15 +273,205 @@ class MainHeader extends React.Component{
         // }
         // return i18n.get('app.commons.errors.emptySearchResult');
         return ""
-      }
+    }
+
+
+    //Custom Search Implemetation
+
+    setWrapperRef =(node)=> {
+        this.wrapperRef = node;
+    }
+
+    handleBodyClick=(event) =>{
+        
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            this.props.dispatch(dashboardActions.globalSearchAnItem("CLEAR"));
+            
+        }
+    }
+
+    getSearchTermResults = (inputValue)=>{
+        let globalSearchAnItemRequest = this.props.globalSearchAnItemReducer,
+            searchResultsData,
+            searchResultsList =[];
+        this.props.dispatch(dashboardActions.globalSearchAnItem("CLEAR"));
+        if(inputValue.length>=1){
+            return this.getSearchedItemResults(inputValue)
+                    .then(
+                        ()=>{
+                        if (globalSearchAnItemRequest.request_status === dashboardConstants.GLOBAL_SEARCH_ITEM_SUCCESS) {
+                            // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
+                            searchResultsData = globalSearchAnItemRequest.request_data.response.data;
+                            
+                            return searchResultsData;
+                        }
+                        
+                    })
+        }else{
+            return null;
+        }
+    }
+    
+    handleSearchInput =(searchValue, isClearable)=>{
+        
+        if(isClearable===true){
+            searchValue.target.value = "";
+            // this.props.dispatch(dashboardActions.globalSearchAnItem("CLEAR"));
+        }
+
+        if(searchValue.target.value.length>=1){
+            let searchTerm = searchValue.target.value;
+            this.getSearchTermResults(searchTerm);
+        }
+
+    }
+
+    clearSearchRecord = (searchValue)=>{
+        
+        this.props.dispatch(dashboardActions.globalSearchAnItem("CLEAR"));
+
+        if(searchValue.target.value.length>=1){
+            let searchTerm = searchValue.target.value;
+            this.getSearchTermResults(searchTerm);
+        }
+    }
+
+    keyPressed = (event)=> {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            if(event.target.value.length>=1){
+                let searchTerm = event.target.value;
+                this.getSearchTermResults(searchTerm);
+            }
+        }
+    }
+
+    renderSearchResults = ()=>{
+        let globalSearchAnItemRequest = this.props.globalSearchAnItemReducer;
+
+        if(globalSearchAnItemRequest.request_status === dashboardConstants.GLOBAL_SEARCH_ITEM_PENDING) {
+            return (
+                <div className="searchresults-wrap noresult" ref={this.setWrapperRef}>
+                    <div className="loading-search">Searching...</div>
+                </div>
+            )
+        }
+
+        if(globalSearchAnItemRequest.request_status === dashboardConstants.GLOBAL_SEARCH_ITEM_SUCCESS) {
+            let searchResult =  globalSearchAnItemRequest.request_data.response.data;
+             let resultChunk = [];
+            
+            if(searchResult.length>=1){
+                let searchResultType =[];
+               
+                searchResult.map((eachResult, index)=>{
+                    // if(searchResultType.indexOf(eachResult.searchItemTypeDesc)===-1){
+                    if(searchResultType.filter(eachType=> eachType.searchType ===eachResult.searchItemType).length<1){
+                        searchResultType.push({
+                            searchType: eachResult.searchItemType,
+                            searchTypeDesc: eachResult.searchItemTypeDesc
+                        })
+
+                    }
+                })
+
+                // searchResult.map((eachResult, index)=>{
+                    
+                //     searchResultType.forEach((eachType)=>{
+                //         if(eachResult.searchItemType === eachType.searchType){
+                //             let resultGroup = [];
+                //             resultGroup.push(eachResult)
+                //             resultChunk.push({
+                //                 resultTypeText:  eachType.searchTypeDesc,
+                //                 resultData: resultGroup
+                //             })
+                //         } 
+                //     })
+                // })
+
+                searchResultType.forEach((eachType)=>{
+                    let resultGroup = [];
+                    searchResult.map((eachResult, index)=>{
+                        if(eachResult.searchItemType === eachType.searchType){
+                            resultGroup.push(eachResult)
+                        } 
+                    })
+                    
+                    // resultChunk.forEach((eachChunk)=>{
+                        // if(eachChunk.resultTypeText!==eachType.searchTypeDesc){
+                            resultChunk.push({
+                                resultTypeText:  eachType.searchTypeDesc,
+                                resultType:  eachType.searchType,
+                                resultData: resultGroup
+                            })
+                        // }
+                    // })
+                    
+                })
+
+                
+
+                return (
+                    <div className="searchresults-wrap" ref={this.setWrapperRef}>
+                        {
+                            resultChunk.map((eachSearchResult, index)=>{
+                                return(
+                                    <div className="each-search-resultlist" key={index} >
+                                       <h5>{eachSearchResult.resultTypeText}</h5>
+                                       <div className="resultlist">
+                                        {
+                                            eachSearchResult.resultData.map((resultList, resultIndex)=>{
+                                                
+                                                return(
+                                                    <div className="result-details" key={resultIndex} 
+                                                        onClick={(e)=>{
+                                                            // e.stopPropagation();
+                                                            
+                                                            this.goToSelectedSearchResult(resultList)
+                                                        }}>
+                                                        {resultList.searchText}
+                                                        <span>{resultList.searchKey!==""?`- ${resultList.searchKey}`:""}</span>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                       </div>
+                                    </div>
+                                )
+                            })
+                        }
+                        
+                    </div>
+                )
+            }else{
+                return (
+                    <div className="searchresults-wrap noresult" ref={node=>this.node=node}>
+                        <div className="each-search-result">No result found</div>
+                    </div>
+                )
+            }
+            
+        }
+
+        if(globalSearchAnItemRequest.request_status === dashboardConstants.GLOBAL_SEARCH_ITEM_FAILURE) {
+            return (
+                <div className="searchresults-wrap noresult" ref={this.setWrapperRef}>
+                    <div className="errormsg">{globalSearchAnItemRequest.error}</div>
+                </div>
+            )
+        }
+
+        return null;
+    }
     
 
     renderGlobalSearch =()=>{
         const { selectedOption } = this.state;
+        let globalSearchAnItemRequest = this.props.globalSearchAnItemReducer;
         return(
-            <Form inline className="searchfieldwrap">
+            <Form inline className="searchfieldwrap async-search-wrap">
                 {/* <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" /> */}
-                <AsyncSelect
+                {/* <AsyncSelect
                     cacheOptions= {false}
                     value={selectedOption}
                     noOptionsMessage={this.noOptionsMessage}
@@ -270,7 +481,17 @@ class MainHeader extends React.Component{
                     loadOptions={this.initiateGlobalSearchItem}
                     placeholder=""
                     onChange={this.handleSearchInputChange}
+                /> */}
+                <Form.Control type="text" 
+                    onChange={this.handleSearchInput}
+                    onKeyPress={this.keyPressed}
+                    onBlur={(e)=>this.handleSearchInput(e, true)}
+                    onFocus={this.clearSearchRecord}
+                    onClick={this.clearSearchRecord}
+                    // value={values.depositProductName}
+                    className={(globalSearchAnItemRequest.request_data!==undefined && Object.keys(globalSearchAnItemRequest.request_data).length>=1) ?"h-38px focusedsearch": "h-38px"} 
                 />
+                {this.renderSearchResults()}
             </Form>
         )
     }

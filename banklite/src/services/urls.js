@@ -95,6 +95,9 @@ export const routes = {
     //Change Client state Endpoints
     HIT_LOAN_STATE: BASEURL + '/api/ChangeLoanState',
 
+    //Change Client state Endpoints
+    HIT_DEPOSIT_STATE: BASEURL + '/api/ChangeDepositState',
+
     //Upload Data Endpoints
     HIT_UPLOAD_DATA: BASEURL + '/api/Upload',
 
@@ -112,4 +115,7 @@ export const routes = {
 
     //Profit Loss Endpoints
     HIT_PROFIT_LOSS: BASEURL + '/api/AccountingReport/profitandloss',
+
+    //Download
+    GET_DOWNLOAD: BASEURL + '/api/Downloads/download?',
 }

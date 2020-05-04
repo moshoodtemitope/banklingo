@@ -518,7 +518,7 @@ class CustomerAccountContainer extends React.Component {
                                 alignRight
                             >
                                 <NavLink className="dropdown-item" to={`/all-loans/newloan-account/${customerDetails.clientEncodedKey}`}>New Loan Account</NavLink>
-                                <NavLink className="dropdown-item" to='/deposits/newaccount'>New Deposit Account</NavLink>
+                                <NavLink className="dropdown-item" to={`/deposits/newaccount/${customerDetails.clientEncodedKey}`}>New Deposit Account</NavLink>
                                 {/* <Dropdown.Item eventKey="1" onClick={this.handleShow}>New Deposit Account</Dropdown.Item> */}
                                 {/* <Dropdown.Item eventKey="1">New Credit Arrangement</Dropdown.Item> */}
                             </DropdownButton>
@@ -602,6 +602,13 @@ class CustomerAccountContainer extends React.Component {
                         {(eachLoanAccount.productName!==null && eachLoanAccount.productName!=="")?
                                     `${eachLoanAccount.productName} - `:""}
                             {eachLoanAccount.accountNumber}
+
+                            {eachLoanAccount.loanStateDescription==="Active" &&
+                                <span className={eachLoanAccount.loanStateDescription==="Active"? "stateindicator active-state": ""}></span>
+                            }
+                            {(eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed") &&
+                                <span className="stateindicator closed-state"></span>
+                            }
                         </NavLink>
                     </li>
                 )
@@ -610,21 +617,35 @@ class CustomerAccountContainer extends React.Component {
     }
 
     renderDepositAccountsNav = (savingsAccounts)=>{
-        return(
-            savingsAccounts.result.map((eachDepositAccount,  index)=>{
-                if(eachDepositAccount.accountNumber!=="" && eachDepositAccount.accountNumber!==null){
-                    return(
-                        <li key={index}>
-                            <NavLink to={`/customer/${this.clientEncodedKey}/savingsaccount/${eachDepositAccount.encodedKey}`}>
-                            {(eachDepositAccount.productName!==null && eachDepositAccount.productName!=="")?
-                                        `${eachDepositAccount.productName} - `:""}
-                                {eachDepositAccount.accountNumber}
-                            </NavLink>
-                        </li>
-                    )
-                }
-            })
-        )
+        if(savingsAccounts.result!==null){
+            return(
+                savingsAccounts.result.map((eachDepositAccount,  index)=>{
+                    if(eachDepositAccount.accountNumber!=="" && eachDepositAccount.accountNumber!==null){
+                        return(
+                            <li key={index}>
+                                <NavLink to={`/customer/${this.clientEncodedKey}/savingsaccount/${eachDepositAccount.encodedKey}`}>
+                                {(eachDepositAccount.productName!==null && eachDepositAccount.productName!=="")?
+                                            `${eachDepositAccount.productName} - `:""}
+                                    {eachDepositAccount.accountNumber}
+
+                                {eachDepositAccount.accountStateDescription==="Active" &&
+                                    <span className={eachDepositAccount.accountStateDescription==="Active"? "stateindicator active-state": ""}></span>
+                                }
+                                {eachDepositAccount.accountStateDescription==="Approved" &&
+                                    <span className={eachDepositAccount.accountStateDescription==="Approved"? "stateindicator mid-state": ""}></span>
+                                }
+                                {(eachDepositAccount.accountStateDescription==="Rejected" || eachDepositAccount.accountStateDescription==="Closed Withdrawn" || eachDepositAccount.accountStateDescription==="Closed") &&
+                                    <span className="stateindicator closed-state"></span>
+                                }
+                                </NavLink>
+                            </li>
+                        )
+                    }
+                })
+            )
+        }else{
+            return null;
+        }
     }
 
     renderSubMenu = (loanAccounts, savingsAccounts)=>{

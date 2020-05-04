@@ -78,9 +78,9 @@ class ViewUser extends React.Component {
                             customerActivitiesData.result.map((eachActivity,  index)=>{
                                 return(
                                     <div className="each-activity" key={index}>
-                                        <span>
+                                        {/* <span>
                                             <NavLink to='/customer/20/savingsaccount/77339322'>Payroll - Private 2073458499</NavLink>
-                                        </span>
+                                        </span> */}
                                         <span className="activity-action">{eachActivity.action}</span>
                                         <div>
                                             <span className="action-date">{eachActivity.creationDate}</span>

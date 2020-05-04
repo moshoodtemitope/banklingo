@@ -321,7 +321,12 @@ class NewBranch extends React.Component {
                             <div className="footer-with-cta toleft">
                                 {/* <Button variant="light" className="btn btn-light">
                                     Cancel</Button> */}
-                                <NavLink to={'/administration/organization'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                {/* <NavLink to={'/administration/organization'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                <Button variant="light" 
+                                        className="btn btn-secondary grayed-out"
+                                        onClick={()=>this.props.history.goBack()}
+                                >
+                                    Cancel</Button>
                                 <Button variant="success" type="submit"
                                     disabled={adminCreateNewBranchRequest.is_request_processing} 
                                     className="mr-20"   

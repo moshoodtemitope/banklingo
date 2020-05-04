@@ -134,7 +134,7 @@ class InitiateDisbursement extends React.Component {
                                             initialValues={{
                                                 bankCode: dataToEdit!==null?destinationBankToEdit.bankCode:'',
                                                 destinationAccount: dataToEdit!==null?dataToEdit.destinationAccount:'',
-                                                amount: dataToEdit!==null?numberWithCommas(dataToEdit.amount):'',
+                                                amount: dataToEdit!==null?numberWithCommas(dataToEdit.amount, true):'',
                                                 transactionSource: dataToEdit!==null?parseInt(txtSourceToEdit.value):'',
                                                 narration: dataToEdit!==null?dataToEdit.narration:'',
                                                 sourceAccount: dataToEdit!==null?dataToEdit.sourceAccount:'',
@@ -584,7 +584,7 @@ class InitiateDisbursement extends React.Component {
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">Amount</Form.Label>
-                                                    <span className="form-text disabled-field">{numberWithCommas(postDisbursementpayload.amount)}</span>
+                                                    <span className="form-text disabled-field">&#8358;{numberWithCommas(postDisbursementpayload.amount, true)}</span>
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Narration</Form.Label>

@@ -763,7 +763,12 @@ class NewLoanAccount extends React.Component {
                                                         <input type="checkbox" name="" id="create-another" />
                                                         <label htmlFor="create-another">Create Another</label>
                                                     </div>
-                                                    <NavLink to={'/deposits'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                                    {/* <NavLink to={'/deposits'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                                    <Button variant="light" 
+                                                            className="btn btn-secondary grayed-out"
+                                                            onClick={()=>this.props.history.goBack()}
+                                                    >
+                                                        Cancel</Button>
                                                     <Button>Create  Account</Button>
                                                 </div>
                                             </Form>

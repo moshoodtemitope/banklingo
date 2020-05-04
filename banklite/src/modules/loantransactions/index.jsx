@@ -10,7 +10,7 @@ import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-
+import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import { loanActions } from '../../redux/actions/loans/loans.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./loantransactions.scss"; 
@@ -77,7 +77,7 @@ class LoanTransactions extends React.Component {
         let saveRequestData= getLoanTransactionsRequest.request_data!==undefined?getLoanTransactionsRequest.request_data.tempData:null;
         switch (getLoanTransactionsRequest.request_status) {
             case (loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_PENDING):
-                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                     return (
                         <div className="loading-content">
                             <div className="heading-with-cta">
@@ -112,7 +112,7 @@ class LoanTransactions extends React.Component {
                                         <th>Transaction Amount</th>
                                         <th>UserName</th>
                                         <th>Transaction Date</th>
-                                        <th>Entry Date</th>
+                                        {/* <th>Entry Date</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -123,7 +123,7 @@ class LoanTransactions extends React.Component {
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
+                                        {/* <td></td> */}
                                     </tr>
                                 </tbody>
                             </TableComponent>
@@ -158,7 +158,7 @@ class LoanTransactions extends React.Component {
                                     </select>
                                 </div>
                             </div>
-
+                            <div className="loading-text">Please wait... </div>
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
@@ -168,22 +168,22 @@ class LoanTransactions extends React.Component {
                                         <th>Transaction Amount</th>
                                         <th>UserName</th>
                                         <th>Transaction Date</th>
-                                        <th>Entry Date</th>
+                                        {/* <th>Entry Date</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        saveRequestData.result.map((eachTransaction, index) => {
+                                        saveRequestData.map((eachTransaction, index) => {
                                             return (
                                                 <Fragment key={index}>
                                                     <tr>
-                                                        <td>{eachTransaction.accountHolderName}</td>
-                                                        <td><NavLink to={`/loan-transactions/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
+                                                        <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
+                                                        <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/loanaccount/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
                                                         <td>{eachTransaction.typeDescription}</td>
-                                                        <td>{eachTransaction.transactionAmount}</td>
+                                                        <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true)}</td>
                                                         <td>{eachTransaction.userName}</td>
                                                         <td>{eachTransaction.transactionDate}</td>
-                                                        <td>{eachTransaction.entryDate}</td>
+                                                        {/* <td>{eachTransaction.entryDate}</td> */}
                                                     </tr>
                                                 </Fragment>
                                             )
@@ -220,7 +220,7 @@ class LoanTransactions extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={(e)=>this.setPagesize(e, allLoanTransactions)}
+                                            onChange={(e)=>this.setPagesize(e, allLoanTransactions.result)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -249,7 +249,7 @@ class LoanTransactions extends React.Component {
                                             <th>Transaction Amount</th>
                                             <th>UserName</th>
                                             <th>Transaction Date</th>
-                                            <th>Entry Date</th>
+                                            {/* <th>Entry Date</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -258,13 +258,13 @@ class LoanTransactions extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachTransaction.accountHolderName}</td>
-                                                            <td><NavLink to={`/loan-transactions/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
+                                                            <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/loanaccount/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
                                                             <td>{eachTransaction.typeDescription}</td>
-                                                            <td>{eachTransaction.transactionAmount}</td>
+                                                            <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true)}</td>
                                                             <td>{eachTransaction.userName}</td>
                                                             <td>{eachTransaction.transactionDate}</td>
-                                                            <td>{eachTransaction.entryDate}</td>
+                                                            {/* <td>{eachTransaction.entryDate}</td> */}
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -312,7 +312,7 @@ class LoanTransactions extends React.Component {
                                             <th>Transaction Amount</th>
                                             <th>UserName</th>
                                             <th>Transaction Date</th>
-                                            <th>Entry Date</th>
+                                            {/* <th>Entry Date</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -323,7 +323,7 @@ class LoanTransactions extends React.Component {
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            {/* <td></td> */}
                                         </tr>
                                     </tbody>
                                 </TableComponent>

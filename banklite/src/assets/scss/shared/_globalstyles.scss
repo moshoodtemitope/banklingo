@@ -156,6 +156,7 @@ select, select.form-control{
     .nav{
         >li{
             margin-right: 10px;
+            margin-bottom: 10px;
             >a{
                 display: block;
                 background: #F8F9F9;
@@ -698,6 +699,9 @@ button.togglestyle{
 .invalid-label{
     color: #dc3545;
 }
+.errormsg{
+    color: #dc3545;
+}
 .loading-content{
     text-align: center;
     color: #AEB6BF;
@@ -769,5 +773,34 @@ button.togglestyle{
             color: #ffffff;
             font-weight: 600;
         }
+    }
+}
+
+.async-search-wrap{
+    position: relative;
+    .css-1wy0on6{
+        display: none;
+    }
+}
+.edit-link{
+    color: #85C1E9;
+    border-bottom: 1px solid #85C1E9;
+    cursor: pointer;
+}
+.stateindicator {
+    width: 6px;
+    height: 6px;
+    line-height: 6px;
+    background: #ffffff;
+    display: inline-block;
+    margin-left: 5px;
+    &.active-state{
+        background: #28a745;
+    }
+    &.closed-state{
+        background: #EC7063;
+    }
+    &.mid-state{
+        background: #FFBF00;
     }
 }

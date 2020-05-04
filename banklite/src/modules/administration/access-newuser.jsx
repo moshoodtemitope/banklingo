@@ -95,9 +95,9 @@ class CreateNewUser extends React.Component {
                 contactMobile: Yup.string()
                     .min(7, 'Valid Contact mobile  required')
                     .max(100, 'Max limit reached'),
-                contactEmail: Yup.string()
-                    .email('Valid email  required')
-                    .max(100, 'Max limit reached'),
+                // contactEmail: Yup.string()
+                //     .email('Valid email  required')
+                //     .max(100, 'Max limit reached'),
                 userName: Yup.string()
                     .min(2, 'Valid Username  required')
                     .max(100, 'Max limit reached')
@@ -146,7 +146,7 @@ class CreateNewUser extends React.Component {
                     addressCountry: '',
                     zipCode: '',
                     contactMobile: '',
-                    contactEmail: '',
+                    // contactEmail: '',
                     userName: '',
                     emailAddress: '',
                     password: '',
@@ -160,58 +160,60 @@ class CreateNewUser extends React.Component {
                     let createNewUserPayload = {
                         firstName: values.firstName,
                         lastName: values.lastName,
-                        title: values.title,
-                        roleId: values.roleId,
-                        isAccountOfficer: values.userIsAccountOfficer,
-                        isTeller: values.userIsTeller,
-                        isApiAccess: values.userHasApiAccessRight,
-                        isPortalAdministrator: values.userIsPortalAdministrator,
-                        isAdministrator: values.userIsAdministrator,
+                        title: values.title !==''? values.title:null,
+                        roleId: values.roleId!==''? values.roleId:null,
+                        isAccountOfficer: values.userIsAccountOfficer!==""? values.userIsAccountOfficer:null ,
+                        isTeller: values.userIsTeller!==''? values.userIsTeller : null,
+                        isApiAccess: values.userHasApiAccessRight!==""? values.userHasApiAccessRight: null,
+                        isPortalAdministrator: values.userIsPortalAdministrator!==""? values.userIsPortalAdministrator: null,
+                        isAdministrator: values.userIsAdministrator!==""?values.userIsAdministrator: null ,
                         contact:{
-                            // contactMobile:values.contactMobile,
-                            // contactEmail:values.contactEmail,
+                            contactMobile:values.contactMobile !==""? values.contactMobile: null,
+                            contactEmail:values.contactEmail!=="" ? values.contactEmail:null,
                         },
                         address:{
-                            // addressLine1: values.addressLine1,
-                            // addressLine2: values.addressLine2,
-                            // addressCity: values.addressCity,
-                            // addressState: values.addressState,
-                            // addressCountry: values.addressCountry,
-                            // zipCode: values.zipCode,
+                            addressLine1: values.addressLine1 !==""? values.addressLine1: null,
+                            addressLine2: values.addressLine2!==""? values.addressLine2: null,
+                            addressCity: values.addressCity !==""? values.addressCity: null,
+                            addressState: values.addressState!==""? values.addressState: null,
+                            addressCountry: values.addressCountry !==""? values.addressCountry :null,
+                            zipCode: values.zipCode!==""? values.zipCode: null,
                         },
-                        userName: values.userName,
-                        emailAddress: values.emailAddress,
-                        password: values.password,
-                        branchId: values.branchId,
-                        note: values.note,
-                        canAccessAllBranches: values.canAccessAllBranches
+                        userName: values.userName!==""? values.userName: null,
+                        emailAddress: values.emailAddress!=="" ? values.emailAddress: null,
+                        password: values.password!==""? values.password: null,
+                        branchId: values.branchId!==""? values.branchId: null,
+                        note: values.note!==""? values.note: null,
+                        canAccessAllBranches: values.canAccessAllBranches!==""? values.canAccessAllBranches: null
                     };
-                    if(values.addressLine1!==''){
-                        createNewUserPayload.address.addressLine1 =values.addressLine1;
-                    }
-                    if(values.addressLine2!==''){
-                        createNewUserPayload.address.addressLine2 =values.addressLine2;
-                    }
-                    if(values.addressCity!==''){
-                        createNewUserPayload.address.addressCity =values.addressCity;
-                    }
-                    if(values.addressState!==''){
-                        createNewUserPayload.address.addressState =values.addressState;
-                    }
-                    if(values.addressCountry!==''){
-                        createNewUserPayload.address.addressCountry =values.addressCountry;
-                    }
-                    if(values.zipCode!==''){
-                        createNewUserPayload.address.zipCode =values.zipCode;
-                    }
+                    // if(values.addressLine1!==''){
+                    //     createNewUserPayload.address.addressLine1 =values.addressLine1;
+                    // }
+                    // if(values.addressLine2!==''){
+                    //     createNewUserPayload.address.addressLine2 =values.addressLine2;
+                    // }
+                    // if(values.addressCity!==''){
+                    //     createNewUserPayload.address.addressCity =values.addressCity;
+                    // }
+                    // if(values.addressState!==''){
+                    //     createNewUserPayload.address.addressState =values.addressState;
+                    // }
+                    // if(values.addressCountry!==''){
+                    //     createNewUserPayload.address.addressCountry =values.addressCountry;
+                    // }
+                    // if(values.zipCode!==''){
+                    //     createNewUserPayload.address.zipCode =values.zipCode;
+                    // }
 
-                    if(values.contactMobile!==''){
-                        createNewUserPayload.contact.contactMobile =values.contactMobile;
-                    }
+                    // if(values.contactMobile!==''){
+                    //     createNewUserPayload.contact.contactMobile =values.contactMobile;
+                    // }
 
-                    if(values.contactEmail!==''){
-                        createNewUserPayload.contact.contactEmail =values.contactEmail;
-                    }
+                    // createNewUserPayload.contact.contactEmail =values.emailAddress;
+                    // if(values.contactEmail!==''){
+                    //     createNewUserPayload.contact.contactEmail =values.emailAddress;
+                    //     // createNewUserPayload.contact.contactEmail =values.contactEmail;
+                    // }
 
                     
 
@@ -229,7 +231,7 @@ class CreateNewUser extends React.Component {
                                     }, 3000);
                                 } else {
                                     setTimeout(() => {
-                                        this.props.dispatch(administrationActions.createUser("CLEAR"))
+                                        // this.props.dispatch(administrationActions.createUser("CLEAR"))
                                     }, 3000);
                                 }
 
@@ -381,7 +383,7 @@ class CreateNewUser extends React.Component {
 
                            
                             <Accordion defaultActiveKey="0">
-                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                     Contact
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="0">
@@ -400,7 +402,7 @@ class CreateNewUser extends React.Component {
                                                     ) : null}
                                             </Col>
                                             <Col>
-                                                <Form.Label className="block-level">Email Address</Form.Label>
+                                                {/* <Form.Label className="block-level">Email Address</Form.Label>
                                                 <Form.Control type="email"
                                                     onChange={handleChange}
                                                     value={values.contactEmail}
@@ -408,7 +410,7 @@ class CreateNewUser extends React.Component {
                                                     name="contactEmail" />
                                                 {errors.contactEmail && touched.contactEmail ? (
                                                     <span className="invalid-feedback">{errors.contactEmail}</span>
-                                                ) : null}
+                                                ) : null} */}
                                             </Col>
                                         </Form.Row>
                                         <Form.Row>
@@ -497,7 +499,7 @@ class CreateNewUser extends React.Component {
                             </Accordion>
 
                             <Accordion defaultActiveKey="0">
-                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                     Login Details
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="0">
@@ -606,7 +608,12 @@ class CreateNewUser extends React.Component {
 
                             <div className="footer-with-cta toleft">
                                 {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
-                                <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                <Button variant="light" 
+                                        className="btn btn-secondary grayed-out"
+                                        onClick={()=>this.props.history.goBack()}
+                                >
+                                    Cancel</Button>
+                                {/* <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
                                 <Button 
                                     type="submit"
                                     disabled={adminCreateAUserRequest.is_request_processing} 

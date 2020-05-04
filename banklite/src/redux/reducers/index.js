@@ -95,6 +95,10 @@ const depositsReducers = combineReducers({
     createADepositCommentReducer: deposits.createADepositCommentReducer, 
     getADepositAccountAttachmentsReducer: deposits.getADepositAccountAttachmentsReducer, 
     createADepositAttachmentReducer: deposits.createADepositAttachmentReducer, 
+    changeDepositStateReducer: deposits.changeDepositStateReducer, 
+    searchAccountNumbersReducer: deposits.searchAccountNumbersReducer, 
+    searchCustomerAccountReducer: deposits.searchCustomerAccountReducer, 
+    searchForAccountsWithCustomerKeyReducer: deposits.searchForAccountsWithCustomerKeyReducer, 
    
 })
 

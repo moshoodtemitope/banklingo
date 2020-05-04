@@ -778,6 +778,8 @@ class AccountManagement extends React.Component {
                             handleChange,
                             handleBlur,
                             resetForm,
+                            setFieldValue,
+                            setFieldTouched,
                             values,
                             touched,
                             isValid,
@@ -822,7 +824,9 @@ class AccountManagement extends React.Component {
                                                         this.setState({ selectedAccType });
                                                         errors.accountType = null
                                                         values.accountType = selectedAccType.value
+                                                        setFieldValue('accountType', selectedAccType.value);
                                                     }}
+                                                    onBlur={() => setFieldTouched('accountType', true)}
                                                     className={errors.accountType && touched.accountType ? "is-invalid" : null}
                                                     // value={values.accountUsage}
                                                     name="accountType"
@@ -843,7 +847,9 @@ class AccountManagement extends React.Component {
                                                         this.setState({ selectedUsageOption });
                                                         errors.accountUsage = null
                                                         values.accountUsage = selectedUsageOption.value
+                                                        setFieldValue('accountUsage', selectedUsageOption.value);
                                                     }}
+                                                    onBlur={() => setFieldTouched('accountUsage', true)}
                                                     className={errors.accountUsage && touched.accountUsage ? "is-invalid" : null}
                                                     
                                                     

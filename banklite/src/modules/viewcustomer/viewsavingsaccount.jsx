@@ -18,6 +18,11 @@ import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 // import  SidebarElement from '../../shared/elements/sidebar'
 // import "./administration.scss"; 
+import DatePicker from '../../_helpers/datepickerfield'
+import "react-datepicker/dist/react-datepicker.css";
+
+import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import Modal from 'react-bootstrap/Modal'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -27,9 +32,12 @@ import Alert from 'react-bootstrap/Alert'
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
-
+import { routes} from '../../services/urls';
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
+
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 class ViewSavingsAccount extends React.Component {
@@ -46,6 +54,11 @@ class ViewSavingsAccount extends React.Component {
             PageSize: 100,
             CurrentPage: 1,
 
+            typeOfTransfer:"currentcustomer",
+            selectOtherCustomerAccount:"",
+            isCustommerAccountsFetchedWithKey:"",
+            selectOtherCustomer:"",
+            defaultAccountOptions:"",
 
             depositTransactionPageSize: 100,
             depositTransactionCurrentPage: 1,
@@ -71,7 +84,10 @@ class ViewSavingsAccount extends React.Component {
 
             CommunicationsPageSize: 100,
             CommunicationsCurrentPage: 1,
-            NotificationType:0
+            NotificationType:0,
+
+            changeDepositState: false,
+            showDepositFundsForm: false
         }
 
         
@@ -92,11 +108,19 @@ class ViewSavingsAccount extends React.Component {
 
     loadInitialCustomerData = ()=>{
         this.getCustomerDepositAccountDetails(this.depositEncodedKey);
-        this.getADepositActivities();
-        this.getADepositCommunications();
-        this.getCustomerDepositTransactions();
-        this.getADepositComments();
-        this.getACustomerDepositAttachments();
+        this.getTransactionChannels();
+        // this.getADepositActivities();
+        // this.getADepositCommunications();
+        // this.getCustomerDepositTransactions();
+        // this.getADepositComments();
+        // this.getACustomerDepositAttachments();
+    }
+
+    getTransactionChannels = ()=>{
+        const {dispatch} = this.props;
+        let params = `PageSize=200&CurrentPage=1`;
+
+        dispatch(administrationActions.getTransactionChannels(params));
     }
 
     getCustomerDepositAccountDetails = (clientEncodedKey )=>{
@@ -191,7 +215,7 @@ class ViewSavingsAccount extends React.Component {
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${depositTransactionCurrentPage}&accountEncodedKey=${this.depositEncodedKey}`;
 
-        // dispatch(loanActions.getDepositTransaction(this.depositEncodedKey, params));
+        
 
         if(tempData){
             dispatch(depositActions.getAccountDepositTransaction(this.depositEncodedKey,params, tempData));
@@ -323,6 +347,51 @@ class ViewSavingsAccount extends React.Component {
             dispatch(depositActions.getAccountDepositAttachments(params, tempData));
         }else{
             dispatch(depositActions.getAccountDepositAttachments(params));
+        }
+    }
+
+    setActivitiesRequestNextPage = (nextPage, tempData)=>{
+        
+        const {dispatch} = this.props;
+        
+
+        let {ActivitiesPageSize } = this.state;
+
+        let params = `PageSize=${ActivitiesPageSize}&CurrentPage=${nextPage}`;
+
+        
+
+       
+        if(tempData){
+            dispatch(depositActions.getADepositAcountActivities(this.depositEncodedKey, params, tempData));
+        }else{
+            dispatch(depositActions.getADepositAcountActivities(this.depositEncodedKey, params));
+        }
+    }
+
+    setActivitiesRequestPagesize = (PageSize, tempData) => {
+        // console.log('----here', PageSize.target.value);
+        const { dispatch } = this.props;
+        let sizeOfPage = PageSize.target.value;
+
+
+        this.setState({ ActivitiesPageSize: sizeOfPage });
+
+       
+
+       
+        
+        
+        let {ActivitiesCurrentPage } = this.state;
+
+        let params = `PageSize=${sizeOfPage}&CurrentPage=${ActivitiesCurrentPage}`;
+        
+
+        if(tempData){
+            dispatch(depositActions.getADepositAcountActivities(this.depositEncodedKey,params, tempData));
+            
+        }else{
+            dispatch(depositActions.getADepositAcountActivities(this.depositEncodedKey,params));
         }
     }
 
@@ -521,21 +590,166 @@ class ViewSavingsAccount extends React.Component {
     }
 
     renderAccountState = (depositAccountData)=>{
-
+        //     public enum depositStateEnum
+        // {
+        //     [Description("Partial Application")]
+        //     Partial_Application = 1,
+        //     [Description("Pending Approval")]
+        //     Pending_Approval = 2,
+        //     [Description("Approved")]
+        //     Approved = 3,
+        //     [Description("Rejected")]
+        //     Rejected = 4,
+        //     [Description("Active")]
+        //     Active = 5,
+        //     [Description("In Arears")]
+        //     In_Arears = 6,
+        //     [Description("Closed")]
+        //     Closed = 7,
+        //     [Description("Closed Written Off")]
+        //     Closed_Written_Off = 8,
+        //     Closed_Withdrawn = 9
+        // }
         return(
-            <div className="eachamount">
-                <h6>Account State</h6>
-                <div className="amounttext">{depositAccountData.accountStateDescription}</div>
+            <div className="amounts-wrap w-65">
+                {depositAccountData.accountState!==5 &&
+                    <div className="eachamount">
+                        <h6>Account State</h6>
+                        <div className="amounttext">{depositAccountData.accountStateDescription}</div>
+                    </div>
+                }
+                
+                    {depositAccountData.accountState===5 &&
+                        <div className="eachamount">
+                            <h6>Total Balance</h6>
+                            <div className="amounttext"> &#8358;{numberWithCommas(depositAccountData.depositBalance, true)}</div>
+                        </div>
+                    }
             </div>
         )
     }
     renderDepositAccountActivities =()=>{
         let getADepositAccountActivitiesRequest = this.props.getADepositAccountActivitiesReducer;
+        let saveRequestData= getADepositAccountActivitiesRequest.request_data!==undefined?getADepositAccountActivitiesRequest.request_data.tempData:null;
 
         if(getADepositAccountActivitiesRequest.request_status===loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ACTIVITIES_PENDING){
-            return(
-                <div className="loading-text">Please wait... </div>
-            )
+            if(saveRequestData===undefined){
+                return(
+                    <div className="loading-content">
+                        <div className="loading-text">Please wait... </div>
+                        <div className="heading-with-cta">
+                            <Form className="one-liner">
+
+                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                    <Form.Control as="select" size="sm">
+                                        <option>No Filter</option>
+                                        <option>Add New Filter</option>
+                                        <option>Custom Filter</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                            </Form>
+
+                            <div className="pagination-wrap">
+                                <label htmlFor="toshow">Show</label>
+                                <select id="toshow"
+
+                                    className="countdropdown form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25" >25</option>
+                                    <option value="50">50</option>
+                                    <option value="200">200</option>
+                                </select>
+                                
+                            </div>
+                        </div>
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    {/* <th>Id</th> */}
+                                    <th>Date Created</th>
+                                    <th>Username</th>
+                                    <th>Action</th>
+                                    <th>Affected Customer</th>
+                                    {/* <th></th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {/* <td></td> */}
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
+                    </div>
+                )
+            }else{
+                
+                return(
+                    <div className="loading-content">
+                        <div className="loading-text">Please wait... </div>
+                        <div className="heading-with-cta">
+                            <Form className="one-liner">
+
+                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                    <Form.Control as="select" size="sm">
+                                        <option>No Filter</option>
+                                        <option>Add New Filter</option>
+                                        <option>Custom Filter</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                            </Form>
+
+                            <div className="pagination-wrap">
+                                <label htmlFor="toshow">Show</label>
+                                <select id="toshow" 
+                                        value={this.state.ActivitiesPageSize}
+                                        className="countdropdown form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="200">200</option>
+                                </select>
+                            </div>
+                        </div>
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    {/* <th>Id</th> */}
+                                    <th>Date Created</th>
+                                    <th>Username</th>
+                                    <th>Action</th>
+                                    <th>Affected Customer</th>
+                                    {/* <th></th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    saveRequestData.map((eachActivity, index)=>{
+                                        return(
+                                            <Fragment key={index}>
+                                                <tr>
+                                                    {/* <td>{eachActivity.id}</td> */}
+                                                    <td>{eachActivity.creationDate}</td>
+                                                    <td>{eachActivity.userName}</td>
+                                                    <td>{eachActivity.action}</td>
+                                                    <td>{eachActivity.affectedCustomerName}</td>
+                                                </tr>
+                                            </Fragment>
+                                        )
+                                    })
+                                }
+                                
+                            </tbody>
+                        </TableComponent>
+
+                    </div>
+                )
+            }
         }
 
 
@@ -543,29 +757,125 @@ class ViewSavingsAccount extends React.Component {
             let depositAccountActivitiesData = getADepositAccountActivitiesRequest.request_data.response.data;
             if(depositAccountActivitiesData.result.length>=1){
                 return(
-                    <div className="activities-wrap">
-                        {
-                            depositAccountActivitiesData.result.map((eachActivity,  index)=>{
-                                return(
-                                    <div className="each-activity">
-                                        <span>
-                                            <NavLink to='/customer/20/savingsaccount/77339322'>Payroll - Private 2073458499</NavLink>
-                                        </span>
-                                        <span className="activity-action">{eachActivity.action}</span>
-                                        <div>
-                                            <span className="action-date">{eachActivity.creationDate}</span>
-                                            <span className="action-by"> <NavLink to='/customer/20/savingsaccount/77339322'>{eachActivity.affectedUserName}</NavLink></span>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
+                    <div>
+                        <div className="heading-with-cta">
+                            <Form className="one-liner">
+
+                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                    <Form.Control as="select" size="sm">
+                                        <option>No Filter</option>
+                                        <option>Add New Filter</option>
+                                        <option>Custom Filter</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                            </Form>
+
+                            <div className="pagination-wrap">
+                                <label htmlFor="toshow">Show</label>
+                                <select id="toshow" 
+                                        onChange={(e)=>this.setActivitiesRequestPagesize(e, depositAccountActivitiesData.result)}
+                                        value={this.state.ActivitiesPageSize}
+                                        className="countdropdown form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="200">200</option>
+                                </select>
+                                <TablePagination
+                                    totalPages={depositAccountActivitiesData.totalPages}
+                                    currPage={depositAccountActivitiesData.currentPage}
+                                    currRecordsCount={depositAccountActivitiesData.result.length}
+                                    totalRows={depositAccountActivitiesData.totalRows}
+                                    tempData={depositAccountActivitiesData.result}
+                                    pagesCountToshow={4}
+                                    refreshFunc={this.setActivitiesRequestNextPage}
+                                />
+                            </div>
+                        </div>
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    {/* <th>Id</th> */}
+                                    <th>Date Created</th>
+                                    <th>Username</th>
+                                    <th>Action</th>
+                                    <th>Affected Customer</th>
+                                    {/* <th></th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    depositAccountActivitiesData.result.map((eachActivity, index)=>{
+                                        return(
+                                            <Fragment key={index}>
+                                                <tr>
+                                                    {/* <td>{eachActivity.id}</td> */}
+                                                    <td>{eachActivity.creationDate}</td>
+                                                    <td>{eachActivity.userName}</td>
+                                                    <td>{eachActivity.action}</td>
+                                                    <td>{eachActivity.affectedCustomerName}</td>
+                                                </tr>
+                                            </Fragment>
+                                        )
+                                    })
+                                }
+                               
+                            </tbody>
+                        </TableComponent>
+
                     </div>
                 )
             }else{
                 return(
-                    <div className="activities-wrap">
-                        <div>No activities to display</div>
+                    <div>
+                        <div className="heading-with-cta">
+                            <Form className="one-liner">
+
+                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                    <Form.Control as="select" size="sm">
+                                        <option>No Filter</option>
+                                        <option>Add New Filter</option>
+                                        <option>Custom Filter</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                            </Form>
+
+                            <div className="pagination-wrap">
+                                <label htmlFor="toshow">Show</label>
+                                <select id="toshow"
+                                        onChange={(e)=>this.setActivitiesRequestPagesize(e, depositAccountActivitiesData.result)}
+                                        value={this.state.ActivitiesPageSize}
+                                    className="countdropdown form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25" >25</option>
+                                    <option value="50">50</option>
+                                    <option value="200">200</option>
+                                </select>
+                            </div>
+                        </div>
+                        <TableComponent classnames="striped bordered hover">
+                            <thead>
+                                <tr>
+                                    {/* <th>Id</th> */}
+                                    <th>Date Created</th>
+                                    <th>Username</th>
+                                    <th>Action</th>
+                                    <th>Affected Customer</th>
+                                    {/* <th></th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {/* <td></td> */}
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </TableComponent>
                     </div>
                 )
             }
@@ -582,6 +892,8 @@ class ViewSavingsAccount extends React.Component {
             )
         }
     }
+
+    
 
     renderADepositCommunicatons=()=>{
         let getADepositAccountCommunicationsRequest =  this.props.getADepositAccountCommunicationsReducer;
@@ -818,7 +1130,7 @@ class ViewSavingsAccount extends React.Component {
     }
 
     renderDepositTransaction = ()=>{
-        let getDepositTransactionRequest =  this.props.getDepositTransactionReducer;
+        let getDepositTransactionRequest =  this.props.getAccountDepositTransactionReducer;
         let saveRequestData= getDepositTransactionRequest.request_data!==undefined?getDepositTransactionRequest.request_data.tempData:null;
         if(getDepositTransactionRequest.request_status===loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING){
             if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
@@ -844,12 +1156,14 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Customer Name</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
+                                    <th>Entry Type</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -884,6 +1198,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Customer Name</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
+                                    <th>Entry Type</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
                                 </tr>
@@ -894,10 +1209,11 @@ class ViewSavingsAccount extends React.Component {
                                         return(
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
-                                                <td>{getDateFromISO(eachTxt.transactionDate)}</td>
+                                                <td>{eachTxt.id}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate)}</td>
+                                                <td>{eachTxt.entryType}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>{eachTxt.transactionAmount}</td>
+                                                <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
                                             </tr>
                                         )
                                     })
@@ -946,8 +1262,9 @@ class ViewSavingsAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
-                                    <th>Transaction Date</th>
+                                    <th>Transaction Id</th>
                                     <th>Entry Date</th>
+                                    <th>Entry Type</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
                                 </tr>
@@ -958,10 +1275,11 @@ class ViewSavingsAccount extends React.Component {
                                         return(
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
-                                                <td>{getDateFromISO(eachTxt.transactionDate)}</td>
+                                                <td>{eachTxt.id}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate)}</td>
+                                                <td>{eachTxt.entryType}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>{eachTxt.transactionAmount}</td>
+                                                <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
                                             </tr>
                                         )
                                     })
@@ -994,14 +1312,16 @@ class ViewSavingsAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
-                                    <th>Transaction Date</th>
+                                    {/* <th>Transaction Date</th> */}
                                     <th>Entry Date</th>
+                                    <th>Entry Type</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    {/* <td></td> */}
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -1170,11 +1490,12 @@ class ViewSavingsAccount extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -1214,6 +1535,7 @@ class ViewSavingsAccount extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1224,6 +1546,7 @@ class ViewSavingsAccount extends React.Component {
                                                 {/* <td>{eachComments.id} </td> */}
                                                 <td>{eachComments.comment} </td>
                                                 <td>{getDateFromISO(eachComments.timeStamp)} </td>
+                                                <td><NavLink to={`/user/${eachComments.userEncodedKey}`}>{eachComments.userName} </NavLink> </td>
                                             </tr>
                                         )
                                    }) 
@@ -1280,6 +1603,7 @@ class ViewSavingsAccount extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1290,6 +1614,7 @@ class ViewSavingsAccount extends React.Component {
                                                 {/* <td>{eachComments.id} </td> */}
                                                 <td>{eachComments.comment} </td>
                                                 <td>{getDateFromISO(eachComments.timeStamp)} </td>
+                                                <td><NavLink to={`/user/${eachComments.userEncodedKey}`}>{eachComments.userName} </NavLink> </td>
                                             </tr>
                                         )
                                    }) 
@@ -1330,11 +1655,12 @@ class ViewSavingsAccount extends React.Component {
                                     {/* <th>ID</th> */}
                                     <th>Comment</th>
                                     <th>Date</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -1540,6 +1866,12 @@ class ViewSavingsAccount extends React.Component {
         )
     }
 
+    getADownload = (filetype,identifier)=>{
+        const {dispatch} = this.props;
+        
+        dispatch(clientsActions.getDownload(filetype,identifier))
+    }
+
     renderADepositAttachments=()=>{
         let getADepositAccountAttachmentsRequest =  this.props.getADepositAccountAttachmentsReducer;
 
@@ -1614,6 +1946,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Description</th>
                                     <th>Created by</th>
                                     <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1624,8 +1957,26 @@ class ViewSavingsAccount extends React.Component {
                                                 <td>{eachAttachment.title} </td>
                                                 <td>{eachAttachment.fileName} </td>
                                                 <td>{eachAttachment.description} </td>
-                                                <td>{eachAttachment.createdByUserName} </td>
+                                                <td><NavLink to={`/user/${eachAttachment.createdByUserEncodedKey}`}>{eachAttachment.createdByUserName}</NavLink> </td>
                                                 <td>{getDateFromISO(eachAttachment.timeStamp)} </td>
+                                                <td>
+                                                    {(eachAttachment.linkIdentifier!=="" && eachAttachment.linkIdentifier!==null && eachAttachment.linkIdentifier!==undefined) &&
+                                                        <DropdownButton
+                                                            size="sm"
+                                                            title="Actions"
+                                                            key="editUser"
+                                                            className="customone"
+                                                        >
+                                                            <a  className="dropdown-item" 
+                                                                href={`${routes.GET_DOWNLOAD}FileType=DEPOSIT&EncodedKey=${this.depositEncodedKey}&Link=${eachAttachment.linkIdentifier}`}
+                                                                // onClick={()=>this.getADownload('DEPOSIT',eachAttachment.linkIdentifier)}
+                                                            >Download</a>
+                                                                {/* <NavLink download className="dropdown-item" to={`${routes.GET_DOWNLOAD}filetype=DEPOSIT&identifier=${eachAttachment.linkIdentifier}&link=treble`}>Download</NavLink> */}
+                                                            
+                                                            
+                                                        </DropdownButton>
+                                                    }
+                                                </td>
                                             </tr>
                                         )
                                    }) 
@@ -1681,6 +2032,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Description</th>
                                     <th>Created by</th>
                                     <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1691,8 +2043,26 @@ class ViewSavingsAccount extends React.Component {
                                                 <td>{eachAttachment.title} </td>
                                                 <td>{eachAttachment.fileName} </td>
                                                 <td>{eachAttachment.description} </td>
-                                                <td>{eachAttachment.createdByUserName} </td>
+                                                <td> <NavLink to={`/user/${eachAttachment.createdByUserEncodedKey}`}>{eachAttachment.createdByUserName}</NavLink> </td>
                                                 <td>{getDateFromISO(eachAttachment.timeStamp)} </td>
+                                                <td>
+                                                    {(eachAttachment.linkIdentifier!=="" && eachAttachment.linkIdentifier!==null && eachAttachment.linkIdentifier!==undefined) &&
+                                                        <DropdownButton
+                                                            size="sm"
+                                                            title="Actions"
+                                                            key="editUser"
+                                                            className="customone"
+                                                        >
+                                                            
+                                                                <a  className="dropdown-item" 
+                                                                    href={`${routes.GET_DOWNLOAD}FileType=DEPOSIT&EncodedKey=${this.depositEncodedKey}&Link=${eachAttachment.linkIdentifier}`}
+                                                                    // onClick={()=>this.getADownload('DEPOSIT',eachAttachment.linkIdentifier)}
+                                                                >Download</a>
+                                                            
+                                                            
+                                                        </DropdownButton>
+                                                    }
+                                                </td>
                                             </tr>
                                         )
                                    }) 
@@ -1785,6 +2155,12 @@ class ViewSavingsAccount extends React.Component {
                                 </td>
                             </tr>
                             <tr>
+                                <td>Product Type</td>
+                                <td>
+                                    {depositAccountData.productTypeDescription}
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Assigned to Branch</td>
                                 <td></td>
                             </tr>
@@ -1802,7 +2178,7 @@ class ViewSavingsAccount extends React.Component {
                             </tr>
                             <tr>
                                 <td>Currency</td>
-                                <td>₦ NGN</td>
+                                <td>NGN </td>
                             </tr>
                             <tr>
                                 <td>Activation Date</td>
@@ -1821,8 +2197,8 @@ class ViewSavingsAccount extends React.Component {
 
                         <tbody>
                             <tr>
-                                <td>Payroll - Private</td>
-                                <td>2073458499</td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </TableComponent>
@@ -1830,6 +2206,1249 @@ class ViewSavingsAccount extends React.Component {
             </div>
         )
     }
+
+    handleDepositChangeStateClose = () => this.setState({changeDepositState:false, showDepositFundsForm:false});
+    
+    handleDepositChangeStateShow = () => this.setState({changeDepositState:true});
+
+    handleNewDepositState = async (changeDepositStatePayload, newStateUpdate)=>{
+        const {dispatch} = this.props;
+       
+        await dispatch(depositActions.changeDepositState(changeDepositStatePayload, newStateUpdate));
+    }
+
+    getSearchForAccountOptionValue = (option) => option.searchItemEncodedKey; // maps the result 'id' as the 'value'
+    getSearchOptionForAccountLabel = (option) => `${option.searchText} -${option.searchKey}`; // maps the result 'name' as the 'label'
+    noOptionsForAccountMessage(inputValue) {
+        
+        return ""
+    }
+
+    getSearchedAccountResults = async (inputValue)=> {
+        const {dispatch} = this.props;
+
+        if (!inputValue || inputValue.length===0) {
+          return null;
+        }
+        
+
+         await dispatch(depositActions.searchAccountNumbers(inputValue));
+
+        
+    }
+
+    initiateAccountSearch =(inputValue)=>{
+        this.setState({defaultAccountOptions:"", 
+                        selectOtherCustomerAccount:"",
+                        firstChosenTransferCriteria:"accounts",
+                        isCustommerAccountsFetchedWithKey:""});
+        
+        let searchAccountNumberRequest = this.props.searchAccountNumbersReducer,
+            searchResultsData,
+            searchResultsList =[],
+            getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
+        this.props.dispatch(depositActions.searchAccountNumbers("CLEAR"));
+        if(inputValue.length>=1){
+            return this.getSearchedAccountResults(inputValue)
+                    .then(
+                        ()=>{
+                        if (searchAccountNumberRequest.request_status === loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS) {
+                            // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
+                            searchResultsData = searchAccountNumberRequest.request_data.response.data;
+                            
+                            
+                            searchResultsData = searchResultsData.filter(eachResult=>(
+                                    (
+                                        (eachResult.searchItemType===3 && (eachResult.state===3 || eachResult.state===5))
+                                        ||
+                                        (eachResult.searchItemType===2 && (eachResult.state===6 || eachResult.state===5))
+                                    )
+                                    && eachResult.searchKey !==getAClientDepositAccountRequest.accountNumber
+                                    && eachResult.clientEncodedKey !==getAClientDepositAccountRequest.clientEncodedKey
+                                    ))
+                            
+                            this.setState({isCustommerAccountsFetchedWithKey:false})
+                                    
+                            return searchResultsData;
+                        }
+                        
+                    })
+        }else{
+            return null;
+        }
+           
+        
+
+                
+    }
+
+    handleSearchAccountInputChange = (selectedOption, {action})=> { 
+        
+        if (this.state.isCustommerAccountsFetchedWithKey!==true){
+            this.setState({
+                selectOtherCustomerAccount: selectedOption,
+                firstChosenTransferCriteria:"accounts",
+                selectACustomerAccount:""
+            });
+        }else{
+            this.setState({
+                selectOtherCustomerAccount: selectedOption,
+                firstChosenTransferCriteria:"customer",
+            });
+        }
+       
+    }
+
+
+
+
+
+
+
+    loadCustomerAccounts = (selectedClientEncodedKey)=>{
+        let   searchForAccountsWithCustomerKeyRequest =  this.props.searchForAccountsWithCustomerKeyReducer;
+        this.getAccountsOfSelectedCustomer(selectedClientEncodedKey)
+            .then( 
+                ()=>{
+                    if(this.props.searchForAccountsWithCustomerKeyReducer.request_status === loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_SUCCESS){
+                        
+                        let loadedCustomerAccounts = this.props.searchForAccountsWithCustomerKeyReducer.request_data.response.data,
+                            customerAccounts =[];
+
+                        if(loadedCustomerAccounts.length>=1){
+                            loadedCustomerAccounts.map((eachAccount, index)=>{
+                                if(
+                                    (eachAccount.searchItemType===2 && (eachAccount.state===5 || eachAccount.state===6))
+                                    ||
+                                    (eachAccount.searchItemType===3 && (eachAccount.state===3 || eachAccount.state===5))
+                                )
+                                {
+                                    customerAccounts.push({label:eachAccount.searchText, value:eachAccount.searchItemEncodedKey})
+                                }
+                            })
+                            this.setState({defaultAccountOptions:loadedCustomerAccounts, isCustommerAccountsFetchedWithKey: true})
+                        }
+                    }
+                }
+            )
+    }
+
+    getAccountsOfSelectedCustomer = async (selectedClientEncodedKey)=>{
+        const {dispatch} = this.props;
+      return  await dispatch(depositActions.searchForAccountsWithCustomerKey(selectedClientEncodedKey));
+    }
+
+    getSearchForCustomerOptionValue = (option) => option.searchItemEncodedKey; // maps the result 'id' as the 'value'
+    getSearchOptionForCustomerLabel = (option) => `${option.clientName} -${option.clientCode}`; // maps the result 'name' as the 'label'
+    noOptionsForCustomerMessage(inputValue) {
+        
+        return ""
+    }
+
+    getSearchedCustomerResults = async (inputValue)=> {
+        const {dispatch} = this.props;
+
+        if (!inputValue || inputValue.length===0) {
+          return null;
+        }
+        
+
+         await dispatch(depositActions.searchCustomerAccount(inputValue));
+
+        
+    }
+
+    initiateCustomerSearch =(inputValue)=>{
+        this.setState({firstChosenTransferCriteria:"customer"})
+        let searchCustomerAccountRequest = this.props.searchCustomerAccountReducer,
+            searchResultsData,
+            searchResultsList =[],
+            getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
+        this.props.dispatch(depositActions.searchCustomerAccount("CLEAR"));
+        if(inputValue.length>=1){
+            return this.getSearchedCustomerResults(inputValue)
+                    .then(
+                        ()=>{
+                           
+                        if (searchCustomerAccountRequest.request_status === loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS) {
+                            // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
+                            searchResultsData = searchCustomerAccountRequest.request_data.response.data;
+                            
+                            // console.log("+++++", searchResultsData);
+                            // searchResultsData = searchResultsData.filter(eachResult=>(
+                            //         (
+                            //             (eachResult.searchItemType===3 && (eachResult.state===3 || eachResult.state===5))
+                            //             ||
+                            //             (eachResult.searchItemType===2 && (eachResult.state===6 || eachResult.state===5))
+                            //         )
+                            //         && eachResult.searchKey !==getAClientDepositAccountRequest.accountNumber
+                            //         ))
+
+                                    
+                            // return searchResultsData;
+
+                            searchResultsData = searchResultsData.filter(eachResult=>(
+                                    (eachResult.clientEncodedKey !==getAClientDepositAccountRequest.clientEncodedKey
+                                        && eachResult.searchItemEncodedKey !==getAClientDepositAccountRequest.clientEncodedKey)
+                                ))
+
+                                
+                                return searchResultsData;
+                        }
+                        
+                    })
+        }else{
+            return null;
+        }
+           
+        
+
+                
+    }
+
+    handleSearchACustomerInputChange = (selectedOption, {action})=> { 
+        this.loadCustomerAccounts(selectedOption.clientEncodedKey);
+        this.setState({
+            selectACustomerAccount: selectedOption,
+            firstChosenTransferCriteria:"customer",
+            selectOtherCustomerAccount:""
+        });
+       
+    }
+
+    // renderTransferToAccount = (TransferToControlToShow, errors, touched, setFieldTouched)=>{
+    //     if(TransferToControlToShow ==="SameCustomerAcounts"){
+    //         return (
+    //             <Form.Row>
+    //                 <Col>
+    //                     <Form.Label className="block-level">Account to Transfer To</Form.Label>
+    //                     <Select
+    //                         options={allAccountOfCurrentCustomer}
+                            
+    //                         onChange={(selected) => {
+    //                             setFieldValue('currentCustomerChosenAccount', selected.value)
+    //                         }}
+    //                         onBlur={()=> setFieldTouched('currentCustomerChosenAccount', true)}
+    //                         className={errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? "is-invalid" : null}
+    //                         name="currentCustomerChosenAccount"
+    //                     />
+    //                     {errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? (
+    //                         <span className="invalid-feedback">{errors.currentCustomerChosenAccount}</span>
+    //                     ) : null}
+    //                 </Col>
+    //             </Form.Row>
+    //         )
+    //     }
+        
+    //     if(TransferToControlToShow ==="SearchableLoanAndDepositAccounts"){
+    //         return (
+    //             <Form.Row>
+    //                 <Col className="async-search-wrap">
+    //                     <Form.Label className="block-level">Account to Transfer To</Form.Label>
+    //                     <AsyncSelect
+    //                         cacheOptions={false}
+    //                         value={selectOtherCustomerAccount}
+    //                         noOptionsMessage={this.noOptionsForAccountMessage}
+    //                         getOptionValue={this.getSearchForAccountOptionValue}
+    //                         getOptionLabel={this.getSearchOptionForAccountLabel}
+    //                         // defaultOptions={defaultOptions}
+    //                         loadOptions={this.initiateAccountSearch}
+    //                         placeholder="Search Accounts"
+    //                         onChange={this.handleSearchAccountInputChange}
+    //                     />
+    //                 </Col>
+    //             </Form.Row>
+    //         )
+    //     }
+
+    //     if(TransferToControlToShow ==="DropDownOfChosenCustomerAccounts"){
+
+    //     }
+    // }
+
+    changeDepositStateBox = (depositDetails)=>{
+        const {changeDepositState, 
+                selectOtherCustomerAccount,
+                isCustommerAccountsFetchedWithKey,
+                selectOtherCustomer, 
+                firstChosenTransferCriteria,
+                typeOfTransfer, 
+                newState,
+                ctaText,
+                newStateHeading, 
+                newStateUpdate, 
+                selectACustomerAccount,
+                defaultAccountOptions,
+                showDepositFundsForm} = this.state;
+        let  changeDepositStateRequest = this.props.changeDepositStateReducer,
+            getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
+
+        let   customerLoanAccounts = this.props.getClientLoansReducer.request_data.response.data;
+        let   customerDepositAccounts = this.props.getClientDepositsReducer.request_data.response.data;
+        let   searchForAccountsWithCustomerKeyRequest =  this.props.searchForAccountsWithCustomerKeyReducer;
+        let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
+            allChannels =[], 
+            allAccountOfCurrentCustomer =[], 
+            channelsList;
+        
+        let searchAccountNumberRequest = this.props.searchAccountNumbersReducer;
+            if(customerLoanAccounts.result!==null){
+                customerLoanAccounts.result.map((eachLoanAccount,  index)=>{
+                    if(eachLoanAccount.loanState ===5 || eachLoanAccount.loanState ===6){
+                        allAccountOfCurrentCustomer.push({label: `${eachLoanAccount.productName} - ${eachLoanAccount.accountNumber}`, value:eachLoanAccount.encodedKey});
+                    }
+                })  
+            }
+
+            if(customerDepositAccounts.result!==null){
+                customerDepositAccounts.result.map((eachDepositAccount,  index)=>{
+                    if((eachDepositAccount.accountState ===3 || eachDepositAccount.accountState ===5) && eachDepositAccount.accountNumber !==getAClientDepositAccountRequest.accountNumber ){
+                        allAccountOfCurrentCustomer.push({label: `${eachDepositAccount.productName} - ${eachDepositAccount.accountNumber}`, value:eachDepositAccount.encodedKey});
+                    }
+                })
+            }
+        
+
+        if(adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+            && adminGetTransactionChannelsRequest.request_data.response.data.result.length>=1){
+                channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+
+                channelsList.map((channel, id)=>{
+                    allChannels.push({label: channel.name, value:channel.encodedKey});
+                })
+        }
+
+        let changeDepositStateValidationSchema;
+        if(showDepositFundsForm!==true){
+            changeDepositStateValidationSchema = Yup.object().shape({
+                comment:  Yup.string()
+                    .min(2, 'Valid comments required'),
+                notes:  Yup.string()
+                    .min(2, 'Valid notes required'),
+            
+            });
+        }
+
+        if(newStateUpdate==="beginmaturity"){
+            changeDepositStateValidationSchema = Yup.object().shape({
+                notes:  Yup.string()
+                    .min(2, 'Valid notes required'),
+                maturityDate:  Yup.string()
+                    .required('Required'),
+            
+            });
+        }
+
+        if(showDepositFundsForm===true){
+            changeDepositStateValidationSchema = Yup.object().shape({
+                    notes:  Yup.string()
+                        .min(2, 'Valid notes required'),
+                    depositChannelEncodedKey:  Yup.string()
+                        .required('Required'),
+                    amountToDeposit:  Yup.string()
+                        .required('Required'),
+                    backDateChosen:  Yup.string()
+                        .when('allowBackDate',{
+                            is:(value)=>value===true,
+                            then: Yup.string()
+                                .required('Required')
+                        }),
+                    bookingDateChosen:  Yup.string()
+                        .when('showBookingDate',{
+                            is:(value)=>value===true,
+                            then: Yup.string()
+                                .required('Required')
+                        }),
+                
+            });
+        }
+
+        if(newStateUpdate === "makewithdrawal"){
+            changeDepositStateValidationSchema = Yup.object().shape({
+                    notes:  Yup.string()
+                        .min(2, 'Valid notes required'),
+                    depositChannelEncodedKey:  Yup.string()
+                        .required('Required'),
+                    amountToWithdraw:  Yup.string()
+                        .required('Required'),
+                    backDateChosen:  Yup.string()
+                        .when('allowBackDate',{
+                            is:(value)=>value===true,
+                            then: Yup.string()
+                                .required('Required')
+                        }),
+                
+            });
+        }
+
+        if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
+            changeDepositStateValidationSchema = Yup.object().shape({
+                    notes:  Yup.string()
+                        .min(2, 'Valid notes required'),
+                    amountToDeposit:  Yup.string()
+                        .required('Required'),
+                
+            });
+        }
+
+        if(newStateUpdate === "transfer"){
+            if(typeOfTransfer ==="currentcustomer"){
+                changeDepositStateValidationSchema = Yup.object().shape({
+                        notes:  Yup.string()
+                            .min(2, 'Valid notes required'),
+                        currentCustomerChosenAccount:  Yup.string()
+                            .required('Required'),
+                        amountToTransfer:  Yup.string()
+                            .required('Required'),
+                    
+                });
+            }
+            if(typeOfTransfer ==="anothercustomer"){
+                changeDepositStateValidationSchema = Yup.object().shape({
+                        notes:  Yup.string()
+                            .min(2, 'Valid notes required'),
+                        chosenAccountNum:  Yup.string()
+                            .required('Required'),
+                        // chosenCustomerEncodedKey:  Yup.string()
+                        //     .required('Required'),
+                        amountToTransfer:  Yup.string()
+                            .required('Required'),
+                    
+                });
+            }
+        }
+
+        return(
+            <Modal show={changeDepositState} onHide={this.handleDepositChangeStateClose} size="lg" centered="true" dialogClassName={showDepositFundsForm!==true?"modal-40w withcentered-heading": "modal-50w withcentered-heading"}  animation={false}>
+                <Formik
+                    initialValues={{
+                        comment:"",
+                        allowBackDate:false,
+                        showBookingDate:false,
+                        depositChannelEncodedKey:"",
+                        backDateChosen:"",
+                        bookingDateChosen:"",
+                        amountToWithdraw:"",
+                        maturityDate:"",
+                        notes:"",
+                        amountToDeposit:"",
+                        currentCustomerChosenAccount:"",
+                        amountToTransfer:"",
+                        chosenAccountNum:selectOtherCustomerAccount!==""?selectOtherCustomerAccount.searchItemEncodedKey:"",
+                        chosenCustomerEncodedKey:selectOtherCustomerAccount!==""?selectOtherCustomerAccount.clientEncodedKey:""
+                    }}
+
+                    validationSchema={changeDepositStateValidationSchema}
+                    onSubmit={(values, { resetForm }) => {
+
+                        let changeDepositStatePayload;
+                        if(showDepositFundsForm!==true){
+                            changeDepositStatePayload = {
+                                comment:values.comment,
+                                accountEncodedKey:this.depositEncodedKey
+                            }
+                        }
+                        if(newStateUpdate==="beginmaturity"){
+                            changeDepositStatePayload = {
+                                notes:values.notes,
+                                accountEncodedKey:this.depositEncodedKey,
+                                maturityDate: values.maturityDate.toISOString()
+                            }
+                        }
+
+                        if(showDepositFundsForm===true){
+                            changeDepositStatePayload = {
+                                accountEncodedKey:this.depositEncodedKey,
+                                notes:values.notes,
+                                amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
+                                channelEncodedKey:values.depositChannelEncodedKey,
+                                isBackDated:values.allowBackDate,
+                                backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
+                                isBookingDate: values.showBookingDate,
+                                bookingDate: values.bookingDateChosen!==""? values.bookingDateChosen.toISOString() : null,
+                            }
+                        }
+
+                        if(newStateUpdate === "makewithdrawal"){
+                            changeDepositStatePayload = {
+                                accountEncodedKey:this.depositEncodedKey,
+                                notes:values.notes,
+                                amount: parseFloat(values.amountToWithdraw.replace(/,/g, '')),
+                                channelEncodedKey:values.depositChannelEncodedKey,
+                                isBackDated:values.allowBackDate,
+                                backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
+                            }
+                        }
+
+                        if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
+                            changeDepositStatePayload ={
+                                accountEncodedKey:this.depositEncodedKey,
+                                notes:values.notes,
+                                amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
+                            }
+                        }
+
+                        if(newStateUpdate==="transfer"){
+                            changeDepositStatePayload ={
+                                accountEncodedKey:this.depositEncodedKey,
+                                notes:values.notes,
+                                amount: parseFloat(values.amountToTransfer.replace(/,/g, '')),
+                            }
+
+                            if(typeOfTransfer ==="currentcustomer"){
+                                changeDepositStatePayload.destinationCustomerEncodedKey = getAClientDepositAccountRequest.clientEncodedKey
+                                changeDepositStatePayload.destinationAccountEncodedKey = values.currentCustomerChosenAccount
+                            }
+
+                            if(typeOfTransfer ==="anothercustomer"  && selectOtherCustomerAccount!==""){
+                                changeDepositStatePayload.destinationCustomerEncodedKey = selectOtherCustomerAccount.clientEncodedKey
+                                changeDepositStatePayload.destinationAccountEncodedKey = selectOtherCustomerAccount.searchItemEncodedKey
+                            }
+                        }
+
+                        // let changeDepositStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
+
+                        // console.log("Transfer Payload", changeDepositStatePayload);
+                        
+                        // return false;
+
+                        this.handleNewDepositState(changeDepositStatePayload,newStateUpdate )
+                            .then(
+                                () => {
+
+                                    if (this.props.changeDepositStateReducer.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS) {
+                                        resetForm();
+                                        // value = {null}
+
+                                        setTimeout(() => {
+                                            this.props.dispatch(depositActions.changeDepositState("CLEAR"))
+                                            this.handleDepositChangeStateClose();
+                                            this.getCustomerDepositAccountDetails(this.depositEncodedKey);
+                                        }, 3000);
+                                    }
+
+                                    if(this.props.changeDepositStateReducer.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE) {
+                                        resetForm();
+                                        // value = {null}
+
+                                        setTimeout(() => {
+                                            this.props.dispatch(depositActions.changeDepositState("CLEAR"))
+                                        }, 3000);
+                                    }
+
+                                    
+
+                                }
+                            )
+
+                    }}
+                >
+                    {({ handleSubmit,
+                        handleChange,
+                        handleBlur,
+                        resetForm,
+                        values,
+                        setFieldValue,
+                        setFieldTouched,
+                        touched,
+                        isValid,
+                        errors, }) => (
+                            <Form
+                                noValidate
+                                onSubmit={handleSubmit}
+                                className="">
+                                
+                                <Modal.Header>
+                                    <Modal.Title>{newStateHeading}</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+
+                                    {(showDepositFundsForm!==true &&
+                                        newStateUpdate!=="setmaximumwithdrawalamount" && newStateUpdate!=="setrecommendeddepositamount"
+                                         && newStateUpdate!=="beginmaturity" && newStateUpdate!=="makewithdrawal"
+                                         && newStateUpdate!=="transfer") &&
+                                        <Form.Group>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Present State</Form.Label>
+                                                    <span className="form-text">{depositDetails.accountStateDescription} </span>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">New State</Form.Label>
+                                                    <span className="form-text">{newState}</span>
+                                                </Col>
+                                            </Form.Row>
+                                        </Form.Group>
+                                    }
+
+                                    {newStateUpdate==="beginmaturity" && 
+                                        <Form.Row className="mb-10">
+                                            <Col className="date-wrap">
+                                                <Form.Label className="block-level">Maturity Date</Form.Label>
+                                                <Form.Group className="mb-0 date-wrap">
+                                                    <DatePicker placeholderText="Choose  date"
+                                                        dateFormat="d MMMM, yyyy"
+                                                        className="form-control form-control-sm"
+                                                        peekNextMonth
+                                                        showMonthDropdown
+                                                        name="maturityDate"
+                                                        value={values.maturityDate}
+                                                        onChange={setFieldValue}
+                                                        showYearDropdown
+                                                        dropdownMode="select"
+                                                        minDate={new Date()}
+                                                        className={errors.maturityDate && touched.maturityDate ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                                                    />
+                                                    {errors.maturityDate && touched.maturityDate ? (
+                                                        <span className="invalid-feedback">{errors.maturityDate}</span>
+                                                    ) : null}
+                                                </Form.Group>
+                                                
+                                            </Col>
+                                        </Form.Row>
+                                    }
+                                    {(showDepositFundsForm!==true &&
+                                        newStateUpdate!=="setmaximumwithdrawalamount" && newStateUpdate!=="setrecommendeddepositamount"
+                                        && newStateUpdate!=="beginmaturity" && newStateUpdate!=="makewithdrawal"
+                                         && newStateUpdate!=="transfer") &&
+                                        <Form.Group>
+                                            <Form.Label className="block-level">Comments</Form.Label>
+                                            <Form.Control as="textarea"
+                                                rows="3"
+                                                onChange={handleChange}
+                                                name="comment"
+                                            value={values.comment}
+                                            className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null} 
+                                            />
+                                            {errors.comment && touched.comment ? (
+                                                <span className="invalid-feedback">{errors.comment}</span>
+                                            ) : null}
+                                        </Form.Group>
+                                    }
+
+                                    {newStateUpdate === "makewithdrawal" &&
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Amount</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        autoComplete="off"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.amountToWithdraw)}
+                                                        className={errors.amountToWithdraw && touched.amountToWithdraw ? "is-invalid h-38px" : "h-38px"}
+                                                        name="amountToWithdraw" required />
+                                                    {errors.amountToWithdraw && touched.amountToWithdraw ? (
+                                                        <span className="invalid-feedback">{errors.amountToWithdraw}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group className="mb-0">
+                                                        <Form.Label className="block-level">Transaction Channel</Form.Label>
+                                                        {allChannels.length >= 1 &&
+                                                            <div>
+                                                                <Select
+                                                                    options={allChannels}
+
+                                                                    onChange={(selected) => {
+                                                                        setFieldValue('depositChannelEncodedKey', selected.value)
+                                                                    }}
+                                                                    onBlur={() => setFieldTouched('depositChannelEncodedKey', true)}
+                                                                    className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
+                                                                    name="depositChannelEncodedKey"
+                                                                />
+                                                                {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
+                                                                    <span className="invalid-feedback">{errors.depositChannelEncodedKey}</span>
+                                                                ) : null}
+                                                            </div>
+                                                        }
+                                                        {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+                                                            <div className="errormsg"> Unable to load Disbursment channels</div>
+                                                        }
+
+
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row className="mb-10">
+                                                <Col className="date-wrap">
+                                                    <Form.Group className="table-helper m-b-5">
+                                                        <input type="checkbox"
+                                                            name="allowBackDate"
+                                                            onChange={handleChange}
+                                                            checked={values.allowBackDate ? values.allowBackDate : null}
+                                                            value={values.allowBackDate}
+                                                            id="allowBackDate" />
+                                                        <label htmlFor="allowBackDate">Backdate</label>
+                                                    </Form.Group>
+                                                    {values.allowBackDate === true &&
+                                                        <Form.Group className="mb-0 date-wrap">
+                                                            <DatePicker placeholderText="Choose  date"
+                                                                dateFormat="d MMMM, yyyy"
+                                                                className="form-control form-control-sm"
+                                                                peekNextMonth
+                                                                showMonthDropdown
+                                                                name="backDateChosen"
+                                                                value={values.backDateChosen}
+                                                                onChange={setFieldValue}
+                                                                showYearDropdown
+                                                                dropdownMode="select"
+                                                                maxDate={new Date()}
+                                                                className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                                                            />
+                                                            {errors.backDateChosen && touched.backDateChosen ? (
+                                                                <span className="invalid-feedback">{errors.backDateChosen}</span>
+                                                            ) : null}
+                                                        </Form.Group>
+                                                    }
+                                                </Col>
+                                            </Form.Row>
+                                        </div>
+                                    }
+
+                                    {showDepositFundsForm===true &&
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Amount</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        autoComplete="off"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.amountToDeposit)}
+                                                        className={errors.amountToDeposit && touched.amountToDeposit ? "is-invalid h-38px" : "h-38px"}
+                                                        name="amountToDeposit" required />
+                                                    {errors.amountToDeposit && touched.amountToDeposit ? (
+                                                        <span className="invalid-feedback">{errors.amountToDeposit}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group className="mb-0">
+                                                        <Form.Label className="block-level">Transaction Channel</Form.Label>
+                                                        {allChannels.length >=1 &&
+                                                            <div>
+                                                                <Select
+                                                                    options={allChannels}
+                                                                    
+                                                                    onChange={(selected) => {
+                                                                        setFieldValue('depositChannelEncodedKey', selected.value)
+                                                                    }}
+                                                                    onBlur={()=> setFieldTouched('depositChannelEncodedKey', true)}
+                                                                    className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
+                                                                    name="depositChannelEncodedKey"
+                                                                />
+                                                                {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
+                                                                    <span className="invalid-feedback">{errors.depositChannelEncodedKey}</span>
+                                                                ) : null}
+                                                            </div>
+                                                        }
+                                                        {adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+                                                            <div className="errormsg"> Unable to load Disbursment channels</div>
+                                                        }
+                                                        
+                                                        
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row className="mb-10">
+                                                <Col className="date-wrap">
+                                                    <Form.Group className="table-helper m-b-5">
+                                                        <input type="checkbox"
+                                                        name="allowBackDate" 
+                                                        onChange={handleChange} 
+                                                        checked={values.allowBackDate? values.allowBackDate:null}
+                                                        value={values.allowBackDate}
+                                                        id="allowBackDate"/>
+                                                        <label htmlFor="allowBackDate">Backdate</label>
+                                                    </Form.Group>
+                                                    {values.allowBackDate===true &&
+                                                        <Form.Group className="mb-0 date-wrap">
+                                                            <DatePicker placeholderText="Choose  date" 
+                                                                dateFormat="d MMMM, yyyy"
+                                                                className="form-control form-control-sm"
+                                                                peekNextMonth
+                                                                showMonthDropdown
+                                                                name="backDateChosen"
+                                                                value={values.backDateChosen}
+                                                                onChange={setFieldValue}
+                                                                showYearDropdown
+                                                                dropdownMode="select"
+                                                                maxDate={new Date()}
+                                                                className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                                                            />
+                                                            {errors.backDateChosen && touched.backDateChosen ? (
+                                                                <span className="invalid-feedback">{errors.backDateChosen}</span>
+                                                            ) : null}
+                                                        </Form.Group>
+                                                    }
+                                                </Col>
+                                                <Col className="date-wrap">
+                                                    <Form.Group className="table-helper m-b-5">
+                                                        <input type="checkbox"
+                                                        name="showBookingDate" 
+                                                        onChange={handleChange} 
+                                                        checked={values.showBookingDate? values.showBookingDate:null}
+                                                        value={values.showBookingDate}
+                                                        id="showBookingDate"/>
+                                                        <label htmlFor="showBookingDate">Booking Date</label>
+                                                    </Form.Group>
+                                                    {values.showBookingDate===true &&
+                                                        <Form.Group className="mb-0 date-wrap">
+                                                            <DatePicker placeholderText="Choose  date" 
+                                                                dateFormat="d MMMM, yyyy"
+                                                                className="form-control form-control-sm"
+                                                                peekNextMonth
+                                                                showMonthDropdown
+                                                                name="bookingDateChosen"
+                                                                value={values.bookingDateChosen}
+                                                                onChange={setFieldValue}
+                                                                showYearDropdown
+                                                                dropdownMode="select"
+                                                                maxDate={new Date()}
+                                                                className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+                                                            />
+                                                            {errors.bookingDateChosen && touched.bookingDateChosen ? (
+                                                                <span className="invalid-feedback">{errors.bookingDateChosen}</span>
+                                                            ) : null}
+                                                        </Form.Group>
+                                                    }
+                                                </Col>
+                                            </Form.Row>
+                                            
+                                            
+                                        </div>
+                                    }
+                                    {(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount") &&
+                                        <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">{newStateHeading} (&#8358;) </Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        autoComplete="off"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.amountToDeposit)}
+                                                        className={errors.amountToDeposit && touched.amountToDeposit ? "is-invalid h-38px" : "h-38px"}
+                                                        name="amountToDeposit" required />
+                                                    {errors.amountToDeposit && touched.amountToDeposit ? (
+                                                        <span className="invalid-feedback">{errors.amountToDeposit}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                </Col>
+                                                
+                                            </Form.Row>
+                                            
+                                        </div>
+                                    }
+
+                                    {(showDepositFundsForm===true || newStateUpdate === "setmaximumwithdrawalamount" || newStateUpdate === "setrecommendeddepositamount"
+                                        || newStateUpdate==="beginmaturity" || newStateUpdate ==="makewithdrawal") &&
+
+                                        <Form.Group>
+                                            <Form.Label className="block-level">Notes</Form.Label>
+                                            <Form.Control as="textarea"
+                                                rows="3"
+                                                onChange={handleChange}
+                                                name="notes"
+                                                value={values.notes}
+                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+                                            />
+                                            {errors.notes && touched.notes ? (
+                                                <span className="invalid-feedback">{errors.notes}</span>
+                                            ) : null}
+                                        </Form.Group>
+                                    }
+                                    {
+                                        newStateUpdate==="transfer" && 
+                                            <div>
+                                                <Form.Row>
+                                                    <Col>
+                                                        <Form.Label className="block-level">From</Form.Label>
+                                                        <span className="form-text">{getAClientDepositAccountRequest.productName}-{getAClientDepositAccountRequest.accountNumber}</span>
+                                                    </Col>
+                                                    <Col>
+                                                        <Form.Label className="block-level">To</Form.Label>
+                                                        <select className="form-control form-control-sm"
+                                                            value={typeOfTransfer}
+                                                            name="typeOfTransferToInitiate"
+                                                            onChange={(e)=>{
+                                                                this.setState({typeOfTransfer: e.target.value,
+                                                                    selectOtherCustomerAccount:"",
+                                                                    defaultAccountOptions:"",
+                                                                    selectACustomerAccount:""})
+                                                            }}
+                                                        >
+                                                            <option value="currentcustomer">{getAClientDepositAccountRequest.accountHolderName}</option>
+                                                            <option value="anothercustomer">Another Customer</option>
+                                                        </select>
+                                                    </Col>
+                                                </Form.Row>
+                                                {typeOfTransfer ==="currentcustomer" &&
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Account to Transfer To</Form.Label>
+                                                            <Select
+                                                                options={allAccountOfCurrentCustomer}
+                                                                
+                                                                onChange={(selected) => {
+                                                                    setFieldValue('currentCustomerChosenAccount', selected.value)
+                                                                }}
+                                                                onBlur={()=> setFieldTouched('currentCustomerChosenAccount', true)}
+                                                                className={errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? "is-invalid" : null}
+                                                                name="currentCustomerChosenAccount"
+                                                            />
+                                                            {errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? (
+                                                                <span className="invalid-feedback">{errors.currentCustomerChosenAccount}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                    </Form.Row>
+                                                }
+                                                {typeOfTransfer ==="anothercustomer" &&
+                                                    <Form.Row>
+                                                        <Col className="async-search-wrap">
+                                                            <Form.Label className="block-level">Account to Transfer To</Form.Label>
+                                                            {   (
+                                                                 searchForAccountsWithCustomerKeyRequest.request_status !== loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING) 
+                                                                &&
+                                                                <div>
+                                                                    <AsyncSelect
+                                                                        cacheOptions= {false}
+                                                                        value={selectOtherCustomerAccount}
+                                                                        noOptionsMessage={this.noOptionsForAccountMessage}
+                                                                        getOptionValue={this.getSearchForAccountOptionValue}
+                                                                        getOptionLabel={this.getSearchOptionForAccountLabel}
+                                                                        defaultOptions={defaultAccountOptions!==""?defaultAccountOptions:null}
+                                                                        loadOptions={this.initiateAccountSearch}
+                                                                        placeholder="Search Accounts"
+                                                                        name="chosenAccountNum"
+                                                                        className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+                                                                        onChange={(selectedOption)=>{
+                                                                            setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
+                                                                            
+                                                                            if (this.state.isCustommerAccountsFetchedWithKey!==true){
+                                                                                this.setState({
+                                                                                    selectOtherCustomerAccount: selectedOption,
+                                                                                    firstChosenTransferCriteria:"accounts",
+                                                                                    selectACustomerAccount:""
+                                                                                });
+                                                                            }else{
+                                                                                this.setState({
+                                                                                    selectOtherCustomerAccount: selectedOption,
+                                                                                    firstChosenTransferCriteria:"customer",
+                                                                                });
+                                                                            }
+                                                                            
+                                                                        }}
+                                                                        onBlur={()=> setFieldTouched('chosenAccountNum', true)}
+                                                                    />
+                                                                    {errors.chosenAccountNum && touched.chosenAccountNum ? (
+                                                                        <span className="invalid-feedback">{errors.chosenAccountNum}</span>
+                                                                    ) : null}
+                                                                </div>
+                                                            }
+                                                            {
+                                                                (searchForAccountsWithCustomerKeyRequest.request_status 
+                                                                && searchForAccountsWithCustomerKeyRequest.request_status === loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING) 
+                                                                &&
+                                                                <span className="form-text">Loading all accounts of {selectACustomerAccount.clientName}... </span>
+                                                            }
+
+                                                            {
+                                                                // ( selectOtherCustomerAccount!=="" && defaultAccountOptions==="") &&
+                                                                (searchAccountNumberRequest.request_status === loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS && selectOtherCustomerAccount!=="" && defaultAccountOptions==="" ) &&
+                                                                    <div className="mt-20">
+                                                                        <Form.Label className="block-level">Customer to transfer To</Form.Label>
+                                                                        <span className="form-text">{selectOtherCustomerAccount.clientName} 
+                                                                            <em className="edit-link"
+                                                                                onClick={()=>{
+                                                                                    this.setState({selectOtherCustomerAccount:"", isCustommerAccountsFetchedWithKey:""})
+                                                                                    this.props.dispatch(depositActions.searchAccountNumbers("CLEAR"));
+                                                                                }}> change</em> 
+                                                                        </span>
+                                                                    </div>
+                                                            }
+
+                                                            {
+                                                            // ((isCustommerAccountsFetchedWithKey==="" || isCustommerAccountsFetchedWithKey===true)
+                                                            //     && selectOtherCustomerAccount==="")
+                                                                // && (searchAccountNumberRequest.request_status !== loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS
+                                                                //      || )) &&
+                                                                (selectOtherCustomerAccount==="" || firstChosenTransferCriteria==="customer")    &&
+                                                                <div className="mt-20">
+                                                                    <Form.Label className="block-level">Customer to transfer To</Form.Label>
+                                                                    <AsyncSelect
+                                                                        cacheOptions= {false}
+                                                                        value={selectACustomerAccount}
+                                                                        noOptionsMessage={this.noOptionsForCustomerMessage}
+                                                                        getOptionValue={this.getSearchForCustomerOptionValue}
+                                                                        getOptionLabel={this.getSearchOptionForCustomerLabel}
+                                                                        // defaultOptions={defaultOptions}
+                                                                        loadOptions={this.initiateCustomerSearch}
+                                                                        placeholder="Search Accounts"
+                                                                        onChange={this.handleSearchACustomerInputChange}
+                                                                    />
+                                                                </div>
+                                                            }
+                                                            {/* <Select
+                                                                options={allAccountOfCurrentCustomer}
+                                                                
+                                                                onChange={(selected) => {
+                                                                    setFieldValue('chosenAccountNum', selected.value)
+                                                                }}
+                                                                onBlur={()=> setFieldTouched('chosenAccountNum', true)}
+                                                                className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+                                                                name="chosenAccountNum"
+                                                            />
+                                                            {errors.chosenAccountNum && touched.chosenAccountNum ? (
+                                                                <span className="invalid-feedback">{errors.chosenAccountNum}</span>
+                                                            ) : null} */}
+                                                        </Col>
+                                                    </Form.Row>
+                                                    
+                                                }
+                                                <Form.Row>
+                                                    <Col>
+                                                        <Form.Label className="block-level">Amount (&#8358;)</Form.Label>
+                                                        <Form.Control
+                                                            type="text"
+                                                            autoComplete="off"
+                                                            onChange={handleChange}
+                                                            value={numberWithCommas(values.amountToTransfer)}
+                                                            className={errors.amountToTransfer && touched.amountToTransfer ? "is-invalid h-38px" : "h-38px"}
+                                                            name="amountToTransfer" required />
+                                                        {errors.amountToTransfer && touched.amountToTransfer ? (
+                                                            <span className="invalid-feedback">{errors.amountToTransfer}</span>
+                                                        ) : null}
+                                                    </Col>
+                                                    <Col></Col>
+                                                </Form.Row>
+                                                <Form.Group>
+                                                    <Form.Label className="block-level">Notes</Form.Label>
+                                                    <Form.Control as="textarea"
+                                                        rows="3"
+                                                        onChange={handleChange}
+                                                        name="notes"
+                                                        value={values.notes}
+                                                        className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+                                                    />
+                                                    {errors.notes && touched.notes ? (
+                                                        <span className="invalid-feedback">{errors.notes}</span>
+                                                    ) : null}
+                                                </Form.Group>
+                                            </div>
+                                    }
+
+
+                                </Modal.Body>
+                                <Modal.Footer>
+
+                                    <Button variant="light" onClick={this.handleDepositChangeStateClose}>
+                                        Cancel
+                                    </Button>
+                                    <Button 
+                                        variant="success"
+                                        type="submit"
+                                        disabled={changeDepositStateRequest.is_request_processing}
+                                    >
+                                        {changeDepositStateRequest.is_request_processing?"Please wait...":`${ctaText}`}
+                                        
+                                    </Button>
+
+                                </Modal.Footer>
+                                <div className="footer-alert">
+                                    {changeDepositStateRequest.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS && 
+                                        <Alert variant="success" className="w-65 mlr-auto">
+                                            {changeDepositStateRequest.request_data.response.data.message}
+                                        </Alert>
+                                    }
+                                    {(changeDepositStateRequest.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE && changeDepositStateRequest.request_data.error )&& 
+                                        <Alert variant="danger" className="w-65 mlr-auto">
+                                            {changeDepositStateRequest.request_data.error}
+                                        </Alert>
+                                    }
+                                </div>
+                            </Form>
+                        )}
+                </Formik>
+            </Modal>
+        )
+    }
+
+    renderDepositCtas =(depositDetails)=>{
+        //     public enum depositStateEnum
+        // {
+        //     [Description("Partial Application")]
+        //     Partial_Application = 1,
+        //     [Description("Pending Approval")]
+        //     Pending_Approval = 2,
+        //     [Description("Approved")]
+        //     Approved = 3,
+        //     [Description("Rejected")]
+        //     Rejected = 4,
+        //     [Description("Active")]
+        //     Active = 5,
+        //     [Description("In Arears")]
+        //     In_Arears = 6,
+        //     [Description("Closed")]
+        //     Closed = 7,
+        //     [Description("Closed Written Off")]
+        //     Closed_Written_Off = 8,
+        //     Closed_Withdrawn = 9
+        // }
+            return(
+                <div className="heading-ctas">
+                    <ul className="nav">
+                        {(depositDetails.accountState ===2) &&
+                            <li>
+                                <Button size="sm"
+                                    onClick={()=>{
+                                        this.setState({newState: "Approved", newStateUpdate: "approve", newStateHeading :"Change Deposit State", ctaText:"Approve Deposit"})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Approve</Button>
+                            </li>
+                        }
+                        {(depositDetails.accountState ===2) &&
+                            <li>
+                                <Button size="sm" 
+                                    onClick={()=>{
+                                        this.setState({newState: "Set Incomplete", newStateHeading :"Change Deposit State", newStateUpdate: "settopartialapplication", ctaText:"Set Incomplete"})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Set Incomplete</Button>
+                            </li>
+                        }
+
+                        {(depositDetails.accountState ===5 && depositDetails.isMaturityDateSet===false && depositDetails.productType===2) &&
+                            <li>
+                                <Button size="sm"
+                                    onClick={()=>{
+                                        this.setState({newState: "Begin Maturity Period", newStateHeading :"Begin Maturity Period", newStateUpdate: "beginmaturity", ctaText:"Begin Maturity"})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Begin Maturity</Button>
+                            </li>
+                        }
+
+                        {(depositDetails.accountState ===5  && depositDetails.productType===2 && depositDetails.depositBalance >=1) &&
+                            <li>
+                                <Button size="sm"
+                                    onClick={()=>{
+                                        this.setState({newState: "Make Withdrawal", newStateHeading :"Make Withdrawal", newStateUpdate: "makewithdrawal", ctaText:"Make Withdrawal"})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Withdrawal</Button>
+                            </li>
+                        }
+
+                        {((depositDetails.accountState ===5 || depositDetails.accountState ===3)  && (depositDetails.productType===2 || depositDetails.productType===1 || depositDetails.productType===4) && depositDetails.depositBalance >=1) &&
+                            <li>
+                                <Button size="sm"
+                                    onClick={()=>{
+                                        this.setState({typeOfTransfer: "currentcustomer",
+                                                            selectOtherCustomerAccount:"",
+                                                            selectACustomerAccount:"",
+                                                            newState: "Make Transfer",
+                                                            newStateHeading :"Make Transfer",
+                                                            newStateUpdate: "transfer",
+                                                            ctaText:"Make Transfer"})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Transfer</Button>
+                            </li>
+                        }
+
+                        {/* {(depositDetails.accountState ===5) &&
+                            <li>
+                                <Button size="sm" >Enter Repayment</Button>
+                            </li>
+                        } */}
+
+                        {(depositDetails.accountState ===1) &&
+                            <li>
+                                <Button size="sm" 
+                                    onClick={()=>{
+                                        this.setState({newState: "Request Approval",newStateHeading :"Change Deposit State", newStateUpdate: "requestapproval", ctaText:"Request Approval"})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Request Approval</Button>
+                            </li>
+                        }
+    
+                        {(depositDetails.accountState ===3 || depositDetails.accountState ===5) &&
+                            <li>
+                                <Button size="sm"
+                                     onClick={()=>{
+                                        this.setState({newStateUpdate: "deposit",newStateHeading :"Change Deposit State", ctaText:"Make Deposit", showDepositFundsForm:true})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Make Deposit</Button>
+                            </li>
+                        }
+                        {(depositDetails.accountState ===1 || depositDetails.accountState ===2 || depositDetails.accountState ===3) &&
+                            <li>
+                                <DropdownButton
+                                    size="sm"
+                                    title="Close"
+                                    key="inActiveCurrency"
+                                    className="customone"
+                                    alignRight
+                                >
+                                    {(depositDetails.accountState ===1 || depositDetails.accountState ===2) &&
+                                        <Dropdown.Item eventKey="1"
+                                            onClick={()=>{
+                                                this.setState({newState: "Rejected", newStateUpdate: "reject", newStateHeading :"Change Deposit State", ctaText:"Reject"})
+                                                this.handleDepositChangeStateShow()
+                                            }}
+                                        >Reject</Dropdown.Item>
+                                    }
+                                    {(depositDetails.accountState ===1 || depositDetails.accountState ===2 || depositDetails.accountState ===3) &&
+                                        <Dropdown.Item eventKey="1"
+                                            onClick={()=>{
+                                                this.setState({newState: "Closed(Withdrawn)",newStateHeading :"Change Deposit State", newStateUpdate: "withdraw", ctaText:"Withdraw"})
+                                                this.handleDepositChangeStateShow()
+                                            }}
+                                        >Withdraw</Dropdown.Item>
+                                    }
+                                    {(depositDetails.accountState ===5) &&
+                                        <Dropdown.Item eventKey="1">Pay Off</Dropdown.Item>
+                                    }
+                                    {(depositDetails.accountState ===5) &&
+                                        <Dropdown.Item eventKey="1">Write Off</Dropdown.Item>
+                                    }
+                                </DropdownButton>
+                            </li>
+                        }
+                        <li>
+                            <DropdownButton
+                                size="sm"
+                                title="More"
+                                key="inActiveCurrency"
+                                className="customone"
+                                alignRight
+                            >
+                                <Dropdown.Item eventKey="1"
+                                    onClick={()=>{
+                                        this.setState({ newStateUpdate: "setmaximumwithdrawalamount", newStateHeading:"Maximum Withdrawal Amount", ctaText:"Update"})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Set Max Withdrawal Amount</Dropdown.Item>
+                                <Dropdown.Item eventKey="1"
+                                    onClick={()=>{
+                                        this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading:"Recommended Deposit Amount", ctaText:"Update"})
+                                        this.handleDepositChangeStateShow()
+                                    }}
+                                >Set Recommended Deposit</Dropdown.Item>
+                                
+                            </DropdownButton>
+                        </li>
+                       
+                        
+                    </ul>
+                </div>
+            )
+        }
 
     renderPage=()=>{
         let getAClientRequest = this.props.getAClientReducer,
@@ -1849,48 +3468,15 @@ class ViewSavingsAccount extends React.Component {
                 )
             }
 
-            if(getAClientDepositAccountRequest.request_status ===loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_DETAILS_SUCCESS){
+            if(getAClientDepositAccountRequest.request_status ===loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_DETAILS_SUCCESS
+                &&  getClientLoansRequest.request_status ===loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
+            && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS){
                 return(
                     <div className="row">
-
+                        {this.changeDepositStateBox(getAClientDepositAccountRequest.request_data.response.data)}
                         <div className="col-sm-12">
                             <div className="middle-content">
-                                <div className="heading-ctas">
-                                    <ul className="nav">
-                                        <li>
-                                            <Button size="sm">Deposit</Button>
-                                        </li>
-                                        <li>
-                                            <DropdownButton
-                                                size="sm"
-                                                title="Close"
-                                                key="inActiveCurrency"
-                                                className="customone"
-                                                alignRight
-                                            >
-                                                <Dropdown.Item eventKey="1" onClick={this.handleChangeAccountStateModalShow} >Close</Dropdown.Item>
-
-                                            </DropdownButton>
-                                        </li>
-                                        <li>
-                                            <DropdownButton
-                                                size="sm"
-                                                title="More"
-                                                key="inActiveCurrency"
-                                                className="customone"
-                                                alignRight
-                                            >
-                                                <Dropdown.Item eventKey="1">Apply Fee</Dropdown.Item>
-                                                <Dropdown.Item eventKey="1">Add Field</Dropdown.Item>
-                                                <NavLink className="dropdown-item" to='/editcustomer'>Edit Account</NavLink>
-                                                <Dropdown.Item eventKey="1" onClick={this.handleSetDepositShow}>Set Recommended Deposit</Dropdown.Item>
-                                                <Dropdown.Item eventKey="1" onClick={this.handleSetMaxWithdrawalShow}>Set Max Withdrawal Amount</Dropdown.Item>
-                                                <Dropdown.Item eventKey="1" onClick={this.handleChangeHistoryShow}>View Change History</Dropdown.Item>
-                                                <Dropdown.Item eventKey="1" onClick={this.handleChangeAccountStateModalShow}>Lock Deposit Account</Dropdown.Item>
-                                            </DropdownButton>
-                                        </li>
-                                    </ul>
-                                </div>
+                                
                                 <div className="customerprofile-tabs">
                                     <Tab.Container defaultActiveKey="details">
 
@@ -1899,22 +3485,22 @@ class ViewSavingsAccount extends React.Component {
                                                 <Nav.Link eventKey="details">Details</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="transactions">Transactions</Nav.Link>
+                                                <Nav.Link eventKey="transactions" onSelect={this.getCustomerDepositTransactions}>Transactions</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="activity">Activity</Nav.Link>
+                                                <Nav.Link eventKey="activity" onSelect={this.getADepositActivities}>Activity</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="attachments">Attachments</Nav.Link>
+                                                <Nav.Link eventKey="attachments" onSelect={this.getACustomerDepositAttachments}>Attachments</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="comments">Comments</Nav.Link>
+                                                <Nav.Link eventKey="comments" onSelect={this.getADepositComments}>Comments</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="communications">Communications</Nav.Link>
+                                                <Nav.Link eventKey="communications" onSelect={this.getADepositCommunications}>Communications</Nav.Link>
                                             </Nav.Item>
                                         </Nav>
-
+                                        {this.renderDepositCtas(getAClientDepositAccountRequest.request_data.response.data)}
                                         <Tab.Content>
                                             <Tab.Pane eventKey="details">
                                                 <div className="amounts-wrap w-40 centered">
@@ -1924,63 +3510,7 @@ class ViewSavingsAccount extends React.Component {
                                                 {this.renderOverview(getAClientDepositAccountRequest.request_data.response.data)}
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="transactions">
-                                                <div className="pagination-wrap">
-                                                    <label htmlFor="toshow">Show</label>
-                                                    <select id="toshow" className="countdropdown form-control form-control-sm">
-                                                        <option value="10">10</option>
-                                                        <option value="25">25</option>
-                                                        <option value="50">50</option>
-                                                        <option value="200">200</option>
-                                                    </select>
-
-                                                </div>
-                                                <TableComponent classnames="striped bordered hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>User</th>
-                                                            <th>ID</th>
-                                                            <th>Value Date (Entry Date)</th>
-                                                            <th>Type</th>
-                                                            <th>Amount</th>
-                                                            <th>Principal Balance</th>
-                                                            <th>Arrears Position</th>
-                                                            <th>Total Balance</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Mayokun Malomo</td>
-                                                            <td>1346858</td>
-                                                            <td>25-03-2019 00:00:00</td>
-                                                            <td>Disbursement</td>
-                                                            <td>₦1,000,000.00</td>
-                                                            <td>₦1,019,000.00</td>
-                                                            <td>₦0.00</td>
-                                                            <td>₦1,019,000.00</td>
-                                                            <td>₦1,019,000.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Mayokun Malomo</td>
-                                                            <td>1346858</td>
-                                                            <td>25-03-2019 00:00:00</td>
-                                                            <td>Interest Applied</td>
-                                                            <td>₦1,000,000.00</td>
-                                                            <td>₦1,019,000.00</td>
-                                                            <td>₦-373,973.01</td>
-                                                            <td>₦1,019,000.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Mayokun Malomo</td>
-                                                            <td>1346858</td>
-                                                            <td>25-03-2019 00:00:00</td>
-                                                            <td>Interest Applied</td>
-                                                            <td>₦1,000,000.00</td>
-                                                            <td>₦1,019,000.00</td>
-                                                            <td>₦-373,973.01</td>
-                                                            <td>₦1,019,000.00</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </TableComponent>
+                                                {this.renderDepositTransaction()}
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="activity">
                                                 {this.renderDepositAccountActivities()}
@@ -2033,17 +3563,22 @@ class ViewSavingsAccount extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        adminGetTransactionChannels : state.administrationReducers.adminGetTransactionChannelsReducer,
         getAClientReducer: state.clientsReducers.getAClientReducer,
         getClientDepositsReducer: state.depositsReducers.getClientDepositsReducer,
         getClientLoansReducer: state.loansReducers.getClientLoansReducer,
         getAClientDepositAccountReducer: state.depositsReducers.getAClientDepositAccountReducer,
         getADepositAccountActivitiesReducer: state.depositsReducers.getADepositAccountActivitiesReducer,
         getADepositAccountCommunicationsReducer: state.depositsReducers.getADepositAccountCommunicationsReducer,
-        getDepositTransactionReducer: state.depositsReducers.getDepositTransactionReducer,
+        getAccountDepositTransactionReducer: state.depositsReducers.getAccountDepositTransactionReducer,
         getAClientDepositAccountCommentsReducer: state.depositsReducers.getAClientDepositAccountCommentsReducer,
         createADepositCommentReducer: state.depositsReducers.createADepositCommentReducer,
         getADepositAccountAttachmentsReducer: state.depositsReducers.getADepositAccountAttachmentsReducer,
         createADepositAttachmentReducer: state.depositsReducers.createADepositAttachmentReducer,
+        changeDepositStateReducer: state.depositsReducers.changeDepositStateReducer,
+        searchAccountNumbersReducer: state.depositsReducers.searchAccountNumbersReducer,
+        searchCustomerAccountReducer: state.depositsReducers.searchCustomerAccountReducer,
+        searchForAccountsWithCustomerKeyReducer: state.depositsReducers.searchForAccountsWithCustomerKeyReducer,
     };
 }
 

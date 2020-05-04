@@ -64,6 +64,16 @@ class BalanceSheet extends React.Component {
         this.setState({monthProvided:e.target.value});
     }
 
+    renderYears =(startYear)=>{
+        let currentYear = new Date().getFullYear(), 
+            years = [];
+            startYear = startYear || 1980;  
+            while ( startYear <= currentYear ) {
+                years.push(startYear++);
+            }   
+            return years;
+    } 
+
     setPagesize = (PageSize, tempData)=>{
         const {dispatch} = this.props;
         this.setState({PageSize: PageSize.target.value})
@@ -92,9 +102,9 @@ class BalanceSheet extends React.Component {
 
             let getBalanceSheetRequest = this.props.getBalanceSheetReducer;
 
-            let saveRequestData= getBalanceSheetRequest.request_data!==undefined?getBalanceSheetRequest.request_data.response.data:null;
+            let saveRequestData= getBalanceSheetRequest.request_data!==undefined?getBalanceSheetRequest.request_data.response.data.result:null;
 
-            console.log("datadsdsd", saveRequestData);
+            
     
         if(monthProvided!=="" && yearProvided!==""){
             let payload ={
@@ -125,6 +135,8 @@ class BalanceSheet extends React.Component {
     renderOptions = (e)=>{
         let getBalanceSheetRequest = this.props.getBalanceSheetReducer;
         let {yearProvided}= this.state;
+        
+        let allYears = this.renderYears(2019);
         return(
             <div className="heading-actions">
                 <Form 
@@ -163,10 +175,25 @@ class BalanceSheet extends React.Component {
                     <Form.Group controlId="periodOptionChosen">
                         <Form.Label>Year</Form.Label>
                         <Form.Control 
+                            as="select" 
+                            size="sm"
+                            onChange={this.setYear}
+                        >
+                            <option>Choose year</option>
+                            {
+                                allYears.map((eachYear,index)=>{
+                                    return(
+                                        <option value={eachYear}>{eachYear}</option>
+                                    )
+                                })
+                            }
+                            
+                        </Form.Control>
+                        {/* <Form.Control 
                             type="text" 
                             value={allowNumbersOnly(yearProvided, 4)}
                             onChange={this.setYear} 
-                            size="sm" />
+                            size="sm" /> */}
                     </Form.Group>
                     {/* <Button variant="secondary" type="button">More >> </Button> */}
                     <Button variant="primary"
@@ -305,7 +332,7 @@ class BalanceSheet extends React.Component {
                                                                     <tr key={`datakey-${keyIndex}`}>
                                                                         <td>{eachModelData.glCode}</td>
                                                                         <td>{eachModelData.accountName}</td>
-                                                                        <td>{numberWithCommas(eachModelData.balance)}</td>
+                                                                        <td>&#8358;{numberWithCommas(eachModelData.balance, true)}</td>
 
                                                                     </tr>
                                                                 )
@@ -315,7 +342,7 @@ class BalanceSheet extends React.Component {
                                                     <tr className="totalrow">
                                                         <td></td>
                                                         <td>Total {eachResult.accountTypeDescription}</td>
-                                                        <td>{numberWithCommas(eachResult.totalBalance)}</td>
+                                                        <td>&#8358;{numberWithCommas(eachResult.totalBalance, true)}</td>
                                                     </tr>
                                                 </tbody>
                                             )
@@ -418,7 +445,7 @@ class BalanceSheet extends React.Component {
                                                                         <tr key={`datakey-${keyIndex}`}>
                                                                             <td>{eachModelData.glCode}</td>
                                                                             <td>{eachModelData.accountName}</td>
-                                                                            <td>{numberWithCommas(eachModelData.balance)}</td>
+                                                                            <td>&#8358;{numberWithCommas(eachModelData.balance, true)}</td>
 
                                                                         </tr>
                                                                     )
@@ -428,7 +455,7 @@ class BalanceSheet extends React.Component {
                                                         <tr className="totalrow">
                                                             <td></td>
                                                             <td>Total {eachResult.accountTypeDescription}</td>
-                                                            <td>{numberWithCommas(eachResult.totalBalance)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachResult.totalBalance, true)}</td>
                                                         </tr>
                                                     </tbody>
                                                 )

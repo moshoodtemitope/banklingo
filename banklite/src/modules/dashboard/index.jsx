@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import { NavLink} from 'react-router-dom';
 
-
+import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
 import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 import "./dashboard.scss"; 
@@ -69,7 +69,7 @@ class DashboardLanding extends React.Component {
                         <div className="all-stats-wrap">
                             <div className="each-stat">
                                 <div className="stat-data card">
-                                    <h4 className="stat-value">{allDashboardStat.activeCustomers}</h4>
+                                    <h4 className="stat-value">{numberWithCommas(allDashboardStat.activeCustomers)}</h4>
                                     <span className="stat-text">Active Customers</span>
                                 </div>
                             </div>
@@ -81,31 +81,31 @@ class DashboardLanding extends React.Component {
                             </div> */}
                             <div className="each-stat">
                                 <div className="stat-data card">
-                                    <h4 className="stat-value">{allDashboardStat.loansAwaitingApproval}</h4>
+                                    <h4 className="stat-value">{numberWithCommas(allDashboardStat.loansAwaitingApproval)}</h4>
                                     <span className="stat-text">Loans Awaiting Approval</span>
                                 </div>
                             </div>
                             <div className="each-stat">
                                 <div className="stat-data card">
-                                    <h4 className="stat-value">{allDashboardStat.totalDeposits}</h4>
+                                    <h4 className="stat-value">{numberWithCommas(allDashboardStat.totalDeposits, true)}</h4>
                                     <span className="stat-text">Total Deposits</span>
                                 </div>
                             </div>
                             <div className="each-stat">
                                 <div className="stat-data card">
-                                    <h4 className="stat-value">{allDashboardStat.activeSavings}</h4>
+                                    <h4 className="stat-value">{numberWithCommas(allDashboardStat.activeSavings)}</h4>
                                     <span className="stat-text">Active Savings</span>
                                 </div>
                             </div>
                             <div className="each-stat">
                                 <div className="stat-data card">
-                                    <h4 className="stat-value">{allDashboardStat.users}</h4>
+                                    <h4 className="stat-value">{numberWithCommas(allDashboardStat.users)}</h4>
                                     <span className="stat-text">Users</span>
                                 </div>
                             </div>
                             <div className="each-stat">
                                 <div className="stat-data card">
-                                    <h4 className="stat-value">{allDashboardStat.totalLoanPortfolio}</h4>
+                                    <h4 className="stat-value">{numberWithCommas(allDashboardStat.totalLoanPortfolio)}</h4>
                                     <span className="stat-text">Total Loan Portfolio</span>
                                 </div>
                             </div>
@@ -235,7 +235,7 @@ class DashboardLanding extends React.Component {
                                                 <div className="col-sm-4">
                                                     <div className="activities-items">
                                                         <h6>Latest Activity </h6>
-                                                        {this.renderLoggedInUserActivities()}
+                                                        {/* {this.renderLoggedInUserActivities()} */}
                                                         {/* <div className="activities-wrap">
                                                             <div className="each-activity">
                                                                 <span>

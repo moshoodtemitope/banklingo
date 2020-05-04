@@ -641,7 +641,12 @@ class EditCustomerAccount extends React.Component {
 
 
                                                     <div className="footer-with-cta toleft">
-                                                        <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                                        {/* <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                                        <Button variant="light" 
+                                                                className="btn btn-secondary grayed-out"
+                                                                onClick={()=>this.props.history.goBack()}
+                                                        >
+                                                            Cancel</Button>
                                                         <Button>Save  Customer</Button>
                                                     </div>
                                                 </Form>

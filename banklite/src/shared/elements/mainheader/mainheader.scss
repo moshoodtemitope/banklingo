@@ -110,7 +110,7 @@
 .searchfieldwrap{
     input{
         width: 100%!important;
-        min-width: 300px;
+        min-width: 330px;
     }
     .css-1hb7zxy-IndicatorsContainer{
         display: none;
@@ -120,4 +120,97 @@
         border-radius: 0!important;
         min-height: 0!important;
     }
+}
+.searchresults-wrap{
+    background: #ffffff;
+    width: 100%;
+    position: absolute;
+    top: 38px;
+    z-index: 1;
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    // height: 200px;
+    overflow: auto;
+    min-height: 34px;
+    max-height: 200px;
+    &.noresult{
+        height: unset;
+        min-height: unset;
+        max-height: unset;
+    }
+    .errormsg{
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 10px 20px;
+    }
+    .each-search-result{
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    .loading-search{
+        text-align: center;
+        font-size: 14px;
+        color: #566573;
+        font-weight: 500;
+        padding: 10px 20px;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    .each-search-resultlist{
+        text-align: left;
+        display: flex;
+        align-items: baseline;
+        // margin-bottom: 10px;
+        
+        &:not(:last-of-type){
+            border-bottom: 1px solid #D6EAF8;
+           
+        }
+        h5{
+            margin:0;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 0;
+            padding: 4px 10px;
+            margin-bottom: 5px;
+            color: rgba(31, 97, 141, 0.8);
+            flex-basis: 20%;
+            text-align: right;
+            background: #D6EAF8;
+        }
+        .resultlist{
+            flex-basis: 80%;
+            border-left: 1px solid #E5E8E8; 
+            .result-details{
+                z-index: 100;
+                cursor: pointer;
+                &:first-of-type, &:hover{
+                background: #D6EAF8;
+                }
+                &:last-of-type{
+                    margin-bottom: 10px;
+                }
+                span{
+                    font-size: 10px;
+                    float: right;
+                    color: #85929E;
+                    font-style: italic;
+                }
+            }
+            
+        }
+        .result-details{
+            font-size: 11px;
+            padding: 4px 10px;
+        }
+    }
+}
+.focusedsearch{
+    border-bottom-left-radius: 0px!important;
+    border-bottom-right-radius: 0px!important;
 }

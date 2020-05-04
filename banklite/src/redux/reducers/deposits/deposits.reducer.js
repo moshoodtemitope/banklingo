@@ -332,6 +332,135 @@ export function createADepositAttachmentReducer(state=[], action) {
     }
 }
 
+export function changeDepositStateReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.CHANGE_DEPOSITSTATE_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.CHANGE_DEPOSITSTATE_RESET:
+            return {
+                request_status: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function searchAccountNumbersReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_RESET:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+    
+}
+
+export function searchCustomerAccountReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_RESET:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function searchForAccountsWithCustomerKeyReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_RESET:
+            return {
+                request_status: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 
 
 

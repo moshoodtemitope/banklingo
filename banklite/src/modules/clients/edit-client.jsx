@@ -8,7 +8,8 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
-
+// import * as moment from 'moment';
+// import 'moment/locale/pt-br';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -17,6 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import Select from 'react-select';
 
+import { getDateFromISO, allowNumbersOnly} from '../../shared/utils';
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants';
 
@@ -31,7 +33,7 @@ class EditAClient extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:JSON.parse(localStorage.getItem("user")),
         }
 
         
@@ -39,13 +41,27 @@ class EditAClient extends React.Component {
 
     componentDidMount(){
         this.getAClient();
-        
+        this.getAllUsers();
+        // console.log('------',moment(new Date));
     }
 
     getAClient = ()=>{
         const {dispatch} = this.props;
        
         dispatch(clientsActions.getAClient(this.props.match.params.encodedkey));
+    }
+
+    getAllUsers = ()=>{
+        const {dispatch} = this.props;
+        
+        dispatch(administrationActions.getAllUsers(1));
+    }
+
+    getBranch =  (encodedKey)=>{
+        const {dispatch} = this.props;
+       
+        
+         dispatch(administrationActions.getABranch(encodedKey));
     }
 
     handleUpdateCustomer = async (updateCustomerpayload)=>{
@@ -69,6 +85,12 @@ class EditAClient extends React.Component {
             .max(50, 'Max limit reached'),
         custType:  Yup.string()
             .min(1, 'Valid response required'),
+        clientBranchEncodedKey:  Yup.string()
+            .required('Required'),
+        accountOfficerEncodedKey:  Yup.string()
+            .required('Required'),
+        BVN:  Yup.string()
+            .required('Required'),
         addressLine1: Yup.string()
             .min(2, 'Valid response required')
             .max(70, 'Max limit reached'),
@@ -108,21 +130,44 @@ class EditAClient extends React.Component {
 
     renderUpdateCustomer = ()=>{
         let updateAClientRequest = this.props.updateAClient,
-            getAClientRequest = this.props.getAClient;
+            getAClientRequest = this.props.getAClient,
+            getAllUsersRequest = this.props.getAllUsers,
+            userAllowedBraches = this.state.user.AllowedBranches,
+            selecBranchList = [];
 
-        switch(getAClientRequest.request_status){
-            case (clientsConstants.GET_A_CLIENT_PENDING):
+
+            userAllowedBraches.map((branch, id)=>{
+                selecBranchList.push({label: branch.name, value:branch.encodedKey});
+            })
+            
+            if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_PENDING
+                || getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_PENDING){
                 return (
                     <div className="loading-content card"> 
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
+            }
 
-            case (clientsConstants.GET_A_CLIENT_SUCCESS):
+            if (getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_SUCCESS
+                && getAClientRequest.request_status=== clientsConstants.GET_A_CLIENT_SUCCESS){
                 
                 let allCustomerData = getAClientRequest.request_data.response.data;
+                let 
+                    allUsersData = getAllUsersRequest.request_data.response.data,
+                    allUserDataList=[],
+                    allCustomerTypesList;
+                let defaultAccountOfficer;
 
-                // console.log('Customer is', this.props.adminGetCustomerTypes.request_data.response);
+                    if(allUsersData.length>=1){
+                        allUsersData.map((eachUser, id)=>{
+                            allUserDataList.push({label: eachUser.name, value:eachUser.key});
+                        })
+
+                        defaultAccountOfficer =allUserDataList.filter(eachOfficer=>eachOfficer.value===allCustomerData.accountOfficerEncodedKey)[0];
+                    }
+                console.log('Customer is', allCustomerData.accountOfficerEncodedKey);
+                console.log('Customer dsdsd', allUserDataList);
                 let custTypes = this.props.adminGetCustomerTypes.request_data.response,
                     selectedCustype  = custTypes.filter(type=>type.id===allCustomerData.clientTypeId)[0];
                     if(Object.keys(allCustomerData).length>=1){
@@ -132,23 +177,26 @@ class EditAClient extends React.Component {
                                 initialValues={{
                                     FName: allCustomerData.firstName,
                                     LName: allCustomerData.lastName,
-                                    MName: allCustomerData.middleName?allCustomerData.middleName:'',
-                                    custType: '',
-                                    addressLine1: allCustomerData.address.addressLine1?allCustomerData.address.addressLine1:'',
-                                    addressLine2: allCustomerData.address.addressLine2?allCustomerData.address.addressLine2:'',
-                                    addressCity: allCustomerData.address.addressCity?allCustomerData.address.addressCity:'',
-                                    addressState: allCustomerData.address.addressState?allCustomerData.address.addressState:'',
-                                    addressCountry: allCustomerData.address.addressCountry?allCustomerData.address.addressCountry:'',
-                                    zipCode: allCustomerData.address.zipCode?allCustomerData.address.zipCode:'',
-                                    contactMobile: allCustomerData.contact.contactMobile?allCustomerData.contact.contactMobile:'',
-                                    contactEmail:allCustomerData.contact.contactEmail?allCustomerData.contact.contactEmail:'',
-                                    nextOfKinFullName: '',
-                                    nextOfKinAddress: '',
-                                    nextOfKinMobile: '',
-                                    gender:'',
-                                    dateOfBirth:'',
+                                    MName: allCustomerData.middleName?allCustomerData.middleName:null,
+                                    custType: allCustomerData.clientTypeEncodedKey,
+                                    BVN: allCustomerData.bvn?allCustomerData.bvn:null,
+                                    addressLine1: allCustomerData.address.addressLine1?allCustomerData.address.addressLine1:null,
+                                    addressLine2: allCustomerData.address.addressLine2?allCustomerData.address.addressLine2:null,
+                                    addressCity: allCustomerData.address.addressCity?allCustomerData.address.addressCity:null,
+                                    addressState: allCustomerData.address.addressState?allCustomerData.address.addressState:null,
+                                    addressCountry: allCustomerData.address.addressCountry?allCustomerData.address.addressCountry:null,
+                                    zipCode: allCustomerData.address.zipCode?allCustomerData.address.zipCode:null,
+                                    contactMobile: allCustomerData.contact.contactMobile?allCustomerData.contact.contactMobile:null,
+                                    contactEmail:allCustomerData.contact.contactEmail?allCustomerData.contact.contactEmail:null,
+                                    nextOfKinFullName: allCustomerData.nextOfKin.nextOfKinFullName!==null?allCustomerData.nextOfKin.nextOfKinFullName:null,
+                                    nextOfKinAddress: allCustomerData.nextOfKin.nextofKinHomeAddress!==null?allCustomerData.nextOfKin.nextofKinHomeAddress:null,
+                                    nextOfKinMobile: allCustomerData.nextOfKin.nextOfKinMobileNumber!==null?allCustomerData.nextOfKin.nextOfKinMobileNumber:null,
+                                    gender:(allCustomerData.gender!==undefined && allCustomerData.gender!==null && allCustomerData.gender!=='') ?allCustomerData.gender:null,
+                                    dateOfBirth: (allCustomerData.dateOfBirth!==null && allCustomerData.dateOfBirth!==undefined && allCustomerData.dateOfBirth!=='')? getDateFromISO(allCustomerData.dateOfBirth):null,
                                     custType:allCustomerData.clientTypeId,
-                                    notes:allCustomerData.notes.notes?allCustomerData.notes.notes:'',
+                                    notes:allCustomerData.notes.notes?allCustomerData.notes.notes:null,
+                                    clientBranchEncodedKey:allCustomerData.branchEncodedKey?allCustomerData.branchEncodedKey:null,
+                                    accountOfficerEncodedKey:allCustomerData.accountOfficerEncodedKey?allCustomerData.accountOfficerEncodedKey:null,
                                 }}
                 
                                 validationSchema={this.updateCustomerValidationSchema}
@@ -177,10 +225,13 @@ class EditAClient extends React.Component {
                                             nextofKinHomeAddress: values.nextOfKinAddress,
                                             nextOfKinMobileNumber: values.nextOfKinMobile,
                                         },
+                                        bvn:values.BVN,
                                         gender:values.gender?values.gender:'',
                                         dateOfBirth: values.dateOfBirth?values.dateOfBirth.toISOString():'',
                                         notes: values.notes,
-                                        encodedKey:this.props.match.params.encodedkey
+                                        encodedKey:this.props.match.params.encodedkey,
+                                        clientBranchEncodedKey:values.clientBranchEncodedKey,
+                                        accountOfficerEncodedKey: values.accountOfficerEncodedKey
                                     }
                 
                 
@@ -281,8 +332,33 @@ class EditAClient extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
+                                                    <Form.Label className="block-level">BVN</Form.Label>
+                                                    <Form.Control type="text"
+                                                         name="BVN"
+                                                         onChange={handleChange} 
+                                                         value={allowNumbersOnly(values.BVN, 10)}
+                                                         className={errors.BVN && touched.BVN ? "is-invalid": null}
+                                                         required />
+                                                    {errors.BVN && touched.BVN ? (
+                                                        <span className="invalid-feedback">{errors.BVN}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col></Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
                                                     {/* <Form.Label className="block-level">Gender</Form.Label> */}
-                                                    <Form.Check type="radio"
+                                                    <Form.Label htmlFor="gender" className="block-level">Gender</Form.Label>
+                                                    <select id="gender"
+                                                        onChange={handleChange}
+                                                        name="gender"
+                                                        value={values.gender}
+                                                        className="countdropdown form-control form-control-sm">
+                                                        <option value="Female">Female</option>
+                                                        <option value="Male">Male</option>
+                                                    </select>
+
+                                                    {/* <Form.Check type="radio"
                                                         name="gender"
                                                         onChange={handleChange} 
                                                         label="Female"
@@ -295,7 +371,7 @@ class EditAClient extends React.Component {
                                                         label="Male"
                                                         id="choose-male"
                                                         value={values.gender}
-                                                          />
+                                                          /> */}
                                                     {errors.gender && touched.gender ? (
                                                         <span className="invalid-feedback">{errors.gender}</span>
                                                     ) : null}
@@ -307,6 +383,7 @@ class EditAClient extends React.Component {
 
                                                             // onChange={this.handleDatePicker}
                                                             // onChangeRaw={(e) => this.handleDateChange(e)}
+                                                            // defaultValue={dateOfBirth}
                                                             dateFormat="d MMMM, yyyy"
                                                             className="form-control form-control-sm"
                                                             peekNextMonth
@@ -326,6 +403,50 @@ class EditAClient extends React.Component {
                                                     </Form.Group>
                                                 </Col>
                                                 
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Customer branch</Form.Label>
+                                                    <Select
+                                                        options={selecBranchList}
+                                                        defaultValue={{label: allCustomerData.branchName, value:allCustomerData.branchEncodedKey}}
+                                                        onChange={(selectedBranch) => {
+                                                            this.setState({ selectedBranch });
+                                                            errors.clientBranchEncodedKey = null
+                                                            values.clientBranchEncodedKey = selectedBranch.value
+                                                        }}
+                                                        className={errors.clientBranchEncodedKey && touched.clientBranchEncodedKey ? "is-invalid" : null}
+                                                        // value={values.accountUsage}
+                                                        name="clientBranchEncodedKey"
+                                                        // value={values.currencyCode}
+                                                        required
+                                                    />
+                                                    
+                                                    {errors.clientBranchEncodedKey && touched.clientBranchEncodedKey ? (
+                                                        <span className="invalid-feedback">{errors.clientBranchEncodedKey}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label className="block-level">Account officer</Form.Label>
+                                                    <Select
+                                                        options={allUserDataList}
+                                                        defaultValue={{label:defaultAccountOfficer?defaultAccountOfficer.label:null, value: defaultAccountOfficer?defaultAccountOfficer.key:null}}
+                                                        onChange={(selectedOfficer) => {
+                                                            this.setState({ selectedOfficer });
+                                                            errors.accountOfficerEncodedKey = null
+                                                            values.accountOfficerEncodedKey = selectedOfficer.value
+                                                        }}
+                                                        className={errors.accountOfficerEncodedKey && touched.accountOfficerEncodedKey ? "is-invalid" : null}
+                                                        // value={values.accountUsage}
+                                                        name="accountOfficerEncodedKey"
+                                                        // value={values.currencyCode}
+                                                        required
+                                                    />
+
+                                                    {errors.accountOfficerEncodedKey && touched.accountOfficerEncodedKey ? (
+                                                        <span className="invalid-feedback">{errors.accountOfficerEncodedKey}</span>
+                                                    ) : null}
+                                                </Col>
                                             </Form.Row>
                                             <Accordion defaultActiveKey="0">
                                                 <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
@@ -517,9 +638,13 @@ class EditAClient extends React.Component {
                 
                 
                                             <div className="footer-with-cta toleft">
-                                                {/* <Button variant="light" className="btn btn-light">
-                                                    Cancel</Button> */}
-                                                <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink>
+                                                <Button variant="light" 
+                                                        className="btn btn-secondary grayed-out"
+                                                        onClick={()=>this.props.history.goBack()}
+                                                >
+                                                    Cancel</Button>
+                                                
+                                                {/* <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
                                                 <Button variant="success" type="submit"
                                                     disabled={updateAClientRequest.is_request_processing} 
                                                     className="ml-20"   
@@ -551,16 +676,17 @@ class EditAClient extends React.Component {
                             </div>
                         )
                     }
+            }
                     
-            case (clientsConstants.GET_A_CLIENT_FAILURE):
+            if (getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_FAILURE){
                 return (
                     <div className="loading-content card"> 
                         <div>{getAClientRequest.request_data.error}</div>
                     </div>
                 )
-            default :
-            return null;
-        }
+            }
+            
+        
         
     }
 
@@ -599,6 +725,8 @@ function mapStateToProps(state) {
     return {
         getAClient : state.clientsReducers.getAClientReducer,
         updateAClient : state.clientsReducers.updateAClientReducer,
+        getAllUsers : state.administrationReducers.adminGetAllUsersReducer,
+        adminGetABranch : state.administrationReducers.adminGetABranchReducer,
         adminGetCustomerTypes : state.administrationReducers.getAllCustomerTypesReducer,
     };
 }
