@@ -33,7 +33,7 @@ steps:
   inputs:
     rootFolderOrFile: $(Build.ArtifactStagingDirectory)
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$Fintech.CBS.BankLingo.zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/Fintech.CBS.BankLingo.zip'
     includeRootFolder: false
 
 ## Publish the zip file
