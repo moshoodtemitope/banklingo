@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  projectFolder: 'banklite/react'
+  projectFolder: 'banklite'
   buildOutputFolder: 'banklite/build'
   
 steps:
