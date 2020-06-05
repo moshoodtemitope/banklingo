@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  projectFolder: 'src/react'
+  buildOutputFolder: 'src/react/build'
+  
 steps:
 ## Run the npm install/build
 - script: |
