@@ -1526,6 +1526,10 @@ class ViewLoanAccount extends React.Component {
                                     <td>&#8358;{numberWithCommas(loanAccountData.principalDue, true)}</td>
                                 </tr>
                                 <tr>
+                                    <td>Interest Rate</td>
+                                    <td>&#8358;{numberWithCommas(loanAccountData.interestRate, true)}</td>
+                                </tr>
+                                <tr>
                                     <td>Interest Paid</td>
                                     <td>&#8358;{numberWithCommas(loanAccountData.interestPaid, true)}</td>
                                 </tr>
@@ -2355,11 +2359,41 @@ class ViewLoanAccount extends React.Component {
             });
         }
 
-        if(showDisburseLoanForm===true || newState === "repayloan" ){
+        if(showDisburseLoanForm===true){
             changeLoanStateValidationSchema = Yup.object().shape({
                     notes:  Yup.string()
                         .min(2, 'Valid notes required'),
                     txtChannelEncodedKey:  Yup.string()
+                        .required('Required'),
+                    firstRepaymentDate:  Yup.string()
+                        .when('showFirstRepayment',{
+                            is:(value)=>value===true,
+                            then: Yup.string()
+                                .required('Required')
+                        }),
+                    backDateChosen:  Yup.string()
+                        .when('allowBackDate',{
+                            is:(value)=>value===true,
+                            then: Yup.string()
+                                .required('Required')
+                        }),
+                    bookingDateChosen:  Yup.string()
+                        .when('showBookingDate',{
+                            is:(value)=>value===true,
+                            then: Yup.string()
+                                .required('Required')
+                        }),
+                
+            });
+        }
+
+        if(newState === "repayloan" ){
+            changeLoanStateValidationSchema = Yup.object().shape({
+                    notes:  Yup.string()
+                        .min(2, 'Valid notes required'),
+                    txtChannelEncodedKey:  Yup.string()
+                        .required('Required'),
+                    amountToRepay:  Yup.string()
                         .required('Required'),
                     firstRepaymentDate:  Yup.string()
                         .when('showFirstRepayment',{
@@ -2395,7 +2429,8 @@ class ViewLoanAccount extends React.Component {
                         firstRepaymentDate:"",
                         backDateChosen:"",
                         bookingDateChosen:"",
-                        notes:""
+                        notes:"",
+                        amountToRepay:""
                     }}
 
                     validationSchema={changeLoanStateValidationSchema}
@@ -2420,6 +2455,15 @@ class ViewLoanAccount extends React.Component {
                                 bookingDate: values.bookingDateChosen!==""? values.bookingDateChosen.toISOString() : null,
                             }
                         }
+
+                        if(newState === "repayloan"){
+                            changeLoanStatePayload.amount= parseFloat(values.amountToRepay.replace(/,/g, ''));
+                        }else{
+                            if(changeLoanStatePayload.amount){
+                                delete changeLoanStatePayload.amount;
+                            }
+                        }
+                        
 
                         // let changeLoanStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
 
@@ -2666,6 +2710,22 @@ class ViewLoanAccount extends React.Component {
                                     {
                                         newState === "repayloan" &&
                                         <div>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className="block-level">Amount to repay (&#8358;)</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        autoComplete="off"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.amountToRepay)}
+                                                        className={errors.amountToRepay && touched.amountToRepay ? "is-invalid h-38px" : "h-38px"}
+                                                        name="amountToRepay" required />
+                                                    {errors.amountToRepay && touched.amountToRepay ? (
+                                                        <span className="invalid-feedback">{errors.amountToRepay}</span>
+                                                    ) : null}
+                                                </Col>
+                                                <Col></Col>
+                                            </Form.Row>
                                             <Form.Row className="mb-10">
                                                 <Col>
                                                     <Form.Group className="mb-0">

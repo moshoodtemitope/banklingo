@@ -20,7 +20,7 @@ class ClientsManagement extends React.Component {
         super(props);
         this.state={
             user:JSON.parse(localStorage.getItem("user")),
-            PageSize:'30',
+            PageSize:'10',
             FullDetails: false,
             CurrentPage:1,
             BranchId: JSON.parse(localStorage.getItem("user")).BranchId,

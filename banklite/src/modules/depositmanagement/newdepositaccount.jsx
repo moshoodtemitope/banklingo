@@ -97,7 +97,8 @@ class NewDepositAccount extends React.Component {
     getAllDepositProducts = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(productActions.getAllDepositProducts(paramters, true));
+        // dispatch(productActions.getAllDepositProducts(paramters, true));
+        dispatch(productActions.getAllDepositProducts(true));
     }
 
     getSingleDepositProduct = async(encodedKey)=>{

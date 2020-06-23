@@ -256,7 +256,7 @@ class CreateNewUser extends React.Component {
                             </div>
                             <Form.Row>
                                 <Col>
-                                    <Form.Label className="block-level">First Names</Form.Label>
+                                    <Form.Label className="block-level">First Name</Form.Label>
                                     <Form.Control 
                                         type="text"
                                         onChange={handleChange}

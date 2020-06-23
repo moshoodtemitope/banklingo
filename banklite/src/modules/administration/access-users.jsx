@@ -129,11 +129,12 @@ class AccessUsers extends React.Component {
                                             <th>Role</th>
                                             <th>Last updated</th>
                                             <th>State</th>
-                                            {/* <th></th> */}
+                                            <th>Created by</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -188,6 +189,7 @@ class AccessUsers extends React.Component {
                                                     <th>Role</th>
                                                     <th>Last updated</th>
                                                     <th>State</th>
+                                                    <th>Created by</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -208,6 +210,7 @@ class AccessUsers extends React.Component {
                                                                     <td>{eachUser.role}</td>
                                                                     <td>{eachUser.lastUpdated}</td>
                                                                     <td>{eachUser.objectStateDescription}</td>
+                                                                    <td>{(eachUser.createdBy!=="" && eachUser.createdBy!==null)?eachUser.createdBy: "-"}</td>
                                                                     <td>
                                                                         {eachUser.encodedKey !==null &&
                                                                         <DropdownButton
@@ -289,6 +292,7 @@ class AccessUsers extends React.Component {
                                                             <th>Role</th>
                                                             <th>Last updated</th>
                                                             <th>State</th>
+                                                            <th>Created by</th>
                                                             <th></th>
                                                         </tr>
                                                     </thead>
@@ -309,6 +313,19 @@ class AccessUsers extends React.Component {
                                                                             <td>{eachUser.role}</td>
                                                                             <td>{eachUser.lastUpdated}</td>
                                                                             <td>{eachUser.objectStateDescription}</td>
+                                                                            {
+                                                                                (eachUser.createdByUserEncodedKey!=="" && eachUser.createdByUserEncodedKey!==null) &&
+                                                                                <td>
+                                                                                    <NavLink to={`/user/${eachUser.createdByUserEncodedKey}`}>
+                                                                                        {(eachUser.createdBy!=="" && eachUser.createdBy!==null)?eachUser.createdBy: "-"}
+                                                                                    </NavLink>
+                                                                                </td>
+                                                                            }
+                                                                             {
+                                                                                (eachUser.createdByUserEncodedKey==="" || eachUser.createdByUserEncodedKey===null) &&
+                                                                                <td>{(eachUser.createdBy!=="" && eachUser.createdBy!==null)?eachUser.createdBy: "-"}</td>
+                                                                            }
+                                                                            
                                                                             <td>
                                                                             {eachUser.encodedKey !==null &&
                                                                                 <DropdownButton
@@ -374,11 +391,12 @@ class AccessUsers extends React.Component {
                                                     <th>Role</th>
                                                     <th>Last updated</th>
                                                     <th>State</th>
-                                                    {/* <th></th> */}
+                                                    <th>Created by</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

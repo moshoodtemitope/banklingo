@@ -3331,7 +3331,7 @@ class ViewSavingsAccount extends React.Component {
                             </li>
                         }
 
-                        {(depositDetails.accountState ===5  && depositDetails.productType===2 && depositDetails.depositBalance >=1) &&
+                        {(depositDetails.accountState ===5  &&  depositDetails.depositBalance >=1) &&
                             <li>
                                 <Button size="sm"
                                     onClick={()=>{

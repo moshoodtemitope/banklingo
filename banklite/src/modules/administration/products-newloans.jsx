@@ -76,6 +76,12 @@ class NewLoanProduct extends React.Component {
                 .required('Required'),
             loanProductType: Yup.string()
                 .required('Required'),
+            repaymentEvery: Yup.string()
+                .required('Required'),
+            repaymentPeriod: Yup.string()
+                .required('Required'),
+            collectPrincipalEveryRepayments: Yup.string()
+                .required('Required'),
             description:  Yup.string()
                 .min(5, 'Valid response required')
           });
@@ -197,8 +203,8 @@ class NewLoanProduct extends React.Component {
                                 interestRateDefault:null,
                                 interestRateMin:null,
                                 interestRateMax:null,
-                                repaymentEvery:null,
-                                repaymentPeriod:null,
+                                repaymentEvery:'',
+                                repaymentPeriod:'',
                                 interestBalanceCalculationSelected:null,
                                 firstDueDateOffsetConstraintDefault:null,
                                 firstDueDateOffsetConstraintMin:null,
@@ -206,7 +212,7 @@ class NewLoanProduct extends React.Component {
                                 installmentsDefault:null,
                                 installmentsMin:null,
                                 installmentsMax:null,
-                                collectPrincipalEveryRepayments:null,
+                                collectPrincipalEveryRepayments:'',
                                 isEnableLinking:false,
                                 depositProductEncodedKey:allDepositProductsList!==null?allDepositProductsList[0].value:null,
                                 settlementOptions:0, 
@@ -293,9 +299,7 @@ class NewLoanProduct extends React.Component {
                                     }
                                 }
 
-                                console.log("testdsds", createNewLoanProductPayload);
-
-                                return false;
+                        
 
                                 this.handleCreateNewLoanProduct(createNewLoanProductPayload)
                                     .then(

@@ -1,5 +1,51 @@
+// export const handleRequestErrors = (error)=>{
+//     console.log('error type',  error.toString());
+//     if(error.toString().indexOf("'closed' of undefined")>-1  
+//         // error.toString().indexOf("code 401")>-1
+//     ){
+//         // setTimeout(() => {
+//             //  window.location.reload();
+//         // }, 1000);
+       
+//     }
+//     if(error!==undefined && error!==null){
+//         // if(error!==undefined && error!==null && error.toString().indexOf("'closed' of undefined")===-1){
+        
+//         if(typeof error.response ==="object"){
+//             // console.log('error keys', error.response);
+//             if(error.response && error.response.data.message!==null && error.response.data.message!==undefined){
+                
+//                 return error.response.data.message;
+//             }else{
+//                 if(error.response && error.response.data.title!==null && error.response.data.title!==undefined){
+                
+//                     return error.response.data.title;
+//                 }
+//             }
+//             // if(error.message){
+//             //     if(error.message==='Request failed with status code 400'){
+//             //         return "An error occured. Please try again";
+//             //     }
+//             //     return error.message;
+//             // }
+           
+//             return "Something went wrong. Please try again";
+//         }
+
+//         if(error.toString()==="Error: Network Error"){
+//             return "Please check your network and try again"
+//         }
+        
+//         // return error
+//         return '';
+//     }
+
+    
+//     return "Something went wrong. Please try again";
+// }
+
 export const handleRequestErrors = (error)=>{
-    console.log('error type',  error.toString());
+    
     if(error.toString().indexOf("'closed' of undefined")>-1  
         // error.toString().indexOf("code 401")>-1
     ){
@@ -8,27 +54,37 @@ export const handleRequestErrors = (error)=>{
         // }, 1000);
        
     }
+    
     if(error!==undefined && error!==null){
         // if(error!==undefined && error!==null && error.toString().indexOf("'closed' of undefined")===-1){
         
         if(typeof error.response ==="object"){
-            // console.log('error keys', error.response);
-            if(error.response && error.response.data.message!==null && error.response.data.message!==undefined){
-                
-                return error.response.data.message;
-            }else{
-                if(error.response && error.response.data.title!==null && error.response.data.title!==undefined){
-                
-                    return error.response.data.title;
+            
+            
+                if(error.response && error.response.data.title!==null && error.response.data.title!==undefined 
+                    && error.response.data.title.toLowerCase().indexOf('one or more validation errors occurred.') > -1){
+                    
+                    // return error.response.data.title;
+                    
+                    return modelStateErrorHandler(error);
+                }else{
+                    if(error.response.data.traceMessages!==null && error.response.data.traceMessages!==""){
+                        return error.response.data.traceMessages;
+                    }else{
+                        if(error.response && error.response.data.message!==null && error.response.data.message!==undefined){
+                    
+                            return error.response.data.message;
+                        }
+                    }
                 }
-            }
+            
             // if(error.message){
             //     if(error.message==='Request failed with status code 400'){
             //         return "An error occured. Please try again";
             //     }
             //     return error.message;
             // }
-           
+            
             return "Something went wrong. Please try again";
         }
 
@@ -44,12 +100,100 @@ export const handleRequestErrors = (error)=>{
     return "Something went wrong. Please try again";
 }
 
+export const modelStateErrorHandler = (error, field) => {
+    //console.log("in model state");
+    //console.log(error);
+    try {
+        
+        if (error.response) {
+            if ("errors" in error.response.data && (error.response.data.title!==undefined && error.response.data.title!=="")) {
+                if ("errors" in error.response.data && error.response.data.title.toLowerCase().indexOf('one or more validation errors occurred.') > -1) {
+                    let message = '';
+                        for (let key in error.response.data.errors) {
+                            if (error.response.data.errors.hasOwnProperty(key)) {
+                                // console.log(key + " -> " + error.errors[key]);
+                                if (Object.keys(error.response.data.errors).length > 1) {
+                                    message += error.response.data.errors[key] + "\n";
+                                } else {
+                                    message += error.response.data.errors[key];
+                                }
+                            }
+                        }
+                    return message;
+                }else{
+                    let message = '';
+                }
+            }
+            // else {
+            //     return handleError(error);
+            // } //Check for the exact error code to know what to return
+        }
+        // else {
+        //     return handleError(error);
+        // }  //Check for the exact error code to know what to return
+        
+    } catch (err) {
+       // console.log(err);
+        return "Error : Something went wrong";
+    }
+    
+}
 
-export const getDateFromISO =(date) =>{
-    let toUse = new Date(date);
-    let convertedDate = toUse.toUTCString().split(' ').slice(0, 4).join(' ');
+export const handleError = (error) => {
+    //console.log("-----in handle error")
+    //console.log(error);
+    var message = '';
+    if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        // console.log(error.response.data);
+        // console.log(error.response.status);
+        // console.log(error.response.headers);
+        if (error.response.status >= 500 && error.response.status < 600) {
+            message = 'something went wrong, try again please.';
+        } else {
+            // console.log("----====", typeof error.response.data);
+            message = error.response.data.message || error.response.data.Message;
+        }
 
-    return convertedDate;
+    } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        //console.log(error.request);
+        message = error.message
+    } else {
+        // Something happened in setting up the request that triggered an Error
+        //console.log('Error', error.message);
+        message = error.message;
+    }
+    return message;
+};
+
+
+export const getDateFromISO =(date, returnTime) =>{
+    let toUse = new Date(date),
+        year = toUse.getFullYear(),
+        month = toUse.getMonth()+1,
+        dt = toUse.getDate();
+        
+        if (dt < 10) {
+        dt = '0' + dt;
+        }
+        if (month < 10) {
+        month = '0' + month;
+        }
+        
+      
+    let convertedDate = `${dt}-${month}-${year}`;
+    // let convertedDate = toUse.toUTCString().split(' ').slice(0, 4).join(' ');
+    let convertedTime ='';
+        if(returnTime===true){
+            convertedTime = date.replace(/^[^:]*([0-2]\d:[0-5]\d).*$/, "$1");
+        }
+
+    let convertedDateAndTime = `${convertedDate} ${convertedTime}`;
+    return convertedDateAndTime;
     // console.log(year+'-' + month + '-'+dt) 
 }
 
@@ -82,14 +226,43 @@ export const noWhiteSpaces = (value)=>{
 
 
 export const allowNumbersOnly = (numbers, maxLength)=>{
-    var reg = /^\d+$/;
-    let filteredNum = numbers.replace(/\D/g,'');
+    if(numbers!==undefined && numbers!==null){
+        var reg = /^\d+$/;
+        let filteredNum = numbers.replace(/\D/g,'');
 
-    if(maxLength!==null && maxLength!==undefined && typeof maxLength ==="number" && filteredNum.toString().length>maxLength){
-        filteredNum = parseInt(filteredNum.toString().substring(0,maxLength));
+        
+
+        // if(maxLength!==null && maxLength!==undefined && typeof maxLength ==="number" && filteredNum.toString().length>maxLength){
+        //     // console.log("##",filteredNum.toString().length);
+        //     filteredNum = filteredNum.toString().substring(0,maxLength);
+
+            
+        //     return filteredNum;
+        // }else{
+            
+        //     return filteredNum;
+        // }
+        // else{
+        //     // console.log("++",filteredNum.toString().length)
+        // }
+
+        if (typeof maxLength === "number") {
+            if (filteredNum.toString().length <= maxLength) {
+                return filteredNum;
+            } else {
+                return filteredNum.toString().substring(0, maxLength);
+            }
+        }else{
+            return filteredNum;
+        }
+
+        
+        
+
+        
+    }else{
+        return null;
     }
-
-    return filteredNum;
     // if(reg.test(numbers)){
     //     return numbers;
     // }else{

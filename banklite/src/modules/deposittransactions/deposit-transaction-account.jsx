@@ -19,7 +19,7 @@ class DepositTransactionAccount extends React.Component {
         super(props);
         this.state = {
             user: '',
-            PageSize: '30',
+            PageSize: '10',
             FullDetails: false,
             CurrentPage: 1,
             CurrentSelectedPage: 1

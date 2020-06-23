@@ -19,7 +19,7 @@ class LoanTransactions extends React.Component {
         super(props);
         this.state={
             user:'',
-            PageSize: '30',
+            PageSize: '10',
             CurrentPage: 1,
             CurrentSelectedPage: 1
         }

@@ -11,13 +11,14 @@ import {
     products} from "./export";
 
 import {LoginReducer} from "./auth/auth.reducer";
+import { authConstants } from "../actiontypes/auth/auth.constants";
 
 const rootReducer = (state, action)=>{
    
-    // if(action.type === userConstants.LOGOUT)
-    //     { 
-    //           state = undefined;   
-    //          }
+    if(action.type === authConstants.LOGOUT)
+        { 
+            state = undefined;   
+        }
     return appReducer(state, action)
 
 };
