@@ -268,26 +268,7 @@ class DisbursementPendingApproval extends React.Component {
                                         </Accordion.Toggle>
                                         <Accordion.Collapse eventKey="0">
                                             <div>
-                                                <Form.Row>
-
-                                                    <Col>
-                                                        <Form.Group >
-                                                            
-                                                            <Form.Label className="block-level">Security Code</Form.Label>
-                                                            <Form.Control type="password"
-                                                                name="securityCode"
-                                                                onChange={handleChange}
-                                                                placeholder="Enter the security code sent to you"
-                                                                value={values.securityCode}
-                                                                className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
-                                                                required />
-                                                            {errors.securityCode && touched.securityCode ? (
-                                                                <span className="invalid-feedback">{errors.securityCode}</span>
-                                                            ) : null}
-                                                            
-                                                        </Form.Group>
-                                                    </Col>
-                                                </Form.Row>
+                                                
                                                 
                                                 <Form.Row>
                                                     <Col>
@@ -305,6 +286,26 @@ class DisbursementPendingApproval extends React.Component {
                                                                 <span className="invalid-feedback">{errors.comment}</span>
                                                             ) : null}
 
+                                                        </Form.Group>
+                                                    </Col>
+                                                </Form.Row>
+                                                <Form.Row>
+
+                                                    <Col>
+                                                        <Form.Group >
+                                                            
+                                                            <Form.Label className="block-level">Security Code</Form.Label>
+                                                            <Form.Control type="password"
+                                                                name="securityCode"
+                                                                onChange={handleChange}
+                                                                placeholder="Enter the security code sent to you"
+                                                                value={values.securityCode}
+                                                                className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                                                                required />
+                                                            {errors.securityCode && touched.securityCode ? (
+                                                                <span className="invalid-feedback">{errors.securityCode}</span>
+                                                            ) : null}
+                                                            
                                                         </Form.Group>
                                                     </Col>
                                                 </Form.Row>
@@ -407,6 +408,7 @@ class DisbursementPendingApproval extends React.Component {
                                         <tr>
 
                                             <th>Transaction Ref</th>
+                                            <th>Request Date</th>
                                             <th>Source Account</th>
                                             <th>Destination Account</th>
                                             <th>Destination Bank</th>
@@ -418,6 +420,7 @@ class DisbursementPendingApproval extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -509,6 +512,7 @@ class DisbursementPendingApproval extends React.Component {
                                         <tr>
                                            
                                             <th>Transaction Ref</th>
+                                            <th>Request Date</th>
                                             <th>Source Account</th>
                                             <th>Destination Account</th>
                                             <th>Destination Bank</th>
@@ -529,6 +533,7 @@ class DisbursementPendingApproval extends React.Component {
                                                                 <span className="txt-cta" onClick={()=>this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span> 
                                                             </td>
                                                             <td>{eachDisburment.sourceAccount}</td>
+                                                            <td>{eachDisburment.createdDate}</td>
                                                             <td>{eachDisburment.destinationAccount}</td>
                                                             <td>{eachDisburment.destinationBank}</td>
                                                             <td>{numberWithCommas(eachDisburment.amount, true)}</td>
@@ -648,6 +653,7 @@ class DisbursementPendingApproval extends React.Component {
                                                 <tr>
                                                    
                                                     <th>Transaction Ref</th>
+                                                    <th>Request Date</th>
                                                     <th>Source Account</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
@@ -667,6 +673,7 @@ class DisbursementPendingApproval extends React.Component {
                                                                     <td>
                                                                         <span className="txt-cta" onClick={()=>this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span> 
                                                                     </td>
+                                                                    <td>{eachDisburment.createdDate}</td>
                                                                     <td>{eachDisburment.sourceAccount}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
                                                                     <td>{eachDisburment.destinationBank}</td>
@@ -725,6 +732,7 @@ class DisbursementPendingApproval extends React.Component {
                                             <tr>
                                                 
                                                 <th>Transaction Ref</th>
+                                                <th>Request Date</th>
                                                 <th>Source Account</th>
                                                 <th>Destination Account</th>
                                                 <th>Destination Bank</th>
@@ -736,6 +744,7 @@ class DisbursementPendingApproval extends React.Component {
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -915,28 +924,9 @@ class DisbursementPendingApproval extends React.Component {
                                         </Accordion.Toggle>
                                     <Accordion.Collapse eventKey="0">
                                         <div>
+                                            
+
                                             <Form.Row>
-
-                                                <Col>
-                                                    <Form.Group >
-
-                                                        <Form.Label className="block-level">Security Code</Form.Label>
-                                                        <Form.Control type="password"
-                                                            name="securityCode"
-                                                            onChange={handleChange}
-                                                            placeholder="Enter the security code sent to you"
-                                                            value={values.securityCode}
-                                                            className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
-                                                            required />
-                                                        {errors.securityCode && touched.securityCode ? (
-                                                            <span className="invalid-feedback">{errors.securityCode}</span>
-                                                        ) : null}
-
-                                                    </Form.Group>
-                                                </Col>
-                                            </Form.Row>
-
-                                            <Form.Row className="mb-0">
                                                 <Col>
                                                     <Form.Group className="mb-0">
 
@@ -955,7 +945,26 @@ class DisbursementPendingApproval extends React.Component {
                                                     </Form.Group>
                                                 </Col>
                                             </Form.Row>
+                                            <Form.Row className="mb-0">
 
+                                                <Col>
+                                                    <Form.Group className="mb-0">
+
+                                                        <Form.Label className="block-level">Security Code</Form.Label>
+                                                        <Form.Control type="password"
+                                                            name="securityCode"
+                                                            onChange={handleChange}
+                                                            placeholder="Enter the security code sent to you"
+                                                            value={values.securityCode}
+                                                            className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                                                            required />
+                                                        {errors.securityCode && touched.securityCode ? (
+                                                            <span className="invalid-feedback">{errors.securityCode}</span>
+                                                        ) : null}
+
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
 
                                         </div>
                                     </Accordion.Collapse>

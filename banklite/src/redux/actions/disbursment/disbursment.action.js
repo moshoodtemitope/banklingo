@@ -14,11 +14,11 @@ export const disbursementActions = {
     getDisbursementByRef
 }
 
-function getDisbursement  (payload, type){
+function getDisbursement  (payload, type, tempData){
     
     return dispatch =>{
         let url;
-            if(type===undefined){
+            if(type!==true){
                 // console.log('----',payload);
                 url = routes.HIT_DISBURSEMENT+`?${payload}`;
             }
@@ -29,7 +29,7 @@ function getDisbursement  (payload, type){
             // url = routes.HIT_DISBURSEMENT+`/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
 
         let consume = ApiService.request(url, "GET", null);
-        dispatch(request(consume));
+        dispatch(request(consume, tempData));
         return consume
             .then(response =>{
                 dispatch(success(response));
@@ -39,9 +39,18 @@ function getDisbursement  (payload, type){
             });
         
     }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.GET_DISBURSMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.GET_DISBURSMENTS_PENDING, user, tempData } 
+        }
+    }
     
 
-    function request(user) { return { type: disbursmentConstants.GET_DISBURSMENTS_PENDING, user } }
+    // function request(user) { return { type: disbursmentConstants.GET_DISBURSMENTS_PENDING, user } }
     function success(response) { return { type: disbursmentConstants.GET_DISBURSMENTS_SUCCESS, response } }
     function failure(error) { return { type: disbursmentConstants.GET_DISBURSMENTS_FAILURE, error } }
 

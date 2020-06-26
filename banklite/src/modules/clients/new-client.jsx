@@ -316,7 +316,7 @@ class NewClient extends React.Component {
                                                     <Form.Control type="text"
                                                          name="BVN"
                                                          onChange={handleChange} 
-                                                         value={allowNumbersOnly(values.BVN, 10)}
+                                                         value={allowNumbersOnly(values.BVN, 11)}
                                                          className={errors.BVN && touched.BVN ? "is-invalid": null}
                                                          required />
                                                     {errors.BVN && touched.BVN ? (

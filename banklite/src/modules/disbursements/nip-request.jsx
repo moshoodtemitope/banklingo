@@ -114,6 +114,12 @@ class NipRequests extends React.Component {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+
+                                                        </tr>
+                                                        {/* <tr>
                                                             <td>1</td>
                                                             <td>023839</td>
                                                             <td>some text</td>
@@ -136,7 +142,7 @@ class NipRequests extends React.Component {
                                                             <td>023839</td>
                                                             <td>Debit</td>
 
-                                                        </tr>
+                                                        </tr> */}
                                                     </tbody>
                                                 </TableComponent>
                                             </div>

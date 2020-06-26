@@ -62,9 +62,9 @@ class DisbursementManagement extends React.Component {
         // this.getDisbursements(params);
 
         if(tempData){
-            dispatch(disbursementActions.getDisbursement(params,tempData));
+            dispatch(disbursementActions.getDisbursement(params,false,tempData));
         }else{
-            dispatch(disbursementActions.getDisbursement(params));
+            dispatch(disbursementActions.getDisbursement(params, false));
         }
     }
 
@@ -224,6 +224,7 @@ class DisbursementManagement extends React.Component {
                                         <tr>
 
                                             <th>Transaction Ref</th>
+                                            <th>Request Date</th>
                                             <th>Source Account</th>
                                             <th>Destination Account</th>
                                             <th>Destination Bank</th>
@@ -235,6 +236,7 @@ class DisbursementManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -283,6 +285,7 @@ class DisbursementManagement extends React.Component {
                                         <tr>
 
                                             <th>Transaction Ref</th>
+                                            <th>Request Date</th>
                                             <th>Source Account</th>
                                             <th>Destination Account</th>
                                             <th>Destination Bank</th>
@@ -303,10 +306,11 @@ class DisbursementManagement extends React.Component {
                                                                 <span className="txt-cta" onClick={() => this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span>
                                                             </td>
                                                             <td>{eachDisburment.sourceAccount}</td>
+                                                            <td>{eachDisburment.createdDate}</td>
                                                             <td>{eachDisburment.destinationAccount}</td>
-                                                            {/* <td>{eachDisburment.destinationBank}</td> */}
-                                                            <td>-</td>
-                                                            <td>{eachDisburment.amount}.00</td>
+                                                            <td>{eachDisburment.destinationBank}</td>
+                                                            {/* <td>-</td> */}
+                                                            <td>{numberWithCommas(eachDisburment.amount, true)}</td>
                                                             {/* <td>{eachDisburment.initiatedBy}</td> */}
                                                             <td>-</td>
                                                             {/* <td>{eachDisburment.approvedBy}</td> */}
@@ -371,6 +375,7 @@ class DisbursementManagement extends React.Component {
                                                 <tr>
                                                     
                                                     <th>Transaction Ref</th>
+                                                    <th>Request Date</th>
                                                     <th>Source Account</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
@@ -390,11 +395,12 @@ class DisbursementManagement extends React.Component {
                                                                     <td>
                                                                         <span className="txt-cta" onClick={()=>this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span> 
                                                                     </td>
+                                                                    <td>{eachDisburment.createdDate}</td>
                                                                     <td>{eachDisburment.sourceAccount}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
-                                                                    {/* <td>{eachDisburment.destinationBank}</td> */}
-                                                                    <td>-</td>
-                                                                    <td>{eachDisburment.amount}.00</td>
+                                                                    <td>{eachDisburment.destinationBank}</td>
+                                                                    {/* <td>-</td> */}
+                                                                    <td>{numberWithCommas(eachDisburment.amount, true)}</td>
                                                                     {/* <td>{eachDisburment.initiatedBy}</td> */}
                                                                     <td>-</td>
                                                                     {/* <td>{eachDisburment.approvedBy}</td> */}
@@ -441,6 +447,7 @@ class DisbursementManagement extends React.Component {
                                                 <tr>
 
                                                     <th>Transaction Ref</th>
+                                                    <th>Request Date</th>
                                                     <th>Source Account</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
@@ -452,6 +459,7 @@ class DisbursementManagement extends React.Component {
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

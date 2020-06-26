@@ -81,6 +81,7 @@ class InitiateDisbursement extends React.Component {
                     .required('Account number is required'),
                 amount: Yup.string()
                     .min(1, 'Please provide amount')
+                    .max(9, 'Max limit reached')
                     .required('Amount is required'),
                 transactionSource: Yup.string()
                     .min(1, 'Please select source')
@@ -91,7 +92,7 @@ class InitiateDisbursement extends React.Component {
                     .required('Narration is required'),
                 sourceAccount: Yup.string()
                     .min(1, 'Please provide a valid source account')
-                    .max(15, 'Max Limit reached')
+                    .max(10, 'Max Limit reached')
                     .required('Source account is required'),
             }),
             allBanksList=[],
@@ -270,7 +271,7 @@ class InitiateDisbursement extends React.Component {
                                                                                 // }}
                                                                                 // onChange={(value) => setFieldValue('sourceAccount', accountNumber(values.sourceAccount, 15))}
                                                                                 // onBlur={()=> setFieldTouched('sourceAccount', true)}
-                                                                                value={accountNumber(values.sourceAccount, 15)}
+                                                                                value={accountNumber(values.sourceAccount, 10)}
                                                                                 className={errors.sourceAccount && touched.sourceAccount ? "is-invalid withcustom" : "withcustom"} />
                         
                                                                             {errors.sourceAccount && touched.sourceAccount ? (
@@ -360,6 +361,7 @@ class InitiateDisbursement extends React.Component {
                                                                             <Form.Label className="block-level">Amount</Form.Label>
                                                                             <Form.Control
                                                                                 type="text"
+                                                                                maxLength="9"
                                                                                 name="amount"
                                                                                 // onChange={
                                                                                 //     (e)=>{
