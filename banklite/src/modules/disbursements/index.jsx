@@ -211,9 +211,12 @@ class DisbursementManagement extends React.Component {
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <select id="toshow" 
+                                            className="countdropdown form-control form-control-sm"
+                                            value={this.state.PageSize}
+                                        >
                                             <option value="10">10</option>
-                                            <option value="25">25</option>
+                                            <option value="30">30</option>
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
@@ -274,7 +277,7 @@ class DisbursementManagement extends React.Component {
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
-                                            <option value="25">25</option>
+                                            <option value="30">30</option>
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
@@ -355,7 +358,7 @@ class DisbursementManagement extends React.Component {
                                                     value={this.state.PageSize}
                                                     className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
-                                                    <option value="25">25</option>
+                                                    <option value="30">30</option>
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
@@ -434,9 +437,12 @@ class DisbursementManagement extends React.Component {
 
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
-                                                <select id="toshow" className="countdropdown form-control form-control-sm">
+                                                <select id="toshow" 
+                                                    className="countdropdown form-control form-control-sm"
+                                                    value={this.state.PageSize}    
+                                                >
                                                     <option value="10">10</option>
-                                                    <option value="25">25</option>
+                                                    <option value="30">30</option>
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>

@@ -243,9 +243,9 @@ class GeneralTxtChannels extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Channel Code</th>
                                             <th>Created</th>
                                             <th>Created by</th>
-                                            {/* <th>Active</th> */}
                                             {/* <th></th> */}
                                         </tr>
                                     </thead>
@@ -254,7 +254,7 @@ class GeneralTxtChannels extends React.Component {
                                         <tr>
                                             <td></td>
                                             <td></td>
-                                            {/* <td></td> */}
+                                            <td></td>
                                             <td></td>
                                         </tr>
                                     </tbody>
@@ -297,6 +297,7 @@ class GeneralTxtChannels extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Channel Code</th>
                                             <th>Created</th>
                                             <th>Created by</th>
                                             <th>Active</th>
@@ -310,6 +311,7 @@ class GeneralTxtChannels extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             <td>{eachChannel.name}</td>
+                                                            <td>{eachChannel.key}</td>
                                                             <td>{eachChannel.dateCreated}</td>
                                                             <td>{eachChannel.createdBy!==null?eachChannel.createdBy:''}</td>
                                                             <td>{eachChannel.objectStateDescription}</td>
@@ -382,6 +384,7 @@ class GeneralTxtChannels extends React.Component {
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
+                                                    <th>Channel Code</th>
                                                     <th>Created</th>
                                                     <th>Created by</th>
                                                     <th>Active</th>
@@ -395,6 +398,7 @@ class GeneralTxtChannels extends React.Component {
                                                             <Fragment key={index}>
                                                                 <tr>
                                                                     <td>{eachChannel.name}</td>
+                                                                    <td>{eachChannel.key}</td>
                                                                     <td>{eachChannel.dateCreated}</td>
                                                                     <td>{eachChannel.createdBy!==null?eachChannel.createdBy:''}</td>
                                                                     <td>{eachChannel.objectStateDescription}</td>
@@ -457,6 +461,7 @@ class GeneralTxtChannels extends React.Component {
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
+                                                    <th>Channel Code</th>
                                                     <th>Created</th>
                                                     <th>Created by</th>
                                                     {/* <th>Active</th> */}
@@ -467,7 +472,7 @@ class GeneralTxtChannels extends React.Component {
                                                 <tr>
                                                     <td></td>
                                                     <td></td>
-                                                    {/* <td></td> */}
+                                                    <td></td>
                                                     <td></td>
                                                 </tr>
                                             </tbody>

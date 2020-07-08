@@ -382,13 +382,19 @@ class AccountManagement extends React.Component {
                                         {
                                             getGLAccountsData.map((eachGL, index)=>{
                                                 return (
-                                                    <tr key={index}>
+                                                    <tr key={index} className={eachGL.accountUsageId===1?"heading-row":""}>
                                                         <td>{eachGL.glCode}</td>
                                                         <td>{eachGL.accountName}</td>
                                                         <td>{eachGL.accountTypeDescription}</td>
                                                         <td>{eachGL.accountUsageDescription}</td>
+                                                        {eachGL.accountUsageId===1 && <td></td>}
+                                                        {eachGL.accountUsageId!==1 &&
                                                         <td>{eachGL.inUse.toString()==="true"?"In Use":"Not In Use"}</td>
-                                                        <td>{eachGL.manualEntriesAllowed.toString()==="true"?"Allowed":"Not Allowed"}</td>
+                                                        }
+                                                        {eachGL.accountUsageId===1 && <td></td>}
+                                                        {eachGL.accountUsageId!==1 &&
+                                                            <td>{eachGL.manualEntriesAllowed.toString()==="true"?"Allowed":"Not Allowed"}</td>
+                                                        }
                                                         <td>
                                                             <DropdownButton
                                                                 size="sm"
@@ -553,13 +559,19 @@ class AccountManagement extends React.Component {
                                             getGLAccountsData.map((eachGL, index)=>{
                                                 // if(typeToShow === eachGL.accountTypeDescription){
                                                     return (
-                                                        <tr key={index}>
+                                                        <tr key={index} className={eachGL.accountUsageId===1?"heading-row":""}>
                                                             <td>{eachGL.glCode}</td>
                                                             <td>{eachGL.accountName}</td>
                                                             <td>{eachGL.accountTypeDescription}</td>
                                                             <td>{eachGL.accountUsageDescription}</td>
-                                                            <td>{eachGL.inUse.toString()==="true"?"In Use":"Not In Use"}</td>
-                                                            <td>{eachGL.manualEntriesAllowed.toString()==="true"?"Allowed":"Not Allowed"}</td>
+                                                            {eachGL.accountUsageId===1 && <td></td>}
+                                                            {eachGL.accountUsageId!==1 &&
+                                                                <td>{eachGL.inUse.toString()==="true"?"In Use":"Not In Use"}</td>
+                                                            }
+                                                            {eachGL.accountUsageId===1 && <td></td>}
+                                                            {eachGL.accountUsageId!==1 &&
+                                                                <td>{eachGL.manualEntriesAllowed.toString()==="true"?"Allowed":"Not Allowed"}</td>
+                                                            }
                                                             <td>
                                                                 <DropdownButton
                                                                     size="sm"
@@ -727,7 +739,8 @@ class AccountManagement extends React.Component {
                     <Formik
                         initialValues={{
                             accountNotes: '',
-                            allowManualEntry: '',
+                            allowManualEntry: false,
+                            // allowManualEntry: '',
                             accountUsage: '',
                             accountType: '',
                             accountName: '',
@@ -746,7 +759,7 @@ class AccountManagement extends React.Component {
                                 notes: values.accountNotes,
                             };
                         
-                            
+                            // console.log("popopop",newgLPayload);
                             this.submitNewGLAccountDetails(newgLPayload)
                                 .then(
                                     () => {
@@ -758,11 +771,12 @@ class AccountManagement extends React.Component {
                                                 this.getGLAccounts(allAccountsData); 
                                                 this.props.dispatch(acoountingActions.createGLAccount("CLEAR"))
                                             }, 2000);
-                                        }else{
-                                            setTimeout(() => {
-                                                this.props.dispatch(acoountingActions.createGLAccount("CLEAR"))
-                                            }, 2000);
                                         }
+                                        // else{
+                                        //     setTimeout(() => {
+                                        //         this.props.dispatch(acoountingActions.createGLAccount("CLEAR"))
+                                        //     }, 2000);
+                                        // }
                                         
                                         
 
@@ -1073,6 +1087,7 @@ class AccountManagement extends React.Component {
                                                             // errors.accountType = null
                                                             values.accountType = selectedAccType.value
                                                         }}
+                                                        isDisabled={true}
                                                         className={errors.accountType && touched.accountType ? "is-invalid" : null}
                                                         defaultValue ={{label:selectGlAcc.accountTypeDescription, value: selectGlAcc.accountTypeId}}
                                                         name="accountType"
@@ -1093,6 +1108,7 @@ class AccountManagement extends React.Component {
                                                             // errors.accountUsage = null
                                                             values.accountUsage = selectedUsageOption.value
                                                         }}
+                                                        isDisabled={true}
                                                         className={errors.accountUsage && touched.accountUsage ? "is-invalid" : null}
                                                         defaultValue ={{label:selectGlAcc.accountUsageDescription, value: selectGlAcc.accountUsageId}}
                                                         

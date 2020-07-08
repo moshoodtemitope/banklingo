@@ -1,7 +1,8 @@
 
 // const URL = 'http://52.170.209.118';
 // const URL = 'http://40.76.69.211/Banklot';
-const URL = 'http://40.76.69.211/Fintech.CBS.Backend';
+// const URL = 'http://40.76.69.211/Fintech.CBS.Backend';
+const URL = 'https://40.76.69.211/Fintech.CBS.Backend';
 
 const BASEURL = URL;  
 

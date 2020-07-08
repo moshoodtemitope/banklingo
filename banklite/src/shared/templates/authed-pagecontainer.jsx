@@ -20,7 +20,7 @@ class InnerPageContainer extends React.Component{
 
 
     componentDidMount(){
-        this.resfreshTokenTimer();
+        // this.resfreshTokenTimer();
     }
     
 

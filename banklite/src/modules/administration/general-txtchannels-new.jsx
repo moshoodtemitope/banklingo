@@ -130,6 +130,8 @@ class NewTxtChannels extends React.Component {
                                 handleBlur,
                                 resetForm,
                                 values,
+                                setFieldValue,
+                                setFieldTouched,
                                 touched,
                                 isValid,
                                 errors, }) => (
@@ -183,11 +185,16 @@ class NewTxtChannels extends React.Component {
                                                         <Form.Label className="block-level">GL Account</Form.Label>
                                                         <Select
                                                             options={allGlAccounts}
-                                                            onChange={(selectedAccType) => {
-                                                                this.setState({ selectedAccType });
-                                                                errors.TxtChannelId = null
-                                                                values.TxtChannelId = selectedAccType.value
+                                                            // onChange={(selectedAccType) => {
+                                                            //     this.setState({ selectedAccType });
+                                                            //     errors.TxtChannelId = null
+                                                            //     values.TxtChannelId = selectedAccType.value
+                                                            // }}
+                                                            onChange={(selected) => {
+                                                                setFieldValue('TxtChannelId', selected.value);
+                                                                this.setState({ selectedAccType:selected });
                                                             }}
+                                                            onBlur={()=> setFieldTouched('TxtChannelId', true)}
                                                             className={errors.TxtChannelId && touched.TxtChannelId ? "is-invalid" : null}
                                                             // value={values.accountUsage}
                                                             name="TxtChannelId"

@@ -89,9 +89,7 @@ export class ApiService {
 
     static request(url, type, data, headers = undefined, noStringify=false){
         let bodyData;
-        let service,
-            lastRefreshTime,
-            currenTimestamp;
+        let service;
         bodyData = noStringify ? JSON.stringify(data) : data;
 
         let urlsToAuthenticate = [
@@ -104,16 +102,13 @@ export class ApiService {
         binaryUploadUrls =[
             "/api/Upload"
         ],
-        skipTokenRefreshForUrls =[
-            "/api/Login/refreshtoken",
-        ],
         serviceToTest = url.split("Fintech.CBS.Backend")[1];
 
         if(localStorage.getItem("user") === null){
             headers = undefined;
         }
 
-        let lingoAuth = JSON.parse(localStorage.getItem("user"));
+        let that =  this;
 
         if (type.toLowerCase() === 'get') {
             if(headers === undefined){
@@ -125,79 +120,7 @@ export class ApiService {
                     axios.defaults.headers.common[key] = value;
                 }
             }
-
-            if(lingoAuth!==null && lingoAuth!==undefined && skipTokenRefreshForUrls.indexOf(serviceToTest) === -1){
-                lastRefreshTime = lingoAuth.lastLogForAuth;
-                currenTimestamp = Date.now();
-
-                if(parseInt(((currenTimestamp -lastRefreshTime)/60000))>=3){ // If Last Token refresh is more than 3 mins, Pause GET reqeust, refresh token, and resume the GET request
-                    let tempRequest = {
-                        url,
-                        bodyData,
-                        tempHeaders: axios.defaults.headers.common
-                    };
-
-                    let refreshpayload ={
-                        username:lingoAuth.userName,
-                        refreshToken:lingoAuth.refreshToken
-                    }
-                    this.setTokenAuthorization(routes.REFRESH_TOKEN);
-                    let tokenService = axios.post(routes.REFRESH_TOKEN, refreshpayload);
-
-                    return tokenService.then(function (response) {
-                        // console.log("was here")
-                        if(response.status===200){
-                            if(response.data.token!==undefined){
-                                
-                                let userData = JSON.parse(localStorage.getItem("user"));
-                                    userData.lastLogForAuth = Date.now();
-                                    userData.token = response.data.token;
-                                    localStorage.setItem('user', JSON.stringify(userData));
-
-                                delete axios.defaults.headers.common;
-                                axios.defaults.headers.common ={
-                                    ...tempRequest.tempHeaders
-                                }
-                                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-
-                                service = axios.get(tempRequest.url, tempRequest.bodyData);
-
-                                
-                                return service.then((response3)=>{
-
-                                    return service;
-                                })
-                                .catch((error2)=>{
-                                    return service;
-                                })
-                            }
-                        }else{
-                            // return service;
-                            dispatch(authActions.Logout())
-                        }
-
-                        
-                        
-
-                       
-                    }).catch(function (error) {
-                        // console.log("logs out now",service, routes.REFRESH_TOKEN)
-                        dispatch(authActions.Logout())
-                        
-                        
-                        
-                    });
-                }else{
-                   
-                    service = axios.get(url, bodyData);
-                   
-                }
-            }else{
-                
-                service = axios.get(url, bodyData);
-            }
-
-            
+            service = axios.get(url, bodyData);
 
             return service.then(function (response) {
                 // let currentRoute = window.location.pathname;
@@ -301,76 +224,7 @@ export class ApiService {
                 }
             }
             
-            if(lingoAuth!==null && lingoAuth!==undefined && skipTokenRefreshForUrls.indexOf(serviceToTest) === -1){
-                lastRefreshTime = lingoAuth.lastLogForAuth;
-                currenTimestamp = Date.now();
-
-                if(parseInt(((currenTimestamp -lastRefreshTime)/60000))>=3){ // If Last Token refresh is more than 3 mins, Pause GET reqeust, refresh token, and resume the GET request
-                    let tempRequest = {
-                        url,
-                        bodyData,
-                        tempHeaders: axios.defaults.headers.common
-                    };
-
-                    let refreshpayload ={
-                        username:lingoAuth.userName,
-                        refreshToken:lingoAuth.refreshToken
-                    }
-                    this.setTokenAuthorization(routes.REFRESH_TOKEN);
-                    let tokenService = axios.post(routes.REFRESH_TOKEN, refreshpayload);
-
-                    return tokenService.then(function (response) {
-                        // console.log("was here")
-                        if(response.status===200){
-                            if(response.data.token!==undefined){
-                                
-                                let userData = JSON.parse(localStorage.getItem("user"));
-                                    userData.lastLogForAuth = Date.now();
-                                    userData.token = response.data.token;
-                                    localStorage.setItem('user', JSON.stringify(userData));
-
-                                delete axios.defaults.headers.common;
-                                axios.defaults.headers.common ={
-                                    ...tempRequest.tempHeaders
-                                }
-                                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-
-                                service = axios.get(tempRequest.url, tempRequest.bodyData);
-
-                                
-                                return service.then((response3)=>{
-
-                                    return service;
-                                })
-                                .catch((error2)=>{
-                                    return service;
-                                })
-                            }
-                        }else{
-                            // return service;
-                            dispatch(authActions.Logout())
-                        }
-
-                        
-                        
-
-                       
-                    }).catch(function (error) {
-                        // console.log("logs out now",service, routes.REFRESH_TOKEN)
-                        dispatch(authActions.Logout())
-                        
-                        
-                        
-                    });
-                }else{
-                   
-                    service = axios.post(url, bodyData);
-                   
-                }
-            }else{
-                
-                service = axios.post(url, bodyData);
-            }
+            service = axios.post(url, bodyData);
             return service.then(function (response) {
                
                 return service;
