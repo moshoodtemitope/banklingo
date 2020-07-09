@@ -5,6 +5,9 @@ import {Fragment} from "react";
 import { connect } from 'react-redux';
 import { NavLink} from 'react-router-dom';
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
@@ -21,7 +24,9 @@ class LoanTransactions extends React.Component {
             user:'',
             PageSize: '10',
             CurrentPage: 1,
-            CurrentSelectedPage: 1
+            CurrentSelectedPage: 1,
+            endDate: "",
+            startDate: "",
         }
         
     }
@@ -69,6 +74,28 @@ class LoanTransactions extends React.Component {
         }else{
             dispatch(loanActions.getLoanTransactions(params));
         }
+    }
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+    }
+    handleStartDatePicker = (startDate) => {
+        startDate.setHours(startDate.getHours() + 1);
+        
+        this.setState({ startDate }, ()=>{
+            if(this.state.endDate!==""){
+                this.getHistory();
+            }
+        });
+    }
+
+    handleEndDatePicker = (endDate) => {
+        endDate.setHours(endDate.getHours() + 1);
+       
+        this.setState({ endDate }, ()=>{
+                if(this.state.startDate!==""){
+                    this.getHistory();
+                }
+        });
     }
 
 
@@ -144,6 +171,44 @@ class LoanTransactions extends React.Component {
                                         </Form.Control>
                                     </Form.Group>
                                     <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                 </Form>
 
                                 <div className="pagination-wrap">
@@ -215,6 +280,44 @@ class LoanTransactions extends React.Component {
                                             </Form.Control>
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -291,6 +394,44 @@ class LoanTransactions extends React.Component {
                                             </Form.Control>
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                     </Form>
 
                                     <div className="pagination-wrap">

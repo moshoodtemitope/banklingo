@@ -10,7 +10,6 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-
 import { Formik} from 'formik';
 import * as Yup from 'yup';
 import Alert from 'react-bootstrap/Alert'
@@ -39,7 +38,9 @@ class DisbursementPendingApproval extends React.Component {
             PageSize:30,
             CurrentPage:1,
             show: false,
-            showDetails:false
+            showDetails:false,
+            endDate: "",
+            startDate: "",
         }
 
         
@@ -70,6 +71,29 @@ class DisbursementPendingApproval extends React.Component {
         const {dispatch} = this.props;
 
         await dispatch(disbursementActions.rejectPostDisbursement(rejectionPayload));
+    }
+
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+    }
+    handleStartDatePicker = (startDate) => {
+        startDate.setHours(startDate.getHours() + 1);
+        
+        this.setState({ startDate }, ()=>{
+            if(this.state.endDate!==""){
+                this.getHistory();
+            }
+        });
+    }
+
+    handleEndDatePicker = (endDate) => {
+        endDate.setHours(endDate.getHours() + 1);
+       
+        this.setState({ endDate }, ()=>{
+                if(this.state.startDate!==""){
+                    this.getHistory();
+                }
+        });
     }
 
     setPagesize = (PageSize, tempData)=>{
@@ -410,8 +434,10 @@ class DisbursementPendingApproval extends React.Component {
                                             <th>Transaction Ref</th>
                                             <th>Request Date</th>
                                             <th>Source Account</th>
+                                            <th>Sender Name</th>
                                             <th>Destination Account</th>
                                             <th>Destination Bank</th>
+                                            <th>Recipient Name</th>
                                             <th>Amount</th>
                                             <th>Inititated By</th>
                                             <th>Approved By</th>
@@ -420,6 +446,8 @@ class DisbursementPendingApproval extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -493,6 +521,44 @@ class DisbursementPendingApproval extends React.Component {
                                             </Form.Control>
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -514,8 +580,10 @@ class DisbursementPendingApproval extends React.Component {
                                             <th>Transaction Ref</th>
                                             <th>Request Date</th>
                                             <th>Source Account</th>
+                                            <th>Sender Name</th>
                                             <th>Destination Account</th>
                                             <th>Destination Bank</th>
+                                            <th>Recipient Name</th>
                                             <th>Amount (NGN)</th>
                                             <th>Inititated By</th>
                                             {/* <th>Approved By</th> */}
@@ -532,10 +600,12 @@ class DisbursementPendingApproval extends React.Component {
                                                             <td>
                                                                 <span className="txt-cta" onClick={()=>this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span> 
                                                             </td>
-                                                            <td>{eachDisburment.sourceAccount}</td>
                                                             <td>{eachDisburment.createdDate}</td>
+                                                            <td>{eachDisburment.sourceAccount}</td>
+                                                            <td>{eachDisburment.senderName}</td>
                                                             <td>{eachDisburment.destinationAccount}</td>
                                                             <td>{eachDisburment.destinationBank}</td>
+                                                            <td>{eachDisburment.recipientName}</td>
                                                             <td>{numberWithCommas(eachDisburment.amount, true)}</td>
                                                             <td>{eachDisburment.initiatedBy}</td>
                                                             {/* <td>{eachDisburment.approvedBy}</td> */}
@@ -624,6 +694,44 @@ class DisbursementPendingApproval extends React.Component {
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                             </Form>
 
                                             <div className="pagination-wrap">
@@ -655,8 +763,10 @@ class DisbursementPendingApproval extends React.Component {
                                                     <th>Transaction Ref</th>
                                                     <th>Request Date</th>
                                                     <th>Source Account</th>
+                                                    <th>Sender Name</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
+                                                    <th>Recipient Name</th>
                                                     <th>Amount (NGN)</th>
                                                     <th>Inititated By</th>
                                                     {/* <th>Approved By</th> */}
@@ -675,8 +785,10 @@ class DisbursementPendingApproval extends React.Component {
                                                                     </td>
                                                                     <td>{eachDisburment.createdDate}</td>
                                                                     <td>{eachDisburment.sourceAccount}</td>
+                                                                    <td>{eachDisburment.senderName}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
                                                                     <td>{eachDisburment.destinationBank}</td>
+                                                                    <td>{eachDisburment.recipientName}</td>
                                                                     <td>{numberWithCommas(eachDisburment.amount, true)}</td>
                                                                     <td>{eachDisburment.initiatedBy}</td>
                                                                     {/* <td>{eachDisburment.approvedBy}</td> */}
@@ -715,6 +827,44 @@ class DisbursementPendingApproval extends React.Component {
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                             </Form>
 
                                             <div className="pagination-wrap">
@@ -734,8 +884,10 @@ class DisbursementPendingApproval extends React.Component {
                                                 <th>Transaction Ref</th>
                                                 <th>Request Date</th>
                                                 <th>Source Account</th>
+                                                <th>Sender Name</th>
                                                 <th>Destination Account</th>
                                                 <th>Destination Bank</th>
+                                                <th>Recipient Name</th>
                                                 <th>Amount</th>
                                                 <th>Inititated By</th>
                                                 <th>Approved By</th>
@@ -866,13 +1018,13 @@ class DisbursementPendingApproval extends React.Component {
 
                                             <Form.Row>
 
-                                                {/* <Col>
-                                                        <Form.Label className="block-level">Transaction Source</Form.Label>
+                                                <Col xs={6}>
+                                                        <Form.Label className="block-level">Sender Name</Form.Label>
 
 
-                                                        <span className="form-text disabled-field">{selectedTxtSourceText}</span>
-                                                    </Col> */}
-                                                <Col>
+                                                        <span className="form-text disabled-field">{transactionToProcess.senderName}</span>
+                                                    </Col>
+                                                <Col xs={6}>
                                                     <Form.Label className="block-level">Source Account</Form.Label>
                                                     <span className="form-text disabled-field">{transactionToProcess.sourceAccount}</span>
                                                 </Col>
@@ -889,13 +1041,13 @@ class DisbursementPendingApproval extends React.Component {
                                         <div>
 
                                             <Form.Row className="mb-0">
-                                                <Col>
+                                                <Col xs={6}>
                                                     <Form.Group >
                                                         <Form.Label className="block-level">Destination Bank</Form.Label>
                                                         <span className="form-text disabled-field">{transactionToProcess.destinationBank}</span>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col>
+                                                <Col xs={6}>
                                                     <Form.Group  className="mb-0">
                                                         <Form.Label className="block-level">Destination Account </Form.Label>
                                                         <span className="form-text disabled-field">{transactionToProcess.destinationAccount}</span>
@@ -903,13 +1055,13 @@ class DisbursementPendingApproval extends React.Component {
                                                 </Col>
                                             </Form.Row>
                                             <Form.Row>
-                                                <Col>
+                                                <Col xs={6}>
+                                                    <Form.Label className="block-level">Recipient Name</Form.Label>
+                                                        <span className="form-text disabled-field">{transactionToProcess.recipientName}</span>
+                                                </Col>
+                                                <Col xs={6}>
                                                     <Form.Label className="block-level">Amount</Form.Label>
                                                     <span className="form-text disabled-field">&#8358;{numberWithCommas(transactionToProcess.amount, true)}</span>
-                                                </Col>
-                                                <Col>
-                                                    {/* <Form.Label className="block-level">Narration</Form.Label>
-                                                        <span className="form-text disabled-field">{postDisbursementpayload.narration}</span> */}
                                                 </Col>
 
                                             </Form.Row>

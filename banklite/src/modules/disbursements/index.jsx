@@ -28,7 +28,9 @@ class DisbursementManagement extends React.Component {
             user:'',
             PageSize:30,
             CurrentPage:1,
-            showDetails: false
+            showDetails: false,
+            endDate: "",
+            startDate: "",
         }
 
         
@@ -48,6 +50,29 @@ class DisbursementManagement extends React.Component {
         const {dispatch} = this.props;
 
         dispatch(disbursementActions.getDisbursement(paramters));
+    }
+
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+    }
+    handleStartDatePicker = (startDate) => {
+        startDate.setHours(startDate.getHours() + 1);
+        
+        this.setState({ startDate }, ()=>{
+            if(this.state.endDate!==""){
+                this.getHistory();
+            }
+        });
+    }
+
+    handleEndDatePicker = (endDate) => {
+        endDate.setHours(endDate.getHours() + 1);
+       
+        this.setState({ endDate }, ()=>{
+                if(this.state.startDate!==""){
+                    this.getHistory();
+                }
+        });
     }
 
     setPagesize = (PageSize, tempData)=>{
@@ -229,8 +254,10 @@ class DisbursementManagement extends React.Component {
                                             <th>Transaction Ref</th>
                                             <th>Request Date</th>
                                             <th>Source Account</th>
+                                            <th>Sender Name</th>
                                             <th>Destination Account</th>
                                             <th>Destination Bank</th>
+                                            <th>Recipient Name</th>
                                             <th>Amount (NGN)</th>
                                             <th>Inititated By</th>
                                             <th>Approved By</th>
@@ -239,6 +266,8 @@ class DisbursementManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -269,6 +298,44 @@ class DisbursementManagement extends React.Component {
                                             </Form.Control>
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -290,8 +357,10 @@ class DisbursementManagement extends React.Component {
                                             <th>Transaction Ref</th>
                                             <th>Request Date</th>
                                             <th>Source Account</th>
+                                            <th>Sender Name</th>
                                             <th>Destination Account</th>
                                             <th>Destination Bank</th>
+                                            <th>Recipient Name</th>
                                             <th>Amount (NGN)</th>
                                             <th>Inititated By</th>
                                             <th>Approved By</th>
@@ -308,10 +377,12 @@ class DisbursementManagement extends React.Component {
                                                             <td>
                                                                 <span className="txt-cta" onClick={() => this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span>
                                                             </td>
-                                                            <td>{eachDisburment.sourceAccount}</td>
                                                             <td>{eachDisburment.createdDate}</td>
+                                                            <td>{eachDisburment.sourceAccount}</td>
+                                                            <td>{eachDisburment.senderName}</td>
                                                             <td>{eachDisburment.destinationAccount}</td>
                                                             <td>{eachDisburment.destinationBank}</td>
+                                                            <td>{eachDisburment.recipientName}</td>
                                                             {/* <td>-</td> */}
                                                             <td>{numberWithCommas(eachDisburment.amount, true)}</td>
                                                             {/* <td>{eachDisburment.initiatedBy}</td> */}
@@ -349,6 +420,44 @@ class DisbursementManagement extends React.Component {
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                             </Form>
 
                                             <div className="pagination-wrap">
@@ -376,16 +485,18 @@ class DisbursementManagement extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
-                                                    
                                                     <th>Transaction Ref</th>
                                                     <th>Request Date</th>
                                                     <th>Source Account</th>
+                                                    <th>Sender Name</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
+                                                    <th>Recipient Name</th>
                                                     <th>Amount (NGN)</th>
                                                     <th>Inititated By</th>
                                                     <th>Approved By</th>
                                                     <th>Status</th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -400,8 +511,10 @@ class DisbursementManagement extends React.Component {
                                                                     </td>
                                                                     <td>{eachDisburment.createdDate}</td>
                                                                     <td>{eachDisburment.sourceAccount}</td>
+                                                                    <td>{eachDisburment.senderName}</td>
                                                                     <td>{eachDisburment.destinationAccount}</td>
                                                                     <td>{eachDisburment.destinationBank}</td>
+                                                                    <td>{eachDisburment.recipientName}</td>
                                                                     {/* <td>-</td> */}
                                                                     <td>{numberWithCommas(eachDisburment.amount, true)}</td>
                                                                     {/* <td>{eachDisburment.initiatedBy}</td> */}
@@ -433,6 +546,44 @@ class DisbursementManagement extends React.Component {
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text" 
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                        </Form.Group>
                                             </Form>
 
                                             <div className="pagination-wrap">
@@ -455,8 +606,10 @@ class DisbursementManagement extends React.Component {
                                                     <th>Transaction Ref</th>
                                                     <th>Request Date</th>
                                                     <th>Source Account</th>
+                                                    <th>Sender Name</th>
                                                     <th>Destination Account</th>
                                                     <th>Destination Bank</th>
+                                                    <th>Recipient Name</th>
                                                     <th>Amount (NGN)</th>
                                                     <th>Inititated By</th>
                                                     <th>Approved By</th>
@@ -465,6 +618,8 @@ class DisbursementManagement extends React.Component {
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

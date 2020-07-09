@@ -12,6 +12,9 @@ import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
@@ -23,7 +26,9 @@ class WebhooksCommunications extends React.Component {
             user:'',
             NotificationType:3,
             PageSize: 30,
-            CurrentPage:1
+            CurrentPage:1,
+            endDate: "",
+            startDate: "",
         }
     }
         componentDidMount(){
@@ -77,7 +82,28 @@ class WebhooksCommunications extends React.Component {
             }
         }
     
-        
+        handleDateChangeRaw = (e) => {
+            e.preventDefault();
+        }
+        handleStartDatePicker = (startDate) => {
+            startDate.setHours(startDate.getHours() + 1);
+            
+            this.setState({ startDate }, ()=>{
+                if(this.state.endDate!==""){
+                    this.getHistory();
+                }
+            });
+        }
+    
+        handleEndDatePicker = (endDate) => {
+            endDate.setHours(endDate.getHours() + 1);
+           
+            this.setState({ endDate }, ()=>{
+                    if(this.state.startDate!==""){
+                        this.getHistory();
+                    }
+            });
+        }
 
 
         renderAllNotifications =()=>{
@@ -173,6 +199,44 @@ class WebhooksCommunications extends React.Component {
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                <Form.Group className="table-filters">
+                                                <DatePicker
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleStartDatePicker}
+                                                    selected={this.state.startDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    placeholderText="Start date"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm "
+
+                                                />
+                                                <DatePicker placeholderText="End  date"
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleEndDatePicker}
+                                                    selected={this.state.endDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm"
+
+                                                />
+                                                <input type="text"
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                                />
+                                                {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                            </Form.Group>
                                             </Form>
 
                                             <div className="pagination-wrap">
@@ -261,6 +325,44 @@ class WebhooksCommunications extends React.Component {
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                <Form.Group className="table-filters">
+                                                <DatePicker
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleStartDatePicker}
+                                                    selected={this.state.startDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    placeholderText="Start date"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm "
+
+                                                />
+                                                <DatePicker placeholderText="End  date"
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleEndDatePicker}
+                                                    selected={this.state.endDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm"
+
+                                                />
+                                                <input type="text"
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                                />
+                                                {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                            </Form.Group>
                                             </Form>
 
                                             <div className="pagination-wrap">
@@ -334,6 +436,44 @@ class WebhooksCommunications extends React.Component {
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                <Form.Group className="table-filters">
+                                                <DatePicker
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleStartDatePicker}
+                                                    selected={this.state.startDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    placeholderText="Start date"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm "
+
+                                                />
+                                                <DatePicker placeholderText="End  date"
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleEndDatePicker}
+                                                    selected={this.state.endDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm"
+
+                                                />
+                                                <input type="text"
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search"
+                                                />
+                                                {/* {errors.startDate && touched.startDate ? (
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
+                                            </Form.Group>
                                             </Form>
 
                                             <div className="pagination-wrap">

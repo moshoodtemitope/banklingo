@@ -36,6 +36,8 @@ import { routes} from '../../services/urls';
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
 
+
+
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
@@ -53,6 +55,8 @@ class ViewSavingsAccount extends React.Component {
             FullDetails:true,
             PageSize: 100,
             CurrentPage: 1,
+            endDate: "",
+            startDate: "",
 
             typeOfTransfer:"currentcustomer",
             selectOtherCustomerAccount:"",
@@ -1154,7 +1158,8 @@ class ViewSavingsAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
-                                    <th>Transaction Date</th>
+                                    <th>Transaction ID</th>
+                                    <th>Narration</th>
                                     <th>Entry Date</th>
                                     <th>Entry Type</th>
                                     <th>Type</th>
@@ -1163,6 +1168,7 @@ class ViewSavingsAccount extends React.Component {
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -1196,7 +1202,8 @@ class ViewSavingsAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
-                                    <th>Transaction Date</th>
+                                    <th>Transaction ID</th>
+                                    <th>Narration</th>
                                     <th>Entry Date</th>
                                     <th>Entry Type</th>
                                     <th>Type</th>
@@ -1210,7 +1217,8 @@ class ViewSavingsAccount extends React.Component {
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
                                                 <td>{eachTxt.id}</td>
-                                                <td>{getDateFromISO(eachTxt.entryDate)}</td>
+                                                <td>{eachTxt.narration}</td>
+                                                <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.entryType}</td>
                                                 <td>{eachTxt.typeDescription}</td>
                                                 <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
@@ -1263,6 +1271,7 @@ class ViewSavingsAccount extends React.Component {
                                 <tr>
                                     <th>Customer Name</th>
                                     <th>Transaction Id</th>
+                                    <th>Narration</th>
                                     <th>Entry Date</th>
                                     <th>Entry Type</th>
                                     <th>Type</th>
@@ -1276,7 +1285,8 @@ class ViewSavingsAccount extends React.Component {
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
                                                 <td>{eachTxt.id}</td>
-                                                <td>{getDateFromISO(eachTxt.entryDate)}</td>
+                                                <td>{eachTxt.narration}</td>
+                                                <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.entryType}</td>
                                                 <td>{eachTxt.typeDescription}</td>
                                                 <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
@@ -1312,7 +1322,8 @@ class ViewSavingsAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
-                                    {/* <th>Transaction Date</th> */}
+                                    <th>Transaction Id</th>
+                                    <th>Narration</th>
                                     <th>Entry Date</th>
                                     <th>Entry Type</th>
                                     <th>Type</th>
@@ -1321,7 +1332,8 @@ class ViewSavingsAccount extends React.Component {
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -2300,7 +2312,28 @@ class ViewSavingsAccount extends React.Component {
     }
 
 
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+    }
+    handleStartDatePicker = (startDate) => {
+        startDate.setHours(startDate.getHours() + 1);
+        
+        this.setState({ startDate }, ()=>{
+            if(this.state.endDate!==""){
+                this.getHistory();
+            }
+        });
+    }
 
+    handleEndDatePicker = (endDate) => {
+        endDate.setHours(endDate.getHours() + 1);
+       
+        this.setState({ endDate }, ()=>{
+                if(this.state.startDate!==""){
+                    this.getHistory();
+                }
+        });
+    }
 
 
 

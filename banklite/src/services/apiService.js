@@ -106,6 +106,7 @@ export class ApiService {
         ],
         skipTokenRefreshForUrls =[
             "/api/Login/refreshtoken",
+            "api/Login",
         ],
         serviceToTest = url.split("Fintech.CBS.Backend")[1];
 

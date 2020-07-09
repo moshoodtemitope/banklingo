@@ -60,7 +60,7 @@ class TablePagination extends React.Component{
                 if(totalPages>=1){
                     let {activePage}= this.state;
                     for(let eachPage=1; eachPage<=totalPages ; eachPage++){
-                        console.log("here", eachPage);
+                        // console.log("here", eachPage);
                         pagingTemplate.push(<span 
                                                 key={`${eachPage}-int`}
                                                 className={currPage===eachPage?"each-pagenum active":"each-pagenum"}

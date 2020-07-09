@@ -188,12 +188,21 @@ export const getDateFromISO =(date, returnTime) =>{
     let convertedDate = `${dt}-${month}-${year}`;
     // let convertedDate = toUse.toUTCString().split(' ').slice(0, 4).join(' ');
     let convertedTime ='';
-        if(returnTime===true){
+        if(returnTime===true && date.indexOf('T')===-1){
             convertedTime = date.replace(/^[^:]*([0-2]\d:[0-5]\d).*$/, "$1");
+            return convertedTime;
+        }
+        if(returnTime===true && date.indexOf('T')>-1){
+            convertedTime = date.replace(/^[^:]*([0-2]\d:[0-5]\d).*$/, "$1");
+
+            let convertedDateAndTime = `${convertedDate} ${convertedTime}`;
+            return convertedDateAndTime;
         }
 
-    let convertedDateAndTime = `${convertedDate} ${convertedTime}`;
-    return convertedDateAndTime;
+        return convertedDate;
+
+    // let convertedDateAndTime = `${convertedDate} ${convertedTime}`;
+    // return convertedDateAndTime;
     // console.log(year+'-' + month + '-'+dt) 
 }
 

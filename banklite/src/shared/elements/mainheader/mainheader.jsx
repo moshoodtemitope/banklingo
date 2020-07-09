@@ -88,7 +88,7 @@ class MainHeader extends React.Component{
         // let currentRoute = window.location.pathname;
 
         // dispatch(authActions.Logout("timeout",currentRoute));
-
+        console.log("----------+++---")
         dispatch(authActions.Logout());
         
         localStorage.removeItem("user");
