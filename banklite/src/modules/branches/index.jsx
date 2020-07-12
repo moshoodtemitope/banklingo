@@ -102,7 +102,7 @@ class BranchesManagement extends React.Component {
         let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined?adminGetAllBranchesRequest.request_data.tempData:null;
             switch (adminGetAllBranchesRequest.request_status){
                 case (administrationConstants.GET_ALL_BRANCHES_PENDING):
-                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
                         return (
                             <div className="loading-content"> 
                                 <div className="heading-with-cta">
@@ -193,7 +193,7 @@ class BranchesManagement extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.map((eachBranch, index)=>{
+                                            saveRequestData.result.map((eachBranch, index)=>{
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>

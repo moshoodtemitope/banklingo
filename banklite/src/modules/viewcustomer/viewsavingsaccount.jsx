@@ -19,6 +19,7 @@ import  TablePagination from '../../shared/elements/table/pagination'
 // import  SidebarElement from '../../shared/elements/sidebar'
 // import "./administration.scss"; 
 import DatePicker from '../../_helpers/datepickerfield'
+import {default as DatePickerFilter} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import Select from 'react-select';
@@ -91,7 +92,10 @@ class ViewSavingsAccount extends React.Component {
             NotificationType:0,
 
             changeDepositState: false,
-            showDepositFundsForm: false
+            showDepositFundsForm: false,
+
+            txtnEndDate: "",
+            txtnStartDate: "",
         }
 
         
@@ -591,6 +595,29 @@ class ViewSavingsAccount extends React.Component {
                 </Modal.Footer>
             </Modal>
         )
+    }
+
+    handleTxtnDateChangeRaw = (e) => {
+        e.preventDefault();
+    }
+    handleTxtnStartDatePicker = (txtnStartDate) => {
+        txtnStartDate.setHours(txtnStartDate.getHours() + 1);
+        
+        this.setState({ txtnStartDate }, ()=>{
+            if(this.state.txtnEndDate!==""){
+                //this.getHistory();
+            }
+        });
+    }
+
+    handleTxtnEndDatePicker = (txtnEndDate) => {
+        txtnEndDate.setHours(txtnEndDate.getHours() + 1);
+       
+        this.setState({ txtnEndDate }, ()=>{
+                if(this.state.txtnStartDate!==""){
+                    //this.getHistory();
+                }
+        });
     }
 
     renderAccountState = (depositAccountData)=>{
@@ -1241,7 +1268,50 @@ class ViewSavingsAccount extends React.Component {
                 return(
                     <div>
                         <div className="heading-with-cta ">
-                            <div></div>
+                            <Form className="one-liner">
+
+
+
+                                <Form.Group className="table-filters">
+                                    <DatePickerFilter
+                                        onChangeRaw={this.handleTxtnDateChangeRaw}
+                                        onChange={this.handleTxtnStartDatePicker}
+                                        selected={this.state.txtnStartDate}
+                                        dateFormat="d MMMM, yyyy"
+                                        peekNextMonth
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        placeholderText="Start date"
+                                        maxDate={new Date()}
+                                        // className="form-control form-control-sm h-38px"
+                                        className="form-control form-control-sm "
+
+                                    />
+                                    <DatePickerFilter placeholderText="End  date"
+                                        onChangeRaw={this.handleTxtnDateChangeRaw}
+                                        onChange={this.handleTxtnEndDatePicker}
+                                        selected={this.state.txtnEndDate}
+                                        dateFormat="d MMMM, yyyy"
+                                        peekNextMonth
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        maxDate={new Date()}
+                                        // className="form-control form-control-sm h-38px"
+                                        className="form-control form-control-sm"
+
+                                    />
+                                    <input type="text"
+                                        className="form-control-sm search-table form-control"
+                                        placeholder="Search text"
+                                    />
+                                    {/* {errors.startDate && touched.startDate ? (
+    <span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                </Form.Group>
+                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                            </Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select 
@@ -2320,7 +2390,7 @@ class ViewSavingsAccount extends React.Component {
         
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
-                this.getHistory();
+                //this.getHistory();
             }
         });
     }
@@ -2330,7 +2400,7 @@ class ViewSavingsAccount extends React.Component {
        
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
-                    this.getHistory();
+                    //this.getHistory();
                 }
         });
     }

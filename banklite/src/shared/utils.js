@@ -60,7 +60,7 @@ export const handleRequestErrors = (error)=>{
         
         if(typeof error.response ==="object"){
             
-            
+            // console.log("dsdsdsdsdsdsd---------", error.response.data)
                 if(error.response && error.response.data.title!==null && error.response.data.title!==undefined 
                     && error.response.data.title.toLowerCase().indexOf('one or more validation errors occurred.') > -1){
                     
@@ -68,7 +68,7 @@ export const handleRequestErrors = (error)=>{
                     
                     return modelStateErrorHandler(error);
                 }else{
-                    if(error.response.data.traceMessages!==null && error.response.data.traceMessages!==""){
+                    if(error.response.data.traceMessages!==null && error.response.data.traceMessages!==undefined && error.response.data.traceMessages!==""){
                         return error.response.data.traceMessages;
                     }else{
                         if(error.response && error.response.data.message!==null && error.response.data.message!==undefined){

@@ -85,7 +85,7 @@ class DepositTransactions extends React.Component {
         
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
-                this.getHistory();
+                //this.getHistory();
             }
         });
     }
@@ -95,7 +95,7 @@ class DepositTransactions extends React.Component {
        
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
-                    this.getHistory();
+                    //this.getHistory();
                 }
         });
     }
@@ -121,10 +121,13 @@ class DepositTransactions extends React.Component {
     renderDepositTransactions = () => {
         let getDepositTransactionRequest = this.props.getDepositTransactionRequest;
 
+        // let saveRequestData= getDepositTransactionRequest.request_data!==undefined?getDepositTransactionRequest.request_data.tempData:null;
         let saveRequestData= getDepositTransactionRequest.request_data!==undefined?getDepositTransactionRequest.request_data.tempData:null;
+
+
         switch (getDepositTransactionRequest.request_status) {
             case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING):
-                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
                     return (
                         <div className="loading-content">
                             <div className="heading-with-cta">
@@ -191,7 +194,7 @@ class DepositTransactions extends React.Component {
                                             <option>Custom Filter</option>
                                         </Form.Control>
                                     </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    
                                     <Form.Group className="table-filters">
                                             <DatePicker
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -224,12 +227,13 @@ class DepositTransactions extends React.Component {
                                             />
                                             <input type="text" 
                                                     className="form-control-sm search-table form-control"
-                                                    placeholder="Search"
+                                                    placeholder="Search text"
                                             />
                                             {/* {errors.startDate && touched.startDate ? (
                                                 <span className="invalid-feedback">{errors.startDate}</span>
                                             ) : null} */}
                                         </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
                                 </Form>
 
                                 <div className="pagination-wrap">
@@ -267,7 +271,7 @@ class DepositTransactions extends React.Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        saveRequestData.map((eachTransaction, index) => {
+                                        saveRequestData.result.map((eachTransaction, index) => {
                                             return (
                                                 <Fragment key={index}>
                                                     <tr>
@@ -309,7 +313,7 @@ class DepositTransactions extends React.Component {
                                                 <option>Custom Filter</option>
                                             </Form.Control>
                                         </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        
                                         <Form.Group className="table-filters">
                                             <DatePicker
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -342,12 +346,13 @@ class DepositTransactions extends React.Component {
                                             />
                                             <input type="text" 
                                                     className="form-control-sm search-table form-control"
-                                                    placeholder="Search"
+                                                    placeholder="Search text"
                                             />
                                             {/* {errors.startDate && touched.startDate ? (
                                                 <span className="invalid-feedback">{errors.startDate}</span>
                                             ) : null} */}
                                         </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -434,7 +439,7 @@ class DepositTransactions extends React.Component {
                                                 <option>Custom Filter</option>
                                             </Form.Control>
                                         </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        
                                         <Form.Group className="table-filters">
                                             <DatePicker
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -467,12 +472,13 @@ class DepositTransactions extends React.Component {
                                             />
                                             <input type="text" 
                                                     className="form-control-sm search-table form-control"
-                                                    placeholder="Search"
+                                                    placeholder="Search text"
                                             />
                                             {/* {errors.startDate && touched.startDate ? (
                                                 <span className="invalid-feedback">{errors.startDate}</span>
                                             ) : null} */}
                                         </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
                                     </Form>
 
                                     <div className="pagination-wrap">

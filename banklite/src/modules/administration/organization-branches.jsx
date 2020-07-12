@@ -155,6 +155,7 @@ class OrganizationBranches extends React.Component {
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </TableComponent>

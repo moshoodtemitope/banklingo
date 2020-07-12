@@ -93,7 +93,7 @@ class AccessUsers extends React.Component {
         let saveRequestData= adminGetUsersRequest.request_data!==undefined?adminGetUsersRequest.request_data.tempData:null;
             switch (adminGetUsersRequest.request_status){
                 case (administrationConstants.GET_USERS_PENDING):
-                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
                         return (
                             <div className="loading-content"> 
                                 <div className="heading-with-cta">
@@ -195,7 +195,7 @@ class AccessUsers extends React.Component {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    saveRequestData.map((eachUser, index)=>{
+                                                    saveRequestData.result.map((eachUser, index)=>{
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>

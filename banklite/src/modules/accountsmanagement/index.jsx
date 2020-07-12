@@ -36,7 +36,7 @@ class AccountManagement extends React.Component {
             typeToShow: "all",
             accountTypeToFetch:0
         }
-
+        this.statsTemp = '';
         
     }
 
@@ -98,6 +98,10 @@ class AccountManagement extends React.Component {
             CurrentPage:this.state.CurrentPage,
             AccountTypeId: this.state.accountTypeToFetch
         }
+
+       
+
+            dispatch(acoountingActions.createGLAccount("CLEAR"));
 
         if(tempData){
             dispatch(acoountingActions.getGLAccounts(payload, tempData));
@@ -259,8 +263,9 @@ class AccountManagement extends React.Component {
                         {accounTypesData} = this.state;
                     let getGLAccountsData = (saveRequestData.result!==undefined)?saveRequestData.result:saveRequestData,
                         getGLAccountsDataCount =0 ,
-                        getGLAccountsStatsData = (saveRequestData.result2!==undefined)?saveRequestData.result2:saveRequestData;
-                        // console.log("cdfdfdf", saveRequestData);
+                        // getGLAccountsStatsData = (saveRequestData.result2!==undefined)?saveRequestData.result2:saveRequestData;
+                        getGLAccountsStatsData = (saveRequestData.result2!==undefined)?saveRequestData.result2:this.statsTemp;
+                        
                         getGLAccountsData.map((eachGL, index)=>{
                             if(accounTypes.indexOf(eachGL.accountTypeDescription)===-1){
                                 accounTypes.push(eachGL.accountTypeDescription)
@@ -280,6 +285,7 @@ class AccountManagement extends React.Component {
                                 countOfAccounTypes[v] = {"index": countOfAccounTypes[v], "length": countOfAccounTypes[v].length};
                             });
                         }
+                        
                     return(
                         <div>
                             {createGLAccountRequest.request_status === accountingConstants.CREATE_GLACCOUNTS_SUCCESS && 
@@ -424,10 +430,12 @@ class AccountManagement extends React.Component {
                 let getGLAccountsData = getGLAccountsRequest.request_data.response.data.result,
                     getGLAccountsStatsData = getGLAccountsRequest.request_data.response.data.result2,
                     accounTypes =[],
+                   
                     unfilteredAccounTypes =[],
                     countOfAccounTypes ={},
                     {accounTypesData} = this.state;
-
+                    this.statsTemp= getGLAccountsRequest.request_data.response.data.result2;
+                    // this.setState({getGLAccountsStatsData})
                     getGLAccountsData.map((eachGL, index)=>{
                         if(accounTypes.indexOf(eachGL.accountTypeDescription)===-1){
                             accounTypes.push(eachGL.accountTypeDescription)
@@ -482,7 +490,9 @@ class AccountManagement extends React.Component {
                                             totalPages={getGLAccountsRequest.request_data.response.data.totalPages}
                                             currPage={getGLAccountsRequest.request_data.response.data.currentPage}
                                             currRecordsCount={getGLAccountsData.length}
+                                            hasResult2= {getGLAccountsRequest.request_data.response.data.result2!==undefined}
                                             totalRows={getGLAccountsRequest.request_data.response.data.totalRows}
+                                            // tempData={getGLAccountsRequest.request_data.response.data}
                                             tempData={getGLAccountsRequest.request_data.response.data}
                                             pagesCountToshow={4}
                                             refreshFunc={this.loadNextPage}
@@ -715,7 +725,7 @@ class AccountManagement extends React.Component {
               .required('Please select type'),
             accountName: Yup.string()
                 .min(2, 'Min of two characters')
-                .max(30, 'Max Limit reached')
+                .max(50, 'Max Limit reached')
                 .required('Please provide name'),
             glCode: Yup.string()
                     .min(2, 'Min of two characters')
@@ -728,7 +738,7 @@ class AccountManagement extends React.Component {
 
         let allAccountsData = (this.props.getGLAccounts.request_data!==undefined && this.props.getGLAccounts.request_data.response!==undefined)
             ? this.props.getGLAccounts.request_data.response.data :null;
-        
+            
         
         return(
             <Modal show={showCreateGL} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>

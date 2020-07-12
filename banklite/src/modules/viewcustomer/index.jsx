@@ -140,6 +140,7 @@ class ViewCustomer extends React.Component {
                                                     <thead>
                                                         <tr>
                                                             <th>Account Name</th>
+                                                            <th>Product</th>
                                                             <th>Type</th>
                                                             <th>State</th>
                                                             <th>Balance</th>
@@ -148,8 +149,10 @@ class ViewCustomer extends React.Component {
                                                     <tbody>
                                                         {customerLoanAccounts.result!==null && (customerLoanAccounts.result.length>=1) &&
                                                             customerLoanAccounts.result.map((eachAccount, index)=>{
+                                                                
                                                                return(
                                                                 <tr key={index}>
+                                                                    <td>{eachAccount.clientName}</td>
                                                                     <td>
                                                                     {(eachAccount.productName!==null && eachAccount.productName!=="")?
                                                                             `${eachAccount.productName} - `:""} 
@@ -168,6 +171,7 @@ class ViewCustomer extends React.Component {
                                                             customerDepositAccounts.result.map((eachAccount, index)=>{
                                                                return(
                                                                 <tr key={index}>
+                                                                    <td>{eachAccount.accountHolderName}</td>
                                                                     <td>
                                                                     {(eachAccount.productName!==null && eachAccount.productName!=="")?
                                                                             `${eachAccount.productName} - `:""} 

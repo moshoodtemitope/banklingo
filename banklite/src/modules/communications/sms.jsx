@@ -89,7 +89,7 @@ class SMSCommunications extends React.Component {
             
             this.setState({ startDate }, ()=>{
                 if(this.state.endDate!==""){
-                    this.getHistory();
+                    //this.getHistory();
                 }
             });
         }
@@ -99,7 +99,7 @@ class SMSCommunications extends React.Component {
            
             this.setState({ endDate }, ()=>{
                     if(this.state.startDate!==""){
-                        this.getHistory();
+                        //this.getHistory();
                     }
             });
         }
@@ -190,15 +190,15 @@ class SMSCommunications extends React.Component {
                                         <div className="heading-with-cta">
                                             <Form className="one-liner">
 
-                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                    <Form.Control as="select" size="sm">
-                                                        <option>No Filter</option>
-                                                        <option>Add New Filter</option>
-                                                        <option>Custom Filter</option>
-                                                    </Form.Control>
-                                                </Form.Group>
-                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                                <Form.Group className="table-filters">
+                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                <Form.Control as="select" size="sm">
+                                                    <option>No Filter</option>
+                                                    <option>Add New Filter</option>
+                                                    <option>Custom Filter</option>
+                                                </Form.Control>
+                                            </Form.Group>
+
+                                            <Form.Group className="table-filters">
                                                 <DatePicker
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleStartDatePicker}
@@ -230,13 +230,14 @@ class SMSCommunications extends React.Component {
                                                 />
                                                 <input type="text"
                                                     className="form-control-sm search-table form-control"
-                                                    placeholder="Search"
+                                                    placeholder="Search text"
                                                 />
                                                 {/* {errors.startDate && touched.startDate ? (
                                                 <span className="invalid-feedback">{errors.startDate}</span>
                                             ) : null} */}
                                             </Form.Group>
-                                            </Form>
+                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        </Form>
 
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
@@ -316,15 +317,15 @@ class SMSCommunications extends React.Component {
                                         <div className="heading-with-cta">
                                             <Form className="one-liner">
 
-                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                    <Form.Control as="select" size="sm">
-                                                        <option>No Filter</option>
-                                                        <option>Add New Filter</option>
-                                                        <option>Custom Filter</option>
-                                                    </Form.Control>
-                                                </Form.Group>
-                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                                <Form.Group className="table-filters">
+                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                <Form.Control as="select" size="sm">
+                                                    <option>No Filter</option>
+                                                    <option>Add New Filter</option>
+                                                    <option>Custom Filter</option>
+                                                </Form.Control>
+                                            </Form.Group>
+
+                                            <Form.Group className="table-filters">
                                                 <DatePicker
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleStartDatePicker}
@@ -356,13 +357,14 @@ class SMSCommunications extends React.Component {
                                                 />
                                                 <input type="text"
                                                     className="form-control-sm search-table form-control"
-                                                    placeholder="Search"
+                                                    placeholder="Search text"
                                                 />
                                                 {/* {errors.startDate && touched.startDate ? (
                                                 <span className="invalid-feedback">{errors.startDate}</span>
                                             ) : null} */}
                                             </Form.Group>
-                                            </Form>
+                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        </Form>
 
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
@@ -426,16 +428,15 @@ class SMSCommunications extends React.Component {
                                         <div className="heading-with-cta">
                                             <Form className="one-liner">
 
-                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                    
-                                                    <Form.Control as="select" size="sm">
-                                                        <option>No Filter</option>
-                                                        <option>Add New Filter</option>
-                                                        <option>Custom Filter</option>
-                                                    </Form.Control>
-                                                </Form.Group>
-                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                                <Form.Group className="table-filters">
+                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                <Form.Control as="select" size="sm">
+                                                    <option>No Filter</option>
+                                                    <option>Add New Filter</option>
+                                                    <option>Custom Filter</option>
+                                                </Form.Control>
+                                            </Form.Group>
+
+                                            <Form.Group className="table-filters">
                                                 <DatePicker
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleStartDatePicker}
@@ -467,13 +468,14 @@ class SMSCommunications extends React.Component {
                                                 />
                                                 <input type="text"
                                                     className="form-control-sm search-table form-control"
-                                                    placeholder="Search"
+                                                    placeholder="Search text"
                                                 />
                                                 {/* {errors.startDate && touched.startDate ? (
                                                 <span className="invalid-feedback">{errors.startDate}</span>
                                             ) : null} */}
                                             </Form.Group>
-                                            </Form>
+                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        </Form>
 
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>

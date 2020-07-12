@@ -208,6 +208,7 @@ class GeneralTxtChannels extends React.Component {
         let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels;
 
         let saveRequestData= adminGetTransactionChannelsRequest.request_data!==undefined?adminGetTransactionChannelsRequest.request_data.tempData:null;
+        
             switch (adminGetTransactionChannelsRequest.request_status){
                 
                 case (administrationConstants.GET_TRANSACTION_CHANNELS_PENDING):
@@ -306,7 +307,7 @@ class GeneralTxtChannels extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.result.map((eachChannel, index)=>{
+                                            saveRequestData.map((eachChannel, index)=>{
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>

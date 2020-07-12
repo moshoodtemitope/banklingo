@@ -55,7 +55,7 @@ class ActiveClients extends React.Component {
         
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
-                this.getHistory();
+                //this.getHistory();
             }
         });
     }
@@ -65,7 +65,7 @@ class ActiveClients extends React.Component {
        
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
-                    this.getHistory();
+                    //this.getHistory();
                 }
         });
     }
@@ -201,53 +201,54 @@ class ActiveClients extends React.Component {
                                 <div className="heading-with-cta ">
                                     <Form className="one-liner">
 
-                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <Form.Control as="select" size="sm">
-                                                <option>No Filter</option>
-                                                <option>Add New Filter</option>
-                                                <option>Custom Filter</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        <Form.Group className="table-filters">
-                                            <DatePicker
-                                                onChangeRaw={this.handleDateChangeRaw}
-                                                onChange={this.handleStartDatePicker}
-                                                selected={this.state.startDate}
-                                                dateFormat="d MMMM, yyyy"
-                                                peekNextMonth
-                                                showMonthDropdown
-                                                showYearDropdown
-                                                dropdownMode="select"
-                                                placeholderText="Start date"
-                                                maxDate={new Date()}
-                                                // className="form-control form-control-sm h-38px"
-                                                className="form-control form-control-sm "
+                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                <Form.Control as="select" size="sm">
+                                                    <option>No Filter</option>
+                                                    <option>Add New Filter</option>
+                                                    <option>Custom Filter</option>
+                                                </Form.Control>
+                                            </Form.Group>
 
-                                            />
-                                            <DatePicker placeholderText="End  date"
-                                                onChangeRaw={this.handleDateChangeRaw}
-                                                onChange={this.handleEndDatePicker}
-                                                selected={this.state.endDate}
-                                                dateFormat="d MMMM, yyyy"
-                                                peekNextMonth
-                                                showMonthDropdown
-                                                showYearDropdown
-                                                dropdownMode="select"
-                                                maxDate={new Date()}
-                                                // className="form-control form-control-sm h-38px"
-                                                className="form-control form-control-sm"
+                                            <Form.Group className="table-filters">
+                                                <DatePicker
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleStartDatePicker}
+                                                    selected={this.state.startDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    placeholderText="Start date"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm "
 
-                                            />
-                                            <input type="text" 
+                                                />
+                                                <DatePicker placeholderText="End  date"
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleEndDatePicker}
+                                                    selected={this.state.endDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm"
+
+                                                />
+                                                <input type="text"
                                                     className="form-control-sm search-table form-control"
-                                                    placeholder="Search"
-                                            />
-                                            {/* {errors.startDate && touched.startDate ? (
+                                                    placeholder="Search text"
+                                                />
+                                                {/* {errors.startDate && touched.startDate ? (
                                                 <span className="invalid-feedback">{errors.startDate}</span>
                                             ) : null} */}
-                                        </Form.Group>
-                                    </Form>
+                                            </Form.Group>
+                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        </Form>
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow"
@@ -334,7 +335,7 @@ class ActiveClients extends React.Component {
                                                     <option>Custom Filter</option>
                                                 </Form.Control>
                                             </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+
                                             <Form.Group className="table-filters">
                                                 <DatePicker
                                                     onChangeRaw={this.handleDateChangeRaw}
@@ -365,14 +366,15 @@ class ActiveClients extends React.Component {
                                                     className="form-control form-control-sm"
 
                                                 />
-                                                <input type="text" 
-                                                        className="form-control-sm search-table form-control"
-                                                        placeholder="Search"
+                                                <input type="text"
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search text"
                                                 />
                                                 {/* {errors.startDate && touched.startDate ? (
-                                                    <span className="invalid-feedback">{errors.startDate}</span>
-                                                ) : null} */}
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
                                             </Form.Group>
+                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
                                         </Form>
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
@@ -460,7 +462,7 @@ class ActiveClients extends React.Component {
                                                     <option>Custom Filter</option>
                                                 </Form.Control>
                                             </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+
                                             <Form.Group className="table-filters">
                                                 <DatePicker
                                                     onChangeRaw={this.handleDateChangeRaw}
@@ -491,14 +493,15 @@ class ActiveClients extends React.Component {
                                                     className="form-control form-control-sm"
 
                                                 />
-                                                <input type="text" 
-                                                        className="form-control-sm search-table form-control"
-                                                        placeholder="Search"
+                                                <input type="text"
+                                                    className="form-control-sm search-table form-control"
+                                                    placeholder="Search text"
                                                 />
                                                 {/* {errors.startDate && touched.startDate ? (
-                                                    <span className="invalid-feedback">{errors.startDate}</span>
-                                                ) : null} */}
+                                                <span className="invalid-feedback">{errors.startDate}</span>
+                                            ) : null} */}
                                             </Form.Group>
+                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
                                         </Form>
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
