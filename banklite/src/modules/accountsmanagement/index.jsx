@@ -45,7 +45,7 @@ class AccountManagement extends React.Component {
     }
 
     setPagesize = (PageSize, tempData)=>{
-        // console.log('----here', PageSize.target.value);
+        // console.log('----here', PageSize.target.valddue);
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
             {CurrentPage, BranchId,ClientState} = this.state;
