@@ -149,20 +149,21 @@ class ViewCustomer extends React.Component {
                                                     <tbody>
                                                         {customerLoanAccounts.result!==null && (customerLoanAccounts.result.length>=1) &&
                                                             customerLoanAccounts.result.map((eachAccount, index)=>{
-                                                                
-                                                               return(
-                                                                <tr key={index}>
-                                                                    <td>{eachAccount.clientName}</td>
-                                                                    <td>
-                                                                    {(eachAccount.productName!==null && eachAccount.productName!=="")?
-                                                                            `${eachAccount.productName} - `:""} 
-                                                                    {eachAccount.accountNumber}
-                                                                    </td>
-                                                                    <td>Loan</td>
-                                                                    <td>{eachAccount.loanStateDescription}</td>
-                                                                    <td>₦{numberWithCommas(eachAccount.loanAmount, true)}</td>
-                                                                </tr>
-                                                               ) 
+                                                                if(eachAccount.loanStateDescription!=="Rejected" && eachAccount.loanStateDescription!=="Closed Withdrawn" && eachAccount.loanStateDescription!=="Closed"){
+                                                                    return(
+                                                                        <tr key={index}>
+                                                                            <td>{eachAccount.clientName}</td>
+                                                                            <td>
+                                                                            {(eachAccount.productName!==null && eachAccount.productName!=="")?
+                                                                                    `${eachAccount.productName} - `:""} 
+                                                                            {eachAccount.accountNumber}
+                                                                            </td>
+                                                                            <td>Loan</td>
+                                                                            <td>{eachAccount.loanStateDescription}</td>
+                                                                            <td>₦{numberWithCommas(eachAccount.loanAmount, true)}</td>
+                                                                        </tr>
+                                                                    ) 
+                                                                }
                                                             })
                                                         }
 

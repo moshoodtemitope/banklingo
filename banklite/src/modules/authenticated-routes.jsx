@@ -6,6 +6,10 @@ import { connect } from 'react-redux';
 import { Fragment } from "react";
 import DashboardLanding from './dashboard'
 import UserLogin from './onboarding/login'
+
+import ChangePassword from './profile/change-password'
+
+
 import ClientsManagement from './clients'
 import InactiveClients from './clients/inactive'
 import ActiveClients from './clients/active'
@@ -152,6 +156,8 @@ class AuthenticatedRoutes extends React.Component {
                         
                         <Route exact path='/' render={(props) => <UserLogin  />} /> 
 
+                        <PrivateRoute path='/profile/change-password' {...this.props} authed={this.props.user} component={ChangePassword} />
+                        
                         <PrivateRoute path='/dashboard' {...this.props} authed={this.props.user} component={DashboardLanding} />
                         {/* <Route exact path='/dashboard' render={(props) => <DashboardLanding {...this.props} />} />  */}
 

@@ -565,7 +565,10 @@ class MainHeader extends React.Component{
                                 {/* <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" /> */}
                                 <NavDropdown title={user.displayName!==undefined?user.displayName:'Unverified Account'} id="basic-nav-dropdown">
                                     <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
-                                    <NavDropdown.Item href="#action">Account settings</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={()=> history.push("/profile/change-password")} >
+                                        {/* <NavLink to={"/profile/change-password"}>Change Password</NavLink> */}
+                                        Change Password
+                                    </NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item  onClick={()=>this.logout()}>Logout</NavDropdown.Item>
                                 </NavDropdown>

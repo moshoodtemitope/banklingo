@@ -731,7 +731,7 @@ class AccountManagement extends React.Component {
                     .min(2, 'Min of two characters')
                     .max(30, 'Max Limit reached')
                     .matches(/^[0-9]*$/, 'Numbers only')
-                    .required('Please provide name'),
+                    .required('Please provide GL Code'),
         });
         const {showCreateGL, selectedAccType, selectedUsageOption} = this.state;
         let createGLAccountRequest = this.props.createGLAccount;
@@ -829,6 +829,7 @@ class AccountManagement extends React.Component {
                                             <Form.Control 
                                                 type="text"
                                                 name="accountName"
+                                                maxLength="50"
                                                 value={values.accountName}
                                                 onChange={handleChange} 
                                                 className={errors.accountName && touched.accountName ? "is-invalid": null}
@@ -1077,6 +1078,7 @@ class AccountManagement extends React.Component {
                                                 <Form.Control 
                                                     type="text"
                                                     name="accountName"
+                                                    maxLength="50"
                                                     value={values.accountName}
                                                     onChange={handleChange} 
                                                     className={errors.accountName && touched.accountName ? "is-invalid": null}

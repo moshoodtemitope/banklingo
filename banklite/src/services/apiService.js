@@ -17,7 +17,7 @@ export class ApiService {
 
 
     static setTokenAuthorization = (url)=>{
-        let urlsToAuthenticate = [
+        let urlsWithoutAuthentication = [
                 "api/Login"
             ],
             urlsWithoutBranchIdInRequest = [
@@ -42,8 +42,8 @@ export class ApiService {
            let user = JSON.parse(localStorage.getItem("user")),
                 serviceToTest = url.split("Fintech.CBS.Backend")[1];
               
-            //Exclude urlsToAuthenticate urls from Authenticated requests with Token
-           if (urlsToAuthenticate.indexOf(serviceToTest) === -1) {
+            //Exclude urlsWithoutAuthentication urls from Authenticated requests with Token
+           if (urlsWithoutAuthentication.indexOf(serviceToTest) === -1 || serviceToTest==="changepassword") {
                axios.defaults.headers.common['Token'] = user.token;
             //    axios.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
                axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;

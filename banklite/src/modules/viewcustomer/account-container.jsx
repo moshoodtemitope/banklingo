@@ -75,7 +75,7 @@ class AccountContainer extends React.Component {
                         <Route  path='/customer/:id/tasks'               render={(props) => <ViewCustomerTasks {...props} />} /> 
                         <Route  path='/customer/:id/communications'      render={(props) => <ViewCustomerCommunications {...props} />} /> 
                         <Route  path='/customer/:id/comments'            render={(props) => <ViewCustomerComments {...props} />}  /> 
-                        <Route  path='/customer/:id/closedaccounts'      render={(props) => <ViewClosedAccounts {...props} />} /> 
+                        <Route exact  path='/customer/:id/closedaccounts'      render={(props) => <ViewClosedAccounts {...props} />} /> 
                         <Route  path='/customer/:id/loanaccount/:loanid'       render={(props) => <ViewLoanAccount {...props} />} /> 
                         <Route  path='/customer/:id/savingsaccount/:accountid' render={(props) => <ViewSavingsAccount {...props} />} /> 
                         

@@ -114,6 +114,7 @@ import{
 
 import{
     LoginReducer,
+    ChangePasswordReducer,
     
 } from './auth/auth.reducer'
 
@@ -243,6 +244,7 @@ export const loans = {
 
 export const auth = {
     LoginReducer,
+    ChangePasswordReducer
 }
 
 export const dashboard = {

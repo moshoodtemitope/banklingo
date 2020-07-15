@@ -87,6 +87,40 @@ export function RefreshTokenReducer(state=initialState, action) {
     }
 }
 
+export function ChangePasswordReducer(state=initialState, action) {
+    
+    switch (action.type) {
+        case authConstants.CHANGE_PASSWORD_PENDING:
+            return {
+                request_status: authConstants.CHANGE_PASSWORD_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case authConstants.CHANGE_PASSWORD_SUCCESS:
+            return {
+                request_status: authConstants.CHANGE_PASSWORD_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.CHANGE_PASSWORD_FAILURE:
+            return {
+                request_status: authConstants.CHANGE_PASSWORD_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.CHANGE_PASSWORD_RESET:
+            return {
+                request_status: authConstants.CHANGE_PASSWORD_RESET,
+                is_request_processing: false,
+                request_data: {},
+            };
+        
+
+        default:
+            return { ...state }
+    }
+}
+
 
 
 

@@ -78,10 +78,11 @@ class CustomerAccountContainer extends React.Component {
             PageSize: 100,
             CurrentPage: 1,
             changeCustomerState:false,
+           
 
         }
         
-
+        
         
     }
 
@@ -595,26 +596,30 @@ class CustomerAccountContainer extends React.Component {
     }
     renderLoanAccountsNav = (loanAccounts)=>{
         return(
-            loanAccounts.result.map((eachLoanAccount,  index)=>{
-                return(
-                    <li key={index}>
-                        <NavLink to={`/customer/${this.clientEncodedKey}/loanaccount/${eachLoanAccount.encodedKey}`}>
-                        {(eachLoanAccount.productName!==null && eachLoanAccount.productName!=="")?
-                                    `${eachLoanAccount.productName} - `:""}
-                            {eachLoanAccount.accountNumber}
+            loanAccounts.map((eachLoanAccount,  index)=>{
+                
+                    return(
+                        <li key={index}>
+                            <NavLink to={`/customer/${this.clientEncodedKey}/loanaccount/${eachLoanAccount.encodedKey}`}>
+                            {(eachLoanAccount.productName!==null && eachLoanAccount.productName!=="")?
+                                        `${eachLoanAccount.productName} - `:""}
+                                {eachLoanAccount.accountNumber}
 
-                            {eachLoanAccount.loanStateDescription==="Active" &&
-                                <span className={eachLoanAccount.loanStateDescription==="Active"? "stateindicator active-state": ""}></span>
-                            }
-                            {(eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed") &&
-                                <span className="stateindicator closed-state"></span>
-                            }
-                        </NavLink>
-                    </li>
-                )
+                                {eachLoanAccount.loanStateDescription==="Active" &&
+                                    <span className={eachLoanAccount.loanStateDescription==="Active"? "stateindicator active-state": ""}></span>
+                                }
+                                {(eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed") &&
+                                    <span className="stateindicator closed-state"></span>
+                                }
+                            </NavLink>
+                        </li>
+                    )
+                
             })
         )
     }
+
+    
 
     renderDepositAccountsNav = (savingsAccounts)=>{
         if(savingsAccounts.result!==null){
@@ -650,6 +655,11 @@ class CustomerAccountContainer extends React.Component {
 
     renderSubMenu = (loanAccounts, savingsAccounts)=>{
         let {generatedRoutes} = this.state;
+        let numberOfClosedLoans  = 0;
+
+            numberOfClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed").length;
+        let unClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription!=="Rejected" && eachLoanAccount.loanStateDescription!=="Closed Withdrawn" && eachLoanAccount.loanStateDescription!=="Closed");
+        
         return(
             <div className="module-submenu">
                 <div className="content-container">
@@ -657,11 +667,16 @@ class CustomerAccountContainer extends React.Component {
                         <li>
                             <NavLink exact to={generatedRoutes.customer}>Overview</NavLink>
                         </li>
-                        {this.renderLoanAccountsNav(loanAccounts)}
+                        {this.renderLoanAccountsNav(unClosedLoans)}
                         {this.renderDepositAccountsNav(savingsAccounts)}
-                        {/* <li>
-                            <NavLink to={generatedRoutes.allclosedaccounts}>Closed Accounts (1)</NavLink>
-                        </li> */}
+                        {numberOfClosedLoans>=1 &&
+                            <li>
+                                <NavLink  to={generatedRoutes.allclosedaccounts}>
+                                    Closed Accounts ({numberOfClosedLoans})
+                                    <span className="stateindicator closed-state"></span>
+                                </NavLink>
+                            </li>
+                        }
                         <li>
                             <NavLink to={generatedRoutes.attachments}>Attachments</NavLink>
                         </li>

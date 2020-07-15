@@ -8,7 +8,8 @@ export const authActions = {
     Login,
     Logout,
     ResfreshToken,
-    initStore
+    initStore,
+    ChangePassword
 }
 
 
@@ -173,6 +174,38 @@ function ResfreshToken   (refreshTokenPayload){
 
 }
 
+function ChangePassword   (changePasswordPayload){
+    if(changePasswordPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.CHANGE_PASSWORD;
+            console.log("hgfghjkljhgfgdh",changePasswordPayload);
+            let consume = ApiService.request(url, "POST", changePasswordPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                    
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: authConstants.CHANGE_PASSWORD_PENDING, user } }
+    function success(response) { return { type: authConstants.CHANGE_PASSWORD_SUCCESS, response } }
+    function failure(error) { return { type: authConstants.CHANGE_PASSWORD_FAILURE, error } }
+    function clear() { return { type: authConstants.CHANGE_PASSWORD_RESET, clear_data:""} }
+
+}
 
 function Logout(redirectType,retUrl) {
     

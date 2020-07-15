@@ -284,7 +284,12 @@ class LoansManagement extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
+                                                            {(eachLoan.loanStateDescription==="Rejected" || eachLoan.loanStateDescription==="Closed Withdrawn" || eachLoan.loanStateDescription==="Closed") && 
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/closedaccounts/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
+                                                            } 
+                                                            {(eachLoan.loanStateDescription!=="Rejected" && eachLoan.loanStateDescription!=="Closed Withdrawn" && eachLoan.loanStateDescription!=="Closed") &&   
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>            
+                                                            }
                                                             <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
                                                             <td>{eachLoan.productName}</td>
                                                             <td>{eachLoan.dateCreated}</td>
@@ -416,7 +421,12 @@ class LoansManagement extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink> </td>
+                                                            {(eachLoan.loanStateDescription==="Rejected" || eachLoan.loanStateDescription==="Closed Withdrawn" || eachLoan.loanStateDescription==="Closed") && 
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/closedaccounts/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
+                                                            } 
+                                                            {(eachLoan.loanStateDescription!=="Rejected" && eachLoan.loanStateDescription!=="Closed Withdrawn" && eachLoan.loanStateDescription!=="Closed") &&   
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>            
+                                                            }
                                                             <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
                                                             <td>{eachLoan.productName}</td>
                                                             <td>{eachLoan.dateCreated}</td>
