@@ -149,7 +149,7 @@ class ViewCustomer extends React.Component {
                                                     <tbody>
                                                         {customerLoanAccounts.result!==null && (customerLoanAccounts.result.length>=1) &&
                                                             customerLoanAccounts.result.map((eachAccount, index)=>{
-                                                                if(eachAccount.loanStateDescription!=="Rejected" && eachAccount.loanStateDescription!=="Closed Withdrawn" && eachAccount.loanStateDescription!=="Closed"){
+                                                                if(eachAccount.loanState!==4 && eachAccount.loanState!==7 && eachAccount.loanState!==8 && eachAccount.loanState!==9){
                                                                     return(
                                                                         <tr key={index}>
                                                                             <td>{eachAccount.clientName}</td>

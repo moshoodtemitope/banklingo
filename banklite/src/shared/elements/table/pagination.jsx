@@ -22,20 +22,35 @@ class TablePagination extends React.Component{
     }
 
     renderPagination =(
+                        // totalPages = 3,
                         totalPages = this.props.totalPages,
                         currPage= this.props.currPage,
+
+                        // currPage = 8,
+                        //     totalPages=12,
                         currRecordsCount= this.props.currRecordsCount, 
                         totalRows= this.props.totalRows, 
                         tempData=(this.props.tempData.result!==undefined)?this.props.tempData.result:this.props.tempData, 
                         pagesCountToshow=this.props.pagesCountToshow, 
                         refreshFunc= this.props.refreshFunc
+
                         )=>{
 
         
+       
         let isMorePagesLeft,
             isPreviousPagesLeft,          
             pagingTemplate=[],
-            pagesToshow =pagesCountToshow||4;
+            pagesToshow;
+
+            if(pagesCountToshow!==undefined && pagesCountToshow!==null && pagesCountToshow!==""){
+                if(pagesCountToshow>=1){
+                    pagesToshow = pagesCountToshow;
+                }
+                
+            }else{
+                pagesToshow = 4
+            }
 
             if(currRecordsCount===totalRows){
                 isMorePagesLeft = false;
@@ -57,10 +72,11 @@ class TablePagination extends React.Component{
             }
 
             if(totalPages<=pagesToshow){
+                
                 if(totalPages>=1){
                     let {activePage}= this.state;
                     for(let eachPage=1; eachPage<=totalPages ; eachPage++){
-                        // console.log("here", eachPage);
+                        
                         pagingTemplate.push(<span 
                                                 key={`${eachPage}-int`}
                                                 className={currPage===eachPage?"each-pagenum active":"each-pagenum"}
@@ -84,30 +100,137 @@ class TablePagination extends React.Component{
                     }
                 }
             }else{
+                
                 for(let eachPage=1; eachPage<=pagesToshow; eachPage++){
-                    if(eachPage<pagesToshow-1){
-                        pagingTemplate.push(<span 
-                                                key={`${eachPage}-int`}
-                                                className="each-pagenum"
-                                                onClick={()=>refreshFunc(eachPage,tempData)}
-                                                >{eachPage}</span>
-                                            );
+                    // console.log("pages is ", eachPage);
+                    
+                    if(currPage<3){
+                        if(eachPage<pagesToshow-1){
+                        
+                            pagingTemplate.push(<span 
+                                                    key={`${eachPage}-int`}
+                                                    className={currPage===eachPage?"each-pagenum active":"each-pagenum"}
+                                                    onClick={()=>refreshFunc(eachPage,tempData)}
+                                                    >{eachPage}</span>
+                                                );
+                        }
+                        if(eachPage===pagesToshow-1){
+                            
+                            pagingTemplate.push(<span 
+                                                    key={`${eachPage}-int`}
+                                                    className="middot"
+                                                    onClick={()=>refreshFunc(eachPage,tempData)}
+                                                    >...</span>
+                                                );
+                        }
+                        if(eachPage===pagesToshow){
+                            
+                            pagingTemplate.push(<span 
+                                                    key={`${eachPage}-int`}
+                                                    className={currPage===totalPages?"each-pagenum active":"each-pagenum"}
+                                                    onClick={()=>refreshFunc(totalPages,tempData)}
+                                                    >{totalPages}</span>
+                                                );
+                        }
                     }
-                    if(eachPage===pagesToshow-1){
-                        pagingTemplate.push(<span 
-                                                key={`${eachPage}-int`}
-                                                className="middot"
-                                                onClick={()=>refreshFunc(eachPage,tempData)}
-                                                >...</span>
-                                            );
-                    }
-                    if(eachPage===pagesToshow){
-                        pagingTemplate.push(<span 
-                                                key={`${eachPage}-int`}
-                                                className="each-pagenum"
-                                                onClick={()=>refreshFunc(totalPages,tempData)}
-                                                >{totalPages}</span>
-                                            );
+
+                    if(currPage>=3){
+                        // if(currPage < totalPages){
+                            
+                            //show first paginated page based on current page and if current page less than total pages
+                            if(eachPage < pagesToshow-2 && currPage < totalPages-1){
+                                
+                                pagingTemplate.push(<span 
+                                                        key={`${currPage}-int`}
+                                                        className="each-pagenum active"
+                                                        onClick={()=>refreshFunc(currPage,tempData)}
+                                                        >{currPage}</span>
+                                                    );
+                            }
+
+                            //show first paginated page based on current page and if current page is equal to  total pages
+                            if(eachPage < pagesToshow-2 && currPage === totalPages){
+                            
+                                pagingTemplate.push(<span 
+                                                        key={`${currPage}-int`}
+                                                        className={currPage===eachPage?"each-pagenum active":"each-pagenum"}
+                                                        onClick={()=>refreshFunc(currPage-2,tempData)}
+                                                        >{currPage-2}</span>
+                                                    );
+                                pagingTemplate.push(<span 
+                                                    key={`${currPage}-int`}
+                                                    className={currPage===eachPage?"each-pagenum active":"each-pagenum"}
+                                                    onClick={()=>refreshFunc(currPage-1,tempData)}
+                                                    >{currPage-1}</span>
+                                                );
+                            }
+
+                            //show first paginated page based on current page and if current page is equal to  total pages
+                            if(eachPage < pagesToshow-2 && currPage === totalPages-1){
+                            
+                                pagingTemplate.push(<span 
+                                                        key={`${currPage}-int`}
+                                                        className={currPage===eachPage?"each-pagenum active":"each-pagenum"}
+                                                        onClick={()=>refreshFunc(currPage-1,tempData)}
+                                                        >{currPage-1}</span>
+                                                    );
+                                pagingTemplate.push(<span 
+                                                    key={`${currPage}-int`}
+                                                    className={currPage === totalPages-1?"each-pagenum active":"each-pagenum"}
+                                                    onClick={()=>refreshFunc(currPage,tempData)}
+                                                    >{currPage}</span>
+                                                );
+                            }
+
+                            
+
+
+
+                             //show second paginated page based on current page and if current page less than total pages
+                            if(eachPage === pagesToshow-2 && currPage < totalPages-1){
+                            
+                                pagingTemplate.push(<span 
+                                                        key={`${currPage+1}-int`}
+                                                        className={currPage===eachPage?"each-pagenum active":"each-pagenum"}
+                                                        onClick={()=>refreshFunc(currPage+1,tempData)}
+                                                        >{currPage+1}</span>
+                                                    );
+                            }
+
+                            //Show Ellipses if current page less than total pages
+                            if(eachPage === pagesToshow-1 && currPage < totalPages-3 ){
+                                
+                                pagingTemplate.push(<span 
+                                                        key={`${currPage+1}-int`}
+                                                        className="middot"
+                                                        onClick={()=>refreshFunc(currPage+2,tempData)}
+                                                        >...</span>
+                                                    );
+                            }
+
+                            //show second to last  paginated page based on current page and if current page less than total pages -3
+                            if(eachPage === pagesToshow-1 && currPage === totalPages-3 ){
+                                
+                                pagingTemplate.push(<span 
+                                                        key={`${currPage+1}-int`}
+                                                        className={currPage===eachPage?"each-pagenum active":"each-pagenum"}
+                                                        onClick={()=>refreshFunc(currPage+2,tempData)}
+                                                        >{currPage+2}</span>
+                                                    );
+                            }
+
+
+                             //show last  paginated page
+                            if(eachPage === pagesToshow){
+                                
+                                pagingTemplate.push(<span 
+                                                        key={`${eachPage}-int`}
+                                                        className={currPage===totalPages?"each-pagenum active":"each-pagenum"}
+                                                        onClick={()=>refreshFunc(totalPages,tempData)}
+                                                        >{totalPages}</span>
+                                                    );
+                            }
+                        // }
                     }
                 }
             }

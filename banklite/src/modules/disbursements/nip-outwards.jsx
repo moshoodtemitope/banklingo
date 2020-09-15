@@ -2,20 +2,22 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
+import { NavLink} from 'react-router-dom';
 import { connect } from 'react-redux';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import  InnerPageContainer from '../../shared/templates/authed-pagecontainer';
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
-import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
+import "./disbursements.scss"; 
 
-import "./activities.scss"; 
-class Activties extends React.Component {
+import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
+import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
+
+class NipOutwardsRequests extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -23,9 +25,12 @@ class Activties extends React.Component {
             PageSize:25,
             CurrentPage:1,
             isRefresh:false,
-            endDate: "",
-            startDate: "",
+            endDate: new Date(),
+            // startDate : new Date (new Date().setDate(today.getDate()-30)),
+            startDate : new Date (),
+            searchText: "",
         }
+
         
     }
 
@@ -34,15 +39,15 @@ class Activties extends React.Component {
     }
 
     loadInitialData=()=>{
-        let {PageSize, CurrentPage}= this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getActivitiesData(params);
+        let {PageSize, CurrentPage,startDate, endDate, searchText}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
+        this.getOutwardsNIPData(params);
     }
 
-    getActivitiesData = (paramters)=>{
+    getOutwardsNIPData = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(dashboardActions.getActivitiesData(paramters));
+        dispatch(disbursementActions.getOutwardsNIP(paramters));
     }
 
     handleDateChangeRaw = (e) => {
@@ -53,7 +58,7 @@ class Activties extends React.Component {
         
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
-                //this.getHistory();
+                // this.loadInitialData();
             }
         });
     }
@@ -63,57 +68,62 @@ class Activties extends React.Component {
        
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
-                    //this.getHistory();
+                    // this.getHistory();
                 }
         });
     }
     setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
         const {dispatch} = this.props;
-        let {CurrentPage}= this.state;
+        // let {CurrentPage}= this.state;
         
 
         let sizeOfPage = PageSize.target.value;
 
         this.setState({PageSize: sizeOfPage, isRefresh: true});
-        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-
+        let {CurrentPage,startDate, endDate, searchText}= this.state;
+        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
+        // let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        
 
         if(tempData){
-            dispatch(dashboardActions.getActivitiesData(params, tempData));
+            dispatch(disbursementActions.getOutwardsNIP(params, tempData));
         }else{
-            dispatch(dashboardActions.getActivitiesData(params));
+            dispatch(disbursementActions.getOutwardsNIP(params));
         }
         
        
-        // dispatch(dashboardActions.getActivitiesData(params));
+        // dispatch(disbursementActions.getOutwardsNIP(params));
     }
 
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize} = this.state;
+        // let {PageSize} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params = `PageSize=${PageSize}&CurrentPage=${nextPage}`;
+        let {PageSize,CurrentPage,startDate, endDate, searchText}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
+
+        // let params = `PageSize=${PageSize}&CurrentPage=${nextPage}`;
         
 
         if(tempData){
-           dispatch(dashboardActions.getActivitiesData(params,tempData));
+           dispatch(disbursementActions.getOutwardsNIP(params,tempData));
         }else{
-           dispatch(dashboardActions.getActivitiesData(params));
+           dispatch(disbursementActions.getOutwardsNIP(params));
         }
     }
 
-    renderActivities=()=>{
-        let getActivitiesRequestData = this.props.getActivitiesRequest,
+    renderOutWardsRequest=()=>{
+        let getOutwardsNIPRequestData = this.props.getOutwardsNIPReducer,
             {isRefresh} = this.state;
 
-        let saveRequestData= getActivitiesRequestData.request_data!==undefined?getActivitiesRequestData.request_data.tempData:null;
-        if(getActivitiesRequestData.request_status ===dashboardConstants.GET_ACTIVITIES_DATA_PENDING
+        let saveRequestData= getOutwardsNIPRequestData.request_data!==undefined?getOutwardsNIPRequestData.request_data.tempData:null;
+        if(getOutwardsNIPRequestData.request_status ===disbursmentConstants.GET_NIP_OUTWARDS_PENDING
             ){
                 if(saveRequestData===undefined){
                     return(
@@ -148,18 +158,24 @@ class Activties extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        {/* <th>Id</th> */}
-                                        <th>Date Created</th>
-                                        <th>Username</th>
-                                        <th>Action</th>
-                                        <th>Affected Customer</th>
-                                        <th>Affected Item Name</th>
-                                        <th>Affected Item Id</th>
-                                        {/* <th></th> */}
+                                        <th>Transaction Date</th>
+                                        <th>Source Account Number</th>
+                                        <th>Source Account Name</th>
+                                        <th>Source Bank</th>
+                                        <th>Destination Account Number</th>
+                                        <th>Destination Account Name</th>
+                                        <th>Destination Bank</th>
+                                        <th>Amount</th>
+                                        <th>Fee</th>
+                                        <th>Narration</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -243,14 +259,16 @@ class Activties extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        {/* <th>Id</th> */}
-                                        <th>Date Created</th>
-                                        <th>Username</th>
-                                        <th>Action</th>
-                                        <th>Affected Customer</th>
-                                        <th>Affected Item Name</th>
-                                        <th>Affected Item Id</th>
-                                        {/* <th></th> */}
+                                        <th>Transaction Date</th>
+                                        <th>Source Account Number</th>
+                                        <th>Source Account Name</th>
+                                        <th>Source Bank</th>
+                                        <th>Destination Account Number</th>
+                                        <th>Destination Account Name</th>
+                                        <th>Destination Bank</th>
+                                        <th>Amount</th>
+                                        <th>Fee</th>
+                                        <th>Narration</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -260,12 +278,16 @@ class Activties extends React.Component {
                                                 <Fragment key={index}>
                                                     <tr>
                                                         {/* <td>{eachActivity.id}</td> */}
-                                                        <td>{eachActivity.creationDate}</td>
-                                                        <td>{eachActivity.userName}</td>
-                                                        <td>{eachActivity.action}</td>
-                                                        <td>{eachActivity.affectedCustomerName}</td>
-                                                        <td>{eachActivity.affectedItemName}</td>
-                                                        <td>{eachActivity.affectedItemId}</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
                                                     </tr>
                                                 </Fragment>
                                             )
@@ -280,9 +302,9 @@ class Activties extends React.Component {
                 }
         }
 
-        if(getActivitiesRequestData.request_status ===dashboardConstants.GET_ACTIVITIES_DATA_SUCCESS
+        if(getOutwardsNIPRequestData.request_status ===disbursmentConstants.GET_NIP_OUTWARDS_SUCCESS
             ){
-                let allActivitiesData = getActivitiesRequestData.request_data.response.data;
+                let allActivitiesData = getOutwardsNIPRequestData.request_data.response.data;
 
                 if(allActivitiesData.result!==undefined){
                     if(allActivitiesData.result.length>=1){
@@ -365,14 +387,16 @@ class Activties extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            {/* <th>Id</th> */}
-                                            <th>Date Created</th>
-                                            <th>Username</th>
-                                            <th>Action</th>
-                                            <th>Affected Customer</th>
-                                            <th>Affected Item Name</th>
-                                            <th>Affected Item Id</th>
-                                            {/* <th></th> */}
+                                            <th>Transaction Date</th>
+                                            <th>Source Account Number</th>
+                                            <th>Source Account Name</th>
+                                            <th>Source Bank</th>
+                                            <th>Destination Account Number</th>
+                                            <th>Destination Account Name</th>
+                                            <th>Destination Bank</th>
+                                            <th>Amount</th>
+                                            <th>Fee</th>
+                                            <th>Narration</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -382,13 +406,16 @@ class Activties extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             {/* <td>{eachActivity.id}</td> */}
-
-                                                            <td>{eachActivity.creationDate}</td>
-                                                            <td>{eachActivity.userName}</td>
-                                                            <td>{eachActivity.action}</td>
-                                                            <td>{eachActivity.affectedCustomerName}</td>
-                                                            <td>{eachActivity.affectedItemName}</td>
-                                                            <td>{eachActivity.affectedItemId}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -471,18 +498,23 @@ class Activties extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            {/* <th>Id</th> */}
-                                            <th>Date Created</th>
-                                            <th>Username</th>
-                                            <th>Action</th>
-                                            <th>Affected Customer</th>
-                                            <th>Affected Item Name</th>
-                                            <th>Affected Item Id</th>
-                                            {/* <th></th> */}
+                                            <th>Transaction Date</th>
+                                            <th>Source Account Number</th>
+                                            <th>Source Account Name</th>
+                                            <th>Source Bank</th>
+                                            <th>Destination Account Number</th>
+                                            <th>Destination Account Name</th>
+                                            <th>Destination Bank</th>
+                                            <th>Amount</th>
+                                            <th>Fee</th>
+                                            <th>Narration</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -501,17 +533,16 @@ class Activties extends React.Component {
                 }
         }
 
-        if (getActivitiesRequestData.request_status === dashboardConstants.GET_ACTIVITIES_DATA_FAILURE
+        if (getOutwardsNIPRequestData.request_status === disbursmentConstants.GET_NIP_OUTWARDS_FAILURE
         ) {
             return (
                 <div className="loading-content errormsg">
-                    <div>{getActivitiesRequestData.request_data.error}</div>
+                    <div>{getOutwardsNIPRequestData.request_data.error}</div>
                 </div>
             )
         }
 
     }
-
 
     render() {
         return (
@@ -524,21 +555,137 @@ class Activties extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>System Activities</h2>
+                                                <h2>Nip Outwards Requests</h2>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="module-submenu">
+                                <div className="content-container">
+                                    <ul className="nav">
+                                        <li>
+                                            <NavLink exact to={'/disbursements'}>Disbursements</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/disbursements/initiate'}>Initiate Disbursement</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/disbursements/pending-review'}>Pending Review</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/disbursements/pending-approval'}>Pending Approval</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/disbursements/nip-requests'}>NIP Requests</NavLink>
+                                            {/* <ul>
+                                                <li>
+                                                    <NavLink to={'/disbursements/transfer-requests'}>Transfer Requests</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to={'/disbursements/account-block'}>Account Block</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to={'/disbursements/amount-block'}>Amount Block</NavLink>
+                                                </li>
+                                            </ul> */}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="module-submenu">
+                                <div className="content-container">
+                                    
+                                    <div className="lowerlevel-menu">
+                                        <ul className="nav">
+                                            <li>
+                                                {/* <NavLink to={'/administration-generalorganization'}>Organization</NavLink> */}
+                                                <NavLink exact to={'/disbursements/nip-requests'}>Inwards</NavLink>
+                                            </li>
+                                            <li>
+                                                <NavLink exact to={'/disbursements/nip-requests/outwards'}>Outwards</NavLink>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                             <div className="module-content">
                                 <div className="content-container">
                                     <div className="row">
-                                        {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                {this.renderActivities()}
+                                                {/* <div className="heading-with-cta">
+                                                    <h3 className="section-title">Disbursement</h3>
+                                                </div> */}
+                                                {this.renderOutWardsRequest()}
+                                                   {/* <div className="heading-with-cta">
+                                                        <Form className="one-liner">
+
+                                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                                <Form.Control as="select" size="sm">
+                                                                    <option>No Filter</option>
+                                                                    <option>Add New Filter</option>
+                                                                    <option>Custom Filter</option>
+                                                                </Form.Control>
+                                                            </Form.Group>
+                                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                        </Form>
+
+                                                        <div className="pagination-wrap">
+                                                            <label htmlFor="toshow">Show</label>
+                                                            <select id="toshow" className="countdropdown form-control form-control-sm">
+                                                                <option value="10">10</option>
+                                                                <option value="25">25</option>
+                                                                <option value="50">50</option>
+                                                                <option value="200">200</option>
+                                                            </select>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                
+                                                
+                                                <TableComponent classnames="striped bordered hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>GL Code</th>
+                                                            <th>Account Name</th>
+                                                            <th></th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>023839</td>
+                                                            <td>some text</td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>023839</td>
+                                                            <td>Debit</td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>023839</td>
+                                                            <td>Debit</td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>023839</td>
+                                                            <td>Debit</td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </TableComponent> */}
                                             </div>
                                         </div>
                                     </div>
@@ -554,8 +701,8 @@ class Activties extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        getActivitiesRequest: state.dashboardReducers.getActivitiesReducer,
+        getOutwardsNIPReducer : state.disbursmentReducers.getOutwardsNIPReducer,
     };
 }
 
-export default connect(mapStateToProps)(Activties);
+export default connect(mapStateToProps) (NipOutwardsRequests);

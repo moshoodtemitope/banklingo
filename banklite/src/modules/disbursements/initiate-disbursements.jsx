@@ -690,6 +690,9 @@ class InitiateDisbursement extends React.Component {
                                             <NavLink to={'/disbursements/initiate'}>Initiate Disbursement</NavLink>
                                         </li>
                                         <li>
+                                            <NavLink to={'/disbursements/pending-review'}>Pending Review</NavLink>
+                                        </li>
+                                        <li>
                                             <NavLink to={'/disbursements/pending-approval'}>Pending Approval</NavLink>
                                         </li>
                                         <li>

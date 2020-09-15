@@ -50,7 +50,32 @@ class MainMenu extends React.Component{
                        
                         <ul>
                             <li>
-                                <NavLink to="/all-loans">All Loans</NavLink>
+                                <NavLink exact to="/all-loans/pending">Pending Approval</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to="/all-loans/approved">Approved</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to="/all-loans/rejected">Rejected</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to="/all-loans/active">Active</NavLink>
+                            </li>
+                            
+                            <li>
+                                <NavLink exact to="/all-loans/arrears">In Arears</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to="/all-loans/closed">Closed</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to="/all-loans/closed-off">Closed Written Off</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to="/all-loans/closed-withdrawn">Closed Withdrawn</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to="/all-loans">All Loans</NavLink>
                             </li>
                         </ul>
                     </li>
@@ -68,7 +93,9 @@ class MainMenu extends React.Component{
                             <li>
                                 <NavLink exact to="/disbursements">All Disbursements</NavLink>
                                 <NavLink exact to="/disbursements/initiate">Initiate Disbursements</NavLink>
+                                <NavLink exact to="/disbursements/pending-review">Pending Review</NavLink>
                                 <NavLink exact to="/disbursements/pending-approval">Pending Approval</NavLink>
+                                <NavLink exact to="/disbursements/nip-requests">NIP Request</NavLink>
                             </li>
                         </ul>
 

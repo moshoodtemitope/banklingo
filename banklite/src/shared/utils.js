@@ -50,12 +50,14 @@ export const handleRequestErrors = (error)=>{
         // error.toString().indexOf("code 401")>-1
     ){
         // setTimeout(() => {
-            //  window.location.reload();
+             window.location.reload();
         // }, 1000);
        
     }
+
+    console.log("error text is", error);
     
-    if(error!==undefined && error!==null){
+    if(error!==undefined && error!==null && error!==""){
         // if(error!==undefined && error!==null && error.toString().indexOf("'closed' of undefined")===-1){
         
         if(typeof error.response ==="object"){
@@ -68,14 +70,22 @@ export const handleRequestErrors = (error)=>{
                     
                     return modelStateErrorHandler(error);
                 }else{
-                    if(error.response.data.traceMessages!==null && error.response.data.traceMessages!==undefined && error.response.data.traceMessages!==""){
-                        return error.response.data.traceMessages;
+                    if(error.response.data.message!==null && error.response.data.message!==undefined && error.response.data.message!==""){
+                        return error.response.data.message;
                     }else{
-                        if(error.response && error.response.data.message!==null && error.response.data.message!==undefined){
+                        if(error.response && error.response.data.traceMessages!==null && error.response.data.traceMessages!==undefined){
                     
-                            return error.response.data.message;
+                            return error.response.data.traceMessages;
                         }
                     }
+                    // if(error.response.data.traceMessages!==null && error.response.data.traceMessages!==undefined && error.response.data.traceMessages!==""){
+                    //     return error.response.data.traceMessages;
+                    // }else{
+                    //     if(error.response && error.response.data.message!==null && error.response.data.message!==undefined){
+                    
+                    //         return error.response.data.message;
+                    //     }
+                    // }
                 }
             
             // if(error.message){
@@ -91,6 +101,14 @@ export const handleRequestErrors = (error)=>{
         if(error.toString()==="Error: Network Error"){
             return "Please check your network and try again"
         }
+
+        if(error.data && typeof error.data==="string"){
+            if(error.data.indexOf("Bad Request")>-1){
+                return "Something went wrong. Please try again later";
+            }
+        }
+
+
         
         // return error
         return '';

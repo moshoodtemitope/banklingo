@@ -22,7 +22,7 @@ class CommunicationsManagement extends React.Component {
         this.state={
             user:'',
             NotificationType:0,
-            PageSize: 30,
+            PageSize: 25,
             CurrentPage:1,
             endDate: "",
             startDate: "",

@@ -26,6 +26,110 @@ export function getDisbursementsReducer(state=[], action) {
     }
 }
 
+export function getPendingApprovalDisbursementReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_PENDING:
+            return {
+                request_status: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_SUCCESS:
+            return {
+                request_status: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_FAILURE:
+            return {
+                request_status: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getInwardsNIPReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.GET_NIP_INWARDS_PENDING:
+            return {
+                request_status: disbursmentConstants.GET_NIP_INWARDS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.GET_NIP_INWARDS_SUCCESS:
+            return {
+                request_status: disbursmentConstants.GET_NIP_INWARDS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_NIP_INWARDS_FAILURE:
+            return {
+                request_status: disbursmentConstants.GET_NIP_INWARDS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getOutwardsNIPReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.GET_NIP_OUTWARDS_PENDING:
+            return {
+                request_status: disbursmentConstants.GET_NIP_OUTWARDS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.GET_NIP_OUTWARDS_SUCCESS:
+            return {
+                request_status: disbursmentConstants.GET_NIP_OUTWARDS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_NIP_OUTWARDS_FAILURE:
+            return {
+                request_status: disbursmentConstants.GET_NIP_OUTWARDS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getPendingReviewDisbursementReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_PENDING:
+            return {
+                request_status: disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_SUCCESS:
+            return {
+                request_status: disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_FAILURE:
+            return {
+                request_status: disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getDisbursementBanksReducer(state=[], action) {
     switch (action.type) {
         case disbursmentConstants.GET_DISBURSMENTS_BANKS_PENDING:
@@ -146,6 +250,38 @@ export function approveOrRejectPostDisbursementReducer(state=[], action) {
         case disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_RESET:
             return {
                 request_status: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function approveOrRejectReviewedDisbursementReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_PENDING:
+            return {
+                request_status: disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS:
+            return {
+                request_status: disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_FAILURE:
+            return {
+                request_status: disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_RESET:
+            return {
+                request_status: disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_RESET,
                 is_request_processing: false,
                 request_data: {}
             };

@@ -9,6 +9,18 @@ import { routes } from "./urls";
 
 const axios = require('axios');
 
+
+
+const instance = axios.create({
+    validateStatus: function (status)
+    {
+        // return (status >= 200 && status <210);
+        return (status >= 200 && status <210);
+    }
+});
+
+
+
 export class ApiService {
 
     state = {
@@ -29,11 +41,11 @@ export class ApiService {
         if(localStorage.getItem("user") === null){
             // if(localStorage.getItem("user") === null && axios.defaults.headers.common["Token"]){
             
-            delete axios.defaults.headers.common.Authorization;
-            delete axios.defaults.headers.common.Bid;
+            delete instance.defaults.headers.common.Authorization;
+            delete instance.defaults.headers.common.Bid;
         }
         // if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
-            axios.defaults.headers.common['Content-Type'] = 'application/json';
+            instance.defaults.headers.common['Content-Type'] = 'application/json';
         // }
         
         
@@ -44,18 +56,18 @@ export class ApiService {
               
             //Exclude urlsWithoutAuthentication urls from Authenticated requests with Token
            if (urlsWithoutAuthentication.indexOf(serviceToTest) === -1 || serviceToTest==="changepassword") {
-               axios.defaults.headers.common['Token'] = user.token;
-            //    axios.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
-               axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+               instance.defaults.headers.common['Token'] = user.token;
+            //    instance.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
+               instance.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
             //    console.log("user is", user);
-                delete axios.defaults.headers.common.Bid;
+                delete instance.defaults.headers.common.Bid;
                 
                 if (urlsWithoutBranchIdInRequest.indexOf(serviceToTest) === -1) {
-                    axios.defaults.headers.common.Bid = `${parseInt(user.BranchId)}`;
+                    instance.defaults.headers.common.Bid = `${parseInt(user.BranchId)}`;
                     
                 }
                 // else{
-                //     delete axios.defaults.headers.common.Bid;
+                //     delete instance.defaults.headers.common.Bid;
 
                    
                 // }
@@ -63,18 +75,18 @@ export class ApiService {
            }
            if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
            
-               axios.defaults.headers.common['Content-Type'] = 'application/json';
+               instance.defaults.headers.common['Content-Type'] = 'application/json';
            }
            if (binaryUploadUrls.indexOf(serviceToTest) > -1) {
            
-               axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
+               instance.defaults.headers.common['Content-Type'] = 'multipart/form-data';
            }
 
            //Exclude urlsWithoutBranchIdInRequest urls from Authenticated requests with BranchId
            
             
-            // axios.defaults.headers.common['Authorization'] = 'Bearer';
-            axios.defaults.headers.common['Accept'] = 'application/json';
+            // instance.defaults.headers.common['Authorization'] = 'Bearer';
+            instance.defaults.headers.common['Accept'] = 'application/json';
        }
     }
 
@@ -123,19 +135,20 @@ export class ApiService {
            
             else if(headers !== undefined){
                 for (let [key, value] of Object.entries(headers)) {
-                    axios.defaults.headers.common[key] = value;
+                    instance.defaults.headers.common[key] = value;
                 }
             }
-
+            let serviceResponse ="",
+                serviceResponse2 ="";
             if(lingoAuth!==null && lingoAuth!==undefined && skipTokenRefreshForUrls.indexOf(serviceToTest) === -1){
                 lastRefreshTime = lingoAuth.lastLogForAuth;
                 currenTimestamp = Date.now();
-
+                
                 if(parseInt(((currenTimestamp -lastRefreshTime)/60000))>=3){ // If Last Token refresh is more than 3 mins, Pause GET reqeust, refresh token, and resume the GET request
                     let tempRequest = {
                         url,
                         bodyData,
-                        tempHeaders: axios.defaults.headers.common
+                        tempHeaders: instance.defaults.headers.common
                     };
 
                     let refreshpayload ={
@@ -143,11 +156,11 @@ export class ApiService {
                         refreshToken:lingoAuth.refreshToken
                     }
                     this.setTokenAuthorization(routes.REFRESH_TOKEN);
-                    let tokenService = axios.post(routes.REFRESH_TOKEN, refreshpayload);
-
+                    let tokenService = instance.post(routes.REFRESH_TOKEN, refreshpayload);
+                        
                     return tokenService.then(function (response) {
-                        // console.log("was here")
-                        if(response.status===200){
+                        
+                        if(response.status>=200 && response.status<210){
                             if(response.data.token!==undefined){
                                 
                                 let userData = JSON.parse(localStorage.getItem("user"));
@@ -155,25 +168,51 @@ export class ApiService {
                                     userData.token = response.data.token;
                                     localStorage.setItem('user', JSON.stringify(userData));
 
-                                delete axios.defaults.headers.common;
-                                axios.defaults.headers.common ={
+                                delete instance.defaults.headers.common;
+                                instance.defaults.headers.common ={
                                     ...tempRequest.tempHeaders
                                 }
-                                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+                                instance.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
-                                service = axios.get(tempRequest.url, tempRequest.bodyData);
+                                service = instance.get(tempRequest.url, tempRequest.bodyData);
 
                                 
                                 return service.then((response3)=>{
 
-                                    return service;
+                                    if(response3.status>=200 && response3.status < 210){
+                                        console.log("service is", response3);
+                                        // return service;
+                                        if(response3.headers['content-type'] === 'application/json'){
+                                            // return response3;
+                                            return service;
+                                            
+                                        }else{
+                                            // serviceResponse = "An error occured";
+                                            serviceResponse = Promise.reject(response3);
+                                            return serviceResponse;
+                                        }
+
+                                        
+                                    }
                                 })
                                 .catch((error2)=>{
-                                    return service;
+                                    // serviceResponse = service;
+                                    console.log("failed is", service);
+                                    // return service;
+                                    
+                                    if(serviceResponse!==""){
+                                        return serviceResponse
+                                    }else{
+                                        console.log("was here")
+                                        serviceResponse2 = service;
+                                        return service;
+                                    }
+                                    
                                 })
                             }
                         }else{
                             // return service;
+                            // console.log("token failed");
                             dispatch(authActions.Logout())
                         }
 
@@ -183,19 +222,34 @@ export class ApiService {
                        
                     }).catch(function (error) {
                         // console.log("logs out now",service, routes.REFRESH_TOKEN)
-                        dispatch(authActions.Logout())
+                        // console.log("token failed 2");
+                        // dispatch(authActions.Logout())
+                        // console.log("dskdsdsdsdsd", serviceResponse);
+                        let responseData= error.response || error;
+                        if(responseData.config.url.indexOf("Login/refreshtoken")>-1){
+                            dispatch(authActions.Logout())
+                        }else{
+                            if(serviceResponse!==""){
+                                return serviceResponse
+                            }else if(serviceResponse2!==""){
+                                return serviceResponse2
+                            }
+                            else{
+                                return tokenService;
+                            }
+                        }
                         
                         
                         
                     });
                 }else{
                    
-                    service = axios.get(url, bodyData);
+                    service = instance.get(url, bodyData);
                    
                 }
             }else{
                 
-                service = axios.get(url, bodyData);
+                service = instance.get(url, bodyData);
             }
 
             
@@ -215,11 +269,34 @@ export class ApiService {
                     
                 // }
 
+                console.log("sample is", response)
+                console.log("dsdsd is", response.headers['content-type'].indexOf('application/json')>-1)
+                // try{
+                //     if(typeof response.data === "object"){
+                //         return service;
+                //     }
+                // }catch{
+                //     throw new Error ("An Error Occured");
+                // }
+
+                if(response.headers['content-type'].indexOf('application/json')>-1){
+                    // return response;
+                    return service;
+                }else{
+                    // serviceResponse = "An error occured";
+                    serviceResponse = Promise.reject(response);
+                    return serviceResponse;
+                }
 
                 
+                
 
-                return service;
+                
+                
+
+               
             }).catch(function (error) {
+                console.log("dsd dsdsd")
                 if (error.response) {
 
                     if (error.response.status === 401) {
@@ -235,14 +312,14 @@ export class ApiService {
                         //             refreshToken: user.refreshToken
                         //           };
                                   
-                        //                 let refreshService = axios.post(routes.REFRESH_TOKEN, refreshTokenPayload);
+                        //                 let refreshService = instance.post(routes.REFRESH_TOKEN, refreshTokenPayload);
                         
                         //                 return refreshService.then(function(response) {
                                             
                         //                     if(response.status===200){
                         //                         localStorage.setItem('user', JSON.stringify(response.data));
                         //                     }
-                        //                     return axios.get(url, bodyData);
+                        //                     return instance.get(url, bodyData);
                         //                 }).catch(function (error) {
                         //                     if (error.response.status === 401) {
                         //                         let currentRoute = window.location.pathname,
@@ -267,7 +344,14 @@ export class ApiService {
                        
                         
                     } else {
-                        return service;
+                        // return service;
+                        if(serviceResponse!==""){
+                           
+                            return serviceResponse
+                        }else{
+                            
+                         return service;
+                        }
                     }
                       
                 }
@@ -276,8 +360,15 @@ export class ApiService {
                 //         return "Please Check your network"
                 //     }
                 // }
-                
-                return  service;
+                if(serviceResponse!==""){
+                    console.log("bbbbbbbbb")
+                    return serviceResponse
+                    // return serviceResponse
+                }else{
+                    console.log("aaaaaaaa")
+                 return service;
+                }
+                // return  service;
             });
 
         }  
@@ -286,19 +377,19 @@ export class ApiService {
             //check for header
             if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
                
-                axios.defaults.headers.common['Content-Type'] = 'application/json';
+                instance.defaults.headers.common['Content-Type'] = 'application/json';
             }
             if (binaryUploadUrls.indexOf(serviceToTest) > -1) {
                 
-                axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
+                instance.defaults.headers.common['Content-Type'] = 'multipart/form-data';
             }
-            // axios.defaults.headers.common['Content-Type'] = 'application/json';
+            // instance.defaults.headers.common['Content-Type'] = 'application/json';
             if(headers === undefined){
                 this.setTokenAuthorization(url);
             }
             else if(headers !== undefined){
                 for (let [key, value] of Object.entries(headers)) {
-                    axios.defaults.headers.common[key] = value;
+                    instance.defaults.headers.common[key] = value;
                 }
             }
             
@@ -310,7 +401,7 @@ export class ApiService {
                     let tempRequest = {
                         url,
                         bodyData,
-                        tempHeaders: axios.defaults.headers.common
+                        tempHeaders: instance.defaults.headers.common
                     };
 
                     let refreshpayload ={
@@ -318,11 +409,11 @@ export class ApiService {
                         refreshToken:lingoAuth.refreshToken
                     }
                     this.setTokenAuthorization(routes.REFRESH_TOKEN);
-                    let tokenService = axios.post(routes.REFRESH_TOKEN, refreshpayload);
+                    let tokenService = instance.post(routes.REFRESH_TOKEN, refreshpayload);
 
                     return tokenService.then(function (response) {
-                        // console.log("was here")
-                        if(response.status===200){
+                        
+                        if(response.status>=200 && response.status<210){
                             if(response.data.token!==undefined){
                                 
                                 let userData = JSON.parse(localStorage.getItem("user"));
@@ -330,18 +421,21 @@ export class ApiService {
                                     userData.token = response.data.token;
                                     localStorage.setItem('user', JSON.stringify(userData));
 
-                                delete axios.defaults.headers.common;
-                                axios.defaults.headers.common ={
+                                delete instance.defaults.headers.common;
+                                instance.defaults.headers.common ={
                                     ...tempRequest.tempHeaders
                                 }
-                                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+                                instance.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
-                                service = axios.get(tempRequest.url, tempRequest.bodyData);
+                                service = instance.get(tempRequest.url, tempRequest.bodyData);
 
                                 
                                 return service.then((response3)=>{
 
-                                    return service;
+                                    if(response3.status>=200 && response3.status < 210){
+                                        // console.log("success in token")
+                                        return service;
+                                    }
                                 })
                                 .catch((error2)=>{
                                     return service;
@@ -349,6 +443,7 @@ export class ApiService {
                             }
                         }else{
                             // return service;
+                            // console.log("token failed 3");
                             dispatch(authActions.Logout())
                         }
 
@@ -358,19 +453,24 @@ export class ApiService {
                        
                     }).catch(function (error) {
                         // console.log("logs out now",service, routes.REFRESH_TOKEN)
-                        dispatch(authActions.Logout())
-                        
-                        
+                        // console.log("token failed 32");
+                        // dispatch(authActions.Logout())
+                        let responseData= error.response;
+                        if(responseData.config.url.indexOf("Login/refreshtoken")>-1){
+                            dispatch(authActions.Logout())
+                        }else{
+                             return tokenService;
+                        }
                         
                     });
                 }else{
                    
-                    service = axios.post(url, bodyData);
+                    service = instance.post(url, bodyData);
                    
                 }
             }else{
                 
-                service = axios.post(url, bodyData);
+                service = instance.post(url, bodyData);
             }
             return service.then(function (response) {
                
@@ -397,14 +497,14 @@ export class ApiService {
                         //             refreshToken: user.refreshToken
                         //           };
                                   
-                        //                 let refreshService = axios.post(routes.REFRESH_TOKEN, refreshTokenPayload);
+                        //                 let refreshService = instance.post(routes.REFRESH_TOKEN, refreshTokenPayload);
                         
                         //                 return refreshService.then(function(response) {
                                             
                         //                     if(response.status===200){
                         //                         localStorage.setItem('user', JSON.stringify(response.data));
                         //                     }
-                        //                     return axios.get(url, bodyData);
+                        //                     return instance.get(url, bodyData);
                         //                 }).catch(function (error) {
                         //                     if (error.response.status === 401) {
                         //                         let currentRoute = window.location.pathname,

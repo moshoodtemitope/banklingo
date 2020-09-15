@@ -6,10 +6,15 @@ import { handleRequestErrors } from "../../../shared/utils";
 
 export const disbursementActions = {
     getDisbursement,
+    getPendingApprovalDisbursement,
+    getPendingReviewDisbursement,
     getDisbursementBanks,
     postDisbursement,
+    getInwardsNIP,
+    getOutwardsNIP,
     confirmPostDisbursement,
     approveOrRejectPostDisbursement,
+    approveOrRejectReviewedDisbursement,
     rejectPostDisbursement,
     getDisbursementByRef
 }
@@ -53,6 +58,150 @@ function getDisbursement  (payload, type, tempData){
     // function request(user) { return { type: disbursmentConstants.GET_DISBURSMENTS_PENDING, user } }
     function success(response) { return { type: disbursmentConstants.GET_DISBURSMENTS_SUCCESS, response } }
     function failure(error) { return { type: disbursmentConstants.GET_DISBURSMENTS_FAILURE, error } }
+
+}
+
+function getPendingApprovalDisbursement  (payload, type, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_DISBURSEMENT+`/pendingapproval?${payload}`;  
+
+            // url = routes.HIT_DISBURSEMENT+`/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_FAILURE, error } }
+
+}
+
+function getInwardsNIP  (payload, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_NIP+`/inwardrequests?${payload}`;  
+
+            // url = routes.HIT_DISBURSEMENT+`/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.GET_NIP_INWARDS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.GET_NIP_INWARDS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.GET_NIP_INWARDS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.GET_NIP_INWARDS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.GET_NIP_INWARDS_FAILURE, error } }
+
+}
+
+function getOutwardsNIP  (payload, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_NIP+`/outwardrequests?${payload}`;  
+
+            // url = routes.HIT_DISBURSEMENT+`/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.GET_NIP_OUTWARDS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.GET_NIP_OUTWARDS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.GET_NIP_OUTWARDS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.GET_NIP_OUTWARDS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.GET_NIP_OUTWARDS_FAILURE, error } }
+
+}
+
+function getPendingReviewDisbursement  (payload, type, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_DISBURSEMENT+`/pendingreview?${payload}`;  
+
+            // url = routes.HIT_DISBURSEMENT+`/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_FAILURE, error } }
 
 }
 
@@ -208,6 +357,50 @@ function approveOrRejectPostDisbursement   (actionDisbursmentPayload){
     function success(response) { return { type: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS, response } }
     function failure(error) { return { type: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE, error } }
     function clear() { return { type: disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_RESET, clear_data:""} }
+
+}
+
+function approveOrRejectReviewedDisbursement   (actionDisbursmentPayload){
+    if(actionDisbursmentPayload!=="CLEAR"){
+        return dispatch =>{
+            let url;
+
+            if(actionDisbursmentPayload.actionToPerform==="approve"){
+                url = routes.HIT_DISBURSEMENT+'/approvereview';
+            }
+            if(actionDisbursmentPayload.actionToPerform==="reject"){
+                url = routes.HIT_DISBURSEMENT+'/rejectreview';
+            }
+            delete actionDisbursmentPayload.actionToPerform
+            let consume = ApiService.request(url, "POST", actionDisbursmentPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    if(response.status===200){
+                        dispatch(success(response));
+                    }else{
+                        dispatch(failure(handleRequestErrors("Unable to complete action")));
+                    }
+                    
+                }).catch(error =>{
+                    // console.log('error is', error)
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_FAILURE, error } }
+    function clear() { return { type: disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_RESET, clear_data:""} }
 
 }
 

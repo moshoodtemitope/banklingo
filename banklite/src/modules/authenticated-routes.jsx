@@ -20,13 +20,23 @@ import NewClient from './clients/new-client'
 import EditAClient from './clients/edit-client'
 
 import LoansManagement from './loanmanagement'
+import ActiveLoans from './loanmanagement/active'
+import ApprovedLoans from './loanmanagement/approved'
+import LoansInArrears from './loanmanagement/arrears'
+import ClosedLoans from './loanmanagement/closed'
+import ClosedWithDrawnLoans from './loanmanagement/closed-withdrawn'
+import ClosedWrittenOffLoans from './loanmanagement/closed-writtenoff'
+import PendingLoans from './loanmanagement/pending'
+import RejectedLoans from './loanmanagement/rejected'
 import LoanClient from './loanmanagement/loan-client'
 import NewLoanAccount from './loanmanagement/newloanaccount'
 
 import DisbursementManagement from './disbursements'
 import InitiateDisbursement from './disbursements/initiate-disbursements'
+import DisbursementPendingReview from './disbursements/pending-review'
 import DisbursementPendingApproval from './disbursements/pending-approval'
 import NipRequests from './disbursements/nip-request'
+import NipOutwardsRequests from './disbursements/nip-outwards'
 
 import DepositManagement from './depositmanagement'
 import DepositClient from './depositmanagement/deposit-client'
@@ -189,6 +199,14 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <Route exact path='/clients-blacklisted' render={(props) => <ClientsBlacklisted {...this.props} />} /> */}
 
                         <PrivateRoute exact path='/all-loans' {...this.props} authed={this.props.user} component={LoansManagement} />  
+                        <PrivateRoute exact path='/all-loans/pending' {...this.props} authed={this.props.user} component={PendingLoans} />  
+                        <PrivateRoute exact path='/all-loans/approved' {...this.props} authed={this.props.user} component={ApprovedLoans} />  
+                        <PrivateRoute exact path='/all-loans/rejected' {...this.props} authed={this.props.user} component={RejectedLoans} />  
+                        <PrivateRoute exact path='/all-loans/active' {...this.props} authed={this.props.user} component={ActiveLoans} />  
+                        <PrivateRoute exact path='/all-loans/arrears' {...this.props} authed={this.props.user} component={LoansInArrears} />  
+                        <PrivateRoute exact path='/all-loans/closed' {...this.props} authed={this.props.user} component={ClosedLoans} />  
+                        <PrivateRoute exact path='/all-loans/closed-off' {...this.props} authed={this.props.user} component={ClosedWrittenOffLoans} />  
+                        <PrivateRoute exact path='/all-loans/closed-withdrawn' {...this.props} authed={this.props.user} component={ClosedWithDrawnLoans} />  
 
                         <PrivateRoute exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
                         <PrivateRoute exact path='/all-loans/newloan-account/:clientId' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
@@ -201,9 +219,11 @@ class AuthenticatedRoutes extends React.Component {
 
                         <PrivateRoute exact path='/disbursements' {...this.props} authed={this.props.user} component={DisbursementManagement} />  
                         <PrivateRoute exact path='/disbursements/initiate' {...this.props} authed={this.props.user} component={InitiateDisbursement} />  
-
+                        
+                        <PrivateRoute exact path='/disbursements/pending-review' {...this.props} authed={this.props.user} component={DisbursementPendingReview} /> 
                         <PrivateRoute exact path='/disbursements/pending-approval' {...this.props} authed={this.props.user} component={DisbursementPendingApproval} /> 
                         <PrivateRoute exact path='/disbursements/nip-requests' {...this.props} authed={this.props.user} component={NipRequests} /> 
+                        <PrivateRoute exact path='/disbursements/nip-requests/outwards' {...this.props} authed={this.props.user} component={NipOutwardsRequests} /> 
                         
                         <PrivateRoute exact path='/deposits' {...this.props} authed={this.props.user} component={DepositManagement} /> 
                         {/* <Route exact path='/deposits' render={(props) => <DepositManagement {...this.props} />} /> */}

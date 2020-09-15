@@ -227,40 +227,7 @@ class CustomerAccountContainer extends React.Component {
         )
     }
 
-    addFieldBox = ()=>{
-        const {showAddField} = this.state;
-        return(
-            <Modal show={showAddField} onHide={this.handleChangeStateClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
-                <Modal.Header>
-                    <Modal.Title>Add Field</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group>
-                            <Form.Label className="block-level">Field Set</Form.Label>
-                            {/* Search dropdown of field items */}
-                            <Form.Control type="text"  />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label className="block-level">Field Name</Form.Label>
-                            {/* Search dropdown of field names */}
-                            <Form.Control type="text"  />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    
-                    <Button variant="light" onClick={this.handleAddFieldClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="secondary">
-                        Add Field
-                    </Button>
-                
-                </Modal.Footer>
-            </Modal>
-        )
-    }
+    
 
     handleNewCustomerState = async (changeCustomerStatePayload, newStateUpdate)=>{
         const {dispatch} = this.props;
@@ -605,10 +572,10 @@ class CustomerAccountContainer extends React.Component {
                                         `${eachLoanAccount.productName} - `:""}
                                 {eachLoanAccount.accountNumber}
 
-                                {eachLoanAccount.loanStateDescription==="Active" &&
-                                    <span className={eachLoanAccount.loanStateDescription==="Active"? "stateindicator active-state": ""}></span>
+                                {eachLoanAccount.loanState===5 &&
+                                    <span className={eachLoanAccount.loanState===5 ? "stateindicator active-state": ""}></span>
                                 }
-                                {(eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed") &&
+                                {(eachLoanAccount.loanState===4  || eachLoanAccount.loanState===7 || eachLoanAccount.loanState===8 || eachLoanAccount.loanState===9 ) &&
                                     <span className="stateindicator closed-state"></span>
                                 }
                             </NavLink>
@@ -657,8 +624,11 @@ class CustomerAccountContainer extends React.Component {
         let {generatedRoutes} = this.state;
         let numberOfClosedLoans  = 0;
 
-            numberOfClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed").length;
-        let unClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription!=="Rejected" && eachLoanAccount.loanStateDescription!=="Closed Withdrawn" && eachLoanAccount.loanStateDescription!=="Closed");
+        //     numberOfClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed").length;
+        // let unClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription!=="Rejected" && eachLoanAccount.loanStateDescription!=="Closed Withdrawn" && eachLoanAccount.loanStateDescription!=="Closed");
+
+        numberOfClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanState===4 || eachLoanAccount.loanState===7 || eachLoanAccount.loanState===8 || eachLoanAccount.loanState===9).length;
+        let unClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanState!==4 && eachLoanAccount.loanState!==7 && eachLoanAccount.loanState!==8 && eachLoanAccount.loanState!==9);
         
         return(
             <div className="module-submenu">
@@ -747,7 +717,7 @@ class CustomerAccountContainer extends React.Component {
             return(
                 <div>
                     {this.newTask()}
-                    {this.addFieldBox()}
+                    
                     {this.changeCustomerStateBox(customerDetails)}
                     {this.setNotificationBox()}
                     {this.changeHistoryBox()}

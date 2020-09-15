@@ -34,7 +34,7 @@ class GeneralCustomerTypes extends React.Component {
             // customerTypeDesc:'',
             // customerTypeId:'',
             // custTypepayload:''
-            PageSize: 30,
+            PageSize: 25,
             CurrentPage:1
         }
 

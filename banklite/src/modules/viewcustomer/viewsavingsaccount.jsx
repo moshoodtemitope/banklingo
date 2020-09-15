@@ -702,12 +702,15 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Username</th>
                                     <th>Action</th>
                                     <th>Affected Customer</th>
+                                    <th>Affected Item Name</th>
+                                    <th>Affected Item Id</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -755,6 +758,8 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Username</th>
                                     <th>Action</th>
                                     <th>Affected Customer</th>
+                                    <th>Affected Item Name</th>
+                                    <th>Affected Item Id</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
@@ -769,6 +774,8 @@ class ViewSavingsAccount extends React.Component {
                                                     <td>{eachActivity.userName}</td>
                                                     <td>{eachActivity.action}</td>
                                                     <td>{eachActivity.affectedCustomerName}</td>
+                                                    <td>{eachActivity.affectedItemName}</td>
+                                                    <td>{eachActivity.affectedItemId}</td>
                                                 </tr>
                                             </Fragment>
                                         )
@@ -832,6 +839,8 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Username</th>
                                     <th>Action</th>
                                     <th>Affected Customer</th>
+                                    <th>Affected Item Name</th>
+                                    <th>Affected Item Id</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
@@ -846,6 +855,8 @@ class ViewSavingsAccount extends React.Component {
                                                     <td>{eachActivity.userName}</td>
                                                     <td>{eachActivity.action}</td>
                                                     <td>{eachActivity.affectedCustomerName}</td>
+                                                    <td>{eachActivity.affectedItemName}</td>
+                                                    <td>{eachActivity.affectedItemId}</td>
                                                 </tr>
                                             </Fragment>
                                         )
@@ -894,12 +905,15 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Username</th>
                                     <th>Action</th>
                                     <th>Affected Customer</th>
+                                    <th>Affected Item Name</th>
+                                    <th>Affected Item Id</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

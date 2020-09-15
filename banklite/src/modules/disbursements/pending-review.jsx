@@ -30,7 +30,7 @@ import {numberWithCommas} from '../../shared/utils';
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
 import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
 
-class DisbursementPendingApproval extends React.Component {
+class DisbursementPendingReview extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -58,10 +58,10 @@ class DisbursementPendingApproval extends React.Component {
     getDisbursements = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(disbursementActions.getPendingApprovalDisbursement(paramters, true));
+        dispatch(disbursementActions.getPendingReviewDisbursement(paramters, true));
     }
 
-    approveOrRejectPostDisbursementRequest = async (actionPayload)=>{
+    approveOrRejectReviewedDisbursementRequest = async (actionPayload)=>{
         const {dispatch} = this.props;
 
         await dispatch(disbursementActions.approveOrRejectPostDisbursement(actionPayload));
@@ -111,7 +111,7 @@ class DisbursementPendingApproval extends React.Component {
             dispatch(disbursementActions.getDisbursement(params));
         }
 
-        
+        // this.getDisbursements(params);
     }
 
     loadNextPage = (nextPage, tempData)=>{
@@ -127,7 +127,7 @@ class DisbursementPendingApproval extends React.Component {
             dispatch(disbursementActions.getDisbursement(params));
         }
 
-        
+        // this.getDisbursements(params);
     }
     handleBackToEdit = ()=>{
         this.setState({showDetails: false})
@@ -139,7 +139,7 @@ class DisbursementPendingApproval extends React.Component {
 
     renderFullDetails=(transactionToProcess)=>{
         const {show}= this.state;
-       let  approveOrRejectPostDisbursementRequest= this.props.approveOrRejectPostDisbursementReducer,
+       let  approveOrRejectReviewedDisbursementRequest= this.props.approveOrRejectReviewedDisbursementReducer,
             rejectPostDisbursementRequest= this.props.rejectPostDisbursementReducer,
             processDisburmentValidationSchema = Yup.object().shape({
                 securityCode: Yup.string()
@@ -174,10 +174,10 @@ class DisbursementPendingApproval extends React.Component {
                                 
                                     
                                     
-                                    this.approveOrRejectPostDisbursementRequest(processPayload)
+                                    this.approveOrRejectReviewedDisbursementRequest(processPayload)
                                         .then(
                                             () => {
-                                                if(this.props.approveOrRejectPostDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS){
+                                                if(this.props.approveOrRejectReviewedDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS){
                                                     const {dispatch} = this.props;
                                                     let  {CurrentPage, PageSize} = this.state;
 
@@ -340,35 +340,35 @@ class DisbursementPendingApproval extends React.Component {
                                     </Accordion>
                                             
                                                 
-                                            {approveOrRejectPostDisbursementRequest.request_status !== disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS && 
+                                            {approveOrRejectReviewedDisbursementRequest.request_status !== disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS && 
                                                 <div className="footer-with-cta toleft">
                                                     {/* <Button variant="secondary" className="grayed-out" onClick={this.handleCloseEdit}>Cancel</Button> */}
                                                     <Button
                                                         type="submit"
                                                         onClick={()=>this.setState({actionToPerform: "approve"})}
-                                                        disabled={approveOrRejectPostDisbursementRequest.is_request_processing}>
-                                                            {approveOrRejectPostDisbursementRequest.is_request_processing && this.state.actionToPerform==="approve"?"Please wait...": "Approve"}
+                                                        disabled={approveOrRejectReviewedDisbursementRequest.is_request_processing}>
+                                                            {approveOrRejectReviewedDisbursementRequest.is_request_processing && this.state.actionToPerform==="approve"?"Please wait...": "Approve"}
                                                         </Button>
 
                                                         <Button
                                                         type="submit"
                                                         onClick={()=>this.setState({actionToPerform: "reject"})}
-                                                        disabled={approveOrRejectPostDisbursementRequest.is_request_processing}>
-                                                            {approveOrRejectPostDisbursementRequest.is_request_processing && this.state.actionToPerform==="reject"?"Please wait...": "Reject"}
+                                                        disabled={approveOrRejectReviewedDisbursementRequest.is_request_processing}>
+                                                            {approveOrRejectReviewedDisbursementRequest.is_request_processing && this.state.actionToPerform==="reject"?"Please wait...": "Reject"}
                                                         </Button>
                                                 </div>
                                             }
                                         </Form>
                                     )}
                             </Formik>
-                            {approveOrRejectPostDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS && 
+                            {approveOrRejectReviewedDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS && 
                                 <Alert variant="success">
-                                    {approveOrRejectPostDisbursementRequest.request_data.response.data.message}
+                                    {approveOrRejectReviewedDisbursementRequest.request_data.response.data.message}
                                 </Alert>
                             }
-                            {approveOrRejectPostDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE && 
+                            {approveOrRejectReviewedDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_FAILURE && 
                                 <Alert variant="danger">
-                                    {approveOrRejectPostDisbursementRequest.request_data.error}
+                                    {approveOrRejectReviewedDisbursementRequest.request_data.error}
                                 </Alert>
                             }
 
@@ -400,7 +400,7 @@ class DisbursementPendingApproval extends React.Component {
 
         let saveRequestData= getDisbursementsRequest.request_data!==undefined?getDisbursementsRequest.request_data.tempData:null;
             switch (getDisbursementsRequest.request_status){
-                case (disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_PENDING):
+                case (disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_PENDING):
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
                         return (
                             <div className="loading-content">
@@ -633,7 +633,7 @@ class DisbursementPendingApproval extends React.Component {
                             </div>
                         )
                     }
-                case(disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_SUCCESS):
+                case(disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_SUCCESS):
                     let allDisbursments = getDisbursementsRequest.request_data.response.data;
                         
                         if(allDisbursments!==undefined){
@@ -919,7 +919,7 @@ class DisbursementPendingApproval extends React.Component {
                             return null;
                         }
 
-                case (disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_FAILURE):
+                case (disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
                             <div>{getDisbursementsRequest.request_data.error}</div>
@@ -931,7 +931,7 @@ class DisbursementPendingApproval extends React.Component {
     }
 
     renderDisbursment =(transactionToProcess)=>{
-        let  approveOrRejectPostDisbursementRequest= this.props.approveOrRejectPostDisbursementReducer,
+        let  approveOrRejectReviewedDisbursementRequest= this.props.approveOrRejectReviewedDisbursementReducer,
         rejectPostDisbursementRequest= this.props.rejectPostDisbursementReducer,
         processDisburmentValidationSchema = Yup.object().shape({
             securityCode: Yup.string()
@@ -962,10 +962,10 @@ class DisbursementPendingApproval extends React.Component {
 
 
 
-                        this.approveOrRejectPostDisbursementRequest(processPayload)
+                        this.approveOrRejectReviewedDisbursementRequest(processPayload)
                             .then(
                                 () => {
-                                    if (this.props.approveOrRejectPostDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS) {
+                                    if (this.props.approveOrRejectReviewedDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS) {
                                         const {dispatch} = this.props;
                                                     let {CurrentPage, PageSize} = this.state;
 
@@ -1127,7 +1127,7 @@ class DisbursementPendingApproval extends React.Component {
                                 </Accordion>
 
 
-                                {approveOrRejectPostDisbursementRequest.request_status !== disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS &&
+                                {approveOrRejectReviewedDisbursementRequest.request_status !== disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS &&
                                     <div>
                                         <div className="footer-with-cta centered approvalctas">
                                             {/* <Button variant="secondary" className="grayed-out" onClick={this.handleCloseEdit}>Cancel</Button> */}
@@ -1135,16 +1135,16 @@ class DisbursementPendingApproval extends React.Component {
                                                 type="submit"
                                                 className="redvariant"
                                                 onClick={() => this.setState({ actionToPerform: "approve" })}
-                                                disabled={approveOrRejectPostDisbursementRequest.is_request_processing}>
-                                                {approveOrRejectPostDisbursementRequest.is_request_processing && this.state.actionToPerform === "approve" ? "Please wait..." : "Approve"}
+                                                disabled={approveOrRejectReviewedDisbursementRequest.is_request_processing}>
+                                                {approveOrRejectReviewedDisbursementRequest.is_request_processing && this.state.actionToPerform === "approve" ? "Please wait..." : "Approve"}
                                             </Button>
 
                                             <Button
                                                 type="submit"
                                                 // className="ml-50"
                                                 onClick={() => this.setState({ actionToPerform: "reject" })}
-                                                disabled={approveOrRejectPostDisbursementRequest.is_request_processing}>
-                                                {approveOrRejectPostDisbursementRequest.is_request_processing && this.state.actionToPerform === "reject" ? "Please wait..." : "Reject"}
+                                                disabled={approveOrRejectReviewedDisbursementRequest.is_request_processing}>
+                                                {approveOrRejectReviewedDisbursementRequest.is_request_processing && this.state.actionToPerform === "reject" ? "Please wait..." : "Reject"}
                                             </Button>
                                         </div>
                                         <div className="back-cta centered" onClick={this.handleBackToEdit}>
@@ -1153,14 +1153,14 @@ class DisbursementPendingApproval extends React.Component {
                                     </div>
                                 }
 
-                                {approveOrRejectPostDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_SUCCESS &&
+                                {approveOrRejectReviewedDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS &&
                                     <Alert variant="success">
-                                        {approveOrRejectPostDisbursementRequest.request_data.response.data.message}
+                                        {approveOrRejectReviewedDisbursementRequest.request_data.response.data.message}
                                     </Alert>
                                 }
-                                {approveOrRejectPostDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE &&
+                                {approveOrRejectReviewedDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_FAILURE &&
                                     <Alert variant="danger">
-                                        {approveOrRejectPostDisbursementRequest.request_data.error}
+                                        {approveOrRejectReviewedDisbursementRequest.request_data.error}
                                     </Alert>
                                 }
                             </Form>
@@ -1173,7 +1173,7 @@ class DisbursementPendingApproval extends React.Component {
 
     render() {
         const {transacTionSelected, showDetails}=this.state;
-        let  approveOrRejectPostDisbursementRequest= this.props.approveOrRejectPostDisbursementReducer;
+        let  approveOrRejectReviewedDisbursementRequest= this.props.approveOrRejectReviewedDisbursementReducer;
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -1184,7 +1184,7 @@ class DisbursementPendingApproval extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Pending Approval</h2>
+                                                <h2>Pending Review</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -1229,8 +1229,8 @@ class DisbursementPendingApproval extends React.Component {
                                             <div className="middle-content">
                                                 {(showDetails===false) && this.renderPendingDisbursment()}
                                                 {
-                                                    (this.props.getDisbursementsReducer.request_status ===disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_SUCCESS 
-                                                        && showDetails===true && approveOrRejectPostDisbursementRequest.request_status!==disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_RESET)
+                                                    (this.props.getDisbursementsReducer.request_status ===disbursmentConstants.GET_PENDING_REVIEW_DISBURSMENTS_SUCCESS 
+                                                        && showDetails===true && approveOrRejectReviewedDisbursementRequest.request_status!==disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_RESET)
                                                     && this.renderDisbursment(transacTionSelected)
                                                 }
                                             </div>
@@ -1248,9 +1248,9 @@ class DisbursementPendingApproval extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        getDisbursementsReducer : state.disbursmentReducers.getPendingApprovalDisbursementReducer,
-        approveOrRejectPostDisbursementReducer : state.disbursmentReducers.approveOrRejectPostDisbursementReducer,
+        getDisbursementsReducer : state.disbursmentReducers.getPendingReviewDisbursementReducer,
+        approveOrRejectReviewedDisbursementReducer : state.disbursmentReducers.approveOrRejectReviewedDisbursementReducer,
         rejectPostDisbursementReducer : state.disbursmentReducers.rejectPostDisbursementReducer,
     };
 }
-export default connect(mapStateToProps)(DisbursementPendingApproval);
+export default connect(mapStateToProps)(DisbursementPendingReview);

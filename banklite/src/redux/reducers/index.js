@@ -158,12 +158,17 @@ const clientsReducers = combineReducers({
 
 const disbursmentReducers = combineReducers({
     getDisbursementsReducer: disbursment.getDisbursementsReducer, 
+    getPendingApprovalDisbursementReducer: disbursment.getPendingApprovalDisbursementReducer, 
+    getPendingReviewDisbursementReducer: disbursment.getPendingReviewDisbursementReducer, 
     getDisbursementBanksReducer: disbursment.getDisbursementBanksReducer, 
     postDisbursementReducer: disbursment.postDisbursementReducer, 
     confirmPostDisbursementReducer: disbursment.confirmPostDisbursementReducer, 
     approveOrRejectPostDisbursementReducer: disbursment.approveOrRejectPostDisbursementReducer, 
+    approveOrRejectReviewedDisbursementReducer: disbursment.approveOrRejectReviewedDisbursementReducer, 
     rejectPostDisbursementReducer: disbursment.rejectPostDisbursementReducer, 
     getDisbursementByRefReducer: disbursment.getDisbursementByRefReducer, 
+    getInwardsNIPReducer: disbursment.getInwardsNIPReducer, 
+    getOutwardsNIPReducer: disbursment.getOutwardsNIPReducer, 
 })
 
 const productReducers = combineReducers({

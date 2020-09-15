@@ -24,7 +24,7 @@ class SMSCommunications extends React.Component {
         this.state={
             user:'',
             NotificationType:2,
-            PageSize: 30,
+            PageSize: 25,
             CurrentPage:1,
             endDate: "",
             startDate: "",

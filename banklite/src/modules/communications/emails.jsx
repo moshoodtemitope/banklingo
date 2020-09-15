@@ -24,7 +24,7 @@ class EmailCommunications extends React.Component {
         this.state={
             user:'',
             NotificationType:1,
-            PageSize: 30,
+            PageSize: 25,
             CurrentPage:1,
             endDate: "",
             startDate: "",

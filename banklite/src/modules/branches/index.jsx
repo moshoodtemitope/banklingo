@@ -18,7 +18,7 @@ class BranchesManagement extends React.Component {
         super(props);
         this.state={
             user:'',
-            PageSize:30,
+            PageSize:25,
             FullDetails: false,
             CurrentPage:1,
             CurrentSelectedPage:1

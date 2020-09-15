@@ -4,6 +4,7 @@ import * as React from "react";
 import {Fragment} from "react";
 import { connect } from 'react-redux';
 
+import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
@@ -11,38 +12,42 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
-import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
+import { numberWithCommas} from '../../shared/utils';
 
-import "./activities.scss"; 
-class Activties extends React.Component {
+import { loanActions } from '../../redux/actions/loans/loans.action';
+import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
+
+import "./loanmanagement.scss"; 
+class PendingLoans extends React.Component {
     constructor(props) {
         super(props);
         this.state={
             user:'',
-            PageSize:25,
-            CurrentPage:1,
-            isRefresh:false,
+            PageSize: 25,
+            FullDetails: false,
+            CurrentPage: 1,
+            CurrentSelectedPage: 1,
             endDate: "",
             startDate: "",
         }
+
         
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.loadInitialData();
     }
 
-    loadInitialData=()=>{
-        let {PageSize, CurrentPage}= this.state;
+    loadInitialData = () => {
+        let { PageSize, CurrentPage } = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getActivitiesData(params);
+        this.getLoans(params);
     }
 
-    getActivitiesData = (paramters)=>{
-        const {dispatch} = this.props;
+    getLoans = (paramters) => {
+        const { dispatch } = this.props;
 
-        dispatch(dashboardActions.getActivitiesData(paramters));
+        dispatch(loanActions.getLoans(paramters));
     }
 
     handleDateChangeRaw = (e) => {
@@ -67,58 +72,71 @@ class Activties extends React.Component {
                 }
         });
     }
-    setPagesize = (PageSize, tempData)=>{
+
+    setPagesize = (PageSize, tempData) => {
         // console.log('----here', PageSize.target.value);
-        const {dispatch} = this.props;
-        let {CurrentPage}= this.state;
-        
+        const { dispatch } = this.props;
+        let sizeOfPage = PageSize.target.value,
+            { FullDetails, CurrentPage, CurrentSelectedPage } = this.state;
 
-        let sizeOfPage = PageSize.target.value;
+        this.setState({ PageSize: sizeOfPage });
 
-        this.setState({PageSize: sizeOfPage, isRefresh: true});
-        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-
+        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+        // this.getLoans(params);
 
         if(tempData){
-            dispatch(dashboardActions.getActivitiesData(params, tempData));
+            dispatch(loanActions.getLoans(params,tempData));
         }else{
-            dispatch(dashboardActions.getActivitiesData(params));
+            dispatch(loanActions.getLoans(params));
         }
-        
-       
-        // dispatch(dashboardActions.getActivitiesData(params));
+    }
+
+    setShowDetails = (FullDetails, tempData) => {
+        // console.log('----here', PageSize.target.value);
+        const { dispatch } = this.props;
+        let showDetails = FullDetails.target.checked,
+            { CurrentPage, CurrentSelectedPage, PageSize } = this.state;
+
+        this.setState({ FullDetails: showDetails });
+
+        let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+        // this.getLoans(params);
+
+        if(tempData){
+            dispatch(loanActions.getLoans(params,tempData));
+        }else{
+            dispatch(loanActions.getLoans(params));
+        }
     }
 
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize} = this.state;
+        let {PageSize,CurrentPage,FullDetails} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params = `PageSize=${PageSize}&CurrentPage=${nextPage}`;
-        
+        // let params= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
 
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
         if(tempData){
-           dispatch(dashboardActions.getActivitiesData(params,tempData));
+            dispatch(loanActions.getLoans(params,tempData));
         }else{
-           dispatch(dashboardActions.getActivitiesData(params));
+            dispatch(loanActions.getLoans(params));
         }
     }
 
-    renderActivities=()=>{
-        let getActivitiesRequestData = this.props.getActivitiesRequest,
-            {isRefresh} = this.state;
+    renderLoans = () => {
+        let getLoansRequest = this.props.getLoansRequest;
 
-        let saveRequestData= getActivitiesRequestData.request_data!==undefined?getActivitiesRequestData.request_data.tempData:null;
-        if(getActivitiesRequestData.request_status ===dashboardConstants.GET_ACTIVITIES_DATA_PENDING
-            ){
-                if(saveRequestData===undefined){
-                    return(
+        let saveRequestData= getLoansRequest.request_data!==undefined?getLoansRequest.request_data.tempData:null;
+        switch (getLoansRequest.request_status) {
+            case (loanAndDepositsConstants.GET_LOANS_PENDING):
+                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                    return (
                         <div className="loading-content">
-                            <div className="loading-text">Please wait... </div>
                             <div className="heading-with-cta">
                                 <Form className="one-liner">
 
@@ -134,11 +152,11 @@ class Activties extends React.Component {
 
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
-                                    <select id="toshow"
-
+                                    <select id="toshow" 
+                                        
                                         className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
-                                        <option value="25" >25</option>
+                                        <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
@@ -148,14 +166,14 @@ class Activties extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        {/* <th>Id</th> */}
-                                        <th>Date Created</th>
-                                        <th>Username</th>
-                                        <th>Action</th>
-                                        <th>Affected Customer</th>
-                                        <th>Affected Item Name</th>
-                                        <th>Affected Item Id</th>
-                                        {/* <th></th> */}
+                                        <th>Account Number</th>
+                                        <th>Client Name</th>
+                                        <th>Product Name</th>
+                                        <th>Loan Amount</th>
+                                        <th>Loan State</th>
+                                        <th>Principal Due</th>
+                                        <th>Total Paid</th>
+                                        <th>Total Due</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -166,18 +184,19 @@ class Activties extends React.Component {
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </TableComponent>
+                            <div className="loading-text">Please wait... </div>
                         </div>
                     )
                 }else{
-                    
                     return(
-                        <div className="loading-content">
-                            <div className="loading-text">Please wait... </div>
-                            <div className="heading-with-cta">
-                                <Form className="one-liner">
+                        <div>
+                                <div className="heading-with-cta">
+                                    <Form className="one-liner">
 
                                             <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                                 <Form.Control as="select" size="sm">
@@ -228,65 +247,76 @@ class Activties extends React.Component {
                                             <Button className="no-margins" variant="primary" type="submit">Filter</Button>
                                         </Form>
 
-                                <div className="pagination-wrap">
-                                    <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" 
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow" 
+                                            
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="200">200</option>
-                                    </select>
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        
+                                    </div>
                                 </div>
-                            </div>
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        {/* <th>Id</th> */}
-                                        <th>Date Created</th>
-                                        <th>Username</th>
-                                        <th>Action</th>
-                                        <th>Affected Customer</th>
-                                        <th>Affected Item Name</th>
-                                        <th>Affected Item Id</th>
-                                        {/* <th></th> */}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        saveRequestData.map((eachActivity, index)=>{
-                                            return(
-                                                <Fragment key={index}>
-                                                    <tr>
-                                                        {/* <td>{eachActivity.id}</td> */}
-                                                        <td>{eachActivity.creationDate}</td>
-                                                        <td>{eachActivity.userName}</td>
-                                                        <td>{eachActivity.action}</td>
-                                                        <td>{eachActivity.affectedCustomerName}</td>
-                                                        <td>{eachActivity.affectedItemName}</td>
-                                                        <td>{eachActivity.affectedItemId}</td>
-                                                    </tr>
-                                                </Fragment>
-                                            )
-                                        })
-                                    }
-                                    
-                                </tbody>
-                            </TableComponent>
+                                
+                                <div className="loading-text">Please wait... </div>
 
-                        </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Account Number</th>
+                                            <th>Client Name</th>
+                                            <th>Product Name</th>
+                                            <th>Date Created</th>
+                                            <th>Loan Amount</th>
+                                            <th>Loan State</th>
+                                            <th>Principal Due</th>
+                                            <th>Total Paid</th>
+                                            <th>Total Due</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            saveRequestData.map((eachLoan, index) => {
+                                                return (
+                                                    <Fragment key={index}>
+                                                        <tr>
+                                                            {(eachLoan.loanStateDescription==="Rejected" || eachLoan.loanStateDescription==="Closed Withdrawn" || eachLoan.loanStateDescription==="Closed") && 
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/closedaccounts/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
+                                                            } 
+                                                            {(eachLoan.loanStateDescription!=="Rejected" && eachLoan.loanStateDescription!=="Closed Withdrawn" && eachLoan.loanStateDescription!=="Closed") &&   
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>            
+                                                            }
+                                                            <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
+                                                            <td>{eachLoan.productName}</td>
+                                                            <td>{eachLoan.dateCreated}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.loanAmount, true)}</td>
+                                                            <td>{eachLoan.loanStateDescription}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.principalDue, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.totalPaid, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.totalDue, true)}</td>
+                                                        </tr>
+                                                    </Fragment>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </TableComponent>
+                                {/* <div className="footer-with-cta toleft">
+                                    <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
+                                </div> */}
+                            </div>
                     )
                 }
-        }
 
-        if(getActivitiesRequestData.request_status ===dashboardConstants.GET_ACTIVITIES_DATA_SUCCESS
-            ){
-                let allActivitiesData = getActivitiesRequestData.request_data.response.data;
-
-                if(allActivitiesData.result!==undefined){
-                    if(allActivitiesData.result.length>=1){
-                        return(
+            case (loanAndDepositsConstants.GET_LOANS_SUCCESS):
+                let allLoans = getLoansRequest.request_data.response.data;
+                if (allLoans !== undefined) {
+                    if (allLoans.result.length >= 1) {
+                        return (
                             <div>
                                 <div className="heading-with-cta">
                                     <Form className="one-liner">
@@ -343,66 +373,81 @@ class Activties extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                                onChange={(e)=>this.setPagesize(e, allActivitiesData.result)}
-                                                value={this.state.PageSize}
-                                                className="countdropdown form-control form-control-sm">
+                                            onChange={(e)=>this.setPagesize(e, allLoans.result)}
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
                                         <TablePagination
-                                            totalPages={allActivitiesData.totalPages}
-                                            currPage={allActivitiesData.currentPage}
-                                            currRecordsCount={allActivitiesData.result.length}
-                                            totalRows={allActivitiesData.totalRows}
-                                            tempData={allActivitiesData.result}
+                                            totalPages={allLoans.totalPages}
+                                            currPage={allLoans.currentPage}
+                                            currRecordsCount={allLoans.result.length}
+                                            totalRows={allLoans.totalRows}
+                                            tempData={allLoans.result}
                                             pagesCountToshow={4}
                                             refreshFunc={this.loadNextPage}
                                         />
                                     </div>
                                 </div>
+                                <div className="table-helper">
+                                    <input type="checkbox" name=""
+                                        onChange={(e)=>this.setShowDetails(e, allLoans.result)}
+                                        checked={this.state.FullDetails}
+                                        id="showFullDetails" />
+                                    <label htmlFor="showFullDetails">Show full details</label>
+                                </div>
+                                
+
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            {/* <th>Id</th> */}
+                                            <th>Account Number</th>
+                                            <th>Client Name</th>
+                                            <th>Product Name</th>
                                             <th>Date Created</th>
-                                            <th>Username</th>
-                                            <th>Action</th>
-                                            <th>Affected Customer</th>
-                                            <th>Affected Item Name</th>
-                                            <th>Affected Item Id</th>
-                                            {/* <th></th> */}
+                                            <th>Loan Amount</th>
+                                            <th>Loan State</th>
+                                            <th>Principal Due</th>
+                                            <th>Total Paid</th>
+                                            <th>Total Due</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
-                                            allActivitiesData.result.map((eachActivity, index)=>{
-                                                return(
+                                            allLoans.result.map((eachLoan, index) => {
+                                                return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            {/* <td>{eachActivity.id}</td> */}
-
-                                                            <td>{eachActivity.creationDate}</td>
-                                                            <td>{eachActivity.userName}</td>
-                                                            <td>{eachActivity.action}</td>
-                                                            <td>{eachActivity.affectedCustomerName}</td>
-                                                            <td>{eachActivity.affectedItemName}</td>
-                                                            <td>{eachActivity.affectedItemId}</td>
+                                                            {(eachLoan.loanStateDescription==="Rejected" || eachLoan.loanStateDescription==="Closed Withdrawn" || eachLoan.loanStateDescription==="Closed") && 
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/closedaccounts/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
+                                                            } 
+                                                            {(eachLoan.loanStateDescription!=="Rejected" && eachLoan.loanStateDescription!=="Closed Withdrawn" && eachLoan.loanStateDescription!=="Closed") &&   
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>            
+                                                            }
+                                                            <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
+                                                            <td>{eachLoan.productName}</td>
+                                                            <td>{eachLoan.dateCreated}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.loanAmount, true)}</td>
+                                                            <td>{eachLoan.loanStateDescription}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.principalDue, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.totalPaid, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.totalDue, true)}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )
                                             })
                                         }
-                                       
                                     </tbody>
                                 </TableComponent>
-
+                                
                             </div>
                         )
                     }else{
                         return(
-                            <div>
+                            <div className="no-records">
                                 <div className="heading-with-cta">
                                     <Form className="one-liner">
 
@@ -458,27 +503,27 @@ class Activties extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow"
-                                                // onChange={this.setPagesize}
-                                                value={this.state.PageSize}
-                                            className="countdropdown form-control form-control-sm">
+                                            value={this.state.PageSize}
+                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
-                                            <option value="25" >25</option>
+                                            <option value="25">25</option>
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
+                                        
                                     </div>
                                 </div>
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            {/* <th>Id</th> */}
-                                            <th>Date Created</th>
-                                            <th>Username</th>
-                                            <th>Action</th>
-                                            <th>Affected Customer</th>
-                                            <th>Affected Item Name</th>
-                                            <th>Affected Item Id</th>
-                                            {/* <th></th> */}
+                                            <th>Account Number</th>
+                                            <th>Client Name</th>
+                                            <th>Product Name</th>
+                                            <th>Loan Amount</th>
+                                            <th>Loan State</th>
+                                            <th>Principal Due</th>
+                                            <th>Total Paid</th>
+                                            <th>Total Due</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -490,28 +535,29 @@ class Activties extends React.Component {
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </TableComponent>
+                                {/* <div className="footer-with-cta centered">
+                                    <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
+                                </div> */}
                             </div>
                         )
                     }
-                }else{
-                    return null
+                } else {
+                    return null;
                 }
+            case (loanAndDepositsConstants.GET_LOANS_FAILURE):
+                return (
+                    <div className="loading-content errormsg">
+                        <div>{getLoansRequest.request_data.error}</div>
+                    </div>
+                )
+            default:
+                return null;
         }
-
-        if (getActivitiesRequestData.request_status === dashboardConstants.GET_ACTIVITIES_DATA_FAILURE
-        ) {
-            return (
-                <div className="loading-content errormsg">
-                    <div>{getActivitiesRequestData.request_data.error}</div>
-                </div>
-            )
-        }
-
     }
-
 
     render() {
         return (
@@ -524,7 +570,7 @@ class Activties extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>System Activities</h2>
+                                                <h2>Pending Loans</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -538,7 +584,7 @@ class Activties extends React.Component {
                                         </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                {this.renderActivities()}
+                                                {this.renderLoans()}
                                             </div>
                                         </div>
                                     </div>
@@ -551,11 +597,10 @@ class Activties extends React.Component {
         );
     }
 }
-
 function mapStateToProps(state) {
     return {
-        getActivitiesRequest: state.dashboardReducers.getActivitiesReducer,
+        getLoansRequest: state.loansReducers.getLoansReducer,
     };
 }
 
-export default connect(mapStateToProps)(Activties);
+export default connect(mapStateToProps)(PendingLoans);

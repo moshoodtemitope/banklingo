@@ -26,7 +26,7 @@ class DisbursementManagement extends React.Component {
         super(props);
         this.state={
             user:'',
-            PageSize:30,
+            PageSize:25,
             CurrentPage:1,
             showDetails: false,
             endDate: "",
@@ -678,6 +678,9 @@ class DisbursementManagement extends React.Component {
                                         </li>
                                         <li>
                                             <NavLink to={'/disbursements/initiate'}>Initiate Disbursement</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to={'/disbursements/pending-review'}>Pending Review</NavLink>
                                         </li>
                                         <li>
                                             <NavLink to={'/disbursements/pending-approval'}>Pending Approval</NavLink>

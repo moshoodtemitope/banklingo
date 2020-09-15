@@ -99,12 +99,17 @@ import{
 
 import{
     getDisbursementsReducer,
+    getPendingApprovalDisbursementReducer,
+    getPendingReviewDisbursementReducer,
     postDisbursementReducer,
     getDisbursementBanksReducer,
     confirmPostDisbursementReducer,
     approveOrRejectPostDisbursementReducer,
+    approveOrRejectReviewedDisbursementReducer,
     rejectPostDisbursementReducer,
-    getDisbursementByRefReducer
+    getDisbursementByRefReducer,
+    getInwardsNIPReducer,
+    getOutwardsNIPReducer
     
 } from './disbursment/disbursment.reducer'
 
@@ -292,12 +297,17 @@ export const clients ={
 
 export const disbursment ={
     getDisbursementsReducer,
+    getPendingApprovalDisbursementReducer,
+    getPendingReviewDisbursementReducer,
     getDisbursementBanksReducer,
     postDisbursementReducer,
     confirmPostDisbursementReducer,
     approveOrRejectPostDisbursementReducer,
+    approveOrRejectReviewedDisbursementReducer,
     rejectPostDisbursementReducer,
-    getDisbursementByRefReducer
+    getDisbursementByRefReducer,
+    getInwardsNIPReducer,
+    getOutwardsNIPReducer
 }
 
 export const products ={

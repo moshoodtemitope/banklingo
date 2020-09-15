@@ -476,12 +476,15 @@ class ViewLoanAccount extends React.Component {
                                     <th>Username</th>
                                     <th>Action</th>
                                     <th>Affected Customer</th>
+                                    <th>Affected Item Name</th>
+                                    <th>Affected Item Id</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -529,6 +532,8 @@ class ViewLoanAccount extends React.Component {
                                     <th>Username</th>
                                     <th>Action</th>
                                     <th>Affected Customer</th>
+                                    <th>Affected Item Name</th>
+                                    <th>Affected Item Id</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
@@ -543,6 +548,8 @@ class ViewLoanAccount extends React.Component {
                                                     <td>{eachActivity.userName}</td>
                                                     <td>{eachActivity.action}</td>
                                                     <td>{eachActivity.affectedCustomerName}</td>
+                                                    <td>{eachActivity.affectedItemName}</td>
+                                                    <td>{eachActivity.affectedItemId}</td>
                                                 </tr>
                                             </Fragment>
                                         )
@@ -607,6 +614,8 @@ class ViewLoanAccount extends React.Component {
                                     <th>Username</th>
                                     <th>Action</th>
                                     <th>Affected Customer</th>
+                                    <th>Affected Item Name</th>
+                                    <th>Affected Item Id</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
@@ -621,6 +630,8 @@ class ViewLoanAccount extends React.Component {
                                                     <td>{eachActivity.userName}</td>
                                                     <td>{eachActivity.action}</td>
                                                     <td>{eachActivity.affectedCustomerName}</td>
+                                                    <td>{eachActivity.affectedItemName}</td>
+                                                    <td>{eachActivity.affectedItemId}</td>
                                                 </tr>
                                             </Fragment>
                                         )
@@ -669,12 +680,15 @@ class ViewLoanAccount extends React.Component {
                                     <th>Username</th>
                                     <th>Action</th>
                                     <th>Affected Customer</th>
+                                    <th>Affected Item Name</th>
+                                    <th>Affected Item Id</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    {/* <td></td> */}
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -1098,6 +1112,9 @@ class ViewLoanAccount extends React.Component {
                                     {this.state.showAmountPaid && 
                                         <th className="borderdright">Penalty Paid</th>
                                     }
+                                    {this.state.showAmountPaid && 
+                                        <th className="borderdright">Total Paid</th>
+                                    }
                                     {this.state.showAmountDue && 
                                         <th className="borderdleft">Principal Due</th>
                                     }
@@ -1113,7 +1130,8 @@ class ViewLoanAccount extends React.Component {
                                     {this.state.showAmountDue && 
                                         <th className="borderdright">Total Due</th>
                                     }
-                                    <th>Total Balance</th>
+                                    {/* <th>Total Balance</th> */}
+                                    <th>State</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1123,48 +1141,53 @@ class ViewLoanAccount extends React.Component {
                                             <tr key={index}>
                                                 <td>{index}</td>
                                                 <td>{(eachSchedule.installmentDate!==null && eachSchedule.installmentDate!=="")? getDateFromISO(eachSchedule.installmentDate):"-"}</td>
-                                                <td>{(eachSchedule.paymentDue!==null && eachSchedule.paymentDue>0)? numberWithCommas(eachSchedule.paymentDue, true): "-"}</td>
+                                                <td>{(eachSchedule.paymentDue!==null && eachSchedule.paymentDue>0)? `₦${numberWithCommas(eachSchedule.paymentDue, true)}`: "-"}</td>
                                                 {/* <td>{numberWithCommas(eachSchedule.interestRate)}</td> */}
                                                 {this.state.showAmountExpected===true && 
-                                                    <td className="borderdleft">{( eachSchedule.loanScheduleExpected.expectedPrincipal!==null && eachSchedule.loanScheduleExpected.expectedPrincipal>0) ? numberWithCommas(eachSchedule.loanScheduleExpected.expectedPrincipal, true) : "-"}</td>
+                                                    <td className="borderdleft">{( eachSchedule.loanScheduleExpected.expectedPrincipal!==null && eachSchedule.loanScheduleExpected.expectedPrincipal>0) ? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedPrincipal, true)}` : "-"}</td>
                                                 }
                                                 {this.state.showAmountExpected===true && 
-                                                    <td>{(eachSchedule.loanScheduleExpected.expectedInterest !==null && eachSchedule.loanScheduleExpected.expectedInterest>0) ? numberWithCommas(eachSchedule.loanScheduleExpected.expectedInterest, true) : "-"}</td>
+                                                    <td>{(eachSchedule.loanScheduleExpected.expectedInterest !==null && eachSchedule.loanScheduleExpected.expectedInterest>0) ? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedInterest, true)}` : "-"}</td>
                                                 }
                                                 {this.state.showAmountExpected===true && 
-                                                    <td>{(eachSchedule.loanScheduleExpected.expectedFees!==null && eachSchedule.loanScheduleExpected.expectedFees >0)? numberWithCommas(eachSchedule.loanScheduleExpected.expectedFees, true) : "-"}</td>
+                                                    <td>{(eachSchedule.loanScheduleExpected.expectedFees!==null && eachSchedule.loanScheduleExpected.expectedFees >0)? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedFees, true)}` : "-"}</td>
                                                 }
                                                 {this.state.showAmountExpected===true && 
-                                                    <td className="borderdright">{(eachSchedule.loanScheduleExpected.expectedPenalty!==null && eachSchedule.loanScheduleExpected.expectedPenalty>0)? numberWithCommas(eachSchedule.loanScheduleExpected.expectedPenalty, true):"-"}</td>
+                                                    <td className="borderdright">{(eachSchedule.loanScheduleExpected.expectedPenalty!==null && eachSchedule.loanScheduleExpected.expectedPenalty>0)? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedPenalty, true)}`:"-"}</td>
                                                 }
                                                 {this.state.showAmountPaid && 
-                                                    <td className="borderdleft">{(eachSchedule.loanSchedulePaid.principalPaid!==null && eachSchedule.loanSchedulePaid.principalPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.principalPaid, true):"-"}</td>
+                                                    <td className="borderdleft">{(eachSchedule.loanSchedulePaid.principalPaid!==null && eachSchedule.loanSchedulePaid.principalPaid>0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.principalPaid, true)}`:"-"}</td>
                                                 }
                                                 {this.state.showAmountPaid && 
-                                                    <td>{(eachSchedule.loanSchedulePaid.feesPaid!==null && eachSchedule.loanSchedulePaid.feesPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.feesPaid, true):"-"}</td>
+                                                    <td>{(eachSchedule.loanSchedulePaid.feesPaid!==null && eachSchedule.loanSchedulePaid.feesPaid>0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.feesPaid, true)}`:"-"}</td>
                                                 }
                                                 {this.state.showAmountPaid && 
-                                                    <td>{(eachSchedule.loanSchedulePaid.interestPaid!==null && eachSchedule.loanSchedulePaid.interestPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.interestPaid, true):"-"}</td>
+                                                    <td>{(eachSchedule.loanSchedulePaid.interestPaid!==null && eachSchedule.loanSchedulePaid.interestPaid>0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.interestPaid, true)}`:"-"}</td>
                                                 }
                                                 {this.state.showAmountPaid && 
-                                                    <td className="borderdright">{(eachSchedule.loanSchedulePaid.penalyPaid!==null && eachSchedule.loanSchedulePaid.penalyPaid >0)? numberWithCommas(eachSchedule.loanSchedulePaid.penalyPaid, true):"-"}</td>
+                                                    <td className="borderdright">{(eachSchedule.loanSchedulePaid.penalyPaid!==null && eachSchedule.loanSchedulePaid.penalyPaid >0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.penalyPaid, true)}`:"-"}</td>
+                                                }
+                                                {this.state.showAmountPaid && 
+                                                    <td className="borderdright">{(eachSchedule.loanSchedulePaid.totalPaid!==null && eachSchedule.loanSchedulePaid.totalPaid >0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.totalPaid, true)}`:"-"}</td>
                                                 }
                                                 {this.state.showAmountDue && 
-                                                    <td className="borderdleft">{(eachSchedule.loanScheduleDue.principalDue!==null && eachSchedule.loanScheduleDue.principalDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.principalDue, true):"-"}</td>
+                                                    <td className="borderdleft">{(eachSchedule.loanScheduleDue.principalDue!==null && eachSchedule.loanScheduleDue.principalDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.principalDue, true)}`:"-"}</td>
+                                                }
+                                                
+                                                {this.state.showAmountDue && 
+                                                    <td>{(eachSchedule.loanScheduleDue.interestDue!==null && eachSchedule.loanScheduleDue.interestDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.interestDue, true)}`:"-"}</td>
                                                 }
                                                 {this.state.showAmountDue && 
-                                                    <td>{(eachSchedule.loanScheduleDue.interestDue!==null && eachSchedule.loanScheduleDue.interestDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.interestDue, true):"-"}</td>
+                                                    <td>{(eachSchedule.loanScheduleDue.feesDue!==null && eachSchedule.loanScheduleDue.feesDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.feesDue, true)}`:"-"}</td>
                                                 }
                                                 {this.state.showAmountDue && 
-                                                    <td>{(eachSchedule.loanScheduleDue.feesDue!==null && eachSchedule.loanScheduleDue.feesDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.feesDue, true):"-"}</td>
+                                                    <td>{(eachSchedule.loanScheduleDue.penalyDue!==null && eachSchedule.loanScheduleDue.penalyDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.penalyDue, true)}`:"-"}</td>
                                                 }
                                                 {this.state.showAmountDue && 
-                                                    <td>{(eachSchedule.loanScheduleDue.penalyDue!==null && eachSchedule.loanScheduleDue.penalyDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.penalyDue, true):"-"}</td>
+                                                    <td className="borderdright">{(eachSchedule.loanScheduleDue.totalDue!==null && eachSchedule.loanScheduleDue.totalDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.totalDue,true)}`:"-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
-                                                    <td className="borderdright">{(eachSchedule.loanScheduleDue.totalDue!==null && eachSchedule.loanScheduleDue.totalDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.totalDue):"-"}</td>
-                                                }
-                                                <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td>
+                                                {/* <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td> */}
+                                                <td>{(eachSchedule.stateDescription !==null && eachSchedule.stateDescription!==undefined) ? eachSchedule.stateDescription : "-"}</td>
                                             </tr>
                                         )
                                     })
@@ -1173,43 +1196,46 @@ class ViewLoanAccount extends React.Component {
                                 <tr>
                                     <td colSpan="3" className="bolden borderdright">Totals</td>
                                     {this.state.showAmountExpected===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountExpected===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountExpected===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountExpected===true && 
-                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty, true) : "-"} </td>
+                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountPaid===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountPaid===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountPaid===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountPaid===true && 
-                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid, true) : "-"} </td>
+                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid, true)}` : "-"} </td>
+                                    }
+                                    {this.state.showAmountPaid===true && 
+                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountDue===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountDue===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountDue===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountDue===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue, true) : "-"} </td>
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue, true)}` : "-"} </td>
                                     }
                                     {this.state.showAmountDue===true && 
-                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue, true) : "-"} </td>
+                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue, true)}` : "-"} </td>
                                     }
                                     <td className="">-</td>
                                 </tr>
@@ -1360,7 +1386,7 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachTxt.transactionDate, true)}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
+                                                <td>₦{numberWithCommas(eachTxt.transactionAmount, true)}</td>
                                             </tr>
                                         )
                                     })
@@ -1467,7 +1493,7 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachTxt.transactionDate, true)}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
+                                                <td>₦{numberWithCommas(eachTxt.transactionAmount, true)}</td>
                                             </tr>
                                         )
                                     })
@@ -1598,7 +1624,7 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Interest Rate</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.interestRate, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.interestRate, true)}%</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Paid</td>

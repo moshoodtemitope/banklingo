@@ -23,6 +23,10 @@ export const routes = {
     HIT_DISBURSEMENT: BASEURL + '/api/Disbursment',
 
 
+     // NIP endpoints
+    HIT_NIP: BASEURL + '/api/NIPRequest',
+
+
     // Administration endpoints
     
     GET_BRANCHES: BASEURL + '/api/branch',
