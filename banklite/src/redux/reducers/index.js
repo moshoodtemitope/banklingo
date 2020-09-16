@@ -105,6 +105,14 @@ const depositsReducers = combineReducers({
 
 const loansReducers = combineReducers({
     getLoansReducer: loans.getLoansReducer, 
+    getPendingLoansReducer: loans.getPendingLoansReducer, 
+    getApprovedLoansReducer: loans.getApprovedLoansReducer, 
+    getRejectedLoansReducer: loans.getRejectedLoansReducer, 
+    getActiveLoansReducer: loans.getActiveLoansReducer, 
+    getLoansInArrearsReducer: loans.getLoansInArrearsReducer, 
+    getClosedLoansReducer: loans.getClosedLoansReducer, 
+    getClosedWrittenOffLoansReducer: loans.getClosedWrittenOffLoansReducer, 
+    getClosedWithdrawnLoansReducer: loans.getClosedWithdrawnLoansReducer, 
     getClientLoansReducer: loans.getClientLoansReducer, 
     getLoanTransactionsReducer: loans.getLoanTransactionsReducer, 
     getAccountLoanTransactionReducer: loans.getAccountLoanTransactionReducer, 

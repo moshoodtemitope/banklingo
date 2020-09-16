@@ -3,7 +3,7 @@ import * as React from "react";
 
 import {Fragment} from "react";
 import { connect } from 'react-redux';
-
+import {history} from '../../_helpers/history'
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
@@ -88,6 +88,35 @@ class LoansManagement extends React.Component {
             dispatch(loanActions.getLoans(params,tempData));
         }else{
             dispatch(loanActions.getLoans(params));
+        }
+    }
+    filterLoanState = (loanState)=>{
+
+        console.log("loans state is", loanState.target.value);
+        let loansStatus = loanState.target.value;
+        if(loansStatus==="2"){
+            history.push("/all-loans/pending")
+        }
+        if(loansStatus==="3"){
+            history.push("/all-loans/approved")
+        }
+        if(loansStatus==="4"){
+            history.push("/all-loans/rejected")
+        }
+        if(loansStatus==="5"){
+            history.push("/all-loans/active")
+        }
+        if(loansStatus==="6"){
+            history.push("/all-loans/arrears")
+        }
+        if(loansStatus==="7"){
+            history.push("/all-loans/closed")
+        }
+        if(loansStatus==="8"){
+            history.push("/all-loans/closed-off")
+        }
+        if(loansStatus==="9"){
+            history.push("/all-loans/closed-withdrawn")
         }
     }
 
@@ -199,10 +228,17 @@ class LoansManagement extends React.Component {
                                     <Form className="one-liner">
 
                                             <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
+                                                <Form.Control as="select" size="sm"
+                                                    onChange={(e)=>this.filterLoanState(e)}
+                                                    >
+                                                    <option value="2">Pending Approval</option>
+                                                    <option value="3">Approved</option>
+                                                    <option value="4">Rejected</option>
+                                                    <option value="5">Active</option>
+                                                    <option value="6">In Arrears</option>
+                                                    <option value="7">Closed</option>
+                                                    <option value="8">Closed Written Off</option>
+                                                    <option value="9">Closed Written Withdrawn</option>
                                                 </Form.Control>
                                             </Form.Group>
 
@@ -322,10 +358,17 @@ class LoansManagement extends React.Component {
                                     <Form className="one-liner">
 
                                             <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
+                                                <Form.Control as="select" size="sm"
+                                                    onChange={(e)=>this.filterLoanState(e)}
+                                                    >
+                                                    <option value="2">Pending Approval</option>
+                                                    <option value="3">Approved</option>
+                                                    <option value="4">Rejected</option>
+                                                    <option value="5">Active</option>
+                                                    <option value="6">In Arrears</option>
+                                                    <option value="7">Closed</option>
+                                                    <option value="8">Closed Written Off</option>
+                                                    <option value="9">Closed Written Withdrawn</option>
                                                 </Form.Control>
                                             </Form.Group>
 
@@ -452,10 +495,18 @@ class LoansManagement extends React.Component {
                                     <Form className="one-liner">
 
                                             <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
+                                                <Form.Control as="select" size="sm"
+                                                    onChange={(e)=>this.filterLoanState(e)}
+                                                    >
+                                                    <option value="0">All Loans</option>
+                                                    <option value="2">Pending Approval</option>
+                                                    <option value="3">Approved</option>
+                                                    <option value="4">Rejected</option>
+                                                    <option value="5">Active</option>
+                                                    <option value="6">In Arrears</option>
+                                                    <option value="7">Closed</option>
+                                                    <option value="8">Closed Written Off</option>
+                                                    <option value="9">Closed Withdrawn</option>
                                                 </Form.Control>
                                             </Form.Group>
 

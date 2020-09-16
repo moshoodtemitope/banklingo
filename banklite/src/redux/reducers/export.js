@@ -64,6 +64,14 @@ import{
 
 import{
     getLoansReducer,
+    getPendingLoansReducer,
+    getApprovedLoansReducer,
+    getRejectedLoansReducer,
+    getActiveLoansReducer,
+    getLoansInArrearsReducer,
+    getClosedLoansReducer,
+    getClosedWrittenOffLoansReducer,
+    getClosedWithdrawnLoansReducer,
     getClientLoansReducer,
     getLoanTransactionsReducer,
     getAccountLoanTransactionReducer,
@@ -231,6 +239,14 @@ export const accounting = {
 
 export const loans = {
     getLoansReducer,
+    getPendingLoansReducer,
+    getApprovedLoansReducer,
+    getRejectedLoansReducer,
+    getActiveLoansReducer,
+    getLoansInArrearsReducer,
+    getClosedLoansReducer,
+    getClosedWrittenOffLoansReducer,
+    getClosedWithdrawnLoansReducer,
     getClientLoansReducer,
     getLoanTransactionsReducer,
     getAccountLoanTransactionReducer,

@@ -29,6 +29,7 @@ class ActiveLoans extends React.Component {
             CurrentSelectedPage: 1,
             endDate: "",
             startDate: "",
+            LoanState:5
         }
 
         
@@ -47,7 +48,7 @@ class ActiveLoans extends React.Component {
     getLoans = (paramters) => {
         const { dispatch } = this.props;
 
-        dispatch(loanActions.getLoans(paramters));
+        dispatch(loanActions.getActiveLoans(paramters));
     }
 
     handleDateChangeRaw = (e) => {
@@ -85,9 +86,9 @@ class ActiveLoans extends React.Component {
         // this.getLoans(params);
 
         if(tempData){
-            dispatch(loanActions.getLoans(params,tempData));
+            dispatch(loanActions.getActiveLoans(params,tempData));
         }else{
-            dispatch(loanActions.getLoans(params));
+            dispatch(loanActions.getActiveLoans(params));
         }
     }
 
@@ -103,9 +104,9 @@ class ActiveLoans extends React.Component {
         // this.getLoans(params);
 
         if(tempData){
-            dispatch(loanActions.getLoans(params,tempData));
+            dispatch(loanActions.getActiveLoans(params,tempData));
         }else{
-            dispatch(loanActions.getLoans(params));
+            dispatch(loanActions.getActiveLoans(params));
         }
     }
 
@@ -122,9 +123,9 @@ class ActiveLoans extends React.Component {
 
         let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
         if(tempData){
-            dispatch(loanActions.getLoans(params,tempData));
+            dispatch(loanActions.getActiveLoans(params,tempData));
         }else{
-            dispatch(loanActions.getLoans(params));
+            dispatch(loanActions.getActiveLoans(params));
         }
     }
 
@@ -599,7 +600,7 @@ class ActiveLoans extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        getLoansRequest: state.loansReducers.getLoansReducer,
+        getLoansRequest: state.loansReducers.getActiveLoansReducer,
     };
 }
 

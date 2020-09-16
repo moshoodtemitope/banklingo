@@ -7,6 +7,14 @@ import { handleRequestErrors } from "../../../shared/utils";
 export const loanActions = {
     getLoans,
     getClientLoans,
+    getPendingLoans,
+    getApprovedLoans,
+    getRejectedLoans,
+    getActiveLoans,
+    getLoansInArrears,
+    getClosedLoans,
+    getClosedWrittenOffLoans,
+    getClosedWithdrawnLoans,
     getLoanTransactions,
     getAccountLoanTransaction,
     createLoanAccount,
@@ -53,6 +61,263 @@ function getLoans(params,tempData) {
     function failure(error) { return { type: loanAndDepositsConstants.GET_LOANS_FAILURE, error } }
 
 }
+
+function getPendingLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=2`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__PENDING_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__PENDING_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__PENDING_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__PENDING_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__PENDING_LOANS_FAILURE, error } }
+
+}
+
+function getApprovedLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=3`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__APPROVED_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__APPROVED_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__APPROVED_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__APPROVED_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__APPROVED_LOANS_FAILURE, error } }
+
+}
+
+function getRejectedLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=4`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__REJECTED_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__REJECTED_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__REJECTED_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__REJECTED_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__REJECTED_LOANS_FAILURE, error } }
+
+}
+
+function getActiveLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=5`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__ACTIVE_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__ACTIVE_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__ACTIVE_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__ACTIVE_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__ACTIVE_LOANS_FAILURE, error } }
+
+}
+
+function getLoansInArrears(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=6`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__ARREARS_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__ARREARS_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__ARREARS_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__ARREARS_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__ARREARS_LOANS_FAILURE, error } }
+
+}
+
+function getClosedLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=7`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__CLOSED_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__CLOSED_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__CLOSED_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__CLOSED_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__CLOSED_LOANS_FAILURE, error } }
+
+}
+
+function getClosedWrittenOffLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=8`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_FAILURE, error } }
+
+}
+
+function getClosedWithdrawnLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=9`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_FAILURE, error } }
+
+}
+
 
 function getClientLoans(clientId,params,tempData) {
 

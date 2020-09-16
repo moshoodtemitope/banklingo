@@ -29,6 +29,7 @@ class PendingLoans extends React.Component {
             CurrentSelectedPage: 1,
             endDate: "",
             startDate: "",
+            LoanState:2
         }
 
         
@@ -47,7 +48,7 @@ class PendingLoans extends React.Component {
     getLoans = (paramters) => {
         const { dispatch } = this.props;
 
-        dispatch(loanActions.getLoans(paramters));
+        dispatch(loanActions.getPendingLoans(paramters));
     }
 
     handleDateChangeRaw = (e) => {
@@ -85,9 +86,9 @@ class PendingLoans extends React.Component {
         // this.getLoans(params);
 
         if(tempData){
-            dispatch(loanActions.getLoans(params,tempData));
+            dispatch(loanActions.getPendingLoans(params,tempData));
         }else{
-            dispatch(loanActions.getLoans(params));
+            dispatch(loanActions.getPendingLoans(params));
         }
     }
 
@@ -103,9 +104,9 @@ class PendingLoans extends React.Component {
         // this.getLoans(params);
 
         if(tempData){
-            dispatch(loanActions.getLoans(params,tempData));
+            dispatch(loanActions.getPendingLoans(params,tempData));
         }else{
-            dispatch(loanActions.getLoans(params));
+            dispatch(loanActions.getPendingLoans(params));
         }
     }
 
@@ -122,9 +123,9 @@ class PendingLoans extends React.Component {
 
         let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
         if(tempData){
-            dispatch(loanActions.getLoans(params,tempData));
+            dispatch(loanActions.getPendingLoans(params,tempData));
         }else{
-            dispatch(loanActions.getLoans(params));
+            dispatch(loanActions.getPendingLoans(params));
         }
     }
 
@@ -133,7 +134,7 @@ class PendingLoans extends React.Component {
 
         let saveRequestData= getLoansRequest.request_data!==undefined?getLoansRequest.request_data.tempData:null;
         switch (getLoansRequest.request_status) {
-            case (loanAndDepositsConstants.GET_LOANS_PENDING):
+            case (loanAndDepositsConstants.GET__PENDING_LOANS_PENDING):
                 if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                     return (
                         <div className="loading-content">
@@ -312,7 +313,7 @@ class PendingLoans extends React.Component {
                     )
                 }
 
-            case (loanAndDepositsConstants.GET_LOANS_SUCCESS):
+            case (loanAndDepositsConstants.GET__PENDING_LOANS_SUCCESS):
                 let allLoans = getLoansRequest.request_data.response.data;
                 if (allLoans !== undefined) {
                     if (allLoans.result.length >= 1) {
@@ -548,7 +549,7 @@ class PendingLoans extends React.Component {
                 } else {
                     return null;
                 }
-            case (loanAndDepositsConstants.GET_LOANS_FAILURE):
+            case (loanAndDepositsConstants.GET__PENDING_LOANS_FAILURE):
                 return (
                     <div className="loading-content errormsg">
                         <div>{getLoansRequest.request_data.error}</div>
@@ -599,7 +600,7 @@ class PendingLoans extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        getLoansRequest: state.loansReducers.getLoansReducer,
+        getLoansRequest: state.loansReducers.getPendingLoansReducer,
     };
 }
 

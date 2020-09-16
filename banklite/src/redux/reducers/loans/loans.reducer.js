@@ -26,6 +26,214 @@ export function getLoansReducer(state=[], action) {
     }
 }
 
+export function getPendingLoansReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__PENDING_LOANS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__PENDING_LOANS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__PENDING_LOANS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__PENDING_LOANS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__PENDING_LOANS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__PENDING_LOANS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getApprovedLoansReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__APPROVED_LOANS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__APPROVED_LOANS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__APPROVED_LOANS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__APPROVED_LOANS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__APPROVED_LOANS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__APPROVED_LOANS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getRejectedLoansReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__REJECTED_LOANS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__REJECTED_LOANS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__REJECTED_LOANS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__REJECTED_LOANS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__REJECTED_LOANS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__REJECTED_LOANS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getActiveLoansReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__ACTIVE_LOANS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__ACTIVE_LOANS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__ACTIVE_LOANS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__ACTIVE_LOANS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__ACTIVE_LOANS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__ACTIVE_LOANS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getLoansInArrearsReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__ARREARS_LOANS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__ARREARS_LOANS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__ARREARS_LOANS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__ARREARS_LOANS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__ARREARS_LOANS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__ARREARS_LOANS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getClosedLoansReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__CLOSED_LOANS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSED_LOANS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__CLOSED_LOANS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSED_LOANS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__CLOSED_LOANS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSED_LOANS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getClosedWrittenOffLoansReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSEDWRITTENOFF_LOANS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getClosedWithdrawnLoansReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__CLOSEDWITHDRAWN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getClientLoansReducer(state=[], action) {
     switch (action.type) {
         case loanAndDepositsConstants.GET_CLIENTLOANS_PENDING:
