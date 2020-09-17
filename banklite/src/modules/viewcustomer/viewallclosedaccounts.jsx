@@ -72,7 +72,8 @@ class ViewClosedAccounts extends React.Component {
                                                     <tbody>
                                                         {customerLoanAccounts.result!==null && (customerLoanAccounts.result.length>=1) &&
                                                             customerLoanAccounts.result.map((eachAccount, index)=>{
-                                                                if(eachAccount.loanStateDescription==="Rejected" || eachAccount.loanStateDescription==="Closed Withdrawn" || eachAccount.loanStateDescription==="Closed"){
+                                                                // if(eachAccount.loanStateDescription==="Rejected" || eachAccount.loanStateDescription==="Closed Withdrawn" || eachAccount.loanStateDescription==="Closed"){
+                                                                if(eachAccount.loanState===4  || eachAccount.loanState===7 || eachAccount.loanState===8 || eachAccount.loanState===9 ){
                                                                     return(
                                                                         <tr key={index}>
                                                                             <td>{eachAccount.clientName}</td>
@@ -124,57 +125,7 @@ class ViewClosedAccounts extends React.Component {
                     )
             }
     }
-    renderClosedAccounts = ()=>{
-        return (
-            <div className="row">
-
-                <div className="col-sm-12">
-                    <div className="middle-content">
-                        <div className="customerprofile-tabs">
-                            <div className="closedaccounts">
-                                <div className="amounts-wrap w-65">
-                                    <div className="eachamount">
-                                        <h6>Max Loan Size</h6>
-                                        <div className="amounttext">₦205,800.00</div>
-                                    </div>
-                                    <div className="eachamount">
-                                        <h6>On Time Repayment Rate</h6>
-                                        <div className="amounttext">0.00%</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h6>General</h6>
-                                    <TableComponent classnames="striped bordered hover">
-                                        <thead>
-                                            <th>Account </th>
-                                            <th>Account</th>
-                                            <th>On Time Repayment Rate</th>
-                                            <th>Closure Date</th>
-                                            <th>Closure Reason</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <NavLink to="/customer/3223/closedaccounts/4384393">
-                                                        2001014672 - MoneyPal Regular
-                                                                            </NavLink>
-                                                </td>
-                                                <td>₦205,800.00</td>
-                                                <td>0.00%</td>
-                                                <td>18-02-2019</td>
-                                                <td>Written Off</td>
-                                            </tr>
-                                        </tbody>
-                                    </TableComponent>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+   
     
 
     render() {

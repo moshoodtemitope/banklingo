@@ -134,7 +134,7 @@ class ActiveLoans extends React.Component {
 
         let saveRequestData= getLoansRequest.request_data!==undefined?getLoansRequest.request_data.tempData:null;
         switch (getLoansRequest.request_status) {
-            case (loanAndDepositsConstants.GET_LOANS_PENDING):
+            case (loanAndDepositsConstants.GET__ACTIVE_LOANS_PENDING):
                 if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                     return (
                         <div className="loading-content">
@@ -313,7 +313,7 @@ class ActiveLoans extends React.Component {
                     )
                 }
 
-            case (loanAndDepositsConstants.GET_LOANS_SUCCESS):
+            case (loanAndDepositsConstants.GET__ACTIVE_LOANS_SUCCESS):
                 let allLoans = getLoansRequest.request_data.response.data;
                 if (allLoans !== undefined) {
                     if (allLoans.result.length >= 1) {
@@ -549,7 +549,7 @@ class ActiveLoans extends React.Component {
                 } else {
                     return null;
                 }
-            case (loanAndDepositsConstants.GET_LOANS_FAILURE):
+            case (loanAndDepositsConstants.GET__ACTIVE_LOANS_FAILURE):
                 return (
                     <div className="loading-content errormsg">
                         <div>{getLoansRequest.request_data.error}</div>
