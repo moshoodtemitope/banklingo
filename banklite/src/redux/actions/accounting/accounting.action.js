@@ -159,7 +159,8 @@ function getJournalEntries  (payload, tempData){
                 
             // }
 
-            url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            // url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            url = routes.JOURNAL_ENTRIES+`?${payload}`;
 
         let consume = ApiService.request(url, "GET", null);
         dispatch(request(consume, tempData));

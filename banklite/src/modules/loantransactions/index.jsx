@@ -27,6 +27,7 @@ class LoanTransactions extends React.Component {
             CurrentSelectedPage: 1,
             endDate: "",
             startDate: "",
+            SearchText:""
         }
         
     }
@@ -98,6 +99,32 @@ class LoanTransactions extends React.Component {
         });
     }
 
+    searchTxtn = (e,tempData)=>{
+        e.preventDefault()
+        const {dispatch} = this.props;
+        let {PageSize,CurrentPage, BranchId, SearchText, endDate, startDate} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+        if(SearchText!=="" || endDate!=="" || startDate!==""){
+            if(endDate!==""){
+                endDate = endDate.toISOString()
+            }
+            if(startDate!==""){
+                startDate = startDate.toISOString()
+            }
+            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+
+            if(tempData){
+                dispatch(loanActions.getLoanTransactions(params,tempData));
+            }else{
+                dispatch(loanActions.getLoanTransactions(params));
+            }
+        }
+    }
+
 
     renderLoanTransactions = () => {
         let getLoanTransactionsRequest = this.props.getLoanTransactions;
@@ -138,6 +165,7 @@ class LoanTransactions extends React.Component {
                                         <th>Type</th>
                                         <th>Transaction Amount</th>
                                         <th>UserName</th>
+                                        <th>Narration</th>
                                         <th>Transaction Date</th>
                                         {/* <th>Entry Date</th> */}
                                     </tr>
@@ -150,7 +178,7 @@ class LoanTransactions extends React.Component {
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        {/* <td></td> */}
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </TableComponent>
@@ -161,7 +189,7 @@ class LoanTransactions extends React.Component {
                     return (
                         <div>
                             <div className="heading-with-cta">
-                                <Form className="one-liner">
+                                <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, saveRequestData)} >
 
                                     <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                         <Form.Control as="select" size="sm">
@@ -204,12 +232,16 @@ class LoanTransactions extends React.Component {
                                         <input type="text"
                                             className="form-control-sm search-table form-control"
                                             placeholder="Search text"
+                                            value={this.state.SearchText}
+                                            onChange={(e) => {
+                                                this.setState({ SearchText: e.target.value.trim() })
+                                            }}
                                         />
                                         {/* {errors.startDate && touched.startDate ? (
-                                                <span className="invalid-feedback">{errors.startDate}</span>
-                                            ) : null} */}
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
                                     </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
                                 </Form>
 
                                 <div className="pagination-wrap">
@@ -233,6 +265,7 @@ class LoanTransactions extends React.Component {
                                         <th>Type</th>
                                         <th>Transaction Amount</th>
                                         <th>UserName</th>
+                                        <th>Narration</th>
                                         <th>Transaction Date</th>
                                         {/* <th>Entry Date</th> */}
                                     </tr>
@@ -248,6 +281,7 @@ class LoanTransactions extends React.Component {
                                                         <td>{eachTransaction.typeDescription}</td>
                                                         <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true)}</td>
                                                         <td>{eachTransaction.userName}</td>
+                                                        <td>{eachTransaction.narration}</td>
                                                         <td>{eachTransaction.transactionDate}</td>
                                                         {/* <td>{eachTransaction.entryDate}</td> */}
                                                     </tr>
@@ -271,56 +305,60 @@ class LoanTransactions extends React.Component {
                         return (
                             <div>
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allLoanTransactions.result)} >
 
-                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
-                                                </Form.Control>
-                                            </Form.Group>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
 
-                                            <Form.Group className="table-filters">
-                                                <DatePicker
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleStartDatePicker}
-                                                    selected={this.state.startDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    placeholderText="Start date"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm "
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
 
-                                                />
-                                                <DatePicker placeholderText="End  date"
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleEndDatePicker}
-                                                    selected={this.state.endDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm"
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
 
-                                                />
-                                                <input type="text"
-                                                    className="form-control-sm search-table form-control"
-                                                    placeholder="Search text"
-                                                />
-                                                {/* {errors.startDate && touched.startDate ? (
-                                                <span className="invalid-feedback">{errors.startDate}</span>
-                                            ) : null} */}
-                                            </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        </Form>
+                                            />
+                                            <input type="text"
+                                                className="form-control-sm search-table form-control"
+                                                placeholder="Search text"
+                                                value={this.state.SearchText}
+                                                onChange={(e) => {
+                                                    this.setState({ SearchText: e.target.value.trim() })
+                                                }}
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                    </Form>
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
@@ -353,6 +391,7 @@ class LoanTransactions extends React.Component {
                                             <th>Type</th>
                                             <th>Transaction Amount</th>
                                             <th>UserName</th>
+                                            <th>Narration</th>
                                             <th>Transaction Date</th>
                                             {/* <th>Entry Date</th> */}
                                         </tr>
@@ -368,6 +407,8 @@ class LoanTransactions extends React.Component {
                                                             <td>{eachTransaction.typeDescription}</td>
                                                             <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true)}</td>
                                                             <td>{eachTransaction.userName}</td>
+                                                            <td>{eachTransaction.narration}</td>
+                                                            {/* <td></td> */}
                                                             <td>{eachTransaction.transactionDate}</td>
                                                             {/* <td>{eachTransaction.entryDate}</td> */}
                                                         </tr>
@@ -386,56 +427,60 @@ class LoanTransactions extends React.Component {
                         return(
                             <div className="no-records">
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allLoanTransactions.result)} >
 
-                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
-                                                </Form.Control>
-                                            </Form.Group>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
 
-                                            <Form.Group className="table-filters">
-                                                <DatePicker
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleStartDatePicker}
-                                                    selected={this.state.startDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    placeholderText="Start date"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm "
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
 
-                                                />
-                                                <DatePicker placeholderText="End  date"
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleEndDatePicker}
-                                                    selected={this.state.endDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm"
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
 
-                                                />
-                                                <input type="text"
-                                                    className="form-control-sm search-table form-control"
-                                                    placeholder="Search text"
-                                                />
-                                                {/* {errors.startDate && touched.startDate ? (
-                                                <span className="invalid-feedback">{errors.startDate}</span>
-                                            ) : null} */}
-                                            </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        </Form>
+                                            />
+                                            <input type="text"
+                                                className="form-control-sm search-table form-control"
+                                                placeholder="Search text"
+                                                value={this.state.SearchText}
+                                                onChange={(e) => {
+                                                    this.setState({ SearchText: e.target.value.trim() })
+                                                }}
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                    </Form>
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
@@ -455,6 +500,7 @@ class LoanTransactions extends React.Component {
                                             <th>Type</th>
                                             <th>Transaction Amount</th>
                                             <th>UserName</th>
+                                            <th>Narration</th>
                                             <th>Transaction Date</th>
                                             {/* <th>Entry Date</th> */}
                                         </tr>
@@ -467,7 +513,7 @@ class LoanTransactions extends React.Component {
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            {/* <td></td> */}
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </TableComponent>

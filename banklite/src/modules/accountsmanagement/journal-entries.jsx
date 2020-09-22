@@ -12,6 +12,8 @@ import Modal from 'react-bootstrap/Modal'
 import DatePicker from '../../_helpers/datepickerfield'
 import "react-datepicker/dist/react-datepicker.css";
 
+import  DatePickerEx from "react-datepicker";
+
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
@@ -38,7 +40,10 @@ class JournalEntries extends React.Component {
             show:false,
             CurrentPage: 1,
             PageSize: 25,
-            totalComparison:null
+            totalComparison:null,
+            endDate: "",
+            startDate: "",
+            SearchText:""
         }
 
         
@@ -55,11 +60,16 @@ class JournalEntries extends React.Component {
          let payload ={
              PageSize: this.state.PageSize,
              CurrentPage:this.state.CurrentPage
-         }
+         },
+         {CurrentPage,PageSize, BranchId,startDate, endDate, SearchText} = this.state;
+
+         let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
          if(tempData){
-            dispatch(acoountingActions.getJournalEntries(payload, tempData));
+            dispatch(acoountingActions.getJournalEntries(params, tempData));
+            // dispatch(acoountingActions.getJournalEntries(payload, tempData));
          }else{
-            dispatch(acoountingActions.getJournalEntries(payload));
+            dispatch(acoountingActions.getJournalEntries(params));
+            // dispatch(acoountingActions.getJournalEntries(payload));
          }
          
      }
@@ -93,39 +103,65 @@ class JournalEntries extends React.Component {
         
     }
 
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+    }
+    handleStartDatePicker = (startDate) => {
+        startDate.setHours(startDate.getHours() + 1);
+        
+        this.setState({ startDate }, ()=>{
+            if(this.state.endDate!==""){
+                //this.getHistory();
+            }
+        });
+    }
+
+    handleEndDatePicker = (endDate) => {
+        endDate.setHours(endDate.getHours() + 1);
+       
+        this.setState({ endDate }, ()=>{
+                if(this.state.startDate!==""){
+                    //this.getHistory();
+                }
+        });
+    }
+
     setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
         let sizeOfPage = PageSize.target.value,
-            {CurrentPage, BranchId,ClientState} = this.state;
+            {CurrentPage, BranchId,startDate, endDate, SearchText} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
-        let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         // this.getJournalEntries(params);
         let getJournalEntriesRequest = this.props.getJournalEntries;
         let saveRequestData= getJournalEntriesRequest.request_data!==undefined?getJournalEntriesRequest.request_data.tempData:null;
         // this.getJournalEntries(saveRequestData);
 
         const {dispatch} = this.props;
-         let payload ={
-             PageSize: sizeOfPage,
-             CurrentPage:this.state.CurrentPage
-         }
+        // let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        //  let payload ={
+        //      PageSize: sizeOfPage,
+        //      CurrentPage:this.state.CurrentPage
+        //  }
          if(tempData){
-            dispatch(acoountingActions.getJournalEntries(payload, tempData));
+            dispatch(acoountingActions.getJournalEntries(params, tempData));
+            // dispatch(acoountingActions.getJournalEntries(payload, tempData));
          }else{
-            dispatch(acoountingActions.getJournalEntries(payload));
+            dispatch(acoountingActions.getJournalEntries(params));
+            // dispatch(acoountingActions.getJournalEntries(payload));
          }
     }
 
     loadNextPage = (nextPage, tempData)=>{
-        console.log("dsdsd", nextPage);
+        // console.log("dsdsd", nextPage);
         const {dispatch} = this.props;
-        let {PageSize} = this.state;
+        let {PageSize, startDate, endDate, SearchText} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
-        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         // this.getTransactionChannels(params);
         
         let payload ={
@@ -134,9 +170,37 @@ class JournalEntries extends React.Component {
         }
 
         if(tempData){
-            dispatch(acoountingActions.getJournalEntries(payload,tempData));
+            dispatch(acoountingActions.getJournalEntries(params,tempData));
+            // dispatch(acoountingActions.getJournalEntries(payload,tempData));
         }else{
-            dispatch(acoountingActions.getJournalEntries(payload));
+            dispatch(acoountingActions.getJournalEntries(params));
+            // dispatch(acoountingActions.getJournalEntries(payload));
+        }
+    }
+
+    searchTxtn = (e,tempData)=>{
+        e.preventDefault()
+        const {dispatch} = this.props;
+        let {PageSize,CurrentPage, SearchText, endDate, startDate} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+        if(SearchText!=="" || endDate!=="" || startDate!==""){
+            if(endDate!==""){
+                endDate = endDate.toISOString()
+            }
+            if(startDate!==""){
+                startDate = startDate.toISOString()
+            }
+            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+
+            if(tempData){
+                dispatch(acoountingActions.getJournalEntries(params,tempData));
+            }else{
+                dispatch(acoountingActions.getJournalEntries(params));
+            }
         }
     }
 
@@ -707,7 +771,7 @@ class JournalEntries extends React.Component {
 
 
                             <div className="heading-with-cta">
-                                <Form className="one-liner">
+                                <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, saveRequestData)} >
 
                                     <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                         <Form.Control as="select" size="sm">
@@ -716,7 +780,50 @@ class JournalEntries extends React.Component {
                                             <option>Custom Filter</option>
                                         </Form.Control>
                                     </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+
+                                    <Form.Group className="table-filters">
+                                        <DatePickerEx
+                                            onChangeRaw={this.handleDateChangeRaw}
+                                            onChange={this.handleStartDatePicker}
+                                            selected={this.state.startDate}
+                                            dateFormat="d MMMM, yyyy"
+                                            peekNextMonth
+                                            showMonthDropdown
+                                            showYearDropdown
+                                            dropdownMode="select"
+                                            placeholderText="Start date"
+                                            maxDate={new Date()}
+                                            // className="form-control form-control-sm h-38px"
+                                            className="form-control form-control-sm "
+
+                                        />
+                                        <DatePickerEx placeholderText="End  date"
+                                            onChangeRaw={this.handleDateChangeRaw}
+                                            onChange={this.handleEndDatePicker}
+                                            selected={this.state.endDate}
+                                            dateFormat="d MMMM, yyyy"
+                                            peekNextMonth
+                                            showMonthDropdown
+                                            showYearDropdown
+                                            dropdownMode="select"
+                                            maxDate={new Date()}
+                                            // className="form-control form-control-sm h-38px"
+                                            className="form-control form-control-sm"
+
+                                        />
+                                        <input type="text"
+                                            className="form-control-sm search-table form-control"
+                                            placeholder="Search text"
+                                            value={this.state.SearchText}
+                                            onChange={(e) => {
+                                                this.setState({ SearchText: e.target.value.trim() })
+                                            }}
+                                        />
+                                        {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
                                 </Form>
 
                                 <div className="pagination-wrap">
@@ -781,7 +888,7 @@ class JournalEntries extends React.Component {
                                     >New Journal Entry</Button>
                                 </div>
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, JournalEntriesData.result)} >
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                             <Form.Control as="select" size="sm">
@@ -790,7 +897,50 @@ class JournalEntries extends React.Component {
                                                 <option>Custom Filter</option>
                                             </Form.Control>
                                         </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+
+                                        <Form.Group className="table-filters">
+                                            <DatePickerEx
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePickerEx placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text"
+                                                className="form-control-sm search-table form-control"
+                                                placeholder="Search text"
+                                                value={this.state.SearchText}
+                                                onChange={(e) => {
+                                                    this.setState({ SearchText: e.target.value.trim() })
+                                                }}
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -850,7 +1000,7 @@ class JournalEntries extends React.Component {
                         return(
                             <div className="no-records">
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, JournalEntriesData.result)} >
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                             <Form.Control as="select" size="sm">
@@ -859,7 +1009,50 @@ class JournalEntries extends React.Component {
                                                 <option>Custom Filter</option>
                                             </Form.Control>
                                         </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+
+                                        <Form.Group className="table-filters">
+                                            <DatePickerEx
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
+
+                                            />
+                                            <DatePickerEx placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
+
+                                            />
+                                            <input type="text"
+                                                className="form-control-sm search-table form-control"
+                                                placeholder="Search text"
+                                                value={this.state.SearchText}
+                                                onChange={(e) => {
+                                                    this.setState({ SearchText: e.target.value.trim() })
+                                                }}
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
                                     </Form>
 
                                     <div className="pagination-wrap">

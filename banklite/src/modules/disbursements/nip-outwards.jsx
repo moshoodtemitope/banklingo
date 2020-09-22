@@ -118,6 +118,32 @@ class NipOutwardsRequests extends React.Component {
         }
     }
 
+    searchTxtn = (e,tempData)=>{
+        e.preventDefault()
+        const {dispatch} = this.props;
+        let {PageSize,CurrentPage, BranchId, SearchText, endDate, startDate} = this.state;
+
+        // this.setState({PageSize: sizeOfPage});
+
+        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        // this.getTransactionChannels(params);
+        if(SearchText!=="" || endDate!=="" || startDate!==""){
+            if(endDate!==""){
+                endDate = endDate.toISOString()
+            }
+            if(startDate!==""){
+                startDate = startDate.toISOString()
+            }
+            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+
+            if(tempData){
+                dispatch(disbursementActions.getOutwardsNIP(params,tempData));
+            }else{
+                dispatch(disbursementActions.getOutwardsNIP(params));
+            }
+        }
+    }
+
     renderOutWardsRequest=()=>{
         let getOutwardsNIPRequestData = this.props.getOutwardsNIPReducer,
             {isRefresh} = this.state;
@@ -193,56 +219,60 @@ class NipOutwardsRequests extends React.Component {
                         <div className="loading-content">
                             <div className="loading-text">Please wait... </div>
                             <div className="heading-with-cta">
-                                <Form className="one-liner">
+                                <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, saveRequestData)} >
 
-                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
-                                                </Form.Control>
-                                            </Form.Group>
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
 
-                                            <Form.Group className="table-filters">
-                                                <DatePicker
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleStartDatePicker}
-                                                    selected={this.state.startDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    placeholderText="Start date"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm "
+                                    <Form.Group className="table-filters">
+                                        <DatePicker
+                                            onChangeRaw={this.handleDateChangeRaw}
+                                            onChange={this.handleStartDatePicker}
+                                            selected={this.state.startDate}
+                                            dateFormat="d MMMM, yyyy"
+                                            peekNextMonth
+                                            showMonthDropdown
+                                            showYearDropdown
+                                            dropdownMode="select"
+                                            placeholderText="Start date"
+                                            maxDate={new Date()}
+                                            // className="form-control form-control-sm h-38px"
+                                            className="form-control form-control-sm "
 
-                                                />
-                                                <DatePicker placeholderText="End  date"
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleEndDatePicker}
-                                                    selected={this.state.endDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm"
+                                        />
+                                        <DatePicker placeholderText="End  date"
+                                            onChangeRaw={this.handleDateChangeRaw}
+                                            onChange={this.handleEndDatePicker}
+                                            selected={this.state.endDate}
+                                            dateFormat="d MMMM, yyyy"
+                                            peekNextMonth
+                                            showMonthDropdown
+                                            showYearDropdown
+                                            dropdownMode="select"
+                                            maxDate={new Date()}
+                                            // className="form-control form-control-sm h-38px"
+                                            className="form-control form-control-sm"
 
-                                                />
-                                                <input type="text"
-                                                    className="form-control-sm search-table form-control"
-                                                    placeholder="Search text"
-                                                />
-                                                {/* {errors.startDate && touched.startDate ? (
-                                                <span className="invalid-feedback">{errors.startDate}</span>
-                                            ) : null} */}
-                                            </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        </Form>
+                                        />
+                                        <input type="text"
+                                            className="form-control-sm search-table form-control"
+                                            placeholder="Search text"
+                                            value={this.state.SearchText}
+                                            onChange={(e) => {
+                                                this.setState({ SearchText: e.target.value.trim() })
+                                            }}
+                                        />
+                                        {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                </Form>
 
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
@@ -304,68 +334,72 @@ class NipOutwardsRequests extends React.Component {
 
         if(getOutwardsNIPRequestData.request_status ===disbursmentConstants.GET_NIP_OUTWARDS_SUCCESS
             ){
-                let allActivitiesData = getOutwardsNIPRequestData.request_data.response.data;
+                let allNIPRequestData = getOutwardsNIPRequestData.request_data.response.data;
 
-                if(allActivitiesData.result!==undefined){
-                    if(allActivitiesData.result.length>=1){
+                if(allNIPRequestData.result!==undefined){
+                    if(allNIPRequestData.result.length>=1){
                         return(
                             <div>
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allNIPRequestData.result)} >
 
-                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
-                                                </Form.Control>
-                                            </Form.Group>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
 
-                                            <Form.Group className="table-filters">
-                                                <DatePicker
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleStartDatePicker}
-                                                    selected={this.state.startDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    placeholderText="Start date"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm "
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
 
-                                                />
-                                                <DatePicker placeholderText="End  date"
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleEndDatePicker}
-                                                    selected={this.state.endDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm"
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
 
-                                                />
-                                                <input type="text"
-                                                    className="form-control-sm search-table form-control"
-                                                    placeholder="Search text"
-                                                />
-                                                {/* {errors.startDate && touched.startDate ? (
-                                                <span className="invalid-feedback">{errors.startDate}</span>
-                                            ) : null} */}
-                                            </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        </Form>
+                                            />
+                                            <input type="text"
+                                                className="form-control-sm search-table form-control"
+                                                placeholder="Search text"
+                                                value={this.state.SearchText}
+                                                onChange={(e) => {
+                                                    this.setState({ SearchText: e.target.value.trim() })
+                                                }}
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                    </Form>
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                                onChange={(e)=>this.setPagesize(e, allActivitiesData.result)}
+                                                onChange={(e)=>this.setPagesize(e, allNIPRequestData.result)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -374,11 +408,11 @@ class NipOutwardsRequests extends React.Component {
                                             <option value="200">200</option>
                                         </select>
                                         <TablePagination
-                                            totalPages={allActivitiesData.totalPages}
-                                            currPage={allActivitiesData.currentPage}
-                                            currRecordsCount={allActivitiesData.result.length}
-                                            totalRows={allActivitiesData.totalRows}
-                                            tempData={allActivitiesData.result}
+                                            totalPages={allNIPRequestData.totalPages}
+                                            currPage={allNIPRequestData.currentPage}
+                                            currRecordsCount={allNIPRequestData.result.length}
+                                            totalRows={allNIPRequestData.totalRows}
+                                            tempData={allNIPRequestData.result}
                                             pagesCountToshow={4}
                                             refreshFunc={this.loadNextPage}
                                         />
@@ -401,7 +435,7 @@ class NipOutwardsRequests extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            allActivitiesData.result.map((eachActivity, index)=>{
+                                            allNIPRequestData.result.map((eachActivity, index)=>{
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>
@@ -431,56 +465,60 @@ class NipOutwardsRequests extends React.Component {
                         return(
                             <div>
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allNIPRequestData.result)} >
 
-                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
-                                                </Form.Control>
-                                            </Form.Group>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
 
-                                            <Form.Group className="table-filters">
-                                                <DatePicker
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleStartDatePicker}
-                                                    selected={this.state.startDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    placeholderText="Start date"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm "
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
 
-                                                />
-                                                <DatePicker placeholderText="End  date"
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleEndDatePicker}
-                                                    selected={this.state.endDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm"
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
 
-                                                />
-                                                <input type="text"
-                                                    className="form-control-sm search-table form-control"
-                                                    placeholder="Search text"
-                                                />
-                                                {/* {errors.startDate && touched.startDate ? (
-                                                <span className="invalid-feedback">{errors.startDate}</span>
-                                            ) : null} */}
-                                            </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        </Form>
+                                            />
+                                            <input type="text"
+                                                className="form-control-sm search-table form-control"
+                                                placeholder="Search text"
+                                                value={this.state.SearchText}
+                                                onChange={(e) => {
+                                                    this.setState({ SearchText: e.target.value.trim() })
+                                                }}
+                                            />
+                                            {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                    </Form>
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>

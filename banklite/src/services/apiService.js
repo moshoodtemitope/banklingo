@@ -182,7 +182,7 @@ export class ApiService {
                                     if(response3.status>=200 && response3.status < 210){
                                         console.log("service is", response3);
                                         // return service;
-                                        if(response3.headers['content-type'] === 'application/json'){
+                                        if(response3.headers['content-type'].indexOf('application/json')>-1){
                                             // return response3;
                                             return service;
                                             
@@ -269,8 +269,8 @@ export class ApiService {
                     
                 // }
 
-                console.log("sample is", response)
-                console.log("dsdsd is", response.headers['content-type'].indexOf('application/json')>-1)
+                // console.log("sample is", response)
+                
                 // try{
                 //     if(typeof response.data === "object"){
                 //         return service;
