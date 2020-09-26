@@ -194,11 +194,15 @@ class DisbursementPendingApproval extends React.Component {
 
                                                     
                                                     setTimeout(() => {
+                                                        resetForm();
                                                         dispatch(disbursementActions.getDisbursement(params,saveRequestData));
                                                         this.props.dispatch(disbursementActions.approveOrRejectPostDisbursement("CLEAR"));
                                                         this.handleClose();
                                                     }, 2000);
                                                 }else{
+                                                    if (this.props.approveOrRejectPostDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE) {
+                                                        resetForm();
+                                                    }
                                                     // setTimeout(() => {
                                                     //     this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"))
                                                     // }, 2000);
@@ -558,56 +562,51 @@ class DisbursementPendingApproval extends React.Component {
                                     </div>
                                 </div>
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                    {/* <Form className="one-liner">
 
-                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
-                                                </Form.Control>
-                                            </Form.Group>
+                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                            <Form.Control as="select" size="sm">
+                                                <option>No Filter</option>
+                                                <option>Add New Filter</option>
+                                                <option>Custom Filter</option>
+                                            </Form.Control>
+                                        </Form.Group>
 
-                                            <Form.Group className="table-filters">
-                                                <DatePicker
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleStartDatePicker}
-                                                    selected={this.state.startDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    placeholderText="Start date"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm "
+                                        <Form.Group className="table-filters">
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                className="form-control form-control-sm "
 
-                                                />
-                                                <DatePicker placeholderText="End  date"
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleEndDatePicker}
-                                                    selected={this.state.endDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm"
+                                            />
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                className="form-control form-control-sm"
 
-                                                />
-                                                <input type="text"
-                                                    className="form-control-sm search-table form-control"
-                                                    placeholder="Search text"
-                                                />
-                                                {/* {errors.startDate && touched.startDate ? (
-                                                <span className="invalid-feedback">{errors.startDate}</span>
-                                            ) : null} */}
-                                            </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        </Form>
+                                            />
+                                            <input type="text"
+                                                className="form-control-sm search-table form-control"
+                                                placeholder="Search text"
+                                            />
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                    </Form> */}
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
@@ -752,56 +751,52 @@ class DisbursementPendingApproval extends React.Component {
                                             </div>
                                         </div>
                                         <div className="heading-with-cta">
-                                            <Form className="one-liner">
+                                            {/* <Form className="one-liner">
 
-                                            <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Control as="select" size="sm">
-                                                    <option>No Filter</option>
-                                                    <option>Add New Filter</option>
-                                                    <option>Custom Filter</option>
-                                                </Form.Control>
-                                            </Form.Group>
+                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                                    <Form.Control as="select" size="sm">
+                                                        <option>No Filter</option>
+                                                        <option>Add New Filter</option>
+                                                        <option>Custom Filter</option>
+                                                    </Form.Control>
+                                                </Form.Group>
 
-                                            <Form.Group className="table-filters">
-                                                <DatePicker
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleStartDatePicker}
-                                                    selected={this.state.startDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    placeholderText="Start date"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm "
+                                                <Form.Group className="table-filters">
+                                                    <DatePicker
+                                                        onChangeRaw={this.handleDateChangeRaw}
+                                                        onChange={this.handleStartDatePicker}
+                                                        selected={this.state.startDate}
+                                                        dateFormat="d MMMM, yyyy"
+                                                        peekNextMonth
+                                                        showMonthDropdown
+                                                        showYearDropdown
+                                                        dropdownMode="select"
+                                                        placeholderText="Start date"
+                                                        maxDate={new Date()}
+                                                        className="form-control form-control-sm "
 
-                                                />
-                                                <DatePicker placeholderText="End  date"
-                                                    onChangeRaw={this.handleDateChangeRaw}
-                                                    onChange={this.handleEndDatePicker}
-                                                    selected={this.state.endDate}
-                                                    dateFormat="d MMMM, yyyy"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    maxDate={new Date()}
-                                                    // className="form-control form-control-sm h-38px"
-                                                    className="form-control form-control-sm"
+                                                    />
+                                                    <DatePicker placeholderText="End  date"
+                                                        onChangeRaw={this.handleDateChangeRaw}
+                                                        onChange={this.handleEndDatePicker}
+                                                        selected={this.state.endDate}
+                                                        dateFormat="d MMMM, yyyy"
+                                                        peekNextMonth
+                                                        showMonthDropdown
+                                                        showYearDropdown
+                                                        dropdownMode="select"
+                                                        maxDate={new Date()}
+                                                        className="form-control form-control-sm"
 
-                                                />
-                                                <input type="text"
-                                                    className="form-control-sm search-table form-control"
-                                                    placeholder="Search text"
-                                                />
-                                                {/* {errors.startDate && touched.startDate ? (
-                                                <span className="invalid-feedback">{errors.startDate}</span>
-                                            ) : null} */}
-                                            </Form.Group>
-                                            <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        </Form>
+                                                    />
+                                                    <input type="text"
+                                                        className="form-control-sm search-table form-control"
+                                                        placeholder="Search text"
+                                                    />
+
+                                                </Form.Group>
+                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                            </Form> */}
 
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
@@ -1049,6 +1044,7 @@ class DisbursementPendingApproval extends React.Component {
                                                     let saveRequestData= getDisbursementsRequest.request_data!==undefined?getDisbursementsRequest.request_data.tempData:null;
 
                                         setTimeout(() => {
+                                            resetForm();
                                             this.setState({showDetails:false})
                                             // this.loadInitialData();
                                             dispatch(disbursementActions.getDisbursement(params,saveRequestData));
@@ -1056,6 +1052,9 @@ class DisbursementPendingApproval extends React.Component {
                                             this.handleClose();
                                         }, 2000);
                                     } else {
+                                        if (this.props.approveOrRejectPostDisbursementReducer.request_status === disbursmentConstants.APPROVE_OR_REJECT_DISBURSMENT_FAILURE) {
+                                            resetForm();
+                                        }
                                         // setTimeout(() => {
                                         //     this.props.dispatch(administrationActions.updateTransactionChannel("CLEAR"))
                                         // }, 2000);
