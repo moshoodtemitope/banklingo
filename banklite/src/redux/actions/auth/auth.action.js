@@ -39,22 +39,40 @@ function Login   (loginPayload){
                                 user.BranchId = response2.data[0].id;
                                 user.BranchName = response2.data[0].name;
                                 localStorage.setItem('user', JSON.stringify(user));
-                        
-                            dispatch(success(response2.data));
+                            
+                                let consume3 = ApiService.request(routes.HIT_ROLE+'/mypermissions', "GET", null);
+                                dispatch(request(consume3));
+                                return consume3
+                                .then(response3 =>{
+                                    // console.log("Permissions are", response3.data);
+                                    localStorage.setItem('x-u-perm', JSON.stringify(response3.data));
+                                    dispatch(success(response2.data));
 
                             
-                            if(window.location.href.indexOf('#')>-1){
-                                // if(window.location.href.indexOf('retUrl=')>-1){
-                                // let retUrl = window.location.href.split('retUrl=');
-                                let retUrl = window.location.href.split('#');
+                                    if(window.location.href.indexOf('#')>-1){
+                                        // if(window.location.href.indexOf('retUrl=')>-1){
+                                        // let retUrl = window.location.href.split('retUrl=');
+                                        let retUrl = window.location.href.split('#');
+                                        
+                                        if(retUrl.length===2){
+                                            history.push(retUrl[1]);
+                                            removeRouteForRedirect();
+                                        }
+                                    }else{
+                                        history.push('/dashboard');
+                                    }
+                                })
+                                .catch(error =>{
+                            
+                                    if(error.response.status===401){
+                                        dispatch(failure(handleRequestErrors("Unable to login. Please try again")))
+                                    }else{
+                                        dispatch(failure(handleRequestErrors(error)));
+                                    }
+                                    
+                                    
+                                });
                                 
-                                if(retUrl.length===2){
-                                    history.push(retUrl[1]);
-                                    removeRouteForRedirect();
-                                }
-                            }else{
-                                history.push('/dashboard');
-                            }
                             
                         })
                         .catch(error =>{

@@ -201,7 +201,7 @@ class ViewUser extends React.Component {
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Email</td>
-                                                                    <td>{userDetails.contact.contactEmail}</td>
+                                                                    <td>{userDetails.emailAddress}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Address</td>

@@ -135,7 +135,9 @@ function PrivateRoute({ component: Component, authed, ...rest }) {
     return (
         <Route
             {...rest}
-            render={(props) => authed && Object.keys(authed).length>=1 ? <Component  {...rest} {...props} />
+            render={
+                (props) => authed && Object.keys(authed).length>=1 
+                ? <Component  {...rest} {...props} />
                 : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
         />
     )

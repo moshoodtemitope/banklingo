@@ -23,12 +23,15 @@ import {administrationConstants} from '../../../redux/actiontypes/administration
 
 import {dashboardActions} from '../../../redux/actions/dashboard/dashboard.action';
 import {dashboardConstants} from '../../../redux/actiontypes/dashboard/dashboard.constants'
+
+import {quickMenuList} from '../mainmenu/menu'
 import "./mainheader.scss"; 
 class MainHeader extends React.Component{
     constructor(props) {
         super(props);
         let user = localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")) : {};
 
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"))
         // console.log("user is", user.BranchId)
         // if(user.BranchId)
         if(Object.keys(user).length<=1){
@@ -496,6 +499,98 @@ class MainHeader extends React.Component{
         )
     }
 
+    renderQuickViewMenu = ()=>{
+        let allMenu = quickMenuList,
+            allMenuGroups = [],
+            allUSerPermissionNames = [],
+            allQuickMenus=[],
+            allUSerPermissions =[];
+
+            allMenu.map(eachMenu=>{
+                if(allMenuGroups.indexOf(eachMenu.permissionName)===-1){
+                    allMenuGroups.push(eachMenu.permissionName)
+                }
+                
+            })
+
+            this.userPermissions.map(eachPermission=>{
+                // if(allUSerPermissionNames.indexOf(eachPermission.groupName)===-1){
+                //     allUSerPermissionNames.push(eachPermission.groupName)
+                // }
+                if(allUSerPermissionNames.indexOf(eachPermission.permissionName)===-1){
+                    allUSerPermissionNames.push(eachPermission.permissionName)
+                }
+                allUSerPermissions.push(eachPermission.permissionCode)
+            })
+
+            // if(allUSerPermissions.length>=1){
+            if(allUSerPermissionNames.length>=1){
+                let menuToAdd;
+                allUSerPermissionNames.map(eachPermission=>{
+                    menuToAdd =  allMenuGroups.filter(eachMenuGroup=>eachMenuGroup ===eachPermission)[0];
+                    if(menuToAdd!==undefined){
+                        allQuickMenus.push(menuToAdd)
+                    }
+                    
+                })
+            }
+            
+
+            if(allQuickMenus.length>=1){
+                // console.log("dnsjndsd", allMenu);
+                return(
+
+                    <DropdownButton
+                                    size="sm"
+                                    variant="secondary"
+                                    title="View"
+                                    className="headingmenu-dropdown"
+                                >
+                                    {
+                                        allMenu.map((eachGroup, menuIdx) =>{
+                                            if(allUSerPermissionNames.indexOf(eachGroup.permissionName)> -1 ){
+                                                return(
+                                                    <NavLink key={menuIdx} to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
+                                                )
+                                            }
+                                        })
+                                    }
+                                    {/* <NavLink to={'/clients'}>Customers</NavLink>
+                                    <NavLink to={'/all-loans'}>Loan Accounts</NavLink>
+                                    <NavLink to={'/loan-transactions'}>Loan Transactions</NavLink>
+                                    <NavLink to={'/deposits'}>Deposit Accounts</NavLink>
+                                    <NavLink to={'/deposit-transactions'}>Deposit Transactions</NavLink>
+                                    <NavLink to={'/activities'}>System Activities</NavLink>
+                                    <NavLink to={'/branches'}>Branches</NavLink>
+                                    <NavLink to={'/user-management'}>Users</NavLink>
+                                    <NavLink to={'/communications'}>Communications</NavLink> */}
+                                </DropdownButton>
+                )
+            }else{
+                return null;
+            }
+
+            // return(
+            //     <DropdownButton
+            //         size="sm"
+            //         variant="secondary"
+            //         title="View"
+            //         className="headingmenu-dropdown"
+            //     >
+
+            //         <NavLink to={'/clients'}>Customers</NavLink>
+            //                         <NavLink to={'/all-loans'}>Loan Accounts</NavLink>
+            //                         <NavLink to={'/loan-transactions'}>Loan Transactions</NavLink>
+            //                         <NavLink to={'/deposits'}>Deposit Accounts</NavLink>
+            //                         <NavLink to={'/deposit-transactions'}>Deposit Transactions</NavLink>
+            //                         <NavLink to={'/activities'}>System Activities</NavLink>
+            //                         <NavLink to={'/branches'}>Branches</NavLink>
+            //                         <NavLink to={'/user-management'}>Users</NavLink>
+            //                         <NavLink to={'/communications'}>Communications</NavLink>
+            //                         </DropdownButton>
+            // )
+    }
+
     renderHeadingWrap(){
         // let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
         const {user} = this.state;
@@ -522,26 +617,7 @@ class MainHeader extends React.Component{
                                 }
                         </div>
                         <div className="other-headingitems">
-                            <DropdownButton
-                                size="sm"
-                                variant="secondary"
-                                title="View"
-                                className="headingmenu-dropdown"
-                            >
-                                <NavLink to={'/clients'}>Customers</NavLink>
-                                {/* <NavLink to={'/dashboard'}>Groups</NavLink> */}
-                                {/* <NavLink to={'/dashboard'}>Credit Arrangements</NavLink> */}
-                                <NavLink to={'/all-loans'}>Loan Accounts</NavLink>
-                                <NavLink to={'/loan-transactions'}>Loan Transactions</NavLink>
-                                {/* <NavLink to={'/dashboard'}>Installments</NavLink> */}
-                                <NavLink to={'/deposits'}>Deposit Accounts</NavLink>
-                                <NavLink to={'/deposit-transactions'}>Deposit Transactions</NavLink>
-                                <NavLink to={'/activities'}>System Activities</NavLink>
-                                <NavLink to={'/branches'}>Branches</NavLink>
-                                {/* <NavLink to={'/dashboard'}>Centers</NavLink> */}
-                                <NavLink to={'/user-management'}>Users</NavLink>
-                                <NavLink to={'/communications'}>Communications</NavLink>
-                            </DropdownButton>
+                            
                             {/* <DropdownButton
                                 size="sm"
                                 variant="secondary"
@@ -559,6 +635,7 @@ class MainHeader extends React.Component{
                                 <NavLink to={'/deposits/newaccount'}>Deposit Account</NavLink>
                                 <NavLink to={'/administration/access/new-user'}>User</NavLink>
                             </DropdownButton> */}
+                            {this.renderQuickViewMenu()}
                             {this.renderCreateMenu()}
                             {this.renderGlobalSearch()}
                             <Form inline>

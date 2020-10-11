@@ -1,48 +1,3 @@
-// export const handleRequestErrors = (error)=>{
-//     console.log('error type',  error.toString());
-//     if(error.toString().indexOf("'closed' of undefined")>-1  
-//         // error.toString().indexOf("code 401")>-1
-//     ){
-//         // setTimeout(() => {
-//             //  window.location.reload();
-//         // }, 1000);
-       
-//     }
-//     if(error!==undefined && error!==null){
-//         // if(error!==undefined && error!==null && error.toString().indexOf("'closed' of undefined")===-1){
-        
-//         if(typeof error.response ==="object"){
-//             // console.log('error keys', error.response);
-//             if(error.response && error.response.data.message!==null && error.response.data.message!==undefined){
-                
-//                 return error.response.data.message;
-//             }else{
-//                 if(error.response && error.response.data.title!==null && error.response.data.title!==undefined){
-                
-//                     return error.response.data.title;
-//                 }
-//             }
-//             // if(error.message){
-//             //     if(error.message==='Request failed with status code 400'){
-//             //         return "An error occured. Please try again";
-//             //     }
-//             //     return error.message;
-//             // }
-           
-//             return "Something went wrong. Please try again";
-//         }
-
-//         if(error.toString()==="Error: Network Error"){
-//             return "Please check your network and try again"
-//         }
-        
-//         // return error
-//         return '';
-//     }
-
-    
-//     return "Something went wrong. Please try again";
-// }
 
 export const handleRequestErrors = (error)=>{
     
@@ -53,7 +8,7 @@ export const handleRequestErrors = (error)=>{
        
     }
 
-    console.log("error text is", error);
+    // console.log("error text is", error);
     
     if(error!==undefined && error!==null && error!==""){
         // if(error!==undefined && error!==null && error.toString().indexOf("'closed' of undefined")===-1){
@@ -71,10 +26,11 @@ export const handleRequestErrors = (error)=>{
                     if(error.response.data.message!==null && error.response.data.message!==undefined && error.response.data.message!==""){
                         return error.response.data.message;
                     }else{
-                        if(error.response && error.response.data.traceMessages!==null && error.response.data.traceMessages!==undefined){
+                        return "Sorry an error occured";
+                        // if(error.response && error.response.data.traceMessages!==null && error.response.data.traceMessages!==undefined){
                     
-                            return error.response.data.traceMessages;
-                        }
+                        //     return error.response.data.traceMessages;
+                        // }
                     }
                     // if(error.response.data.traceMessages!==null && error.response.data.traceMessages!==undefined && error.response.data.traceMessages!==""){
                     //     return error.response.data.traceMessages;

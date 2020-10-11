@@ -427,7 +427,7 @@ export class ApiService {
                                 }
                                 instance.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
-                                service = instance.get(tempRequest.url, tempRequest.bodyData);
+                                service = instance.post(tempRequest.url, tempRequest.bodyData);
 
                                 
                                 return service.then((response3)=>{

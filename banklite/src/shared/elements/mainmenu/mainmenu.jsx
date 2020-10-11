@@ -3,6 +3,8 @@ import * as React from 'react';
 import {Fragment} from "react";
 import {NavLink} from 'react-router-dom';
 import "./mainmenu.scss"; 
+
+import {menuList} from './menu'
 class MainMenu extends React.Component{
     constructor(props) {
         super(props);
@@ -10,16 +12,91 @@ class MainMenu extends React.Component{
         this.state={
             user:''
         }
+
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"))
+
+        
        
     }
 
 
     renderMainNav(){
-        
+        let allMenu = menuList,
+            allMenuGroups = [],
+            allUSerPermissionGroups = [],
+            allUSerPermissions =[];
+            
+            allMenu.map(eachMenu=>{
+                if(allMenuGroups.indexOf(eachMenu.menuGroup)===-1){
+                    allMenuGroups.push(eachMenu.menuGroup)
+                }
+                
+            })
+
+            this.userPermissions.map(eachPermission=>{
+                if(allUSerPermissionGroups.indexOf(eachPermission.groupName)===-1){
+                    allUSerPermissionGroups.push(eachPermission.groupName)
+                }
+                allUSerPermissions.push(eachPermission.permissionCode)
+            })
+
+            // console.log("All menu groups", allMenuGroups);
+            // console.log("All Permission groups", allUSerPermissionGroups);
+            // console.log("All user Permissions", allUSerPermissions);
         return(
             <div className="mainmenu-wrap">
                 <ul className="nav">
-                    <li className="nav-item">
+                    {
+                        allMenu.map((eachGroup, menuIdx) =>{
+                            // if(allUSerPermissionGroups.indexOf(eachGroup.menuGroup)> -1 ){
+                                if(eachGroup.hasSubMenu && eachGroup.permissionCode!==undefined && (allUSerPermissions.indexOf(eachGroup.permissionCode) > -1 || eachGroup.permissionCode==="universal")){
+                                    return (
+                                        <li key={menuIdx} className="nav-item">
+                                            <span>{eachGroup.mainMenu}</span>
+                                            <ul>
+                                                {
+                                                    eachGroup.subMenus.map((eachSubMenu, submenuIdx)=>{
+                                                        if(eachSubMenu.permissionCode!==undefined && allUSerPermissions.indexOf(eachSubMenu.permissionCode) > -1){
+                                                            return(
+                                                                <li key={submenuIdx}>
+                                                                    <NavLink to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
+                                                                </li>
+                                                            )
+                                                        }
+
+                                                        if(eachSubMenu.permissionCode ===undefined){
+                                                            return(
+                                                                <li key={submenuIdx}>
+                                                                    <NavLink to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
+                                                                </li>
+                                                            )
+                                                        }
+                                                    })
+                                                }
+
+                                            </ul>
+                                        </li>
+                                        
+                                    )
+                                }
+
+                                if(!eachGroup.hasSubMenu && eachGroup.permissionCode!==undefined){
+                                    if(allUSerPermissions.indexOf(eachGroup.permissionCode) > -1 || eachGroup.permissionCode==="universal"){
+                                        return (
+                                            <li key={menuIdx} className="nav-item">
+                                                <NavLink to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
+                                            </li>
+                                            
+                                        )
+                                    }
+                                }
+                            // }else{
+                            //     return null
+                            // }
+
+                        })
+                    }
+                    {/* <li className="nav-item">
                         <NavLink to={'/dashboard'}>Dashboard</NavLink>
                     </li>
                     <li className="nav-item">
@@ -156,7 +233,7 @@ class MainMenu extends React.Component{
                     </li>
                     <li className="nav-item">
                         <NavLink to={'/administration/general'}>Administration</NavLink>
-                    </li>
+                    </li> */}
                 </ul>
                 
             </div>
