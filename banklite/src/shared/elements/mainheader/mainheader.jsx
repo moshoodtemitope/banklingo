@@ -25,13 +25,15 @@ import {dashboardActions} from '../../../redux/actions/dashboard/dashboard.actio
 import {dashboardConstants} from '../../../redux/actiontypes/dashboard/dashboard.constants'
 
 import {quickMenuList} from '../mainmenu/menu'
+import {quickCreateMenuList} from '../mainmenu/menu'
 import "./mainheader.scss"; 
 class MainHeader extends React.Component{
     constructor(props) {
         super(props);
         let user = localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")) : {};
 
-        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"))
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
+        // this.allPermissionsList;
         // console.log("user is", user.BranchId)
         // if(user.BranchId)
         if(Object.keys(user).length<=1){
@@ -106,36 +108,91 @@ class MainHeader extends React.Component{
 
     renderCreateMenu =()=>{
         let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
+
+        let allMenu = quickCreateMenuList,
+            allMenuGroups = [],
+            allUSerPermissionNames = [],
+            allQuickMenus=[],
+            allUSerPermissions =[];
+
+        allMenu.map(eachMenu=>{
+            if(allMenuGroups.indexOf(eachMenu.permissionName)===-1){
+                allMenuGroups.push(eachMenu.permissionName)
+            }
+            
+        })
+
+        this.userPermissions.map(eachPermission=>{
+            // if(allUSerPermissionNames.indexOf(eachPermission.groupName)===-1){
+            //     allUSerPermissionNames.push(eachPermission.groupName)
+            // }
+            if(allUSerPermissionNames.indexOf(eachPermission.permissionName)===-1){
+                allUSerPermissionNames.push(eachPermission.permissionName)
+            }
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
+
+        if(allUSerPermissionNames.length>=1){
+            let menuToAdd;
+            allUSerPermissionNames.map(eachPermission=>{
+                menuToAdd =  allMenuGroups.filter(eachMenuGroup=>eachMenuGroup ===eachPermission)[0];
+                if(menuToAdd!==undefined){
+                    allQuickMenus.push(menuToAdd)
+                }
+                
+            })
+        }
+
+        
+
         switch(adminGetCustomerTypesRequest.request_status){
             case (administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS):{
                 let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data||adminGetCustomerTypesRequest.request_data.response,
                     allCustomerTypes=[];
                     // console.log("====", allCustomerTypesData);
                 if(allCustomerTypesData.length>=1){
-                    return(
-                    
-                        <DropdownButton
-                            size="sm"
-                            variant="secondary"
-                            title="Create"
-                            className="headingmenu-dropdown"
-                            >
-                                {
-                                    allCustomerTypesData.map((eachType, id)=>{
-                                        // allCustomerTypes.push({label: eachType.name, value:eachType.id});
-                                        let custType = eachType.name.split(' ').join('');
-                                        return(
-                                            <NavLink className="menu-grouplist" key={id} exact to={`/clients/new/${custType}/${eachType.encodedKey}`}>{eachType.name}</NavLink>
-                                        )
-                                        //  return( <NavLink to={'/dashboard'}>dsdhsjdhshjd</NavLink>)
-                                    })
-                                }
-                                
-                                <NavLink exact to={'/all-loans/newloan-account'}>Loan Account</NavLink>
-                                <NavLink to={'/deposits/newaccount'}>Deposit Account</NavLink>
-                                <NavLink to={'/administration/access/new-user'}>User</NavLink>
-                            </DropdownButton>
-                    )
+                    if(allQuickMenus.length >=1){
+                        return(
+                        
+                            <DropdownButton
+                                size="sm"
+                                variant="secondary"
+                                title="Create"
+                                className="headingmenu-dropdown"
+                                >
+                                    {
+                                        allCustomerTypesData.map((eachType, id)=>{
+                                            // allCustomerTypes.push({label: eachType.name, value:eachType.id});
+                                            let custType = eachType.name.split(' ').join('');
+                                            if(allUSerPermissions.indexOf("bnk_create_client") > -1){
+                                                return(
+                                                    <NavLink className="menu-grouplist" key={id} exact to={`/clients/new/${custType}/${eachType.encodedKey}`}>{eachType.name}</NavLink>
+                                                )
+                                            }else{
+                                                return null;
+                                            }
+                                            //  return( <NavLink to={'/dashboard'}>dsdhsjdhshjd</NavLink>)
+                                        })
+                                    }
+
+                                    {
+                                        allMenu.map((eachGroup, menuIdx) =>{
+                                            if(allUSerPermissionNames.indexOf(eachGroup.permissionName)> -1 ){
+                                                return(
+                                                    <NavLink key={menuIdx} to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
+                                                )
+                                            }
+                                        })
+                                    }
+                                    
+                                    {/* <NavLink exact to={'/all-loans/newloan-account'}>Loan Account</NavLink>
+                                    <NavLink to={'/deposits/newaccount'}>Deposit Account</NavLink>
+                                    <NavLink to={'/administration/access/new-user'}>User</NavLink> */}
+                                </DropdownButton>
+                        )
+                    }else{
+                        return null
+                    }
                 }
             }
             default :
@@ -522,6 +579,7 @@ class MainHeader extends React.Component{
                 }
                 allUSerPermissions.push(eachPermission.permissionCode)
             })
+            // this.allPermissionsList = allUSerPermissions;
 
             // if(allUSerPermissions.length>=1){
             if(allUSerPermissionNames.length>=1){

@@ -18,6 +18,7 @@ import {administrationActions} from '../../redux/actions/administration/administ
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
 import AdminNav from './_menu'
+import AccessNav from './menus/_access-menu'
 import "./administration.scss"; 
 class AccessPreferences extends React.Component {
     constructor(props) {
@@ -345,7 +346,8 @@ class AccessPreferences extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <AdminNav />
-                                    <div className="lowerlevel-menu">
+                                    <AccessNav />
+                                    {/* <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>
                                                 <NavLink exact to={'/administration/access'}>Roles</NavLink>
@@ -356,11 +358,9 @@ class AccessPreferences extends React.Component {
                                             <li>
                                                 <NavLink to={'/administration/access/preferences'}>Preferences</NavLink>
                                             </li>
-                                            {/* <li>
-                                                <NavLink to={'/administration/access/authentication'}>Federated Authentication</NavLink>
-                                            </li> */}
+                                            
                                         </ul>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className="module-content">

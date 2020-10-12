@@ -29,6 +29,7 @@ import {administrationConstants} from '../../redux/actiontypes/administration/ad
 
 import Alert from 'react-bootstrap/Alert'
 import "./accountsmanagement.scss"; 
+import AccountingNav from './_menu'
 
 class TrialBalance extends React.Component {
     constructor(props) {
@@ -627,7 +628,8 @@ class TrialBalance extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
-                                    <ul className="nav">
+                                    <AccountingNav />
+                                    {/* <ul className="nav">
                                         <li>
                                             <NavLink to={'/balancesheet'}>Balance Sheet</NavLink>
                                         </li>
@@ -638,30 +640,13 @@ class TrialBalance extends React.Component {
                                             <NavLink to={'/trial-balance'}>Trial Balance</NavLink>
                                         </li>
                                         <li>
-                                            {/* <NavLink to={'/accounts/journal'}>Journal Entries</NavLink> */}
                                             <NavLink to={'/journals'}>Journal Entries</NavLink>
                                         </li>
                                         <li>
                                             <NavLink to={'/accounts'}>Charts of Accounts</NavLink>
-                                            {/* <ul>
-                                                <li>
-                                                    <NavLink to={'/accounts/charts/all'}>All</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to={'/accounts/charts/liabilities'}>Liabilities</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to={'/accounts/charts/equity'}>Equity</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to={'/accounts/charts/income'}>Income</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to={'/accounts/charts/expenses'}>Expenses</NavLink>
-                                                </li>
-                                            </ul> */}
+                                            
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </div>
                             </div>
                             <div className="module-content">

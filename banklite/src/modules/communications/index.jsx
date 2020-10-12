@@ -14,6 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import CommunicationsNav from './_menu'
 
 import "./communications.scss"; 
 class CommunicationsManagement extends React.Component {
@@ -589,7 +590,8 @@ class CommunicationsManagement extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
-                                    <ul className="nav">
+                                    <CommunicationsNav />
+                                    {/* <ul className="nav">
                                         <li>
                                             <NavLink exact to={'/communications'}>All</NavLink>
                                         </li>
@@ -602,7 +604,7 @@ class CommunicationsManagement extends React.Component {
                                         <li>
                                             <NavLink to={'/communications/webhooks'}>Webhooks</NavLink>
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </div>
                             </div>
                             <div className="module-content">

@@ -13,6 +13,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import AdminNav from './_menu'
+import GeneralNav from './menus/_general-menu'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
@@ -343,15 +344,14 @@ class GeneralOrganization extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <AdminNav />
-                                    <div className="lowerlevel-menu">
+                                    <GeneralNav />
+                                    {/* <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>
-                                                {/* <NavLink to={'/administration-generalorganization'}>Organization</NavLink> */}
                                                 <NavLink to={'/administration/general'}>Organization</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to={'/administration/general/currency'}>Currency</NavLink>
-                                                {/* <NavLink to={'/administration/administration-generalcurrency'}>Currency</NavLink> */}
                                             </li>
                                             <li>
                                                 <NavLink to={'/administration/general/txt-channels'}>Transaction Channels</NavLink>
@@ -362,11 +362,8 @@ class GeneralOrganization extends React.Component {
                                             <li>
                                                 <NavLink to={'/administration/general/control'}>Internal Control</NavLink>
                                             </li>
-                                            {/* <li>
-                                                <NavLink to={'/administration/general/branding'}>Branding</NavLink>
-                                            </li> */}
                                         </ul>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className="module-content">

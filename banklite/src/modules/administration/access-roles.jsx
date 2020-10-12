@@ -17,6 +17,8 @@ import  TablePagination from '../../shared/elements/table/pagination'
 import {getDateFromISO} from '../../shared/utils';
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+
+import AccessNav from './menus/_access-menu'
 import "./administration.scss"; 
 class AccessRoles extends React.Component {
     constructor(props) {
@@ -374,7 +376,8 @@ class AccessRoles extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <AdminNav />
-                                    <div className="lowerlevel-menu">
+                                    <AccessNav />
+                                    {/* <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>
                                                 <NavLink exact to={'/administration/access'}>Roles</NavLink>
@@ -385,11 +388,8 @@ class AccessRoles extends React.Component {
                                             <li>
                                                 <NavLink to={'/administration/access/preferences'}>Preferences</NavLink>
                                             </li>
-                                            {/* <li>
-                                                <NavLink to={'/administration/access/authentication'}>Federated Authentication</NavLink>
-                                            </li> */}
                                         </ul>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className="module-content">
