@@ -30,7 +30,7 @@ import "./mainheader.scss";
 class MainHeader extends React.Component{
     constructor(props) {
         super(props);
-        let user = localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")) : {};
+        let user = localStorage.getItem('lingoAuth')? JSON.parse(localStorage.getItem('lingoAuth')) : {};
 
         this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
         // this.allPermissionsList;
@@ -40,8 +40,8 @@ class MainHeader extends React.Component{
             history.push('/');
        }
         this.state={
-            user:JSON.parse(localStorage.getItem("user")),
-            activeBranch:JSON.parse(localStorage.getItem("user")).BranchName,
+            user:JSON.parse(localStorage.getItem('lingoAuth')),
+            activeBranch:JSON.parse(localStorage.getItem('lingoAuth')).BranchName,
             showDropdown: false,
             selectedOption: "",
         }
@@ -79,9 +79,9 @@ class MainHeader extends React.Component{
 
     chooseBranch = (e)=>{
         
-        let user = JSON.parse(localStorage.getItem("user"));
+        let user = JSON.parse(localStorage.getItem('lingoAuth'));
             user.BranchId = e.target.value;
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('lingoAuth', JSON.stringify(user));
             let selectedBranch = user.AllowedBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].name;
         this.setState({showDropdown: false, 
                         activeBranch: selectedBranch

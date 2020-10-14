@@ -1047,9 +1047,6 @@ class GeneralCurrency extends React.Component {
                                             <li>
                                                 <NavLink to={'/administration/general/control'}>Internal Control</NavLink>
                                             </li>
-                                            {/* <li>
-                                                <NavLink to={'/administration/general/branding'}>Branding</NavLink>
-                                            </li> */}
                                         </ul>
                                     </div>
                                 </div>

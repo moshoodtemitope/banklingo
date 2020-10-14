@@ -2,7 +2,7 @@ import {authConstants} from '../../actiontypes/auth/auth.constants'
 
 
 
-let user = JSON.parse(localStorage.getItem('user'));
+let user = JSON.parse(localStorage.getItem('lingoAuth'));
 
 const initialState = (user && user.AllowedBranches!==undefined) ? { loggedIn: true, user } : {};
 

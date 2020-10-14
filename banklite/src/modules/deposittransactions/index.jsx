@@ -48,6 +48,21 @@ class DepositTransactions extends React.Component {
         dispatch(depositActions.getDepositTransaction(paramters));
     }
 
+    exportDepositTransactions=()=>{
+        let {PageSize,CurrentPage, BranchId, SearchText, endDate, startDate} = this.state;
+        
+        if(endDate!==""){
+            endDate = endDate.toISOString()
+        }
+        if(startDate!==""){
+            startDate = startDate.toISOString()
+        }
+        let paramters= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+        const {dispatch} = this.props;
+
+        dispatch(depositActions.exportDepositTransaction(paramters));
+    }
+
     setPagesize = (PageSize,tempData) => {
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
@@ -389,6 +404,11 @@ class DepositTransactions extends React.Component {
 ) : null} */}
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                        <div className="actions-wrap">
+                                            <Button onClick={this.exportDepositTransactions} className="action-icon" variant="outline-secondary" type="button">
+                                                <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
+                                            </Button>
+                                        </div>
                                     </Form>
 
                                     <div className="pagination-wrap">

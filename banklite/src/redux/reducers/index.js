@@ -85,8 +85,10 @@ const accountingReducers = combineReducers({
 
 const depositsReducers = combineReducers({
     getDepositsReducer: deposits.getDepositsReducer, 
+    exportDepositsReducer: deposits.exportDepositsReducer, 
     getClientDepositsReducer: deposits.getClientDepositsReducer, 
     getDepositTransactionReducer: deposits.getDepositTransactionReducer, 
+    exportDepositTransactionReducer: deposits.exportDepositTransactionReducer, 
     getAccountDepositTransactionReducer: deposits.getAccountDepositTransactionReducer, 
     createDepositAccountReducer: deposits.createDepositAccountReducer, 
     getAClientDepositAccountReducer: deposits.getAClientDepositAccountReducer, 
@@ -115,6 +117,7 @@ const loansReducers = combineReducers({
     getClosedWithdrawnLoansReducer: loans.getClosedWithdrawnLoansReducer, 
     getClientLoansReducer: loans.getClientLoansReducer, 
     getLoanTransactionsReducer: loans.getLoanTransactionsReducer, 
+    exportLoanTransactionsReducer: loans.exportLoanTransactionsReducer, 
     getAccountLoanTransactionReducer: loans.getAccountLoanTransactionReducer, 
     createLoanAccountReducer: loans.createLoanAccountReducer, 
     getLoanSchedulePreviewReducer: loans.getLoanSchedulePreviewReducer, 
@@ -148,6 +151,7 @@ const dashboardReducers = combineReducers({
 
 const clientsReducers = combineReducers({
     getClientsReducer: clients.getClientsReducer, 
+    exportClientsReducer: clients.exportClientsReducer, 
     getAllClientsReducer: clients.getAllClientsReducer, 
     createAClientReducer: clients.createAClientReducer, 
     getAClientReducer: clients.getAClientReducer, 

@@ -24,7 +24,7 @@ class ViewDepositProduct extends React.Component {
         super(props);
         // this.userEncodedKey = this.props.match.params.userid;
         this.state={
-            user: JSON.parse(localStorage.getItem("user")),
+            user:JSON.parse(localStorage.getItem('lingoAuth')),
             PageSize: 100,
             CurrentPage: 1,
         }

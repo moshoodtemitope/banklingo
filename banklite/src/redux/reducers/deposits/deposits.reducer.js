@@ -26,6 +26,32 @@ export function getDepositsReducer(state=[], action) {
     }
 }
 
+export function exportDepositsReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.EXPORT_DEPOSITS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_DEPOSITS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_DEPOSITS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_DEPOSITS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_DEPOSITS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_DEPOSITS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getClientDepositsReducer(state=[], action) {
     switch (action.type) {
         case loanAndDepositsConstants.GET_CLIENTDEPOSITS_PENDING:
@@ -69,6 +95,32 @@ export function getDepositTransactionReducer(state=[], action) {
         case loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_FAILURE:
             return {
                 request_status: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function exportDepositTransactionReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };

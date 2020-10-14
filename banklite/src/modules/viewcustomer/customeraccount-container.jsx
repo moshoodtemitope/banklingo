@@ -81,6 +81,8 @@ class CustomerAccountContainer extends React.Component {
            
 
         }
+
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
         
         
         
@@ -469,14 +471,20 @@ class CustomerAccountContainer extends React.Component {
     }
 
     renderHeadingCtas =(customerDetails)=>{
-
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
         return(
             <div className="heading-ctas">
                 <ul className="nav">
-                    <li>
-                        <Button size="sm" onClick={this.handleTaskShow}>New Task</Button>
-                    </li>
-                    {customerDetails.clientState===4 &&
+                    {allUSerPermissions.indexOf("bnk_manage_clients_task") >-1 &&
+                        <li>
+                            <Button size="sm" onClick={this.handleTaskShow}>New Task</Button>
+                        </li>
+                    }
+                    {   (customerDetails.clientState===4 && 
+                        (allUSerPermissions.indexOf("bnk_create_loan") >-1 ||allUSerPermissions.indexOf("bnk_create_deposit") >-1  )) &&
                         <li>
                             <DropdownButton
                                 size="sm"
@@ -485,19 +493,25 @@ class CustomerAccountContainer extends React.Component {
                                 className="customone"
                                 alignRight
                             >
-                                <NavLink className="dropdown-item" to={`/all-loans/newloan-account/${customerDetails.clientEncodedKey}`}>New Loan Account</NavLink>
-                                <NavLink className="dropdown-item" to={`/deposits/newaccount/${customerDetails.clientEncodedKey}`}>New Deposit Account</NavLink>
+                                {allUSerPermissions.indexOf("bnk_create_loan") >-1 &&
+                                    <NavLink className="dropdown-item" to={`/all-loans/newloan-account/${customerDetails.clientEncodedKey}`}>New Loan Account</NavLink>
+                                }
+                                {allUSerPermissions.indexOf("bnk_create_deposit") >-1 &&
+                                    <NavLink className="dropdown-item" to={`/deposits/newaccount/${customerDetails.clientEncodedKey}`}>New Deposit Account</NavLink>
+                                }
                                 {/* <Dropdown.Item eventKey="1" onClick={this.handleShow}>New Deposit Account</Dropdown.Item> */}
                                 {/* <Dropdown.Item eventKey="1">New Credit Arrangement</Dropdown.Item> */}
                             </DropdownButton>
                         </li>
                     }
-                    <li>
-                        <Button size="sm">
-                            <NavLink to={`/clients/edit/${customerDetails.clientEncodedKey}`} >Edit</NavLink>
-                        </Button>
-                    </li>
-                    {customerDetails.clientState===4 &&
+                    {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                        <li>
+                            <Button size="sm">
+                                <NavLink to={`/clients/edit/${customerDetails.clientEncodedKey}`} >Edit</NavLink>
+                            </Button>
+                        </li>
+                    }
+                    {(customerDetails.clientState===4 && allUSerPermissions.indexOf("bnk_blacklist_customer") >-1) &&
                         <li>
                             <DropdownButton
                                 size="sm"
@@ -506,9 +520,9 @@ class CustomerAccountContainer extends React.Component {
                                 className="customone"
                                 alignRight
                             >
-                                <Dropdown.Item eventKey="1" onClick={this.handleAddFieldShow}>Add Field</Dropdown.Item>
+                                {/* <Dropdown.Item eventKey="1" onClick={this.handleAddFieldShow}>Add Field</Dropdown.Item>
                                 <Dropdown.Item eventKey="1" onClick={this.handleSetNotificationShow}>Set Notifications</Dropdown.Item>
-                                <Dropdown.Item eventKey="1" onClick={this.handleChangeHistoryShow}>View Change History</Dropdown.Item>
+                                <Dropdown.Item eventKey="1" onClick={this.handleChangeHistoryShow}>View Change History</Dropdown.Item> */}
                                 <Dropdown.Item eventKey="1" onClick={()=>{
                                     this.setState({newState: "Blacklisted", newStateUpdate: "blacklist", ctaText:"Blacklist Customer"})
                                     this.handleChangeStateShow()
@@ -516,7 +530,7 @@ class CustomerAccountContainer extends React.Component {
                             </DropdownButton>
                         </li>
                     }
-                    {customerDetails.clientState===6 &&
+                    {(customerDetails.clientState===6 && allUSerPermissions.indexOf("bnk_blacklist_customer") >-1) &&
                         <li>
                             <DropdownButton
                                 size="sm"
@@ -533,7 +547,8 @@ class CustomerAccountContainer extends React.Component {
                             </DropdownButton>
                         </li>
                     }
-                    {customerDetails.clientState===3 &&
+                    {(customerDetails.clientState===3 
+                        && (allUSerPermissions.indexOf("bnk_blacklist_customer") >-1 || allUSerPermissions.indexOf("bnk_approve_client") >-1)) &&
                         <li>
                             <DropdownButton
                                 size="sm"
@@ -542,18 +557,24 @@ class CustomerAccountContainer extends React.Component {
                                 className="customone"
                                 alignRight
                             >
-                                <Dropdown.Item eventKey="1" onClick={()=>{
-                                    this.setState({newState: "Approved", newStateUpdate: "approve", ctaText:"Approve Customer"})
-                                    this.handleChangeStateShow()
-                                }} >Approve</Dropdown.Item>
-                                <Dropdown.Item eventKey="1" onClick={()=>{
-                                    this.setState({newState: "Rejected", newStateUpdate: "rejectcustomer", ctaText:"Reject Customer"})
-                                    this.handleChangeStateShow()
-                                }} >Reject</Dropdown.Item>
-                                <Dropdown.Item eventKey="1" onClick={()=>{
-                                    this.setState({newState: "Blacklisted", newStateUpdate: "blacklist", ctaText:"Blacklist Customer"})
-                                    this.handleChangeStateShow()
-                                }} >Blacklist Customer</Dropdown.Item>
+                                { allUSerPermissions.indexOf("bnk_approve_client") >-1 &&
+                                    <Dropdown.Item eventKey="1" onClick={()=>{
+                                        this.setState({newState: "Approved", newStateUpdate: "approve", ctaText:"Approve Customer"})
+                                        this.handleChangeStateShow()
+                                    }} >Approve</Dropdown.Item>
+                                }
+                                { allUSerPermissions.indexOf("bnk_approve_client") >-1 &&
+                                    <Dropdown.Item eventKey="1" onClick={()=>{
+                                        this.setState({newState: "Rejected", newStateUpdate: "rejectcustomer", ctaText:"Reject Customer"})
+                                        this.handleChangeStateShow()
+                                    }} >Reject</Dropdown.Item>
+                                }
+                                { allUSerPermissions.indexOf("bnk_blacklist_customer") >-1 &&
+                                    <Dropdown.Item eventKey="1" onClick={()=>{
+                                        this.setState({newState: "Blacklisted", newStateUpdate: "blacklist", ctaText:"Blacklist Customer"})
+                                        this.handleChangeStateShow()
+                                    }} >Blacklist Customer</Dropdown.Item>
+                                }
                             </DropdownButton>
                         </li>
                     }
@@ -624,6 +645,10 @@ class CustomerAccountContainer extends React.Component {
         let {generatedRoutes} = this.state;
         let numberOfClosedLoans  = 0;
 
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
         //     numberOfClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed").length;
         // let unClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription!=="Rejected" && eachLoanAccount.loanStateDescription!=="Closed Withdrawn" && eachLoanAccount.loanStateDescription!=="Closed");
 
@@ -647,18 +672,29 @@ class CustomerAccountContainer extends React.Component {
                                 </NavLink>
                             </li>
                         }
-                        <li>
-                            <NavLink to={generatedRoutes.attachments}>Attachments</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to={generatedRoutes.tasks}>Tasks</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to={generatedRoutes.communications}>Communications</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to={generatedRoutes.comments}>Comments</NavLink>
-                        </li>
+                        
+                        {allUSerPermissions.indexOf("bnk_view_customer_documents") >-1 &&
+                        
+                            <li>
+                                <NavLink to={generatedRoutes.attachments}>Attachments</NavLink>
+                            </li>
+                        }
+                        {allUSerPermissions.indexOf("bnk_manage_clients_task") >-1 &&
+                            <li>
+                                <NavLink to={generatedRoutes.tasks}>Tasks</NavLink>
+                            </li>
+                        }
+
+                        {allUSerPermissions.indexOf("bnk_view_client_communications") >-1 &&
+                            <li>
+                                <NavLink to={generatedRoutes.communications}>Communications</NavLink>
+                            </li>
+                        }
+                        {allUSerPermissions.indexOf("bnk_view_customer_comments") >-1 &&
+                            <li>
+                                <NavLink to={generatedRoutes.comments}>Comments</NavLink>
+                            </li>
+                        }
                     </ul>
                     
                 </div>

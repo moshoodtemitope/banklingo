@@ -6,8 +6,10 @@ import { handleRequestErrors } from "../../../shared/utils";
 
 export const depositActions = {
     getDeposits,
+    exportDeposits,
     getClientDeposits,
     getDepositTransaction,
+    exportDepositTransaction,
     getAccountDepositTransaction,
     createDepositAccount,
     getAClientDepositAccount,
@@ -52,6 +54,47 @@ function getDeposits(params , tempData) {
     // function request(user) { return { type: loanAndDepositsConstants.GET_DEPOSITS_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_DEPOSITS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_DEPOSITS_FAILURE, error } }
+
+}
+
+function exportDeposits(params , tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_DEPOSITS + `/depositsexport?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response => {
+                console.log("dsvdsd", response);
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'template.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+               
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.EXPORT_DEPOSITS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.EXPORT_DEPOSITS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.EXPORT_DEPOSITS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.EXPORT_DEPOSITS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.EXPORT_DEPOSITS_FAILURE, error } }
 
 }
 
@@ -120,6 +163,44 @@ function getDepositTransaction(params, tempData) {
     // function request(user) { return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_FAILURE, error } }
+
+}
+
+function exportDepositTransaction(params, tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_DEPOSITS_TRANSACTIONS +`/deposittransactionsexport?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'template.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_PENDING, user, tempData } 
+        }
+    }
+
+    // function request(user) { return { type: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_FAILURE, error } }
 
 }
 

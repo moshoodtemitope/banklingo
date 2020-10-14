@@ -100,6 +100,15 @@ select, select.form-control{
         margin-left: 6px;
         font-size: 13px;
     }
+    .action-icon{
+        padding: 1px 4px;
+        border-color: rgba(93, 109, 126, 0.5);
+        margin-top: 0 !important;
+        &:hover{
+            background: unset;
+            border-color: rgba(93, 109, 126, 1);
+        }
+    }
     .section-title{
         margin-bottom: 0;
     }

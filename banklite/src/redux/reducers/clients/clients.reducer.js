@@ -26,6 +26,32 @@ export function getClientsReducer(state=[], action) {
     }
 }
 
+export function exportClientsReducer(state=[], action) {
+    switch (action.type) {
+        case clientsConstants.EXPORT_CLIENTS_PENDING:
+            return {
+                request_status: clientsConstants.EXPORT_CLIENTS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case clientsConstants.EXPORT_CLIENTS_SUCCESS:
+            return {
+                request_status: clientsConstants.EXPORT_CLIENTS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case clientsConstants.EXPORT_CLIENTS_FAILURE:
+            return {
+                request_status: clientsConstants.EXPORT_CLIENTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getAClientReducer(state=[], action) {
     switch (action.type) {
         case clientsConstants.GET_A_CLIENT_PENDING:

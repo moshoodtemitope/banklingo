@@ -33,7 +33,7 @@ class EditAClient extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:JSON.parse(localStorage.getItem("user")),
+            user:JSON.parse(localStorage.getItem('lingoAuth')),
         }
 
         
@@ -166,8 +166,7 @@ class EditAClient extends React.Component {
 
                         defaultAccountOfficer =allUserDataList.filter(eachOfficer=>eachOfficer.value===allCustomerData.accountOfficerEncodedKey)[0];
                     }
-                console.log('Customer is', allCustomerData.accountOfficerEncodedKey);
-                console.log('Customer dsdsd', allUserDataList);
+                
                 let custTypes = this.props.adminGetCustomerTypes.request_data.response,
                     selectedCustype  = custTypes.filter(type=>type.id===allCustomerData.clientTypeId)[0];
                     if(Object.keys(allCustomerData).length>=1){
@@ -177,21 +176,21 @@ class EditAClient extends React.Component {
                                 initialValues={{
                                     FName: allCustomerData.firstName,
                                     LName: allCustomerData.lastName,
-                                    MName: allCustomerData.middleName?allCustomerData.middleName:null,
+                                    MName: allCustomerData.middleName?allCustomerData.middleName:"",
                                     custType: allCustomerData.clientTypeEncodedKey,
-                                    BVN: allCustomerData.bvn?allCustomerData.bvn:null,
-                                    addressLine1: allCustomerData.address.addressLine1?allCustomerData.address.addressLine1:null,
-                                    addressLine2: allCustomerData.address.addressLine2?allCustomerData.address.addressLine2:null,
-                                    addressCity: allCustomerData.address.addressCity?allCustomerData.address.addressCity:null,
-                                    addressState: allCustomerData.address.addressState?allCustomerData.address.addressState:null,
-                                    addressCountry: allCustomerData.address.addressCountry?allCustomerData.address.addressCountry:null,
-                                    zipCode: allCustomerData.address.zipCode?allCustomerData.address.zipCode:null,
-                                    contactMobile: allCustomerData.contact.contactMobile?allCustomerData.contact.contactMobile:null,
-                                    contactEmail:allCustomerData.contact.contactEmail?allCustomerData.contact.contactEmail:null,
-                                    nextOfKinFullName: allCustomerData.nextOfKin.nextOfKinFullName!==null?allCustomerData.nextOfKin.nextOfKinFullName:null,
-                                    nextOfKinAddress: allCustomerData.nextOfKin.nextofKinHomeAddress!==null?allCustomerData.nextOfKin.nextofKinHomeAddress:null,
-                                    nextOfKinMobile: allCustomerData.nextOfKin.nextOfKinMobileNumber!==null?allCustomerData.nextOfKin.nextOfKinMobileNumber:null,
-                                    gender:(allCustomerData.gender!==undefined && allCustomerData.gender!==null && allCustomerData.gender!=='') ?allCustomerData.gender:null,
+                                    BVN: allCustomerData.bvn?allCustomerData.bvn:"",
+                                    addressLine1: allCustomerData.address.addressLine1?allCustomerData.address.addressLine1:"",
+                                    addressLine2: allCustomerData.address.addressLine2?allCustomerData.address.addressLine2:"",
+                                    addressCity: allCustomerData.address.addressCity?allCustomerData.address.addressCity:"",
+                                    addressState: allCustomerData.address.addressState?allCustomerData.address.addressState:"",
+                                    addressCountry: allCustomerData.address.addressCountry?allCustomerData.address.addressCountry:"",
+                                    zipCode: allCustomerData.address.zipCode?allCustomerData.address.zipCode:"",
+                                    contactMobile: allCustomerData.contact.contactMobile?allCustomerData.contact.contactMobile:"",
+                                    contactEmail:allCustomerData.contact.contactEmail?allCustomerData.contact.contactEmail:"",
+                                    nextOfKinFullName: allCustomerData.nextOfKin.nextOfKinFullName!==null?allCustomerData.nextOfKin.nextOfKinFullName:"",
+                                    nextOfKinAddress: allCustomerData.nextOfKin.nextofKinHomeAddress!==null?allCustomerData.nextOfKin.nextofKinHomeAddress:"",
+                                    nextOfKinMobile: allCustomerData.nextOfKin.nextOfKinMobileNumber!==null?allCustomerData.nextOfKin.nextOfKinMobileNumber:"",
+                                    gender:(allCustomerData.gender!==undefined && allCustomerData.gender!==null && allCustomerData.gender!=='') ?allCustomerData.gender:"",
                                     // dateOfBirth: (allCustomerData.dateOfBirth!==null && allCustomerData.dateOfBirth!==undefined && allCustomerData.dateOfBirth!=='')? getDateFromISO(allCustomerData.dateOfBirth):null,
                                     dateOfBirth: null,
                                     custType:allCustomerData.clientTypeId,

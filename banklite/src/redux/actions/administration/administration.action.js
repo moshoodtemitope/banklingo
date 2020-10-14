@@ -590,7 +590,7 @@ function getCustomerTypes  (customerTypesPayload, tempData){
 }
 
 function getAllCustomerTypes  (){
-        let userInfo = JSON.parse(localStorage.getItem("user"));
+        let userInfo = JSON.parse(localStorage.getItem('lingoAuth'));
         return dispatch =>{
             if(userInfo.custTypes===null || userInfo.custTypes===undefined){
                 let consume = ApiService.request(routes.HIT_CUSTOMER_TYPES+`/all`, "GET", null);
@@ -598,7 +598,7 @@ function getAllCustomerTypes  (){
                 return consume
                     .then(response =>{
                         userInfo.custTypes = response.data;
-                        localStorage.setItem('user', JSON.stringify(userInfo));
+                        localStorage.setItem('lingoAuth', JSON.stringify(userInfo));
                         dispatch(success(response));
                     }).catch(error =>{
                         dispatch(failure(handleRequestErrors(error)));

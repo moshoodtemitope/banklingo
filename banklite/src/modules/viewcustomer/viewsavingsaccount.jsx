@@ -98,6 +98,7 @@ class ViewSavingsAccount extends React.Component {
             txtnStartDate: "",
         }
 
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
         
     }
 
@@ -1556,7 +1557,10 @@ class ViewSavingsAccount extends React.Component {
         let getAClientDepositAccountCommentsRequest =  this.props.getAClientDepositAccountCommentsReducer;
 
         let saveRequestData= getAClientDepositAccountCommentsRequest.request_data!==undefined?getAClientDepositAccountCommentsRequest.request_data.tempData:null;
-
+            let allUSerPermissions =[];
+            this.userPermissions.map(eachPermission=>{
+                allUSerPermissions.push(eachPermission.permissionCode)
+            })
         if(getAClientDepositAccountCommentsRequest.request_status===loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMENTS_PENDING){
             if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                 return(
@@ -1597,9 +1601,11 @@ class ViewSavingsAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleCommentsBoxShow}>New Comment</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_deposit_comments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleCommentsBoxShow}>New Comment</Button>
+                            </div>
+                        }
                         
                     </div>
                 )
@@ -1649,9 +1655,11 @@ class ViewSavingsAccount extends React.Component {
                                 }
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_deposit_comments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
+                            </div>
+                        }
                     </div>
                 )
             }
@@ -1717,9 +1725,11 @@ class ViewSavingsAccount extends React.Component {
                                 }
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_deposit_comments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
+                            </div>
+                        }
                     </div>
                 )
             }else{
@@ -1762,9 +1772,11 @@ class ViewSavingsAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_deposit_comments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
+                            </div>
+                        }
                     </div>
                 )
             }
@@ -1970,7 +1982,10 @@ class ViewSavingsAccount extends React.Component {
 
     renderADepositAttachments=()=>{
         let getADepositAccountAttachmentsRequest =  this.props.getADepositAccountAttachmentsReducer;
-
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
         let saveRequestData= getADepositAccountAttachmentsRequest.request_data!==undefined?getADepositAccountAttachmentsRequest.request_data.tempData:null;
         if(getADepositAccountAttachmentsRequest.request_status===loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_ATTACHMENTS_PENDING){
             if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
@@ -2011,9 +2026,11 @@ class ViewSavingsAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_deposit_attachments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
+                            </div>
+                        }
                     </div>
                 )
             }else{
@@ -2079,9 +2096,11 @@ class ViewSavingsAccount extends React.Component {
                                 }
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_deposit_attachments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
+                            </div>
+                        }
                     </div>
                 )
             }
@@ -2165,9 +2184,11 @@ class ViewSavingsAccount extends React.Component {
                                 }
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_deposit_attachments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
+                            </div>
+                        }
                     </div>
                 )
             }else{
@@ -2211,9 +2232,11 @@ class ViewSavingsAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_deposit_attachments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
+                            </div>
+                        }
                     </div>
                 )
             }
@@ -3413,10 +3436,15 @@ class ViewSavingsAccount extends React.Component {
         //     Closed_Written_Off = 8,
         //     Closed_Withdrawn = 9
         // }
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
+
             return(
                 <div className="heading-ctas">
                     <ul className="nav">
-                        {(depositDetails.accountState ===2) &&
+                        {(depositDetails.accountState ===2 && allUSerPermissions.indexOf("bnk_approve_deposit_account") >-1) &&
                             <li>
                                 <Button size="sm"
                                     onClick={()=>{
@@ -3482,7 +3510,7 @@ class ViewSavingsAccount extends React.Component {
                             </li>
                         } */}
 
-                        {(depositDetails.accountState ===1) &&
+                        {(depositDetails.accountState ===1 && allUSerPermissions.indexOf("bnk_request_deposit_approval") >- 1) &&
                             <li>
                                 <Button size="sm" 
                                     onClick={()=>{
@@ -3512,7 +3540,7 @@ class ViewSavingsAccount extends React.Component {
                                     className="customone"
                                     alignRight
                                 >
-                                    {(depositDetails.accountState ===1 || depositDetails.accountState ===2) &&
+                                    {((depositDetails.accountState ===1 || depositDetails.accountState ===2) && allUSerPermissions.indexOf("bnk_reject_deposit_account") >- 1) &&
                                         <Dropdown.Item eventKey="1"
                                             onClick={()=>{
                                                 this.setState({newState: "Rejected", newStateUpdate: "reject", newStateHeading :"Change Deposit State", ctaText:"Reject"})
@@ -3573,6 +3601,10 @@ class ViewSavingsAccount extends React.Component {
             getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer,
             getClientDepositsRequest = this.props.getClientDepositsReducer;
 
+            let allUSerPermissions =[];
+            this.userPermissions.map(eachPermission=>{
+                allUSerPermissions.push(eachPermission.permissionCode)
+            })
 
             if((getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_SUCCESS
                 &&  getClientLoansRequest.request_status ===loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
@@ -3601,21 +3633,31 @@ class ViewSavingsAccount extends React.Component {
                                             <Nav.Item>
                                                 <Nav.Link eventKey="details">Details</Nav.Link>
                                             </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="transactions" onSelect={this.getCustomerDepositTransactions}>Transactions</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="activity" onSelect={this.getADepositActivities}>Activity</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="attachments" onSelect={this.getACustomerDepositAttachments}>Attachments</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="comments" onSelect={this.getADepositComments}>Comments</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="communications" onSelect={this.getADepositCommunications}>Communications</Nav.Link>
-                                            </Nav.Item>
+                                            {allUSerPermissions.indexOf("bnk_view_deposit_transactions") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="transactions" onSelect={this.getCustomerDepositTransactions}>Transactions</Nav.Link>
+                                                </Nav.Item>
+                                            }
+                                            {allUSerPermissions.indexOf("bnk_view_deposit_activities") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="activity" onSelect={this.getADepositActivities}>Activity</Nav.Link>
+                                                </Nav.Item>
+                                            }
+                                            {allUSerPermissions.indexOf("bnk_view_deposit_attachments") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="attachments" onSelect={this.getACustomerDepositAttachments}>Attachments</Nav.Link>
+                                                </Nav.Item>
+                                            }
+                                            {allUSerPermissions.indexOf("bnk_view_deposit_comments") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="comments" onSelect={this.getADepositComments}>Comments</Nav.Link>
+                                                </Nav.Item>
+                                            }
+                                            {allUSerPermissions.indexOf("bnk_view_deposit_communications") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="communications" onSelect={this.getADepositCommunications}>Communications</Nav.Link>
+                                                </Nav.Item>
+                                            }
                                         </Nav>
                                         {this.renderDepositCtas(getAClientDepositAccountRequest.request_data.response.data)}
                                         <Tab.Content>

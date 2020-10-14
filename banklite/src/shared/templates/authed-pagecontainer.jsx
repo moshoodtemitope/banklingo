@@ -8,7 +8,7 @@ import {authActions} from '../../redux/actions/auth/auth.action';
 class InnerPageContainer extends React.Component{
     constructor(props) {
         super(props);
-        let user = localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")) : {};
+        let user = localStorage.getItem('lingoAuth')? JSON.parse(localStorage.getItem('lingoAuth')) : {};
 
         // console.log("user is", user.BranchId)
         // if(user.BranchId)
@@ -31,7 +31,7 @@ class InnerPageContainer extends React.Component{
 
     refreshTokenTask =()=>{
         
-        let userInfo = JSON.parse(localStorage.getItem("user"));
+        let userInfo = JSON.parse(localStorage.getItem('lingoAuth'));
             if(userInfo!==null && userInfo!==undefined){
                 let    lastRefreshTime = userInfo.lastLogForAuth;
 
@@ -62,7 +62,7 @@ class InnerPageContainer extends React.Component{
     }
     
     render() {
-        let user = localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")) : {};
+        let user = localStorage.getItem('lingoAuth')? JSON.parse(localStorage.getItem('lingoAuth')) : {};
 
         // console.log("user is", user.BranchId)
         // if(user.BranchId)

@@ -9,7 +9,8 @@ export const authActions = {
     Logout,
     ResfreshToken,
     initStore,
-    ChangePassword
+    ChangePassword,
+    ForbiddenAccess
 }
 
 
@@ -26,19 +27,19 @@ function Login   (loginPayload){
                         userData = {...response.data};
                         userData.lastLogForAuth = Date.now();
                         
-                        localStorage.setItem('user', JSON.stringify(userData));
+                        localStorage.setItem('lingoAuth', JSON.stringify(userData));
                         // userData = response.data;
                         let consume2 = ApiService.request(routes.ADD_BRANCH+'/allowedbranches', "GET", null);
                         dispatch(request(consume2));
 
                         return consume2
                         .then(response2 =>{
-                            // localStorage.setItem('user', JSON.stringify(response.data));
-                            let user = JSON.parse(localStorage.getItem("user"));
+                            // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
+                            let user = JSON.parse(localStorage.getItem('lingoAuth'));
                                 user.AllowedBranches = response2.data;
                                 user.BranchId = response2.data[0].id;
                                 user.BranchName = response2.data[0].name;
-                                localStorage.setItem('user', JSON.stringify(user));
+                                localStorage.setItem('lingoAuth', JSON.stringify(user));
                             
                                 let consume3 = ApiService.request(routes.HIT_ROLE+'/mypermissions', "GET", null);
                                 dispatch(request(consume3));
@@ -89,7 +90,7 @@ function Login   (loginPayload){
                         
                     }
                     // else{
-                    //     localStorage.setItem('user', JSON.stringify(response.data));
+                    //     localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                        
                     //     dispatch(success(response.data));
                     //     history.push('/dashboard');
@@ -131,26 +132,26 @@ function ResfreshToken   (refreshTokenPayload){
             
             return consume
                 .then(response =>{
-                    console.log("response is",response.status);
+                    // console.log("response is",response.status);
                     if(response.status===200){
                         if(response.data.token!==undefined){
                             
-                            userData = JSON.parse(localStorage.getItem("user"));;
+                            userData = JSON.parse(localStorage.getItem('lingoAuth'));
                             userData.lastLogForAuth = Date.now();
                             userData.statusCode = response.status;
                             userData.token = response.data.token;
-                            localStorage.setItem('user', JSON.stringify(userData));
+                            localStorage.setItem('lingoAuth', JSON.stringify(userData));
                             // let consume2 = ApiService.request(routes.ADD_BRANCH+'/allowedbranches', "GET", null);
                             // dispatch(request(consume2));
                             dispatch(success(userData));
                             // return consume2
                             // .then(response2 =>{
                                 
-                            //     let user = JSON.parse(localStorage.getItem("user"));
+                            //     let user = JSON.parse(localStorage.getItem('lingoAuth');
                             //         user.AllowedBranches = response2.data;
                             //         user.BranchId = response2.data[0].id;
                             //         user.BranchName = response2.data[0].name;
-                            //         localStorage.setItem('user', JSON.stringify(user));
+                            //         localStorage.setItem('lingoAuth', JSON.stringify(user));
                             
 
                                 
@@ -165,9 +166,9 @@ function ResfreshToken   (refreshTokenPayload){
                             
                         }
                     }else{
-                        let userInfo = JSON.parse(localStorage.getItem("user"))
+                        let userInfo = JSON.parse(localStorage.getItem('lingoAuth'))
                         userInfo.lastLogForAuth = Date.now();
-                        localStorage.setItem('user', JSON.stringify(userInfo));
+                        localStorage.setItem('lingoAuth', JSON.stringify(userInfo));
                     }
                     
                     
@@ -250,6 +251,27 @@ function Logout(redirectType,retUrl) {
         }
         
     }
+}
+
+function ForbiddenAccess(retUrl) {
+    
+   
+
+    history.push('/forbidden-access');
+    // return (dispatch) => {
+    //     dispatch(forbidAccess(retUrl));
+    // }
+    
+    
+    // function forbidAccess(retUrl) { 
+    //     if(retUrl===undefined ||retUrl===null ){
+    //         return { type: authConstants.LOGOUT } 
+    //     }
+    //     if(retUrl!==undefined){
+    //         return { type: authConstants.LOGOUT, retUrl } 
+    //     }
+        
+    // }
 }
 
 function initStore() {

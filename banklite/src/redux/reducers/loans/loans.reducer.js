@@ -286,6 +286,32 @@ export function getLoanTransactionsReducer(state=[], action) {
     }
 }
 
+export function exportLoanTransactionsReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.EXPORT_LOAN_TRANSACTIONS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_LOAN_TRANSACTIONS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_LOAN_TRANSACTIONS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_LOAN_TRANSACTIONS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_LOAN_TRANSACTIONS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_LOAN_TRANSACTIONS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getAccountLoanTransactionReducer(state=[], action) {
     switch (action.type) {
         case loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING:

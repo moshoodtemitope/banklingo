@@ -25,6 +25,8 @@ import Select from 'react-select';
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
 import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
 import {banksList} from '../../shared/banks'
+
+import DisbursementNav from './_menu'
 class InitiateDisbursement extends React.Component {
     constructor(props) {
         super(props);
@@ -682,7 +684,8 @@ class InitiateDisbursement extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
-                                    <ul className="nav">
+                                    <DisbursementNav />
+                                    {/* <ul className="nav">
                                         <li>
                                             <NavLink exact to={'/disbursements'}>Disbursements</NavLink>
                                         </li>
@@ -697,19 +700,9 @@ class InitiateDisbursement extends React.Component {
                                         </li>
                                         <li>
                                             <NavLink to={'/disbursements/nip-requests'}>NIP Requests</NavLink>
-                                            {/* <ul>
-                                                <li>
-                                                    <NavLink to={'/disbursements/transfer-requests'}>Transfer Requests</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to={'/disbursements/account-block'}>Account Block</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to={'/disbursements/amount-block'}>Amount Block</NavLink>
-                                                </li>
-                                            </ul> */}
+                                            
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </div>
                             </div>
                             <div className="module-content">

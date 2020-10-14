@@ -21,16 +21,17 @@ class ClientsManagement extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:JSON.parse(localStorage.getItem("user")),
+            user:JSON.parse(localStorage.getItem('lingoAuth')),
             PageSize:'10',
             FullDetails: false,
             CurrentPage:1,
-            BranchId: JSON.parse(localStorage.getItem("user")).BranchId,
+            BranchId: JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
             ClientState:0,
             endDate: "",
             startDate: "",
             SearchText:""
         }
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
     }
 
     componentDidMount(){
@@ -47,6 +48,26 @@ class ClientsManagement extends React.Component {
         const {dispatch} = this.props;
 
         dispatch(clientsActions.getClients(paramters));
+    }
+
+    exportClients=()=>{
+        let {PageSize,CurrentPage,FullDetails, BranchId, ClientState, SearchText, endDate, startDate} = this.state;
+        
+        
+        if(endDate!==""){
+            endDate = endDate.toISOString()
+        }
+        if(startDate!==""){
+            startDate = startDate.toISOString()
+        }
+        let paramters= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+
+            
+        
+
+        const {dispatch} = this.props;
+
+        dispatch(clientsActions.exportClients(paramters));
     }
 
     setPagesize = (PageSize, tempData)=>{
@@ -151,6 +172,7 @@ class ClientsManagement extends React.Component {
             dispatch(clientsActions.getClients(params));
         }
     }
+
     getCustomerTypeText = (custypeId)=>{
 
         let customerTypeVal = this.state.user.custTypes.filter(eachType=>eachType.id===custypeId)[0];
@@ -160,6 +182,10 @@ class ClientsManagement extends React.Component {
 
     renderClients =()=>{
         let getClientsRequest = this.props.getClientsReducer;
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
 
         let saveRequestData= getClientsRequest.request_data!==undefined?getClientsRequest.request_data.tempData:null;
             switch (getClientsRequest.request_status){
@@ -252,7 +278,9 @@ class ClientsManagement extends React.Component {
                                             <th>Account Currency</th>
                                             <th>Account Balance</th>
                                             <th>Date Created</th>
-                                            <th></th>
+                                            {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                                                <th></th>
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -269,18 +297,20 @@ class ClientsManagement extends React.Component {
                                                             <td>{eachClient.currency}</td>
                                                             <td>{eachClient.totalBalance}</td>
                                                             <td>{eachClient.lastUpdated}</td>
-                                                            <td>
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="activeCurrency"
-                                                                    className="customone"
-                                                                >
-                                                                    <NavLink className="dropdown-item" to={`/clients/edit/${eachClient.clientEncodedKey}`}>Edit</NavLink>
-                                                                    {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
-                                                                </DropdownButton>
-                                                            </td>
+                                                            {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                                                                <td>
+                                                                    <DropdownButton
+                                                                        size="sm"
+                                                                        title="Actions"
+                                                                        key="activeCurrency"
+                                                                        className="customone"
+                                                                    >
+                                                                        <NavLink className="dropdown-item" to={`/clients/edit/${eachClient.clientEncodedKey}`}>Edit</NavLink>
+                                                                        {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                            <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                                    </DropdownButton>
+                                                                </td>
+                                                            }
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -359,6 +389,11 @@ class ClientsManagement extends React.Component {
 ) : null} */}
                                             </Form.Group>
                                             <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                            <div className="actions-wrap">
+                                                <Button onClick={this.exportClients} className="action-icon" variant="outline-secondary" type="button">
+                                                    <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
+                                                </Button>
+                                            </div>
                                         </Form>
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
@@ -395,7 +430,9 @@ class ClientsManagement extends React.Component {
                                                 <th>Account Currency</th>
                                                 <th>Account Balance</th>
                                                 <th>Date Created</th>
-                                                <th></th>
+                                                {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                                                    <th></th>
+                                                }
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -412,18 +449,20 @@ class ClientsManagement extends React.Component {
                                                                 <td>{eachClient.currency}</td>
                                                                 <td>{eachClient.totalBalance}</td>
                                                                 <td>{eachClient.lastUpdated}</td>
-                                                                <td>
-                                                                    <DropdownButton
-                                                                        size="sm"
-                                                                        title="Actions"
-                                                                        key="activeCurrency"
-                                                                        className="customone"
-                                                                    >
-                                                                        <NavLink className="dropdown-item" to={`/clients/edit/${eachClient.clientEncodedKey}`}>Edit</NavLink>
-                                                                        {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
-                                                                    </DropdownButton>
-                                                                </td>
+                                                                {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                                                                    <td>
+                                                                        <DropdownButton
+                                                                            size="sm"
+                                                                            title="Actions"
+                                                                            key="activeCurrency"
+                                                                            className="customone"
+                                                                        >
+                                                                            <NavLink className="dropdown-item" to={`/clients/edit/${eachClient.clientEncodedKey}`}>Edit</NavLink>
+                                                                            {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                            <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                                        </DropdownButton>
+                                                                    </td>
+                                                                }
                                                             </tr>
                                                         </Fragment>
                                                     )
@@ -639,6 +678,7 @@ class ClientsManagement extends React.Component {
 function mapStateToProps(state) {
     return {
         getClientsReducer : state.clientsReducers.getClientsReducer,
+        exportClientsReducer : state.clientsReducers.exportClientsReducer,
     };
 }
 

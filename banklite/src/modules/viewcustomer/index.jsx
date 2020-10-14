@@ -25,7 +25,7 @@ class ViewCustomer extends React.Component {
         super(props);
         this.clientEncodedKey = this.props.match.params.id;
         this.state={
-            user: JSON.parse(localStorage.getItem("user")),
+            user:JSON.parse(localStorage.getItem('lingoAuth')),
             FullDetails:true,
             PageSize: 100,
             CurrentPage: 1,

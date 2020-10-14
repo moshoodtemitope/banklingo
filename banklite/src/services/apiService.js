@@ -38,8 +38,8 @@ export class ApiService {
             binaryUploadUrls =[
                 "/api/Upload"
             ];
-        if(localStorage.getItem("user") === null){
-            // if(localStorage.getItem("user") === null && axios.defaults.headers.common["Token"]){
+        if(localStorage.getItem('lingoAuth') === null){
+            // if(localStorage.getItem('lingoAuth' === null && axios.defaults.headers.common["Token"]){
             
             delete instance.defaults.headers.common.Authorization;
             delete instance.defaults.headers.common.Bid;
@@ -49,9 +49,9 @@ export class ApiService {
         // }
         
         
-       if(localStorage.getItem("user") !==null){
+       if(localStorage.getItem('lingoAuth') !==null){
            
-           let user = JSON.parse(localStorage.getItem("user")),
+           let user = JSON.parse(localStorage.getItem('lingoAuth')),
                 serviceToTest = url.split("Fintech.CBS.Backend")[1];
               
             //Exclude urlsWithoutAuthentication urls from Authenticated requests with Token
@@ -59,7 +59,7 @@ export class ApiService {
                instance.defaults.headers.common['Token'] = user.token;
             //    instance.defaults.headers.common['Authorization'] = `Bearer ddsdsdiysdij`;
                instance.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-            //    console.log("user is", user);
+            
                 delete instance.defaults.headers.common.Bid;
                 
                 if (urlsWithoutBranchIdInRequest.indexOf(serviceToTest) === -1) {
@@ -99,7 +99,7 @@ export class ApiService {
     }
 
 
-    static request(url, type, data, headers = undefined, noStringify=false){
+    static request(url, type, data, headers = undefined, noStringify=false, responseType){
         let bodyData;
         let service,
             lastRefreshTime,
@@ -122,13 +122,15 @@ export class ApiService {
         ],
         serviceToTest = url.split("Fintech.CBS.Backend")[1];
 
-        if(localStorage.getItem("user") === null){
+        if(localStorage.getItem('lingoAuth' === null)){
             headers = undefined;
         }
 
-        let lingoAuth = JSON.parse(localStorage.getItem("user"));
+        let lingoAuth = JSON.parse(localStorage.getItem('lingoAuth'));
 
         if (type.toLowerCase() === 'get') {
+            
+            
             if(headers === undefined){
                 this.setTokenAuthorization(url);
             }
@@ -163,26 +165,31 @@ export class ApiService {
                         if(response.status>=200 && response.status<210){
                             if(response.data.token!==undefined){
                                 
-                                let userData = JSON.parse(localStorage.getItem("user"));
+                                let userData = JSON.parse(localStorage.getItem('lingoAuth'));
                                     userData.lastLogForAuth = Date.now();
                                     userData.token = response.data.token;
-                                    localStorage.setItem('user', JSON.stringify(userData));
+                                    localStorage.setItem('lingoAuth', JSON.stringify(userData));
 
                                 delete instance.defaults.headers.common;
                                 instance.defaults.headers.common ={
                                     ...tempRequest.tempHeaders
                                 }
+                                // responseType
                                 instance.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-
-                                service = instance.get(tempRequest.url, tempRequest.bodyData);
+                                if(responseType ===undefined){
+                                    service = instance.get(tempRequest.url, tempRequest.bodyData);
+                                }
+                                if(responseType ==="blob"){
+                                    service = instance.request({url:tempRequest.url, method: 'GET', data:tempRequest.bodyData, responseType: 'blob'})
+                                }
 
                                 
                                 return service.then((response3)=>{
 
                                     if(response3.status>=200 && response3.status < 210){
-                                        console.log("service is", response3);
+                                        
                                         // return service;
-                                        if(response3.headers['content-type'].indexOf('application/json')>-1){
+                                        if(response3.headers['content-type'].indexOf('application/json')>-1 || response3.headers['content-type'].indexOf('application/octet-stream')>-1){
                                             // return response3;
                                             return service;
                                             
@@ -197,13 +204,13 @@ export class ApiService {
                                 })
                                 .catch((error2)=>{
                                     // serviceResponse = service;
-                                    console.log("failed is", service);
+                                    
                                     // return service;
                                     
                                     if(serviceResponse!==""){
                                         return serviceResponse
                                     }else{
-                                        console.log("was here")
+                                        
                                         serviceResponse2 = service;
                                         return service;
                                     }
@@ -212,7 +219,7 @@ export class ApiService {
                             }
                         }else{
                             // return service;
-                            // console.log("token failed");
+                            
                             dispatch(authActions.Logout())
                         }
 
@@ -221,10 +228,8 @@ export class ApiService {
 
                        
                     }).catch(function (error) {
-                        // console.log("logs out now",service, routes.REFRESH_TOKEN)
-                        // console.log("token failed 2");
-                        // dispatch(authActions.Logout())
-                        // console.log("dskdsdsdsdsd", serviceResponse);
+                        
+                     
                         let responseData= error.response || error;
                         if(responseData.config.url.indexOf("Login/refreshtoken")>-1){
                             dispatch(authActions.Logout())
@@ -243,13 +248,24 @@ export class ApiService {
                         
                     });
                 }else{
-                   
-                    service = instance.get(url, bodyData);
+                    if(responseType ===undefined){
+                        service = instance.get(url, bodyData);
+                    }
+                    if(responseType ==="blob"){
+                        service = instance.request({url:url, method: 'GET', data:bodyData, responseType: 'blob'})
+                    }
+                    // service = instance.get(url, bodyData);
                    
                 }
             }else{
+                if(responseType ===undefined){
+                    service = instance.get(url, bodyData);
+                }
+                if(responseType ==="blob"){
+                    service = instance.request({url:url, method: 'GET', data:bodyData, responseType: 'blob'})
+                }
                 
-                service = instance.get(url, bodyData);
+                // service = instance.get(url, bodyData);
             }
 
             
@@ -269,7 +285,7 @@ export class ApiService {
                     
                 // }
 
-                // console.log("sample is", response)
+                
                 
                 // try{
                 //     if(typeof response.data === "object"){
@@ -279,7 +295,7 @@ export class ApiService {
                 //     throw new Error ("An Error Occured");
                 // }
 
-                if(response.headers['content-type'].indexOf('application/json')>-1){
+                if(response.headers['content-type'].indexOf('application/json')>-1 || response.headers['content-type'].indexOf('application/octet-stream')>-1){
                     // return response;
                     return service;
                 }else{
@@ -296,7 +312,7 @@ export class ApiService {
 
                
             }).catch(function (error) {
-                console.log("dsd dsdsd")
+                
                 if (error.response) {
 
                     if (error.response.status === 401) {
@@ -306,7 +322,7 @@ export class ApiService {
                             dispatch(authActions.Logout(type,currentRoute));
                         // if((urlsToAuthenticate.indexOf(serviceToTest) === -1)){
                             
-                        //     let user = JSON.parse(localStorage.getItem("user")),
+                        //     let user = JSON.parse(localStorage.getItem('lingoAuth'),
                         //         refreshTokenPayload={
                         //             username: user.userName,
                         //             refreshToken: user.refreshToken
@@ -317,14 +333,14 @@ export class ApiService {
                         //                 return refreshService.then(function(response) {
                                             
                         //                     if(response.status===200){
-                        //                         localStorage.setItem('user', JSON.stringify(response.data));
+                        //                         localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                         //                     }
                         //                     return instance.get(url, bodyData);
                         //                 }).catch(function (error) {
                         //                     if (error.response.status === 401) {
                         //                         let currentRoute = window.location.pathname,
                         //                         type = "unauthorized";
-                        //                         // console.log("routing" , currentRoute);
+                        
 
                         //                         // dispatch(authActions.Logout("unauthorized",currentRoute));
                         //                         // setTimeout(() => {
@@ -343,7 +359,9 @@ export class ApiService {
                         // }
                        
                         
-                    } else {
+                    }else if(error.response.status === 403){
+                        dispatch(authActions.ForbiddenAccess())
+                    }else {
                         // return service;
                         if(serviceResponse!==""){
                            
@@ -361,11 +379,11 @@ export class ApiService {
                 //     }
                 // }
                 if(serviceResponse!==""){
-                    console.log("bbbbbbbbb")
+                   
                     return serviceResponse
                     // return serviceResponse
                 }else{
-                    console.log("aaaaaaaa")
+                  
                  return service;
                 }
                 // return  service;
@@ -416,10 +434,10 @@ export class ApiService {
                         if(response.status>=200 && response.status<210){
                             if(response.data.token!==undefined){
                                 
-                                let userData = JSON.parse(localStorage.getItem("user"));
+                                let userData = JSON.parse(localStorage.getItem('lingoAuth'));
                                     userData.lastLogForAuth = Date.now();
                                     userData.token = response.data.token;
-                                    localStorage.setItem('user', JSON.stringify(userData));
+                                    localStorage.setItem('lingoAuth', JSON.stringify(userData));
 
                                 delete instance.defaults.headers.common;
                                 instance.defaults.headers.common ={
@@ -433,7 +451,7 @@ export class ApiService {
                                 return service.then((response3)=>{
 
                                     if(response3.status>=200 && response3.status < 210){
-                                        // console.log("success in token")
+                                        
                                         return service;
                                     }
                                 })
@@ -443,7 +461,7 @@ export class ApiService {
                             }
                         }else{
                             // return service;
-                            // console.log("token failed 3");
+                            
                             dispatch(authActions.Logout())
                         }
 
@@ -452,8 +470,7 @@ export class ApiService {
 
                        
                     }).catch(function (error) {
-                        // console.log("logs out now",service, routes.REFRESH_TOKEN)
-                        // console.log("token failed 32");
+                        
                         // dispatch(authActions.Logout())
                         let responseData= error.response;
                         if(responseData.config.url.indexOf("Login/refreshtoken")>-1){
@@ -491,7 +508,7 @@ export class ApiService {
 
                         // if((urlsToAuthenticate.indexOf(serviceToTest) === -1)){
                             
-                        //     let user = JSON.parse(localStorage.getItem("user")),
+                        //     let user = JSON.parse(localStorage.getItem('lingoAuth'),
                         //         refreshTokenPayload={
                         //             username: user.userName,
                         //             refreshToken: user.refreshToken
@@ -502,14 +519,14 @@ export class ApiService {
                         //                 return refreshService.then(function(response) {
                                             
                         //                     if(response.status===200){
-                        //                         localStorage.setItem('user', JSON.stringify(response.data));
+                        //                         localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                         //                     }
                         //                     return instance.get(url, bodyData);
                         //                 }).catch(function (error) {
                         //                     if (error.response.status === 401) {
                         //                         let currentRoute = window.location.pathname,
                         //                         type = "unauthorized";
-                        //                         // console.log("routing" , currentRoute);
+                        
 
                         //                         // dispatch(authActions.Logout("unauthorized",currentRoute));
                         //                         // setTimeout(() => {
@@ -526,6 +543,8 @@ export class ApiService {
                         //         dispatch(authActions.Logout(type,currentRoute));  
                         
                         // }
+                    }else if(error.response.status === 403){
+                        dispatch(authActions.ForbiddenAccess())
                     }else {
                         
                         return service;
@@ -533,7 +552,7 @@ export class ApiService {
             } 
             // if(!error.response) {
             //     // let errorm = {...error};
-            //     console.log("error is", error.toString());
+        
             //     if(error.toString().indexOf('Network')!==-1){
             //         return "Please Check your network"
             //     }

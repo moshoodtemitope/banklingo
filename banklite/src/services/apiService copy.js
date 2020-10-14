@@ -26,8 +26,8 @@ export class ApiService {
             binaryUploadUrls =[
                 "/api/Upload"
             ];
-        if(localStorage.getItem("user") === null){
-            // if(localStorage.getItem("user") === null && axios.defaults.headers.common["Token"]){
+        if(localStorage.getItem('lingoAuth' === null){
+            // if(localStorage.getItem('lingoAuth' === null && axios.defaults.headers.common["Token"]){
             
             delete axios.defaults.headers.common.Authorization;
             delete axios.defaults.headers.common.Bid;
@@ -37,9 +37,9 @@ export class ApiService {
         // }
         
         
-       if(localStorage.getItem("user") !==null){
+       if(localStorage.getItem('lingoAuth' !==null){
            
-           let user = JSON.parse(localStorage.getItem("user")),
+           let user = JSON.parse(localStorage.getItem('lingoAuth'),
                 serviceToTest = url.split("Fintech.CBS.Backend")[1];
               
             //Exclude urlsToAuthenticate urls from Authenticated requests with Token
@@ -104,7 +104,7 @@ export class ApiService {
         ],
         serviceToTest = url.split("Fintech.CBS.Backend")[1];
 
-        if(localStorage.getItem("user") === null){
+        if(localStorage.getItem('lingoAuth' === null){
             headers = undefined;
         }
 
@@ -151,7 +151,7 @@ export class ApiService {
                             dispatch(authActions.Logout(type,currentRoute));
                         // if((urlsToAuthenticate.indexOf(serviceToTest) === -1)){
                             
-                        //     let user = JSON.parse(localStorage.getItem("user")),
+                        //     let user = JSON.parse(localStorage.getItem('lingoAuth'),
                         //         refreshTokenPayload={
                         //             username: user.userName,
                         //             refreshToken: user.refreshToken
@@ -162,7 +162,7 @@ export class ApiService {
                         //                 return refreshService.then(function(response) {
                                             
                         //                     if(response.status===200){
-                        //                         localStorage.setItem('user', JSON.stringify(response.data));
+                        //                         localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                         //                     }
                         //                     return axios.get(url, bodyData);
                         //                 }).catch(function (error) {
@@ -244,7 +244,7 @@ export class ApiService {
 
                         // if((urlsToAuthenticate.indexOf(serviceToTest) === -1)){
                             
-                        //     let user = JSON.parse(localStorage.getItem("user")),
+                        //     let user = JSON.parse(localStorage.getItem('lingoAuth'),
                         //         refreshTokenPayload={
                         //             username: user.userName,
                         //             refreshToken: user.refreshToken
@@ -255,7 +255,7 @@ export class ApiService {
                         //                 return refreshService.then(function(response) {
                                             
                         //                     if(response.status===200){
-                        //                         localStorage.setItem('user', JSON.stringify(response.data));
+                        //                         localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                         //                     }
                         //                     return axios.get(url, bodyData);
                         //                 }).catch(function (error) {

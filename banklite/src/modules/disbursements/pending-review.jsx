@@ -29,6 +29,7 @@ import {numberWithCommas} from '../../shared/utils';
 
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
 import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
+import DisbursementNav from './_menu'
 
 class DisbursementPendingReview extends React.Component {
     constructor(props) {
@@ -43,6 +44,8 @@ class DisbursementPendingReview extends React.Component {
             startDate: "",
             SearchText:""
         }
+
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
 
         
     }
@@ -1010,6 +1013,10 @@ class DisbursementPendingReview extends React.Component {
             comment: Yup.string()
                 .min(1, 'Please provide account number')
                 .required('Comment is required'),
+        });
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
         })
         return(
             <div>
@@ -1149,61 +1156,63 @@ class DisbursementPendingReview extends React.Component {
                                         </div>
                                     </Accordion.Collapse>
                                 </Accordion>
+                                {allUSerPermissions.indexOf("bnk_review_disbursements") >-1 &&
+                                    <Accordion defaultActiveKey="0">
+                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                            Provide Confirmation details
+                                            </Accordion.Toggle>
+                                        <Accordion.Collapse eventKey="0">
+                                            <div>
+                                                
 
-                                <Accordion defaultActiveKey="0">
-                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                        Provide Confirmation details
-                                        </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="0">
-                                        <div>
-                                            
+                                                <Form.Row>
+                                                    <Col>
+                                                        <Form.Group className="mb-0">
 
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Group className="mb-0">
+                                                            <Form.Label className="block-level">Comments</Form.Label>
+                                                            <Form.Control
+                                                                as="textarea" rows="3"
+                                                                onChange={handleChange}
+                                                                value={values.comment}
+                                                                className={errors.comment && touched.comment ? "is-invalid" : null}
+                                                                name="comment"
+                                                            />
+                                                            {errors.comment && touched.comment ? (
+                                                                <span className="invalid-feedback">{errors.comment}</span>
+                                                            ) : null}
 
-                                                        <Form.Label className="block-level">Comments</Form.Label>
-                                                        <Form.Control
-                                                            as="textarea" rows="3"
-                                                            onChange={handleChange}
-                                                            value={values.comment}
-                                                            className={errors.comment && touched.comment ? "is-invalid" : null}
-                                                            name="comment"
-                                                        />
-                                                        {errors.comment && touched.comment ? (
-                                                            <span className="invalid-feedback">{errors.comment}</span>
-                                                        ) : null}
+                                                        </Form.Group>
+                                                    </Col>
+                                                </Form.Row>
+                                                <Form.Row className="mb-0">
 
-                                                    </Form.Group>
-                                                </Col>
-                                            </Form.Row>
-                                            <Form.Row className="mb-0">
+                                                    <Col>
+                                                        <Form.Group className="mb-0">
 
-                                                <Col>
-                                                    <Form.Group className="mb-0">
+                                                            <Form.Label className="block-level">Security Code</Form.Label>
+                                                            <Form.Control type="password"
+                                                                name="securityCode"
+                                                                onChange={handleChange}
+                                                                placeholder="Enter the security code sent to you"
+                                                                value={values.securityCode}
+                                                                className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                                                                required />
+                                                            {errors.securityCode && touched.securityCode ? (
+                                                                <span className="invalid-feedback">{errors.securityCode}</span>
+                                                            ) : null}
 
-                                                        <Form.Label className="block-level">Security Code</Form.Label>
-                                                        <Form.Control type="password"
-                                                            name="securityCode"
-                                                            onChange={handleChange}
-                                                            placeholder="Enter the security code sent to you"
-                                                            value={values.securityCode}
-                                                            className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
-                                                            required />
-                                                        {errors.securityCode && touched.securityCode ? (
-                                                            <span className="invalid-feedback">{errors.securityCode}</span>
-                                                        ) : null}
+                                                        </Form.Group>
+                                                    </Col>
+                                                </Form.Row>
 
-                                                    </Form.Group>
-                                                </Col>
-                                            </Form.Row>
-
-                                        </div>
-                                    </Accordion.Collapse>
-                                </Accordion>
+                                            </div>
+                                        </Accordion.Collapse>
+                                    </Accordion>
+                                }
 
 
-                                {approveOrRejectReviewedDisbursementRequest.request_status !== disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS &&
+                                {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 &&
+                                    approveOrRejectReviewedDisbursementRequest.request_status !== disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS )&&
                                     <div>
                                         <div className="footer-with-cta centered approvalctas">
                                             {/* <Button variant="secondary" className="grayed-out" onClick={this.handleCloseEdit}>Cancel</Button> */}
@@ -1229,12 +1238,14 @@ class DisbursementPendingReview extends React.Component {
                                     </div>
                                 }
 
-                                {approveOrRejectReviewedDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS &&
+                                {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 &&
+                                    approveOrRejectReviewedDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_SUCCESS) &&
                                     <Alert variant="success">
                                         {approveOrRejectReviewedDisbursementRequest.request_data.response.data.message}
                                     </Alert>
                                 }
-                                {approveOrRejectReviewedDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_FAILURE &&
+                                {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 &&
+                                    approveOrRejectReviewedDisbursementRequest.request_status === disbursmentConstants.APPROVE_OR_REJECT_REVIEWED_DISBURSMENT_FAILURE) &&
                                     <Alert variant="danger">
                                         {approveOrRejectReviewedDisbursementRequest.request_data.error}
                                     </Alert>
@@ -1268,7 +1279,8 @@ class DisbursementPendingReview extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
-                                    <ul className="nav">
+                                    <DisbursementNav />
+                                    {/* <ul className="nav">
                                         <li>
                                             <NavLink exact to={'/disbursements'}>Disbursements</NavLink>
                                         </li>
@@ -1283,19 +1295,9 @@ class DisbursementPendingReview extends React.Component {
                                         </li>
                                         <li>
                                             <NavLink to={'/disbursements/nip-requests'}>NIP Requests</NavLink>
-                                            {/* <ul>
-                                                <li>
-                                                    <NavLink to={'/disbursements/transfer-requests'}>Transfer Requests</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to={'/disbursements/account-block'}>Account Block</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to={'/disbursements/amount-block'}>Amount Block</NavLink>
-                                                </li>
-                                            </ul> */}
+                                            
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </div>
                             </div>
                             <div className="module-content">

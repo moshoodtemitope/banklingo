@@ -83,7 +83,7 @@ class LoansManagement extends React.Component {
         this.setState({ PageSize: sizeOfPage });
 
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        // this.getLoans(params);
+        
 
         if(tempData){
             dispatch(loanActions.getLoans(params,tempData));
@@ -119,6 +119,30 @@ class LoansManagement extends React.Component {
         if(loansStatus==="9"){
             history.push("/all-loans/closed-withdrawn")
         }
+    }
+
+    exportLoansAccounts = () => {
+        const { dispatch } = this.props;
+        // let { PageSize, CurrentPage } = this.state;
+        
+
+        let {PageSize,CurrentPage,FullDetails, BranchId, ClientState, SearchText, endDate, startDate} = this.state;
+        
+        if(endDate!=="" || startDate!==""){
+            if(endDate!==""){
+                endDate = endDate.toISOString()
+            }
+            if(startDate!==""){
+                startDate = startDate.toISOString()
+            }
+            // let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+
+          
+        }
+        let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+        dispatch(loanActions.exportLoansAccounts(params));
+
+
     }
 
     setShowDetails = (FullDetails, tempData) => {
@@ -432,6 +456,11 @@ class LoansManagement extends React.Component {
 ) : null} */}
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                        <div className="actions-wrap">
+                                            <Button onClick={this.exportLoansAccounts} className="action-icon" variant="outline-secondary" type="button">
+                                                <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
+                                            </Button>
+                                        </div>
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -566,6 +595,7 @@ class LoansManagement extends React.Component {
 ) : null} */}
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                        
                                     </Form>
 
                                     <div className="pagination-wrap">

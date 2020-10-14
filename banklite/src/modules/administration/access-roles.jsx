@@ -29,7 +29,7 @@ class AccessRoles extends React.Component {
             CurrentPage:1,
         }
 
-        
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
     }
 
     componentDidMount(){
@@ -93,6 +93,10 @@ class AccessRoles extends React.Component {
         let GetRolesRequest = this.props.GetRoles;
 
         let saveRequestData= GetRolesRequest.request_data!==undefined?GetRolesRequest.request_data.tempData:null;
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
 
         switch (GetRolesRequest.request_status){
             
@@ -178,7 +182,9 @@ class AccessRoles extends React.Component {
                                     <tr>
                                         <th>Role Name</th>
                                         <th>Created</th>
-                                        <th></th>
+                                        {allUSerPermissions.indexOf("bnk_manage_role") >-1 &&
+                                            <th></th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -189,18 +195,20 @@ class AccessRoles extends React.Component {
                                                     <tr>
                                                         <td>{eachRole.roleName}</td>
                                                         <td>{getDateFromISO(eachRole.dateCreated)}</td>
-                                                        <td>
-                                                            <DropdownButton
-                                                                size="sm"
-                                                                title="Actions"
-                                                                key="editRole"
-                                                                className="customone"
-                                                            >
-                                                                <NavLink className="dropdown-item" to={`/administration/access/edit-role/${eachRole.id}`}>Edit</NavLink>
-                                                                {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
-                                                            </DropdownButton>
-                                                        </td>
+                                                        {allUSerPermissions.indexOf("bnk_manage_role") >-1 &&
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    key="editRole"
+                                                                    className="customone"
+                                                                >
+                                                                    <NavLink className="dropdown-item" to={`/administration/access/edit-role/${eachRole.id}`}>Edit</NavLink>
+                                                                    {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                                </DropdownButton>
+                                                            </td>
+                                                        }
                                                     </tr>
                                                 </Fragment>
                                             )
@@ -259,7 +267,9 @@ class AccessRoles extends React.Component {
                                         <tr>
                                             <th>Role Name</th>
                                             <th>Created</th>
-                                            <th></th>
+                                            {allUSerPermissions.indexOf("bnk_manage_role") >-1 &&
+                                                <th></th>
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -270,18 +280,20 @@ class AccessRoles extends React.Component {
                                                         <tr>
                                                             <td>{eachRole.roleName}</td>
                                                             <td>{getDateFromISO(eachRole.dateCreated)}</td>
-                                                            <td>
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="editRole"
-                                                                    className="customone"
-                                                                >
-                                                                    <NavLink className="dropdown-item" to={`/administration/access/edit-role/${eachRole.id}`}>Edit</NavLink>
-                                                                    {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
-                                                                </DropdownButton>
-                                                            </td>
+                                                            {allUSerPermissions.indexOf("bnk_manage_role") >-1 &&
+                                                                <td>
+                                                                    <DropdownButton
+                                                                        size="sm"
+                                                                        title="Actions"
+                                                                        key="editRole"
+                                                                        className="customone"
+                                                                    >
+                                                                        <NavLink className="dropdown-item" to={`/administration/access/edit-role/${eachRole.id}`}>Edit</NavLink>
+                                                                        {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                            <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                                    </DropdownButton>
+                                                                </td>
+                                                            }
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -289,9 +301,11 @@ class AccessRoles extends React.Component {
                                         }
                                     </tbody>
                                 </TableComponent>
-                                <div className="footer-with-cta toleft">
-                                    <NavLink to={'/administration/access/new-role'} className="btn btn-primary">Add Role</NavLink>
-                                </div>
+                                {allUSerPermissions.indexOf("bnk_create_roles") >-1 &&
+                                    <div className="footer-with-cta toleft">
+                                        <NavLink to={'/administration/access/new-role'} className="btn btn-primary">Add Role</NavLink>
+                                    </div>
+                                }
                             </div>
                         )
                     }else{
@@ -336,9 +350,11 @@ class AccessRoles extends React.Component {
                                         </tr>
                                     </tbody>
                                 </TableComponent>
-                                <div className="footer-with-cta toleft">
-                                <NavLink to={'/administration/access/new-role'} className="btn btn-primary">Add Role</NavLink>
-                                </div>
+                                {allUSerPermissions.indexOf("bnk_create_roles") >-1 &&
+                                    <div className="footer-with-cta toleft">
+                                        <NavLink to={'/administration/access/new-role'} className="btn btn-primary">Add Role</NavLink>
+                                    </div>
+                                }
                             </div>
                         )
                     }

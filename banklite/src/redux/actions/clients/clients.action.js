@@ -6,6 +6,7 @@ import { handleRequestErrors } from "../../../shared/utils";
 
 export const clientsActions = {
     getClients,
+    exportClients,
     createClient,
     getAllClients,
     getAClient,
@@ -38,19 +39,60 @@ function getClients  (params, tempData){
         
     }
 
-function request(user, tempData) { 
-    if(tempData===undefined){
-        return { type: clientsConstants.GET_CLIENTS_PENDING, user } 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: clientsConstants.GET_CLIENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: clientsConstants.GET_CLIENTS_PENDING, user, tempData } 
+        }
     }
-    if(tempData!==undefined){
-        return { type: clientsConstants.GET_CLIENTS_PENDING, user, tempData } 
-    }
-}
-    
+        
 
-// function request(user) { return { type: clientsConstants.GET_CLIENTS_PENDING, user } }
-function success(response) { return { type: clientsConstants.GET_CLIENTS_SUCCESS, response } }
-function failure(error) { return { type: clientsConstants.GET_CLIENTS_FAILURE, error } }
+    // function request(user) { return { type: clientsConstants.GET_CLIENTS_PENDING, user } }
+    function success(response) { return { type: clientsConstants.GET_CLIENTS_SUCCESS, response } }
+    function failure(error) { return { type: clientsConstants.GET_CLIENTS_FAILURE, error } }
+
+}
+
+function exportClients  (params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_CLIENTS+`/clientsexport?${params}`, "GET", '','','', "blob");
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response =>{
+                
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'template.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                // console.log("shkddsd")
+                dispatch(success(response));
+            }).catch(error =>{
+               
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: clientsConstants.EXPORT_CLIENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: clientsConstants.EXPORT_CLIENTS_PENDING, user, tempData } 
+        }
+    }
+        
+
+    // function request(user) { return { type: clientsConstants.EXPORT_CLIENTS_PENDING, user } }
+    function success(response) { return { type: clientsConstants.EXPORT_CLIENTS_SUCCESS, response } }
+    function failure(error) { return { type: clientsConstants.EXPORT_CLIENTS_FAILURE, error } }
 
 }
 

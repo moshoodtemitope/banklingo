@@ -26,6 +26,7 @@ import {administrationConstants} from '../../redux/actiontypes/administration/ad
 
 import Alert from 'react-bootstrap/Alert'
 import "./accountsmanagement.scss"; 
+import AccountingNav from './_menu'
 
 class BalanceSheet extends React.Component {
     constructor(props) {
@@ -575,7 +576,8 @@ class BalanceSheet extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
-                                    <ul className="nav">
+                                    <AccountingNav />
+                                    {/* <ul className="nav">
                                         <li>
                                             <NavLink to={'/balancesheet'}>Balance Sheet</NavLink>
                                         </li>
@@ -586,14 +588,14 @@ class BalanceSheet extends React.Component {
                                             <NavLink to={'/trial-balance'}>Trial Balance</NavLink>
                                         </li>
                                         <li>
-                                            {/* <NavLink to={'/accounts/journal'}>Journal Entries</NavLink> */}
+                                           
                                             <NavLink to={'/journals'}>Journal Entries</NavLink>
                                         </li>
                                         <li>
                                             <NavLink to={'/accounts'}>Charts of Accounts</NavLink>
                                            
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </div>
                             </div>
                             <div className="module-content">

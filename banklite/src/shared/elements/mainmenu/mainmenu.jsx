@@ -46,10 +46,14 @@ class MainMenu extends React.Component{
         return(
             <div className="mainmenu-wrap">
                 <ul className="nav">
+                    {/* <li className="nav-item">
+                        <NavLink to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
+                    </li> */}
                     {
                         allMenu.map((eachGroup, menuIdx) =>{
+                           
                             // if(allUSerPermissionGroups.indexOf(eachGroup.menuGroup)> -1 ){
-                                if(eachGroup.hasSubMenu && eachGroup.permissionCode!==undefined && (allUSerPermissions.indexOf(eachGroup.permissionCode) > -1 || eachGroup.permissionCode==="universal")){
+                                if(eachGroup.hasSubMenu && eachGroup.permissionCode!==undefined && (allUSerPermissions.indexOf(eachGroup.permissionCode) > -1 && eachGroup.allowedPermissions ===undefined)){
                                     return (
                                         <li key={menuIdx} className="nav-item">
                                             <span>{eachGroup.mainMenu}</span>
@@ -78,6 +82,47 @@ class MainMenu extends React.Component{
                                         </li>
                                         
                                     )
+                                }
+
+                                if(eachGroup.hasSubMenu  && eachGroup.allowedPermissions !==undefined){
+                                    let permissionsAllowed = [];
+                                    
+                                    permissionsAllowed = allUSerPermissions.filter(function(n) {
+                                            return eachGroup.allowedPermissions.indexOf(n) !== -1;
+                                        })
+                                    
+                                    
+                                    if(permissionsAllowed.length>=1){
+                                    //    console.log("kakakaka dhsdhhiisd", permissionsAllowed);
+                                        return (
+                                            <li key={menuIdx} className="nav-item">
+                                                <span>{eachGroup.mainMenu}</span>
+                                                <ul>
+                                                    {
+                                                        eachGroup.subMenus.map((eachSubMenu, submenuIdx)=>{
+                                                            if(eachSubMenu.permissionCode!==undefined && allUSerPermissions.indexOf(eachSubMenu.permissionCode) > -1){
+                                                                return(
+                                                                    <li key={submenuIdx}>
+                                                                        <NavLink to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
+                                                                    </li>
+                                                                )
+                                                            }
+
+                                                            if(eachSubMenu.permissionCode ===undefined){
+                                                                return(
+                                                                    <li key={submenuIdx}>
+                                                                        <NavLink to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
+                                                                    </li>
+                                                                )
+                                                            }
+                                                        })
+                                                    }
+
+                                                </ul>
+                                            </li>
+                                            
+                                        )
+                                    }
                                 }
 
                                 if(!eachGroup.hasSubMenu && eachGroup.permissionCode!==undefined){

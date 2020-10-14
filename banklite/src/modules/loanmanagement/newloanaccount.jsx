@@ -44,7 +44,7 @@ class NewLoanAccount extends React.Component {
         this.loanParams = this.props.match.params;
         this.providedInstallments ="";
         this.state={
-            user:JSON.parse(localStorage.getItem("user")),
+            user:JSON.parse(localStorage.getItem('lingoAuth')),
             PageSize:1000,
             CurrentPage:1,
             scheduleErrorMsg:"",

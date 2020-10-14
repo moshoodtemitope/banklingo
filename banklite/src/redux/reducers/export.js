@@ -74,6 +74,7 @@ import{
     getClosedWithdrawnLoansReducer,
     getClientLoansReducer,
     getLoanTransactionsReducer,
+    exportLoanTransactionsReducer,
     getAccountLoanTransactionReducer,
     createLoanAccountReducer,
     getLoanSchedulePreviewReducer,
@@ -141,8 +142,10 @@ import{
 
 import{
     getDepositsReducer,
+    exportDepositsReducer,
     getClientDepositsReducer,
     getDepositTransactionReducer,
+    exportDepositTransactionReducer,
     getAccountDepositTransactionReducer,
     createDepositAccountReducer,
     getAClientDepositAccountReducer,
@@ -162,6 +165,7 @@ import{
 
 import{
     getClientsReducer,
+    exportClientsReducer,
     getAllClientsReducer,
     createAClientReducer,
     getAClientReducer,
@@ -249,6 +253,7 @@ export const loans = {
     getClosedWithdrawnLoansReducer,
     getClientLoansReducer,
     getLoanTransactionsReducer,
+    exportLoanTransactionsReducer,
     getAccountLoanTransactionReducer,
     createLoanAccountReducer,
     getLoanSchedulePreviewReducer,
@@ -277,8 +282,10 @@ export const dashboard = {
 
 export const deposits = {
     getDepositsReducer,
+    exportDepositsReducer,
     getClientDepositsReducer,
     getDepositTransactionReducer,
+    exportDepositTransactionReducer,
     getAccountDepositTransactionReducer,
     createDepositAccountReducer,
     getAClientDepositAccountReducer,
@@ -296,6 +303,7 @@ export const deposits = {
 
 export const clients ={
     getClientsReducer,
+    exportClientsReducer,
     getAllClientsReducer,
     createAClientReducer,
     getAClientReducer,

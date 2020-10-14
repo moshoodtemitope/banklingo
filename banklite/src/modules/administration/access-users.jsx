@@ -29,6 +29,7 @@ class AccessUsers extends React.Component {
             CurrentPage:1,
             refresh: false
         }
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
 
         
     }
@@ -91,7 +92,10 @@ class AccessUsers extends React.Component {
 
     renderAllUsers =()=>{
         let adminGetUsersRequest = this.props.adminGetUsers;
-
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
         let saveRequestData= adminGetUsersRequest.request_data!==undefined?adminGetUsersRequest.request_data.tempData:null;
             switch (adminGetUsersRequest.request_status){
                 case (administrationConstants.GET_USERS_PENDING):
@@ -192,7 +196,9 @@ class AccessUsers extends React.Component {
                                                     <th>Last updated</th>
                                                     <th>State</th>
                                                     <th>Created by</th>
-                                                    <th></th>
+                                                    {allUSerPermissions.indexOf("bnk_edit_user") >-1 &&
+                                                        <th></th>
+                                                    }
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -213,20 +219,23 @@ class AccessUsers extends React.Component {
                                                                     <td>{eachUser.lastUpdated}</td>
                                                                     <td>{eachUser.objectStateDescription}</td>
                                                                     <td>{(eachUser.createdBy!=="" && eachUser.createdBy!==null)?eachUser.createdBy: "-"}</td>
-                                                                    <td>
-                                                                        {eachUser.encodedKey !==null &&
-                                                                        <DropdownButton
-                                                                            size="sm"
-                                                                            title="Actions"
-                                                                            key="editUser"
-                                                                            className="customone"
-                                                                        >
-                                                                            <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
-                                                                            {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                                <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
-                                                                        </DropdownButton>
-                                                                        }
-                                                                    </td>
+                                                                    {allUSerPermissions.indexOf("bnk_edit_user") >-1 &&
+                                                        
+                                                                        <td>
+                                                                            {eachUser.encodedKey !==null &&
+                                                                            <DropdownButton
+                                                                                size="sm"
+                                                                                title="Actions"
+                                                                                key="editUser"
+                                                                                className="customone"
+                                                                            >
+                                                                                <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
+                                                                                {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                                            </DropdownButton>
+                                                                            }
+                                                                        </td>
+                                                                    }
                                                                 </tr>
                                                             </Fragment>
                                                         )
@@ -235,9 +244,11 @@ class AccessUsers extends React.Component {
                                             </tbody>
                                             
                                 </TableComponent>
-                                <div className="footer-with-cta toleft">
-                                    <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
-                                </div>
+                                {allUSerPermissions.indexOf("bnk_create_user") >-1 &&
+                                    <div className="footer-with-cta toleft">
+                                        <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
+                                    </div>
+                                }
 
                             </div>
                         )
@@ -295,7 +306,9 @@ class AccessUsers extends React.Component {
                                                             <th>Last updated</th>
                                                             <th>State</th>
                                                             <th>Created by</th>
-                                                            <th></th>
+                                                            {allUSerPermissions.indexOf("bnk_edit_user") >-1 &&
+                                                                <th></th>
+                                                            }
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -328,20 +341,22 @@ class AccessUsers extends React.Component {
                                                                                 <td>{(eachUser.createdBy!=="" && eachUser.createdBy!==null)?eachUser.createdBy: "-"}</td>
                                                                             }
                                                                             
-                                                                            <td>
-                                                                            {eachUser.encodedKey !==null &&
-                                                                                <DropdownButton
-                                                                                    size="sm"
-                                                                                    title="Actions"
-                                                                                    key="editUser"
-                                                                                    className="customone"
-                                                                                >
-                                                                                    <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
-                                                                                    {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+                                                                            
+                                                                            {(eachUser.encodedKey !== null && allUSerPermissions.indexOf("bnk_edit_user") > -1) &&
+                                                                                <td>
+                                                                                    <DropdownButton
+                                                                                        size="sm"
+                                                                                        title="Actions"
+                                                                                        key="editUser"
+                                                                                        className="customone"
+                                                                                    >
+                                                                                        <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
+                                                                                        {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                                         <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
-                                                                                </DropdownButton>
+                                                                                    </DropdownButton>
+                                                                                </td>
                                                                             }
-                                                                            </td>
+                                                                            
                                                                         </tr>
                                                                     </Fragment>
                                                                 )
@@ -350,9 +365,11 @@ class AccessUsers extends React.Component {
                                                     </tbody>
                                                     
                                         </TableComponent>
-                                        <div className="footer-with-cta toleft">
-                                            <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
-                                        </div>
+                                        {allUSerPermissions.indexOf("bnk_create_user") >-1 &&
+                                            <div className="footer-with-cta toleft">
+                                                <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
+                                            </div>
+                                        }
 
                                     </div>
                                 )
@@ -409,9 +426,11 @@ class AccessUsers extends React.Component {
                                                 </tr>
                                             </tbody>
                                         </TableComponent>
-                                            <div className="footer-with-cta toleft">
-                                                <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
-                                            </div>
+                                            {allUSerPermissions.indexOf("bnk_create_user") >-1 &&
+                                                <div className="footer-with-cta toleft">
+                                                    <NavLink to={'/administration/access/new-user'} className="btn btn-primary">Create New User</NavLink>
+                                                </div>
+                                            }
                                         </div>
                                     
                                 )

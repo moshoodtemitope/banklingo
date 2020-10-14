@@ -66,6 +66,7 @@ export const routes = {
     JOURNAL_ENTRIES: BASEURL + '/api/JournalEntries',
 
     //Accounting Endpoints
+    HIT_GLACCOUNTS_BASE: BASEURL + '/api/GLAccount',
     HIT_GLACCOUNTS: BASEURL + '/api/GLAccount/glaccounts',
     ALL_GLACCOUNTS: BASEURL + '/api/GLAccount/allglaccounts',
     CREATE_GLACCOUNT: BASEURL + '/api/GLAccount/glaccount',
