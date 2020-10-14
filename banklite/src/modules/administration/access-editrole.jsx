@@ -21,6 +21,12 @@ import Alert from 'react-bootstrap/Alert'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import "./administration.scss"; 
+
+const CheckboxField = ({checked, onChange}) => {
+    return (
+      <input type="checkbox" checked={checked} onChange={ev => onChange(ev.target.checked)} />
+    );
+  };
 class EditRole extends React.Component {
     constructor(props) {
         super(props);
@@ -56,11 +62,26 @@ class EditRole extends React.Component {
         
         await dispatch(administrationActions.updateARole(payload));
     }
+    
+    handlePermissionsCheckboxChange(checked, option) {
+        const {options} = this.state;
+        
+        var cOptions = [...options];
+        for(var i in cOptions) {
+          if(cOptions[i].id == option.id) {
+            cOptions[i].checked = checked;
+          }
+        }
+        this.setState({
+          options: cOptions
+        });
+      }
 
     renderUpdateRoleForm = (permissiondData, roleData)=>{
         let updateARoleRequest = this.props.adminUpdateARole;
         let permissionGroups = [],
             permissionsSelected=[],
+            allPermissionsList={},
             permissionsEnabled = roleData.permissions,
             createRoleValidationSchema = Yup.object().shape({
                 roleName: Yup.string()
@@ -76,7 +97,13 @@ class EditRole extends React.Component {
                 if(permissionGroups.indexOf(permission.groupName)===-1){
                     permissionGroups.push(permission.groupName);
                 }
+                allPermissionsList[permission.permissionCode] = permission.enabled;
+                // allPermissionsList.push({
+                //     [permission.permissionCode]: permission.enabled
+                // })
             })
+
+            // console.log("all permissions", allPermissionsList);
         
         return(
             <Formik
@@ -86,7 +113,8 @@ class EditRole extends React.Component {
                     roleIsAdministrator: roleData.isAdministrator,
                     roleHasPortalAccessRight: roleData.hasPortalAccessRight,
                     roleHasApiAccessRight: roleData.hasApiAccessRight,
-                    note: roleData.note
+                    note: roleData.note,
+                    ...allPermissionsList
                 }}
 
                 validationSchema={createRoleValidationSchema}
@@ -133,6 +161,7 @@ class EditRole extends React.Component {
                     handleChange,
                     handleBlur,
                     resetForm,
+                    setFieldValue,
                     values,
                     touched,
                     isValid,
@@ -229,6 +258,7 @@ class EditRole extends React.Component {
                                         {/* <div className="searchbox-wrap">
                                             <Form.Control type="text" size="sm" placeholder="search permissions" />
                                         </div> */}
+                                        {/* <div>{JSON.stringify(values, null, 2)} </div> */}
 
                                         {
                                             permissionGroups.map((permissionGroup, index)=>{
@@ -258,23 +288,43 @@ class EditRole extends React.Component {
                                                                                 //     permissionsSelected.push(permission.permissionCode);
                                                                                 // }
                                                                                 // console.log('permissions are',permission.permissionName, permission.enabled);
+                                                                                // this.setState(
+                                                                                //     Object.defineProperty({}, `permission-${permission.permissionCode}`, {
+                                                                                //       value: permission.enabled,
+                                                                                //       enumerable: true
+                                                                                //     })
+                                                                                // );
                                                                                 return(
                                                                                     <div className="checkbox-wrap" key={`permission-${index}`}>
                                                                                         <input 
                                                                                             type="checkbox" 
-                                                                                            checked={permission.enabled? permission.enabled: false}
+                                                                                            // checked={permission.enabled}
+                                                                                            // checked={this.state[`permission-${permission.permissionCode}`]}
                                                                                             // value={permission.enabled}
+                                                                                            // ref={`permission-${permission.permissionCode}`}
                                                                                             data-permissioncode={permission.permissionCode}
-                                                                                            id={`permit-${permission.permissionCode}`} 
+                                                                                            // id={`permit-${permission.permissionCode}`} 
+
                                                                                             onChange={(event)=>{
                                                                                                 let permitCode = event.target.getAttribute('data-permissioncode');
-                                                                                                
+                                                                                                // this.setState({
+                                                                                                //     [`permission-${permission.permissionCode}`]: !this.state[`permission-${permission.permissionCode}`]
+                                                                                                // })
+                                                                                                setFieldValue(`${permission.permissionCode}`, event.target.checked)
                                                                                                 if(permissionsSelected.indexOf(permitCode) > -1){
                                                                                                     permissionsSelected.splice(permissionsSelected.indexOf(permitCode), 1)
                                                                                                 }else{
                                                                                                     permissionsSelected.push(permitCode);
                                                                                                 }
                                                                                             }}
+
+                                                                                            // type="checkbox" 
+                                                                                            id={permission.permissionCode}
+                                                                                            checked={values[permission.permissionCode]}
+                                                                                            name={permission.permissionCode}
+                                                                                            // onChange={handleChange} 
+                                                                                            value={values[permission.permissionCode]}
+
                                                                                         />
                                                                                         <label htmlFor={`permit-${permission.permissionCode}`} >{permission.permissionName}</label>
                                                                                     </div>

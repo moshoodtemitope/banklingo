@@ -360,8 +360,8 @@ class JournalEntries extends React.Component {
                                 })
 
                                 if(creditTotal!==debitTotal){
-                                    console.log("Credit total",creditTotal);
-                                    console.log("Debit total",debitTotal);
+                                    // console.log("Credit total",creditTotal);
+                                    // console.log("Debit total",debitTotal);
                                     this.setState({totalComparison:false});
                                 }else{
                                     this.setState({totalComparison:true});

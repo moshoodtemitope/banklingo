@@ -65,14 +65,33 @@ function exportDeposits(params , tempData) {
         dispatch(request(consume, tempData));
         return consume
             .then(response => {
-                console.log("dsvdsd", response);
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'template.xlsx');
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
+                let disposition = response.headers['content-disposition'],
+                    filename;
+                    
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) { 
+                        filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+                    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    if(filename === undefined){
+                        link.setAttribute('download', 'deposit-accounts.xlsx');
+                    }
+
+                    if(filename !== undefined){
+                        link.setAttribute('download', filename);
+                    }
+
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                
                
                 dispatch(success(response));
             }).catch(error => {
@@ -174,13 +193,32 @@ function exportDepositTransaction(params, tempData) {
         dispatch(request(consume, tempData));
         return consume
             .then(response => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'template.xlsx');
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
+                let disposition = response.headers['content-disposition'],
+                    filename;
+                    
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) { 
+                        filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+                    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    if(filename === undefined){
+                        link.setAttribute('download', 'deposit-transactions.xlsx');
+                    }
+
+                    if(filename !== undefined){
+                        link.setAttribute('download', filename);
+                    }
+
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
                 dispatch(success(response));
             }).catch(error => {
 

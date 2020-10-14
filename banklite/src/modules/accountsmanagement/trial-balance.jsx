@@ -102,6 +102,30 @@ class TrialBalance extends React.Component {
         document.querySelector("#fetch-btn").click();
     }
 
+    exportTrialBalance = () => {
+        const { dispatch } = this.props;
+        let
+            {branchId, startDate, endDate } = this.state;
+        if(endDate!=="" && startDate!=="" && branchId!==""){
+            // if(endDate!==undefined){
+            //     endDate = endDate.toISOString()
+            // }
+            // if(startDate!==undefined){
+            //     startDate = startDate.toISOString()
+            // }
+            endDate = endDate.toISOString();
+            startDate = startDate.toISOString();
+            let payload = {
+                    branchId: branchId.value,
+                    StartDate: startDate.toISOString(),
+                    EndDate: endDate.toISOString(),
+            }
+
+            dispatch(acoountingActions.exportTrialBalance(payload));
+        }
+
+    }
+
 
     
     makePrintable =()=>{
@@ -231,7 +255,10 @@ class TrialBalance extends React.Component {
                                                     <Select
                                                         options={branchData}
                                                         // onBlur={setFieldValue}
-                                                        onChange={(value) => setFieldValue('branchId', value)}
+                                                        onChange={(value) => {
+                                                            setFieldValue('branchId', value)
+                                                            this.setState({branchId: value})
+                                                        }}
                                                         onBlur={()=> setFieldTouched('branchId', true)}
                                                         // onChange={setFieldValue}
                                                         // onBlur={setFieldTouched}
@@ -305,7 +332,11 @@ class TrialBalance extends React.Component {
                                                     id="fetch-btn"
                                                     type="submit"
                                                     disabled={getTrialBalanceRequest.is_request_processing}>{getTrialBalanceRequest.is_request_processing ? "Generating..." : " Generate Trial Balance"}</Button>
-
+                                                <div className="actions-wrap">
+                                                    <Button onClick={this.exportTrialBalance} className="action-icon" variant="outline-secondary" type="button">
+                                                        <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
+                                                    </Button>
+                                                </div>
 
                                             </Form>
 

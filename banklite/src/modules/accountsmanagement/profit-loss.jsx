@@ -95,6 +95,23 @@ class ProfitAndLoss extends React.Component {
         
     }
 
+    exportProfitLoss = () => {
+        const { dispatch } = this.props;
+        let {endDate,startDate,branchId}= this.state;
+        if(endDate!=="" && startDate!=="" && branchId!==""){
+            endDate = endDate.toISOString();
+            startDate = startDate.toISOString();
+            let payload = {
+                    branchId: branchId.value,
+                    StartDate: startDate.toISOString(),
+                    EndDate: endDate.toISOString(),
+            }
+            dispatch(acoountingActions.exportProfitLoss(payload));
+        }
+
+
+    }
+
     renderOptions = ()=>{
         let getProfitAndLossRequest = this.props.getProfitAndLossReducer,
             fetchBranchesListRequest = this.props.fetchBranchesListReducer;
@@ -189,7 +206,10 @@ class ProfitAndLoss extends React.Component {
                                                 <Form.Label>Branch</Form.Label>
                                                 <Select
                                                     options={branchData}
-                                                    onChange={(value) => setFieldValue('branchId', value)}
+                                                    onChange={(value) => {
+                                                            setFieldValue('branchId', value)
+                                                            this.setState({branchId: value})
+                                                    }}
                                                     onBlur={()=> setFieldTouched('branchId', true)}
 
                                                     // onChange={(selectedBranch) => {

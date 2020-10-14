@@ -15,8 +15,11 @@ export const acoountingActions = {
     createJournalEntry,
 
     getTrialBalance,
+    exportTrialBalance,
     getProfitAndLoss,
-    getBalanceSheet
+    exportProfitLoss,
+    getBalanceSheet,
+    exportBalanceSheet
 }
 
 function getGLAccounts  (payload, tempData){
@@ -344,6 +347,75 @@ function exportJournalEntries  (payload, tempData){
 
 }
 
+function exportTrialBalance  (payload, tempData){
+    
+    return dispatch =>{
+        let url;
+            // if(id===undefined){
+            //     url = routes.GET_GLACCOUNTS;
+            // }else{
+                
+            // }
+
+            // url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            url = routes.HIT_TRIAL_BALANCE_EXPORT+`/?${payload}`;
+
+        let consume = ApiService.request(url, "GET", '','','', "blob");
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                    let disposition = response.headers['content-disposition'],
+                    filename;
+                    
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) { 
+                        filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+                    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    if(filename === undefined){
+                        link.setAttribute('download', 'Trial-balance.xlsx');
+                    }
+
+                    if(filename !== undefined){
+                        link.setAttribute('download', filename);
+                    }
+
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    dispatch(success(response));
+                    
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.EXPORT_JOURNAL_ENTRY_PENDING, user }
+        }
+
+        if(tempData!==undefined){
+            return { type: accountingConstants.EXPORT_JOURNAL_ENTRY_PENDING, user, tempData }
+        }
+
+         
+    }
+    function success(response) { return { type: accountingConstants.EXPORT_JOURNAL_ENTRY_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.EXPORT_JOURNAL_ENTRY_FAILURE, error } }
+
+}
+
 function createJournalEntry   (createJournalEntryPayload){
     if(createJournalEntryPayload!=="CLEAR"){
         return dispatch =>{
@@ -484,5 +556,143 @@ function getBalanceSheet  (payload, tempData){
     }
     function success(response) { return { type: accountingConstants.GET_BALANCE_SHEET_SUCCESS, response } }
     function failure(error) { return { type: accountingConstants.GET_BALANCE_SHEET_FAILURE, error } }
+
+}
+
+function exportBalanceSheet  (payload, tempData){
+    
+    return dispatch =>{
+        let url;
+            // if(id===undefined){
+            //     url = routes.GET_GLACCOUNTS;
+            // }else{
+                
+            // }
+
+            // url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            url = routes.HIT_BALANCE_SHEET_EXPORT+`/?${payload}`;
+
+        let consume = ApiService.request(url, "GET", '','','', "blob");
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                    let disposition = response.headers['content-disposition'],
+                    filename;
+                    
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) { 
+                        filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+                    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    if(filename === undefined){
+                        link.setAttribute('download', 'Balance-sheet.xlsx');
+                    }
+
+                    if(filename !== undefined){
+                        link.setAttribute('download', filename);
+                    }
+
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    dispatch(success(response));
+                    
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.EXPORT_JOURNAL_BALANCESHEET_PENDING, user }
+        }
+
+        if(tempData!==undefined){
+            return { type: accountingConstants.EXPORT_JOURNAL_BALANCESHEET_PENDING, user, tempData }
+        }
+
+         
+    }
+    function success(response) { return { type: accountingConstants.EXPORT_JOURNAL_BALANCESHEET_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.EXPORT_JOURNAL_BALANCESHEET_FAILURE, error } }
+
+}
+
+function exportProfitLoss  (payload, tempData){
+    
+    return dispatch =>{
+        let url;
+            // if(id===undefined){
+            //     url = routes.GET_GLACCOUNTS;
+            // }else{
+                
+            // }
+
+            // url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            url = routes.HIT_PROFIT_LOSS_EXPORT+`/?${payload}`;
+
+        let consume = ApiService.request(url, "GET", '','','', "blob");
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                    let disposition = response.headers['content-disposition'],
+                    filename;
+                    
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) { 
+                        filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+                    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    if(filename === undefined){
+                        link.setAttribute('download', 'Profit-loss.xlsx');
+                    }
+
+                    if(filename !== undefined){
+                        link.setAttribute('download', filename);
+                    }
+
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    dispatch(success(response));
+                    
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.EXPORT_PROFIT_LOSS_PENDING, user }
+        }
+
+        if(tempData!==undefined){
+            return { type: accountingConstants.EXPORT_PROFIT_LOSS_PENDING, user, tempData }
+        }
+
+         
+    }
+    function success(response) { return { type: accountingConstants.EXPORT_PROFIT_LOSS_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.EXPORT_PROFIT_LOSS_FAILURE, error } }
 
 }

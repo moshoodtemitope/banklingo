@@ -118,12 +118,15 @@ export const routes = {
 
     //Balance sheet Report Endpoints
     HIT_BALANCE_SHEET: BASEURL + '/api/AccountingReport/balancesheet',
+    HIT_BALANCE_SHEET_EXPORT: BASEURL + '/api/AccountingReport/balancesheetexport',
 
     //Trial Balance Endpoints
     HIT_TRIAL_BALANCE: BASEURL + '/api/AccountingReport/trialbalance',
+    HIT_TRIAL_BALANCE_EXPORT: BASEURL + '/api/AccountingReport/trialbalanceexport',
 
     //Profit Loss Endpoints
     HIT_PROFIT_LOSS: BASEURL + '/api/AccountingReport/profitandloss',
+    HIT_PROFIT_LOSS_EXPORT: BASEURL + '/api/AccountingReport/profitandlossexport',
 
     //Download
     GET_DOWNLOAD: BASEURL + '/api/Downloads/download?',

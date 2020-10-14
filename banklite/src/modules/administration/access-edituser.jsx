@@ -135,7 +135,7 @@ class EditUser extends React.Component {
                 }
                 
 
-                console.log('role is', currentRole);
+                
 
         return(
             <Formik
@@ -161,7 +161,7 @@ class EditUser extends React.Component {
                     userName: userData.userName,
                     emailAddress: userData.emailAddress,
                     password: '',
-                    branchId: userData.branchId,
+                    branchId: userData.branchId!==null? userData.branchId :'',
                 }}
 
                 validationSchema={updateUserValidationSchema}
@@ -238,7 +238,7 @@ class EditUser extends React.Component {
                                     }, 3000);
                                 } else {
                                     setTimeout(() => {
-                                        this.props.dispatch(administrationActions.updateAUser("CLEAR"))
+                                        // this.props.dispatch(administrationActions.updateAUser("CLEAR"))
                                     }, 3000);
                                 }
 
@@ -303,7 +303,10 @@ class EditUser extends React.Component {
                                     <Form.Label className="block-level">Role</Form.Label>
                                     <Select
                                         options={allRoles}
-                                        defaultValue ={{label:currentRole.name, value: currentRole.roleId}}
+                                        defaultValue ={{
+                                                        label: currentRole? currentRole.name : null, 
+                                                        value: currentRole? currentRole.roleId : null
+                                                    }}
                                         onChange={(selectedRole) => {
                                             this.setState({ selectedRole });
                                             errors.roleId = null
