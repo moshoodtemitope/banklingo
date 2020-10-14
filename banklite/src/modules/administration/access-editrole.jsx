@@ -262,7 +262,7 @@ class EditRole extends React.Component {
                                                                                     <div className="checkbox-wrap" key={`permission-${index}`}>
                                                                                         <input 
                                                                                             type="checkbox" 
-                                                                                            checked={permission.enabled? permission.enabled: null}
+                                                                                            checked={permission.enabled? permission.enabled: false}
                                                                                             // value={permission.enabled}
                                                                                             data-permissioncode={permission.permissionCode}
                                                                                             id={`permit-${permission.permissionCode}`} 
