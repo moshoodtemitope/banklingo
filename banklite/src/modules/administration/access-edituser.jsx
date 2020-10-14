@@ -106,7 +106,8 @@ class EditUser extends React.Component {
                 password: Yup.string()
                     .min(2, 'Valid password  required')
                     .max(100, 'Max limit reached')
-                    .required('Required'),
+                    // .required('Required')
+                    ,
                 branchId: Yup.string()
                     .min(1, 'Branch  required')
                     .max(100, 'Max limit reached')
