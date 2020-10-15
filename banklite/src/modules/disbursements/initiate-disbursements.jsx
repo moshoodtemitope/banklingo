@@ -105,7 +105,7 @@ class InitiateDisbursement extends React.Component {
             dataToEdit=null,
             destinationBankToEdit=null,
             txtSourceToEdit=null;
-            // console.log('banks are', banksList);
+
 
 
             if(postDisbursementRequest.request_status===disbursmentConstants.POST_DISBURSMENT_EDIT){
@@ -153,7 +153,7 @@ class InitiateDisbursement extends React.Component {
                                                         sourceAccount: values.sourceAccount,
                                                 };
                         
-                                                // console.log('data', initiationPayload);
+                                               
                         
                                                 this.initiateDisburmentRequest(initiationPayload)
                                                     .then(
