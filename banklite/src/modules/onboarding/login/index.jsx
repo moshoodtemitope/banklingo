@@ -125,6 +125,7 @@ class UserLogin extends React.Component {
                             handleChange,
                             handleBlur,
                             resetForm,
+                            setFieldValue,
                             values,
                             touched,
                             isValid,
@@ -158,7 +159,11 @@ class UserLogin extends React.Component {
                                                 type="text" 
                                                 name="userEmail"
                                                 placeholder="Email"
-                                                onChange={handleChange} 
+                                                // onChange={handleChange} 
+                                                onChange={(e)=>{
+                                                        setFieldValue('userEmail', e.target.value);
+                                                    }  
+                                                }
                                                 value={values.userEmail}
                                                 className={errors.userEmail && touched.userEmail ? "is-invalid": null}
                                                 required />
@@ -175,7 +180,11 @@ class UserLogin extends React.Component {
                                                 type="password" 
                                                 name="userPassword"
                                                 placeholder="Password"
-                                                onChange={handleChange} 
+                                                // onChange={handleChange} 
+                                                onChange={(e)=>{
+                                                        setFieldValue('userPassword', e.target.value);
+                                                    }  
+                                                }
                                                 value={values.userPassword}
                                                 className={errors.userPassword && touched.userPassword ? "is-invalid": null}
                                                 required />
