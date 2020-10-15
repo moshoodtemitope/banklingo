@@ -158,7 +158,7 @@ class InitiateDisbursement extends React.Component {
                                                 this.initiateDisburmentRequest(initiationPayload)
                                                     .then(
                                                         () => {
-                                                            // resetForm();
+                                                            
                                                             setTimeout(() => {
                                                                 if(this.props.postDisbursementReducer.request_status===disbursmentConstants.POST_DISBURSMENT_SUCCESS){
                                                                     // this.props.dispatch(disbursementActions.postDisbursement("CLEAR"))
