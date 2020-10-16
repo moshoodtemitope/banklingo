@@ -175,27 +175,27 @@ class EditRole extends React.Component {
 
 
                        
-                        // this.updateARoleRequest(updateRolePayload)
-                        //     .then(
-                        //         () => {
+                        this.updateARoleRequest(updateRolePayload)
+                            .then(
+                                () => {
 
-                        //             if(this.props.adminUpdateARole.request_status === administrationConstants.UPDATE_A_ROLE_SUCCESS) {
+                                    if(this.props.adminUpdateARole.request_status === administrationConstants.UPDATE_A_ROLE_SUCCESS) {
                                     
 
-                        //                 setTimeout(() => {
-                        //                     // this.getARole(this.props.match.params.roleId);
-                        //                     this.props.dispatch(administrationActions.updateARole("CLEAR"));
+                                        setTimeout(() => {
+                                            // this.getARole(this.props.match.params.roleId);
+                                            this.props.dispatch(administrationActions.updateARole("CLEAR"));
                                             
-                        //                     // resetForm();
-                        //                 }, 3000);
-                        //             }else{
-                        //                 setTimeout(() => {
-                        //                     this.props.dispatch(administrationActions.updateARole("CLEAR"))
-                        //                 }, 3000);
-                        //             }
+                                            // resetForm();
+                                        }, 3000);
+                                    }else{
+                                        setTimeout(() => {
+                                            this.props.dispatch(administrationActions.updateARole("CLEAR"))
+                                        }, 3000);
+                                    }
 
-                        //         }
-                        //     )
+                                }
+                            )
 
                     }else{
                         this.setState({showError:true, errorMessage:"Please select a permission for this role"})
