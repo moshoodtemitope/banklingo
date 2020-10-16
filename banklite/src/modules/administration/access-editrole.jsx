@@ -183,10 +183,10 @@ class EditRole extends React.Component {
                                     
 
                                         setTimeout(() => {
-                                            // this.getARole(this.props.match.params.roleId);
+                                            
                                             this.props.dispatch(administrationActions.updateARole("CLEAR"));
                                             
-                                            // resetForm();
+                                            
                                         }, 3000);
                                     }else{
                                         setTimeout(() => {
