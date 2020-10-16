@@ -61,7 +61,7 @@ function exportDeposits(params , tempData) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_DEPOSITS + `/depositsexport?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_DEPOSITS + `/depositsexport?${params}`, "GET", '','','', "blob");
         dispatch(request(consume, tempData));
         return consume
             .then(response => {
@@ -189,7 +189,7 @@ function exportDepositTransaction(params, tempData) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_DEPOSITS_TRANSACTIONS +`/deposittransactionsexport?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_DEPOSITS_TRANSACTIONS +`/deposittransactionsexport?${params}`, "GET", '','','', "blob");
         dispatch(request(consume, tempData));
         return consume
             .then(response => {

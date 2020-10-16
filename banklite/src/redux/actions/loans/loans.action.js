@@ -389,7 +389,7 @@ function exportLoanTransactions(params, tempData) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_LOAN_TRANSACTIONS +`/loantransactionsexport?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_LOAN_TRANSACTIONS +`/loantransactionsexport?${params}`, "GET", '','','', "blob");
         dispatch(request(consume,tempData));
         return consume
             .then(response => {
@@ -447,7 +447,7 @@ function exportLoansAccounts(params, tempData) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_LOAN +`/loanexport?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_LOAN +`/loanexport?${params}`, "GET", '','','', "blob");
         dispatch(request(consume,tempData));
         return consume
             .then(response => {

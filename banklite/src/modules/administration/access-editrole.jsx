@@ -31,9 +31,13 @@ class EditRole extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            showError: false,
+            errorMessage:'',
+            storedPermissionsSelected:null
         }
 
+        this.permissionsSelected=[];
         
     }
 
@@ -41,7 +45,9 @@ class EditRole extends React.Component {
     componentDidMount() {
 
         // this.getAllPermissions();
+
         this.getARole(this.props.match.params.roleId);
+        // this.storeAllPermissions()
     }
 
 
@@ -51,10 +57,21 @@ class EditRole extends React.Component {
     }
 
     getARole =  (roleId)=>{
+        // const {dispatch} = this.props;
+        // let getARoleRequest = this.props.adminGetARole;
+        
+        //  dispatch(administrationActions.getARole(roleId));
+        this.fetchRole(roleId)
+            .then(()=>{
+                this.storeAllPermissions()
+            })
+
+    }
+    fetchRole =async (roleId)=>{
         const {dispatch} = this.props;
        
         
-         dispatch(administrationActions.getARole(roleId));
+        await dispatch(administrationActions.getARole(roleId))
     }
 
     updateARoleRequest = async (payload)=>{
@@ -77,11 +94,34 @@ class EditRole extends React.Component {
         });
       }
 
+    storeAllPermissions = ()=>{
+        let getARoleRequest = this.props.adminGetARole;
+        if(administrationConstants.GET_A_ROLE_SUCCESS){
+            let roleData = getARoleRequest.request_data.response.data;
+
+            roleData.permissions.map((permission, index) => {
+                // permissiondData.map((permission, index)=>{
+                
+                if (permission.enabled === true && this.permissionsSelected.indexOf(permission.permissionCode) === -1) {
+                    this.permissionsSelected.push(permission.permissionCode);
+                    
+                }
+
+                // allPermissionsList[permission.permissionCode] = permission.enabled;
+                // allPermissionsList.push({
+                //     [permission.permissionCode]: permission.enabled
+                // })
+            })
+        }
+    }
+
     renderUpdateRoleForm = (permissiondData, roleData)=>{
         let updateARoleRequest = this.props.adminUpdateARole;
         let permissionGroups = [],
-            permissionsSelected=[],
+            // permissionsSelected=[],
             allPermissionsList={},
+            testList =[],
+            {showError, errorMessage, storedPermissionsSelected} = this.state,
             permissionsEnabled = roleData.permissions,
             createRoleValidationSchema = Yup.object().shape({
                 roleName: Yup.string()
@@ -92,18 +132,17 @@ class EditRole extends React.Component {
                     .min(5, 'Provide detailed notes'),
               });
 
-              roleData.permissions.map((permission, index)=>{
+            roleData.permissions.map((permission, index) => {
                 // permissiondData.map((permission, index)=>{
-                if(permissionGroups.indexOf(permission.groupName)===-1){
+                if (permissionGroups.indexOf(permission.groupName) === -1) {
                     permissionGroups.push(permission.groupName);
                 }
-                allPermissionsList[permission.permissionCode] = permission.enabled;
-                // allPermissionsList.push({
-                //     [permission.permissionCode]: permission.enabled
-                // })
-            })
+               
 
-            // console.log("all permissions", allPermissionsList);
+                allPermissionsList[permission.permissionCode] = permission.enabled;
+                
+            })
+           
         
         return(
             <Formik
@@ -119,41 +158,48 @@ class EditRole extends React.Component {
 
                 validationSchema={createRoleValidationSchema}
                 onSubmit={(values, { resetForm }) => {
-
-                    let updateRolePayload = {
-                        name: values.roleName,
-                        isTeller: values.roleIsTeller,
-                        isAdministrator: values.roleIsAdministrator,
-                        hasPortalAccessRight: values.roleHasPortalAccessRight,
-                        hasApiAccessRight: values.roleHasApiAccessRight,
-                        note:values.note,
-                        permissionCodes:permissionsSelected,
-                        id:this.props.match.params.roleId
-                    }
-
-
+                    let updateRolePayload
+                    if(this.permissionsSelected.length>=1){
+                        this.setState({showError:false, errorMessage:""})
+                         updateRolePayload = {
+                            name: values.roleName,
+                            isTeller: values.roleIsTeller,
+                            isAdministrator: values.roleIsAdministrator,
+                            hasPortalAccessRight: values.roleHasPortalAccessRight,
+                            hasApiAccessRight: values.roleHasApiAccessRight,
+                            note:values.note,
+                            permissionCodes:this.state.storedPermissionsSelected!==null? this.state.storedPermissionsSelected : this.permissionsSelected,
+                            id:this.props.match.params.roleId
+                        }
                     
-                    this.updateARoleRequest(updateRolePayload)
-                        .then(
-                            () => {
 
-                                if(this.props.adminUpdateARole.request_status === administrationConstants.UPDATE_A_ROLE_SUCCESS) {
-                                   
 
-                                    setTimeout(() => {
-                                        // this.getARole(this.props.match.params.roleId);
-                                        this.props.dispatch(administrationActions.updateARole("CLEAR"));
-                                        
-                                        // resetForm();
-                                    }, 3000);
-                                }else{
-                                    setTimeout(() => {
-                                        this.props.dispatch(administrationActions.updateARole("CLEAR"))
-                                    }, 3000);
-                                }
+                       
+                        // this.updateARoleRequest(updateRolePayload)
+                        //     .then(
+                        //         () => {
 
-                            }
-                        )
+                        //             if(this.props.adminUpdateARole.request_status === administrationConstants.UPDATE_A_ROLE_SUCCESS) {
+                                    
+
+                        //                 setTimeout(() => {
+                        //                     // this.getARole(this.props.match.params.roleId);
+                        //                     this.props.dispatch(administrationActions.updateARole("CLEAR"));
+                                            
+                        //                     // resetForm();
+                        //                 }, 3000);
+                        //             }else{
+                        //                 setTimeout(() => {
+                        //                     this.props.dispatch(administrationActions.updateARole("CLEAR"))
+                        //                 }, 3000);
+                        //             }
+
+                        //         }
+                        //     )
+
+                    }else{
+                        this.setState({showError:true, errorMessage:"Please select a permission for this role"})
+                    }
 
                 }}
             >
@@ -279,21 +325,8 @@ class EditRole extends React.Component {
                                                                         roleData.permissions.map((permission, index)=>{
                                                                             // permissiondData.map((permission, index)=>{
                                                                             if(permission.groupName===permissionGroup){
-                                                                                // let findPermission = permissionsEnabled.find(enabledPermission=>
-                                                                                //                                                 (enabledPermission.permissionCode===permission.permissionCode &&
-                                                                                //                                                     permission.enabled===true)
-                                                                                //                                             );
                                                                                
-                                                                                // if(findPermission!==undefined){
-                                                                                //     permissionsSelected.push(permission.permissionCode);
-                                                                                // }
-                                                                                // console.log('permissions are',permission.permissionName, permission.enabled);
-                                                                                // this.setState(
-                                                                                //     Object.defineProperty({}, `permission-${permission.permissionCode}`, {
-                                                                                //       value: permission.enabled,
-                                                                                //       enumerable: true
-                                                                                //     })
-                                                                                // );
+                                                                               
                                                                                 return(
                                                                                     <div className="checkbox-wrap" key={`permission-${index}`}>
                                                                                         <input 
@@ -304,29 +337,65 @@ class EditRole extends React.Component {
                                                                                             // ref={`permission-${permission.permissionCode}`}
                                                                                             data-permissioncode={permission.permissionCode}
                                                                                             // id={`permit-${permission.permissionCode}`} 
-
-                                                                                            onChange={(event)=>{
-                                                                                                let permitCode = event.target.getAttribute('data-permissioncode');
-                                                                                                // this.setState({
-                                                                                                //     [`permission-${permission.permissionCode}`]: !this.state[`permission-${permission.permissionCode}`]
-                                                                                                // })
-                                                                                                setFieldValue(`${permission.permissionCode}`, event.target.checked)
-                                                                                                if(permissionsSelected.indexOf(permitCode) > -1){
-                                                                                                    permissionsSelected.splice(permissionsSelected.indexOf(permitCode), 1)
-                                                                                                }else{
-                                                                                                    permissionsSelected.push(permitCode);
-                                                                                                }
-                                                                                            }}
-
-                                                                                            // type="checkbox" 
-                                                                                            id={permission.permissionCode}
+                                                                                            id={`permit-${permission.permissionCode}-${index}`}
                                                                                             checked={values[permission.permissionCode]}
                                                                                             name={permission.permissionCode}
                                                                                             // onChange={handleChange} 
                                                                                             value={values[permission.permissionCode]}
 
+                                                                                            onChange={(event)=>{
+                                                                                                // event.stopImmediatePropagation();
+                                                                                                let permitCode = event.target.getAttribute('data-permissioncode');
+                                                                                                // this.setState({
+                                                                                                //     [`permission-${permission.permissionCode}`]: !this.state[`permission-${permission.permissionCode}`]
+                                                                                                // })
+                                                                                               
+                                                                                                this.setState({showError:false, errorMessage:""})
+                                                                                                setFieldValue(`${permission.permissionCode}`, event.target.checked)
+
+
+                                                                                                if(event.target.checked ===true){
+                                                                                                    
+                                                                                                    if(this.permissionsSelected.indexOf(permitCode) === -1){
+                                                                                                        this.permissionsSelected.push(permitCode);
+                                                                                                        
+                                                                                                    }
+                                                                                                }
+
+                                                                                                if(event.target.checked ===false){
+                                                                                                    
+                                                                                                    if(this.permissionsSelected.indexOf(permitCode) > -1){
+                                                                                                        this.permissionsSelected.splice(this.permissionsSelected.indexOf(permitCode), 1)
+                                                                                                        
+                                                                                                        
+                                                                                                    }
+                                                                                                }
+
+                                                                                               
+
+
+                                                                                                // testList = this.permissionsSelected
+                                                                                                
+                                                                                                if(this.permissionsSelected.length>=1){
+                                                                                                    this.setState({storedPermissionsSelected: this.permissionsSelected})
+                                                                                                }else{
+                                                                                                    this.setState({storedPermissionsSelected: null})
+                                                                                                }
+                                                                                                
+                                                                                                // if(permissionsSelected.indexOf(permitCode) > -1){
+                                                                                                //     permissionsSelected.splice(permissionsSelected.indexOf(permitCode), 1)
+                                                                                                // }else{
+                                                                                                //     if(event.target.checked ===true){
+                                                                                                //         permissionsSelected.push(permitCode);
+                                                                                                //     }
+                                                                                                // }
+                                                                                            }}
+
+                                                                                            // type="checkbox" 
+                                                                                            
+
                                                                                         />
-                                                                                        <label htmlFor={`permit-${permission.permissionCode}`} >{permission.permissionName}</label>
+                                                                                        <label htmlFor={`permit-${permission.permissionCode}-${index}`} onClick={e=>{e.stopPropagation()}} className="check-label" >{permission.permissionName}</label>
                                                                                     </div>
                                                                                 )
                                                                             }
@@ -390,6 +459,12 @@ class EditRole extends React.Component {
                             {updateARoleRequest.request_status === administrationConstants.UPDATE_A_ROLE_FAILURE && 
                                 <Alert variant="danger">
                                     {updateARoleRequest.request_data.error}
+                            
+                                </Alert>
+                            }
+                            {showError && 
+                                <Alert variant="danger">
+                                    {errorMessage}
                             
                                 </Alert>
                             }
