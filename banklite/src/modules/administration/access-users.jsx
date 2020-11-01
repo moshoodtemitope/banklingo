@@ -524,7 +524,8 @@ class AccessUsers extends React.Component {
                     }
                     {ResetPinRequest.request_status === authConstants.RESET_PIN_SUCCESS && 
                        <div className="text-center">
-                             PIN Reset was successful for {userToResetPInFor}
+                           {ResetPinRequest.request_data.response.data.message}
+                             {/* PIN Reset was successful for {userToResetPInFor} */}
                         </div>
                     }
                 </Modal.Body>
