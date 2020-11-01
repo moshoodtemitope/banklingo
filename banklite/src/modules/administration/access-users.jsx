@@ -9,14 +9,16 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-// import Dropdown from 'react-bootstrap/Dropdown'
+import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
-
+import Modal from 'react-bootstrap/Modal'
 import AccessNav from './menus/_access-menu'
+import {authActions} from '../../redux/actions/auth/auth.action';
+import {authConstants} from '../../redux/actiontypes/auth/auth.constants'
 // import Alert from 'react-bootstrap/Alert'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
@@ -27,7 +29,8 @@ class AccessUsers extends React.Component {
             user:'',
             PageSize:25,
             CurrentPage:1,
-            refresh: false
+            refresh: false,
+            showPINStatus: false
         }
         this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
 
@@ -42,6 +45,41 @@ class AccessUsers extends React.Component {
         let {PageSize, CurrentPage}= this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
         this.getUsers(params);
+    }
+
+    handleResetPINUpdates = async (resetPINPayload) =>{
+        this.handleshowPINStatus();
+        const {dispatch} = this.props;
+       
+        await dispatch(authActions.ResetPIN(resetPINPayload));
+
+        
+    }
+
+    resetUserPIN=(resetPINPayload, userToResetPInFor) =>{
+        this.setState({userToResetPInFor})
+        this.handleResetPINUpdates(resetPINPayload)
+            .then(
+                () => {
+                    if(this.props.ResetPinReducer.request_status === authConstants.RESET_PIN_SUCCESS){
+                      
+                    //    this.handleClosePINStatus();
+                        
+                        // setTimeout(() => {
+                        //     this.props.dispatch(authActions.ResetPIN("CLEAR"))
+                        // }, 2000);
+                    }
+                    // else{
+                    //     setTimeout(() => {
+                    //         this.props.dispatch(acoountingActions.createGLAccount("CLEAR"))
+                    //     }, 2000);
+                    // }
+                    
+                    
+
+                }
+            )
+            .catch()
     }
 
     setPagesize = (PageSize, tempData)=>{
@@ -91,6 +129,7 @@ class AccessUsers extends React.Component {
     }
 
     renderAllUsers =()=>{
+        let {showPINStatus} = this.state;
         let adminGetUsersRequest = this.props.adminGetUsers;
         let allUSerPermissions =[];
         this.userPermissions.map(eachPermission=>{
@@ -157,6 +196,7 @@ class AccessUsers extends React.Component {
                     }else{
                         return(
                             <div>
+                                {showPINStatus && this.PINResetStatus()}
                                 <div className="heading-with-cta">
                                     <Form className="one-liner">
 
@@ -230,8 +270,8 @@ class AccessUsers extends React.Component {
                                                                                 className="customone"
                                                                             >
                                                                                 <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
-                                                                                {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                                                <Dropdown.Item eventKey="1" onClick={this.resetUserPIN({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset PIN</Dropdown.Item>
+                                                                                    {/*<Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                                                             </DropdownButton>
                                                                             }
                                                                         </td>
@@ -260,6 +300,7 @@ class AccessUsers extends React.Component {
                             if(allUsersData.result.length>=1){
                                 return(
                                     <div>
+                                        {showPINStatus && this.PINResetStatus()}
                                         <div className="heading-with-cta">
                                             <Form className="one-liner">
 
@@ -351,6 +392,7 @@ class AccessUsers extends React.Component {
                                                                                         className="customone"
                                                                                     >
                                                                                         <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
+                                                                                        <Dropdown.Item eventKey="1" onClick={()=>this.resetUserPIN({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset PIN</Dropdown.Item>
                                                                                         {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                                         <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                                                                     </DropdownButton>
@@ -451,8 +493,65 @@ class AccessUsers extends React.Component {
             }
     }
 
+    handleClosePINStatus = () => {
+            this.setState({showPINStatus:false})
+            this.props.dispatch(authActions.ResetPIN("CLEAR"))
+    };
+    
+    handleshowPINStatus = () => this.setState({showPINStatus:true});
+
+    PINResetStatus = () =>{
+        let {showPINStatus, userToResetPInFor} = this.state;
+        let ResetPinRequest = this.props.ResetPinReducer;
+            
+        
+        return(
+            <Modal show={showPINStatus}  size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
+                <Modal.Header>
+                    <Modal.Title>PIN Reset</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    
+                    {ResetPinRequest.request_status === authConstants.RESET_PIN_FAILURE && 
+                        <div className="text-center errortxt">
+                            {ResetPinRequest.request_data.error}
+                        </div>
+                    }
+                    {ResetPinRequest.request_status === authConstants.RESET_PIN_PENDING && 
+                        <div className="text-center ">
+                            Resetting PIN for {userToResetPInFor}
+                        </div>
+                    }
+                    {ResetPinRequest.request_status === authConstants.RESET_PIN_SUCCESS && 
+                       <div className="text-center">
+                             PIN Reset was successful for {userToResetPInFor}
+                        </div>
+                    }
+                </Modal.Body>
+                {(ResetPinRequest.request_status === authConstants.RESET_PIN_SUCCESS 
+                    || ResetPinRequest.request_status === authConstants.RESET_PIN_FAILURE ) && 
+                <Modal.Footer>
+
+                    
+                    <Button 
+                        variant="success"
+                        type="button"
+                        onClick={this.handleClosePINStatus}
+                    >
+                        Okay
+                        
+                        
+                    </Button>
+
+                </Modal.Footer>
+                }
+            </Modal>
+        )
+    }
+
 
     render() {
+        
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -471,6 +570,7 @@ class AccessUsers extends React.Component {
                             </div>
                             <div className="module-submenu">
                                 <div className="content-container">
+                                    
                                     <AdminNav />
                                     <AccessNav />
                                     {/* <div className="lowerlevel-menu">
@@ -513,6 +613,7 @@ class AccessUsers extends React.Component {
 function mapStateToProps(state) {
     return {
         adminGetUsers : state.administrationReducers.adminGetUsersReducer,
+        ResetPinReducer : state.authReducers.ResetPinReducer,
     };
 }
 

@@ -136,6 +136,8 @@ const loansReducers = combineReducers({
 const authReducers = combineReducers({
     LoginReducer: auth.LoginReducer, 
     ChangePasswordReducer: auth.ChangePasswordReducer, 
+    ChangePinReducer: auth.ChangePinReducer, 
+    ResetPinReducer: auth.ResetPinReducer, 
    
 })
 

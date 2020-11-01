@@ -121,6 +121,73 @@ export function ChangePasswordReducer(state=initialState, action) {
     }
 }
 
+export function ChangePinReducer(state=initialState, action) {
+    
+    switch (action.type) {
+        case authConstants.CHANGE_PIN_PENDING:
+            return {
+                request_status: authConstants.CHANGE_PIN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case authConstants.CHANGE_PIN_SUCCESS:
+            return {
+                request_status: authConstants.CHANGE_PIN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.CHANGE_PIN_FAILURE:
+            return {
+                request_status: authConstants.CHANGE_PIN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.CHANGE_PIN_RESET:
+            return {
+                request_status: authConstants.CHANGE_PIN_RESET,
+                is_request_processing: false,
+                request_data: {},
+            };
+        
+
+        default:
+            return { ...state }
+    }
+}
+
+export function ResetPinReducer(state=initialState, action) {
+    
+    switch (action.type) {
+        case authConstants.RESET_PIN_PENDING:
+            return {
+                request_status: authConstants.RESET_PIN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case authConstants.RESET_PIN_SUCCESS:
+            return {
+                request_status: authConstants.RESET_PIN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.RESET_PIN_FAILURE:
+            return {
+                request_status: authConstants.RESET_PIN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.RESET_PIN_RESET:
+            return {
+                request_status: authConstants.RESET_PIN_RESET,
+                is_request_processing: false,
+                request_data: {},
+            };
+        
+
+        default:
+            return { ...state }
+    }
+}
 
 
 

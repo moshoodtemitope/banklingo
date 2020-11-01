@@ -15,6 +15,8 @@ export const routes = {
     LOGIN_USER: BASEURL + '/api/Login',
     REFRESH_TOKEN: BASEURL + '/api/Login/refreshtoken',
     CHANGE_PASSWORD: BASEURL + '/api/Login/changepassword',
+    RESET_PIN: BASEURL + '/api/Login/resetpin',
+    CHANGE_PIN: BASEURL + '/api/Login/changepin',
     HIT_DASHBOARD: BASEURL + '/api/Dashboard',
 
 

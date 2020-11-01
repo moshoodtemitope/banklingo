@@ -10,6 +10,8 @@ export const authActions = {
     ResfreshToken,
     initStore,
     ChangePassword,
+    ChangePIN,
+    ResetPIN,
     ForbiddenAccess
 }
 
@@ -197,7 +199,7 @@ function ChangePassword   (changePasswordPayload){
     if(changePasswordPayload!=="CLEAR"){
         return dispatch =>{
             let url = routes.CHANGE_PASSWORD;
-            console.log("hgfghjkljhgfgdh",changePasswordPayload);
+            
             let consume = ApiService.request(url, "POST", changePasswordPayload);
             dispatch(request(consume));
             return consume
@@ -223,6 +225,72 @@ function ChangePassword   (changePasswordPayload){
     function success(response) { return { type: authConstants.CHANGE_PASSWORD_SUCCESS, response } }
     function failure(error) { return { type: authConstants.CHANGE_PASSWORD_FAILURE, error } }
     function clear() { return { type: authConstants.CHANGE_PASSWORD_RESET, clear_data:""} }
+
+}
+
+function ChangePIN   (changePINPayload){
+    if(changePINPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.CHANGE_PIN;
+            
+            let consume = ApiService.request(url, "POST", changePINPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                    
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: authConstants.CHANGE_PIN_PENDING, user } }
+    function success(response) { return { type: authConstants.CHANGE_PIN_SUCCESS, response } }
+    function failure(error) { return { type: authConstants.CHANGE_PIN_FAILURE, error } }
+    function clear() { return { type: authConstants.CHANGE_PIN_RESET, clear_data:""} }
+
+}
+
+function ResetPIN   (resetPINPayload){
+    if(resetPINPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.RESET_PIN;
+            // console.log("hgfghjkljhgfgdh",resetPINPayload);
+            let consume = ApiService.request(url, "POST", resetPINPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                    
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: authConstants.RESET_PIN_PENDING, user } }
+    function success(response) { return { type: authConstants.RESET_PIN_SUCCESS, response } }
+    function failure(error) { return { type: authConstants.RESET_PIN_FAILURE, error } }
+    function clear() { return { type: authConstants.RESET_PIN_RESET, clear_data:""} }
 
 }
 

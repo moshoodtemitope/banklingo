@@ -129,6 +129,8 @@ import{
 import{
     LoginReducer,
     ChangePasswordReducer,
+    ChangePinReducer,
+    ResetPinReducer
     
 } from './auth/auth.reducer'
 
@@ -270,7 +272,9 @@ export const loans = {
 
 export const auth = {
     LoginReducer,
-    ChangePasswordReducer
+    ChangePasswordReducer,
+    ChangePinReducer,
+    ResetPinReducer
 }
 
 export const dashboard = {

@@ -701,8 +701,10 @@ class MainHeader extends React.Component{
                                 <NavDropdown title={user.displayName!==undefined?user.displayName:'Unverified Account'} id="basic-nav-dropdown">
                                     <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
                                     <NavDropdown.Item onClick={()=> history.push("/profile/change-password")} >
-                                        {/* <NavLink to={"/profile/change-password"}>Change Password</NavLink> */}
                                         Change Password
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item onClick={()=> history.push("/profile/change-pin")} >
+                                        Change PIN
                                     </NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item  onClick={()=>this.logout()}>Logout</NavDropdown.Item>

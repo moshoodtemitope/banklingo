@@ -8,6 +8,7 @@ import DashboardLanding from './dashboard'
 import UserLogin from './onboarding/login'
 
 import ChangePassword from './profile/change-password'
+import ChangePin from './profile/change-pin'
 
 
 import ClientsManagement from './clients'
@@ -211,6 +212,7 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/' render={(props) => <UserLogin  />} /> 
 
                         <PrivateRoute path='/profile/change-password' {...this.props} authed={this.props.user} component={ChangePassword} />
+                        <PrivateRoute path='/profile/change-pin' {...this.props} authed={this.props.user} component={ChangePin} />
                         
                         <PrivateRoute path='/dashboard' {...this.props} authed={this.props.user} component={DashboardLanding} />
                         {/* <Route exact path='/dashboard' render={(props) => <DashboardLanding {...this.props} />} />  */}
@@ -326,9 +328,11 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_manage_products" exact path='/administration/products/newloan-product' {...this.props} authed={this.props.user} component={NewLoanProduct} /> 
                         <PrivateRoute accessRequired="bnk_manage_products" exact path='/administration/products/loans/edit/:encodedKey' {...this.props} authed={this.props.user} component={EditLoanProduct} /> 
                         
-                        <PrivateRoute accessRequired="bnk_manage_role" exact path='/administration/access' {...this.props} authed={this.props.user} component={AccessRoles} /> 
+                        {/* <PrivateRoute accessRequired="bnk_manage_role" exact path='/administration/access' {...this.props} authed={this.props.user} component={AccessRoles} />  */}
+                        <PrivateRoute  exact path='/administration/access' {...this.props} authed={this.props.user} component={AccessRoles} /> 
                         <PrivateRoute accessRequired="bnk_manage_role" exact path='/administration/access/new-role' {...this.props} authed={this.props.user} component={CreateNewRole} /> 
-                        <PrivateRoute accessRequired="bnk_manage_role" exact path='/administration/access/edit-role/:roleId' {...this.props} authed={this.props.user} component={EditRole} /> 
+                        {/* <PrivateRoute accessRequired="bnk_manage_role" exact path='/administration/access/edit-role/:roleId' {...this.props} authed={this.props.user} component={EditRole} />  */}
+                        <PrivateRoute  exact path='/administration/access/edit-role/:roleId' {...this.props} authed={this.props.user} component={EditRole} /> 
                         
                         <PrivateRoute accessRequired="bnk_manage_users" exact path='/administration/access/users' {...this.props} authed={this.props.user} component={AccessUsers} /> 
                         <PrivateRoute accessRequired="bnk_manage_users" exact path='/administration/access/new-user' {...this.props} authed={this.props.user} component={CreateNewUser} /> 
