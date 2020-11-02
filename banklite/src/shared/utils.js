@@ -259,7 +259,7 @@ export const numberWithoutDecimals= (amount)=> {
     if(amount!==null){
         if(amount!==undefined && amount!==''){
             let amountFiltered, splittedDecimal, amountTemp;
-            amount = amount.toString().replace(/\D/g,'');
+            amount = amount.toString().replace(/\-\D/g,'');
             
             // if(!testSequence.test(amount)){
             //     return "";
@@ -328,7 +328,7 @@ export const numberWithCommas= (amount, isDecimal)=> {
     if(amount!==null){
         if(amount!==undefined && amount!==''){
             let amountFiltered, splittedDecimal, amountTemp;
-            amount = amount.toString().replace(/[^0-9.,]/g,'');
+            amount = amount.toString().replace(/\-[^0-9.,]/g,'');
 
             // if(!testSequence.test(amount)){
             //     return "";
@@ -340,6 +340,7 @@ export const numberWithCommas= (amount, isDecimal)=> {
                 amountFiltered = amount.toString().replace(/,/g, '');
             // }
 
+            console.log("skrrr", amountFiltered)
             
             if((amountFiltered.match(/\./g) || []).length===1){
         
@@ -368,6 +369,7 @@ export const numberWithCommas= (amount, isDecimal)=> {
                     //     splittedDecimal[1] = splittedDecimal[1]+'0';
                     // }
                     
+                    console.log("bloom", splittedDecimal)
 
                     amountTemp = splittedDecimal[0].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                     return `${amountTemp}.${splittedDecimal[1]}`;
@@ -378,12 +380,15 @@ export const numberWithCommas= (amount, isDecimal)=> {
                 var numberParts = amountFiltered.split('.');
                 numberParts =  numberParts.slice(0,-1).join('') + '.' + numberParts.slice(-1)
                 
+                console.log("testsss", numberParts);
                 return numberParts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');    
             }
 
             if(amountFiltered.indexOf('.')===-1 && isDecimal===true){
                 amountFiltered = amountFiltered+'.00';
             }
+
+            console.log("hahahah", amountFiltered)
             
             return amountFiltered.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
             

@@ -180,7 +180,7 @@ class ViewCustomer extends React.Component {
                                                                     </td>
                                                                     <td>Deposit</td>
                                                                     <td>{eachAccount.accountStateDescription}</td>
-                                                                    <td>₦{eachAccount.depositBalance}</td>
+                                                                    <td>₦{numberWithCommas(eachAccount.depositBalance, true)}</td>
                                                                 </tr>
                                                                ) 
                                                             })

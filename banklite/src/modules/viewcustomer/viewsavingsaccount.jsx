@@ -32,7 +32,7 @@ import Alert from 'react-bootstrap/Alert'
 
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 
-import { numberWithCommas, getDateFromISO} from '../../shared/utils';
+import { numberWithCommas, getDateFromISO, numberWithoutDecimals} from '../../shared/utils';
 import { routes} from '../../services/urls';
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
@@ -657,6 +657,8 @@ class ViewSavingsAccount extends React.Component {
                             <div className="amounttext"> &#8358;{numberWithCommas(depositAccountData.depositAvailableBalance, true)}</div>
                         </div>
                     }
+
+                    
             </div>
         )
     }

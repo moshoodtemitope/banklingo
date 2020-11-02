@@ -539,6 +539,7 @@ class DepositTransactions extends React.Component {
 ) : null} */}
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                        
                                     </Form>
 
                                     <div className="pagination-wrap">
