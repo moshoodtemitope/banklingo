@@ -189,6 +189,40 @@ export function ResetPinReducer(state=initialState, action) {
     }
 }
 
+export function ActivateDeactivateUserReducer(state=initialState, action) {
+    
+    switch (action.type) {
+        case authConstants.ACTIVATE_DEACTIVATE_USER_PENDING:
+            return {
+                request_status: authConstants.ACTIVATE_DEACTIVATE_USER_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS:
+            return {
+                request_status: authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE:
+            return {
+                request_status: authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.ACTIVATE_DEACTIVATE_USER_RESET:
+            return {
+                request_status: authConstants.ACTIVATE_DEACTIVATE_USER_RESET,
+                is_request_processing: false,
+                request_data: {},
+            };
+        
+
+        default:
+            return { ...state }
+    }
+}
+
 
 
 

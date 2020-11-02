@@ -654,7 +654,7 @@ class ViewSavingsAccount extends React.Component {
                     {depositAccountData.accountState===5 &&
                         <div className="eachamount">
                             <h6>Total Balance</h6>
-                            <div className="amounttext"> &#8358;{numberWithCommas(depositAccountData.depositBalance, true)}</div>
+                            <div className="amounttext"> &#8358;{numberWithCommas(depositAccountData.depositAvailableBalance, true)}</div>
                         </div>
                     }
             </div>
@@ -3476,7 +3476,7 @@ class ViewSavingsAccount extends React.Component {
                             </li>
                         }
 
-                        {(depositDetails.accountState ===5  &&  depositDetails.depositBalance >=1) &&
+                        {(depositDetails.accountState ===5  &&  depositDetails.depositAvailableBalance >=1) &&
                             <li>
                                 <Button size="sm"
                                     onClick={()=>{
@@ -3487,7 +3487,7 @@ class ViewSavingsAccount extends React.Component {
                             </li>
                         }
 
-                        {((depositDetails.accountState ===5 || depositDetails.accountState ===3)  && (depositDetails.productType===2 || depositDetails.productType===1 || depositDetails.productType===4) && depositDetails.depositBalance >=1) &&
+                        {((depositDetails.accountState ===5 || depositDetails.accountState ===3)  && (depositDetails.productType===2 || depositDetails.productType===1 || depositDetails.productType===4) && depositDetails.depositAvailableBalance >=1) &&
                             <li>
                                 <Button size="sm"
                                     onClick={()=>{

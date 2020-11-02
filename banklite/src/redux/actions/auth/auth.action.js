@@ -12,6 +12,7 @@ export const authActions = {
     ChangePassword,
     ChangePIN,
     ResetPIN,
+    activateDeactivateUser,
     ForbiddenAccess
 }
 
@@ -293,6 +294,48 @@ function ResetPIN   (resetPINPayload){
     function clear() { return { type: authConstants.RESET_PIN_RESET, clear_data:""} }
 
 }
+
+function activateDeactivateUser   (actionType, userPayload){
+    
+    if(userPayload!=="CLEAR"){
+        return dispatch =>{
+            let url;
+            if(actionType==="activate"){
+                url = routes.ACTIVATE_USER
+            }
+            if(actionType==="deactivate"){
+                url = routes.DEACTIVATE_USER
+            }
+            
+            let consume = ApiService.request(url, "POST", userPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                    
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: authConstants.ACTIVATE_DEACTIVATE_USER_PENDING, user } }
+    function success(response) { return { type: authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS, response } }
+    function failure(error) { return { type: authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE, error } }
+    function clear() { return { type: authConstants.ACTIVATE_DEACTIVATE_USER_RESET, clear_data:""} }
+
+}
+
+
 
 function Logout(redirectType,retUrl) {
     

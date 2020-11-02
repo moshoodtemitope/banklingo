@@ -30,7 +30,10 @@ class AccessUsers extends React.Component {
             PageSize:25,
             CurrentPage:1,
             refresh: false,
-            showPINStatus: false
+            showPINStatus: false,
+            showActivationStatus: false,
+            ShowDeactivated:false,
+            // ShowDeactivated:false
         }
         this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
 
@@ -42,16 +45,26 @@ class AccessUsers extends React.Component {
     }
 
     loadInitialData=()=>{
-        let {PageSize, CurrentPage}= this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        let {PageSize, CurrentPage,ShowDeactivated}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&ShowDeactivated=${ShowDeactivated}`;
         this.getUsers(params);
     }
 
     handleResetPINUpdates = async (resetPINPayload) =>{
         this.handleshowPINStatus();
+        
         const {dispatch} = this.props;
        
         await dispatch(authActions.ResetPIN(resetPINPayload));
+
+        
+    }
+
+    handleUserStateUpdates = async (activationAction,userStatePayload) =>{
+        this.handleshowActivationtatus();
+        const {dispatch} = this.props;
+       
+        await dispatch(authActions.activateDeactivateUser(activationAction,userStatePayload));
 
         
     }
@@ -65,9 +78,65 @@ class AccessUsers extends React.Component {
                       
                     //    this.handleClosePINStatus();
                         
-                        // setTimeout(() => {
-                        //     this.props.dispatch(authActions.ResetPIN("CLEAR"))
-                        // }, 2000);
+                        
+                    }
+                    // else{
+                    //     setTimeout(() => {
+                    //         this.props.dispatch(acoountingActions.createGLAccount("CLEAR"))
+                    //     }, 2000);
+                    // }
+                    
+                    
+
+                }
+            )
+            .catch()
+    }
+
+    showAllDeactivatedUsers = ()=>{
+        let {ShowDeactivated} =  this.state;
+        this.setState({ShowDeactivated : !ShowDeactivated},()=>{
+            let allUsersData = this.props.adminGetUsers.request_data.response? this.props.adminGetUsers.request_data.response.data:undefined;
+
+            const {dispatch} = this.props;
+            let {PageSize, CurrentPage, ShowDeactivated} = this.state;
+
+            let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&ShowDeactivated=${ShowDeactivated}`;
+            // this.getTransactionChannels(params);
+
+
+            if(allUsersData){
+                dispatch(administrationActions.getUsers(params,allUsersData));
+            }else{
+                dispatch(administrationActions.getUsers(params));
+            }
+        })
+    }
+
+    activateDeactivateUser=(userActionPayload, userDetailsForAction, activationAction) =>{
+        let allUsersData = this.props.adminGetUsers.request_data.response.data;
+        this.setState({userDetailsForAction, activationAction})
+        this.handleUserStateUpdates(activationAction,userActionPayload)
+            .then(
+                () => {
+                    if(this.props.ActivateDeactivateUserReducer.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS){
+                      
+                    //    this.handleClosePINStatus();
+                        
+                        setTimeout(() => {
+                            const {dispatch} = this.props;
+                            let {PageSize, CurrentPage, ShowDeactivated} = this.state;
+
+                            let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&ShowDeactivated=${ShowDeactivated}`;
+                            // this.getTransactionChannels(params);
+
+
+                            if(allUsersData){
+                                dispatch(administrationActions.getUsers(params,allUsersData));
+                            }else{
+                                dispatch(administrationActions.getUsers(params));
+                            }
+                        }, 500);
                     }
                     // else{
                     //     setTimeout(() => {
@@ -85,13 +154,13 @@ class AccessUsers extends React.Component {
     setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
         const {dispatch} = this.props;
-        let {CurrentPage}= this.state;
+        let {CurrentPage,ShowDeactivated}= this.state;
         
 
         let sizeOfPage = PageSize.target.value;
 
         this.setState({PageSize: sizeOfPage, refresh: true});
-        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&ShowDeactivated=${ShowDeactivated}`;
 
         if(tempData){
             
@@ -107,11 +176,11 @@ class AccessUsers extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize, CurrentPage} = this.state;
+        let {PageSize, CurrentPage, ShowDeactivated} = this.state;
 
-        // this.setState({PageSize: sizeOfPage});
+        this.setState({CurrentPage: nextPage});
 
-        let params = `PageSize=${PageSize}&CurrentPage=${nextPage}`;
+        let params = `PageSize=${PageSize}&CurrentPage=${nextPage}&ShowDeactivated=${ShowDeactivated}`;
         // this.getTransactionChannels(params);
 
 
@@ -129,7 +198,7 @@ class AccessUsers extends React.Component {
     }
 
     renderAllUsers =()=>{
-        let {showPINStatus} = this.state;
+        let {showPINStatus, showActivationStatus,ShowDeactivated} = this.state;
         let adminGetUsersRequest = this.props.adminGetUsers;
         let allUSerPermissions =[];
         this.userPermissions.map(eachPermission=>{
@@ -157,7 +226,7 @@ class AccessUsers extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" className="countdropdown form-control form-control-sm">
-                                            <option value="10">10</option>
+                                            {/* <option value="10">10</option> */}
                                             <option value="25">25</option>
                                             <option value="50">50</option>
                                             <option value="200">200</option>
@@ -196,7 +265,7 @@ class AccessUsers extends React.Component {
                     }else{
                         return(
                             <div>
-                                {showPINStatus && this.PINResetStatus()}
+                                
                                 <div className="heading-with-cta">
                                     <Form className="one-liner">
 
@@ -208,6 +277,10 @@ class AccessUsers extends React.Component {
                                             </Form.Control>
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                        <div className="eachitem ml-20">
+                                            <input checked={ShowDeactivated} onChange={this.showAllDeactivatedUsers} type="checkbox" name="" id="showdeactivatedusers" />
+                                            <label htmlFor="showdeactivatedusers">Show De-activated Users</label>
+                                        </div>
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -270,7 +343,13 @@ class AccessUsers extends React.Component {
                                                                                 className="customone"
                                                                             >
                                                                                 <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
-                                                                                <Dropdown.Item eventKey="1" onClick={this.resetUserPIN({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset PIN</Dropdown.Item>
+                                                                                <Dropdown.Item eventKey="1" onClick={()=>this.resetUserPIN({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset PIN</Dropdown.Item>
+                                                                                {eachUser.objectState!==1 &&
+                                                                                    <Dropdown.Item eventKey="1" onClick={()=>this.activateDeactivateUser({"encodedKey":eachUser.encodedKey }, eachUser.name, "activate")}>Activate User</Dropdown.Item>
+                                                                                }
+                                                                                {eachUser.objectState===1 &&
+                                                                                    <Dropdown.Item eventKey="1" onClick={()=>this.activateDeactivateUser({"encodedKey":eachUser.encodedKey }, eachUser.name, "deactivate")}>De-Activate User</Dropdown.Item>
+                                                                                }
                                                                                     {/*<Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                                                             </DropdownButton>
                                                                             }
@@ -296,11 +375,12 @@ class AccessUsers extends React.Component {
 
                 case(administrationConstants.GET_USERS_SUCCESS):
                     let allUsersData = adminGetUsersRequest.request_data.response.data;
+                    
                         if(allUsersData!==undefined){
                             if(allUsersData.result.length>=1){
                                 return(
                                     <div>
-                                        {showPINStatus && this.PINResetStatus()}
+                                        
                                         <div className="heading-with-cta">
                                             <Form className="one-liner">
 
@@ -312,7 +392,14 @@ class AccessUsers extends React.Component {
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                                <div className="eachitem ml-20">
+                                                    <input checked={ShowDeactivated} onChange={()=>this.showAllDeactivatedUsers()} type="checkbox" name="" id="showdeactivated" />
+                                                    <label htmlFor="showdeactivated">Show De-activated Users</label>
+                                                </div>
                                             </Form>
+                                            {/* <div className="heading-with-cta toright compact"> */}
+                                                
+                                            {/* </div> */}
 
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
@@ -393,6 +480,12 @@ class AccessUsers extends React.Component {
                                                                                     >
                                                                                         <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
                                                                                         <Dropdown.Item eventKey="1" onClick={()=>this.resetUserPIN({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset PIN</Dropdown.Item>
+                                                                                        {eachUser.objectState!==1 &&
+                                                                                            <Dropdown.Item eventKey="1" onClick={()=>this.activateDeactivateUser({"encodedKey":eachUser.encodedKey }, eachUser.name, "activate")}>Activate User</Dropdown.Item>
+                                                                                        }
+                                                                                        {eachUser.objectState===1 &&
+                                                                                            <Dropdown.Item eventKey="1" onClick={()=>this.activateDeactivateUser({"encodedKey":eachUser.encodedKey }, eachUser.name, "deactivate")}>De-Activate User</Dropdown.Item>
+                                                                                        }
                                                                                         {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                                         <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                                                                     </DropdownButton>
@@ -500,13 +593,21 @@ class AccessUsers extends React.Component {
     
     handleshowPINStatus = () => this.setState({showPINStatus:true});
 
+    handleCloseActivationStatus = () => {
+        this.setState({showActivationStatus:false})
+        this.props.dispatch(authActions.activateDeactivateUser(null, "CLEAR"))
+            
+    };
+
+    handleshowActivationtatus = () => this.setState({showActivationStatus:true});
+
     PINResetStatus = () =>{
         let {showPINStatus, userToResetPInFor} = this.state;
         let ResetPinRequest = this.props.ResetPinReducer;
             
         
         return(
-            <Modal show={showPINStatus}  size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
+            <Modal show={showPINStatus} onHide={()=>{}}  size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
                 <Modal.Header>
                     <Modal.Title>PIN Reset</Modal.Title>
                 </Modal.Header>
@@ -550,9 +651,77 @@ class AccessUsers extends React.Component {
         )
     }
 
+    ActivationActionStatus = () =>{
+        let {showActivationStatus, userDetailsForAction, activationAction} = this.state;
+        let ActivateDeactivateUserRequest = this.props.ActivateDeactivateUserReducer;
+            
+        
+        return(
+            <Modal show={showActivationStatus} onHide={()=>{}}  size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
+                <Modal.Header>
+                    {
+                        activationAction ==="activate" &&
+                        <Modal.Title>Activate User</Modal.Title>
+                    }
+
+                    {
+                        activationAction ==="deactivate" &&
+                        <Modal.Title>Deactivate User</Modal.Title>
+                    }
+                   
+                </Modal.Header>
+                <Modal.Body>
+                    
+                    {ActivateDeactivateUserRequest.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE && 
+                        <div className="text-center errortxt">
+                            {ActivateDeactivateUserRequest.request_data.error}
+                        </div>
+                    }
+                    {ActivateDeactivateUserRequest.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_PENDING && 
+                        <div className="text-center ">
+                            {
+                                activationAction ==="activate" &&
+                                <div>Activating {userDetailsForAction}</div>
+                            }
+
+                            {
+                                activationAction ==="deactivate" &&
+                                <div>De-Activating {userDetailsForAction}</div>
+                            }
+                            
+                        </div>
+                    }
+                    {ActivateDeactivateUserRequest.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS && 
+                       <div className="text-center">
+                           {ActivateDeactivateUserRequest.request_data.response.data.message}
+                             {/* PIN Reset was successful for {userToResetPInFor} */}
+                        </div>
+                    }
+                </Modal.Body>
+                {(ActivateDeactivateUserRequest.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS 
+                    || ActivateDeactivateUserRequest.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE ) && 
+                <Modal.Footer>
+
+                    
+                    <Button 
+                        variant="success"
+                        type="button"
+                        onClick={this.handleCloseActivationStatus}
+                    >
+                        Okay
+                        
+                        
+                    </Button>
+
+                </Modal.Footer>
+                }
+            </Modal>
+        )
+    }
+
 
     render() {
-        
+        let {showPINStatus, showActivationStatus} = this.state;
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -597,7 +766,8 @@ class AccessUsers extends React.Component {
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                 {this.renderAllUsers()}
-                                                
+                                                {showPINStatus && this.PINResetStatus()}
+                                                {showActivationStatus && this.ActivationActionStatus()}
                                             </div>
                                         </div>
                                     </div>
@@ -615,6 +785,7 @@ function mapStateToProps(state) {
     return {
         adminGetUsers : state.administrationReducers.adminGetUsersReducer,
         ResetPinReducer : state.authReducers.ResetPinReducer,
+        ActivateDeactivateUserReducer : state.authReducers.ActivateDeactivateUserReducer,
     };
 }
 
