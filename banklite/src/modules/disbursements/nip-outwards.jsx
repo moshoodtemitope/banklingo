@@ -103,10 +103,7 @@ class NipOutwardsRequests extends React.Component {
         const {dispatch} = this.props;
         // let {PageSize} = this.state;
 
-        // this.setState({PageSize: sizeOfPage});
-
-        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
-        // this.getTransactionChannels(params);
+       
         let {PageSize,CurrentPage,startDate, endDate, searchText}= this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${nextPage}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
 
