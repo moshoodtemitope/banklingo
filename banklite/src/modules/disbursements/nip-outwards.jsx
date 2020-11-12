@@ -17,17 +17,19 @@ import "./disbursements.scss";
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
 import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
 import DisbursementNav from './_menu'
+import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 class NipOutwardsRequests extends React.Component {
     constructor(props) {
         super(props);
+        let today = new Date();
         this.state={
             user:'',
             PageSize:25,
             CurrentPage:1,
             isRefresh:false,
             endDate: new Date(),
-            // startDate : new Date (new Date().setDate(today.getDate()-30)),
-            startDate : new Date (),
+            startDate : new Date (new Date().setDate(today.getDate()-30)),
+            // startDate : new Date (),
             searchText: "",
         }
 
@@ -40,7 +42,7 @@ class NipOutwardsRequests extends React.Component {
 
     loadInitialData=()=>{
         let {PageSize, CurrentPage,startDate, endDate, searchText}= this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
         this.getOutwardsNIPData(params);
     }
 
@@ -82,7 +84,7 @@ class NipOutwardsRequests extends React.Component {
 
         this.setState({PageSize: sizeOfPage, isRefresh: true});
         let {CurrentPage,startDate, endDate, searchText}= this.state;
-        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
+        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
         // let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
         
 
@@ -106,7 +108,7 @@ class NipOutwardsRequests extends React.Component {
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
         let {PageSize,CurrentPage,startDate, endDate, searchText}= this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
+        let params = `PageSize=${PageSize}&CurrentPage=${nextPage}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}&SearchText=${searchText}`;
 
         // let params = `PageSize=${PageSize}&CurrentPage=${nextPage}`;
         
@@ -142,6 +144,21 @@ class NipOutwardsRequests extends React.Component {
                 dispatch(disbursementActions.getOutwardsNIP(params));
             }
         }
+    }
+
+    exportNipInwards=()=>{
+        let {PageSize,CurrentPage, BranchId, SearchText, endDate, startDate} = this.state;
+        
+        if(endDate!==""){
+            endDate = endDate.toISOString()
+        }
+        if(startDate!==""){
+            startDate = startDate.toISOString()
+        }
+        let paramters= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+        const {dispatch} = this.props;
+
+        // dispatch(depositActions.exportDepositTransaction(paramters));
     }
 
     renderOutWardsRequest=()=>{
@@ -230,35 +247,41 @@ class NipOutwardsRequests extends React.Component {
                                     </Form.Group>
 
                                     <Form.Group className="table-filters">
-                                        <DatePicker
-                                            onChangeRaw={this.handleDateChangeRaw}
-                                            onChange={this.handleStartDatePicker}
-                                            selected={this.state.startDate}
-                                            dateFormat="d MMMM, yyyy"
-                                            peekNextMonth
-                                            showMonthDropdown
-                                            showYearDropdown
-                                            dropdownMode="select"
-                                            placeholderText="Start date"
-                                            maxDate={new Date()}
-                                            // className="form-control form-control-sm h-38px"
-                                            className="form-control form-control-sm "
+                                        <div>
+                                            <Form.Label>Start Date</Form.Label>
+                                            <DatePicker
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleStartDatePicker}
+                                                selected={this.state.startDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                placeholderText="Start date"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm "
 
-                                        />
-                                        <DatePicker placeholderText="End  date"
-                                            onChangeRaw={this.handleDateChangeRaw}
-                                            onChange={this.handleEndDatePicker}
-                                            selected={this.state.endDate}
-                                            dateFormat="d MMMM, yyyy"
-                                            peekNextMonth
-                                            showMonthDropdown
-                                            showYearDropdown
-                                            dropdownMode="select"
-                                            maxDate={new Date()}
-                                            // className="form-control form-control-sm h-38px"
-                                            className="form-control form-control-sm"
+                                            />
+                                        </div>
+                                        <div>
+                                            <Form.Label>End Date</Form.Label>
+                                            <DatePicker placeholderText="End  date"
+                                                onChangeRaw={this.handleDateChangeRaw}
+                                                onChange={this.handleEndDatePicker}
+                                                selected={this.state.endDate}
+                                                dateFormat="d MMMM, yyyy"
+                                                peekNextMonth
+                                                showMonthDropdown
+                                                showYearDropdown
+                                                dropdownMode="select"
+                                                maxDate={new Date()}
+                                                // className="form-control form-control-sm h-38px"
+                                                className="form-control form-control-sm"
 
-                                        />
+                                            />
+                                        </div>
                                         <input type="text"
                                             className="form-control-sm search-table form-control"
                                             placeholder="Search text"
@@ -303,26 +326,26 @@ class NipOutwardsRequests extends React.Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        saveRequestData.map((eachActivity, index)=>{
-                                            return(
-                                                <Fragment key={index}>
-                                                    <tr>
-                                                        {/* <td>{eachActivity.id}</td> */}
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </Fragment>
-                                            )
-                                        })
-                                    }
+                                            saveRequestData.map((eachRequest, index)=>{
+                                                return(
+                                                    <Fragment key={index}>
+                                                        <tr>
+                                                            {/* <td>{eachActivity.id}</td> */}
+                                                            <td>{getDateFromISO(eachRequest.transactionDate)}</td>
+                                                            <td>{eachRequest.sourceAccountNumber}</td>
+                                                            <td>{eachRequest.sourceAccountName}</td>
+                                                            <td>{eachRequest.sourceBankCode}</td>
+                                                            <td>{eachRequest.destinationAccountNumber}</td>
+                                                            <td>{eachRequest.destinationAccountName}</td>
+                                                            <td>{eachRequest.destinationBankNumber}</td>
+                                                            <td>{numberWithCommas(eachRequest.amount, true)}</td>
+                                                            <td>{numberWithCommas(eachRequest.fee, true)}</td>
+                                                            <td>{eachRequest.narration}</td>
+                                                        </tr>
+                                                    </Fragment>
+                                                )
+                                            })
+                                        }
                                     
                                 </tbody>
                             </TableComponent>
@@ -352,35 +375,43 @@ class NipOutwardsRequests extends React.Component {
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                            <DatePicker
-                                                onChangeRaw={this.handleDateChangeRaw}
-                                                onChange={this.handleStartDatePicker}
-                                                selected={this.state.startDate}
-                                                dateFormat="d MMMM, yyyy"
-                                                peekNextMonth
-                                                showMonthDropdown
-                                                showYearDropdown
-                                                dropdownMode="select"
-                                                placeholderText="Start date"
-                                                maxDate={new Date()}
-                                                // className="form-control form-control-sm h-38px"
-                                                className="form-control form-control-sm "
+                                            <div>
+                                                {/* <Form.Label>Start Date</Form.Label> */}
+                                                <DatePicker
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleStartDatePicker}
+                                                    selected={this.state.startDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    placeholderText="Start date"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm "
 
-                                            />
-                                            <DatePicker placeholderText="End  date"
-                                                onChangeRaw={this.handleDateChangeRaw}
-                                                onChange={this.handleEndDatePicker}
-                                                selected={this.state.endDate}
-                                                dateFormat="d MMMM, yyyy"
-                                                peekNextMonth
-                                                showMonthDropdown
-                                                showYearDropdown
-                                                dropdownMode="select"
-                                                maxDate={new Date()}
-                                                // className="form-control form-control-sm h-38px"
-                                                className="form-control form-control-sm"
+                                                />
+                                            </div>
+                                            <div>
+                                                {/* <Form.Label>Start Date</Form.Label> */}
+                                                <DatePicker placeholderText="End  date"
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={this.handleEndDatePicker}
+                                                    selected={this.state.endDate}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    maxDate={new Date()}
+                                                    // className="form-control form-control-sm h-38px"
+                                                    className="form-control form-control-sm"
 
-                                            />
+                                                />
+                                            </div>
+                                            <div>
+                                                {/* <Form.Label></Form.Label> */}
                                             <input type="text"
                                                 className="form-control-sm search-table form-control"
                                                 placeholder="Search text"
@@ -389,11 +420,17 @@ class NipOutwardsRequests extends React.Component {
                                                     this.setState({ SearchText: e.target.value.trim() })
                                                 }}
                                             />
+                                            </div>
                                             {/* {errors.startDate && touched.startDate ? (
 <span className="invalid-feedback">{errors.startDate}</span>
 ) : null} */}
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                        {/* <div className="actions-wrap">
+    <Button onClick={this.exportNipInwards} className="action-icon" variant="outline-secondary" type="button">
+        <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
+    </Button>
+</div> */}
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -435,21 +472,21 @@ class NipOutwardsRequests extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            allNIPRequestData.result.map((eachActivity, index)=>{
+                                            allNIPRequestData.result.map((eachRequest, index)=>{
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>
                                                             {/* <td>{eachActivity.id}</td> */}
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
+                                                            <td>{getDateFromISO(eachRequest.transactionDate)}</td>
+                                                            <td>{eachRequest.sourceAccountNumber}</td>
+                                                            <td>{eachRequest.sourceAccountName}</td>
+                                                            <td>{eachRequest.sourceBankCode}</td>
+                                                            <td>{eachRequest.destinationAccountNumber}</td>
+                                                            <td>{eachRequest.destinationAccountName}</td>
+                                                            <td>{eachRequest.destinationBankNumber}</td>
+                                                            <td>{numberWithCommas(eachRequest.amount, true)}</td>
+                                                            <td>{numberWithCommas(eachRequest.fee, true)}</td>
+                                                            <td>{eachRequest.narration}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )

@@ -3,6 +3,7 @@
 // const URL = 'http://40.76.69.211/Banklot';
 // const URL = 'http://40.76.69.211/Fintech.CBS.Backend';
 const URL = process.env.NODE_ENV === 'development' ? 'http://40.76.69.211/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
+// const URL = process.env.NODE_ENV === 'development' ? 'https://banklingoapi.monee.ng/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
 // const URL = process.env.API_URL
 
 const BASEURL = URL;  
