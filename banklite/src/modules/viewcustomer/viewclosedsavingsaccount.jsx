@@ -43,7 +43,7 @@ import {administrationActions} from '../../redux/actions/administration/administ
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
-class ViewSavingsAccount extends React.Component {
+class ViewClosedSavingsAccount extends React.Component {
     constructor(props) {
         super(props);
         this.depositEncodedKey = this.props.match.params.accountid;
@@ -2338,7 +2338,7 @@ class ViewSavingsAccount extends React.Component {
                                     <td>Blocked Amount</td>
                                     <td>&#x20A6;{numberWithCommas(depositAccountData.blockedAmount, true)}</td>
                                 </tr>
-
+                                
                             </tbody>
                         </TableComponent>
                     </div>
@@ -3776,4 +3776,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps) (ViewSavingsAccount);
+export default connect(mapStateToProps) (ViewClosedSavingsAccount);

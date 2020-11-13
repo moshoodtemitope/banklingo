@@ -43,6 +43,7 @@ export class ApiService {
             
             delete instance.defaults.headers.common.Authorization;
             delete instance.defaults.headers.common.Bid;
+            delete instance.defaults.headers.common.Token;
         }
         // if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
             instance.defaults.headers.common['Content-Type'] = 'application/json';

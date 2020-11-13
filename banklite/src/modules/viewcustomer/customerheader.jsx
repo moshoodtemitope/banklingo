@@ -39,10 +39,7 @@ class CustomerHeading extends React.Component {
                 tasks: `/customer/${this.clientEncodedKey}/tasks`,
                 communications: `/customer/${this.clientEncodedKey}/communications`,
                 comments: `/customer/${this.clientEncodedKey}/comments`,
-                // loanaccount: `/customer/${this.clientEncodedKey}/loan/${this.props.loanId}`,
-                loanaccount: `/customer/${this.clientEncodedKey}/loanaccount/348046272`,
-                // savingsaccount: `/customer/${this.clientEncodedKey}/savingsaccount/${this.props.accountid}`,
-                savingsaccount: `/customer/${this.clientEncodedKey}/savingsaccount/77339322`,
+                
                 allclosedaccounts: `/customer/${this.clientEncodedKey}/closedaccounts`,
             },
             showNewTask:false,

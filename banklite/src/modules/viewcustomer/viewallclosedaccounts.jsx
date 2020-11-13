@@ -78,7 +78,7 @@ class ViewClosedAccounts extends React.Component {
                                                                         <tr key={index}>
                                                                             <td>{eachAccount.clientName}</td>
                                                                             <td>
-                                                                            <NavLink exact to={`/customer/${this.clientEncodedKey}/closedaccounts/${eachAccount.encodedKey}`}>
+                                                                            <NavLink exact to={`/customer/${this.clientEncodedKey}/closedaccounts/loan/${eachAccount.encodedKey}`}>
                                                                                 {(eachAccount.productName!==null && eachAccount.productName!=="")?
                                                                                         `${eachAccount.productName} - `:""} 
                                                                                 {eachAccount.accountNumber}
@@ -87,6 +87,29 @@ class ViewClosedAccounts extends React.Component {
                                                                             <td>Loan</td>
                                                                             <td>{eachAccount.loanStateDescription}</td>
                                                                             <td>₦{numberWithCommas(eachAccount.loanAmount, true)}</td>
+                                                                        </tr>
+                                                                    ) 
+                                                                }
+                                                            })
+                                                        }
+
+                                                        {customerDepositAccounts.result!==null && (customerDepositAccounts.result.length>=1) &&
+                                                            customerDepositAccounts.result.map((eachAccount, index)=>{
+                                                                // if(eachAccount.loanStateDescription==="Rejected" || eachAccount.loanStateDescription==="Closed Withdrawn" || eachAccount.loanStateDescription==="Closed"){
+                                                                if(eachAccount.accountState===4  || eachAccount.accountState===7 || eachAccount.accountState===8 || eachAccount.accountState===9 ){
+                                                                    return(
+                                                                        <tr key={index}>
+                                                                            <td>{eachAccount.accountHolderName}</td>
+                                                                            <td>
+                                                                            <NavLink exact to={`/customer/${this.clientEncodedKey}/closedaccounts/savings/${eachAccount.encodedKey}`}>
+                                                                                {(eachAccount.productName!==null && eachAccount.productName!=="")?
+                                                                                        `${eachAccount.productName} - `:""} 
+                                                                                {eachAccount.accountNumber}
+                                                                            </NavLink>
+                                                                            </td>
+                                                                            <td>Deposit</td>
+                                                                            <td>{eachAccount.accountStateDescription}</td>
+                                                                            <td>₦{numberWithCommas(eachAccount.depositAvailableBalance, true)}</td>
                                                                         </tr>
                                                                     ) 
                                                                 }

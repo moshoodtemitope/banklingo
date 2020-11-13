@@ -287,7 +287,7 @@ function createDepositAccount(depositAccountDetailsPayload,accountType) {
             dispatch(request(consume));
             return consume
                 .then(response => {
-                    console.log("resultpppp", response);
+                    // console.log("resultpppp", response);
                     dispatch(success(response));
                     history.push(`/customer/${response.data.result.clientEncodedKey}/savingsaccount/${response.data.result.encodedKey}`);
                     

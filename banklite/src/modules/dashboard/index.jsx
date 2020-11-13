@@ -170,7 +170,7 @@ class DashboardLanding extends React.Component {
                                             {eachActivity.action} </span>
                                         <div>
                                             <span className="action-date">{eachActivity.creationDate}</span>
-                                            <span className="action-by"> <NavLink to='/customer/20/savingsaccount/77339322'>{eachActivity.affectedUserName}</NavLink></span>
+                                            {/* <span className="action-by"> <NavLink to='/customer/20/savingsaccount/77339322'>{eachActivity.affectedUserName}</NavLink></span> */}
                                         </div>
                                     </div>
                                 )

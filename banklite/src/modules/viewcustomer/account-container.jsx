@@ -39,7 +39,8 @@ import NewInvestmentCustomerAccount from './new-investmentcustomer'
 import ViewLoanAccount from './viewloanaccount'
 import ViewSavingsAccount from './viewsavingsaccount'
 import ViewClosedAccounts from './viewallclosedaccounts'
-import ViewClosedAccount from './viewclosedaccount'
+import ViewClosedLoanAccount from './viewclosedloanaccount'
+import ViewClosedSavingsAccount from './viewclosedsavingsaccount'
 
 
 
@@ -79,7 +80,9 @@ class AccountContainer extends React.Component {
                         <Route  path='/customer/:id/loanaccount/:loanid'       render={(props) => <ViewLoanAccount {...props} />} /> 
                         <Route  path='/customer/:id/savingsaccount/:accountid' render={(props) => <ViewSavingsAccount {...props} />} /> 
                         
-                        <Route  path='/customer/:id/closedaccounts/:accountid' render={(props) => <ViewClosedAccount {...props} />} />
+                        {/* <Route  path='/customer/:id/closedaccounts/:accountid' render={(props) => <ViewClosedLoanAccount {...props} />} /> */}
+                        <Route  path='/customer/:id/closedaccounts/loan/:accountid' render={(props) => <ViewClosedLoanAccount {...props} />} />
+                        <Route  path='/customer/:id/closedaccounts/savings/:accountid' render={(props) => <ViewClosedSavingsAccount {...props} />} />
                     </div>
              </Fragment>
         );

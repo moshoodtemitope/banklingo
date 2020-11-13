@@ -335,6 +335,12 @@ class DepositManagement extends React.Component {
                                                 <Fragment key={index}>
                                                     <tr>
                                                         <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink> </td>
+                                                        {(eachDeposit.loanState===4  || eachDeposit.accountState===7 || eachDeposit.accountState===8 || eachDeposit.accountState===9 ) && 
+                                                                <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/closedaccounts/savings/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>
+                                                            } 
+                                                            {(eachDeposit.accountState!==4  && eachDeposit.accountState!==7 && eachDeposit.accountState!==8 && eachDeposit.accountState!==9 ) &&   
+                                                                <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>            
+                                                            }
                                                         <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                         <td>{eachDeposit.productName}</td>
                                                         <td>{eachDeposit.productTypeDescription}</td>
@@ -473,7 +479,14 @@ class DepositManagement extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink></td>
+                                                            {/* <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink></td> */}
+
+                                                            {(eachDeposit.loanState===4  || eachDeposit.accountState===7 || eachDeposit.accountState===8 || eachDeposit.accountState===9 ) && 
+                                                                <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/closedaccounts/savings/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>
+                                                            } 
+                                                            {(eachDeposit.accountState!==4  && eachDeposit.accountState!==7 && eachDeposit.accountState!==8 && eachDeposit.accountState!==9 ) &&   
+                                                                <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>            
+                                                            }
                                                             <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                             <td>{eachDeposit.productName}</td>
                                                             <td>{eachDeposit.productTypeDescription}</td>

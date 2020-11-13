@@ -566,7 +566,7 @@ function createLoanAccount(loanDetailsPayload,loanType) {
 }
 
 function getLoanSchedulePreview(params) {
-    console.log("sdsds", params);
+    // console.log("sdsds", params);
     return dispatch => {
 
         let consume = ApiService.request(routes.HIT_LOAN + `/previewschedules`, "POST", params);

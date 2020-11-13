@@ -340,10 +340,10 @@ class ClosedWrittenOffLoans extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            {(eachLoan.loanStateDescription==="Rejected" || eachLoan.loanStateDescription==="Closed Withdrawn" || eachLoan.loanStateDescription==="Closed") && 
-                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/closedaccounts/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
+                                                            {(eachLoan.loanState===4  || eachLoan.loanState===7 || eachLoan.loanState===8 || eachLoan.loanState===9 ) && 
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/closedaccounts/loan/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
                                                             } 
-                                                            {(eachLoan.loanStateDescription!=="Rejected" && eachLoan.loanStateDescription!=="Closed Withdrawn" && eachLoan.loanStateDescription!=="Closed") &&   
+                                                            {(eachLoan.loanState!==4  && eachLoan.loanState!==7 && eachLoan.loanState!==8 && eachLoan.loanState!==9 ) &&   
                                                                 <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>            
                                                             }
                                                             <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
@@ -486,10 +486,10 @@ class ClosedWrittenOffLoans extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            {(eachLoan.loanStateDescription==="Rejected" || eachLoan.loanStateDescription==="Closed Withdrawn" || eachLoan.loanStateDescription==="Closed") && 
-                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/closedaccounts/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
+                                                            {(eachLoan.loanState===4  || eachLoan.loanState===7 || eachLoan.loanState===8 || eachLoan.loanState===9 ) && 
+                                                                <td><NavLink to={`/customer/${eachLoan.clientKey}/closedaccounts/loan/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>
                                                             } 
-                                                            {(eachLoan.loanStateDescription!=="Rejected" && eachLoan.loanStateDescription!=="Closed Withdrawn" && eachLoan.loanStateDescription!=="Closed") &&   
+                                                            {(eachLoan.loanState!==4  && eachLoan.loanState!==7 && eachLoan.loanState!==8 && eachLoan.loanState!==9 ) &&   
                                                                 <td><NavLink to={`/customer/${eachLoan.clientKey}/loanaccount/${eachLoan.encodedKey}`}> {eachLoan.accountNumber}</NavLink></td>            
                                                             }
                                                             <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>

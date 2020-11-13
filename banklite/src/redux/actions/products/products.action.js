@@ -78,7 +78,7 @@ function getAllLoanProducts  (params, fetchDetailsOfFirstProduct){
                         allLoanProducts = allLoanProducts.filter(product=>product.loanProductType===0)[0];
                         // let encodedKey = response.data[0].loanProductEncodedKey;
                         let encodedKey = allLoanProducts.productEncodedKey;
-                        console.log("aaaaaa", allLoanProducts);
+                        // console.log("aaaaaa", allLoanProducts);
 
                         let consume2 = ApiService.request(routes.HIT_LOAN_PRODUCTS+`/${encodedKey}`, "GET", null);
                         dispatch(request(consume2));

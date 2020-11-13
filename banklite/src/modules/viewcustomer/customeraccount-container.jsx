@@ -64,10 +64,7 @@ class CustomerAccountContainer extends React.Component {
                 tasks: `/customer/${this.clientEncodedKey}/tasks`,
                 communications: `/customer/${this.clientEncodedKey}/communications`,
                 comments: `/customer/${this.clientEncodedKey}/comments`,
-                // loanaccount: `/customer/${this.clientEncodedKey}/loan/${this.props.loanId}`,
-                loanaccount: `/customer/${this.clientEncodedKey}/loanaccount/348046272`,
-                // savingsaccount: `/customer/${this.clientEncodedKey}/savingsaccount/${this.props.accountid}`,
-                savingsaccount: `/customer/${this.clientEncodedKey}/savingsaccount/77339322`,
+                
                 allclosedaccounts: `/customer/${this.clientEncodedKey}/closedaccounts`,
             },
             showNewTask:false,
@@ -98,7 +95,7 @@ class CustomerAccountContainer extends React.Component {
         let { PageSize, CurrentPage,FullDetails } = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&FullDetails=${FullDetails}`;
 
-        console.log("djsdsds", this.clientEncodedKey);
+        // console.log("djsdsds", this.clientEncodedKey);
         this.getCustomerDepositAccounts(this.clientEncodedKey, params);
         this.getCustomerLoanAccounts(this.clientEncodedKey, params);
         this.getClientInfo(this.clientEncodedKey);
@@ -136,10 +133,7 @@ class CustomerAccountContainer extends React.Component {
                 tasks: `/customer/${this.clientEncodedKey}/tasks`,
                 communications: `/customer/${this.clientEncodedKey}/communications`,
                 comments: `/customer/${this.clientEncodedKey}/comments`,
-                // loanaccount: `/customer/${this.clientEncodedKey}/loan/${this.props.loanId}`,
-                loanaccount: `/customer/${this.clientEncodedKey}/loanaccount/348046272`,
-                // savingsaccount: `/customer/${this.clientEncodedKey}/savingsaccount/${this.props.accountid}`,
-                savingsaccount: `/customer/${this.clientEncodedKey}/savingsaccount/77339322`,
+               
                 allclosedaccounts: `/customer/${this.clientEncodedKey}/closedaccounts`,
             }
         })
@@ -610,9 +604,9 @@ class CustomerAccountContainer extends React.Component {
     
 
     renderDepositAccountsNav = (savingsAccounts)=>{
-        if(savingsAccounts.result!==null){
+        // if(savingsAccounts.result!==null){
             return(
-                savingsAccounts.result.map((eachDepositAccount,  index)=>{
+                savingsAccounts.map((eachDepositAccount,  index)=>{
                     if(eachDepositAccount.accountNumber!=="" && eachDepositAccount.accountNumber!==null){
                         return(
                             <li key={index}>
@@ -636,14 +630,15 @@ class CustomerAccountContainer extends React.Component {
                     }
                 })
             )
-        }else{
-            return null;
-        }
+        // }else{
+        //     return null;
+        // }
     }
 
     renderSubMenu = (loanAccounts, savingsAccounts)=>{
         let {generatedRoutes} = this.state;
         let numberOfClosedLoans  = 0;
+        let numberOfClosedSavings  = 0;
 
         let allUSerPermissions =[];
         this.userPermissions.map(eachPermission=>{
@@ -654,7 +649,12 @@ class CustomerAccountContainer extends React.Component {
 
         numberOfClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanState===4 || eachLoanAccount.loanState===7 || eachLoanAccount.loanState===8 || eachLoanAccount.loanState===9).length;
         let unClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanState!==4 && eachLoanAccount.loanState!==7 && eachLoanAccount.loanState!==8 && eachLoanAccount.loanState!==9);
-        
+
+        numberOfClosedSavings = savingsAccounts.result.filter((eachSavingsAccount)=> eachSavingsAccount.accountState===4 || eachSavingsAccount.accountState===7 || eachSavingsAccount.accountState===8 || eachSavingsAccount.accountState===9).length;
+        let unClosedSavings = savingsAccounts.result.filter((eachSavingsAccount)=> eachSavingsAccount.accountState!==4 && eachSavingsAccount.accountState!==7 && eachSavingsAccount.accountState!==8 && eachSavingsAccount.accountState!==9);
+        let totalClosed = numberOfClosedSavings+numberOfClosedLoans;
+
+        // console.log("unClosedSavings", unClosedSavings);
         return(
             <div className="module-submenu">
                 <div className="content-container">
@@ -663,11 +663,11 @@ class CustomerAccountContainer extends React.Component {
                             <NavLink exact to={generatedRoutes.customer}>Overview</NavLink>
                         </li>
                         {this.renderLoanAccountsNav(unClosedLoans)}
-                        {this.renderDepositAccountsNav(savingsAccounts)}
-                        {numberOfClosedLoans>=1 &&
+                        {this.renderDepositAccountsNav(unClosedSavings)}
+                        {totalClosed>=1 &&
                             <li>
                                 <NavLink  to={generatedRoutes.allclosedaccounts}>
-                                    Closed Accounts ({numberOfClosedLoans})
+                                    Closed Accounts ({totalClosed})
                                     <span className="stateindicator closed-state"></span>
                                 </NavLink>
                             </li>

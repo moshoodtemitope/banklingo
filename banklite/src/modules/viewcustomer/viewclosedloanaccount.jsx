@@ -41,7 +41,7 @@ import Alert from 'react-bootstrap/Alert'
 
 
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
-class ViewClosedAccount extends React.Component {
+class ViewClosedLoanAccount extends React.Component {
     constructor(props) {
         super(props);
         this.loanEncodedKey = this.props.match.params.accountid;
@@ -3196,4 +3196,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(ViewClosedAccount);
+export default connect(mapStateToProps)(ViewClosedLoanAccount);
