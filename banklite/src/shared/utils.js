@@ -321,11 +321,12 @@ export const numberWithoutDecimals= (amount)=> {
     }
 }
 
-export const numberWithCommas= (amount, isDecimal)=> {
+export const numberWithCommas= (amount, isDecimal, isDisplay)=> {
     // let testSequence = /^[0-9.,]+$/;
     // let testSequence = /([0-9]+(\.[0-9]+)?)/;
     
     if(amount!==null){
+        let amountOutput;
         if(amount!==undefined && amount!==''){
             let amountFiltered, splittedDecimal, amountTemp;
             amount = amount.toString().replace(/\-[^0-9.,]/g,'');
@@ -372,7 +373,14 @@ export const numberWithCommas= (amount, isDecimal)=> {
                     // console.log("bloom", splittedDecimal)
 
                     amountTemp = splittedDecimal[0].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-                    return `${amountTemp}.${splittedDecimal[1]}`;
+                    amountOutput = `${amountTemp}.${splittedDecimal[1]}`;
+                    if(isDisplay === true){
+                        if(parseFloat(amountOutput)<0){
+                            amountOutput = `(${Math.abs(amountOutput)})`
+                        }
+                    }
+                    return amountOutput;
+                    // return `${amountTemp}.${splittedDecimal[1]}`;
                 }
             }
             if((amountFiltered.match(/\./g) || []).length>1){
@@ -381,7 +389,14 @@ export const numberWithCommas= (amount, isDecimal)=> {
                 numberParts =  numberParts.slice(0,-1).join('') + '.' + numberParts.slice(-1)
                 
                 // console.log("testsss", numberParts);
-                return numberParts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');    
+                amountOutput = numberParts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                if(isDisplay === true){
+                    if(parseFloat(amountOutput)<0){
+                        amountOutput = `(${Math.abs(amountOutput)})`
+                    }
+                }
+                return amountOutput;
+                // return numberParts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');    
             }
 
             if(amountFiltered.indexOf('.')===-1 && isDecimal===true){
@@ -389,8 +404,16 @@ export const numberWithCommas= (amount, isDecimal)=> {
             }
 
             // console.log("hahahah", amountFiltered)
+
+            amountOutput = amountFiltered.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                if(isDisplay === true){
+                    if(parseFloat(amountOutput)<0){
+                        amountOutput = `(${Math.abs(amountOutput)})`
+                    }
+                }
+                return amountOutput;
             
-            return amountFiltered.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+            // return amountFiltered.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
             
         
             
