@@ -759,12 +759,14 @@ class JournalEntries extends React.Component {
                                         <th>Transaction Id</th>
                                         <th>Booking Date (Entry Date)</th>
                                         <th>GL Account Name</th>
+                                        <th>GL Code</th>
                                         <th>Debit Amount (&#8358;)</th>
                                         <th>Credit Amount (&#8358;)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -867,6 +869,7 @@ class JournalEntries extends React.Component {
                                         <th>Transaction Id</th>
                                         <th>Booking Date (Entry Date)</th>
                                         <th>GL Account Name</th>
+                                        <th>GL Code</th>
                                         <th>Debit Amount (&#8358;)</th>
                                         <th>Credit Amount (&#8358;)</th>
                                     </tr>
@@ -880,8 +883,9 @@ class JournalEntries extends React.Component {
                                             {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
                                             <td>{eachJournal.bookingDate}</td>
                                             <td>{eachJournal.accountName}</td>
-                                            <td>{numberWithCommas(eachJournal.debitAmount, true)}</td>
-                                            <td>{numberWithCommas(eachJournal.creditAmount, true)}</td>
+                                            <td>{eachJournal.glCode}</td>
+                                            <td>{numberWithCommas(eachJournal.debitAmount, true, true)}</td>
+                                            <td>{numberWithCommas(eachJournal.creditAmount, true, true)}</td>
                                         </tr>
                                     )
                                 })}
@@ -998,6 +1002,7 @@ class JournalEntries extends React.Component {
                                             <th>Transaction Id</th>
                                             <th>Booking Date (Entry Date)</th>
                                             <th>GL Account Name</th>
+                                            <th>GL Code</th>
                                             <th>Debit Amount (&#8358;)</th>
                                             <th>Credit Amount (&#8358;)</th>
                                         </tr>
@@ -1011,8 +1016,9 @@ class JournalEntries extends React.Component {
                                                 <td>{eachJournal.bookingDate}</td>
                                                 {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
                                                 <td>{eachJournal.accountName}</td>
-                                                <td>{numberWithCommas(eachJournal.debitAmount, true)}</td>
-                                                <td>{numberWithCommas(eachJournal.creditAmount, true)}</td>
+                                                <td>{eachJournal.glCode}</td>
+                                                <td>{numberWithCommas(eachJournal.debitAmount, true, true)}</td>
+                                                <td>{numberWithCommas(eachJournal.creditAmount, true, true)}</td>
                                             </tr>
                                         )
                                     })}
@@ -1097,12 +1103,14 @@ class JournalEntries extends React.Component {
                                             <th>Transaction Id</th>
                                             <th>Booking Date (Entry Date)</th>
                                             <th>GL Account Name</th>
+                                            <th>GL Code</th>
                                             <th>Debit Amount (&#8358;)</th>
                                             <th>Credit Amount (&#8358;)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

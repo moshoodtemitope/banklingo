@@ -338,15 +338,15 @@ class NipRequests extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             {/* <td>{eachActivity.id}</td> */}
-                                                            <td>{getDateFromISO(eachRequest.transactionDate, true)}</td>
+                                                            <td>{getDateFromISO(eachRequest.transactionDate, true, true)}</td>
                                                             <td>{eachRequest.sourceAccountNumber}</td>
                                                             <td>{eachRequest.sourceAccountName}</td>
                                                             <td>{eachRequest.sourceBankCode}</td>
                                                             <td>{eachRequest.destinationAccountNumber}</td>
                                                             <td>{eachRequest.destinationAccountName}</td>
                                                             <td>{eachRequest.destinationBankNumber}</td>
-                                                            <td>&#x20A6;{numberWithCommas(eachRequest.amount, true)}</td>
-                                                            <td>&#x20A6;{numberWithCommas(eachRequest.fee, true)}</td>
+                                                            <td>&#x20A6;{numberWithCommas(eachRequest.amount, true, true)}</td>
+                                                            <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
                                                             <td>{eachRequest.narration}</td>
                                                             <td>{eachRequest.sessionId}</td>
                                                         </tr>
@@ -486,15 +486,15 @@ class NipRequests extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             {/* <td>{eachActivity.id}</td> */}
-                                                            <td>{getDateFromISO(eachRequest.transactionDate, true)}</td>
+                                                            <td>{getDateFromISO(eachRequest.transactionDate, true, true)}</td>
                                                             <td>{eachRequest.sourceAccountNumber}</td>
                                                             <td>{eachRequest.sourceAccountName}</td>
                                                             <td>{eachRequest.sourceBankCode}</td>
                                                             <td>{eachRequest.destinationAccountNumber}</td>
                                                             <td>{eachRequest.destinationAccountName}</td>
                                                             <td>{eachRequest.destinationBankNumber}</td>
-                                                            <td>&#x20A6;{numberWithCommas(eachRequest.amount, true)}</td>
-                                                            <td>&#x20A6;{numberWithCommas(eachRequest.fee, true)}</td>
+                                                            <td>&#x20A6;{numberWithCommas(eachRequest.amount, true, true)}</td>
+                                                            <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
                                                             <td>{eachRequest.narration}</td>
                                                             <td>{eachRequest.sessionId}</td>
                                                         </tr>

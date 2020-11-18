@@ -383,7 +383,8 @@ class InitiateDisbursement extends React.Component {
                                                                         <Col>
                                                                             <Form.Label className="block-level">Narration</Form.Label>
                                                                             <Form.Control
-                                                                                type="text"
+                                                                                as="textarea" 
+                                                                                rows="2"
                                                                                 name="narration"
                                                                                 onChange={handleChange}
                                                                                 value={values.narration}

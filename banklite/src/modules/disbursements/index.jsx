@@ -418,7 +418,7 @@ class DisbursementManagement extends React.Component {
                                                             <td>{eachDisburment.destinationBank}</td>
                                                             <td>{eachDisburment.recipientName}</td>
                                                             {/* <td>-</td> */}
-                                                            <td>{numberWithCommas(eachDisburment.amount, true)}</td>
+                                                            <td>{numberWithCommas(eachDisburment.amount, true, true)}</td>
                                                             {/* <td>{eachDisburment.initiatedBy}</td> */}
                                                             <td>-</td>
                                                             {/* <td>{eachDisburment.approvedBy}</td> */}
@@ -555,7 +555,7 @@ class DisbursementManagement extends React.Component {
                                                                     <td>{eachDisburment.destinationBank}</td>
                                                                     <td>{eachDisburment.recipientName}</td>
                                                                     {/* <td>-</td> */}
-                                                                    <td>{numberWithCommas(eachDisburment.amount, true)}</td>
+                                                                    <td>{numberWithCommas(eachDisburment.amount, true, true)}</td>
                                                                     {/* <td>{eachDisburment.initiatedBy}</td> */}
                                                                     <td>-</td>
                                                                     {/* <td>{eachDisburment.approvedBy}</td> */}

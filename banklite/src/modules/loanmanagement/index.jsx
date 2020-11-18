@@ -377,11 +377,11 @@ class LoansManagement extends React.Component {
                                                             <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
                                                             <td>{eachLoan.productName}</td>
                                                             <td>{eachLoan.dateCreated}</td>
-                                                            <td>&#8358;{numberWithCommas(eachLoan.loanAmount, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.loanAmount, true, true)}</td>
                                                             <td>{eachLoan.loanStateDescription}</td>
-                                                            <td>&#8358;{numberWithCommas(eachLoan.principalDue, true)}</td>
-                                                            <td>&#8358;{numberWithCommas(eachLoan.totalPaid, true)}</td>
-                                                            <td>&#8358;{numberWithCommas(eachLoan.totalDue, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.principalDue, true, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.totalPaid, true, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.totalDue, true, true)}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -523,11 +523,11 @@ class LoansManagement extends React.Component {
                                                             <td><NavLink to={`/customer/${eachLoan.clientKey}`}>{eachLoan.clientName}</NavLink>  </td>
                                                             <td>{eachLoan.productName}</td>
                                                             <td>{eachLoan.dateCreated}</td>
-                                                            <td>&#8358;{numberWithCommas(eachLoan.loanAmount, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.loanAmount, true, true)}</td>
                                                             <td>{eachLoan.loanStateDescription}</td>
-                                                            <td>&#8358;{numberWithCommas(eachLoan.principalDue, true)}</td>
-                                                            <td>&#8358;{numberWithCommas(eachLoan.totalPaid, true)}</td>
-                                                            <td>&#8358;{numberWithCommas(eachLoan.totalDue, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.principalDue, true, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.totalPaid, true, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachLoan.totalDue, true, true)}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )

@@ -63,6 +63,7 @@ class ViewClosedAccounts extends React.Component {
                                                     <thead>
                                                         <tr>
                                                             <th>Account Name</th>
+                                                            <th>Date Created</th>
                                                             <th>Product</th>
                                                             <th>Type</th>
                                                             <th>State</th>
@@ -77,6 +78,7 @@ class ViewClosedAccounts extends React.Component {
                                                                     return(
                                                                         <tr key={index}>
                                                                             <td>{eachAccount.clientName}</td>
+                                                                            <td>{eachAccount.dateCreated}</td>
                                                                             <td>
                                                                             <NavLink exact to={`/customer/${this.clientEncodedKey}/closedaccounts/loan/${eachAccount.encodedKey}`}>
                                                                                 {(eachAccount.productName!==null && eachAccount.productName!=="")?
@@ -86,7 +88,7 @@ class ViewClosedAccounts extends React.Component {
                                                                             </td>
                                                                             <td>Loan</td>
                                                                             <td>{eachAccount.loanStateDescription}</td>
-                                                                            <td>₦{numberWithCommas(eachAccount.loanAmount, true)}</td>
+                                                                            <td>₦{numberWithCommas(eachAccount.loanAmount, true, true)}</td>
                                                                         </tr>
                                                                     ) 
                                                                 }
@@ -100,6 +102,7 @@ class ViewClosedAccounts extends React.Component {
                                                                     return(
                                                                         <tr key={index}>
                                                                             <td>{eachAccount.accountHolderName}</td>
+                                                                            <td>{eachAccount.dateCreated}</td>
                                                                             <td>
                                                                             <NavLink exact to={`/customer/${this.clientEncodedKey}/closedaccounts/savings/${eachAccount.encodedKey}`}>
                                                                                 {(eachAccount.productName!==null && eachAccount.productName!=="")?
@@ -109,7 +112,7 @@ class ViewClosedAccounts extends React.Component {
                                                                             </td>
                                                                             <td>Deposit</td>
                                                                             <td>{eachAccount.accountStateDescription}</td>
-                                                                            <td>₦{numberWithCommas(eachAccount.depositAvailableBalance, true)}</td>
+                                                                            <td>₦{numberWithCommas(eachAccount.depositAvailableBalance, true, true)}</td>
                                                                         </tr>
                                                                     ) 
                                                                 }

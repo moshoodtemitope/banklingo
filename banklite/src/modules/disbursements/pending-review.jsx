@@ -659,7 +659,7 @@ class DisbursementPendingReview extends React.Component {
                                                             <td>{eachDisburment.destinationAccount}</td>
                                                             <td>{eachDisburment.destinationBank}</td>
                                                             <td>{eachDisburment.recipientName}</td>
-                                                            <td>{numberWithCommas(eachDisburment.amount, true)}</td>
+                                                            <td>{numberWithCommas(eachDisburment.amount, true, true)}</td>
                                                             <td>{eachDisburment.initiatedBy}</td>
                                                             {/* <td>{eachDisburment.approvedBy}</td> */}
                                                             <td>{eachDisburment.disbursmentStatusDescription}</td>
@@ -859,7 +859,7 @@ class DisbursementPendingReview extends React.Component {
                                                                     <td>{eachDisburment.destinationAccount}</td>
                                                                     <td>{eachDisburment.destinationBank}</td>
                                                                     <td>{eachDisburment.recipientName}</td>
-                                                                    <td>{numberWithCommas(eachDisburment.amount, true)}</td>
+                                                                    <td>{numberWithCommas(eachDisburment.amount, true, true)}</td>
                                                                     <td>{eachDisburment.initiatedBy}</td>
                                                                     {/* <td>{eachDisburment.approvedBy}</td> */}
                                                                     <td>{eachDisburment.disbursmentStatusDescription}</td>
@@ -972,6 +972,8 @@ class DisbursementPendingReview extends React.Component {
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td></td>
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>

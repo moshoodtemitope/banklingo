@@ -356,7 +356,7 @@ class BalanceSheet extends React.Component {
                                                                     <tr key={`datakey-${keyIndex}`}>
                                                                         <td>{eachModelData.glCode}</td>
                                                                         <td>{eachModelData.accountName}</td>
-                                                                        <td>&#8358;{numberWithCommas(eachModelData.balance, true)}</td>
+                                                                        <td>&#8358;{numberWithCommas(eachModelData.balance, true, true)}</td>
 
                                                                     </tr>
                                                                 )
@@ -366,7 +366,7 @@ class BalanceSheet extends React.Component {
                                                     <tr className="totalrow">
                                                         <td></td>
                                                         <td>Total {eachResult.accountTypeDescription}</td>
-                                                        <td>&#8358;{numberWithCommas(eachResult.totalBalance, true)}</td>
+                                                        <td>&#8358;{numberWithCommas(eachResult.totalBalance, true, true)}</td>
                                                     </tr>
                                                 </tbody>
                                             )
@@ -474,7 +474,7 @@ class BalanceSheet extends React.Component {
                                                                         <tr key={`datakey-${keyIndex}`}>
                                                                             <td>{eachModelData.glCode}</td>
                                                                             <td>{eachModelData.accountName}</td>
-                                                                            <td>&#8358;{numberWithCommas(eachModelData.balance, true)}</td>
+                                                                            <td>&#8358;{numberWithCommas(eachModelData.balance, true, true)}</td>
 
                                                                         </tr>
                                                                     )
@@ -484,7 +484,7 @@ class BalanceSheet extends React.Component {
                                                         <tr className="totalrow">
                                                             <td></td>
                                                             <td>Total {eachResult.accountTypeDescription}</td>
-                                                            <td>&#8358;{numberWithCommas(eachResult.totalBalance, true)}</td>
+                                                            <td>&#8358;{numberWithCommas(eachResult.totalBalance, true, true)}</td>
                                                         </tr>
                                                     </tbody>
                                                 )

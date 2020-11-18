@@ -325,7 +325,7 @@ class DepositTransactions extends React.Component {
                                                         <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
                                                         <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/savingsaccount/${eachTransaction.depositAccountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
                                                         <td>{eachTransaction.typeDescription}</td>
-                                                        <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true)}</td>
+                                                        <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true,true)}</td>
                                                         <td>{eachTransaction.narration}</td>
                                                         <td>{eachTransaction.userName}</td>
                                                         {/* <td>{eachTransaction.entryDate}</td> */}
@@ -414,7 +414,7 @@ class DepositTransactions extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={(e)=>this.setPagesize(e, allDepositTransactions)}
+                                            onChange={(e)=>this.setPagesize(e, allDepositTransactions.result)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -465,7 +465,7 @@ class DepositTransactions extends React.Component {
                                                         <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/savingsaccount/${eachTransaction.depositAccountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
                                                             <td>{eachTransaction.typeDescription}</td>
-                                                            <td >&#8358;{numberWithCommas(eachTransaction.transactionAmount, true)}</td>
+                                                            <td >&#8358;{numberWithCommas(eachTransaction.transactionAmount, true,true)}</td>
                                                             <td width="300">{eachTransaction.narration}</td>
                                                             <td>{eachTransaction.userName}</td>
                                                             {/* <td>{eachTransaction.entryDate}</td> */}

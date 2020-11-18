@@ -1265,7 +1265,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.entryType}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
+                                                <td>{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
                                             </tr>
                                         )
                                     })
@@ -1376,7 +1376,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.entryType}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>{numberWithCommas(eachTxt.transactionAmount, true)}</td>
+                                                <td>{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
                                             </tr>
                                         )
                                     })
@@ -2320,23 +2320,23 @@ class ViewClosedSavingsAccount extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>Interest Accrued</td>
-                                    <td>&#x20A6;{numberWithCommas(depositAccountData.interestAccrued, true)}</td>
+                                    <td>&#x20A6;{numberWithCommas(depositAccountData.interestAccrued, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Earned</td>
                                     <td>
-                                        &#x20A6;{numberWithCommas(depositAccountData.interestDue, true)}
+                                        &#x20A6;{numberWithCommas(depositAccountData.interestDue, true, true)}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Interest Paid</td>
                                     <td>
-                                        &#x20A6;{numberWithCommas(depositAccountData.interestPaid, true)}
+                                        &#x20A6;{numberWithCommas(depositAccountData.interestPaid, true, true)}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Blocked Amount</td>
-                                    <td>&#x20A6;{numberWithCommas(depositAccountData.blockedAmount, true)}</td>
+                                    <td>&#x20A6;{numberWithCommas(depositAccountData.blockedAmount, true, true)}</td>
                                 </tr>
                                 
                             </tbody>

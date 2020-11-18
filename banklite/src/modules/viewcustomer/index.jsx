@@ -140,6 +140,7 @@ class ViewCustomer extends React.Component {
                                                     <thead>
                                                         <tr>
                                                             <th>Account Name</th>
+                                                            <th>Date Created</th>
                                                             <th>Product</th>
                                                             <th>Type</th>
                                                             <th>State</th>
@@ -149,10 +150,11 @@ class ViewCustomer extends React.Component {
                                                     <tbody>
                                                         {customerLoanAccounts.result!==null && (customerLoanAccounts.result.length>=1) &&
                                                             customerLoanAccounts.result.map((eachAccount, index)=>{
-                                                                if(eachAccount.loanState!==4 && eachAccount.loanState!==7 && eachAccount.loanState!==8 && eachAccount.loanState!==9){
+                                                                if(eachAccount.loanState===5){
                                                                     return(
                                                                         <tr key={index}>
                                                                             <td>{eachAccount.clientName}</td>
+                                                                            <td>{eachAccount.dateCreated}</td>
                                                                             <td>
                                                                             {(eachAccount.productName!==null && eachAccount.productName!=="")?
                                                                                     `${eachAccount.productName} - `:""} 
@@ -160,7 +162,7 @@ class ViewCustomer extends React.Component {
                                                                             </td>
                                                                             <td>Loan</td>
                                                                             <td>{eachAccount.loanStateDescription}</td>
-                                                                            <td>₦{numberWithCommas(eachAccount.loanAmount, true)}</td>
+                                                                            <td>₦{numberWithCommas(eachAccount.loanAmount, true, true)}</td>
                                                                         </tr>
                                                                     ) 
                                                                 }
@@ -170,19 +172,22 @@ class ViewCustomer extends React.Component {
 
                                                         {customerDepositAccounts.result!==null && (customerDepositAccounts.result.length>=1) &&
                                                             customerDepositAccounts.result.map((eachAccount, index)=>{
-                                                               return(
-                                                                <tr key={index}>
-                                                                    <td>{eachAccount.accountHolderName}</td>
-                                                                    <td>
-                                                                    {(eachAccount.productName!==null && eachAccount.productName!=="")?
-                                                                            `${eachAccount.productName} - `:""} 
-                                                                    {eachAccount.accountNumber}
-                                                                    </td>
-                                                                    <td>Deposit</td>
-                                                                    <td>{eachAccount.accountStateDescription}</td>
-                                                                    <td>₦{numberWithCommas(eachAccount.depositBalance, true)}</td>
-                                                                </tr>
-                                                               ) 
+                                                                if(eachAccount.accountState===5){
+                                                                    return(
+                                                                        <tr key={index}>
+                                                                            <td>{eachAccount.accountHolderName}</td>
+                                                                            <td>{eachAccount.dateCreated}</td>
+                                                                            <td>
+                                                                            {(eachAccount.productName!==null && eachAccount.productName!=="")?
+                                                                                    `${eachAccount.productName} - `:""} 
+                                                                            {eachAccount.accountNumber}
+                                                                            </td>
+                                                                            <td>Deposit</td>
+                                                                            <td>{eachAccount.accountStateDescription}</td>
+                                                                            <td>₦{numberWithCommas(eachAccount.depositBalance, true, true)}</td>
+                                                                        </tr>
+                                                                    ) 
+                                                                }
                                                             })
                                                         }
                                                    

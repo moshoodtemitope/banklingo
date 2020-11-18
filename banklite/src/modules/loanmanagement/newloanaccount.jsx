@@ -348,7 +348,7 @@ class NewLoanAccount extends React.Component {
                             <td>-</td>
                             <td>-</td>
                             <td>-</td>
-                            <td>{numberWithCommas(scheduleData.loanAmount, true)}</td>
+                            <td>{numberWithCommas(scheduleData.loanAmount, true, true)}</td>
                         </tr>
                         {
                             scheduleData.loanScheduleSampleModels.map((schedule, index)=>{
@@ -356,23 +356,23 @@ class NewLoanAccount extends React.Component {
                                     <tr key={index}>
                                         <td>{schedule.installmentOrder}</td>
                                         <td>{getDateFromISO(schedule.installmentDate)}</td>
-                                        <td>{numberWithCommas(schedule.principal, true)}</td>
-                                        <td>{numberWithCommas(schedule.interest, true)}</td>
-                                        <td>{numberWithCommas(schedule.fees, true)}</td>
-                                        {/* <td>{numberWithCommas(schedule.interestRate, true)}</td> */}
-                                        <td>{numberWithCommas(schedule.paymentDue, true)}</td>
-                                        <td>{numberWithCommas(schedule.totalBalance, true)}</td>
+                                        <td>{numberWithCommas(schedule.principal, true, true)}</td>
+                                        <td>{numberWithCommas(schedule.interest, true, true)}</td>
+                                        <td>{numberWithCommas(schedule.fees, true, true)}</td>
+                                        {/* <td>{numberWithCommas(schedule.interestRate, true, true)}</td> */}
+                                        <td>{numberWithCommas(schedule.paymentDue, true, true)}</td>
+                                        <td>{numberWithCommas(schedule.totalBalance, true, true)}</td>
                                     </tr>
                                 )
                             })
                         }
                         <tr>
                             <td colSpan="2" className="bolden">Totals</td>
-                            <td className="bolden">{numberWithCommas(scheduleData.totalPrincipal, true)}</td>
-                            <td className="bolden">{numberWithCommas(scheduleData.totalInterest, true)}</td>
-                            <td className="bolden">{numberWithCommas(scheduleData.totalFees, true)}</td>
+                            <td className="bolden">{numberWithCommas(scheduleData.totalPrincipal, true, true)}</td>
+                            <td className="bolden">{numberWithCommas(scheduleData.totalInterest, true, true)}</td>
+                            <td className="bolden">{numberWithCommas(scheduleData.totalFees, true, true)}</td>
                             {/* <td className="bolden">-</td> */}
-                            <td className="bolden">{numberWithCommas(scheduleData.totalDue, true)}</td>
+                            <td className="bolden">{numberWithCommas(scheduleData.totalDue, true, true)}</td>
                             <td className="bolden">-</td>
                         </tr>
                     </tbody>
