@@ -344,10 +344,10 @@ class DepositManagement extends React.Component {
                                                         <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                         <td>{eachDeposit.productName}</td>
                                                         <td>{eachDeposit.productTypeDescription}</td>
-                                                        <td>&#8358;{numberWithCommas(eachDeposit.depositBalance, true, true)}</td>
+                                                        <td>{numberWithCommas(eachDeposit.depositBalance, true, true)}</td>
                                                         <td>{eachDeposit.accountStateDescription}</td>
                                                         <td>{eachDeposit.dateCreated}</td>
-                                                        <td>&#8358;{numberWithCommas(eachDeposit.depositAvailableBalance, true, true)}</td>
+                                                        <td>{numberWithCommas(eachDeposit.depositAvailableBalance, true, true)}</td>
                                                     </tr>
                                                 </Fragment>
                                             )
@@ -490,10 +490,10 @@ class DepositManagement extends React.Component {
                                                             <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                             <td>{eachDeposit.productName}</td>
                                                             <td>{eachDeposit.productTypeDescription}</td>
-                                                            <td>&#8358;{numberWithCommas(eachDeposit.depositBalance, true, true)}</td>
+                                                            <td>{numberWithCommas(eachDeposit.depositBalance, true, true)}</td>
                                                             <td>{eachDeposit.accountStateDescription}</td>
                                                             <td>{eachDeposit.dateCreated}</td>
-                                                            <td>&#8358;{numberWithCommas(eachDeposit.depositAvailableBalance, true, true)}</td>
+                                                            <td>{numberWithCommas(eachDeposit.depositAvailableBalance, true, true)}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )

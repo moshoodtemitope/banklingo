@@ -475,12 +475,12 @@ class TrialBalance extends React.Component {
                                                 <tr key={`key-${index}`}>
                                                     <td>{eachResult.glCode}</td>
                                                     <td>{eachResult.accountName}</td>
-                                                    <td>&#8358;{numberWithCommas(eachResult.openingBalance, true, true)}</td>
-                                                    <td>&#8358;{numberWithCommas(eachResult.debits, true, true)}</td>
-                                                    <td>&#8358;{numberWithCommas(eachResult.credits, true, true)}</td>
-                                                    <td>&#8358;{eachResult.isNetInBracket===false? numberWithCommas(eachResult.netChange, true):`(${numberWithCommas(eachResult.netChange, true)})`}</td>
-                                                    <td>&#8358;{eachResult.isNetInBracket===false? numberWithCommas(eachResult.closingBalance, true):`(${numberWithCommas(eachResult.closingBalance, true)})`}</td>
-                                                    {/* <td>&#8358;{numberWithCommas(eachResult.closingBalance)}</td> */}
+                                                    <td>{numberWithCommas(eachResult.openingBalance, true, true)}</td>
+                                                    <td>{numberWithCommas(eachResult.debits, true, true)}</td>
+                                                    <td>{numberWithCommas(eachResult.credits, true, true)}</td>
+                                                    <td>&#8358;{eachResult.isNetInBracket===false? numberWithCommas(eachResult.netChange, true, true):`(${numberWithCommas(eachResult.netChange, true, true)})`}</td>
+                                                    <td>&#8358;{eachResult.isNetInBracket===false? numberWithCommas(eachResult.closingBalance, true, true):`(${numberWithCommas(eachResult.closingBalance, true, true)})`}</td>
+                                                    {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
 
                                                 </tr>
                                             )
@@ -489,11 +489,11 @@ class TrialBalance extends React.Component {
                                     <tr className="totalrow netrow">
                                         <td></td>
                                         <td>Totals</td>
-                                        <td>&#8358;{numberWithCommas(openingBalanceTotal, true, true)}</td>
-                                        <td>&#8358;{numberWithCommas(debitTotal,true, true)}</td>
-                                        <td>&#8358;{numberWithCommas(creditTotal,true, true)}</td>
-                                        <td>&#8358;{numberWithCommas(netChangeTotal,true, true)}</td>
-                                        <td>&#8358;{numberWithCommas(closingBalanceTotal,true, true)}</td>
+                                        <td>{numberWithCommas(openingBalanceTotal, true, true)}</td>
+                                        <td>{numberWithCommas(debitTotal,true, true)}</td>
+                                        <td>{numberWithCommas(creditTotal,true, true)}</td>
+                                        <td>{numberWithCommas(netChangeTotal,true, true)}</td>
+                                        <td>{numberWithCommas(closingBalanceTotal,true, true)}</td>
                                     </tr>
                                 </tbody>
                             </TableComponent>
@@ -569,11 +569,11 @@ class TrialBalance extends React.Component {
                                                     <tr key={`key-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td>{eachResult.accountName}</td>
-                                                        <td>&#8358;{numberWithCommas(eachResult.openingBalance,true, true)}</td>
-                                                        <td>&#8358;{numberWithCommas(eachResult.debits,true, true)}</td>
-                                                        <td>&#8358;{numberWithCommas(eachResult.credits,true, true)}</td>
-                                                        <td>&#8358;{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.netChange,true) : `(${numberWithCommas(eachResult.netChange,true)})`}</td>
-                                                        <td>&#8358;{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.closingBalance,true) : `(${numberWithCommas(eachResult.closingBalance,true)})`}</td>
+                                                        <td>{numberWithCommas(eachResult.openingBalance,true, true)}</td>
+                                                        <td>{numberWithCommas(eachResult.debits,true, true)}</td>
+                                                        <td>{numberWithCommas(eachResult.credits,true, true)}</td>
+                                                        <td>&#8358;{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.netChange,true, true) : `(${numberWithCommas(eachResult.netChange,true, true)})`}</td>
+                                                        <td>&#8358;{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.closingBalance,true, true) : `(${numberWithCommas(eachResult.closingBalance,true, true)})`}</td>
                                                         {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
 
                                                     </tr>
@@ -583,11 +583,11 @@ class TrialBalance extends React.Component {
                                         <tr className="totalrow netrow">
                                             <td></td>
                                             <td>Totals</td>
-                                            <td>&#8358;{numberWithCommas(openingBalanceTotal,true, true)}</td>
-                                            <td>&#8358;{numberWithCommas(debitTotal,true, true)}</td>
-                                            <td>&#8358;{numberWithCommas(creditTotal,true, true)}</td>
-                                            <td>&#8358;{numberWithCommas(netChangeTotal,true, true)}</td>
-                                            <td>&#8358;{numberWithCommas(closingBalanceTotal,true, true)}</td>
+                                            <td>{numberWithCommas(openingBalanceTotal,true, true)}</td>
+                                            <td>{numberWithCommas(debitTotal,true, true)}</td>
+                                            <td>{numberWithCommas(creditTotal,true, true)}</td>
+                                            <td>{numberWithCommas(netChangeTotal,true, true)}</td>
+                                            <td>{numberWithCommas(closingBalanceTotal,true, true)}</td>
                                         </tr>
                                     </tbody>
                                 </TableComponent>

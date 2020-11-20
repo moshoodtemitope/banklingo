@@ -295,9 +295,9 @@ class LoanTransactions extends React.Component {
                                                         <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
                                                         <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/loanaccount/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
                                                         <td>{eachTransaction.typeDescription}</td>
-                                                        <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
+                                                        <td>{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
                                                         <td>{eachTransaction.userName}</td>
-                                                        <td>{eachTransaction.narration}</td>
+                                                        <td>{eachTransaction.remarks}</td>
                                                         <td>{eachTransaction.transactionDate}</td>
                                                         {/* <td>{eachTransaction.entryDate}</td> */}
                                                     </tr>
@@ -426,9 +426,9 @@ class LoanTransactions extends React.Component {
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink></td>
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/loanaccount/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
                                                             <td>{eachTransaction.typeDescription}</td>
-                                                            <td>&#8358;{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
+                                                            <td>{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
                                                             <td>{eachTransaction.userName}</td>
-                                                            <td>{eachTransaction.narration}</td>
+                                                            <td>{eachTransaction.remarks}</td>
                                                             {/* <td></td> */}
                                                             <td>{eachTransaction.transactionDate}</td>
                                                             {/* <td>{eachTransaction.entryDate}</td> */}

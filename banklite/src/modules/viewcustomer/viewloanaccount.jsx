@@ -1617,11 +1617,11 @@ class ViewLoanAccount extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>Principal Paid</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.principalPaid, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.principalPaid, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Principal Due</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.principalDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.principalDue, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Rate</td>
@@ -1629,27 +1629,27 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Interest Paid</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.interestPaid, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.interestPaid, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Due</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.interestDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.interestDue, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Due</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.penaltyDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.penaltyDue, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Paid</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.penaltyPaid, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.penaltyPaid, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Fee Due</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.feeDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.feeDue, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Fee Paid</td>
-                                    <td>&#8358;{numberWithCommas(loanAccountData.feePaid, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.feePaid, true, true)}</td>
                                 </tr>
                             </tbody>
                         </TableComponent>

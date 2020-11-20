@@ -342,10 +342,14 @@ export const numberWithCommas= (amount, isDecimal, isDisplay)=> {
             // }
 
             // console.log("skrrr", amountFiltered)
+            if(amount<0 ){
+                amountFiltered = `${Math.abs(amountFiltered)}`
+            }
             
             if((amountFiltered.match(/\./g) || []).length===1){
         
                 if(amountFiltered.indexOf('.')>0){
+                    
                     splittedDecimal = amountFiltered.trim().split('.');
 
                     if(splittedDecimal[1].indexOf('.')>-1){
@@ -375,42 +379,47 @@ export const numberWithCommas= (amount, isDecimal, isDisplay)=> {
                     amountTemp = splittedDecimal[0].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                     amountOutput = `${amountTemp}.${splittedDecimal[1]}`;
                     if(isDisplay === true){
-                        if(parseFloat(amountOutput)<0){
-                            amountOutput = `(${Math.abs(amountOutput)})`
+                        if(parseFloat(amount)<0){
+                            amountOutput = `(${amountOutput})`
                         }
                     }
+                    
                     return amountOutput;
                     // return `${amountTemp}.${splittedDecimal[1]}`;
                 }
             }
             if((amountFiltered.match(/\./g) || []).length>1){
-
+                
                 var numberParts = amountFiltered.split('.');
                 numberParts =  numberParts.slice(0,-1).join('') + '.' + numberParts.slice(-1)
                 
-                // console.log("testsss", numberParts);
+                
                 amountOutput = numberParts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                 if(isDisplay === true){
-                    if(parseFloat(amountOutput)<0){
-                        amountOutput = `(${Math.abs(amountOutput)})`
+                    if(parseFloat(amount)<0){
+                        amountOutput = `(${amountOutput})`
                     }
                 }
+                
                 return amountOutput;
                 // return numberParts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');    
             }
 
             if(amountFiltered.indexOf('.')===-1 && isDecimal===true){
+                
                 amountFiltered = amountFiltered+'.00';
             }
 
-            // console.log("hahahah", amountFiltered)
-
+           
+            
             amountOutput = amountFiltered.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                 if(isDisplay === true){
-                    if(parseFloat(amountOutput)<0){
-                        amountOutput = `(${Math.abs(amountOutput)})`
+                   
+                    if(parseFloat(amount)<0){
+                        amountOutput = `(${amountOutput})`
                     }
                 }
+                
                 return amountOutput;
             
             // return amountFiltered.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
