@@ -90,7 +90,6 @@ class InitiateDisbursement extends React.Component {
                     .required('Transaction source is required'),
                 narration: Yup.string()
                     .min(1, 'Please provide narration')
-                    // .max(20, 'Max Limit reached')
                     .required('Narration is required'),
                 sourceAccount: Yup.string()
                     .min(1, 'Please provide a valid source account')
