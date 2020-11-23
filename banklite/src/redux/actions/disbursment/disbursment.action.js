@@ -12,6 +12,8 @@ export const disbursementActions = {
     postDisbursement,
     getInwardsNIP,
     getOutwardsNIP,
+    exportInwardsNIP,
+    exportOutwardsNIP,
     confirmPostDisbursement,
     approveOrRejectPostDisbursement,
     approveOrRejectReviewedDisbursement,
@@ -133,6 +135,71 @@ function getInwardsNIP  (payload, tempData){
 
 }
 
+function exportInwardsNIP  (payload, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_NIP+`/inwardrequestsexport?${payload}`;  
+
+            
+        let consume = ApiService.request(url, "GET", '','','', "blob");
+        // let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                    
+                let disposition = response.headers['content-disposition'],
+                filename;
+                
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) { 
+                    filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+                
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                if(filename === undefined){
+                    link.setAttribute('download', 'NIP-INWARDS.xlsx');
+                }
+
+                if(filename !== undefined){
+                    link.setAttribute('download', filename);
+                }
+
+                
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                
+                dispatch(success(response));
+            }).catch(error =>{
+            
+                dispatch(failure(handleRequestErrors(error)));
+            });
+            
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.EXPORT_NIP_INWARDS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.EXPORT_NIP_INWARDS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.EXPORT_NIP_INWARDS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.EXPORT_NIP_INWARDS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.EXPORT_NIP_INWARDS_FAILURE, error } }
+
+}
+
 function getOutwardsNIP  (payload, tempData){
     
     return dispatch =>{
@@ -166,6 +233,70 @@ function getOutwardsNIP  (payload, tempData){
     // function request(user) { return { type: disbursmentConstants.GET_NIP_OUTWARDS_PENDING, user } }
     function success(response) { return { type: disbursmentConstants.GET_NIP_OUTWARDS_SUCCESS, response } }
     function failure(error) { return { type: disbursmentConstants.GET_NIP_OUTWARDS_FAILURE, error } }
+
+}
+
+function exportOutwardsNIP  (payload, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_NIP+`/outwardrequestsexport?${payload}`;  
+
+            
+
+            let consume = ApiService.request(url, "GET", '','','', "blob");
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                    
+                let disposition = response.headers['content-disposition'],
+                filename;
+                
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) { 
+                    filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+                
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                if(filename === undefined){
+                    link.setAttribute('download', 'NIP-OUTWARDS.xlsx');
+                }
+
+                if(filename !== undefined){
+                    link.setAttribute('download', filename);
+                }
+
+                
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                // console.log("shkddsd")
+                dispatch(success(response));
+            }).catch(error =>{
+            
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_FAILURE, error } }
 
 }
 

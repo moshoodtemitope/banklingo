@@ -476,6 +476,12 @@ function getTrialBalance  (payload, tempData){
             });
         
     }
+
+    // return dispatch =>{
+        
+    //     dispatch(clear());
+        
+    // }
     
 
     function request(user, tempData) { 
@@ -531,7 +537,7 @@ function getBalanceSheet  (payload, tempData){
         let url;
             
 
-            url = routes.HIT_BALANCE_SHEET+`?BranchId=${payload.branchId}&Month=${payload.Month}&Year=${payload.Year}&PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            url = routes.HIT_BALANCE_SHEET+`?BranchId=${payload.branchId}&Month=${payload.Month}&Year=${payload.Year}&BalanceSheetDate=${payload.BalanceSheetDate}&PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
 
         let consume = ApiService.request(url, "GET", null);
         dispatch(request(consume, tempData));

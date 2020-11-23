@@ -10,8 +10,11 @@ import  TableComponent from '../../shared/elements/table'
 import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form'
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
+
+import DatePicker from '../../_helpers/datepickerfield'
+import "react-datepicker/dist/react-datepicker.css";
 // import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
@@ -36,7 +39,7 @@ class BalanceSheet extends React.Component {
             yearProvided:'',
             monthProvided:'',
             CurrentPage: 1,
-            PageSize: 25,
+            PageSize: 100,
             branchId:1
         }
 
@@ -157,17 +160,118 @@ class BalanceSheet extends React.Component {
         let allYears = this.renderYears(2019);
         return(
             <div className="heading-actions">
-                <Form 
+                <Formik
+                    initialValues={{
+                        dateChosen: ''
+                    }}
+                    validationSchema={Yup.object().shape({
+                        dateChosen: Yup.string()
+                            .required('Please select end date').nullable(),
+                    })}
+                    // validateOnMount ={true}
+                    isValid={false}
+                    onSubmit={(values, { resetForm }, errors,) => {
+                        // let startDateTemp = new Date(values.startDate),
+                        //     endDateTemp = new Date(values.endDate);
+
+
+                        const {dispatch} = this.props;
+                        let {monthProvided,yearProvided,PageSize,CurrentPage,branchId}= this.state;
+            
+                        let getBalanceSheetRequest = this.props.getBalanceSheetReducer;
+            
+                        let saveRequestData= getBalanceSheetRequest.request_data!==undefined?getBalanceSheetRequest.request_data.response.data.result:null;
+                        console.log("dsdsdsds", values);
+                        
+                        let tempData = null;
+                        
+                            let payload ={
+                                branchId: branchId,
+                                Month:0,
+                                Year:0,
+                                BalanceSheetDate: values.dateChosen.toISOString(),
+                                PageSize:parseInt(PageSize),
+                                CurrentPage:parseInt(CurrentPage),
+                            }
+                        
+                            if(tempData){
+                                dispatch(acoountingActions.getBalanceSheet(payload, tempData));
+                            }else{
+                                if(saveRequestData){
+                                    dispatch(acoountingActions.getBalanceSheet(payload, saveRequestData));
+                                }else{
+                                    dispatch(acoountingActions.getBalanceSheet(payload));
+                                }
+                                
+                            }
+                
+                        
+
+
+
+
+                    }}
+                >
+                    {({ handleSubmit,
+                        handleChange,
+                        handleBlur,
+                        resetForm,
+                        values,
+                        setFieldValue,
+                        setFieldTouched,
+                        touched,
+                        isValid,
+                        errors, }) => (
+
+                            <Form className="one-liner"
+                                noValidate
+                                onSubmit={handleSubmit}>
+
+                                
+                                <Form.Group controlId="periodOptionChosen"
+                                    className={errors.dateChosen && touched.dateChosen ? "has-invaliderror" : null}
+                                >
+                                    <Form.Label>Date</Form.Label>
+
+                                    <DatePicker placeholderText="Choose start date"
+                                        onChange={setFieldValue}
+                                        value={values.dateChosen}
+                                        dateFormat="d MMMM, yyyy"
+                                        className="form-control form-control-sm"
+                                        peekNextMonth
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        name="dateChosen"
+                                        className={errors.dateChosen && touched.dateChosen ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
+                                        dropdownMode="select"
+                                        maxDate={new Date()}
+                                    />
+                                    {errors.dateChosen && touched.dateChosen ? (
+                                        <span className="invalid-feedback">{errors.dateChosen}</span>
+                                    ) : null}
+                                </Form.Group>
+                                
+
+                                
+                                <Button variant="primary"
+                                    disabled={getBalanceSheetRequest.is_request_processing}
+                                    type="submit">{getBalanceSheetRequest.is_request_processing?"Generating...":"Generate Balance Sheet"} </Button>
+                                <div className="actions-wrap">
+                                    <Button onClick={this.exportBalanceSheet} className="action-icon" variant="outline-secondary" type="button">
+                                        <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
+                                    </Button>
+                                </div>
+
+                            </Form>
+
+
+                        )}
+                </Formik>
+                {/* <Form 
                     className="one-liner"
                     noValidate 
                     onSubmit={this.fetchBalanceSheet}>
-                    {/* <Form.Group controlId="periodOptionChosen">
-                        <Form.Label>Show</Form.Label>
-                        <Form.Control as="select" size="sm">
-                            <option>Month</option>
-                            <option>Date</option>
-                        </Form.Control>
-                    </Form.Group> */}
+                    
                     <Form.Group controlId="monthsDropdown">
                         <Form.Label>Month</Form.Label>
                         <Form.Control 
@@ -190,7 +294,7 @@ class BalanceSheet extends React.Component {
                             <option value="12">December</option>
                         </Form.Control>
                     </Form.Group>
-                    <Form.Group controlId="periodOptionChosen">
+                     <Form.Group controlId="periodOptionChosen">
                         <Form.Label>Year</Form.Label>
                         <Form.Control 
                             as="select" 
@@ -207,13 +311,9 @@ class BalanceSheet extends React.Component {
                             }
                             
                         </Form.Control>
-                        {/* <Form.Control 
-                            type="text" 
-                            value={allowNumbersOnly(yearProvided, 4)}
-                            onChange={this.setYear} 
-                            size="sm" /> */}
+                       
                     </Form.Group>
-                    {/* <Button variant="secondary" type="button">More >> </Button> */}
+                    
                     <Button variant="primary"
                         disabled={getBalanceSheetRequest.is_request_processing}
                          type="submit">{getBalanceSheetRequest.is_request_processing?"Generating...":"Generate Balance Sheet"} </Button>
@@ -222,7 +322,7 @@ class BalanceSheet extends React.Component {
                             <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
                         </Button>
                     </div> 
-                </Form>
+                </Form> */}
                 
                 {/* <div className="actions-wrap">
                     <Button className="action-icon" variant="outline-secondary" type="button">

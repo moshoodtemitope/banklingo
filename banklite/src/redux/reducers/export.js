@@ -118,7 +118,9 @@ import{
     rejectPostDisbursementReducer,
     getDisbursementByRefReducer,
     getInwardsNIPReducer,
-    getOutwardsNIPReducer
+    exportInwardsNIPReducer,
+    getOutwardsNIPReducer,
+    exportOutwardsNIPReducer
     
 } from './disbursment/disbursment.reducer'
 
@@ -337,7 +339,9 @@ export const disbursment ={
     rejectPostDisbursementReducer,
     getDisbursementByRefReducer,
     getInwardsNIPReducer,
-    getOutwardsNIPReducer
+    exportInwardsNIPReducer,
+    getOutwardsNIPReducer,
+    exportOutwardsNIPReducer
 }
 
 export const products ={

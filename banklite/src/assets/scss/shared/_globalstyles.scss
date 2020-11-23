@@ -7,6 +7,9 @@
         max-width: initial;
     }
 }
+.tablecomponent-container > .container > .row{
+    overflow-x: auto !important;
+}
 .no-margins{
     margin: 0!important;
 }

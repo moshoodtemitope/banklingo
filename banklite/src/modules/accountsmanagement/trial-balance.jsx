@@ -56,6 +56,8 @@ class TrialBalance extends React.Component {
         
 
         dispatch(administrationActions.fetchBranchesList());
+
+        dispatch(acoountingActions.getTrialBalance("CLEAR"));
         
     }
 
@@ -478,8 +480,8 @@ class TrialBalance extends React.Component {
                                                     <td>{numberWithCommas(eachResult.openingBalance, true, true)}</td>
                                                     <td>{numberWithCommas(eachResult.debits, true, true)}</td>
                                                     <td>{numberWithCommas(eachResult.credits, true, true)}</td>
-                                                    <td>&#8358;{eachResult.isNetInBracket===false? numberWithCommas(eachResult.netChange, true, true):`(${numberWithCommas(eachResult.netChange, true, true)})`}</td>
-                                                    <td>&#8358;{eachResult.isNetInBracket===false? numberWithCommas(eachResult.closingBalance, true, true):`(${numberWithCommas(eachResult.closingBalance, true, true)})`}</td>
+                                                    <td>{eachResult.isNetInBracket===false? numberWithCommas(eachResult.netChange, true, true):`(${numberWithCommas(eachResult.netChange, true, true)})`}</td>
+                                                    <td>{eachResult.isNetInBracket===false? numberWithCommas(eachResult.closingBalance, true, true):`(${numberWithCommas(eachResult.closingBalance, true, true)})`}</td>
                                                     {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
 
                                                 </tr>
@@ -572,8 +574,8 @@ class TrialBalance extends React.Component {
                                                         <td>{numberWithCommas(eachResult.openingBalance,true, true)}</td>
                                                         <td>{numberWithCommas(eachResult.debits,true, true)}</td>
                                                         <td>{numberWithCommas(eachResult.credits,true, true)}</td>
-                                                        <td>&#8358;{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.netChange,true, true) : `(${numberWithCommas(eachResult.netChange,true, true)})`}</td>
-                                                        <td>&#8358;{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.closingBalance,true, true) : `(${numberWithCommas(eachResult.closingBalance,true, true)})`}</td>
+                                                        <td>{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.netChange,true, true) : `(${numberWithCommas(eachResult.netChange,true, true)})`}</td>
+                                                        <td>{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.closingBalance,true, true) : `(${numberWithCommas(eachResult.closingBalance,true, true)})`}</td>
                                                         {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
 
                                                     </tr>

@@ -78,6 +78,33 @@ export function getInwardsNIPReducer(state=[], action) {
     }
 }
 
+export function exportInwardsNIPReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.EXPORT_NIP_INWARDS_PENDING:
+            return {
+                request_status: disbursmentConstants.EXPORT_NIP_INWARDS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.EXPORT_NIP_INWARDS_SUCCESS:
+            return {
+                request_status: disbursmentConstants.EXPORT_NIP_INWARDS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.EXPORT_NIP_INWARDS_FAILURE:
+            return {
+                request_status: disbursmentConstants.EXPORT_NIP_INWARDS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+
 export function getOutwardsNIPReducer(state=[], action) {
     switch (action.type) {
         case disbursmentConstants.GET_NIP_OUTWARDS_PENDING:
@@ -95,6 +122,32 @@ export function getOutwardsNIPReducer(state=[], action) {
         case disbursmentConstants.GET_NIP_OUTWARDS_FAILURE:
             return {
                 request_status: disbursmentConstants.GET_NIP_OUTWARDS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function exportOutwardsNIPReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING:
+            return {
+                request_status: disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.EXPORT_NIP_OUTWARDS_SUCCESS:
+            return {
+                request_status: disbursmentConstants.EXPORT_NIP_OUTWARDS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.EXPORT_NIP_OUTWARDS_FAILURE:
+            return {
+                request_status: disbursmentConstants.EXPORT_NIP_OUTWARDS_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };

@@ -6,6 +6,9 @@
         font-size: 12px;
     }
 }
+.tablecomponent-container > .container > .row{
+    overflow-x: auto !important;
+}
 span.each-pagenum {
     background: #D6EAF8;
     padding: 2px 5px;
