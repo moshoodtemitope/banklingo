@@ -122,7 +122,7 @@ class ActiveLoans extends React.Component {
         // this.getTransactionChannels(params);
        
 
-        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}`;
         if(tempData){
             dispatch(loanActions.getActiveLoans(params,tempData));
         }else{

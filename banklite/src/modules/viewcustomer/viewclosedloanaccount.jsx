@@ -86,7 +86,9 @@ class ViewClosedLoanAccount extends React.Component {
 
             txtnEndDate: "",
             txtnStartDate: "",
+            
         }
+        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
 
         
     }
@@ -1941,7 +1943,10 @@ class ViewClosedLoanAccount extends React.Component {
 
     renderAloanAttachments=()=>{
         let getALoanAccountAttachmentsRequest =  this.props.getALoanAccountAttachmentsReducer;
-
+        let allUSerPermissions =[];
+        this.userPermissions.map(eachPermission=>{
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
         let saveRequestData= getALoanAccountAttachmentsRequest.request_data!==undefined?getALoanAccountAttachmentsRequest.request_data.tempData:null;
         if(getALoanAccountAttachmentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_PENDING){
             if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
@@ -1982,9 +1987,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
+                            </div>
+                        }
                     </div>
                 )
             }else{
@@ -2031,9 +2038,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 }
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
+                            </div>
+                        }
                     </div>
                 )
             }
@@ -2098,9 +2107,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 }
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
+                            </div>
+                        }
                     </div>
                 )
             }else{
@@ -2144,9 +2155,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
+                            </div>
+                        }
                     </div>
                 )
             }
@@ -2166,7 +2179,10 @@ class ViewClosedLoanAccount extends React.Component {
 
     renderLoanAccountComments =()=>{
         let getAClientLoanAccountCommentsRequest =  this.props.getAClientLoanAccountCommentsReducer;
-
+        let allUSerPermissions =[];
+            this.userPermissions.map(eachPermission=>{
+                allUSerPermissions.push(eachPermission.permissionCode)
+            })
         let saveRequestData= getAClientLoanAccountCommentsRequest.request_data!==undefined?getAClientLoanAccountCommentsRequest.request_data.tempData:null;
 
         if(getAClientLoanAccountCommentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMENTS_PENDING){
@@ -2209,9 +2225,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleCommentsBoxShow}>New Comment</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleCommentsBoxShow}>New Comment</Button>
+                            </div>
+                        }
                         
                     </div>
                 )
@@ -2261,9 +2279,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 }
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
+                            </div>
+                        }
                     </div>
                 )
             }
@@ -2329,9 +2349,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 }
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
+                            </div>
+                        }
                     </div>
                 )
             }else{
@@ -2375,9 +2397,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        <div className="footer-with-cta toright">
-                            <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
-                        </div>
+                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") >-1 &&
+                            <div className="footer-with-cta toright">
+                                <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
+                            </div>
+                        }
                     </div>
                 )
             }
@@ -2972,10 +2996,15 @@ class ViewClosedLoanAccount extends React.Component {
     //     Closed_Written_Off = 8,
     //     Closed_Withdrawn = 9
     // }
+
+    let allUSerPermissions =[];
+    this.userPermissions.map(eachPermission=>{
+        allUSerPermissions.push(eachPermission.permissionCode)
+    })
         return(
             <div className="heading-ctas">
                 <ul className="nav">
-                    {(loanDetails.loanState ===2) &&
+                {(loanDetails.loanState ===2 && allUSerPermissions.indexOf("bnk_approve_loan_account") >-1) &&
                         <li>
                             <Button size="sm"
                                 onClick={()=>{
@@ -3005,7 +3034,7 @@ class ViewClosedLoanAccount extends React.Component {
                             >Enter Repayment</Button>
                         </li>
                     }
-                    {(loanDetails.loanState ===1) &&
+                    {(loanDetails.loanState ===1 && allUSerPermissions.indexOf("bnk_request_loan_approval") >-1) &&
                         <li>
                             <Button size="sm" 
                                 onClick={()=>{
@@ -3035,7 +3064,7 @@ class ViewClosedLoanAccount extends React.Component {
                                 className="customone"
                                 alignRight
                             >
-                                {(loanDetails.loanState ===1 || loanDetails.loanState ===2) &&
+                                {((loanDetails.loanState ===1 || loanDetails.loanState ===2) && allUSerPermissions.indexOf("bnk_reject_loan_account") >-1) &&
                                     <Dropdown.Item eventKey="1"
                                         onClick={()=>{
                                             this.setState({newState: "Rejected", newStateUpdate: "reject", ctaText:"Reject"})
@@ -3073,6 +3102,11 @@ class ViewClosedLoanAccount extends React.Component {
             getAClientLoanAccountRequest = this.props.getAClientLoanAccountReducer,
             getClientDepositsRequest = this.props.getClientDepositsReducer;
 
+            let allUSerPermissions =[];
+            this.userPermissions.map(eachPermission=>{
+                allUSerPermissions.push(eachPermission.permissionCode)
+            })
+
             if(getAClientLoanAccountRequest.request_status ===loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_SUCCESS){
                 return(
                     <div className="row">
@@ -3089,24 +3123,34 @@ class ViewClosedLoanAccount extends React.Component {
                                             <Nav.Item>
                                                 <Nav.Link eventKey="schedule" onSelect={this.getCustomerLoanSchedule} >Schedule</Nav.Link>
                                             </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="transactions" onSelect={this.getCustomerLoanTransactions} >Transactions</Nav.Link>
-                                            </Nav.Item>
+                                            {allUSerPermissions.indexOf("bnk_manage_loan_transactions") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="transactions" onSelect={this.getCustomerLoanTransactions} >Transactions</Nav.Link>
+                                                </Nav.Item>
+                                            }
                                             {/* <Nav.Item>
                                                 <Nav.Link eventKey="securities">Securities</Nav.Link>
                                             </Nav.Item> */}
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="activity" onSelect={this.getALoanActivities}>Activity</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="attachments" onSelect={this.getACustomerLoanAttachments}>Attachments</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="comments" onSelect={this.getALoanComments}>Comments</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="communications" onSelect={this.getALoanCommunications}>Communications</Nav.Link>
-                                            </Nav.Item>
+                                            {allUSerPermissions.indexOf("bnk_view_loan_activities") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="activity" onSelect={this.getALoanActivities}>Activity</Nav.Link>
+                                                </Nav.Item>
+                                            }
+                                            {allUSerPermissions.indexOf("bnk_view_loan_attachments") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="attachments" onSelect={this.getACustomerLoanAttachments}>Attachments</Nav.Link>
+                                                </Nav.Item>
+                                            }
+                                            {allUSerPermissions.indexOf("bnk_view_loan_comments") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="comments" onSelect={this.getALoanComments}>Comments</Nav.Link>
+                                                </Nav.Item>
+                                            }
+                                            {allUSerPermissions.indexOf("bnk_view_loan_communications") >-1 &&
+                                                <Nav.Item>
+                                                    <Nav.Link eventKey="communications" onSelect={this.getALoanCommunications}>Communications</Nav.Link>
+                                                </Nav.Item>
+                                            }
                                         </Nav>
                                         {this.renderLoanCtas(getAClientLoanAccountRequest.request_data.response.data)}
                                         <Tab.Content>

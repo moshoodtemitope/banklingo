@@ -130,6 +130,8 @@ const loansReducers = combineReducers({
     createALoanAttachmentReducer: loans.createALoanAttachmentReducer, 
     getALoanAccountCommunicationsReducer: loans.getALoanAccountCommunicationsReducer, 
     changeLoanStateReducer: loans.changeLoanStateReducer, 
+    getAllLoanSchedulesReducer: loans.getAllLoanSchedulesReducer, 
+    exportLoansSchedulesReducer: loans.exportLoansSchedulesReducer, 
    
 })
 

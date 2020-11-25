@@ -147,6 +147,18 @@ export const menuList = [
             }
         ]
     },
+    {
+        menuGroup: "All Loan Schedules",
+        mainMenu: "All Loan Schedules",
+        permissionCode: "bnk_view_all_loan_schedules",
+        hasSubMenu: true,
+        subMenus: [
+            {
+                subMenuLabel: "All Loan Schedules",
+                subMmenuRoute: "/all-loan-schedules"
+            }
+        ]
+    },
 
     {
         menuGroup: "Deposit Transactions",

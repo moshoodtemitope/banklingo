@@ -86,7 +86,9 @@ import{
     getALoanAccountAttachmentsReducer,
     createALoanAttachmentReducer,
     getALoanAccountCommunicationsReducer,
-    changeLoanStateReducer
+    changeLoanStateReducer,
+    getAllLoanSchedulesReducer,
+    exportLoansSchedulesReducer
     
 } from './loans/loans.reducer'
 
@@ -270,7 +272,9 @@ export const loans = {
     getALoanAccountAttachmentsReducer,
     createALoanAttachmentReducer,
     getALoanAccountCommunicationsReducer,
-    changeLoanStateReducer
+    changeLoanStateReducer,
+    getAllLoanSchedulesReducer,
+    exportLoansSchedulesReducer
 }
 
 export const auth = {

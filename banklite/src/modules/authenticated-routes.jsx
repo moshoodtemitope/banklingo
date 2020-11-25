@@ -43,6 +43,8 @@ import DepositManagement from './depositmanagement'
 import DepositClient from './depositmanagement/deposit-client'
 import NewDepositAccount from './depositmanagement/newdepositaccount'
 
+import AllLoanSchedules from './all-loan-schedules'
+
 import LoanTransactions from './loantransactions'
 import LoanAccountTransactions from './loantransactions/loan-account-transactions'
 import DepositTransactions from './deposittransactions'
@@ -280,6 +282,8 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <Route exact path='/deposits/:clientId' render={(props) => <DepositClient clientId={props.match.params.clientId} {...this.props} />} /> */}
                         
                        
+                        <PrivateRoute accessRequired="bnk_view_all_loan_schedules" exact path='/all-loan-schedules' {...this.props} authed={this.props.user} component={AllLoanSchedules} /> 
+                        
                         <PrivateRoute accessRequired="bnk_view_all_loan_transactions" exact path='/loan-transactions' {...this.props} authed={this.props.user} component={LoanTransactions} /> 
                         <PrivateRoute accessRequired="bnk_view_all_loan_transactions" exact path='/loan-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={LoanAccountTransactions} /> 
                         {/* <Route exact path='/loan-transactions/:accountEncodedKey' render={(props) => <LoanAccountTransactions accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} /> */}

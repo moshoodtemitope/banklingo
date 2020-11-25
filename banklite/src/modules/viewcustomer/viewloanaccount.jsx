@@ -962,21 +962,7 @@ class ViewLoanAccount extends React.Component {
                 return(
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
-                        {/* <div className="heading-with-cta ">
-                            <Form className="one-liner"></Form>
-                            <div className="pagination-wrap">
-                                <label htmlFor="toshow">Show</label>
-                                <select id="toshow"
-                                    value={this.state.PageSize}
-                                    className="countdropdown form-control form-control-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="200">200</option>
-                                </select>
-
-                            </div>
-                        </div> */}
+                        
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
@@ -1003,21 +989,7 @@ class ViewLoanAccount extends React.Component {
                return(
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
-                        {/* <div className="heading-with-cta ">
-                            <Form className="one-liner"></Form>
-                            <div className="pagination-wrap">
-                                <label htmlFor="toshow">Show</label>
-                                <select id="toshow"
-                                    value={this.state.PageSize}
-                                    className="countdropdown form-control form-control-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="200">200</option>
-                                </select>
-
-                            </div>
-                        </div> */}
+                        
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>

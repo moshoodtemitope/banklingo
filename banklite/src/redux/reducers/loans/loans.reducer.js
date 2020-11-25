@@ -52,6 +52,59 @@ export function getPendingLoansReducer(state=[], action) {
     }
 }
 
+export function getAllLoanSchedulesReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function exportLoansSchedulesReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+
 export function getApprovedLoansReducer(state=[], action) {
     switch (action.type) {
         case loanAndDepositsConstants.GET__APPROVED_LOANS_PENDING:
