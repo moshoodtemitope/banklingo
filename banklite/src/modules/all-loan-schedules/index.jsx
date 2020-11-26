@@ -29,7 +29,7 @@ class AllLoanSchedules extends React.Component {
             startDate: "",
             SearchText:"",
             ScheduleState:-1,
-            showAmountExpected: false,
+            showAmountExpected: true,
             showAmountPaid: false,
             showAmountDue: true,
         }
@@ -413,7 +413,7 @@ class AllLoanSchedules extends React.Component {
                                                 showMonthDropdown
                                                 showYearDropdown
                                                 dropdownMode="select"
-                                                maxDate={new Date()}
+                                                // maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm"
 
