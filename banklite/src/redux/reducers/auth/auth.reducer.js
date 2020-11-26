@@ -189,6 +189,40 @@ export function ResetPinReducer(state=initialState, action) {
     }
 }
 
+export function ResetPasswordReducer(state=initialState, action) {
+    
+    switch (action.type) {
+        case authConstants.RESET_PASSWORD_PENDING:
+            return {
+                request_status: authConstants.RESET_PASSWORD_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case authConstants.RESET_PASSWORD_SUCCESS:
+            return {
+                request_status: authConstants.RESET_PASSWORD_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.RESET_PASSWORD_FAILURE:
+            return {
+                request_status: authConstants.RESET_PASSWORD_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.RESET_PASSWORD_RESET:
+            return {
+                request_status: authConstants.RESET_PASSWORD_RESET,
+                is_request_processing: false,
+                request_data: {},
+            };
+        
+
+        default:
+            return { ...state }
+    }
+}
+
 export function ActivateDeactivateUserReducer(state=initialState, action) {
     
     switch (action.type) {

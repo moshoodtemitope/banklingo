@@ -140,6 +140,7 @@ const authReducers = combineReducers({
     ChangePasswordReducer: auth.ChangePasswordReducer, 
     ChangePinReducer: auth.ChangePinReducer, 
     ResetPinReducer: auth.ResetPinReducer, 
+    ResetPasswordReducer: auth.ResetPasswordReducer, 
     ActivateDeactivateUserReducer: auth.ActivateDeactivateUserReducer, 
    
 })

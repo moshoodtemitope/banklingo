@@ -10,6 +10,7 @@ export const authActions = {
     ResfreshToken,
     initStore,
     ChangePassword,
+    ResetPassword,
     ChangePIN,
     ResetPIN,
     activateDeactivateUser,
@@ -292,6 +293,39 @@ function ResetPIN   (resetPINPayload){
     function success(response) { return { type: authConstants.RESET_PIN_SUCCESS, response } }
     function failure(error) { return { type: authConstants.RESET_PIN_FAILURE, error } }
     function clear() { return { type: authConstants.RESET_PIN_RESET, clear_data:""} }
+
+}
+
+function ResetPassword   (resetPasswordPayload){
+    if(resetPasswordPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.RESET_PASSWORD_FOR_USER;
+            // console.log("hgfghjkljhgfgdh",resetPasswordPayload);
+            let consume = ApiService.request(url, "POST", resetPasswordPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                    
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: authConstants.RESET_PASSWORD_PENDING, user } }
+    function success(response) { return { type: authConstants.RESET_PASSWORD_SUCCESS, response } }
+    function failure(error) { return { type: authConstants.RESET_PASSWORD_FAILURE, error } }
+    function clear() { return { type: authConstants.RESET_PASSWORD_RESET, clear_data:""} }
 
 }
 

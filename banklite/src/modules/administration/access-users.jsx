@@ -31,6 +31,7 @@ class AccessUsers extends React.Component {
             CurrentPage:1,
             refresh: false,
             showPINStatus: false,
+            showResetPasswordStatus: false,
             showActivationStatus: false,
             ShowDeactivated:false,
             // ShowDeactivated:false
@@ -75,6 +76,40 @@ class AccessUsers extends React.Component {
             .then(
                 () => {
                     if(this.props.ResetPinReducer.request_status === authConstants.RESET_PIN_SUCCESS){
+                      
+                    //    this.handleClosePINStatus();
+                        
+                        
+                    }
+                    // else{
+                    //     setTimeout(() => {
+                    //         this.props.dispatch(acoountingActions.createGLAccount("CLEAR"))
+                    //     }, 2000);
+                    // }
+                    
+                    
+
+                }
+            )
+            .catch()
+    }
+
+    handleResetPasswordUpdates = async (resetPasswordPayload) =>{
+        this.handleshowResetPasswordStatus();
+        
+        const {dispatch} = this.props;
+       
+        await dispatch(authActions.ResetPassword(resetPasswordPayload));
+
+        
+    }
+
+    resetUserPassword=(resetPasswordPayload, userToResetPasswordFor) =>{
+        this.setState({userToResetPasswordFor})
+        this.handleResetPasswordUpdates(resetPasswordPayload)
+            .then(
+                () => {
+                    if(this.props.ResetPasswordReducer.request_status === authConstants.RESET_PASSWORD_SUCCESS){
                       
                     //    this.handleClosePINStatus();
                         
@@ -198,7 +233,7 @@ class AccessUsers extends React.Component {
     }
 
     renderAllUsers =()=>{
-        let {showPINStatus, showActivationStatus,ShowDeactivated} = this.state;
+        let {showPINStatus,showResetPasswordStatus, showActivationStatus,ShowDeactivated} = this.state;
         let adminGetUsersRequest = this.props.adminGetUsers;
         let allUSerPermissions =[];
         this.userPermissions.map(eachPermission=>{
@@ -344,6 +379,7 @@ class AccessUsers extends React.Component {
                                                                             >
                                                                                 <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
                                                                                 <Dropdown.Item eventKey="1" onClick={()=>this.resetUserPIN({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset PIN</Dropdown.Item>
+                                                                                <Dropdown.Item eventKey="1" onClick={()=>this.resetUserPassword({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset Password</Dropdown.Item>
                                                                                 {eachUser.objectState!==1 &&
                                                                                     <Dropdown.Item eventKey="1" onClick={()=>this.activateDeactivateUser({"encodedKey":eachUser.encodedKey }, eachUser.name, "activate")}>Activate User</Dropdown.Item>
                                                                                 }
@@ -480,6 +516,7 @@ class AccessUsers extends React.Component {
                                                                                     >
                                                                                         <NavLink className="dropdown-item" to={`/administration/access/edit-user/${eachUser.encodedKey}`}>Edit</NavLink>
                                                                                         <Dropdown.Item eventKey="1" onClick={()=>this.resetUserPIN({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset PIN</Dropdown.Item>
+                                                                                        <Dropdown.Item eventKey="1" onClick={()=>this.resetUserPassword({"encodedKey":eachUser.encodedKey }, eachUser.name)}>Reset Password</Dropdown.Item>
                                                                                         {eachUser.objectState!==1 &&
                                                                                             <Dropdown.Item eventKey="1" onClick={()=>this.activateDeactivateUser({"encodedKey":eachUser.encodedKey }, eachUser.name, "activate")}>Activate User</Dropdown.Item>
                                                                                         }
@@ -593,6 +630,15 @@ class AccessUsers extends React.Component {
     
     handleshowPINStatus = () => this.setState({showPINStatus:true});
 
+    handleCloseResetPasswordStatus = () => {
+        this.setState({showResetPasswordStatus:false})
+        this.props.dispatch(authActions.ResetPassword("CLEAR"))
+    };
+
+    handleshowResetPasswordStatus = () => this.setState({showResetPasswordStatus:true});
+
+    
+
     handleCloseActivationStatus = () => {
         this.setState({showActivationStatus:false})
         this.props.dispatch(authActions.activateDeactivateUser(null, "CLEAR"))
@@ -651,6 +697,56 @@ class AccessUsers extends React.Component {
         )
     }
 
+    PasswordesetStatus = () =>{
+        let {showResetPasswordStatus, userToResetPasswordFor} = this.state;
+        let ResetPasswordRequest = this.props.ResetPasswordReducer;
+            
+        
+        return(
+            <Modal show={showResetPasswordStatus} onHide={()=>{}}  size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={true}>
+                <Modal.Header>
+                    <Modal.Title>Password Reset</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    
+                    {ResetPasswordRequest.request_status === authConstants.RESET_PASSWORD_FAILURE && 
+                        <div className="text-center errortxt">
+                            {ResetPasswordRequest.request_data.error}
+                        </div>
+                    }
+                    {ResetPasswordRequest.request_status === authConstants.RESET_PASSWORD_PENDING && 
+                        <div className="text-center ">
+                            Resetting Password for {userToResetPasswordFor}
+                        </div>
+                    }
+                    {ResetPasswordRequest.request_status === authConstants.RESET_PASSWORD_SUCCESS && 
+                       <div className="text-center">
+                           {ResetPasswordRequest.request_data.response.data.message}
+                             {/* PIN Reset was successful for {userToResetPasswordFor} */}
+                        </div>
+                    }
+                </Modal.Body>
+                {(ResetPasswordRequest.request_status === authConstants.RESET_PASSWORD_SUCCESS 
+                    || ResetPasswordRequest.request_status === authConstants.RESET_PASSWORD_FAILURE ) && 
+                <Modal.Footer>
+
+                    
+                    <Button 
+                        variant="success"
+                        type="button"
+                        onClick={this.handleCloseResetPasswordStatus}
+                    >
+                        Okay
+                        
+                        
+                    </Button>
+
+                </Modal.Footer>
+                }
+            </Modal>
+        )
+    }
+
     ActivationActionStatus = () =>{
         let {showActivationStatus, userDetailsForAction, activationAction} = this.state;
         let ActivateDeactivateUserRequest = this.props.ActivateDeactivateUserReducer;
@@ -694,7 +790,7 @@ class AccessUsers extends React.Component {
                     {ActivateDeactivateUserRequest.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS && 
                        <div className="text-center">
                            {ActivateDeactivateUserRequest.request_data.response.data.message}
-                             {/* PIN Reset was successful for {userToResetPInFor} */}
+                             
                         </div>
                     }
                 </Modal.Body>
@@ -721,7 +817,7 @@ class AccessUsers extends React.Component {
 
 
     render() {
-        let {showPINStatus, showActivationStatus} = this.state;
+        let {showPINStatus, showActivationStatus, showResetPasswordStatus} = this.state;
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -767,6 +863,7 @@ class AccessUsers extends React.Component {
                                             <div className="middle-content">
                                                 {this.renderAllUsers()}
                                                 {showPINStatus && this.PINResetStatus()}
+                                                {showResetPasswordStatus && this.PasswordesetStatus()}
                                                 {showActivationStatus && this.ActivationActionStatus()}
                                             </div>
                                         </div>
@@ -785,6 +882,7 @@ function mapStateToProps(state) {
     return {
         adminGetUsers : state.administrationReducers.adminGetUsersReducer,
         ResetPinReducer : state.authReducers.ResetPinReducer,
+        ResetPasswordReducer : state.authReducers.ResetPasswordReducer,
         ActivateDeactivateUserReducer : state.authReducers.ActivateDeactivateUserReducer,
     };
 }
