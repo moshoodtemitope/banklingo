@@ -57,7 +57,7 @@ class TrialBalance extends React.Component {
 
         dispatch(administrationActions.fetchBranchesList());
 
-        dispatch(acoountingActions.getTrialBalance("CLEAR"));
+        // dispatch(acoountingActions.getTrialBalance("CLEAR"));
         
     }
 
