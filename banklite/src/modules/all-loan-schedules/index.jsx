@@ -143,13 +143,13 @@ class AllLoanSchedules extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage,FullDetails} = this.state;
+        let {PageSize,CurrentPage,FullDetails, ScheduleState} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}`;
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}&ScheduleState=${ScheduleState}`;
 
         if(tempData){
             dispatch(loanActions.getAllLoanSchedules(params,tempData));
@@ -161,7 +161,7 @@ class AllLoanSchedules extends React.Component {
     searchTxtn = (e,tempData)=>{
         e.preventDefault()
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage,  SearchText, endDate, startDate} = this.state;
+        let {PageSize,CurrentPage,  SearchText, endDate, startDate,ScheduleState} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
@@ -174,7 +174,7 @@ class AllLoanSchedules extends React.Component {
             if(startDate!==""){
                 startDate = startDate.toISOString()
             }
-            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}&ScheduleState=${ScheduleState}`;
 
             if(tempData){
                 dispatch(loanActions.getAllLoanSchedules(params,tempData));
@@ -203,9 +203,9 @@ class AllLoanSchedules extends React.Component {
                                     <tr>
                                         <th>#</th>
                                         <th>Customer Name</th>
-                                        <th>Loan Account Number</th>
+                                        <th>Account Number</th>
                                         <th>Due Date</th>
-                                        <th>Total Balance</th>
+                                        {/* <th>Total Balance</th> */}
                                         <th>Expected Principal</th>
                                     </tr>
                                 </thead>
@@ -231,9 +231,9 @@ class AllLoanSchedules extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>ID</th>
+                                            {/* <th>ID</th> */}
                                             <th>Customer Name</th>
-                                            <th>Loan Account Number</th>
+                                            <th>Account Number</th>
                                             <th>Loan Amount</th>
                                             <th>Due Date</th>
                                             {this.state.showAmountExpected === true &&
@@ -281,7 +281,7 @@ class AllLoanSchedules extends React.Component {
                                             {this.state.showAmountDue &&
                                                 <th className="borderdright">Total Due</th>
                                             }
-                                            <th>Total Balance</th>
+                                            {/* <th>Total Balance</th> */}
                                             <th>State</th>
                                         </tr>
                                     </thead>
@@ -292,7 +292,7 @@ class AllLoanSchedules extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr key={index}>
                                                             <td>{index+1}</td>
-                                                            <td>{eachSchedule.id}</td>
+                                                            {/* <td>{eachSchedule.id}</td> */}
                                                             <td><NavLink to={`/customer/${eachSchedule.clientKey}`}> {eachSchedule.clientName}</NavLink></td>
                                                             <td><NavLink to={`/customer/${eachSchedule.clientKey}/loanaccount/${eachSchedule.encodedKey}`}> {eachSchedule.accountNumber}</NavLink></td>
                                                             <td>{(eachSchedule.loanAmount !== null && eachSchedule.loanAmount > 0) ? `₦${numberWithCommas(eachSchedule.loanAmount, true)}` : "-"}</td>
@@ -343,7 +343,7 @@ class AllLoanSchedules extends React.Component {
                                                             {this.state.showAmountDue &&
                                                                 <td className="borderdright">{(eachSchedule.totalDue !== null && eachSchedule.totalDue > 0) ? `₦${numberWithCommas(eachSchedule.totalDue, true)}` : "-"}</td>
                                                             }
-                                                            <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td>
+                                                            {/* <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td> */}
                                                             <td>{(eachSchedule.scheduleStateDescription !== null && eachSchedule.scheduleStateDescription !== undefined) ? eachSchedule.scheduleStateDescription : "-"}</td>
                                                         </tr>
                                                         {/* <tr>
@@ -380,9 +380,9 @@ class AllLoanSchedules extends React.Component {
                                                 value={this.state.ScheduleState}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="-1">All</option>
-                                                <option value="0">Not Disbursed</option>
+                                                {/* <option value="0">Not Disbursed</option> */}
                                                 <option value="1">Pending</option>
-                                                <option value="2">Late</option>
+                                                {/* <option value="2">Late</option> */}
                                                 <option value="3">Paid</option>
                                                 <option value="4">Payment Due</option>
                                             </select>
@@ -461,13 +461,13 @@ class AllLoanSchedules extends React.Component {
                                         />
                                     </div>
                                 </div>
-                                <div className="table-helper">
+                                {/* <div className="table-helper">
                                     <input type="checkbox" name=""
                                         onChange={(e)=>this.setShowDetails(e, allLoanSchedules.result)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
-                                </div>
+                                </div> */}
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
                                         onChange={(e) => this.setScheduleFilter(e, 'showAmountExpected')}
@@ -491,9 +491,9 @@ class AllLoanSchedules extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>ID</th>
+                                            {/* <th>ID</th> */}
                                             <th>Customer Name</th>
-                                            <th>Loan Account Number</th>
+                                            <th>Account Number</th>
                                             <th>Loan Amount</th>
                                             <th>Due Date</th>
                                             {this.state.showAmountExpected === true &&
@@ -541,7 +541,7 @@ class AllLoanSchedules extends React.Component {
                                             {this.state.showAmountDue &&
                                                 <th className="borderdright">Total Due</th>
                                             }
-                                            <th>Total Balance</th>
+                                            {/* <th>Total Balance</th> */}
                                             <th>State</th>
                                         </tr>
                                     </thead>
@@ -552,7 +552,7 @@ class AllLoanSchedules extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr key={index}>
                                                             <td>{index+1}</td>
-                                                            <td>{eachSchedule.id}</td>
+                                                            {/* <td>{eachSchedule.id}</td> */}
                                                             <td><NavLink to={`/customer/${eachSchedule.clientKey}`}> {eachSchedule.clientName}</NavLink></td>
                                                             <td><NavLink to={`/customer/${eachSchedule.clientKey}/loanaccount/${eachSchedule.encodedKey}`}> {eachSchedule.accountNumber}</NavLink></td>
                                                             <td>{(eachSchedule.loanAmount !== null && eachSchedule.loanAmount > 0) ? `₦${numberWithCommas(eachSchedule.loanAmount, true)}` : "-"}</td>
@@ -603,7 +603,7 @@ class AllLoanSchedules extends React.Component {
                                                             {this.state.showAmountDue &&
                                                                 <td className="borderdright">{(eachSchedule.totalDue !== null && eachSchedule.totalDue > 0) ? `₦${numberWithCommas(eachSchedule.totalDue, true)}` : "-"}</td>
                                                             }
-                                                            <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td>
+                                                            {/* <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td> */}
                                                             <td>{(eachSchedule.scheduleStateDescription !== null && eachSchedule.scheduleStateDescription !== undefined) ? eachSchedule.scheduleStateDescription : "-"}</td>
                                                         </tr>
                                                         {/* <tr>
@@ -638,9 +638,9 @@ class AllLoanSchedules extends React.Component {
                                                 value={this.state.ScheduleState}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="-1">All</option>
-                                                <option value="0">Not Disbursed</option>
+                                                {/* <option value="0">Not Disbursed</option> */}
                                                 <option value="1">Pending</option>
-                                                <option value="2">Late</option>
+                                                {/* <option value="2">Late</option> */}
                                                 <option value="3">Paid</option>
                                                 <option value="4">Payment Due</option>
                                             </select>
@@ -707,9 +707,9 @@ class AllLoanSchedules extends React.Component {
                                     <tr>
                                         <th>#</th>
                                         <th>Customer Name</th>
-                                        <th>Loan Account Number</th>
+                                        <th>Account Number</th>
                                         <th>Due Date</th>
-                                        <th>Total Balance</th>
+                                        {/* <th>Total Balance</th> */}
                                         <th>Expected Principal</th>
                                     </tr>
                                 </thead>
