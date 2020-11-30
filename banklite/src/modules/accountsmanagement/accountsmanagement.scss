@@ -21,6 +21,34 @@ pre{
     font-weight: 700;
     font-size: 13px;
 }
+[data-title] {
+    position: relative !important;
+    cursor: help;
+}
+[data-title]:hover::before {
+    content: attr(data-title);
+    // position: absolute;
+    // bottom: -26px;
+    // top: 10px;
+    display: inline-block;
+    padding: 3px 6px;
+    border-radius: 2px;
+    background: #000;
+    color: #fff;
+    font-size: 12px;
+    font-family: sans-serif;
+    white-space: nowrap;
+  }
+//   [data-title]:hover::after {
+//     content: '';
+//     // position: absolute;
+   
+//     // left: 8px;
+//     display: inline-block;
+//     color: #fff;
+//     // border: 8px solid transparent;	
+//     border-bottom: 8px solid #000;
+//   }
 
 .btn-secondary.btn.remove-btn, .btn-secondary.btn.remove-btn:active,
 .btn-secondary.btn.remove-btn:not(:disabled):not(.disabled):active{

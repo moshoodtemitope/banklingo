@@ -11,6 +11,7 @@ import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select';
 import DatePicker from '../../_helpers/datepickerfield'
 import "react-datepicker/dist/react-datepicker.css";
+import  DatePickerEx from "react-datepicker";
 
 import Form from 'react-bootstrap/Form'
 import { Formik } from 'formik';
@@ -58,14 +59,16 @@ class ProfitAndLoss extends React.Component {
         
     }
 
-    setStartDate=(e)=>{
-
-        this.setState({startDate:e.target.value});
+    handleStartDatePicker = (startDate) => {
+        startDate.setHours(startDate.getHours() + 1);
+        
+        this.setState({ startDate });
     }
 
-    setEndDate=(e)=>{
-
-        this.setState({endDate:e.target.value});
+    handleEndDatePicker = (endDate) => {
+        endDate.setHours(endDate.getHours() + 1);
+       
+        this.setState({ endDate });
     }
 
     fetchProfitAndLoss = (payload, tempData)=>{
@@ -152,16 +155,16 @@ class ProfitAndLoss extends React.Component {
                                     }}
                                     validationSchema={validationSchema}
                                     onSubmit={(values, { resetForm }, errors,) => {
-                                        let startDateTemp = new Date(values.startDate),
-                                            endDateTemp = new Date(values.endDate);
+                                        let startDateTemp = new Date(this.state.startDate),
+                                            endDateTemp = new Date(this.state.endDate);
                                         if(startDateTemp <= endDateTemp){
                                             
                                             this.setState({ invalidDate: false, branchId:values.branchId.value });
             
                                             let payload ={
                                                 branchId: values.branchId.value,
-                                                StartDate:values.startDate.toISOString(),
-                                                EndDate:values.endDate.toISOString(),
+                                                StartDate:this.state.startDate.toISOString(),
+                                                EndDate: this.state.endDate.toISOString(),
                                             }
                 
                                             // console.log("-----", values.endDate);
@@ -232,20 +235,19 @@ class ProfitAndLoss extends React.Component {
                                                         className={errors.startDate && touched.startDate ? "has-invaliderror" : null}>
                                                 <Form.Label>From</Form.Label>
             
-                                                <DatePicker placeholderText="Choose start date"
-                                                    // selected={this.state.startDate} 
-                                                    onChange={setFieldValue}
-                                                    value={values.startDate}
-                                                    // onChangeRaw={(e)=>this.handleChange(e)}
+                                                <DatePickerEx placeholderText="Choose start date"
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={(e)=>{this.handleStartDatePicker(e); setFieldValue('startDate', e)}}
+                                                    selected={this.state.startDate}
                                                     dateFormat="d MMMM, yyyy"
-                                                    className="form-control form-control-sm"
                                                     peekNextMonth
                                                     showMonthDropdown
                                                     showYearDropdown
-                                                    name="startDate"
-                                                    className={errors.startDate && touched.startDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                                     dropdownMode="select"
+                                                    placeholderText="Start date"
                                                     maxDate={new Date()}
+                                                    className={errors.startDate && touched.startDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
+                                                    
                                                 />
                                                 {errors.startDate && touched.startDate ? (
                                                     <span className="invalid-feedback">{errors.startDate}</span>
@@ -255,20 +257,18 @@ class ProfitAndLoss extends React.Component {
                                                         className={errors.endDate && touched.endDate ? "has-invaliderror" : null}
                                             >
                                                 <Form.Label>To</Form.Label>
-                                                <DatePicker placeholderText="Choose end date"
-                                                    // selected={this.state.endDate} 
-                                                    onChange={setFieldValue}
-                                                    value={values.endDate}
-                                                    // onChangeRaw={(e)=>this.handleChange(e)}
+                                                <DatePickerEx placeholderText="Choose end date"
+                                                    onChangeRaw={this.handleDateChangeRaw}
+                                                    onChange={(e)=>{this.handleEndDatePicker(e); setFieldValue('endDate', e)}}
+                                                    selected={this.state.endDate}
                                                     dateFormat="d MMMM, yyyy"
-                                                    className="form-control form-control-sm"
                                                     peekNextMonth
                                                     showMonthDropdown
                                                     showYearDropdown
                                                     dropdownMode="select"
-                                                    name="endDate"
-                                                    className={errors.endDate && touched.endDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                                     maxDate={new Date()}
+                                                    className={errors.endDate && touched.endDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
+                                                    
                                                 />
                                                 {errors.endDate && touched.endDate ? (
                                                     <span className="invalid-feedback">{errors.endDate}</span>

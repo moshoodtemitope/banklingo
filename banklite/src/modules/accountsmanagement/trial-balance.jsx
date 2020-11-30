@@ -9,8 +9,9 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select';
-import DatePicker from '../../_helpers/datepickerfield'
+
 import "react-datepicker/dist/react-datepicker.css";
+import  DatePickerEx from "react-datepicker";
 
 import Form from 'react-bootstrap/Form'
 import { Formik, Field } from 'formik';
@@ -61,14 +62,26 @@ class TrialBalance extends React.Component {
         
     }
 
-    setStartDate=(e)=>{
+    // setStartDate=(e)=>{
 
-        this.setState({startDate:e.target.value});
+    //     this.setState({startDate:e.target.value});
+    // }
+
+    // setEndDate=(e)=>{
+
+    //     this.setState({endDate:e.target.value});
+    // }
+
+    handleStartDatePicker = (startDate) => {
+        startDate.setHours(startDate.getHours() + 1);
+        
+        this.setState({ startDate });
     }
 
-    setEndDate=(e)=>{
-
-        this.setState({endDate:e.target.value});
+    handleEndDatePicker = (endDate) => {
+        endDate.setHours(endDate.getHours() + 1);
+       
+        this.setState({ endDate });
     }
 
     
@@ -100,9 +113,7 @@ class TrialBalance extends React.Component {
         
     }
 
-    initiateValidation=()=>{
-        document.querySelector("#fetch-btn").click();
-    }
+    
 
     exportTrialBalance = () => {
         const { dispatch } = this.props;
@@ -182,8 +193,9 @@ class TrialBalance extends React.Component {
                                     // validateOnMount ={true}
                                     isValid={false}
                                     onSubmit={(values, { resetForm }, errors, ) => {
-                                        let startDateTemp = new Date(values.startDate),
-                                            endDateTemp = new Date(values.endDate);
+                                        
+                                        let startDateTemp = new Date(this.state.startDate),
+                                            endDateTemp = new Date(this.state.endDate);
 
                                         let {branchId}= this.state;
 
@@ -194,8 +206,10 @@ class TrialBalance extends React.Component {
                                                 
                                                 let payload = {
                                                     branchId: values.branchId.value,
-                                                    StartDate: values.startDate.toISOString(),
-                                                    EndDate: values.endDate.toISOString(),
+                                                    // StartDate: values.startDate.toISOString(),
+                                                    StartDate: this.state.startDate.toISOString(),
+                                                    EndDate: this.state.endDate.toISOString(),
+                                                    // EndDate: values.endDate.toISOString(),
                                                 }
 
                                                 // console.log("-----", values.endDate);
@@ -288,18 +302,18 @@ class TrialBalance extends React.Component {
                                                 >
                                                     <Form.Label>From</Form.Label>
 
-                                                    <DatePicker placeholderText="Choose start date"
-                                                        onChange={setFieldValue}
-                                                        value={values.startDate}
+                                                    <DatePickerEx placeholderText="Choose start date"
+                                                        onChangeRaw={this.handleDateChangeRaw}
+                                                        onChange={(e)=>{this.handleStartDatePicker(e); setFieldValue('startDate', e)}}
+                                                        selected={this.state.startDate}
                                                         dateFormat="d MMMM, yyyy"
-                                                        className="form-control form-control-sm"
                                                         peekNextMonth
                                                         showMonthDropdown
                                                         showYearDropdown
-                                                        name="startDate"
-                                                        className={errors.startDate && touched.startDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                                         dropdownMode="select"
+                                                        placeholderText="Start date"
                                                         maxDate={new Date()}
+                                                        className={errors.startDate && touched.startDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                                     />
                                                     {errors.startDate && touched.startDate ? (
                                                         <span className="invalid-feedback">{errors.startDate}</span>
@@ -309,20 +323,18 @@ class TrialBalance extends React.Component {
                                                     className={errors.endDate && touched.endDate ? "has-invaliderror" : null}
                                                 >
                                                     <Form.Label>To</Form.Label>
-                                                    <DatePicker placeholderText="Choose end date"
-                                                        // selected={this.state.endDate} 
-                                                        onChange={setFieldValue}
-                                                        value={values.endDate}
-                                                        // onChangeRaw={(e)=>this.handleChange(e)}
+                                                    <DatePickerEx placeholderText="Choose end date"
+                                                        onChangeRaw={this.handleDateChangeRaw}
+                                                        onChange={(e)=>{this.handleEndDatePicker(e); setFieldValue('endDate', e)}}
+                                                        selected={this.state.endDate}
                                                         dateFormat="d MMMM, yyyy"
-                                                        className="form-control form-control-sm"
                                                         peekNextMonth
                                                         showMonthDropdown
                                                         showYearDropdown
                                                         dropdownMode="select"
-                                                        name="endDate"
-                                                        className={errors.endDate && touched.endDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                                         maxDate={new Date()}
+                                                        // className="form-control form-control-sm h-38px"
+                                                        className={errors.endDate && touched.endDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                                     />
                                                     {errors.endDate && touched.endDate ? (
                                                         <span className="invalid-feedback">{errors.endDate}</span>

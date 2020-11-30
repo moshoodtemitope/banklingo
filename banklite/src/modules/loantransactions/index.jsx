@@ -180,6 +180,7 @@ class LoanTransactions extends React.Component {
                                         <th>Loan Account Number</th>
                                         <th>Type</th>
                                         <th>Transaction Amount</th>
+                                        <th>Transaction ID</th>
                                         <th>UserName</th>
                                         <th>Narration</th>
                                         <th>Transaction Date</th>
@@ -188,6 +189,7 @@ class LoanTransactions extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -280,6 +282,7 @@ class LoanTransactions extends React.Component {
                                         <th>Loan Account Number</th>
                                         <th>Type</th>
                                         <th>Transaction Amount</th>
+                                        <th>Transaction ID</th>
                                         <th>UserName</th>
                                         <th>Narration</th>
                                         <th>Transaction Date</th>
@@ -297,6 +300,7 @@ class LoanTransactions extends React.Component {
                                                         <td>{eachTransaction.typeDescription}</td>
                                                         <td>{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
                                                         <td>{eachTransaction.userName}</td>
+                                                        <td>{eachTransaction.id}</td>
                                                         <td>{eachTransaction.remarks}</td>
                                                         <td>{eachTransaction.transactionDate}</td>
                                                         {/* <td>{eachTransaction.entryDate}</td> */}
@@ -411,6 +415,7 @@ class LoanTransactions extends React.Component {
                                             <th>Loan Account Number</th>
                                             <th>Type</th>
                                             <th>Transaction Amount</th>
+                                            <th>Transaction ID</th>
                                             <th>UserName</th>
                                             <th>Narration</th>
                                             <th>Transaction Date</th>
@@ -427,6 +432,7 @@ class LoanTransactions extends React.Component {
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/loanaccount/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
                                                             <td>{eachTransaction.typeDescription}</td>
                                                             <td>{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
+                                                            <td>{eachTransaction.id}</td>
                                                             <td>{eachTransaction.userName}</td>
                                                             <td>{eachTransaction.remarks}</td>
                                                             {/* <td></td> */}
@@ -525,6 +531,7 @@ class LoanTransactions extends React.Component {
                                             <th>Loan Account Number</th>
                                             <th>Type</th>
                                             <th>Transaction Amount</th>
+                                            <th>Transaction ID</th>
                                             <th>UserName</th>
                                             <th>Narration</th>
                                             <th>Transaction Date</th>
@@ -533,6 +540,7 @@ class LoanTransactions extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

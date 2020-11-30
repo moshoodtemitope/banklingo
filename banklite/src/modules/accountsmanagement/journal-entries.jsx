@@ -877,7 +877,7 @@ class JournalEntries extends React.Component {
                                 <tbody>
                                 {getJournalData.map((eachJournal, key)=>{
                                     return(
-                                        <tr key={key}>
+                                        <tr key={key} title={(eachJournal.notes!==null && eachJournal.notes!=="")?`Narration: ${eachJournal.notes}`: ""}>
                                             <td>{eachJournal.id}</td>
                                             <td>{eachJournal.transactionReference}</td>
                                             {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
@@ -1010,7 +1010,7 @@ class JournalEntries extends React.Component {
                                     <tbody>
                                     {JournalEntriesData.result.map((eachJournal, key)=>{
                                         return(
-                                            <tr key={key}>
+                                            <tr key={key} title={(eachJournal.notes!==null && eachJournal.notes!=="")?`Narration: ${eachJournal.notes}`: ""}>
                                                 <td>{eachJournal.id}</td>
                                                 <td>{eachJournal.transactionReference}</td>
                                                 <td>{eachJournal.bookingDate}</td>
