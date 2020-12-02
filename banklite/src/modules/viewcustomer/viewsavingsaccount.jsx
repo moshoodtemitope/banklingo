@@ -1260,7 +1260,7 @@ class ViewSavingsAccount extends React.Component {
                                         return(
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
-                                                <td>{eachTxt.id}</td>
+                                                <td>{eachTxt.transactionKey}</td>
                                                 <td>{eachTxt.narration}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.entryType}</td>
@@ -1371,7 +1371,7 @@ class ViewSavingsAccount extends React.Component {
                                         return(
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
-                                                <td>{eachTxt.id}</td>
+                                                <td>{eachTxt.transactionKey}</td>
                                                 <td>{eachTxt.narration}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.entryType}</td>

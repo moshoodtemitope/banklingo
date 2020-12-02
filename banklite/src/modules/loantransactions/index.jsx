@@ -300,7 +300,7 @@ class LoanTransactions extends React.Component {
                                                         <td>{eachTransaction.typeDescription}</td>
                                                         <td>{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
                                                         <td>{eachTransaction.userName}</td>
-                                                        <td>{eachTransaction.id}</td>
+                                                        <td>{eachTransaction.transactionKey}</td>
                                                         <td>{eachTransaction.remarks}</td>
                                                         <td>{eachTransaction.transactionDate}</td>
                                                         {/* <td>{eachTransaction.entryDate}</td> */}
@@ -432,7 +432,7 @@ class LoanTransactions extends React.Component {
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/loanaccount/${eachTransaction.loanAccountEncodedKey}`}>{eachTransaction.loanAccountNumber}</NavLink> </td>
                                                             <td>{eachTransaction.typeDescription}</td>
                                                             <td>{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
-                                                            <td>{eachTransaction.id}</td>
+                                                            <td>{eachTransaction.transactionKey}</td>
                                                             <td>{eachTransaction.userName}</td>
                                                             <td>{eachTransaction.remarks}</td>
                                                             {/* <td></td> */}
