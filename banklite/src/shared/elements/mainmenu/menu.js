@@ -359,7 +359,7 @@ export const quickMenuList = [
         permissionName: "View Loan Accounts",
         mainMenu: "Loan Accounts",
         permissionCode: "bnk_view_loan_accounts",
-        menuRoute: "/all-loans"
+        menuRoute: "/all-loans/all"
     },
     {
         permissionName: "View All Loan Transactions",
@@ -401,7 +401,7 @@ export const quickMenuList = [
         permissionName: "View All Communications",
         mainMenu: "Communications",
         permissionCode: "bnk_view_all_communications",
-        menuRoute: "/communications",
+        menuRoute: "/communications/all",
     },
 ]
 

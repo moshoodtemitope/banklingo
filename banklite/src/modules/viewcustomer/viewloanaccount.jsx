@@ -1304,14 +1304,18 @@ class ViewLoanAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
+                                    <th>Transaction ID</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
+                                    <th>Narration</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -1344,10 +1348,12 @@ class ViewLoanAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
+                                    <th>Transaction ID</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
+                                    <th>Narration</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1356,10 +1362,12 @@ class ViewLoanAccount extends React.Component {
                                         return(
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
+                                                <td>{eachTxt.id} </td>
                                                 <td>{getDateFromISO(eachTxt.transactionDate, true)}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.typeDescription}</td>
                                                 <td>₦{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
+                                                <td>{eachTxt.remarks}</td>
                                             </tr>
                                         )
                                     })
@@ -1451,10 +1459,12 @@ class ViewLoanAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
+                                    <th>Transaction ID</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
+                                    <th>Narration</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1463,10 +1473,12 @@ class ViewLoanAccount extends React.Component {
                                         return(
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
+                                                <td>{eachTxt.id} </td>
                                                 <td>{getDateFromISO(eachTxt.transactionDate, true)}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.typeDescription}</td>
                                                 <td>₦{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
+                                                <td>{eachTxt.remarks}</td>
                                             </tr>
                                         )
                                     })
@@ -1499,14 +1511,18 @@ class ViewLoanAccount extends React.Component {
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
+                                    <th>Transaction ID</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
+                                    <th>Narration</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
