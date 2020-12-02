@@ -3034,7 +3034,7 @@ class ViewLoanAccount extends React.Component {
                             >Set Incomplete</Button>
                         </li>
                     }
-                    {(loanDetails.loanState ===5) &&
+                    {(loanDetails.loanState ===5 || loanDetails.loanState ===6) &&
                         <li>
                             <Button size="sm" 
                                 onClick={()=>{
