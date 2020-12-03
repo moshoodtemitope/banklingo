@@ -14,6 +14,7 @@ import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 
 import DatePicker from '../../_helpers/datepickerfield'
+import  DatePickerEx from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
@@ -85,9 +86,10 @@ class BalanceSheet extends React.Component {
 
 
         let payload ={
-            branchId:branchId,
-            Month:parseInt(monthProvided),
-            Year:yearProvided,
+            branchId: branchId,
+            Month:0,
+            Year:0,
+            BalanceSheetDate: this.state.dateChosen.toISOString(),
             PageSize:parseInt(PageSize.target.value),
             CurrentPage:parseInt(CurrentPage),
         }
@@ -98,6 +100,11 @@ class BalanceSheet extends React.Component {
             dispatch(acoountingActions.getBalanceSheet(payload));
         }
     }
+    handleStartDatePicker = (dateChosen) => {
+        dateChosen.setHours(dateChosen.getHours() + 1);
+        
+        this.setState({ dateChosen });
+    }
 
     exportBalanceSheet = () => {
         const { dispatch } = this.props;
@@ -105,8 +112,9 @@ class BalanceSheet extends React.Component {
         if(monthProvided!=="" && yearProvided!==""){
             let payload ={
                 branchId: branchId,
-                Month:parseInt(monthProvided),
-                Year:parseInt(yearProvided),
+                Month:0,
+                Year:0,
+                BalanceSheetDate: this.state.dateChosen.toISOString(),
                 PageSize:parseInt(PageSize),
                 CurrentPage:parseInt(CurrentPage),
             }
@@ -130,8 +138,9 @@ class BalanceSheet extends React.Component {
         if(monthProvided!=="" && yearProvided!==""){
             let payload ={
                 branchId: branchId,
-                Month:parseInt(monthProvided),
-                Year:parseInt(yearProvided),
+                Month:0,
+                BalanceSheetDate: this.state.dateChosen.toISOString(),
+                Year:0,
                 PageSize:parseInt(PageSize),
                 CurrentPage:parseInt(CurrentPage),
             }
@@ -171,8 +180,7 @@ class BalanceSheet extends React.Component {
                     // validateOnMount ={true}
                     isValid={false}
                     onSubmit={(values, { resetForm }, errors,) => {
-                        // let startDateTemp = new Date(values.startDate),
-                        //     endDateTemp = new Date(values.endDate);
+                        // let dateChosenTemp = new Date(values.dateChosen);
 
 
                         const {dispatch} = this.props;
@@ -181,7 +189,7 @@ class BalanceSheet extends React.Component {
                         let getBalanceSheetRequest = this.props.getBalanceSheetReducer;
             
                         let saveRequestData= getBalanceSheetRequest.request_data!==undefined?getBalanceSheetRequest.request_data.response.data.result:null;
-                        console.log("dsdsdsds", values);
+                        // console.log("dsdsdsds", values);
                         
                         let tempData = null;
                         
@@ -189,7 +197,7 @@ class BalanceSheet extends React.Component {
                                 branchId: branchId,
                                 Month:0,
                                 Year:0,
-                                BalanceSheetDate: values.dateChosen.toISOString(),
+                                BalanceSheetDate: this.state.dateChosen.toISOString(),
                                 PageSize:parseInt(PageSize),
                                 CurrentPage:parseInt(CurrentPage),
                             }
@@ -233,18 +241,30 @@ class BalanceSheet extends React.Component {
                                 >
                                     <Form.Label>Date</Form.Label>
 
-                                    <DatePicker placeholderText="Choose start date"
-                                        onChange={setFieldValue}
-                                        value={values.dateChosen}
+                                    <DatePickerEx placeholderText="Choose start date"
+                                        // onChange={setFieldValue}
+                                        // value={values.dateChosen}
+                                        // dateFormat="d MMMM, yyyy"
+                                        // className="form-control form-control-sm"
+                                        // peekNextMonth
+                                        // showMonthDropdown
+                                        // showYearDropdown
+                                        // name="dateChosen"
+                                        // className={errors.dateChosen && touched.dateChosen ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
+                                        // dropdownMode="select"
+                                        // maxDate={new Date()}
+
+                                        onChangeRaw={this.handleDateChangeRaw}
+                                        onChange={(e)=>{this.handleStartDatePicker(e); setFieldValue('dateChosen', e)}}
+                                        selected={this.state.dateChosen}
                                         dateFormat="d MMMM, yyyy"
-                                        className="form-control form-control-sm"
                                         peekNextMonth
                                         showMonthDropdown
                                         showYearDropdown
-                                        name="dateChosen"
-                                        className={errors.dateChosen && touched.dateChosen ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                         dropdownMode="select"
+                                        placeholderText="Start date"
                                         maxDate={new Date()}
+                                        className={errors.dateChosen && touched.dateChosen ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                     />
                                     {errors.dateChosen && touched.dateChosen ? (
                                         <span className="invalid-feedback">{errors.dateChosen}</span>

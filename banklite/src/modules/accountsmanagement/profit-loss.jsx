@@ -377,7 +377,7 @@ class ProfitAndLoss extends React.Component {
                                                 <tr key={`datakey-${index}`}>
                                                     <td>{eachResult.glCode}</td>
                                                     <td>{eachResult.accountName}</td>
-                                                    <td>{numberWithCommas(eachResult.amount, true, true)}</td>
+                                                    <td>{numberWithCommas(eachResult.amount, true)}</td>
                                                 </tr>
                                             )
                                         })
@@ -385,7 +385,7 @@ class ProfitAndLoss extends React.Component {
                                     <tr className="totalrow">
                                         <td></td>
                                         <td>Total Income</td>
-                                        <td>{numberWithCommas(saveRequestData.totalIncome, true, true)}</td>
+                                        <td>{numberWithCommas(saveRequestData.totalIncome, true)}</td>
                                     </tr>
                                     {
                                         saveRequestData.expenses.map((eachResult, index)=>{
@@ -393,7 +393,7 @@ class ProfitAndLoss extends React.Component {
                                                 <tr key={`datakey-${index}`}>
                                                     <td>{eachResult.glCode}</td>
                                                     <td>{eachResult.accountName}</td>
-                                                    <td>{numberWithCommas(eachResult.amount, true, true)}</td>
+                                                    <td>{numberWithCommas(eachResult.amount, true)}</td>
                                                 </tr>
                                             )
                                         })
@@ -401,13 +401,13 @@ class ProfitAndLoss extends React.Component {
                                     <tr className="totalrow">
                                         <td></td>
                                         <td>Total Expenses</td>
-                                        <td>{numberWithCommas(saveRequestData.totalExpense, true, true)}</td>
+                                        <td>{numberWithCommas(saveRequestData.totalExpense, true)}</td>
                                     </tr>
 
                                     <tr className="totalrow netrow">
                                         <td></td>
                                         <td>NET Income</td>
-                                        <td>{numberWithCommas(saveRequestData.netIncome, true, true)}</td>
+                                        <td>{numberWithCommas(saveRequestData.netIncome, true)}</td>
                                     </tr>
                                     
                                 </tbody>
@@ -441,7 +441,7 @@ class ProfitAndLoss extends React.Component {
                                                     <tr key={`datakey-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td>{eachResult.accountName}</td>
-                                                        <td>{numberWithCommas(eachResult.amount, true, true)}</td>
+                                                        <td>{numberWithCommas(eachResult.amount, true)}</td>
                                                     </tr>
                                                 )
                                             })
@@ -449,7 +449,7 @@ class ProfitAndLoss extends React.Component {
                                         <tr className="totalrow">
                                             <td></td>
                                             <td>Total Income</td>
-                                            <td>{numberWithCommas(profitAndLossResult.totalIncome, true, true)}</td>
+                                            <td>{numberWithCommas(profitAndLossResult.totalIncome, true)}</td>
                                         </tr>
                                         {
                                             profitAndLossResult.expenses.map((eachResult, index)=>{
@@ -457,7 +457,7 @@ class ProfitAndLoss extends React.Component {
                                                     <tr key={`datakey-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td>{eachResult.accountName}</td>
-                                                        <td>{numberWithCommas(eachResult.amount, true, true)}</td>
+                                                        <td>{numberWithCommas(eachResult.amount, true)}</td>
                                                     </tr>
                                                 )
                                             })
@@ -465,12 +465,12 @@ class ProfitAndLoss extends React.Component {
                                         <tr className="totalrow">
                                             <td></td>
                                             <td>Total Expenses</td>
-                                            <td>{numberWithCommas(profitAndLossResult.totalExpense, true, true)}</td>
+                                            <td>{numberWithCommas(profitAndLossResult.totalExpense, true)}</td>
                                         </tr>
                                         <tr className="totalrow netrow">
                                             <td></td>
                                             <td>NET Income</td>
-                                            <td>{numberWithCommas(profitAndLossResult.netIncome, true, true)}</td>
+                                            <td>{numberWithCommas(profitAndLossResult.netIncome, true)}</td>
                                         </tr>
                                     </tbody>
                                 </TableComponent>
