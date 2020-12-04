@@ -15,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import CommunicationsNav from './_menu'
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 
 import "./communications.scss"; 
 class CommunicationsManagement extends React.Component {
@@ -305,7 +306,13 @@ class CommunicationsManagement extends React.Component {
                                                                 <tr>
                                                                     <td>{eachNotification.sentBy}</td>
                                                                     <td>{eachNotification.destination}</td>
-                                                                    <td>{eachNotification.message}</td>
+                                                                   
+                                                                    {eachNotification.communicationType!==1  &&
+                                                                         <td>{eachNotification.message}</td>
+                                                                    }
+                                                                    {eachNotification.communicationType===1  &&
+                                                                        <td><div className="email-wrap">{ReactHtmlParser(eachNotification.message)}</div> </td>
+                                                                    }
                                                                     <td>{eachNotification.communicationTypeDescription}</td>
                                                                     <td>{eachNotification.communicationStateDescription}</td>
                                                                     <td>{eachNotification.dateSent}</td>
@@ -444,7 +451,12 @@ class CommunicationsManagement extends React.Component {
                                                                 <tr>
                                                                     <td>{eachNotification.sentBy}</td>
                                                                     <td>{eachNotification.destination}</td>
-                                                                    <td>{eachNotification.message}</td>
+                                                                    {eachNotification.communicationType!==1  &&
+                                                                         <td>{eachNotification.message}</td>
+                                                                    }
+                                                                    {eachNotification.communicationType===1  &&
+                                                                        <td><div className="email-wrap">{ReactHtmlParser(eachNotification.message)}</div> </td>
+                                                                    }
                                                                     <td>{eachNotification.communicationTypeDescription}</td>
                                                                     <td>{eachNotification.communicationStateDescription}</td>
                                                                     <td>{eachNotification.dateSent}</td>

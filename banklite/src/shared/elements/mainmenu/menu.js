@@ -546,7 +546,7 @@ export const communicationsMenuList = [
         permissionName: "View All Communications",
         mainMenu: "All",
         permissionCode: "bnk_view_all_communications",
-        menuRoute: "/communications",
+        menuRoute: "/communications/all",
     },
 
     {
