@@ -130,11 +130,12 @@ class TrialBalance extends React.Component {
             startDate = startDate.toISOString();
             let payload = {
                     branchId: branchId.value,
-                    StartDate: startDate.toISOString(),
-                    EndDate: endDate.toISOString(),
+                    StartDate: startDate,
+                    EndDate: endDate,
             }
 
-            dispatch(acoountingActions.exportTrialBalance(payload));
+            let payloadSend = `BranchId=${payload.branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+            dispatch(acoountingActions.exportTrialBalance(payloadSend));
         }
 
     }

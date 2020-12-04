@@ -38,7 +38,7 @@ class TrialBalanceBasic extends React.Component {
         this.state={
             user:'',
             dob:'',
-            startDate:'',
+            startDate:null,
             endDate:'',
             branchId:'',
             invalidDate:false,
@@ -119,7 +119,7 @@ class TrialBalanceBasic extends React.Component {
         const { dispatch } = this.props;
         let
             {branchId, startDate, endDate } = this.state;
-        if(endDate!=="" && startDate!=="" && branchId!==""){
+        if(endDate!=="" && branchId!==""){
             // if(endDate!==undefined){
             //     endDate = endDate.toISOString()
             // }
@@ -127,14 +127,17 @@ class TrialBalanceBasic extends React.Component {
             //     startDate = startDate.toISOString()
             // }
             endDate = endDate.toISOString();
-            startDate = startDate.toISOString();
+            // startDate = startDate.toISOString();
             let payload = {
                     branchId: branchId.value,
-                    StartDate: startDate.toISOString(),
-                    EndDate: endDate.toISOString(),
+                    // StartDate: startDate.toISOString(),
+                    // StartDate: null,
+                    EndDate: endDate,
             }
 
-            dispatch(acoountingActions.exportTrialBalanceBasic(payload));
+            let payloadSend = `BranchId=${payload.branchId}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+
+            dispatch(acoountingActions.exportTrialBalanceBasic(payloadSend));
         }
 
     }
@@ -160,8 +163,8 @@ class TrialBalanceBasic extends React.Component {
                 let  validationSchema = Yup.object().shape({
                     endDate: Yup.string()
                         .required('Please select end date').nullable(),
-                    startDate: Yup.string()
-                        .required('Please select start date').nullable(),
+                    // startDate: Yup.string()
+                    //     .required('Please select start date').nullable(),
                     branchId: Yup.string()
                         .required('Please select a branch').nullable()
                 });
@@ -184,9 +187,9 @@ class TrialBalanceBasic extends React.Component {
                                     }}
                                     validationSchema={Yup.object().shape({
                                         endDate: Yup.string()
-                                            .required('Please select end date').nullable(),
-                                        startDate: Yup.string()
-                                            .required('Please select start date').nullable(),
+                                            .required('Please select date').nullable(),
+                                        // startDate: Yup.string()
+                                        //     .required('Please select start date').nullable(),
                                         branchId: Yup.string()
                                             .required('Please select a branch').nullable()
                                     })}
@@ -199,7 +202,7 @@ class TrialBalanceBasic extends React.Component {
 
                                         let {branchId}= this.state;
 
-                                            if (startDateTemp <= endDateTemp) {
+                                            // if (startDateTemp <= endDateTemp) {
 
                                                 this.setState({ invalidDate: false, branchId:values.branchId.value });
 
@@ -207,7 +210,8 @@ class TrialBalanceBasic extends React.Component {
                                                 let payload = {
                                                     branchId: values.branchId.value,
                                                     // StartDate: values.startDate.toISOString(),
-                                                    StartDate: this.state.startDate.toISOString(),
+                                                    // StartDate: null,
+                                                    // StartDate: this.state.startDate.toISOString(),
                                                     EndDate: this.state.endDate.toISOString(),
                                                     // EndDate: values.endDate.toISOString(),
                                                 }
@@ -225,9 +229,9 @@ class TrialBalanceBasic extends React.Component {
                                                 }
 
 
-                                            } else {
-                                                this.setState({ invalidDate: true })
-                                            }
+                                            // } else {
+                                            //     this.setState({ invalidDate: true })
+                                            // }
 
 
                                     }}
@@ -297,7 +301,7 @@ class TrialBalanceBasic extends React.Component {
                                                         <span className="invalid-feedback">{errors.branchId}</span>
                                                     ) : null}
                                                 </Form.Group>
-                                                <Form.Group controlId="periodOptionChosen"
+                                                {/* <Form.Group controlId="periodOptionChosen"
                                                     className={errors.startDate && touched.startDate ? "has-invaliderror" : null}
                                                 >
                                                     <Form.Label>From</Form.Label>
@@ -318,12 +322,12 @@ class TrialBalanceBasic extends React.Component {
                                                     {errors.startDate && touched.startDate ? (
                                                         <span className="invalid-feedback">{errors.startDate}</span>
                                                     ) : null}
-                                                </Form.Group>
+                                                </Form.Group> */}
                                                 <Form.Group controlId="monthsDropdown"
                                                     className={errors.endDate && touched.endDate ? "has-invaliderror" : null}
                                                 >
-                                                    <Form.Label>To</Form.Label>
-                                                    <DatePickerEx placeholderText="Choose end date"
+                                                    <Form.Label>Date</Form.Label>
+                                                    <DatePickerEx placeholderText="Choose  date"
                                                         onChangeRaw={this.handleDateChangeRaw}
                                                         onChange={(e)=>{this.handleEndDatePicker(e); setFieldValue('endDate', e)}}
                                                         selected={this.state.endDate}
@@ -422,8 +426,8 @@ class TrialBalanceBasic extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Debits</th>
-                                        <th>Credits</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -452,8 +456,8 @@ class TrialBalanceBasic extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th colSpan="2">Account Name</th>
-                                        <th colSpan="2">Debits</th>
-                                        <th colSpan="2">Credits</th>
+                                        <th colSpan="2">Debit</th>
+                                        <th colSpan="2">Credit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -463,11 +467,11 @@ class TrialBalanceBasic extends React.Component {
                                                 openingBalanceTotal+=eachResult.openingBalance;
                                             }
 
-                                            if(typeof eachResult.debits=== "number"){
-                                                debitTotal+=eachResult.debits;
+                                            if(typeof eachResult.trialBalanceDebit=== "number"){
+                                                debitTotal+=eachResult.trialBalanceDebit;
                                             }
-                                            if(typeof eachResult.credits=== "number"){
-                                                creditTotal+=eachResult.credits;
+                                            if(typeof eachResult.trialBalanceDebit=== "number"){
+                                                creditTotal+=eachResult.trialBalanceDebit;
                                             }
                                             if(typeof eachResult.netChange=== "number"){
                                                 netChangeTotal+=eachResult.netChange;
@@ -480,20 +484,20 @@ class TrialBalanceBasic extends React.Component {
                                                 <tr key={`key-${index}`}>
                                                     <td>{eachResult.glCode}</td>
                                                     <td colSpan="2">{eachResult.accountName}</td>
-                                                    <td colSpan="2">{numberWithCommas(eachResult.debits, true, true)}</td>
-                                                    <td colSpan="2">{numberWithCommas(eachResult.credits, true, true)}</td>
+                                                    <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit, true, true)}</td>
+                                                    <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit, true, true)}</td>
                                                 </tr>
                                             )
                                         })
                                     }
                                     <tr className="totalrow netrow">
                                         <td></td>
-                                        <td>Totals</td>
-                                        <td>{numberWithCommas(openingBalanceTotal, true, true)}</td>
-                                        <td>{numberWithCommas(debitTotal,true, true)}</td>
-                                        <td>{numberWithCommas(creditTotal,true, true)}</td>
-                                        <td>{numberWithCommas(netChangeTotal,true, true)}</td>
-                                        <td>{numberWithCommas(closingBalanceTotal,true, true)}</td>
+                                        <td colSpan="2">Totals</td>
+                                        {/* <td>{numberWithCommas(openingBalanceTotal, true, true)}</td> */}
+                                        <td colSpan="2">{numberWithCommas(debitTotal,true, true)}</td>
+                                        <td colSpan="2">{numberWithCommas(creditTotal,true, true)}</td>
+                                        {/* <td>{numberWithCommas(netChangeTotal,true, true)}</td> */}
+                                        {/* <td>{numberWithCommas(closingBalanceTotal,true, true)}</td> */}
                                     </tr>
                                 </tbody>
                             </TableComponent>
@@ -538,8 +542,8 @@ class TrialBalanceBasic extends React.Component {
                                         <tr>
                                             <th>GL Code</th>
                                             <th colSpan="2">Account Name</th>
-                                            <th colSpan="2">Debits</th>
-                                            <th colSpan="2">Credits</th>
+                                            <th colSpan="2">Debit</th>
+                                            <th colSpan="2">Credit</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -549,11 +553,11 @@ class TrialBalanceBasic extends React.Component {
                                                     openingBalanceTotal += eachResult.openingBalance;
                                                 }
 
-                                                if (typeof eachResult.debits === "number") {
-                                                    debitTotal += eachResult.debits;
+                                                if (typeof eachResult.trialBalanceDebit === "number") {
+                                                    debitTotal += eachResult.trialBalanceDebit;
                                                 }
-                                                if (typeof eachResult.credits === "number") {
-                                                    creditTotal += eachResult.credits;
+                                                if (typeof eachResult.trialBalanceDebit === "number") {
+                                                    creditTotal += eachResult.trialBalanceDebit;
                                                 }
                                                 if (typeof eachResult.netChange === "number") {
                                                     netChangeTotal += eachResult.netChange;
@@ -566,8 +570,8 @@ class TrialBalanceBasic extends React.Component {
                                                     <tr key={`key-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td colSpan="2">{eachResult.accountName}</td>
-                                                        <td colSpan="2">{numberWithCommas(eachResult.debits,true, true)}</td>
-                                                        <td colSpan="2">{numberWithCommas(eachResult.credits,true, true)}</td>
+                                                        <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit,true, true)}</td>
+                                                        <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit,true, true)}</td>
                                                         
                                                         {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
 
@@ -577,12 +581,12 @@ class TrialBalanceBasic extends React.Component {
                                         }
                                         <tr className="totalrow netrow">
                                             <td></td>
-                                            <td>Totals</td>
-                                            <td>{numberWithCommas(openingBalanceTotal,true, true)}</td>
-                                            <td>{numberWithCommas(debitTotal,true, true)}</td>
-                                            <td>{numberWithCommas(creditTotal,true, true)}</td>
-                                            <td>{numberWithCommas(netChangeTotal,true, true)}</td>
-                                            <td>{numberWithCommas(closingBalanceTotal,true, true)}</td>
+                                            <td colSpan="2">Totals</td>
+                                            {/* <td>{numberWithCommas(openingBalanceTotal,true, true)}</td> */}
+                                            <td colSpan="2">{numberWithCommas(debitTotal,true, true)}</td>
+                                            <td colSpan="2">{numberWithCommas(creditTotal,true, true)}</td>
+                                            {/* <td>{numberWithCommas(netChangeTotal,true, true)}</td>
+                                            <td>{numberWithCommas(closingBalanceTotal,true, true)}</td> */}
                                         </tr>
                                     </tbody>
                                 </TableComponent>
@@ -599,8 +603,8 @@ class TrialBalanceBasic extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Debits</th>
-                                        <th>Credits</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
                                     </tr>
                                 </thead>
                                 <tbody>

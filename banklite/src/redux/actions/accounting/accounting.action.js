@@ -360,7 +360,7 @@ function exportTrialBalance  (payload, tempData){
             // }
 
             // url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
-            url = routes.HIT_TRIAL_BALANCE_EXPORT+`/?${payload}`;
+            url = routes.HIT_TRIAL_BALANCE_EXPORT+`?${payload}`;
 
         let consume = ApiService.request(url, "GET", '','','', "blob");
         dispatch(request(consume, tempData));
@@ -429,7 +429,7 @@ function exportTrialBalanceBasic  (payload, tempData){
             // }
 
             // url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
-            url = routes.HIT_TRIAL_BALANCE_EXPORT+`/?${payload}`;
+            url = routes.HIT_TRIAL_BALANCE_EXPORT+`?${payload}`;
 
         let consume = ApiService.request(url, "GET", '','','', "blob");
         dispatch(request(consume, tempData));
@@ -575,7 +575,8 @@ function getTrialBalanceBasic  (payload, tempData){
             // branchId = parseInt(JSON.parse(localStorage.getItem('lingoAuth').BranchId)
             
 
-            url = routes.HIT_TRIAL_BALANCE+`?BranchId=${payload.branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+            url = routes.HIT_TRIAL_BALANCE+`?BranchId=${payload.branchId}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+            // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${payload.branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
             // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
 
         let consume = ApiService.request(url, "GET", null);
