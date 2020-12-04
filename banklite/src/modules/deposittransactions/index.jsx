@@ -329,7 +329,7 @@ class DepositTransactions extends React.Component {
                                                         <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/savingsaccount/${eachTransaction.depositAccountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
                                                         <td>{eachTransaction.typeDescription}</td>
                                                         <td>{numberWithCommas(eachTransaction.transactionAmount, true,true)}</td>
-                                                        <td>{eachTransaction.transactionKey}</td>
+                                                        <td>{eachTransaction.key}</td>
                                                         <td>{eachTransaction.narration}</td>
                                                         <td>{eachTransaction.userName}</td>
                                                         {/* <td>{eachTransaction.entryDate}</td> */}
@@ -471,7 +471,7 @@ class DepositTransactions extends React.Component {
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/savingsaccount/${eachTransaction.depositAccountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
                                                             <td>{eachTransaction.typeDescription}</td>
                                                             <td >{numberWithCommas(eachTransaction.transactionAmount, true,true)}</td>
-                                                            <td>{eachTransaction.transactionKey}</td>
+                                                            <td>{eachTransaction.key}</td>
                                                             <td width="300">{eachTransaction.narration}</td>
                                                             <td>{eachTransaction.userName}</td>
                                                             {/* <td>{eachTransaction.entryDate}</td> */}

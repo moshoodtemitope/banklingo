@@ -12,6 +12,7 @@ import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import DatePicker from "react-datepicker";
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import "react-datepicker/dist/react-datepicker.css";
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
@@ -306,7 +307,7 @@ class EmailCommunications extends React.Component {
                                                                 <tr>
                                                                     <td>{eachNotification.sentBy}</td>
                                                                     <td>{eachNotification.destination}</td>
-                                                                    <td>{eachNotification.message}</td>
+                                                                    <td><div className="email-wrap">{ReactHtmlParser(eachNotification.message)}</div> </td>
                                                                     <td>{eachNotification.communicationTypeDescription}</td>
                                                                     <td>{eachNotification.communicationStateDescription}</td>
                                                                     <td>{eachNotification.dateSent}</td>
@@ -324,6 +325,7 @@ class EmailCommunications extends React.Component {
                     
                     case(administrationConstants.GET_NOTIFICATIONS_SUCCESS):
                         let allNotificationsData = adminGetNotificationsRequest.request_data.response.data;
+                        let parseDom = new DOMParser();
                         if(allNotificationsData!==undefined){
                             if(allNotificationsData.result.length>=1){
                                 return(
@@ -445,7 +447,7 @@ class EmailCommunications extends React.Component {
                                                                 <tr>
                                                                     <td>{eachNotification.sentBy}</td>
                                                                     <td>{eachNotification.destination}</td>
-                                                                    <td>{eachNotification.message}</td>
+                                                                    <td><div className="email-wrap">{ReactHtmlParser(eachNotification.message)}</div> </td>
                                                                     <td>{eachNotification.communicationTypeDescription}</td>
                                                                     <td>{eachNotification.communicationStateDescription}</td>
                                                                     <td>{eachNotification.dateSent}</td>
