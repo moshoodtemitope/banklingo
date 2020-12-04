@@ -16,7 +16,7 @@ import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import { loanActions } from '../../redux/actions/loans/loans.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./styles.scss"; 
-class AllLoanSchedules extends React.Component {
+class LoanPAR extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -28,7 +28,7 @@ class AllLoanSchedules extends React.Component {
             endDate: "",
             startDate: "",
             SearchText:"",
-            ScheduleState:-1,
+            
             showAmountExpected: true,
             showAmountPaid: false,
             showAmountDue: true,
@@ -41,19 +41,19 @@ class AllLoanSchedules extends React.Component {
     }
 
     loadInitialData = () => {
-        let { PageSize, CurrentPage,CurrentSelectedPage, ScheduleState } = this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${ScheduleState}`;
-        this.getAllLoanSchedules(params);
+        let { PageSize, CurrentPage,CurrentSelectedPage,startDate, endDate,SearchText } = this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&EndDate=${endDate}&SearchText=${SearchText}`;
+        this.getAllLoanPAR(params);
     }
 
-    getAllLoanSchedules = (paramters) => {
+    getAllLoanPAR = (paramters) => {
         const { dispatch } = this.props;
 
-        dispatch(loanActions.getAllLoanSchedules(paramters));
+        dispatch(loanActions.getLoanPAR(paramters));
     }
 
-    exportLoansSchedules=()=>{
-        let {PageSize,CurrentPage,  SearchText,ScheduleState, endDate, startDate} = this.state;
+    exportLoansPAR=()=>{
+        let {PageSize,CurrentPage,  SearchText, endDate, startDate} = this.state;
         
         if(endDate!==""){
             endDate = endDate.toISOString()
@@ -61,54 +61,40 @@ class AllLoanSchedules extends React.Component {
         if(startDate!==""){
             startDate = startDate.toISOString()
         }
-        let paramters= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}&ScheduleState=${ScheduleState}`;
+        let paramters= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         const {dispatch} = this.props;
 
-        dispatch(loanActions.exportLoansSchedules(paramters));
+        dispatch(loanActions.exportLoanPAR(paramters));
     }
 
     setPagesize = (PageSize,tempData) => {
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
-            { FullDetails, CurrentPage, CurrentSelectedPage, ScheduleState } = this.state;
+            { FullDetails, CurrentPage, CurrentSelectedPage } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
-        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${ScheduleState}`;
+        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
         if(tempData){
-            dispatch(loanActions.getAllLoanSchedules(params,tempData));
+            dispatch(loanActions.getLoanPAR(params,tempData));
         }else{
-            dispatch(loanActions.getAllLoanSchedules(params));
+            dispatch(loanActions.getLoanPAR(params));
         }
     }
 
-    setScheduleState = (stateChosen,tempData) => {
-        const {dispatch} = this.props;
-        let currentState = stateChosen.target.value,
-            { FullDetails, CurrentPage,PageSize, CurrentSelectedPage } = this.state;
-
-        this.setState({ ScheduleState: currentState });
-
-        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${currentState}`;
-        if(tempData){
-            dispatch(loanActions.getAllLoanSchedules(params,tempData));
-        }else{
-            dispatch(loanActions.getAllLoanSchedules(params));
-        }
-    }
-
+   
     setShowDetails = (FullDetails,tempData) => {
         const {dispatch} = this.props;
         let showDetails = FullDetails.target.checked,
-            { CurrentPage, CurrentSelectedPage, PageSize, ScheduleState } = this.state;
+            { CurrentPage, CurrentSelectedPage, PageSize } = this.state;
 
         this.setState({ FullDetails: showDetails });
 
-        let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${ScheduleState}`;
+        let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
         if(tempData){
-            dispatch(loanActions.getAllLoanSchedules(params,tempData));
+            dispatch(loanActions.getLoanPAR(params,tempData));
         }else{
-            dispatch(loanActions.getAllLoanSchedules(params));
+            dispatch(loanActions.getLoanPAR(params));
         }
     }
 
@@ -135,7 +121,7 @@ class AllLoanSchedules extends React.Component {
         });
     }
 
-    setScheduleFilter = (filterState, filterItem)=>{
+    setPARFilter = (filterState, filterItem)=>{
         
         this.setState({[filterItem]:filterState.target.checked})
     }
@@ -143,25 +129,25 @@ class AllLoanSchedules extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage,FullDetails, ScheduleState} = this.state;
+        let {PageSize,CurrentPage,FullDetails} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}&ScheduleState=${ScheduleState}`;
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}`;
 
         if(tempData){
-            dispatch(loanActions.getAllLoanSchedules(params,tempData));
+            dispatch(loanActions.getLoanPAR(params,tempData));
         }else{
-            dispatch(loanActions.getAllLoanSchedules(params));
+            dispatch(loanActions.getLoanPAR(params));
         }
     }
 
     searchTxtn = (e,tempData)=>{
         e.preventDefault()
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage,  SearchText, endDate, startDate,ScheduleState} = this.state;
+        let {PageSize,CurrentPage,  SearchText, endDate, startDate} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
@@ -174,25 +160,25 @@ class AllLoanSchedules extends React.Component {
             if(startDate!==""){
                 startDate = startDate.toISOString()
             }
-            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}&ScheduleState=${ScheduleState}`;
+            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
             if(tempData){
-                dispatch(loanActions.getAllLoanSchedules(params,tempData));
+                dispatch(loanActions.getLoanPAR(params,tempData));
             }else{
-                dispatch(loanActions.getAllLoanSchedules(params));
+                dispatch(loanActions.getLoanPAR(params));
             }
         }
     }
 
-    renderAllLoanSchedules = () => {
-        let getAllLoanSchedulesRequest = this.props.getAllLoanSchedulesRequest;
+    renderLoansPAR = () => {
+        let getLoanPARRequest = this.props.getLoanPARRequest;
 
-        // let saveRequestData= getAllLoanSchedulesRequest.request_data!==undefined?getAllLoanSchedulesRequest.request_data.tempData:null;
-        let saveRequestData= getAllLoanSchedulesRequest.request_data!==undefined?getAllLoanSchedulesRequest.request_data.tempData:null;
+        // let saveRequestData= getLoanPARRequest.request_data!==undefined?getLoanPARRequest.request_data.tempData:null;
+        let saveRequestData= getLoanPARRequest.request_data!==undefined?getLoanPARRequest.request_data.tempData:null;
 
 
-        switch (getAllLoanSchedulesRequest.request_status) {
-            case (loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_PENDING):
+        switch (getLoanPARRequest.request_status) {
+            case (loanAndDepositsConstants.LOAN_PAR_PENDING):
                 if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                     return(
                         <div className="loading-content">
@@ -282,69 +268,69 @@ class AllLoanSchedules extends React.Component {
                                                 <th className="borderdright">Total Due</th>
                                             }
                                             {/* <th>Total Balance</th> */}
-                                            <th>State</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
-                                            saveRequestData.map((eachSchedule, index) => {
+                                            saveRequestData.map((eachData, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr key={index}>
                                                             <td>{index+1}</td>
-                                                            {/* <td>{eachSchedule.id}</td> */}
-                                                            <td><NavLink to={`/customer/${eachSchedule.clientKey}`}> {eachSchedule.clientName}</NavLink></td>
-                                                            <td><NavLink to={`/customer/${eachSchedule.clientKey}/loanaccount/${eachSchedule.encodedKey}`}> {eachSchedule.accountNumber}</NavLink></td>
-                                                            <td>{(eachSchedule.loanAmount !== null && eachSchedule.loanAmount > 0) ? `₦${numberWithCommas(eachSchedule.loanAmount, true)}` : "-"}</td>
-                                                            <td>{(eachSchedule.dueDate!==null && eachSchedule.dueDate!=="")? eachSchedule.dueDate:"-"}</td>
+                                                            {/* <td>{eachData.id}</td> */}
+                                                            <td><NavLink to={`/customer/${eachData.clientKey}`}> {eachData.clientName}</NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachData.clientKey}/loanaccount/${eachData.encodedKey}`}> {eachData.accountNumber}</NavLink></td>
+                                                            <td>{(eachData.loanAmount !== null && eachData.loanAmount > 0) ? `₦${numberWithCommas(eachData.loanAmount, true)}` : "-"}</td>
+                                                            <td>{(eachData.dueDate!==null && eachData.dueDate!=="")? eachData.dueDate:"-"}</td>
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdleft">{(eachSchedule.principalExpected !== null && eachSchedule.principalExpected > 0) ? `₦${numberWithCommas(eachSchedule.principalExpected, true)}` : "-"}</td>
-                                                            }
-                                                            {this.state.showAmountExpected === true &&
-                                                                <td>{(eachSchedule.interestExpected !== null && eachSchedule.interestExpected > 0) ? `₦${numberWithCommas(eachSchedule.interestExpected, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `₦${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td>{(eachSchedule.feesExpected !== null && eachSchedule.feesExpected > 0) ? `₦${numberWithCommas(eachSchedule.feesExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestExpected !== null && eachData.interestExpected > 0) ? `₦${numberWithCommas(eachData.interestExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdright">{(eachSchedule.penaltyExpected !== null && eachSchedule.penaltyExpected > 0) ? `₦${numberWithCommas(eachSchedule.penaltyExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.feesExpected !== null && eachData.feesExpected > 0) ? `₦${numberWithCommas(eachData.feesExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdright">{(eachSchedule.totalExpected !== null && eachSchedule.totalExpected > 0) ? `₦${numberWithCommas(eachSchedule.totalExpected, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.penaltyExpected !== null && eachData.penaltyExpected > 0) ? `₦${numberWithCommas(eachData.penaltyExpected, true)}` : "-"}</td>
+                                                            }
+                                                            {this.state.showAmountExpected === true &&
+                                                                <td className="borderdright">{(eachData.totalExpected !== null && eachData.totalExpected > 0) ? `₦${numberWithCommas(eachData.totalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdleft">{(eachSchedule.principalPaid !== null && eachSchedule.principalPaid > 0) ? `₦${numberWithCommas(eachSchedule.principalPaid, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `₦${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td>{(eachSchedule.feePaid !== null && eachSchedule.feePaid > 0) ? `₦${numberWithCommas(eachSchedule.feePaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.feePaid !== null && eachData.feePaid > 0) ? `₦${numberWithCommas(eachData.feePaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td>{(eachSchedule.interestPaid !== null && eachSchedule.interestPaid > 0) ? `₦${numberWithCommas(eachSchedule.interestPaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestPaid !== null && eachData.interestPaid > 0) ? `₦${numberWithCommas(eachData.interestPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdright">{(eachSchedule.penaltyPaid !== null && eachSchedule.penaltyPaid > 0) ? `₦${numberWithCommas(eachSchedule.penaltyPaid, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.penaltyPaid !== null && eachData.penaltyPaid > 0) ? `₦${numberWithCommas(eachData.penaltyPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdright">{(eachSchedule.totalPaid !== null && eachSchedule.totalPaid > 0) ? `₦${numberWithCommas(eachSchedule.totalPaid, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalPaid !== null && eachData.totalPaid > 0) ? `₦${numberWithCommas(eachData.totalPaid, true)}` : "-"}</td>
                                                             }
                                                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `₦${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.interestDue !== null && eachSchedule.interestDue > 0) ? `₦${numberWithCommas(eachSchedule.interestDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestDue !== null && eachData.interestDue > 0) ? `₦${numberWithCommas(eachData.interestDue, true)}` : "-"}</td>
                                                             } */}
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.feeDue !== null && eachSchedule.feeDue > 0) ? `₦${numberWithCommas(eachSchedule.feeDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.feeDue !== null && eachData.feeDue > 0) ? `₦${numberWithCommas(eachData.feeDue, true)}` : "-"}</td>
                                                             } */}
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.penaltyDue !== null && eachSchedule.penaltyDue > 0) ? `₦${numberWithCommas(eachSchedule.penaltyDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.penaltyDue !== null && eachData.penaltyDue > 0) ? `₦${numberWithCommas(eachData.penaltyDue, true)}` : "-"}</td>
                                                             } */}
                                                             {this.state.showAmountDue &&
-                                                                <td className="borderdright">{(eachSchedule.totalDue !== null && eachSchedule.totalDue > 0) ? `₦${numberWithCommas(eachSchedule.totalDue, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalDue !== null && eachData.totalDue > 0) ? `₦${numberWithCommas(eachData.totalDue, true)}` : "-"}</td>
                                                             }
-                                                            {/* <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td> */}
-                                                            <td>{(eachSchedule.scheduleStateDescription !== null && eachSchedule.scheduleStateDescription !== undefined) ? eachSchedule.scheduleStateDescription : "-"}</td>
+                                                            {/* <td>{(eachData.totalBalance !==null && eachData.totalBalance>0) ? numberWithCommas(eachData.totalBalance, true) : "-"}</td> */}
+                                                            
                                                         </tr>
                                                         {/* <tr>
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
@@ -365,27 +351,17 @@ class AllLoanSchedules extends React.Component {
                     )
                 }
 
-            case (loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_SUCCESS):
-                let allLoanSchedules = getAllLoanSchedulesRequest.request_data.response.data;
-                if (allLoanSchedules !== undefined) {
-                    if (allLoanSchedules.result.length >= 1) {
+            case (loanAndDepositsConstants.LOAN_PAR_SUCCESS):
+                let loansPAR = getLoanPARRequest.request_data.response.data;
+                if (loansPAR !== undefined) {
+                    if (loansPAR.result.length >= 1) {
                         return (
                             <div>
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allLoanSchedules.result)} >
+                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, loansPAR.result)} >
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <select id="toshow" 
-                                                onChange={(e)=>this.setScheduleState(e, allLoanSchedules.result)}
-                                                value={this.state.ScheduleState}
-                                                className="countdropdown form-control form-control-sm">
-                                                <option value="-1">All</option>
-                                                {/* <option value="0">Not Disbursed</option> */}
-                                                <option value="1">Pending</option>
-                                                {/* <option value="2">Late</option> */}
-                                                <option value="3">Paid</option>
-                                                <option value="4">Payment Due</option>
-                                            </select>
+                                            
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
@@ -432,7 +408,7 @@ class AllLoanSchedules extends React.Component {
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
                                         <div className="actions-wrap">
-                                            <Button onClick={this.exportLoansSchedules} className="action-icon" variant="outline-secondary" type="button">
+                                            <Button onClick={this.exportLoansPAR} className="action-icon" variant="outline-secondary" type="button">
                                                 <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
                                             </Button>
                                         </div>
@@ -441,7 +417,7 @@ class AllLoanSchedules extends React.Component {
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow" 
-                                            onChange={(e)=>this.setPagesize(e, allLoanSchedules.result)}
+                                            onChange={(e)=>this.setPagesize(e, loansPAR.result)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -451,11 +427,11 @@ class AllLoanSchedules extends React.Component {
                                         </select>
                                         
                                         <TablePagination
-                                            totalPages={allLoanSchedules.totalPages}
-                                            currPage={allLoanSchedules.currentPage}
-                                            currRecordsCount={allLoanSchedules.result.length}
-                                            totalRows={allLoanSchedules.totalRows}
-                                            tempData={allLoanSchedules.result}
+                                            totalPages={loansPAR.totalPages}
+                                            currPage={loansPAR.currentPage}
+                                            currRecordsCount={loansPAR.result.length}
+                                            totalRows={loansPAR.totalRows}
+                                            tempData={loansPAR.result}
                                             pagesCountToshow={4}
                                             refreshFunc={this.loadNextPage}
                                         />
@@ -463,24 +439,24 @@ class AllLoanSchedules extends React.Component {
                                 </div>
                                 {/* <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={(e)=>this.setShowDetails(e, allLoanSchedules.result)}
+                                        onChange={(e)=>this.setShowDetails(e, loansPAR.result)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
                                 </div> */}
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={(e) => this.setScheduleFilter(e, 'showAmountExpected')}
+                                        onChange={(e) => this.setPARFilter(e, 'showAmountExpected')}
                                         checked={this.state.showAmountExpected}
                                         id="showAmountExpected" />
                                     <label htmlFor="showAmountExpected">Amount Expected</label>
                                     <input type="checkbox" name=""
-                                        onChange={(e) => this.setScheduleFilter(e, 'showAmountPaid')}
+                                        onChange={(e) => this.setPARFilter(e, 'showAmountPaid')}
                                         checked={this.state.showAmountPaid}
                                         id="showAmountPaid" />
                                     <label htmlFor="showAmountPaid">Amount Paid</label>
                                     <input type="checkbox" name=""
-                                        onChange={(e) => this.setScheduleFilter(e, 'showAmountDue')}
+                                        onChange={(e) => this.setPARFilter(e, 'showAmountDue')}
                                         checked={this.state.showAmountDue}
                                         id="showAmountDue" />
                                     <label htmlFor="showAmountDue">Amount Due</label>
@@ -542,69 +518,69 @@ class AllLoanSchedules extends React.Component {
                                                 <th className="borderdright">Total Due</th>
                                             }
                                             {/* <th>Total Balance</th> */}
-                                            <th>State</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
-                                            allLoanSchedules.result.map((eachSchedule, index) => {
+                                            loansPAR.result.map((eachData, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr key={index}>
                                                             <td>{index+1}</td>
-                                                            {/* <td>{eachSchedule.id}</td> */}
-                                                            <td><NavLink to={`/customer/${eachSchedule.clientKey}`}> {eachSchedule.clientName}</NavLink></td>
-                                                            <td><NavLink to={`/customer/${eachSchedule.clientKey}/loanaccount/${eachSchedule.encodedKey}`}> {eachSchedule.accountNumber}</NavLink></td>
-                                                            <td>{(eachSchedule.loanAmount !== null && eachSchedule.loanAmount > 0) ? `₦${numberWithCommas(eachSchedule.loanAmount, true)}` : "-"}</td>
-                                                            <td>{(eachSchedule.dueDate!==null && eachSchedule.dueDate!=="")? eachSchedule.dueDate:"-"}</td>
+                                                            {/* <td>{eachData.id}</td> */}
+                                                            <td><NavLink to={`/customer/${eachData.clientKey}`}> {eachData.clientName}</NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachData.clientKey}/loanaccount/${eachData.encodedKey}`}> {eachData.accountNumber}</NavLink></td>
+                                                            <td>{(eachData.loanAmount !== null && eachData.loanAmount > 0) ? `₦${numberWithCommas(eachData.loanAmount, true)}` : "-"}</td>
+                                                            <td>{(eachData.dueDate!==null && eachData.dueDate!=="")? eachData.dueDate:"-"}</td>
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdleft">{(eachSchedule.principalExpected !== null && eachSchedule.principalExpected > 0) ? `₦${numberWithCommas(eachSchedule.principalExpected, true)}` : "-"}</td>
-                                                            }
-                                                            {this.state.showAmountExpected === true &&
-                                                                <td>{(eachSchedule.interestExpected !== null && eachSchedule.interestExpected > 0) ? `₦${numberWithCommas(eachSchedule.interestExpected, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `₦${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td>{(eachSchedule.feesExpected !== null && eachSchedule.feesExpected > 0) ? `₦${numberWithCommas(eachSchedule.feesExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestExpected !== null && eachData.interestExpected > 0) ? `₦${numberWithCommas(eachData.interestExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdright">{(eachSchedule.penaltyExpected !== null && eachSchedule.penaltyExpected > 0) ? `₦${numberWithCommas(eachSchedule.penaltyExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.feesExpected !== null && eachData.feesExpected > 0) ? `₦${numberWithCommas(eachData.feesExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdright">{(eachSchedule.totalExpected !== null && eachSchedule.totalExpected > 0) ? `₦${numberWithCommas(eachSchedule.totalExpected, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.penaltyExpected !== null && eachData.penaltyExpected > 0) ? `₦${numberWithCommas(eachData.penaltyExpected, true)}` : "-"}</td>
+                                                            }
+                                                            {this.state.showAmountExpected === true &&
+                                                                <td className="borderdright">{(eachData.totalExpected !== null && eachData.totalExpected > 0) ? `₦${numberWithCommas(eachData.totalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdleft">{(eachSchedule.principalPaid !== null && eachSchedule.principalPaid > 0) ? `₦${numberWithCommas(eachSchedule.principalPaid, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `₦${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td>{(eachSchedule.feePaid !== null && eachSchedule.feePaid > 0) ? `₦${numberWithCommas(eachSchedule.feePaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.feePaid !== null && eachData.feePaid > 0) ? `₦${numberWithCommas(eachData.feePaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td>{(eachSchedule.interestPaid !== null && eachSchedule.interestPaid > 0) ? `₦${numberWithCommas(eachSchedule.interestPaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestPaid !== null && eachData.interestPaid > 0) ? `₦${numberWithCommas(eachData.interestPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdright">{(eachSchedule.penaltyPaid !== null && eachSchedule.penaltyPaid > 0) ? `₦${numberWithCommas(eachSchedule.penaltyPaid, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.penaltyPaid !== null && eachData.penaltyPaid > 0) ? `₦${numberWithCommas(eachData.penaltyPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdright">{(eachSchedule.totalPaid !== null && eachSchedule.totalPaid > 0) ? `₦${numberWithCommas(eachSchedule.totalPaid, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalPaid !== null && eachData.totalPaid > 0) ? `₦${numberWithCommas(eachData.totalPaid, true)}` : "-"}</td>
                                                             }
                                                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `₦${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.interestDue !== null && eachSchedule.interestDue > 0) ? `₦${numberWithCommas(eachSchedule.interestDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestDue !== null && eachData.interestDue > 0) ? `₦${numberWithCommas(eachData.interestDue, true)}` : "-"}</td>
                                                             } */}
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.feeDue !== null && eachSchedule.feeDue > 0) ? `₦${numberWithCommas(eachSchedule.feeDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.feeDue !== null && eachData.feeDue > 0) ? `₦${numberWithCommas(eachData.feeDue, true)}` : "-"}</td>
                                                             } */}
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.penaltyDue !== null && eachSchedule.penaltyDue > 0) ? `₦${numberWithCommas(eachSchedule.penaltyDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.penaltyDue !== null && eachData.penaltyDue > 0) ? `₦${numberWithCommas(eachData.penaltyDue, true)}` : "-"}</td>
                                                             } */}
                                                             {this.state.showAmountDue &&
-                                                                <td className="borderdright">{(eachSchedule.totalDue !== null && eachSchedule.totalDue > 0) ? `₦${numberWithCommas(eachSchedule.totalDue, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalDue !== null && eachData.totalDue > 0) ? `₦${numberWithCommas(eachData.totalDue, true)}` : "-"}</td>
                                                             }
-                                                            {/* <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td> */}
-                                                            <td>{(eachSchedule.scheduleStateDescription !== null && eachSchedule.scheduleStateDescription !== undefined) ? eachSchedule.scheduleStateDescription : "-"}</td>
+                                                            {/* <td>{(eachData.totalBalance !==null && eachData.totalBalance>0) ? numberWithCommas(eachData.totalBalance, true) : "-"}</td> */}
+                                                           
                                                         </tr>
                                                         {/* <tr>
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
@@ -630,20 +606,10 @@ class AllLoanSchedules extends React.Component {
                         return(
                             <div className="no-records">
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allLoanSchedules.result)} >
+                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, loansPAR.result)} >
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <select id="toshow" 
-                                                onChange={(e)=>this.setScheduleState(e, allLoanSchedules.result)}
-                                                value={this.state.ScheduleState}
-                                                className="countdropdown form-control form-control-sm">
-                                                <option value="-1">All</option>
-                                                {/* <option value="0">Not Disbursed</option> */}
-                                                <option value="1">Pending</option>
-                                                {/* <option value="2">Late</option> */}
-                                                <option value="3">Paid</option>
-                                                <option value="4">Payment Due</option>
-                                            </select>
+                                            
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
@@ -733,10 +699,10 @@ class AllLoanSchedules extends React.Component {
                 } else {
                     return null;
                 }
-            case (loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_FAILURE):
+            case (loanAndDepositsConstants.LOAN_PAR_FAILURE):
                 return (
                     <div className="loading-content errormsg">
-                        <div>{getAllLoanSchedulesRequest.request_data.error}</div>
+                        <div>{getLoanPARRequest.request_data.error}</div>
                     </div>
                 )
             default:
@@ -755,7 +721,7 @@ class AllLoanSchedules extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>All Loan Schedules</h2>
+                                                <h2>Loans PAR</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -769,7 +735,7 @@ class AllLoanSchedules extends React.Component {
                                         </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                {this.renderAllLoanSchedules()}
+                                                {this.renderLoansPAR()}
                                             </div>
                                         </div>
                                     </div>
@@ -784,7 +750,7 @@ class AllLoanSchedules extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        getAllLoanSchedulesRequest: state.loansReducers.getAllLoanSchedulesReducer,
+        getLoanPARRequest: state.loansReducers.getLoanPARReducer,
     };
 }
-export default connect(mapStateToProps)(AllLoanSchedules);
+export default connect(mapStateToProps)(LoanPAR);

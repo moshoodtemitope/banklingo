@@ -201,6 +201,32 @@ export function getTrialBalanceReducer(state=[], action) {
     }
 }
 
+export function getTrialBalanceBasicReducer(state=[], action) {
+    switch (action.type) {
+        case accountingConstants.GET_TRIAL_BALANCE_BASIC_PENDING:
+            return {
+                request_status: accountingConstants.GET_TRIAL_BALANCE_BASIC_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case accountingConstants.GET_TRIAL_BALANCE_BASIC_SUCCESS:
+            return {
+                request_status: accountingConstants.GET_TRIAL_BALANCE_BASIC_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case accountingConstants.GET_TRIAL_BALANCE_BASIC_FAILURE:
+            return {
+                request_status: accountingConstants.GET_TRIAL_BALANCE_BASIC_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getProfitAndLossReducer(state=[], action) {
     switch (action.type) {
         case accountingConstants.GET_PROFIT_AND_LOSS_PENDING:

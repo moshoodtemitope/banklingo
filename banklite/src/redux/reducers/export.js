@@ -53,6 +53,7 @@ import{
     getJournalEntriesReducer,
     createJournalEntriesReducer,
     getTrialBalanceReducer,
+    getTrialBalanceBasicReducer,
     getProfitAndLossReducer,
     getBalanceSheetReducer
     
@@ -88,7 +89,9 @@ import{
     getALoanAccountCommunicationsReducer,
     changeLoanStateReducer,
     getAllLoanSchedulesReducer,
-    exportLoansSchedulesReducer
+    exportLoansSchedulesReducer,
+    getLoanPARReducer,
+    exportLoanPARReducer
     
 } from './loans/loans.reducer'
 
@@ -244,6 +247,7 @@ export const accounting = {
     getJournalEntriesReducer,
     createJournalEntriesReducer,
     getTrialBalanceReducer,
+    getTrialBalanceBasicReducer,
     getProfitAndLossReducer,
     getBalanceSheetReducer
     
@@ -275,7 +279,9 @@ export const loans = {
     getALoanAccountCommunicationsReducer,
     changeLoanStateReducer,
     getAllLoanSchedulesReducer,
-    exportLoansSchedulesReducer
+    exportLoansSchedulesReducer,
+    getLoanPARReducer,
+    exportLoanPARReducer
 }
 
 export const auth = {

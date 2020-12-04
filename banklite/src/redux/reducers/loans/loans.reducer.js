@@ -104,6 +104,58 @@ export function exportLoansSchedulesReducer(state=[], action) {
     }
 }
 
+export function getLoanPARReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.LOAN_PAR_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.LOAN_PAR_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.LOAN_PAR_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.LOAN_PAR_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.LOAN_PAR_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.LOAN_PAR_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function exportLoanPARReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.EXPORT_LOAN_PAR_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_LOAN_PAR_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_LOAN_PAR_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_LOAN_PAR_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EXPORT_LOAN_PAR_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.EXPORT_LOAN_PAR_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 
 export function getApprovedLoansReducer(state=[], action) {
     switch (action.type) {

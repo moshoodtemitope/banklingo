@@ -32,7 +32,7 @@ import Alert from 'react-bootstrap/Alert'
 import "./accountsmanagement.scss"; 
 import AccountingNav from './_menu'
 
-class TrialBalance extends React.Component {
+class TrialBalanceBasic extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -103,9 +103,9 @@ class TrialBalance extends React.Component {
         //     }
 
             if(tempData){
-                dispatch(acoountingActions.getTrialBalance(payload, tempData));
+                dispatch(acoountingActions.getTrialBalanceBasic(payload, tempData));
             }else{
-                dispatch(acoountingActions.getTrialBalance(payload));
+                dispatch(acoountingActions.getTrialBalanceBasic(payload));
             }
         // }else{
         //     return false;
@@ -134,7 +134,7 @@ class TrialBalance extends React.Component {
                     EndDate: endDate.toISOString(),
             }
 
-            dispatch(acoountingActions.exportTrialBalance(payload));
+            dispatch(acoountingActions.exportTrialBalanceBasic(payload));
         }
 
     }
@@ -214,7 +214,7 @@ class TrialBalance extends React.Component {
 
                                                 // console.log("-----", values.endDate);
                                                 let saveRequestData = this.props.getTrialBalanceReducer.request_data !== undefined && this.props.getTrialBalanceReducer.request_data.response !== undefined && this.props.getTrialBalanceReducer.request_data.response.data !== undefined ? this.props.getTrialBalanceReducer.request_data.response.data : null;
-                                                // let saveRequestData= this.props.getProfitAndLossReducer.request_data!==undefined ?this.props.getProfitAndLossReducer.request_data.data:null;
+                                                
 
                                                 if (saveRequestData !== null) {
 
@@ -357,7 +357,7 @@ class TrialBalance extends React.Component {
 
                                         )}
                                 </Formik>
-                                {getTrialBalanceRequest.request_status === accountingConstants.GET_TRIAL_BALANCE_SUCCESS &&
+                                {getTrialBalanceRequest.request_status === accountingConstants.GET_TRIAL_BALANCE_BASIC_SUCCESS &&
                                     <div className="actions-wrap">
                                         {/* <Button className="action-icon" variant="outline-secondary" type="button">
                                             <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
@@ -368,7 +368,7 @@ class TrialBalance extends React.Component {
                                     </div>
                                 }
                             </div>
-                            <div className="heading-with-cta toright compact">
+                            {/* <div className="heading-with-cta toright compact">
                                 <div className="eachitem">
                                     <input type="checkbox" name="" id="opening-balance" />
                                     <label htmlFor="opening-balance">Opening Balance</label>
@@ -381,7 +381,7 @@ class TrialBalance extends React.Component {
                                     <input type="checkbox" name="" id="closing-balance" />
                                     <label htmlFor="closing-balance">Closing Balance</label>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     )
                     
@@ -412,7 +412,7 @@ class TrialBalance extends React.Component {
 
         // if()
         switch(getTrialBalanceRequest.request_status){
-            case (accountingConstants.GET_TRIAL_BALANCE_PENDING):
+            case (accountingConstants.GET_TRIAL_BALANCE_BASIC_PENDING):
                 if(saveRequestData===null || saveRequestData===undefined){
                     return(
                         <div className="">
@@ -422,18 +422,12 @@ class TrialBalance extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Opening Balance</th>
                                         <th>Debits</th>
                                         <th>Credits</th>
-                                        <th>Net Change</th>
-                                        <th>Closing Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -457,12 +451,9 @@ class TrialBalance extends React.Component {
                                 <thead>
                                     <tr>
                                         <th>GL Code</th>
-                                        <th>Account Name</th>
-                                        <th>Opening Balance</th>
-                                        <th>Debits</th>
-                                        <th>Credits</th>
-                                        <th>Net Change</th>
-                                        <th>Closing Balance</th>
+                                        <th colSpan="2">Account Name</th>
+                                        <th colSpan="2">Debits</th>
+                                        <th colSpan="2">Credits</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -488,14 +479,9 @@ class TrialBalance extends React.Component {
                                             return(
                                                 <tr key={`key-${index}`}>
                                                     <td>{eachResult.glCode}</td>
-                                                    <td>{eachResult.accountName}</td>
-                                                    <td>{numberWithCommas(eachResult.openingBalance, true, true)}</td>
-                                                    <td>{numberWithCommas(eachResult.debits, true, true)}</td>
-                                                    <td>{numberWithCommas(eachResult.credits, true, true)}</td>
-                                                    <td>{eachResult.isNetInBracket===false? numberWithCommas(eachResult.netChange, true, true):`(${numberWithCommas(eachResult.netChange, true, true)})`}</td>
-                                                    <td>{eachResult.isNetInBracket===false? numberWithCommas(eachResult.closingBalance, true, true):`(${numberWithCommas(eachResult.closingBalance, true, true)})`}</td>
-                                                    {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
-
+                                                    <td colSpan="2">{eachResult.accountName}</td>
+                                                    <td colSpan="2">{numberWithCommas(eachResult.debits, true, true)}</td>
+                                                    <td colSpan="2">{numberWithCommas(eachResult.credits, true, true)}</td>
                                                 </tr>
                                             )
                                         })
@@ -515,7 +501,7 @@ class TrialBalance extends React.Component {
                     )
                 }
 
-            case (accountingConstants.GET_TRIAL_BALANCE_SUCCESS):
+            case (accountingConstants.GET_TRIAL_BALANCE_BASIC_SUCCESS):
                 let trialBalanceData = getTrialBalanceRequest.request_data.response.data,
                     trialBalanceResult = trialBalanceData.result;
                 
@@ -551,12 +537,9 @@ class TrialBalance extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>GL Code</th>
-                                            <th>Account Name</th>
-                                            <th>Opening Balance</th>
-                                            <th>Debits</th>
-                                            <th>Credits</th>
-                                            <th>Net Change</th>
-                                            <th>Closing Balance</th>
+                                            <th colSpan="2">Account Name</th>
+                                            <th colSpan="2">Debits</th>
+                                            <th colSpan="2">Credits</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -582,12 +565,10 @@ class TrialBalance extends React.Component {
                                                 return (
                                                     <tr key={`key-${index}`}>
                                                         <td>{eachResult.glCode}</td>
-                                                        <td>{eachResult.accountName}</td>
-                                                        <td>{numberWithCommas(eachResult.openingBalance,true, true)}</td>
-                                                        <td>{numberWithCommas(eachResult.debits,true, true)}</td>
-                                                        <td>{numberWithCommas(eachResult.credits,true, true)}</td>
-                                                        <td>{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.netChange,true, true) : `(${numberWithCommas(eachResult.netChange,true, true)})`}</td>
-                                                        <td>{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.closingBalance,true, true) : `(${numberWithCommas(eachResult.closingBalance,true, true)})`}</td>
+                                                        <td colSpan="2">{eachResult.accountName}</td>
+                                                        <td colSpan="2">{numberWithCommas(eachResult.debits,true, true)}</td>
+                                                        <td colSpan="2">{numberWithCommas(eachResult.credits,true, true)}</td>
+                                                        
                                                         {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
 
                                                     </tr>
@@ -618,18 +599,12 @@ class TrialBalance extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Opening Balance</th>
                                         <th>Debits</th>
                                         <th>Credits</th>
-                                        <th>Net Change</th>
-                                        <th>Closing Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -642,7 +617,7 @@ class TrialBalance extends React.Component {
                     )
                 }
 
-            case (accountingConstants.GET_TRIAL_BALANCE_FAILURE):
+            case (accountingConstants.GET_TRIAL_BALANCE_BASIC_FAILURE):
                 return (
                     <div className="loading-content"> 
                         <div>{getTrialBalanceRequest.request_data.error}</div>
@@ -665,7 +640,7 @@ class TrialBalance extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Trial Balance</h2>
+                                                <h2>Trial Balance (Basic)</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -721,52 +696,7 @@ class TrialBalance extends React.Component {
                                                 {this.renderTrialBalance()}
                                                 
                                                 
-                                                {/* <TableComponent classnames="striped bordered hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>GL Code</th>
-                                                            <th>Account Name</th>
-                                                            <th>Debits</th>
-                                                            <th>Credits</th>
-                                                            <th>Net Change</th>
-
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>some text</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>023839</td>
-                                                            <td>Debit</td>
-                                                            <td>text text</td>
-                                                            <td>Yes</td>
-
-                                                        </tr>
-                                                    </tbody>
-                                                </TableComponent> */}
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -781,9 +711,9 @@ class TrialBalance extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        getProfitAndLossReducer : state.accountingReducers.getProfitAndLossReducer,
-        getTrialBalanceReducer : state.accountingReducers.getTrialBalanceReducer,
+        
+        getTrialBalanceReducer : state.accountingReducers.getTrialBalanceBasicReducer,
         fetchBranchesListReducer : state.administrationReducers.fetchBranchesListReducer,
     };
 }
-export default connect(mapStateToProps)(TrialBalance);
+export default connect(mapStateToProps)(TrialBalanceBasic);

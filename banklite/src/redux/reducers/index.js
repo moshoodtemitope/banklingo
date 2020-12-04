@@ -78,6 +78,7 @@ const accountingReducers = combineReducers({
     createJournalEntriesReducer: accounting.createJournalEntriesReducer, 
 
     getTrialBalanceReducer: accounting.getTrialBalanceReducer, 
+    getTrialBalanceBasicReducer: accounting.getTrialBalanceBasicReducer, 
     getProfitAndLossReducer: accounting.getProfitAndLossReducer, 
     getBalanceSheetReducer: accounting.getBalanceSheetReducer, 
    
@@ -132,6 +133,8 @@ const loansReducers = combineReducers({
     changeLoanStateReducer: loans.changeLoanStateReducer, 
     getAllLoanSchedulesReducer: loans.getAllLoanSchedulesReducer, 
     exportLoansSchedulesReducer: loans.exportLoansSchedulesReducer, 
+    getLoanPARReducer: loans.getLoanPARReducer, 
+    exportLoanPARReducer: loans.exportLoanPARReducer, 
    
 })
 

@@ -525,7 +525,7 @@ class ProfitAndLoss extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Accounting</h2>
+                                                <h2>Profit and Loss</h2>
                                             </div>
                                         </div>
                                     </div>

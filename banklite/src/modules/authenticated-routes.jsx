@@ -44,6 +44,7 @@ import DepositClient from './depositmanagement/deposit-client'
 import NewDepositAccount from './depositmanagement/newdepositaccount'
 
 import AllLoanSchedules from './all-loan-schedules'
+import LoanPAR from './loan-PAR'
 
 import LoanTransactions from './loantransactions'
 import LoanAccountTransactions from './loantransactions/loan-account-transactions'
@@ -59,6 +60,7 @@ import SMSCommunications from './communications/sms'
 import WebhooksCommunications from './communications/webhooks' 
 
 import AccountManagement from './accountsmanagement'
+import TrialBalanceBasic from './accountsmanagement/trial-balance-basic'
 import TrialBalance from './accountsmanagement/trial-balance'
 import JournalEntries from './accountsmanagement/journal-entries'
 import ProfitAndLoss from './accountsmanagement/profit-loss'
@@ -283,6 +285,7 @@ class AuthenticatedRoutes extends React.Component {
                         
                        
                         <PrivateRoute accessRequired="bnk_view_all_loan_schedules" exact path='/all-loan-schedules' {...this.props} authed={this.props.user} component={AllLoanSchedules} /> 
+                        <PrivateRoute accessRequired="bnk_view_all_loan_schedules" exact path='/loans-par' {...this.props} authed={this.props.user} component={LoanPAR} /> 
                         
                         <PrivateRoute accessRequired="bnk_view_all_loan_transactions" exact path='/loan-transactions' {...this.props} authed={this.props.user} component={LoanTransactions} /> 
                         <PrivateRoute accessRequired="bnk_view_all_loan_transactions" exact path='/loan-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={LoanAccountTransactions} /> 
@@ -302,6 +305,7 @@ class AuthenticatedRoutes extends React.Component {
                         
                         <PrivateRoute accessRequired="bnk_view_charts_of_accounts" exact path='/accounts' {...this.props} authed={this.props.user} component={AccountManagement} /> 
                         <PrivateRoute accessRequired="bnk_view_journal_entries" exact path='/journals' {...this.props} authed={this.props.user} component={JournalEntries} /> 
+                        <PrivateRoute accessRequired="bnk_view_trial_balance" exact path='/trial-balance-basic' {...this.props} authed={this.props.user} component={TrialBalanceBasic} /> 
                         <PrivateRoute accessRequired="bnk_view_trial_balance" exact path='/trial-balance' {...this.props} authed={this.props.user} component={TrialBalance} /> 
                         <PrivateRoute accessRequired="bnk_view_profit_and_loss" exact path='/profit-loss' {...this.props} authed={this.props.user} component={ProfitAndLoss} /> 
                         <PrivateRoute accessRequired="bnk_view_balance_sheet" exact path='/balancesheet' {...this.props} authed={this.props.user} component={BalanceSheet} /> 

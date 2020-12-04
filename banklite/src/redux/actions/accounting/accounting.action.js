@@ -15,7 +15,9 @@ export const acoountingActions = {
     createJournalEntry,
 
     getTrialBalance,
+    getTrialBalanceBasic,
     exportTrialBalance,
+    exportTrialBalanceBasic,
     getProfitAndLoss,
     exportProfitLoss,
     getBalanceSheet,
@@ -402,17 +404,86 @@ function exportTrialBalance  (payload, tempData){
 
     function request(user, tempData) { 
         if(tempData===undefined){
-            return { type: accountingConstants.EXPORT_JOURNAL_ENTRY_PENDING, user }
+            return { type: accountingConstants.EXPORT_TRIAL_BALANCE_PENDING, user }
         }
 
         if(tempData!==undefined){
-            return { type: accountingConstants.EXPORT_JOURNAL_ENTRY_PENDING, user, tempData }
+            return { type: accountingConstants.EXPORT_TRIAL_BALANCE_PENDING, user, tempData }
         }
 
          
     }
-    function success(response) { return { type: accountingConstants.EXPORT_JOURNAL_ENTRY_SUCCESS, response } }
-    function failure(error) { return { type: accountingConstants.EXPORT_JOURNAL_ENTRY_FAILURE, error } }
+    function success(response) { return { type: accountingConstants.EXPORT_TRIAL_BALANCE_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.EXPORT_TRIAL_BALANCE_FAILURE, error } }
+
+}
+
+function exportTrialBalanceBasic  (payload, tempData){
+    
+    return dispatch =>{
+        let url;
+            // if(id===undefined){
+            //     url = routes.GET_GLACCOUNTS;
+            // }else{
+                
+            // }
+
+            // url = routes.JOURNAL_ENTRIES+`?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+            url = routes.HIT_TRIAL_BALANCE_EXPORT+`/?${payload}`;
+
+        let consume = ApiService.request(url, "GET", '','','', "blob");
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                    let disposition = response.headers['content-disposition'],
+                    filename;
+                    
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) { 
+                        filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+                    
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    if(filename === undefined){
+                        link.setAttribute('download', 'Trial-balance.xlsx');
+                    }
+
+                    if(filename !== undefined){
+                        link.setAttribute('download', filename);
+                    }
+
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    dispatch(success(response));
+                    
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.EXPORT_TRIAL_BALANCE_BASIC_PENDING, user }
+        }
+
+        if(tempData!==undefined){
+            return { type: accountingConstants.EXPORT_TRIAL_BALANCE_BASIC_PENDING, user, tempData }
+        }
+
+         
+    }
+    function success(response) { return { type: accountingConstants.EXPORT_TRIAL_BALANCE_BASIC_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.EXPORT_TRIAL_BALANCE_BASIC_FAILURE, error } }
 
 }
 
@@ -494,6 +565,48 @@ function getTrialBalance  (payload, tempData){
     }
     function success(response) { return { type: accountingConstants.GET_TRIAL_BALANCE_SUCCESS, response } }
     function failure(error) { return { type: accountingConstants.GET_TRIAL_BALANCE_FAILURE, error } }
+
+}
+
+function getTrialBalanceBasic  (payload, tempData){
+    
+    return dispatch =>{
+        let url;
+            // branchId = parseInt(JSON.parse(localStorage.getItem('lingoAuth').BranchId)
+            
+
+            url = routes.HIT_TRIAL_BALANCE+`?BranchId=${payload.branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+            // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    // return dispatch =>{
+        
+    //     dispatch(clear());
+        
+    // }
+    
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: accountingConstants.GET_TRIAL_BALANCE_BASIC_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: accountingConstants.GET_TRIAL_BALANCE_BASIC_PENDING, user, tempData } 
+        }
+    }
+    function success(response) { return { type: accountingConstants.GET_TRIAL_BALANCE_BASIC_SUCCESS, response } }
+    function failure(error) { return { type: accountingConstants.GET_TRIAL_BALANCE_BASIC_FAILURE, error } }
 
 }
 

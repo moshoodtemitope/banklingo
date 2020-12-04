@@ -31,7 +31,9 @@ export const loanActions = {
     getALoanCommunications,
     changeLoanState,
     getAllLoanSchedules,
-    exportLoansSchedules
+    exportLoansSchedules,
+    getLoanPAR,
+    exportLoanPAR
 }
 
 function getLoans(params,tempData) {
@@ -590,6 +592,96 @@ function exportLoansSchedules(params, tempData) {
     // function request(user) { return { type: loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.EXPORT_ALL_LOAN_SCHEDULES_FAILURE, error } }
+
+}
+
+function getLoanPAR(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN + `/fetchloansportfolioatrisk?${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.LOAN_PAR_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.LOAN_PAR_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.LOAN_PAR_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.LOAN_PAR_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.LOAN_PAR_FAILURE, error } }
+
+}
+
+function exportLoanPAR(params, tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`/fetchloansportfolioatriskreport?${params}`, "GET", '','','', "blob");
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                let disposition = response.headers['content-disposition'],
+                 filename;
+                
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) { 
+                      filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+                
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                if(filename === undefined){
+                    link.setAttribute('download', 'loan-PAR.xlsx');
+                }
+
+                if(filename !== undefined){
+                    link.setAttribute('download', filename);
+                }
+
+                
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.EXPORT_LOAN_PAR_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.EXPORT_LOAN_PAR_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.EXPORT_LOAN_PAR_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.EXPORT_LOAN_PAR_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.EXPORT_LOAN_PAR_FAILURE, error } }
 
 }
 

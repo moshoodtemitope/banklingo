@@ -25,9 +25,9 @@ class AccountingNav extends React.Component{
             })
 
             userPermissions.map(eachPermission=>{
-                if(allUSerPermissionNames.indexOf(eachPermission.permissionName)===-1){
+                // if(allUSerPermissionNames.indexOf(eachPermission.permissionName)===-1){
                     allUSerPermissionNames.push(eachPermission.permissionName)
-                }
+                // }
                 allUSerPermissions.push(eachPermission.permissionCode)
             })
 
@@ -36,13 +36,13 @@ class AccountingNav extends React.Component{
                 <ul className="nav">
                     {
                         allMenu.map((eachGroup, menuIdx) =>{
-                            if(allUSerPermissionNames.indexOf(eachGroup.permissionName)> -1 ){
+                            // if(allUSerPermissionNames.indexOf(eachGroup.permissionName)> -1 ){
                                 return(
                                     <li key={menuIdx}>
                                         <NavLink exact to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
                                     </li>
                                 )
-                            }
+                            // }
                             
 
                         })

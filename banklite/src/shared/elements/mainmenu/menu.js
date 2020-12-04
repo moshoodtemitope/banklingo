@@ -148,14 +148,18 @@ export const menuList = [
         ]
     },
     {
-        menuGroup: "All Loan Schedules",
-        mainMenu: "All Loan Schedules",
+        menuGroup: "Loan Reports",
+        mainMenu: "Loan Reports",
         permissionCode: "bnk_view_all_loan_schedules",
         hasSubMenu: true,
         subMenus: [
             {
                 subMenuLabel: "All Loan Schedules",
                 subMmenuRoute: "/all-loan-schedules"
+            },
+            {
+                subMenuLabel: "Loan PAR",
+                subMmenuRoute: "/loans-par"
             }
         ]
     },
@@ -262,6 +266,12 @@ export const menuList = [
                 subMenuLabel: "Profit & Loss",
                 permissionCode: "bnk_view_profit_and_loss",
                 subMmenuRoute: "/profit-loss",
+            },
+            {
+                // permissionName: "Manage Organisation",
+                subMenuLabel: "Trial Balance(Basic)",
+                permissionCode: "bnk_view_trial_balance",
+                subMmenuRoute: "/trial-balance-basic",
             },
             {
                 // permissionName: "Manage Organisation",
@@ -581,6 +591,14 @@ export const accountsMenuList = [
         permissionCode: "bnk_view_trial_balance",
         menuRoute: "/trial-balance"
     },
+
+    {
+        permissionName: "View Trial Balance Basic",
+        mainMenu: "Trial Balance(Basic)",
+        permissionCode: "bnk_view_trial_balance",
+        menuRoute: "/trial-balance-basic"
+    },
+
     {
         permissionName: "View Journal Entries",
         mainMenu: "Journal Entries",
