@@ -190,13 +190,16 @@ class LoanPAR extends React.Component {
                                         <th>#</th>
                                         <th>Customer Name</th>
                                         <th>Account Number</th>
-                                        <th>Due Date</th>
+                                        <th>Maturity Date</th>
+                                        <th>DPD</th>
                                         {/* <th>Total Balance</th> */}
                                         <th>Expected Principal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -221,7 +224,8 @@ class LoanPAR extends React.Component {
                                             <th>Customer Name</th>
                                             <th>Account Number</th>
                                             <th>Loan Amount</th>
-                                            <th>Due Date</th>
+                                            <th>Maturity Date</th>
+                                            <th>DPD</th>
                                             {this.state.showAmountExpected === true &&
                                                 <th className="borderdleft">Expected Principal</th>
                                             }
@@ -281,53 +285,54 @@ class LoanPAR extends React.Component {
                                                             {/* <td>{eachData.id}</td> */}
                                                             <td><NavLink to={`/customer/${eachData.clientKey}`}> {eachData.clientName}</NavLink></td>
                                                             <td><NavLink to={`/customer/${eachData.clientKey}/loanaccount/${eachData.encodedKey}`}> {eachData.accountNumber}</NavLink></td>
-                                                            <td>{(eachData.loanAmount !== null && eachData.loanAmount > 0) ? `₦${numberWithCommas(eachData.loanAmount, true)}` : "-"}</td>
-                                                            <td>{(eachData.dueDate!==null && eachData.dueDate!=="")? eachData.dueDate:"-"}</td>
+                                                            <td>{(eachData.loanAmount !== null && eachData.loanAmount > 0) ? `${numberWithCommas(eachData.loanAmount, true)}` : "-"}</td>
+                                                            <td>{(eachData.maturityDate!==null && eachData.maturityDate!=="")? eachData.maturityDate:"-"}</td>
+                                                            <td>{(eachData.daysPassDue !== null ) ? `${numberWithCommas(eachData.daysPassDue, false)}` : "-"}</td>
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `₦${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
-                                                            }
-                                                            {this.state.showAmountExpected === true &&
-                                                                <td>{(eachData.interestExpected !== null && eachData.interestExpected > 0) ? `₦${numberWithCommas(eachData.interestExpected, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td>{(eachData.feesExpected !== null && eachData.feesExpected > 0) ? `₦${numberWithCommas(eachData.feesExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestExpected !== null && eachData.interestExpected > 0) ? `${numberWithCommas(eachData.interestExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdright">{(eachData.penaltyExpected !== null && eachData.penaltyExpected > 0) ? `₦${numberWithCommas(eachData.penaltyExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.feesExpected !== null && eachData.feesExpected > 0) ? `${numberWithCommas(eachData.feesExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdright">{(eachData.totalExpected !== null && eachData.totalExpected > 0) ? `₦${numberWithCommas(eachData.totalExpected, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.penaltyExpected !== null && eachData.penaltyExpected > 0) ? `${numberWithCommas(eachData.penaltyExpected, true)}` : "-"}</td>
+                                                            }
+                                                            {this.state.showAmountExpected === true &&
+                                                                <td className="borderdright">{(eachData.totalExpected !== null && eachData.totalExpected > 0) ? `${numberWithCommas(eachData.totalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdleft">{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `₦${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td>{(eachData.feePaid !== null && eachData.feePaid > 0) ? `₦${numberWithCommas(eachData.feePaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.feePaid !== null && eachData.feePaid > 0) ? `${numberWithCommas(eachData.feePaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td>{(eachData.interestPaid !== null && eachData.interestPaid > 0) ? `₦${numberWithCommas(eachData.interestPaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestPaid !== null && eachData.interestPaid > 0) ? `${numberWithCommas(eachData.interestPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdright">{(eachData.penaltyPaid !== null && eachData.penaltyPaid > 0) ? `₦${numberWithCommas(eachData.penaltyPaid, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.penaltyPaid !== null && eachData.penaltyPaid > 0) ? `${numberWithCommas(eachData.penaltyPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdright">{(eachData.totalPaid !== null && eachData.totalPaid > 0) ? `₦${numberWithCommas(eachData.totalPaid, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalPaid !== null && eachData.totalPaid > 0) ? `${numberWithCommas(eachData.totalPaid, true)}` : "-"}</td>
                                                             }
                                                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `₦${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachData.interestDue !== null && eachData.interestDue > 0) ? `₦${numberWithCommas(eachData.interestDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestDue !== null && eachData.interestDue > 0) ? `${numberWithCommas(eachData.interestDue, true)}` : "-"}</td>
                                                             } */}
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachData.feeDue !== null && eachData.feeDue > 0) ? `₦${numberWithCommas(eachData.feeDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.feeDue !== null && eachData.feeDue > 0) ? `${numberWithCommas(eachData.feeDue, true)}` : "-"}</td>
                                                             } */}
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachData.penaltyDue !== null && eachData.penaltyDue > 0) ? `₦${numberWithCommas(eachData.penaltyDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.penaltyDue !== null && eachData.penaltyDue > 0) ? `${numberWithCommas(eachData.penaltyDue, true)}` : "-"}</td>
                                                             } */}
                                                             {this.state.showAmountDue &&
-                                                                <td className="borderdright">{(eachData.totalDue !== null && eachData.totalDue > 0) ? `₦${numberWithCommas(eachData.totalDue, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalDue !== null && eachData.totalDue > 0) ? `${numberWithCommas(eachData.totalDue, true)}` : "-"}</td>
                                                             }
                                                             {/* <td>{(eachData.totalBalance !==null && eachData.totalBalance>0) ? numberWithCommas(eachData.totalBalance, true) : "-"}</td> */}
                                                             
@@ -471,7 +476,8 @@ class LoanPAR extends React.Component {
                                             <th>Customer Name</th>
                                             <th>Account Number</th>
                                             <th>Loan Amount</th>
-                                            <th>Due Date</th>
+                                            <th>Maturity Date</th>
+                                            <th>DPD</th>
                                             {this.state.showAmountExpected === true &&
                                                 <th className="borderdleft">Expected Principal</th>
                                             }
@@ -531,53 +537,71 @@ class LoanPAR extends React.Component {
                                                             {/* <td>{eachData.id}</td> */}
                                                             <td><NavLink to={`/customer/${eachData.clientKey}`}> {eachData.clientName}</NavLink></td>
                                                             <td><NavLink to={`/customer/${eachData.clientKey}/loanaccount/${eachData.encodedKey}`}> {eachData.accountNumber}</NavLink></td>
-                                                            <td>{(eachData.loanAmount !== null && eachData.loanAmount > 0) ? `₦${numberWithCommas(eachData.loanAmount, true)}` : "-"}</td>
-                                                            <td>{(eachData.dueDate!==null && eachData.dueDate!=="")? eachData.dueDate:"-"}</td>
+                                                            <td>{(eachData.loanAmount !== null && eachData.loanAmount > 0) ? `${numberWithCommas(eachData.loanAmount, true)}` : "-"}</td>
+                                                            <td>{(eachData.maturityDate!==null && eachData.maturityDate!=="")? eachData.maturityDate:"-"}</td>
+                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue ===0) && 
+                                                                <td className="amber-color">0</td>
+                                                            }
+
+                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue >0) && 
+                                                                <td className="red-color">{numberWithCommas(eachData.daysPassDue, false)}</td>
+                                                            }
+
+                                                            
+
+                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue <0) && 
+                                                                <td className="green-color">0</td>
+                                                            }
+
+                                                            {(eachData.daysPassDue === null) && 
+                                                                <td>-</td>
+                                                            }
+                                                            
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `₦${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td>{(eachData.interestExpected !== null && eachData.interestExpected > 0) ? `₦${numberWithCommas(eachData.interestExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestExpected !== null && eachData.interestExpected > 0) ? `${numberWithCommas(eachData.interestExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td>{(eachData.feesExpected !== null && eachData.feesExpected > 0) ? `₦${numberWithCommas(eachData.feesExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.feesExpected !== null && eachData.feesExpected > 0) ? `${numberWithCommas(eachData.feesExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdright">{(eachData.penaltyExpected !== null && eachData.penaltyExpected > 0) ? `₦${numberWithCommas(eachData.penaltyExpected, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.penaltyExpected !== null && eachData.penaltyExpected > 0) ? `${numberWithCommas(eachData.penaltyExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdright">{(eachData.totalExpected !== null && eachData.totalExpected > 0) ? `₦${numberWithCommas(eachData.totalExpected, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalExpected !== null && eachData.totalExpected > 0) ? `${numberWithCommas(eachData.totalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdleft">{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `₦${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td>{(eachData.feePaid !== null && eachData.feePaid > 0) ? `₦${numberWithCommas(eachData.feePaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.feePaid !== null && eachData.feePaid > 0) ? `${numberWithCommas(eachData.feePaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td>{(eachData.interestPaid !== null && eachData.interestPaid > 0) ? `₦${numberWithCommas(eachData.interestPaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestPaid !== null && eachData.interestPaid > 0) ? `${numberWithCommas(eachData.interestPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdright">{(eachData.penaltyPaid !== null && eachData.penaltyPaid > 0) ? `₦${numberWithCommas(eachData.penaltyPaid, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.penaltyPaid !== null && eachData.penaltyPaid > 0) ? `${numberWithCommas(eachData.penaltyPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdright">{(eachData.totalPaid !== null && eachData.totalPaid > 0) ? `₦${numberWithCommas(eachData.totalPaid, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalPaid !== null && eachData.totalPaid > 0) ? `${numberWithCommas(eachData.totalPaid, true)}` : "-"}</td>
                                                             }
                                                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `₦${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
+                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachData.interestDue !== null && eachData.interestDue > 0) ? `₦${numberWithCommas(eachData.interestDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.interestDue !== null && eachData.interestDue > 0) ? `${numberWithCommas(eachData.interestDue, true)}` : "-"}</td>
                                                             } */}
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachData.feeDue !== null && eachData.feeDue > 0) ? `₦${numberWithCommas(eachData.feeDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.feeDue !== null && eachData.feeDue > 0) ? `${numberWithCommas(eachData.feeDue, true)}` : "-"}</td>
                                                             } */}
                                                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachData.penaltyDue !== null && eachData.penaltyDue > 0) ? `₦${numberWithCommas(eachData.penaltyDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.penaltyDue !== null && eachData.penaltyDue > 0) ? `${numberWithCommas(eachData.penaltyDue, true)}` : "-"}</td>
                                                             } */}
                                                             {this.state.showAmountDue &&
-                                                                <td className="borderdright">{(eachData.totalDue !== null && eachData.totalDue > 0) ? `₦${numberWithCommas(eachData.totalDue, true)}` : "-"}</td>
+                                                                <td className="borderdright">{(eachData.totalDue !== null && eachData.totalDue > 0) ? `${numberWithCommas(eachData.totalDue, true)}` : "-"}</td>
                                                             }
                                                             {/* <td>{(eachData.totalBalance !==null && eachData.totalBalance>0) ? numberWithCommas(eachData.totalBalance, true) : "-"}</td> */}
                                                            
@@ -674,7 +698,8 @@ class LoanPAR extends React.Component {
                                         <th>#</th>
                                         <th>Customer Name</th>
                                         <th>Account Number</th>
-                                        <th>Due Date</th>
+                                        <th>Maturity Date</th>
+                                        <th>DPD</th>
                                         {/* <th>Total Balance</th> */}
                                         <th>Expected Principal</th>
                                     </tr>

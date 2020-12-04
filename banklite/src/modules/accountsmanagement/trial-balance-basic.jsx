@@ -485,7 +485,7 @@ class TrialBalanceBasic extends React.Component {
                                                     <td>{eachResult.glCode}</td>
                                                     <td colSpan="2">{eachResult.accountName}</td>
                                                     <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit, true, true)}</td>
-                                                    <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit, true, true)}</td>
+                                                    <td colSpan="2">{numberWithCommas(eachResult.trialBalanceCredit, true, true)}</td>
                                                 </tr>
                                             )
                                         })
@@ -571,7 +571,7 @@ class TrialBalanceBasic extends React.Component {
                                                         <td>{eachResult.glCode}</td>
                                                         <td colSpan="2">{eachResult.accountName}</td>
                                                         <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit,true, true)}</td>
-                                                        <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit,true, true)}</td>
+                                                        <td colSpan="2">{numberWithCommas(eachResult.trialBalanceCredit,true, true)}</td>
                                                         
                                                         {/* <td>{numberWithCommas(eachResult.closingBalance)}</td> */}
 
