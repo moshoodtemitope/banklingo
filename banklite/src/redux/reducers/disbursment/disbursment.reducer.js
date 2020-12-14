@@ -209,6 +209,102 @@ export function getDisbursementBanksReducer(state=[], action) {
     }
 }
 
+export function postNewDisbursementBatchReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.NEW_DISBURSMENT_BATCH_PENDING:
+            return {
+                request_status: disbursmentConstants.NEW_DISBURSMENT_BATCH_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.NEW_DISBURSMENT_BATCH_SUCCESS:
+            return {
+                request_status: disbursmentConstants.NEW_DISBURSMENT_BATCH_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.NEW_DISBURSMENT_BATCH_FAILURE:
+            return {
+                request_status: disbursmentConstants.NEW_DISBURSMENT_BATCH_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.NEW_DISBURSMENT_BATCH_RESET:
+            return {
+                request_status: disbursmentConstants.NEW_DISBURSMENT_BATCH_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getADisbursementBatchReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.GET_A_DISBURSMENT_BATCH_PENDING:
+            return {
+                request_status: disbursmentConstants.GET_A_DISBURSMENT_BATCH_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.GET_A_DISBURSMENT_BATCH_SUCCESS:
+            return {
+                request_status: disbursmentConstants.GET_A_DISBURSMENT_BATCH_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_A_DISBURSMENT_BATCH_FAILURE:
+            return {
+                request_status: disbursmentConstants.GET_A_DISBURSMENT_BATCH_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_A_DISBURSMENT_BATCH_RESET:
+            return {
+                request_status: disbursmentConstants.GET_A_DISBURSMENT_BATCH_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function getInitiatedDisbursementsReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.GET_INITIATED_BATCHES_PENDING:
+            return {
+                request_status: disbursmentConstants.GET_INITIATED_BATCHES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.GET_INITIATED_BATCHES_SUCCESS:
+            return {
+                request_status: disbursmentConstants.GET_INITIATED_BATCHES_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_INITIATED_BATCHES_FAILURE:
+            return {
+                request_status: disbursmentConstants.GET_INITIATED_BATCHES_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_INITIATED_BATCHES_RESET:
+            return {
+                request_status: disbursmentConstants.GET_INITIATED_BATCHES_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function postDisbursementReducer(state=[], action) {
     switch (action.type) {
         case disbursmentConstants.POST_DISBURSMENT_PENDING:
@@ -238,6 +334,70 @@ export function postDisbursementReducer(state=[], action) {
         case disbursmentConstants.POST_DISBURSMENT_RESET:
             return {
                 request_status: disbursmentConstants.POST_DISBURSMENT_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function performActionOnDisbursementBatchReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_PENDING:
+            return {
+                request_status: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_SUCCESS:
+            return {
+                request_status: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_FAILURE:
+            return {
+                request_status: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_RESET:
+            return {
+                request_status: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function deleteADisbursementReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.DELETE_A_BATCH_PENDING:
+            return {
+                request_status: disbursmentConstants.DELETE_A_BATCH_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.DELETE_A_BATCH_SUCCESS:
+            return {
+                request_status: disbursmentConstants.DELETE_A_BATCH_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.DELETE_A_BATCH_FAILURE:
+            return {
+                request_status: disbursmentConstants.DELETE_A_BATCH_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.DELETE_A_BATCH_RESET:
+            return {
+                request_status: disbursmentConstants.DELETE_A_BATCH_RESET,
                 is_request_processing: false,
                 request_data: {}
             };

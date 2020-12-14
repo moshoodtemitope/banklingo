@@ -198,7 +198,7 @@ class UserLogin extends React.Component {
                                     <div className=" form-cta">
                                         <Button  type="submit"
                                             disabled={loginRequest.is_request_processing}
-                                            className="ml-20 btn-block submitbtn"
+                                            className=" btn-block submitbtn"
                                         >
                                             {loginRequest.is_request_processing ? "Please wait..." : "Log In"}
                                         </Button>

@@ -4,6 +4,70 @@
     background: #F4F6F7;
     padding: 20px 0;
 }
+.disbursment-options-wrap {
+    display: flex;
+    width: 60%;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+.each-option {
+    text-align: center;
+    h3 {
+        font-size: 20px;
+    }
+}
+button.batch-cta{
+    float: right;
+}
+.overview-wrap{
+    .each-overview{
+        &:nth-of-type(2){
+            padding-right: 0;
+        }
+        &:not(:nth-of-type(2)){
+            padding-right: 18px;
+        }
+    }
+}
+.batch-data-wrap{
+    table{
+        tr th{
+            display: none;
+        }
+        tbody tr:first-of-type{
+            background: #5D6D7E;
+            color: #F4F6F7;
+            font-weight: 600;
+            font-size: 18px;
+        }
+    }
+}
+.upload-a-batch{
+    width: 30%;
+    margin: 0 auto;
+    border: 1px dotted #AED6F1;
+    text-align: center;
+    padding: 100px;
+    label{
+        font-size: 20px;
+        color: #5DADE2;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    input{
+        display: none;
+    }
+}
+.batch-actions{
+    input{
+        display: none;
+    }
+    margin-bottom: 20px;
+    label{
+        margin-bottom: 0;
+        margin-left: 25px;
+    }
+}
 .back-cta {
     margin-bottom: 15px;
     text-align: left;

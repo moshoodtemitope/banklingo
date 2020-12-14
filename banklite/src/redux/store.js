@@ -35,7 +35,7 @@ export const store = createStore(
     rootReducer,
     applyMiddleware(
         thunkMiddleware,
-        // loggerMiddleware
+        loggerMiddleware
         // process.env.NODE_ENV === 'development' ? loggerMiddleware: null
     )
 );

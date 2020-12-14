@@ -1,6 +1,6 @@
 import { ApiService } from "../../../services/apiService";
 import { routes } from "../../../services/urls";
-// import { history } from './../../../_helpers/history';
+import { history } from './../../../_helpers/history';
 import {disbursmentConstants} from '../../actiontypes/disbursment/disbursment.constants'
 import { handleRequestErrors } from "../../../shared/utils";
 
@@ -18,7 +18,12 @@ export const disbursementActions = {
     approveOrRejectPostDisbursement,
     approveOrRejectReviewedDisbursement,
     rejectPostDisbursement,
-    getDisbursementByRef
+    getDisbursementByRef,
+    postNewDisbursementBatch,
+    getADisbursementBatch,
+    performActionOnDisbursementBatch,
+    getInitiatedDisbursements,
+    deleteADisbursement
 }
 
 function getDisbursement  (payload, type, tempData){
@@ -336,6 +341,42 @@ function getPendingReviewDisbursement  (payload, type, tempData){
 
 }
 
+function getInitiatedDisbursements  (payload, type, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_DISBURSEMENT+`/initiatedbatch?${payload}`;  
+
+            // url = routes.HIT_DISBURSEMENT+`/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.GET_INITIATED_BATCHES_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.GET_INITIATED_BATCHES_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.GET_INITIATED_BATCHES_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.GET_INITIATED_BATCHES_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.GET_INITIATED_BATCHES_FAILURE, error } }
+
+}
+
 function getDisbursementBanks  (){
     
     return dispatch =>{
@@ -417,6 +458,153 @@ function postDisbursement   (postPayload, dataToEdit){
 
 }
 
+function postNewDisbursementBatch   (newDisbursmentBatch){
+    if(newDisbursmentBatch!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_DISBURSEMENT, "POST", newDisbursmentBatch);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                    // getADisbursementBatch(response.data.batchReference)
+                    history.push(`/disbursements/batch/${response.data.batchReference}`)
+
+                    
+
+                }).catch(error => {
+                    // console.log('error is', error)
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: disbursmentConstants.NEW_DISBURSMENT_BATCH_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.NEW_DISBURSMENT_BATCH_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.NEW_DISBURSMENT_BATCH_FAILURE, error } }
+    function clear() { return { type: disbursmentConstants.NEW_DISBURSMENT_BATCH_RESET, clear_data:""} }
+
+}
+
+function performActionOnDisbursementBatch   (disbursmentBatchActionPayload, action){
+    if(disbursmentBatchActionPayload!=="CLEAR"){
+        return dispatch =>{
+            let url;
+            if(action==="validate"){
+                url = `${routes.HIT_DISBURSEMENT}/validatebatchaccount`
+            }
+            if(action==="confirm"){
+                url = `${routes.HIT_DISBURSEMENT}/confirm`
+            }
+            if(action==="approvereview"){
+                url = `${routes.HIT_DISBURSEMENT}/approvereview`
+            }
+            if(action==="rejectreview"){
+                url = `${routes.HIT_DISBURSEMENT}/rejectreview`
+            }
+            if(action==="approve"){
+                url = `${routes.HIT_DISBURSEMENT}/approve`
+            }
+            if(action==="reject"){
+                url = `${routes.HIT_DISBURSEMENT}/reject`
+            }
+            // console.log("payload", disbursmentBatchActionPayload)
+            let consume = ApiService.request(url, "POST", disbursmentBatchActionPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                   
+
+                    
+
+                }).catch(error => {
+                   
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_FAILURE, error } }
+    function clear() { return { type: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_RESET, clear_data:""} }
+
+}
+
+function getADisbursementBatch   (batchReference){
+    if(batchReference!=="CLEAR"){
+        return dispatch =>{
+            let consume2 = ApiService.request(`${routes.HIT_DISBURSEMENT}/getdisbursmentbatchitem/${batchReference}`, "GET", null);
+                    dispatch(request(consume2));
+                    return consume2
+                        .then(response2 => {
+                            dispatch(success(response2));
+                            
+                        }).catch(error => {
+                            dispatch(failure(handleRequestErrors(error)));
+                        });
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: disbursmentConstants.GET_A_DISBURSMENT_BATCH_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.GET_A_DISBURSMENT_BATCH_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.GET_A_DISBURSMENT_BATCH_FAILURE, error } }
+    function clear() { return { type: disbursmentConstants.GET_A_DISBURSMENT_BATCH_RESET, clear_data:""} }
+
+}
+
+function deleteADisbursement   (deleteBatchPayload){
+    if(deleteBatchPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_DISBURSEMENT+'/cancelbatch', "POST", deleteBatchPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: disbursmentConstants.DELETE_A_BATCH_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.DELETE_A_BATCH_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.DELETE_A_BATCH_FAILURE, error } }
+    function clear() { return { type: disbursmentConstants.DELETE_A_BATCH_RESET, clear_data:""} }
+
+}
+
 function confirmPostDisbursement   (confirmDisbursmentPayload){
     if(confirmDisbursmentPayload!=="CLEAR"){
         return dispatch =>{
@@ -446,6 +634,8 @@ function confirmPostDisbursement   (confirmDisbursmentPayload){
     function clear() { return { type: disbursmentConstants.CONFIRM_DISBURSMENT_RESET, clear_data:""} }
 
 }
+
+
 
 function approveOrRejectPostDisbursement   (actionDisbursmentPayload){
     if(actionDisbursmentPayload!=="CLEAR"){

@@ -114,6 +114,11 @@ export const menuList = [
                 subMmenuRoute: "/disbursements/all"
             },
             {
+                subMenuLabel: "Partial Application",
+                permissionCode: "bnk_view_disbursements",
+                subMmenuRoute: "/disbursements/initiated"
+            },
+            {
                 subMenuLabel: "Initiate Disbursements",
                 permissionCode: "bnk_initiate_disbursements",
                 subMmenuRoute: "/disbursements/initiate"
@@ -628,6 +633,12 @@ export const disbursementMenuList = [
         menuRoute: "/disbursements/initiate",
     },
     
+    {
+        permissionName: "View Disbursements",
+        mainMenu: "Partial Application",
+        permissionCode: "bnk_view_disbursements",
+        menuRoute: "/disbursements/initiated"
+    },
     {
         permissionName: "View Disbursements",
         mainMenu: "Pending Review",

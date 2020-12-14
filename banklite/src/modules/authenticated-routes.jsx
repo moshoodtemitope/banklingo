@@ -34,6 +34,8 @@ import NewLoanAccount from './loanmanagement/newloanaccount'
 
 import DisbursementManagement from './disbursements'
 import InitiateDisbursement from './disbursements/initiate-disbursements'
+import InitiatedDisbursmentBatches from './disbursements/initiated'
+import ViewADisbursmentBatch from './disbursements/view-batch'
 import DisbursementPendingReview from './disbursements/pending-review'
 import DisbursementPendingApproval from './disbursements/pending-approval'
 import NipRequests from './disbursements/nip-request'
@@ -269,7 +271,9 @@ class AuthenticatedRoutes extends React.Component {
 
                         <PrivateRoute accessRequired="bnk_view_disbursements" exact path='/disbursements/all' {...this.props} authed={this.props.user} component={DisbursementManagement} />  
                         <PrivateRoute accessRequired="bnk_initiate_disbursements" exact path='/disbursements/initiate' {...this.props} authed={this.props.user} component={InitiateDisbursement} />  
+                        <PrivateRoute accessRequired="bnk_initiate_disbursements" exact path='/disbursements/initiated' {...this.props} authed={this.props.user} component={InitiatedDisbursmentBatches} />  
                         
+                        <PrivateRoute accessRequired="bnk_view_clients" exact path='/disbursements/batch/:batchRef' {...this.props} authed={this.props.user} component={ViewADisbursmentBatch} /> 
                         <PrivateRoute accessRequired="bnk_view_disbursements" exact path='/disbursements/pending-review' {...this.props} authed={this.props.user} component={DisbursementPendingReview} /> 
                         <PrivateRoute accessRequired="bnk_view_disbursements" exact path='/disbursements/pending-approval' {...this.props} authed={this.props.user} component={DisbursementPendingApproval} /> 
                         <PrivateRoute accessRequired="bnk_view_nip_requests" exact path='/disbursements/nip-requests' {...this.props} authed={this.props.user} component={NipRequests} /> 
