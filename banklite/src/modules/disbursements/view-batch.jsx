@@ -85,11 +85,11 @@ class ViewADisbursmentBatch extends React.Component {
                                 this.handleCloseActionState();
                                 this.loadInitialData()
                                 const {dispatch} = this.props;
-                            
+                                this.setState({securityCode:""})
                              dispatch(disbursementActions.performActionOnDisbursementBatch("CLEAR"))
                             }
                             
-                        }, 4000);
+                        }, 3000);
                         
                     })
         }
@@ -202,6 +202,7 @@ class ViewADisbursmentBatch extends React.Component {
                             }}
                             validationSchema={processDisburmentValidationSchema}
                             onSubmit={(values, { resetForm }) => {
+                                
                                this.handleShowActionState(values.securityCode,values.actionComments )
                             }}
                         >
@@ -219,21 +220,7 @@ class ViewADisbursmentBatch extends React.Component {
                                         onSubmit={handleSubmit}>
 
                                        
-                                        <Form.Group controlId="securityCode">
-                                            <Form.Label className="block-level">Security Code </Form.Label>
-                                            <Form.Control
-                                                type="password"
-                                                name="securityCode"
-                                                maxLength="6"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                value={allowNumbersOnly(values.securityCode, 6)}
-                                                className={errors.securityCode && touched.securityCode ? "is-invalid withcustom" : "withcustom"} />
-
-                                            {errors.securityCode && touched.securityCode ? (
-                                                <span className="invalid-feedback">{errors.securityCode}</span>
-                                            ) : null}
-                                        </Form.Group>
+                                        
                                         {(actionState === "approvereview" || actionState === "rejectreview"
                                             || actionState === "reject" || actionState === "approve") &&
                                             <Form.Group controlId="actionComments">
@@ -251,6 +238,21 @@ class ViewADisbursmentBatch extends React.Component {
                                                 ) : null}
                                             </Form.Group>
                                         }
+                                        <Form.Group controlId="securityCode">
+                                            <Form.Label className="block-level">Security Code </Form.Label>
+                                            <Form.Control
+                                                type="password"
+                                                name="securityCode"
+                                                maxLength="6"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                value={allowNumbersOnly(values.securityCode, 6)}
+                                                className={errors.securityCode && touched.securityCode ? "is-invalid withcustom" : "withcustom"} />
+
+                                            {errors.securityCode && touched.securityCode ? (
+                                                <span className="invalid-feedback">{errors.securityCode}</span>
+                                            ) : null}
+                                        </Form.Group>
                                         
                                         {performActionOnDisbursementBatchRequest.request_status === disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_FAILURE &&
                                             <Alert variant="danger">
@@ -486,6 +488,7 @@ class ViewADisbursmentBatch extends React.Component {
                     setTimeout(() => {
                         if (this.props.deleteADisbursementReducer.request_status === disbursmentConstants.DELETE_A_BATCH_SUCCESS) {
                             this.clearDeleteData();
+                            this.setState({securityCode:""})
                             this.handleCloseDelete();
                             history.push("/disbursements/initiated")
                             // this.loadInitialData();
@@ -609,100 +612,102 @@ class ViewADisbursmentBatch extends React.Component {
             allUSerPermissions.push(eachPermission.permissionCode)
         })
         return(
-            <div className="heading-ctas">
-                <ul className="nav">
-                    
-                    {   (allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus!==5 && batchDetails.batchStatus!==6 && batchDetails.batchStatus!==7) &&
-                        <li>
-                            <DropdownButton
-                                size="sm"
-                                title="Perform Batch Action"
-                                key="inActiveCurrency"
-                                className="customone"
-                                alignRight
-                            >
-                                {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===0) &&
-                                    <Dropdown.Item eventKey="1" 
-                                    onClick={()=>
-                                        this.handleShowActionConfirmation("validate",
-                                                                            `Validate Batch - ${batchDetails.id}`,
-                                                                            `Please confirm that you want to validate Batch - ${batchDetails.id}`,
-                                                                            ""
-                                                                            )       
-                                    } >Validate Batch</Dropdown.Item>
-                                }
-                                {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===0) &&
-                                    <Dropdown.Item eventKey="1" 
-                                            onClick={()=>{
-                                                this.handleShowDelete();
-                                                this.setState({batchToDelete:batchDetails.batchReference, batchIdToDelete:batchDetails.id})}}
-                                    >Return Batch</Dropdown.Item>
-                                }
-                                {(allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===1) &&
-                                    <Dropdown.Item eventKey="1"
-                                                    onClick={()=>
-                                                        this.handleShowActionConfirmation("confirm",
-                                                                                            `Request approval for Batch - ${batchDetails.id}`,
-                                                                                            `Please confirm that you want to request approval for Batch - ${batchDetails.id}`,
-                                                                                            ""
-                                                                                            )       
-                                                    } 
-                                     >Request Approval</Dropdown.Item>
-                                }
-                                {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===2) &&
-                                    <Dropdown.Item eventKey="1"
-                                                    onClick={()=>
-                                                        this.handleShowActionConfirmation("approvereview",
-                                                                                            `Approve review for Batch - ${batchDetails.id}`,
-                                                                                            `Please confirm that you want to approve review for Batch - ${batchDetails.id}`,
-                                                                                            ""
-                                                                                            )       
-                                                    } 
-                                                >Approve review</Dropdown.Item>
-                                }
-                                {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===2) &&
-                                    <Dropdown.Item eventKey="1" 
-                                                    onClick={()=>
-                                                        this.handleShowActionConfirmation("rejectreview",
-                                                                                            `Reject review for Batch - ${batchDetails.id}`,
-                                                                                            `Please confirm that you want to reject review for Batch - ${batchDetails.id}`,
-                                                                                            ""
-                                                                                            )       
-                                                    } 
-                                    >Reject review</Dropdown.Item>
-                                }
-                                {(allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===4) &&
-                                    <Dropdown.Item eventKey="1" 
-                                                    onClick={()=>
-                                                        this.handleShowActionConfirmation("approve",
-                                                                                            `Approve Batch - ${batchDetails.id}`,
-                                                                                            `Please confirm that you want to approve disburment for Batch - ${batchDetails.id}`,
-                                                                                            ""
-                                                                                            )       
-                                                    } 
-                                    >Approve Batch</Dropdown.Item>
-                                }
-                                {(allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===4) &&
-                                    <Dropdown.Item eventKey="1" 
-                                                    onClick={()=>
-                                                        this.handleShowActionConfirmation("reject",
-                                                                                            `Reject Batch - ${batchDetails.id}`,
-                                                                                            `Please confirm that you want to reject disburment for Batch - ${batchDetails.id}`,
-                                                                                            ""
-                                                                                            )       
-                                                    }
-                                    >Reject Batch</Dropdown.Item>
-                                }
-                                
-                                
-                            </DropdownButton>
-                        </li>
-                    }
-                    
-                    
-                    
-                    
-                </ul>
+            <div className="ctas-wrap">
+                <div className="heading-ctas">
+                    <ul className="nav">
+                        
+                        {   (allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus!==5 && batchDetails.batchStatus!==6 && batchDetails.batchStatus!==7) &&
+                            <li>
+                                <DropdownButton
+                                    size="sm"
+                                    title="Perform Batch Action"
+                                    key="inActiveCurrency"
+                                    className="customone"
+                                    alignRight
+                                >
+                                    {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===0) &&
+                                        <Dropdown.Item eventKey="1" 
+                                        onClick={()=>
+                                            this.handleShowActionConfirmation("validate",
+                                                                                `Validate Batch - ${batchDetails.id}`,
+                                                                                `Please confirm that you want to validate Batch - ${batchDetails.id}`,
+                                                                                ""
+                                                                                )       
+                                        } >Validate Batch</Dropdown.Item>
+                                    }
+                                    {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===0) &&
+                                        <Dropdown.Item eventKey="1" 
+                                                onClick={()=>{
+                                                    this.handleShowDelete();
+                                                    this.setState({batchToDelete:batchDetails.batchReference, batchIdToDelete:batchDetails.id})}}
+                                        >Return Batch</Dropdown.Item>
+                                    }
+                                    {(allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===1) &&
+                                        <Dropdown.Item eventKey="1"
+                                                        onClick={()=>
+                                                            this.handleShowActionConfirmation("confirm",
+                                                                                                `Request approval for Batch - ${batchDetails.id}`,
+                                                                                                `Please confirm that you want to request approval for Batch - ${batchDetails.id}`,
+                                                                                                ""
+                                                                                                )       
+                                                        } 
+                                        >Request Approval</Dropdown.Item>
+                                    }
+                                    {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===2) &&
+                                        <Dropdown.Item eventKey="1"
+                                                        onClick={()=>
+                                                            this.handleShowActionConfirmation("approvereview",
+                                                                                                `Approve review for Batch - ${batchDetails.id}`,
+                                                                                                `Please confirm that you want to approve review for Batch - ${batchDetails.id}`,
+                                                                                                ""
+                                                                                                )       
+                                                        } 
+                                                    >Approve review</Dropdown.Item>
+                                    }
+                                    {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===2) &&
+                                        <Dropdown.Item eventKey="1" 
+                                                        onClick={()=>
+                                                            this.handleShowActionConfirmation("rejectreview",
+                                                                                                `Reject review for Batch - ${batchDetails.id}`,
+                                                                                                `Please confirm that you want to reject review for Batch - ${batchDetails.id}`,
+                                                                                                ""
+                                                                                                )       
+                                                        } 
+                                        >Reject review</Dropdown.Item>
+                                    }
+                                    {(allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===4) &&
+                                        <Dropdown.Item eventKey="1" 
+                                                        onClick={()=>
+                                                            this.handleShowActionConfirmation("approve",
+                                                                                                `Approve Batch - ${batchDetails.id}`,
+                                                                                                `Please confirm that you want to approve disburment for Batch - ${batchDetails.id}`,
+                                                                                                ""
+                                                                                                )       
+                                                        } 
+                                        >Approve Batch</Dropdown.Item>
+                                    }
+                                    {(allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===4) &&
+                                        <Dropdown.Item eventKey="1" 
+                                                        onClick={()=>
+                                                            this.handleShowActionConfirmation("reject",
+                                                                                                `Reject Batch - ${batchDetails.id}`,
+                                                                                                `Please confirm that you want to reject disburment for Batch - ${batchDetails.id}`,
+                                                                                                ""
+                                                                                                )       
+                                                        }
+                                        >Reject Batch</Dropdown.Item>
+                                    }
+                                    
+                                    
+                                </DropdownButton>
+                            </li>
+                        }
+                        
+                        
+                        
+                        
+                    </ul>
+                </div>
             </div>
         )
     }
@@ -720,7 +725,7 @@ class ViewADisbursmentBatch extends React.Component {
                     
                     return(
                         <div className="row">
-
+                            {this.renderHeadingCtas()}
                             <div className="col-sm-12">
                                 <div className="middle-content">
                                     <div className="row">
@@ -735,6 +740,14 @@ class ViewADisbursmentBatch extends React.Component {
                                                         <TableComponent classnames="striped bordered hover">
 
                                                             <tbody>
+                                                                <tr>
+                                                                    <td>Batch ID</td>
+                                                                    <td>{batchDetails.batchInfo.id}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total records</td>
+                                                                    <td>{batchDetails.disbursementItems.length}</td>
+                                                                </tr>
                                                                 <tr>
                                                                     <td>Initiated by</td>
                                                                     <td>{batchDetails.batchInfo.initiatedBy}</td>
@@ -770,11 +783,11 @@ class ViewADisbursmentBatch extends React.Component {
                                                                 
                                                                 <tr>
                                                                     <td>Date Initiated</td>
-                                                                    <td>{getDateFromISO(batchDetails.batchInfo.dateInitiated)}</td>
+                                                                    <td>{getDateFromISO(batchDetails.batchInfo.dateInitiated, true)}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Last Updated</td>
-                                                                    <td>{getDateFromISO(batchDetails.batchInfo.lastUpdated)}</td>
+                                                                    <td>{getDateFromISO(batchDetails.batchInfo.lastUpdated, true)}</td>
                                                                 </tr>
                                                                 
 
@@ -843,12 +856,12 @@ class ViewADisbursmentBatch extends React.Component {
         return(
             <div>
                 <div className="module-title">
-                    {this.renderHeadingCtas()}
+                    
                     <div className="content-container">
                         <div className="row">
                             <div className="col-sm-12">
                                 <div className="">
-                                    <h2>Batch ID: {batchDetails.batchInfo.id}</h2>
+                                    <h2>Partial Application</h2>
                                 </div>
                             </div>
                         </div>

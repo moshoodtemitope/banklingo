@@ -486,7 +486,18 @@ class InitiatedDisbursmentBatches extends React.Component {
                                 return(
                                     <div>
                                         {confirmDeleteBatch && this.deleteABatchConfirm()}
-                                        <div className="heading-actions">
+                                        {/* <div className="heading-actions"> */}
+                                            
+                                            {/* <div className="actions-wrap">
+                                                <Button className="action-icon" variant="outline-secondary" type="button">
+                                                    <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
+                                                </Button>
+                                                <Button className="action-icon" variant="outline-secondary" type="button">
+                                                    <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" />
+                                                </Button>
+                                            </div> */}
+                                        {/* </div> */}
+                                        <div className="heading-with-cta">
                                             <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allDisbursments.result)} >
 
                                                 <Form.Group controlId="filterDropdown" className="no-margins pr-10">
@@ -541,17 +552,6 @@ class InitiatedDisbursmentBatches extends React.Component {
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
                                             </Form>
-                                            <div className="actions-wrap">
-                                                <Button className="action-icon" variant="outline-secondary" type="button">
-                                                    <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
-                                                </Button>
-                                                <Button className="action-icon" variant="outline-secondary" type="button">
-                                                    <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPklEQVR42q2SMY6CQBiFvc/ewVBQWHgFRAkRQwLxAKjTUVh5BKOhEDtiTaFBCAXE0GJjTYgWJFRvGQuyrLOSTXzJ6ybf++f9f6fzafX7fU6SJGia1vB4PMZoNHJbAYqioCgKsHQ4HDCZTMhbgGEYKMuS6SiK0O12XwFZln2JouhW9JfRWZZlGZZlqTVgOp0Sx3HQpjzPcTwecbvdQL9aA+hYcRy3Au73O4IgwOPxgK7r/wf81GcBHMeRMAyhqioEQcBwOGS6KhqDwQA0jL6tAev1mqxWK1yvV8zn8z9TkySBbdu4XC5YLBZorHK5XBLTNJ+A3W73kk5X53nes/3ZbOZWW+OYh0QB1V0gTdOG6XQ0mXlIvwG+72Oz2TS83W5xOp3aAbQcWhLL+/0ePM+/B1RlEprCcq/XI+fzufH3b1NUA2h4gmflAAAAAElFTkSuQmCC" width="16" height="16" />
-                                                </Button>
-                                            </div>
-                                        </div>
-                                        <div className="heading-with-cta">
-                                            
                                             <div className="pagination-wrap">
                                                 <label htmlFor="toshow">Show</label>
                                                 <select id="toshow" 
@@ -604,7 +604,7 @@ class InitiatedDisbursmentBatches extends React.Component {
                                                                                 key="action"
                                                                                 className="customone"
                                                                             >
-                                                                                <NavLink className="dropdown-item" to={`/disbursements/batch/${eachDisburment.batchReference}`}>View Batch</NavLink>
+                                                                                <NavLink className="dropdown-item" to={`/disbursements/partial/${eachDisburment.batchReference}`}>View Batch</NavLink>
                                                                                 <Dropdown.Item eventKey="1" 
                                                                                     onClick={()=>{
                                                                                     this.handleShowDelete();
@@ -613,7 +613,7 @@ class InitiatedDisbursmentBatches extends React.Component {
                                                                                 
                                                                         </DropdownButton>
                                                                     </td>
-                                                                    {/* <td><NavLink to={`/disbursements/batch/${eachDisburment.batchReference}`}> {eachDisburment.id} </NavLink> </td> */}
+                                                                    {/* <td><NavLink to={`/disbursements/partial/${eachDisburment.batchReference}`}> {eachDisburment.id} </NavLink> </td> */}
                                                                     {/* <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td> */}
                                                                     {/* <td>{getDateFromISO(eachDisburment.lastUpdated)}</td> */}
                                                                     

@@ -5,16 +5,27 @@
     padding: 20px 0;
 }
 .disbursment-options-wrap {
-    display: flex;
-    width: 60%;
+    // display: flex;
+    width: 40%;
     margin: 0 auto;
     justify-content: space-between;
 }
 .each-option {
     text-align: center;
+    margin-bottom: 60px;
     h3 {
         font-size: 20px;
     }
+}
+.option-msg {
+    margin-bottom: 15px;
+}
+button a, button a:hover, button a:focus{
+    color: #ffffff;
+    text-decoration: none;
+}
+#upload-batch{
+    display: none;
 }
 button.batch-cta{
     float: right;
@@ -35,10 +46,13 @@ button.batch-cta{
             display: none;
         }
         tbody tr:first-of-type{
-            background: #5D6D7E;
-            color: #F4F6F7;
+            background: #ffffff;
+            // color: #F4F6F7;
             font-weight: 600;
-            font-size: 18px;
+            font-size: 14px;
+            td{
+                font-size: 14px;
+            }
         }
     }
 }
@@ -58,6 +72,9 @@ button.batch-cta{
         display: none;
     }
 }
+.ctas-wrap {
+    width: 100%;
+}
 .batch-actions{
     input{
         display: none;
@@ -66,6 +83,14 @@ button.batch-cta{
     label{
         margin-bottom: 0;
         margin-left: 25px;
+    }
+    .btn{
+        color: #fff !important;
+        background-color: #34495E !important;
+        border-color: #34495E !important;
+        padding-bottom: 4px !important;
+        padding-top: 4px !important;
+        font-size: 13px !important;
     }
 }
 .back-cta {

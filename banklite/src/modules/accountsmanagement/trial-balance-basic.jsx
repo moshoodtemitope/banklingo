@@ -471,7 +471,7 @@ class TrialBalanceBasic extends React.Component {
                                                 debitTotal+=eachResult.trialBalanceDebit;
                                             }
                                             if(typeof eachResult.trialBalanceDebit=== "number"){
-                                                creditTotal+=eachResult.trialBalanceDebit;
+                                                creditTotal+=eachResult.trialBalanceCredit;
                                             }
                                             if(typeof eachResult.netChange=== "number"){
                                                 netChangeTotal+=eachResult.netChange;
@@ -557,7 +557,7 @@ class TrialBalanceBasic extends React.Component {
                                                     debitTotal += eachResult.trialBalanceDebit;
                                                 }
                                                 if (typeof eachResult.trialBalanceDebit === "number") {
-                                                    creditTotal += eachResult.trialBalanceDebit;
+                                                    creditTotal += eachResult.trialBalanceCredit;
                                                 }
                                                 if (typeof eachResult.netChange === "number") {
                                                     netChangeTotal += eachResult.netChange;

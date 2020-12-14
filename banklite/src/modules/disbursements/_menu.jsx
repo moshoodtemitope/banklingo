@@ -39,7 +39,7 @@ class DisbursementNav extends React.Component{
                             if(allUSerPermissionNames.indexOf(eachGroup.permissionName)> -1 ){
                                 return(
                                     <li key={menuIdx}>
-                                        <NavLink exact to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
+                                        <NavLink  to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
                                     </li>
                                 )
                             }

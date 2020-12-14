@@ -34,6 +34,7 @@ class InitiateDisbursement extends React.Component {
         this.state = {
             user: '',
             disburmentOption: null,
+            showPostData:false
         }
 
 
@@ -96,6 +97,9 @@ class InitiateDisbursement extends React.Component {
                         <div className="disbursment-options-wrap">
                             <div className="each-option">
                                 <h3> Single Disbursement</h3>
+                                <div className="option-msg">
+                                    Disburse fund to a single account number.
+                                </div>
                                 <Button
                                     variant="success"
                                     onClick={() => this.setState({ disburmentOption: "single" })}
@@ -105,11 +109,27 @@ class InitiateDisbursement extends React.Component {
                             </div>
                             <div className="each-option">
                                 <h3> Batch Disbursement</h3>
-                                <Button
+                                <div className="option-msg">
+                                    Disburse funds to multiple account numbers using an excel templates. All accounts in the list must be valid before the disbursement can be initiated
+                                </div>
+                                <label className="btn btn-success" htmlFor="upload-batch">Initiate batch disbursment</label>
+                                <input type="file" id="upload-batch" onChange={this.handleFileUpload} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                                {/* <Button
                                     variant="success"
                                     onClick={() => this.setState({ disburmentOption: "batch" })}
                                 >
                                     Initiate batch disbursment
+                                </Button> */}
+                            </div>
+                            <div className="each-option">
+                                <h3> Download disbursement template.</h3>
+                                <div className="option-msg">
+                                    Please us the following excel sheet template to disburse funds to multiple accounts.
+                                </div>
+                                <Button
+                                    variant="success"
+                                >
+                                   <a href="/assets/lingo-batch-disburse.xlsx" download>Download Template</a>
                                 </Button>
                             </div>
                         </div>
@@ -145,7 +165,7 @@ class InitiateDisbursement extends React.Component {
 
     handleFileUpload = (file/*:File*/) => {
         /* Boilerplate to set up FileReader */
-        this.setState({ batchDataFromFile: undefined })
+        this.setState({ batchDataFromFile: undefined, disburmentOption: null })
         const files = file.target.files;
         const reader = new FileReader();
         const rABS = !!reader.readAsBinaryString;
@@ -194,7 +214,7 @@ class InitiateDisbursement extends React.Component {
     handleshowPostData = () => {
         const { dispatch } = this.props;
 
-        dispatch(disbursementActions.postNewDisbursementBatch("CLEAR"));
+        // dispatch(disbursementActions.postNewDisbursementBatch("CLEAR"));
 
         this.setState({ showPostData: true })
     }
@@ -364,13 +384,13 @@ class InitiateDisbursement extends React.Component {
         let { showPostData, batchDataFromFile } = this.state;
             let postDisbursementRequest = this.props.postNewDisbursementBatchReducer;
         let processDisburmentValidationSchema = Yup.object().shape({
-            transactionSource: Yup.string()
-                .required('required'),
-            sourceAccount: Yup.string()
-                .required('required'),
-            batchDescription: Yup.string()
-                .required('required'),
-        }),
+                transactionSource: Yup.string()
+                    .required('required'),
+                sourceAccount: Yup.string()
+                    .required('required'),
+                batchDescription: Yup.string()
+                    .required('required'),
+            }),
             
             transactionSourceList = [
                 { label: "BankOne", value: 1 },
@@ -378,29 +398,34 @@ class InitiateDisbursement extends React.Component {
             ],
             
             allBatchData = [];
-            batchDataFromFile.splice(0,1);
+            // batchDataFromFile.splice(0,1);
            
             batchDataFromFile.map((eachRow, rowIndex)=>{
                 let dataTemp = {}
-                eachRow.map((eachData, dataIndex)=>{
-                    if(dataIndex===0){
-                         dataTemp.bankCode = eachData
-                    }
-                    if (dataIndex === 1) {
-                        dataTemp.destinationAccount = eachData.toString()
-                    }
-                    if (dataIndex === 2) {
-                        dataTemp.amount = eachData
-                    }
-                    if (dataIndex === 3) {
-                        dataTemp.narration = eachData
-                    }
-                   
-                })
+                if(rowIndex >=1 ){
+                    eachRow.map((eachData, dataIndex)=>{
+                        console.log("row is", eachData)
+                        if(dataIndex===0){
+                            dataTemp.bankCode = eachData
+                        }
+                        if (dataIndex === 1) {
+                            dataTemp.destinationAccount = eachData.toString()
+                        }
+                        if (dataIndex === 2) {
+                            dataTemp.amount = eachData
+                        }
+                        if (dataIndex === 3) {
+                            dataTemp.narration = eachData
+                        }
+                        
+                    })
+                    allBatchData.push(dataTemp)
+                }
 
-                allBatchData.push(dataTemp)
+               
 
             })
+
             
 
 
@@ -426,7 +451,7 @@ class InitiateDisbursement extends React.Component {
                                 transactionSource: values.transactionSource,
                                 sourceAccount:values.sourceAccount
                             }
-                            console.log("payload is", batchPayload);
+                            
                             this.postNewDisbursement(batchPayload)
                                 .then(()=>{
                                     
@@ -559,7 +584,7 @@ class InitiateDisbursement extends React.Component {
         return (
             <div className="batch-data-wrap">
                 {(batchDataFromFile !== undefined && batchDataCols !== undefined) &&
-                    <div>
+                    <div className="">
                         <div className="batch-actions">
                             <Button
                                 variant="secondary"
@@ -578,6 +603,7 @@ class InitiateDisbursement extends React.Component {
                             </Button>
 
                         </div>
+                        {/* <OutTable amountIndex={4} addRowAction={false} rowActionText="Remove entry" data={batchDataFromFile} cols={batchDataCols} /> */}
                         <OutTable amountIndex={4} addRowAction={true} rowAction={this.removeEntry} rowActionText="Remove entry" data={batchDataFromFile} cols={batchDataCols} />
                     </div>
                 }
@@ -600,7 +626,7 @@ class InitiateDisbursement extends React.Component {
 
 
     renderInitiateDisburment = () => {
-        let postDisbursementRequest = this.props.postDisbursementReducer,
+        let postDisbursementRequest = this.props.postNewDisbursementBatchReducer,
             getDisbursementBanksRequest = this.props.getDisbursementBanksReducer,
             initiateDisburmentValidationSchema = Yup.object().shape({
                 bankCode: Yup.string()
@@ -672,31 +698,55 @@ class InitiateDisbursement extends React.Component {
                                     }}
                                     validationSchema={initiateDisburmentValidationSchema}
                                     onSubmit={(values, { resetForm }) => {
+                                        // let initiationPayload = {
+                                        //     bankCode: values.bankCode,
+                                        //     destinationAccount: values.destinationAccount,
+                                        //     amount: parseFloat(values.amount.replace(/,/g, '')),
+                                        //     transactionSource: parseInt(values.transactionSource),
+                                        //     narration: values.narration,
+                                        //     sourceAccount: values.sourceAccount,
+                                        // };
+
                                         let initiationPayload = {
-                                            bankCode: values.bankCode,
-                                            destinationAccount: values.destinationAccount,
-                                            amount: parseFloat(values.amount.replace(/,/g, '')),
+                                            batchDescription: values.narration,
+                                            disbursementItemModels:[{
+                                                bankCode: values.bankCode,
+                                                destinationAccount: values.destinationAccount,
+                                                amount: parseFloat(values.amount.replace(/,/g, '')),
+                                                narration: values.narration,
+                                            }],
                                             transactionSource: parseInt(values.transactionSource),
-                                            narration: values.narration,
                                             sourceAccount: values.sourceAccount,
                                         };
 
 
-
-                                        this.initiateDisburmentRequest(initiationPayload)
-                                            .then(
-                                                () => {
-
+                                        this.postNewDisbursement(initiationPayload)
+                                            .then(()=>{
+                                                
+                                                if(this.props.postNewDisbursementBatchReducer.request_status === disbursmentConstants.NEW_DISBURSMENT_BATCH_SUCCESS){
+                                                    // console.log("data gotten", this.props.postNewDisbursementBatchReducer.request_data);
                                                     setTimeout(() => {
-                                                        if (this.props.postDisbursementReducer.request_status === disbursmentConstants.POST_DISBURSMENT_SUCCESS) {
-                                                            // this.props.dispatch(disbursementActions.postDisbursement("CLEAR"))
-                                                            this.setState({ transactionState: true });
-                                                        }
-
-                                                    }, 3000);
-
+                                                        this.setState({batchDataFromFile:"",showPostData:false, renderUploaded:false, disburmentOption:null})
+                                                    }, 4000);
+                                                    
                                                 }
-                                            )
+                                            })
+
+
+                                        // this.initiateDisburmentRequest(initiationPayload)
+                                        //     .then(
+                                        //         () => {
+
+                                        //             setTimeout(() => {
+                                        //                 if (this.props.postDisbursementReducer.request_status === disbursmentConstants.POST_DISBURSMENT_SUCCESS) {
+                                        //                     // this.props.dispatch(disbursementActions.postDisbursement("CLEAR"))
+                                        //                     this.setState({ transactionState: true });
+                                        //                 }
+
+                                        //             }, 3000);
+
+                                        //         }
+                                        //     )
 
                                     }}
                                 >
@@ -940,14 +990,29 @@ class InitiateDisbursement extends React.Component {
                                                     </Button>
                                                     {/* <Button variant="light" type="button"> Cancel</Button> */}
                                                 </div>
-                                                {/* {postDisbursementRequest.request_status === disbursmentConstants.POST_DISBURSMENT_SUCCESS &&
-                                                            <Alert variant="success">
-                                                                {postDisbursementRequest.request_data.response.data.message}
-                                                            </Alert>
-                                                        } */}
-                                                {postDisbursementRequest.request_status === disbursmentConstants.POST_DISBURSMENT_FAILURE &&
+                                                
+                                                {/* {postDisbursementRequest.request_status === disbursmentConstants.POST_DISBURSMENT_FAILURE &&
                                                     <Alert variant="danger">
                                                         {postDisbursementRequest.request_data.error}
+                                                    </Alert>
+                                                } */}
+
+                                                {postDisbursementRequest.request_status === disbursmentConstants.NEW_DISBURSMENT_BATCH_FAILURE &&
+                                                    <Alert variant="danger">
+                                                        {postDisbursementRequest.request_data.error}
+                                                    </Alert>
+                                                }
+                                                {postDisbursementRequest.request_status === disbursmentConstants.NEW_DISBURSMENT_BATCH_SUCCESS &&
+                                                    <Alert variant="success">
+                                                        <div>
+                                                            Total amount in batch : {this.props.postNewDisbursementBatchReducer.request_data.response.data.totalAmount}
+                                                        </div>
+                                                        <div>
+                                                            Total Fee : {this.props.postNewDisbursementBatchReducer.request_data.response.data.totalFees}
+                                                            {/* Total Fee : {postDisbursementRequest.request_data.response.data.totalFees} */}
+                                                        </div>
+
+
                                                     </Alert>
                                                 }
                                             </Form>

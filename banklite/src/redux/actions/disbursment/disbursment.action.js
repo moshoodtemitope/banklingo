@@ -467,7 +467,7 @@ function postNewDisbursementBatch   (newDisbursmentBatch){
                 .then(response => {
                     dispatch(success(response));
                     // getADisbursementBatch(response.data.batchReference)
-                    history.push(`/disbursements/batch/${response.data.batchReference}`)
+                    history.push(`/disbursements/partial/${response.data.batchReference}`)
 
                     
 

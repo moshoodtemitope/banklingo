@@ -137,45 +137,55 @@ import unAuthedPage from './unauthed-page/un-authed'
 import {authActions} from '../redux/actions/auth/auth.action';
 
 
-var user = JSON.parse(localStorage.getItem('lingoAuth'));
+// var permissionsList = JSON.parse(localStorage.getItem('x-u-perm'));
 
 function PrivateRoute({ component: Component, authed,accessRequired, ...rest }) {
     if(authed && Object.keys(authed).length>=1 ){
         let userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
-        let allUSerPermissions =[];
-            userPermissions.map(eachPermission=>{
-                allUSerPermissions.push(eachPermission.permissionCode)
-            })
+        if(userPermissions){
+            let allUSerPermissions =[];
+                userPermissions.map(eachPermission=>{
+                    allUSerPermissions.push(eachPermission.permissionCode)
+                })
 
-        if(accessRequired && allUSerPermissions.indexOf(accessRequired) >-1){
-            return (
-                <Route
-                    {...rest}
-                    render={
-                        (props) => authed && Object.keys(authed).length>=1 
-                        ? <Component  {...rest} {...props} />
-                        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
-                />
-            )
-        }
+            if(accessRequired && allUSerPermissions.indexOf(accessRequired) >-1){
+                return (
+                    <Route
+                        {...rest}
+                        render={
+                            (props) => authed && Object.keys(authed).length>=1 
+                            ? <Component  {...rest} {...props} />
+                            : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
+                    />
+                )
+            }
 
-        if(accessRequired && allUSerPermissions.indexOf(accessRequired) === -1){
+            if(accessRequired && allUSerPermissions.indexOf(accessRequired) === -1){
+                return (
+                    <Route
+                        {...rest}
+                        render={
+                            (props) => <Redirect to={{ pathname: '/not-found', state: { from: props.location } }} />}
+                    />
+                )
+            }
+            if(!accessRequired){
+                return (
+                    <Route
+                        {...rest}
+                        render={
+                            (props) => authed && Object.keys(authed).length>=1 
+                            ? <Component  {...rest} {...props} />
+                            : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
+                    />
+                )
+            }
+        }else{
             return (
                 <Route
                     {...rest}
                     render={
-                        (props) => <Redirect to={{ pathname: '/not-found', state: { from: props.location } }} />}
-                />
-            )
-        }
-        if(!accessRequired){
-            return (
-                <Route
-                    {...rest}
-                    render={
-                        (props) => authed && Object.keys(authed).length>=1 
-                        ? <Component  {...rest} {...props} />
-                        : <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
+                        (props) =>  <Redirect to={{ pathname: '/', state: { from: props.location } }} />}
                 />
             )
         }
@@ -271,9 +281,9 @@ class AuthenticatedRoutes extends React.Component {
 
                         <PrivateRoute accessRequired="bnk_view_disbursements" exact path='/disbursements/all' {...this.props} authed={this.props.user} component={DisbursementManagement} />  
                         <PrivateRoute accessRequired="bnk_initiate_disbursements" exact path='/disbursements/initiate' {...this.props} authed={this.props.user} component={InitiateDisbursement} />  
-                        <PrivateRoute accessRequired="bnk_initiate_disbursements" exact path='/disbursements/initiated' {...this.props} authed={this.props.user} component={InitiatedDisbursmentBatches} />  
+                        <PrivateRoute accessRequired="bnk_initiate_disbursements" exact path='/disbursements/partial' {...this.props} authed={this.props.user} component={InitiatedDisbursmentBatches} />  
                         
-                        <PrivateRoute accessRequired="bnk_view_clients" exact path='/disbursements/batch/:batchRef' {...this.props} authed={this.props.user} component={ViewADisbursmentBatch} /> 
+                        <PrivateRoute accessRequired="bnk_view_clients" exact path='/disbursements/partial/:batchRef' {...this.props} authed={this.props.user} component={ViewADisbursmentBatch} /> 
                         <PrivateRoute accessRequired="bnk_view_disbursements" exact path='/disbursements/pending-review' {...this.props} authed={this.props.user} component={DisbursementPendingReview} /> 
                         <PrivateRoute accessRequired="bnk_view_disbursements" exact path='/disbursements/pending-approval' {...this.props} authed={this.props.user} component={DisbursementPendingApproval} /> 
                         <PrivateRoute accessRequired="bnk_view_nip_requests" exact path='/disbursements/nip-requests' {...this.props} authed={this.props.user} component={NipRequests} /> 

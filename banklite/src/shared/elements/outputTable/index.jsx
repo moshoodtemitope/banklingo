@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import Button from 'react-bootstrap/Button'
+import  TableComponent from '../table'
 import {  getDateFromISO, numberWithCommas} from '../../../shared/utils';
 class OutTable extends React.Component {
     constructor(props) { super(props); };
@@ -17,7 +18,7 @@ class OutTable extends React.Component {
 
                     
 
-                    <table className="table table-striped">
+                    <TableComponent classnames="striped bordered hover">
                         <thead>
                             <tr>
                                 {
@@ -56,7 +57,7 @@ class OutTable extends React.Component {
                                     }
                                 )}
                         </tbody>
-                    </table>
+                    </TableComponent>
                     
                 </div>
             )
@@ -72,7 +73,7 @@ class OutTable extends React.Component {
 
                     
 
-                    <table className="table table-striped">
+                    <TableComponent classnames="striped bordered hover">
                         <thead>
                             
                             <tr className="heading-item">
@@ -143,7 +144,7 @@ class OutTable extends React.Component {
                             
                             
                         </tbody>
-                    </table>
+                    </TableComponent>
                     
                 </div>
             )
