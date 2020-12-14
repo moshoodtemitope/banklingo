@@ -640,7 +640,7 @@ class ViewADisbursmentBatch extends React.Component {
                                                 onClick={()=>{
                                                     this.handleShowDelete();
                                                     this.setState({batchToDelete:batchDetails.batchReference, batchIdToDelete:batchDetails.id})}}
-                                        >Return Batch</Dropdown.Item>
+                                        >Delete Batch</Dropdown.Item>
                                     }
                                     {(allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===1) &&
                                         <Dropdown.Item eventKey="1"

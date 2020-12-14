@@ -112,7 +112,7 @@ class InitiateDisbursement extends React.Component {
                                 <div className="option-msg">
                                     Disburse funds to multiple account numbers using an excel templates. All accounts in the list must be valid before the disbursement can be initiated
                                 </div>
-                                <label className="btn btn-success" htmlFor="upload-batch">Initiate batch disbursment</label>
+                                <label className="btn btn-success" htmlFor="upload-batch">Upload new batch</label>
                                 <input type="file" id="upload-batch" onChange={this.handleFileUpload} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
                                 {/* <Button
                                     variant="success"
@@ -124,7 +124,7 @@ class InitiateDisbursement extends React.Component {
                             <div className="each-option">
                                 <h3> Download disbursement template.</h3>
                                 <div className="option-msg">
-                                    Please us the following excel sheet template to disburse funds to multiple accounts.
+                                    Please use the following excel sheet template to disburse funds to multiple accounts.
                                 </div>
                                 <Button
                                     variant="success"
@@ -587,19 +587,19 @@ class InitiateDisbursement extends React.Component {
                     <div className="">
                         <div className="batch-actions">
                             <Button
-                                variant="secondary"
+                                variant="light"
                                 onClick={() => this.setState({ showAddEntry: true })}
                             >
                                 Add New Entry
                             </Button>
-                            <label htmlFor="upload-newbatch" className="btn btn-secondary">Upload New Batch</label>
-                            <input type="file" id="upload-newbatch" onChange={this.handleFileUpload} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                            {/* <label htmlFor="upload-newbatch" className="btn btn-secondary">Upload New Batch</label>
+                            <input type="file" id="upload-newbatch" onChange={this.handleFileUpload} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /> */}
                             <Button
                                 variant="success"
                                 onClick={this.handleshowPostData}
                                 className="batch-cta"
                             >
-                                Initiate Disbursment
+                                Submit batch
                             </Button>
 
                         </div>

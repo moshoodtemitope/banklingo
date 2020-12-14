@@ -114,7 +114,7 @@ export const menuList = [
                 subMmenuRoute: "/disbursements/all"
             },
             {
-                subMenuLabel: "Partial Application",
+                subMenuLabel: "Partial Applications",
                 permissionCode: "bnk_view_disbursements",
                 subMmenuRoute: "/disbursements/partial"
             },
@@ -635,7 +635,7 @@ export const disbursementMenuList = [
     
     {
         permissionName: "View Disbursements",
-        mainMenu: "Partial Application",
+        mainMenu: "Partial Applications",
         permissionCode: "bnk_view_disbursements",
         menuRoute: "/disbursements/partial"
     },

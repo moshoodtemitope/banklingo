@@ -82,13 +82,17 @@ class InitiatedDisbursmentBatches extends React.Component {
     performDeletion = (batchInfo)=>{
         this.deleteABatch(batchInfo)
                 .then(()=>{
-                    setTimeout(() => {
+                    
+                    
                         if (this.props.deleteADisbursementReducer.request_status === disbursmentConstants.DELETE_A_BATCH_SUCCESS) {
-                            this.clearDeleteData();
-                            this.handleCloseDelete();
-                            this.loadInitialData();
+                            this.setState({securityCode:""})
+                            setTimeout(() => {
+                                this.clearDeleteData();
+                                this.handleCloseDelete();
+                                this.loadInitialData();
+                            }, 3500);
                         }
-                    }, 3500);
+                    
                     
                 })
     }
@@ -132,7 +136,7 @@ class InitiatedDisbursmentBatches extends React.Component {
                                     name="securityCode"
                                     onChange={(e)=>this.setState({securityCode: e.target.value})}
                                     placeholder="Enter your security code"
-                                    value={allowNumbersOnly(securityCode)}
+                                    value={allowNumbersOnly(this.state.securityCode)}
                                     // className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
                                     required />
                                 
