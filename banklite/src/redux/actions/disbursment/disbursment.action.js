@@ -32,7 +32,7 @@ function getDisbursement  (payload, type, tempData){
         let url;
             if(type!==true){
                 // console.log('----',payload);
-                url = routes.HIT_DISBURSEMENT+`?${payload}`;
+                url = routes.HIT_DISBURSEMENT+`/disbursementbatches?${payload}`;
             }
             if(type===true){
                 url = routes.HIT_DISBURSEMENT+`/pendingapproval?${payload}`;   

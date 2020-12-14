@@ -713,7 +713,7 @@ class DisbursementPendingApproval extends React.Component {
                                                                             key="action"
                                                                             className="customone"
                                                                         >
-                                                                            <NavLink className="dropdown-item" to={`/disbursements/partial/${eachDisburment.batchReference}`}>View Batch</NavLink>
+                                                                            <NavLink className="dropdown-item" to={`/disbursements/pending-approval/${eachDisburment.batchReference}`}>View Batch</NavLink>
                                                                             
                                                                             {/* <Dropdown.Item eventKey="1" onClick={()=>this.resetUserPIN({"encodedKey":eachDisburment.batchReference }, eachDisburment.batchReference)}>Delete Batch</Dropdown.Item> */}
                                                                             

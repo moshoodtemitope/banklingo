@@ -16,7 +16,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import "./disbursements.scss"; 
-
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import closeIcon from '../../assets/img/close.svg'
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
@@ -280,27 +280,15 @@ class DisbursementManagement extends React.Component {
                                     <thead>
                                         <tr>
 
-                                            <th>Transaction Ref</th>
-                                            <th>Request Date</th>
-                                            <th>Source Account</th>
-                                            <th>Sender Name</th>
-                                            <th>Destination Account</th>
-                                            <th>Destination Bank</th>
-                                            <th>Recipient Name</th>
-                                            <th>Amount (NGN)</th>
-                                            <th>Inititated By</th>
-                                            <th>Approved By</th>
-                                            <th>Status</th>
+                                            <th>Batch Description</th>
+                                            <th>Total Amount</th>
+                                            <th>Date Initiated</th>
+                                            <th>Batch Status</th>
+                                            <th>Initiated by</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -388,17 +376,11 @@ class DisbursementManagement extends React.Component {
                                     <thead>
                                         <tr>
 
-                                            <th>Transaction Ref</th>
-                                            <th>Request Date</th>
-                                            <th>Source Account</th>
-                                            <th>Sender Name</th>
-                                            <th>Destination Account</th>
-                                            <th>Destination Bank</th>
-                                            <th>Recipient Name</th>
-                                            <th>Amount (NGN)</th>
-                                            <th>Inititated By</th>
-                                            <th>Approved By</th>
-                                            <th>Status</th>
+                                            <th>Batch Description</th>
+                                            <th>Total Amount</th>
+                                            <th>Date Initiated</th>
+                                            <th>Batch Status</th>
+                                            <th>Initiated by</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -406,24 +388,13 @@ class DisbursementManagement extends React.Component {
                                             saveRequestData.result.map((eachDisburment, index) => {
                                                 return (
                                                     <Fragment key={index}>
-                                                        <tr>
-
-                                                            <td>
-                                                                <span className="txt-cta" onClick={() => this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span>
-                                                            </td>
-                                                            <td>{eachDisburment.createdDate}</td>
-                                                            <td>{eachDisburment.sourceAccount}</td>
-                                                            <td>{eachDisburment.senderName}</td>
-                                                            <td>{eachDisburment.destinationAccount}</td>
-                                                            <td>{eachDisburment.destinationBank}</td>
-                                                            <td>{eachDisburment.recipientName}</td>
-                                                            {/* <td>-</td> */}
-                                                            <td>{numberWithCommas(eachDisburment.amount, true, true)}</td>
-                                                            {/* <td>{eachDisburment.initiatedBy}</td> */}
-                                                            <td>-</td>
-                                                            {/* <td>{eachDisburment.approvedBy}</td> */}
-                                                            <td>-</td>
-                                                            <td>{eachDisburment.disbursmentStatusDescription}</td>
+                                                        <tr>     
+                                                            <td>{eachDisburment.batchDescription}</td>
+                                                            <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td>
+                                                            <td>{getDateFromISO(eachDisburment.dateInitiated)}</td>
+                                                            <td>{eachDisburment.batchStatusDescription}</td>
+                                                            <td>{eachDisburment.initiatedBy}</td>
+                                                            
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -436,7 +407,8 @@ class DisbursementManagement extends React.Component {
                         )
                     }
                 case(disbursmentConstants.GET_DISBURSMENTS_SUCCESS):
-                    let allDisbursments = getDisbursementsRequest.request_data.response.data;
+                    let allDisbursments = getDisbursementsRequest.request_data.response.data,
+                        currentItemState;
                         
                         if(allDisbursments!==undefined){
                             if(allDisbursments.result.length>=1){
@@ -524,43 +496,64 @@ class DisbursementManagement extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Transaction Ref</th>
-                                                    <th>Request Date</th>
-                                                    <th>Source Account</th>
-                                                    <th>Sender Name</th>
-                                                    <th>Destination Account</th>
-                                                    <th>Destination Bank</th>
-                                                    <th>Recipient Name</th>
-                                                    <th>Amount (NGN)</th>
-                                                    <th>Inititated By</th>
-                                                    <th>Approved By</th>
-                                                    <th>Status</th>
-                                                    
-                                                </tr>
+                                                
+                                                <th>Batch Description</th>
+                                                <th>Total Amount</th>
+                                                <th>Date Initiated</th>
+                                                <th>Batch Status</th>
+                                                <th>Initiated by</th>
+                                                <th></th>
+                                            </tr>
                                             </thead>
                                             <tbody>
                                                 {
                                                     allDisbursments.result.map((eachDisburment, index)=>{
+                                                        if(eachDisburment.batchStatus ===1){
+                                                            currentItemState = "partial"
+                                                        }
+                                                        if(eachDisburment.batchStatus ===2){
+                                                            currentItemState = "pending-review"
+                                                        }
+                                                        if(eachDisburment.batchStatus ===3){
+                                                            currentItemState = "all"
+                                                        }
+                                                        if(eachDisburment.batchStatus ===4){
+                                                            currentItemState = "pending-approval"
+                                                        }
+                                                        if(eachDisburment.batchStatus ===5){
+                                                            currentItemState = "all"
+                                                        }
+                                                        if(eachDisburment.batchStatus ===6){
+                                                            currentItemState = "all"
+                                                        }
+                                                        if(eachDisburment.batchStatus ===7){
+                                                            currentItemState = "all"
+                                                        }
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
-                                                                    
+                                                                    <td>{eachDisburment.batchDescription}</td>
+                                                                    <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td>
+                                                                    <td>{getDateFromISO(eachDisburment.dateInitiated)}</td>
+                                                                    <td>{eachDisburment.batchStatusDescription}</td>
+                                                                    <td>{eachDisburment.initiatedBy}</td>
                                                                     <td>
-                                                                        <span className="txt-cta" onClick={()=>this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span> 
+                                                                        <DropdownButton
+                                                                            size="sm"
+                                                                            title="Actions"
+                                                                            key="action"
+                                                                            className="customone"
+                                                                        >
+                                                                            <NavLink className="dropdown-item" to={`/disbursements/${currentItemState}/${eachDisburment.batchReference}`}>View Batch</NavLink>
+
+                                                                           
+
+                                                                        </DropdownButton>
                                                                     </td>
-                                                                    <td>{eachDisburment.createdDate}</td>
-                                                                    <td>{eachDisburment.sourceAccount}</td>
-                                                                    <td>{eachDisburment.senderName}</td>
-                                                                    <td>{eachDisburment.destinationAccount}</td>
-                                                                    <td>{eachDisburment.destinationBank}</td>
-                                                                    <td>{eachDisburment.recipientName}</td>
-                                                                    {/* <td>-</td> */}
-                                                                    <td>{numberWithCommas(eachDisburment.amount, true, true)}</td>
-                                                                    {/* <td>{eachDisburment.initiatedBy}</td> */}
-                                                                    <td>-</td>
-                                                                    {/* <td>{eachDisburment.approvedBy}</td> */}
-                                                                    <td>-</td>
-                                                                    <td>{eachDisburment.disbursmentStatusDescription}</td>
+                                                                    {/* <td><NavLink to={`/disbursements/partial/${eachDisburment.batchReference}`}> {eachDisburment.id} </NavLink> </td> */}
+                                                                    {/* <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td> */}
+                                                                    {/* <td>{getDateFromISO(eachDisburment.lastUpdated)}</td> */}
+
                                                                 </tr>
                                                             </Fragment>
                                                         )
@@ -646,28 +639,15 @@ class DisbursementManagement extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
-
-                                                    <th>Transaction Ref</th>
-                                                    <th>Request Date</th>
-                                                    <th>Source Account</th>
-                                                    <th>Sender Name</th>
-                                                    <th>Destination Account</th>
-                                                    <th>Destination Bank</th>
-                                                    <th>Recipient Name</th>
-                                                    <th>Amount (NGN)</th>
-                                                    <th>Inititated By</th>
-                                                    <th>Approved By</th>
-                                                    <th>Status</th>
+                                                    <th>Batch Description</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Date Initiated</th>
+                                                    <th>Batch Status</th>
+                                                    <th>Initiated by</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
