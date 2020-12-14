@@ -466,13 +466,13 @@ function postNewDisbursementBatch   (newDisbursmentBatch){
             return consume
                 .then(response => {
                     dispatch(success(response));
-                    // getADisbursementBatch(response.data.batchReference)
+                    
                     history.push(`/disbursements/partial/${response.data.batchReference}`)
 
                     
 
                 }).catch(error => {
-                    // console.log('error is', error)
+                    
                     dispatch(failure(handleRequestErrors(error)));
                 });
             
