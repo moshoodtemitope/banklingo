@@ -32,6 +32,7 @@ import RejectedLoans from './loanmanagement/rejected'
 import LoanClient from './loanmanagement/loan-client'
 import NewLoanAccount from './loanmanagement/newloanaccount'
 
+import AllDisbursements from './disbursements/all'
 import DisbursementManagement from './disbursements'
 import InitiateDisbursement from './disbursements/initiate-disbursements'
 import InitiatedDisbursmentBatches from './disbursements/initiated'
@@ -279,6 +280,7 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <Route exact path='/all-loans/newloan-account' render={(props) => <NewLoanAccount {...this.props} />} /> */}
                         
 
+                        <PrivateRoute accessRequired="bnk_view_disbursements" exact path='/disbursements' {...this.props} authed={this.props.user} component={AllDisbursements} />  
                         <PrivateRoute accessRequired="bnk_view_disbursements" exact path='/disbursements/all' {...this.props} authed={this.props.user} component={DisbursementManagement} />  
                         <PrivateRoute accessRequired="bnk_initiate_disbursements" exact path='/disbursements/initiate' {...this.props} authed={this.props.user} component={InitiateDisbursement} />  
                         <PrivateRoute accessRequired="bnk_initiate_disbursements" exact path='/disbursements/partial' {...this.props} authed={this.props.user} component={InitiatedDisbursmentBatches} />  

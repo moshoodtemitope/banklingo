@@ -23,7 +23,9 @@ export const disbursementActions = {
     getADisbursementBatch,
     performActionOnDisbursementBatch,
     getInitiatedDisbursements,
-    deleteADisbursement
+    deleteADisbursement,
+    exportDisbursmentBatches,
+    getAllDisbursements
 }
 
 function getDisbursement  (payload, type, tempData){
@@ -101,6 +103,42 @@ function getPendingApprovalDisbursement  (payload, type, tempData){
     // function request(user) { return { type: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_PENDING, user } }
     function success(response) { return { type: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_SUCCESS, response } }
     function failure(error) { return { type: disbursmentConstants.GET_PENDING_APPROVAL_DISBURSMENTS_FAILURE, error } }
+
+}
+
+function getAllDisbursements  (payload, type, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_DISBURSEMENT+`?${payload}`;  
+
+            // url = routes.HIT_DISBURSEMENT+`/pendingapproval?PageSize=${payload.PageSize}&CurrentPage=${payload.CurrentPage}`;
+
+        let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.GET_ALL_DISBURSMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.GET_ALL_DISBURSMENTS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.GET_ALL_DISBURSMENTS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.GET_ALL_DISBURSMENTS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.GET_ALL_DISBURSMENTS_FAILURE, error } }
 
 }
 
@@ -544,6 +582,69 @@ function performActionOnDisbursementBatch   (disbursmentBatchActionPayload, acti
     function success(response) { return { type: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_SUCCESS, response } }
     function failure(error) { return { type: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_FAILURE, error } }
     function clear() { return { type: disbursmentConstants.PERFORMACTION_ON_DISBURSMENT_BATCH_RESET, clear_data:""} }
+
+}
+function exportDisbursmentBatches  (payload, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_DISBURSEMENT+`/disbursementbatchesexport?${payload}`;  
+
+            
+
+            let consume = ApiService.request(url, "GET", '','','', "blob");
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                    
+                let disposition = response.headers['content-disposition'],
+                filename;
+                
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) { 
+                    filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+                
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                if(filename === undefined){
+                    link.setAttribute('download', 'ALL-BATCHES.xlsx');
+                }
+
+                if(filename !== undefined){
+                    link.setAttribute('download', filename);
+                }
+
+                
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                // console.log("shkddsd")
+                dispatch(success(response));
+            }).catch(error =>{
+            
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.EXPORT_NIP_OUTWARDS_FAILURE, error } }
 
 }
 

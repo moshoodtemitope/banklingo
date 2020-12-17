@@ -35,6 +35,7 @@ import ViewCustomerTasks from './tasks'
 import NewCustomerAccount from './newcustomer'
 import EditCustomerAccount from './editcustomer'
 import NewInvestmentCustomerAccount from './new-investmentcustomer'
+import ViewCustomerActivites from './activities'
 
 import ViewLoanAccount from './viewloanaccount'
 import ViewSavingsAccount from './viewsavingsaccount'
@@ -74,6 +75,7 @@ class AccountContainer extends React.Component {
                         <Route  path='/editcustomer'                     render={(props) => <EditCustomerAccount {...props} />}  /> 
                         <Route  path='/customer/:id/attachments'         render={(props) => <ViewCustomerAttachments {...props} />} /> 
                         <Route  path='/customer/:id/tasks'               render={(props) => <ViewCustomerTasks {...props} />} /> 
+                        <Route  path='/customer/:id/activities'               render={(props) => <ViewCustomerActivites {...props} />} /> 
                         <Route  path='/customer/:id/communications'      render={(props) => <ViewCustomerCommunications {...props} />} /> 
                         <Route  path='/customer/:id/comments'            render={(props) => <ViewCustomerComments {...props} />}  /> 
                         <Route exact  path='/customer/:id/closedaccounts'      render={(props) => <ViewClosedAccounts {...props} />} /> 

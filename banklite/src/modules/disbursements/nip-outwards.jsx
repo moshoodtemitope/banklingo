@@ -334,10 +334,10 @@ class NipOutwardsRequests extends React.Component {
                                                             <td>{getDateFromISO(eachRequest.transactionDate, true, true)}</td>
                                                             <td>{eachRequest.sourceAccountNumber}</td>
                                                             <td>{eachRequest.sourceAccountName}</td>
-                                                            <td>{eachRequest.sourceBankCode}</td>
+                                                            <td>{eachRequest.originInstitutionName}</td>
                                                             <td>{eachRequest.destinationAccountNumber}</td>
                                                             <td>{eachRequest.destinationAccountName}</td>
-                                                            <td>{eachRequest.destinationBankNumber}</td>
+                                                            <td>{eachRequest.destinationInstitutionName}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.amount, true, true)}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
                                                             <td>{eachRequest.narration}</td>
@@ -482,10 +482,10 @@ class NipOutwardsRequests extends React.Component {
                                                             <td>{getDateFromISO(eachRequest.transactionDate, true, true)}</td>
                                                             <td>{eachRequest.sourceAccountNumber}</td>
                                                             <td>{eachRequest.sourceAccountName}</td>
-                                                            <td>{eachRequest.sourceBankCode}</td>
+                                                            <td>{eachRequest.originInstitutionName}</td>
                                                             <td>{eachRequest.destinationAccountNumber}</td>
                                                             <td>{eachRequest.destinationAccountName}</td>
-                                                            <td>{eachRequest.destinationBankNumber}</td>
+                                                            <td>{eachRequest.destinationInstitutionName}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.amount, true, true)}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
                                                             <td>{eachRequest.narration}</td>

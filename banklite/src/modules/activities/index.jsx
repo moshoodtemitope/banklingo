@@ -175,7 +175,7 @@ class Activties extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        {/* <th>Id</th> */}
+                                        <th>Activity Description</th>
                                         <th>Date Created</th>
                                         <th>Username</th>
                                         <th>Action</th>
@@ -187,6 +187,7 @@ class Activties extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -274,7 +275,7 @@ class Activties extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        {/* <th>Id</th> */}
+                                        <th>Activity Description</th>
                                         <th>Date Created</th>
                                         <th>Username</th>
                                         <th>Action</th>
@@ -290,7 +291,7 @@ class Activties extends React.Component {
                                             return(
                                                 <Fragment key={index}>
                                                     <tr>
-                                                        {/* <td>{eachActivity.id}</td> */}
+                                                        <td>{eachActivity.activityDescription}</td>
                                                         <td>{eachActivity.creationDate}</td>
                                                         <td>{eachActivity.userName}</td>
                                                         <td>{eachActivity.action}</td>
@@ -400,7 +401,7 @@ class Activties extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            {/* <th>Id</th> */}
+                                            <th>Activity Description</th>
                                             <th>Date Created</th>
                                             <th>Username</th>
                                             <th>Action</th>
@@ -416,7 +417,7 @@ class Activties extends React.Component {
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            {/* <td>{eachActivity.id}</td> */}
+                                                            <td>{eachActivity.activityDescription}</td>
 
                                                             <td>{eachActivity.creationDate}</td>
                                                             <td>{eachActivity.userName}</td>
@@ -510,7 +511,7 @@ class Activties extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            {/* <th>Id</th> */}
+                                            <th>Activity Description</th>
                                             <th>Date Created</th>
                                             <th>Username</th>
                                             <th>Action</th>

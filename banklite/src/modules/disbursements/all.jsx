@@ -16,14 +16,14 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import "./disbursements.scss"; 
-import DropdownButton from 'react-bootstrap/DropdownButton'
+
 import closeIcon from '../../assets/img/close.svg'
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import {disbursementActions} from '../../redux/actions/disbursment/disbursment.action';
 import {disbursmentConstants} from '../../redux/actiontypes/disbursment/disbursment.constants'
 
 import DisbursementNav from './_menu'
-class DisbursementManagement extends React.Component {
+class AllDisbursements extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -44,15 +44,15 @@ class DisbursementManagement extends React.Component {
     }
 
     loadInitialData=()=>{
-        let {PageSize, CurrentPage}= this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+        let {PageSize, CurrentPage,SearchText, startDate, endDate}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         this.getDisbursements(params);
     }
 
     getDisbursements = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(disbursementActions.getDisbursement(paramters));
+        dispatch(disbursementActions.getAllDisbursements(paramters));
     }
 
     handleDateChangeRaw = (e) => {
@@ -82,24 +82,24 @@ class DisbursementManagement extends React.Component {
         // console.log('----here', PageSize.target.value);
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
-            {CurrentPage} = this.state;
+            {CurrentPage, SearchText, startDate, endDate} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
-        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         // this.getDisbursements(params);
 
         if(tempData){
-            dispatch(disbursementActions.getDisbursement(params,false,tempData));
+            dispatch(disbursementActions.getAllDisbursements(params,false,tempData));
         }else{
-            dispatch(disbursementActions.getDisbursement(params, false));
+            dispatch(disbursementActions.getAllDisbursements(params, false));
         }
     }
 
     getADisbursment =(transactionReference)=>{
         const {dispatch} =  this.props;
 
-        dispatch(disbursementActions.getDisbursementByRef(transactionReference))
+        dispatch(disbursementActions.getAllDisbursementsByRef(transactionReference))
     }
 
     showDetails = (transactionReference)=>{
@@ -109,36 +109,21 @@ class DisbursementManagement extends React.Component {
        
     }
 
-    exportDisbursmentBatches=()=>{
-        let {PageSize,CurrentPage, SearchText, endDate, startDate} = this.state;
-        
-        if(endDate!==""){
-            endDate = endDate.toISOString()
-        }
-        if(startDate!==""){
-            startDate = startDate.toISOString()
-        }
-        let paramters= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
-        const {dispatch} = this.props;
-
-        dispatch(disbursementActions.exportDisbursmentBatches(paramters));
-    }
-
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage} = this.state;
+        let {PageSize,CurrentPage, SearchText, startDate, endDate} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params= `&PageSize=${PageSize}&CurrentPage=${nextPage}`;
+        let params= `&PageSize=${PageSize}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
         if(tempData){
-            dispatch(disbursementActions.getDisbursement(params,tempData));
+            dispatch(disbursementActions.getAllDisbursements(params,tempData));
         }else{
-            dispatch(disbursementActions.getDisbursement(params));
+            dispatch(disbursementActions.getAllDisbursements(params));
         }
     }
 
@@ -158,12 +143,12 @@ class DisbursementManagement extends React.Component {
             if(startDate!==""){
                 startDate = startDate.toISOString()
             }
-            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+            let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
             if(tempData){
-                dispatch(disbursementActions.getDisbursement(params,tempData));
+                dispatch(disbursementActions.getAllDisbursements(params,tempData));
             }else{
-                dispatch(disbursementActions.getDisbursement(params));
+                dispatch(disbursementActions.getAllDisbursements(params));
             }
         }
     }
@@ -214,7 +199,7 @@ class DisbursementManagement extends React.Component {
                                                             <Form.Label className="block-level">{eachInfo.key}</Form.Label>
                                                             <span className="form-text disabled-field">{
                                                                 (eachInfo.value!=='' && eachInfo.value!==null)?
-                                                                    (eachInfo.key==="Amount")?`₦${numberWithCommas(eachInfo.value, true)}`:eachInfo.value
+                                                                    (eachInfo.key==="Amount")?`â‚¦${numberWithCommas(eachInfo.value, true)}`:eachInfo.value
                                                                 :'N/A'}
                                                             </span>
                                                         </div>
@@ -261,7 +246,7 @@ class DisbursementManagement extends React.Component {
         let saveRequestData= getDisbursementsRequest.request_data!==undefined?getDisbursementsRequest.request_data.tempData:null;
             switch (getDisbursementsRequest.request_status){
                 
-                case (disbursmentConstants.GET_DISBURSMENTS_PENDING):
+                case (disbursmentConstants.GET_ALL_DISBURSMENTS_PENDING):
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
                         return (
                             <div className="loading-content"> 
@@ -295,15 +280,27 @@ class DisbursementManagement extends React.Component {
                                     <thead>
                                         <tr>
 
-                                            <th>Batch Description</th>
-                                            <th>Total Amount</th>
-                                            <th>Date Initiated</th>
-                                            <th>Batch Status</th>
-                                            <th>Initiated by</th>
+                                            <th>Transaction Ref</th>
+                                            <th>Request Date</th>
+                                            <th>Source Account</th>
+                                            <th>Sender Name</th>
+                                            <th>Destination Account</th>
+                                            <th>Destination Bank</th>
+                                            <th>Recipient Name</th>
+                                            <th>Amount (NGN)</th>
+                                            <th>Inititated By</th>
+                                            <th>Approved By</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -381,7 +378,7 @@ class DisbursementManagement extends React.Component {
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
-                                    <option value="25">25</option>
+                                            <option value="25">25</option>
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
@@ -391,11 +388,17 @@ class DisbursementManagement extends React.Component {
                                     <thead>
                                         <tr>
 
-                                            <th>Batch Description</th>
-                                            <th>Total Amount</th>
-                                            <th>Date Initiated</th>
-                                            <th>Batch Status</th>
-                                            <th>Initiated by</th>
+                                            <th>Transaction Ref</th>
+                                            <th>Request Date</th>
+                                            <th>Source Account</th>
+                                            <th>Sender Name</th>
+                                            <th>Destination Account</th>
+                                            <th>Destination Bank</th>
+                                            <th>Recipient Name</th>
+                                            <th>Amount (NGN)</th>
+                                            <th>Inititated By</th>
+                                            <th>Approved By</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -403,13 +406,24 @@ class DisbursementManagement extends React.Component {
                                             saveRequestData.result.map((eachDisburment, index) => {
                                                 return (
                                                     <Fragment key={index}>
-                                                        <tr>     
-                                                            <td>{eachDisburment.batchDescription}</td>
-                                                            <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td>
-                                                            <td>{getDateFromISO(eachDisburment.dateInitiated, true)}</td>
-                                                            <td>{eachDisburment.batchStatusDescription}</td>
+                                                        <tr>
+
+                                                            <td>
+                                                                <span className="txt-cta" onClick={() => this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span>
+                                                            </td>
+                                                            <td>{getDateFromISO(eachDisburment.createdDate, true)}</td>
+                                                            <td>{eachDisburment.sourceAccount}</td>
+                                                            <td>{eachDisburment.senderName}</td>
+                                                            <td>{eachDisburment.destinationAccount}</td>
+                                                            <td>{eachDisburment.destinationBank}</td>
+                                                            <td>{eachDisburment.recipientName}</td>
+                                                            {/* <td>-</td> */}
+                                                            <td>{numberWithCommas(eachDisburment.amount, true, true)}</td>
                                                             <td>{eachDisburment.initiatedBy}</td>
-                                                            
+                                                            {/* <td>-</td> */}
+                                                            <td>{eachDisburment.approvedBy}</td>
+                                                            {/* <td>-</td> */}
+                                                            <td>{eachDisburment.disbursmentStatusDescription}</td>
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -421,9 +435,8 @@ class DisbursementManagement extends React.Component {
                             </div>
                         )
                     }
-                case(disbursmentConstants.GET_DISBURSMENTS_SUCCESS):
-                    let allDisbursments = getDisbursementsRequest.request_data.response.data,
-                        currentItemState;
+                case(disbursmentConstants.GET_ALL_DISBURSMENTS_SUCCESS):
+                    let allDisbursments = getDisbursementsRequest.request_data.response.data;
                         
                         if(allDisbursments!==undefined){
                             if(allDisbursments.result.length>=1){
@@ -484,11 +497,6 @@ class DisbursementManagement extends React.Component {
 ) : null} */}
                                                 </Form.Group>
                                                 <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
-                                                <div className="actions-wrap">
-                                            <Button onClick={this.exportDisbursmentBatches} className="action-icon" variant="outline-secondary" type="button">
-                                                <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
-                                            </Button>
-                                        </div>
                                             </Form>
 
                                             <div className="pagination-wrap">
@@ -498,7 +506,7 @@ class DisbursementManagement extends React.Component {
                                                     value={this.state.PageSize}
                                                     className="countdropdown form-control form-control-sm">
                                                     <option value="10">10</option>
-                                                    <option value="25">25</option>
+                                                    /partial
                                                     <option value="50">50</option>
                                                     <option value="200">200</option>
                                                 </select>
@@ -516,64 +524,43 @@ class DisbursementManagement extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
-                                                
-                                                <th>Batch Description</th>
-                                                <th>Total Amount</th>
-                                                <th>Date Initiated</th>
-                                                <th>Batch Status</th>
-                                                <th>Initiated by</th>
-                                                <th></th>
-                                            </tr>
+                                                    <th>Transaction Ref</th>
+                                                    <th>Request Date</th>
+                                                    <th>Source Account</th>
+                                                    <th>Sender Name</th>
+                                                    <th>Destination Account</th>
+                                                    <th>Destination Bank</th>
+                                                    <th>Recipient Name</th>
+                                                    <th>Amount (NGN)</th>
+                                                    <th>Inititated By</th>
+                                                    <th>Approved By</th>
+                                                    <th>Status</th>
+                                                    
+                                                </tr>
                                             </thead>
                                             <tbody>
                                                 {
                                                     allDisbursments.result.map((eachDisburment, index)=>{
-                                                        if(eachDisburment.batchStatus ===1 || eachDisburment.batchStatus ===0){
-                                                            currentItemState = "partial"
-                                                        }
-                                                        if(eachDisburment.batchStatus ===2){
-                                                            currentItemState = "pending-review"
-                                                        }
-                                                        if(eachDisburment.batchStatus ===3){
-                                                            currentItemState = "all"
-                                                        }
-                                                        if(eachDisburment.batchStatus ===4){
-                                                            currentItemState = "pending-approval"
-                                                        }
-                                                        if(eachDisburment.batchStatus ===5){
-                                                            currentItemState = "all"
-                                                        }
-                                                        if(eachDisburment.batchStatus ===6){
-                                                            currentItemState = "all"
-                                                        }
-                                                        if(eachDisburment.batchStatus ===7){
-                                                            currentItemState = "all"
-                                                        }
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
-                                                                    <td>{eachDisburment.batchDescription}</td>
-                                                                    <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td>
-                                                                    <td>{getDateFromISO(eachDisburment.dateInitiated, true)}</td>
-                                                                    <td>{eachDisburment.batchStatusDescription}</td>
-                                                                    <td>{eachDisburment.initiatedBy}</td>
+                                                                    
                                                                     <td>
-                                                                        <DropdownButton
-                                                                            size="sm"
-                                                                            title="Actions"
-                                                                            key="action"
-                                                                            className="customone"
-                                                                        >
-                                                                            <NavLink className="dropdown-item" to={`/disbursements/${currentItemState}/${eachDisburment.batchReference}`}>View Batch</NavLink>
-
-                                                                           
-
-                                                                        </DropdownButton>
+                                                                        <span className="txt-cta" onClick={()=>this.showDetails(eachDisburment.transactionReference)} >{eachDisburment.transactionReference}</span> 
                                                                     </td>
-                                                                    {/* <td><NavLink to={`/disbursements/partial/${eachDisburment.batchReference}`}> {eachDisburment.id} </NavLink> </td> */}
-                                                                    {/* <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td> */}
-                                                                    {/* <td>{getDateFromISO(eachDisburment.lastUpdated)}</td> */}
-
+                                                                    <td>{getDateFromISO(eachDisburment.createdDate, true)}</td>
+                                                                    <td>{eachDisburment.sourceAccount}</td>
+                                                                    <td>{eachDisburment.senderName}</td>
+                                                                    <td>{eachDisburment.destinationAccount}</td>
+                                                                    <td>{eachDisburment.destinationBank}</td>
+                                                                    <td>{eachDisburment.recipientName}</td>
+                                                                    {/* <td>-</td> */}
+                                                                    <td>{numberWithCommas(eachDisburment.amount, true, true)}</td>
+                                                                    <td>{eachDisburment.initiatedBy}</td>
+                                                                    {/* <td>-</td> */}
+                                                                    <td>{eachDisburment.approvedBy}</td>
+                                                                    {/* <td>-</td> */}
+                                                                    <td>{eachDisburment.disbursmentStatusDescription}</td>
                                                                 </tr>
                                                             </Fragment>
                                                         )
@@ -659,15 +646,28 @@ class DisbursementManagement extends React.Component {
                                         <TableComponent classnames="striped bordered hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Batch Description</th>
-                                                    <th>Total Amount</th>
-                                                    <th>Date Initiated</th>
-                                                    <th>Batch Status</th>
-                                                    <th>Initiated by</th>
+
+                                                    <th>Transaction Ref</th>
+                                                    <th>Request Date</th>
+                                                    <th>Source Account</th>
+                                                    <th>Sender Name</th>
+                                                    <th>Destination Account</th>
+                                                    <th>Destination Bank</th>
+                                                    <th>Recipient Name</th>
+                                                    <th>Amount (NGN)</th>
+                                                    <th>Inititated By</th>
+                                                    <th>Approved By</th>
+                                                    <th>Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -683,7 +683,7 @@ class DisbursementManagement extends React.Component {
                             return null;
                         }
 
-                case (disbursmentConstants.GET_DISBURSMENTS_FAILURE):
+                case (disbursmentConstants.GET_ALL_DISBURSMENTS_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
                             <div>{getDisbursementsRequest.request_data.error}</div>
@@ -757,9 +757,9 @@ class DisbursementManagement extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        getDisbursementsReducer : state.disbursmentReducers.getDisbursementsReducer,
+        getDisbursementsReducer : state.disbursmentReducers.getAllDisbursementsReducer,
         getDisbursementByRefReducer : state.disbursmentReducers.getDisbursementByRefReducer,
     };
 }
 
-export default connect(mapStateToProps)(DisbursementManagement);
+export default connect(mapStateToProps)(AllDisbursements);

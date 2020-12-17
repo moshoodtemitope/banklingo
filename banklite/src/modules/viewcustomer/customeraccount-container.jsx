@@ -61,6 +61,7 @@ class CustomerAccountContainer extends React.Component {
             generatedRoutes :{
                 customer: `/customer/${this.clientEncodedKey}`,
                 attachments: `/customer/${this.clientEncodedKey}/attachments`,
+                activities: `/customer/${this.clientEncodedKey}/activities`,
                 tasks: `/customer/${this.clientEncodedKey}/tasks`,
                 communications: `/customer/${this.clientEncodedKey}/communications`,
                 comments: `/customer/${this.clientEncodedKey}/comments`,
@@ -130,6 +131,7 @@ class CustomerAccountContainer extends React.Component {
             generatedRoutes :{
                 customer: `/customer/${this.clientEncodedKey}`,
                 attachments: `/customer/${this.clientEncodedKey}/attachments`,
+                activities: `/customer/${this.clientEncodedKey}/activities`,
                 tasks: `/customer/${this.clientEncodedKey}/tasks`,
                 communications: `/customer/${this.clientEncodedKey}/communications`,
                 comments: `/customer/${this.clientEncodedKey}/comments`,
@@ -672,7 +674,9 @@ class CustomerAccountContainer extends React.Component {
                                 </NavLink>
                             </li>
                         }
-                        
+                        <li>
+                            <NavLink to={generatedRoutes.activities}>Activities</NavLink>
+                        </li>
                         {allUSerPermissions.indexOf("bnk_view_customer_documents") >-1 &&
                         
                             <li>

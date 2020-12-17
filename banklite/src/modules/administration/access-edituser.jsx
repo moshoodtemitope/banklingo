@@ -167,7 +167,7 @@ class EditUser extends React.Component {
 
                 validationSchema={updateUserValidationSchema}
                 onSubmit={(values, { resetForm }) => {
-
+                   
                     let updateNewUserPayload = {
                         firstName: values.firstName,
                         lastName: values.lastName,
@@ -254,6 +254,8 @@ class EditUser extends React.Component {
                     resetForm,
                     values,
                     touched,
+                    setFieldTouched,
+                    setFieldValue,
                     isValid,
                     errors, }) => (
                         <Form noValidate 
@@ -309,15 +311,18 @@ class EditUser extends React.Component {
                                                         value: currentRole? currentRole.roleId : null
                                                     }}
                                         onChange={(selectedRole) => {
+                                            setFieldValue('roleId', selectedRole.value)
                                             this.setState({ selectedRole });
                                             errors.roleId = null
                                             values.roleId = selectedRole.value
+                                            
                                         }}
+                                        onBlur={() => setFieldTouched('roleId', true)}
                                         className={errors.roleId && touched.roleId ? "is-invalid" : null}
                                         // value="roleId"
                                         name="roleId"
                                         // value={values.roleId}
-                                        required
+                                        
                                     />
                                     {errors.roleId && touched.roleId ? (
                                         <span className="invalid-feedback">{errors.roleId}</span>
@@ -562,16 +567,18 @@ class EditUser extends React.Component {
                                                     defaultValue ={{label:currentBranch!==null?currentBranch.name:null, 
                                                                     value:currentBranch!==null? currentBranch.id:null}}
                                                     onChange={(selectedBranch) => {
+                                                        setFieldValue('branchId', selectedBranch.value)
                                                         this.setState({ selectedBranch });
                                                         errors.branchId = null
                                                         values.branchId = selectedBranch.value;
-
+                                                        
                                                         
                                                     }}
+                                                    onBlur={() => setFieldTouched('branchId', true)}
                                                     className={errors.branchId && touched.branchId ? "is-invalid" : null}
                                                     // value={values.branchId}
                                                     name="branchId"
-                                                    required
+                                                    
                                                 />
                                                 {errors.branchId && touched.branchId ? (
                                                     <span className="invalid-feedback">{errors.branchId}</span>

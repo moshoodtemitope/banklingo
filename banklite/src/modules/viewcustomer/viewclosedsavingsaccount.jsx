@@ -700,7 +700,7 @@ class ViewClosedSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    {/* <th>Id</th> */}
+                                    <th>Activity Description</th>
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
@@ -712,6 +712,7 @@ class ViewClosedSavingsAccount extends React.Component {
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -756,7 +757,7 @@ class ViewClosedSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    {/* <th>Id</th> */}
+                                    <th>Activity Description</th>
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
@@ -772,8 +773,8 @@ class ViewClosedSavingsAccount extends React.Component {
                                         return(
                                             <Fragment key={index}>
                                                 <tr>
-                                                    {/* <td>{eachActivity.id}</td> */}
-                                                    <td>{eachActivity.creationDate}</td>
+                                                    <td>{eachActivity.activityDescription}</td>
+                                                    <td>{getDateFromISO(eachActivity.creationDate, true)}</td>
                                                     <td>{eachActivity.userName}</td>
                                                     <td>{eachActivity.action}</td>
                                                     <td>{eachActivity.affectedCustomerName}</td>
@@ -837,7 +838,7 @@ class ViewClosedSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    {/* <th>Id</th> */}
+                                    <th>Activity Description</th>
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
@@ -853,8 +854,8 @@ class ViewClosedSavingsAccount extends React.Component {
                                         return(
                                             <Fragment key={index}>
                                                 <tr>
-                                                    {/* <td>{eachActivity.id}</td> */}
-                                                    <td>{eachActivity.creationDate}</td>
+                                                    <td>{eachActivity.activityDescription}</td>
+                                                    <td>{getDateFromISO(eachActivity.creationDate, true)}</td>
                                                     <td>{eachActivity.userName}</td>
                                                     <td>{eachActivity.action}</td>
                                                     <td>{eachActivity.affectedCustomerName}</td>
@@ -903,7 +904,7 @@ class ViewClosedSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    {/* <th>Id</th> */}
+                                    <th>Activity Description</th>
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
@@ -915,6 +916,7 @@ class ViewClosedSavingsAccount extends React.Component {
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

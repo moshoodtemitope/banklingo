@@ -130,7 +130,8 @@ import{
     getInwardsNIPReducer,
     exportInwardsNIPReducer,
     getOutwardsNIPReducer,
-    exportOutwardsNIPReducer
+    exportOutwardsNIPReducer,
+    getAllDisbursementsReducer
     
 } from './disbursment/disbursment.reducer'
 
@@ -363,7 +364,8 @@ export const disbursment ={
     getInwardsNIPReducer,
     exportInwardsNIPReducer,
     getOutwardsNIPReducer,
-    exportOutwardsNIPReducer
+    exportOutwardsNIPReducer,
+    getAllDisbursementsReducer
 }
 
 export const products ={

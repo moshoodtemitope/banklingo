@@ -214,12 +214,14 @@ class NipRequests extends React.Component {
                                         <th>Destination Bank</th>
                                         <th>Amount</th>
                                         <th>Fee</th>
+                                        <th>Status</th>
                                         <th>Narration</th>
                                         <th>Session ID</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -327,6 +329,7 @@ class NipRequests extends React.Component {
                                         <th>Destination Bank</th>
                                         <th>Amount</th>
                                         <th>Fee</th>
+                                        <th>Status</th>
                                         <th>Narration</th>
                                         <th>Session ID</th>
                                     </tr>
@@ -338,15 +341,16 @@ class NipRequests extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             {/* <td>{eachActivity.id}</td> */}
-                                                            <td>{getDateFromISO(eachRequest.transactionDate, true, true)}</td>
+                                                            <td>{getDateFromISO(eachRequest.transactionDate, true)}</td>
                                                             <td>{eachRequest.sourceAccountNumber}</td>
                                                             <td>{eachRequest.sourceAccountName}</td>
-                                                            <td>{eachRequest.sourceBankCode}</td>
+                                                            <td>{eachRequest.originInstitutionName}</td>
                                                             <td>{eachRequest.destinationAccountNumber}</td>
                                                             <td>{eachRequest.destinationAccountName}</td>
-                                                            <td>{eachRequest.destinationBankNumber}</td>
+                                                            <td>{eachRequest.destinationInstitutionName}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.amount, true, true)}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
+                                                            <td>{eachRequest.status}</td>
                                                             <td>{eachRequest.narration}</td>
                                                             <td>{eachRequest.sessionId}</td>
                                                         </tr>
@@ -475,6 +479,7 @@ class NipRequests extends React.Component {
                                             <th>Destination Bank</th>
                                             <th>Amount</th>
                                             <th>Fee</th>
+                                            <th>Status</th>
                                             <th>Narration</th>
                                             <th>Session ID</th>
                                         </tr>
@@ -486,15 +491,16 @@ class NipRequests extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             {/* <td>{eachActivity.id}</td> */}
-                                                            <td>{getDateFromISO(eachRequest.transactionDate, true, true)}</td>
+                                                            <td>{getDateFromISO(eachRequest.transactionDate, true)}</td>
                                                             <td>{eachRequest.sourceAccountNumber}</td>
                                                             <td>{eachRequest.sourceAccountName}</td>
-                                                            <td>{eachRequest.sourceBankCode}</td>
+                                                            <td>{eachRequest.originInstitutionName}</td>
                                                             <td>{eachRequest.destinationAccountNumber}</td>
                                                             <td>{eachRequest.destinationAccountName}</td>
-                                                            <td>{eachRequest.destinationBankNumber}</td>
+                                                            <td>{eachRequest.destinationInstitutionName}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.amount, true, true)}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
+                                                            <td>{eachRequest.status}</td>
                                                             <td>{eachRequest.narration}</td>
                                                             <td>{eachRequest.sessionId}</td>
                                                         </tr>
@@ -598,12 +604,14 @@ class NipRequests extends React.Component {
                                             <th>Destination Bank</th>
                                             <th>Amount</th>
                                             <th>Fee</th>
+                                            <th>Status</th>
                                             <th>Narration</th>
                                             <th>Session ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

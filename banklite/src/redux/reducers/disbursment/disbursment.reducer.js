@@ -131,6 +131,32 @@ export function getOutwardsNIPReducer(state=[], action) {
     }
 }
 
+export function getAllDisbursementsReducer(state=[], action) {
+    switch (action.type) {
+        case disbursmentConstants.GET_ALL_DISBURSMENTS_PENDING:
+            return {
+                request_status: disbursmentConstants.GET_ALL_DISBURSMENTS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case disbursmentConstants.GET_ALL_DISBURSMENTS_SUCCESS:
+            return {
+                request_status: disbursmentConstants.GET_ALL_DISBURSMENTS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case disbursmentConstants.GET_ALL_DISBURSMENTS_FAILURE:
+            return {
+                request_status: disbursmentConstants.GET_ALL_DISBURSMENTS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function exportOutwardsNIPReducer(state=[], action) {
     switch (action.type) {
         case disbursmentConstants.EXPORT_NIP_OUTWARDS_PENDING:

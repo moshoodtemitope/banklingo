@@ -197,6 +197,7 @@ const disbursmentReducers = combineReducers({
     exportInwardsNIPReducer: disbursment.exportInwardsNIPReducer, 
     getOutwardsNIPReducer: disbursment.getOutwardsNIPReducer, 
     exportOutwardsNIPReducer: disbursment.exportOutwardsNIPReducer, 
+    getAllDisbursementsReducer: disbursment.getAllDisbursementsReducer, 
 })
 
 const productReducers = combineReducers({

@@ -625,7 +625,7 @@ class ViewADisbursmentBatch extends React.Component {
                                     className="customone"
                                     alignRight
                                 >
-                                    {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===0) &&
+                                    {(allUSerPermissions.indexOf("bnk_initiate_disbursements") >-1 && batchDetails.batchStatus===0) &&
                                         <Dropdown.Item eventKey="1" 
                                         onClick={()=>
                                             this.handleShowActionConfirmation("validate",
@@ -635,14 +635,14 @@ class ViewADisbursmentBatch extends React.Component {
                                                                                 )       
                                         } >Validate Batch</Dropdown.Item>
                                     }
-                                    {(allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===0) &&
+                                    {(allUSerPermissions.indexOf("bnk_initiate_disbursements") >-1 && batchDetails.batchStatus===0) &&
                                         <Dropdown.Item eventKey="1" 
                                                 onClick={()=>{
                                                     this.handleShowDelete();
                                                     this.setState({batchToDelete:batchDetails.batchReference, batchIdToDelete:batchDetails.id})}}
                                         >Delete Batch</Dropdown.Item>
                                     }
-                                    {(allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===1) &&
+                                    {(allUSerPermissions.indexOf("bnk_initiate_disbursements") >-1 && batchDetails.batchStatus===1) &&
                                         <Dropdown.Item eventKey="1"
                                                         onClick={()=>
                                                             this.handleShowActionConfirmation("confirm",
