@@ -25,7 +25,8 @@ export const disbursementActions = {
     getInitiatedDisbursements,
     deleteADisbursement,
     exportDisbursmentBatches,
-    getAllDisbursements
+    getAllDisbursements,
+    exportAllDisbursments
 }
 
 function getDisbursement  (payload, type, tempData){
@@ -240,6 +241,71 @@ function exportInwardsNIP  (payload, tempData){
     // function request(user) { return { type: disbursmentConstants.EXPORT_NIP_INWARDS_PENDING, user } }
     function success(response) { return { type: disbursmentConstants.EXPORT_NIP_INWARDS_SUCCESS, response } }
     function failure(error) { return { type: disbursmentConstants.EXPORT_NIP_INWARDS_FAILURE, error } }
+
+}
+
+function exportAllDisbursments  (payload, tempData){
+    
+    return dispatch =>{
+        let 
+            url = routes.HIT_NIP+`/disbursementitemsexport?${payload}`;  
+
+            
+        let consume = ApiService.request(url, "GET", '','','', "blob");
+        // let consume = ApiService.request(url, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                    
+                let disposition = response.headers['content-disposition'],
+                filename;
+                
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) { 
+                    filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+                
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                if(filename === undefined){
+                    link.setAttribute('download', 'All-Disbursments.xlsx');
+                }
+
+                if(filename !== undefined){
+                    link.setAttribute('download', filename);
+                }
+
+                
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                
+                dispatch(success(response));
+            }).catch(error =>{
+            
+                dispatch(failure(handleRequestErrors(error)));
+            });
+            
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: disbursmentConstants.EXPORT_ALL_DISBURSMENTS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: disbursmentConstants.EXPORT_ALL_DISBURSMENTS_PENDING, user, tempData } 
+        }
+    }
+    
+
+    // function request(user) { return { type: disbursmentConstants.EXPORT_ALL_DISBURSMENTS_PENDING, user } }
+    function success(response) { return { type: disbursmentConstants.EXPORT_ALL_DISBURSMENTS_SUCCESS, response } }
+    function failure(error) { return { type: disbursmentConstants.EXPORT_ALL_DISBURSMENTS_FAILURE, error } }
 
 }
 

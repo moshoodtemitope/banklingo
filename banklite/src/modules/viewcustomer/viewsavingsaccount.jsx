@@ -2284,10 +2284,12 @@ class ViewSavingsAccount extends React.Component {
                                         {depositAccountData.productTypeDescription}
                                     </td>
                                 </tr>
-                                {/* <tr>
-                                    <td>Assigned to Branch</td>
-                                    <td></td>
-                                </tr> */}
+                                {depositAccountData.isMaturityDateSet===true &&
+                                <tr>
+                                    <td>Maturity Date</td>
+                                    <td>{getDateFromISO(depositAccountData.maturityDate)}</td>
+                                </tr>
+                                }
                                 <tr>
                                     <td>Account State</td>
                                     <td>{depositAccountData.accountStateDescription}</td>
