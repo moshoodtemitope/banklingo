@@ -164,7 +164,8 @@ class EditUser extends React.Component {
                     password: '',
                     branchId: userData.branchId!==null? userData.branchId :'',
                 }}
-
+                // validateOnBlur={true}
+                // validateOnChange={true}
                 validationSchema={updateUserValidationSchema}
                 onSubmit={(values, { resetForm }) => {
                    
@@ -172,7 +173,7 @@ class EditUser extends React.Component {
                         firstName: values.firstName,
                         lastName: values.lastName,
                         title: values.title,
-                        roleId: values.roleId,
+                        roleId: parseInt(values.roleId),
                         isAccountOfficer: values.userIsAccountOfficer,
                         isTeller: values.userIsTeller,
                         isApiAccess: values.userHasApiAccessRight,
@@ -304,7 +305,26 @@ class EditUser extends React.Component {
                                 </Col>
                                 <Col>
                                     <Form.Label className="block-level">Role</Form.Label>
-                                    <Select
+                                    <select id="roleId"
+                                        onChange={handleChange}
+                                        name="roleId"
+                                        value={values.roleId}
+                                        defaultValue={currentRole.roleId}
+                                        className={errors.roleId && touched.roleId ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+                                    >
+                                        {
+                                            allRoles.map((eachRole, index)=>{
+                                                return(
+                                                    <option key={index} value={eachRole.value}>{eachRole.label}</option>
+                                                )
+                                            })
+                                        }
+                                        
+                                    </select>
+                                    {errors.roleId && touched.roleId ? (
+                                        <span className="invalid-feedback">{errors.roleId}</span>
+                                    ) : null}
+                                    {/* <Select
                                         options={allRoles}
                                         defaultValue ={{
                                                         label: currentRole? currentRole.name : null, 
@@ -319,14 +339,12 @@ class EditUser extends React.Component {
                                         }}
                                         onBlur={() => setFieldTouched('roleId', true)}
                                         className={errors.roleId && touched.roleId ? "is-invalid" : null}
-                                        // value="roleId"
                                         name="roleId"
-                                        // value={values.roleId}
                                         
                                     />
                                     {errors.roleId && touched.roleId ? (
                                         <span className="invalid-feedback">{errors.roleId}</span>
-                                    ) : null} 
+                                    ) : null}  */}
                                     
                                 </Col>
                             </Form.Row>
@@ -562,7 +580,26 @@ class EditUser extends React.Component {
                                             </Col>
                                             <Col>
                                                 <Form.Label className="block-level">Branch</Form.Label>
-                                                <Select
+                                                <select id="branchId"
+                                                    onChange={handleChange}
+                                                    name="branchId"
+                                                    value={values.branchId}
+                                                    defaultValue={currentBranch.id}
+                                                    className={errors.branchId && touched.branchId ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+                                                >
+                                                    {
+                                                        allBranches.map((eachBranch, index) => {
+                                                            return (
+                                                                <option key={index} value={eachBranch.value}>{eachBranch.label}</option>
+                                                            )
+                                                        })
+                                                    }
+
+                                                </select>
+                                                {errors.branchId && touched.branchId ? (
+                                                    <span className="invalid-feedback">{errors.branchId}</span>
+                                                ) : null}
+                                                {/* <Select
                                                     options={allBranches}
                                                     defaultValue ={{label:currentBranch!==null?currentBranch.name:null, 
                                                                     value:currentBranch!==null? currentBranch.id:null}}
@@ -576,13 +613,13 @@ class EditUser extends React.Component {
                                                     }}
                                                     onBlur={() => setFieldTouched('branchId', true)}
                                                     className={errors.branchId && touched.branchId ? "is-invalid" : null}
-                                                    // value={values.branchId}
+                                                    
                                                     name="branchId"
                                                     
                                                 />
                                                 {errors.branchId && touched.branchId ? (
                                                     <span className="invalid-feedback">{errors.branchId}</span>
-                                                ) : null} 
+                                                ) : null}  */}
                                             </Col>
                                         </Form.Row>
                                     </div>

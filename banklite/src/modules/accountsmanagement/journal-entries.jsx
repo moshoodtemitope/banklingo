@@ -345,10 +345,10 @@ class JournalEntries extends React.Component {
                                 jornalEntryModel =[]
                                 values.jornalEntries.forEach(eachEntry=>{
                                     if(eachEntry.entryTypeId===1){
-                                        console.log("each credit value",eachEntry.entryAmount);
+                                        // console.log("each credit value",eachEntry.entryAmount);
                                         creditTotal+=parseFloat(eachEntry.entryAmount.replace(/,/g, ''));
                                     }else{
-                                        console.log("each debit value",eachEntry.entryAmount);
+                                        // console.log("each debit value",eachEntry.entryAmount);
                                         debitTotal +=parseFloat(eachEntry.entryAmount.replace(/,/g, ''));
                                     }
                                     jornalEntryModel.push({
@@ -554,7 +554,7 @@ class JournalEntries extends React.Component {
                                                                             touched.jornalEntries[index].entryTypeId  = null
                                                                         }
 
-                                                                        console.log("type is",selectedType.value, typeof selectedType.value);
+                                                                        // console.log("type is",selectedType.value, typeof selectedType.value);
                                                                         
                                                                         // values.jornalEntries[index].entryTypeId = selectedType.value
                                                                         values.jornalEntries[index].entryTypeId = parseInt(selectedType.value)
