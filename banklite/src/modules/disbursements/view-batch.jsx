@@ -616,7 +616,16 @@ class ViewADisbursmentBatch extends React.Component {
                 <div className="heading-ctas">
                     <ul className="nav">
                         
-                        {   (allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus!==5 && batchDetails.batchStatus!==6 && batchDetails.batchStatus!==7) &&
+                        {   ( 
+                               ( 
+                                (allUSerPermissions.indexOf("bnk_initiate_disbursements") >-1 && batchDetails.batchStatus===0)||
+                                (allUSerPermissions.indexOf("bnk_initiate_disbursements") >-1 && batchDetails.batchStatus===1) ||
+                                (allUSerPermissions.indexOf("bnk_review_disbursements") >-1 && batchDetails.batchStatus===2) ||
+                                (allUSerPermissions.indexOf("bnk_approve_disburmsements") >-1 && batchDetails.batchStatus===4) 
+                               )
+                                        
+                                && (batchDetails.batchStatus!==5 && batchDetails.batchStatus!==6 && batchDetails.batchStatus!==7)
+                            ) &&
                             <li>
                                 <DropdownButton
                                     size="sm"
