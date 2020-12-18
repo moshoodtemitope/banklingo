@@ -144,10 +144,13 @@ function PrivateRoute({ component: Component, authed,accessRequired, ...rest }) 
     if(authed && Object.keys(authed).length>=1 ){
         let userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
         if(userPermissions){
+            
             let allUSerPermissions =[];
                 userPermissions.map(eachPermission=>{
                     allUSerPermissions.push(eachPermission.permissionCode)
                 })
+
+                
 
             if(accessRequired && allUSerPermissions.indexOf(accessRequired) >-1){
                 return (

@@ -464,7 +464,8 @@ class DisbursementPendingApproval extends React.Component {
                                     <thead>
                                         <tr>
 
-                                             <th>Batch Description</th>
+                                            <th>Batch Description</th>
+                                            <th>Batch Reference</th>
                                             <th>Total Amount</th>
                                             <th>Date Initiated</th>
                                             <th>Batch Status</th>
@@ -473,6 +474,7 @@ class DisbursementPendingApproval extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -569,6 +571,7 @@ class DisbursementPendingApproval extends React.Component {
                                         <tr>
                                                    
                                             <th>Batch Description</th>
+                                            <th>Batch Reference</th>
                                             <th>Total Amount</th>
                                             <th>Date Initiated</th>
                                             <th>Batch Status</th>
@@ -582,6 +585,7 @@ class DisbursementPendingApproval extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>     
                                                             <td>{eachDisburment.batchDescription}</td>
+                                                            <td>{eachDisburment.batchReference}</td>
                                                             <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td>
                                                             <td>{getDateFromISO(eachDisburment.dateInitiated)}</td>
                                                             <td>{eachDisburment.batchStatusDescription}</td>
@@ -688,6 +692,7 @@ class DisbursementPendingApproval extends React.Component {
                                             <tr>
                                                
                                                 <th>Batch Description</th>
+                                                <th>Batch Reference</th>
                                                 <th>Total Amount</th>
                                                 <th>Date Initiated</th>
                                                 <th>Batch Status</th>
@@ -702,6 +707,7 @@ class DisbursementPendingApproval extends React.Component {
                                                         <Fragment key={index}>
                                                             <tr>
                                                                 <td>{eachDisburment.batchDescription}</td>
+                                                                <td>{eachDisburment.batchReference}</td>
                                                                 <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td>
                                                                 <td>{getDateFromISO(eachDisburment.dateInitiated)}</td>
                                                                 <td>{eachDisburment.batchStatusDescription}</td>
@@ -806,6 +812,7 @@ class DisbursementPendingApproval extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Batch Description</th>
+                                            <th>Batch Reference</th>
                                             <th>Total Amount</th>
                                             <th>Date Initiated</th>
                                             <th>Batch Status</th>
@@ -814,6 +821,7 @@ class DisbursementPendingApproval extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

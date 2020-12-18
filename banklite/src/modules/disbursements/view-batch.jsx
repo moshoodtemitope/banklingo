@@ -754,6 +754,10 @@ class ViewADisbursmentBatch extends React.Component {
                                                                     <td>{batchDetails.batchInfo.id}</td>
                                                                 </tr>
                                                                 <tr>
+                                                                    <td>Batch Reference</td>
+                                                                    <td>{batchDetails.batchInfo.batchReference}</td>
+                                                                </tr>
+                                                                <tr>
                                                                     <td>Total records</td>
                                                                     <td>{batchDetails.disbursementItems.length}</td>
                                                                 </tr>
