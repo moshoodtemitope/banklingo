@@ -129,7 +129,7 @@ class TrialBalanceBasic extends React.Component {
             endDate = endDate.toISOString();
             // startDate = startDate.toISOString();
             let payload = {
-                    branchId: branchId.value,
+                    branchId: branchId,
                     // StartDate: startDate.toISOString(),
                     // StartDate: null,
                     EndDate: endDate,
@@ -275,9 +275,9 @@ class TrialBalanceBasic extends React.Component {
                                                     <Select
                                                         options={branchData}
                                                         // onBlur={setFieldValue}
-                                                        onChange={(value) => {
-                                                            setFieldValue('branchId', value)
-                                                            this.setState({branchId: value})
+                                                        onChange={(branch) => {
+                                                            setFieldValue('branchId', branch.value)
+                                                            this.setState({branchId: branch.value})
                                                         }}
                                                         onBlur={()=> setFieldTouched('branchId', true)}
                                                         // onChange={setFieldValue}
