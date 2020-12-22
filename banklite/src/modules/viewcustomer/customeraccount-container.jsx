@@ -748,12 +748,12 @@ class CustomerAccountContainer extends React.Component {
             &&  getClientLoansRequest.request_status ===loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
             && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS){
                 
-                // console.log("dsdsdsdsd", getAClientRequest);
+                
                 let customerDetails = getAClientRequest.request_data.response.data;
                 let   customerLoanAccounts = getClientLoansRequest.request_data.response.data;
                 let    customerDepositAccounts = getClientDepositsRequest.request_data.response.data;
 
-                   
+                //    console.log("dsdsdsdsd", getAClientRequest.request_data.response);
             return(
                 <div>
                     {this.newTask()}

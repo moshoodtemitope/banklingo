@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { Fragment } from "react";
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -129,7 +129,8 @@ class InitiateDisbursement extends React.Component {
                                 <Button
                                     variant="success"
                                 >
-                                   <a href="/assets/lingo-batch-disburse.xlsx" download>Download Template</a>
+                                    <Link to="/files/lingo-batch-disburse.xlsx" target="_blank" download>Download Template</Link>
+                                   {/* <a href="/assets/lingo-batch-disburse.xlsx" download>Download Template</a> */}
                                 </Button>
                             </div>
                         </div>

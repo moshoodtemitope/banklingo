@@ -146,7 +146,17 @@ function getAClient  (encodedKey){
             dispatch(request(consume));
             return consume
                 .then(response =>{
-                    dispatch(success(response));
+                    let consume2 = ApiService.request(routes.HIT_CLIENTS + `/passport/${encodedKey}`, "GET", null);
+                    dispatch(request(consume2));
+                    return consume2
+                        .then(response2 => {
+                            
+                            dispatch(success({...response,...response2.data }));
+                        }).catch(error => {
+
+                            dispatch(failure(handleRequestErrors(error)));
+                        });
+                    // dispatch(success(response));
                 }).catch(error =>{
                     
                     dispatch(failure(handleRequestErrors(error)));

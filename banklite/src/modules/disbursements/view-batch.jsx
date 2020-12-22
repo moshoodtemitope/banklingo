@@ -821,10 +821,12 @@ class ViewADisbursmentBatch extends React.Component {
                                                             <th>Bank Name</th>
                                                             <th>Bank Code</th>
                                                             <th>Recipient Name</th>
+                                                            <th>Source Account</th>
+                                                            <th>Source Account Name</th>
                                                             <th>Amount</th>
                                                             <th>Remarks</th>
                                                             <th>Response Message</th>
-                                                            {/* <th>Disbursment Status</th> */}
+                                                            <th>Disbursment Status</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -837,9 +839,12 @@ class ViewADisbursmentBatch extends React.Component {
                                                                             <td>{eachAccount.destinationBank}</td>
                                                                             <td>{eachAccount.destinationBankCode}</td>
                                                                             <td>{eachAccount.recipientName}</td>
+                                                                            <td>{eachAccount.sourceAccount}</td>
+                                                                            <td>{eachAccount.sourceAccountName}</td>
                                                                             <td>{numberWithCommas(eachAccount.amount, true, true)}</td>
                                                                             <td>{eachAccount.remarks}</td>
                                                                             <td>{eachAccount.responseMessage}</td>
+                                                                            <td>{eachAccount.statusDescription}</td>
                                                                         </tr>
                                                                     ) 
                                                                 

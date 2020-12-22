@@ -473,6 +473,7 @@ class CustomerHeading extends React.Component {
                 let   customerLoanAccounts = getClientLoansRequest.request_data.response.data;
                 let    customerDepositAccounts = getClientDepositsRequest.request_data.response.data;
 
+                
                    
             return(
                 <div>

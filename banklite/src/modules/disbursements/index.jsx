@@ -551,9 +551,10 @@ class DisbursementManagement extends React.Component {
                                                         if(eachDisburment.batchStatus ===6){
                                                             currentItemState = "all"
                                                         }
-                                                        if(eachDisburment.batchStatus ===7){
+                                                        if(eachDisburment.batchStatus ===7 || eachDisburment.batchStatus ===8){
                                                             currentItemState = "all"
                                                         }
+                                                        
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>

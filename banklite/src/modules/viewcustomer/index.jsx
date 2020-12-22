@@ -61,7 +61,8 @@ class ViewCustomer extends React.Component {
 
     renderCustomerActivities =()=>{
         let getAClientActivitiesRequest = this.props.getAClientActivitiesReducer;
-
+        
+       
         if(getAClientActivitiesRequest.request_status===clientsConstants.GET_A_CLIENT_ACTIVITIES_PENDING){
             return(
                 <div className="loading-text">Please wait... </div>
@@ -74,6 +75,7 @@ class ViewCustomer extends React.Component {
             if(customerActivitiesData.result.length>=1){
                 return(
                     <div className="activities-wrap">
+                        
                         {
                             customerActivitiesData.result.map((eachActivity,  index)=>{
                                 return(
@@ -122,12 +124,25 @@ class ViewCustomer extends React.Component {
                 &&  getClientLoansRequest.request_status ===loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
                 && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS){
 
-                    let customerDetails = getAClientRequest.request_data.response.data;
+                   
                     let   customerLoanAccounts = getClientLoansRequest.request_data.response.data;
                     let   customerDepositAccounts = getClientDepositsRequest.request_data.response.data;
+                    let getAClientRequest = this.props.getAClientReducer;
+                    let customerDetails = getAClientRequest.request_data.response.data;
+                    let passport = getAClientRequest.request_data.response.base64Image,
+                        passportStyle="";
 
+                        if(passport!==null){
+                            passportStyle = {
+                                background: `url(data:image/png;base64,${passport})`,
+                                height:'100px',
+                                backgroundSize: `100% 100%`,
+                                backgroundPosition: `center center`,
+                                backgroundRepeat: `no-repeat`
+                            }
+                        }
                     let customerTypeVal = this.state.user.custTypes.filter(eachType=>eachType.id===customerDetails.clientTypeId)[0];
-                    
+                    // console.log("dsdsdsdsd", getAClientRequest.request_data.response);
                     return(
                         <div className="row">
 
@@ -314,6 +329,9 @@ class ViewCustomer extends React.Component {
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="leftside-items">
+                                            {passport!==null &&
+                                                <div style={passportStyle} className="passport-photo"></div>
+                                            }
                                                 <h6>Latest Activity </h6>
                                                 {this.renderCustomerActivities()}
                                             </div>
