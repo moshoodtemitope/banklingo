@@ -103,7 +103,7 @@ class MainMenu extends React.Component{
                                                             if(eachSubMenu.permissionCode!==undefined && allUSerPermissions.indexOf(eachSubMenu.permissionCode) > -1){
                                                                 return(
                                                                     <li key={submenuIdx}>
-                                                                        <NavLink to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
+                                                                        <NavLink exact to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
                                                                     </li>
                                                                 )
                                                             }
@@ -111,7 +111,7 @@ class MainMenu extends React.Component{
                                                             if(eachSubMenu.permissionCode ===undefined){
                                                                 return(
                                                                     <li key={submenuIdx}>
-                                                                        <NavLink to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
+                                                                        <NavLink exact to={eachSubMenu.subMmenuRoute}>{eachSubMenu.subMenuLabel}</NavLink>
                                                                     </li>
                                                                 )
                                                             }

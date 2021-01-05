@@ -3,10 +3,10 @@
 // const URL = 'http://40.76.69.211/Banklot';
 // const URL = 'http://40.76.69.211/Fintech.CBS.Backend';
 // const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
-// const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com' : 'https://theprojectsplash.com'
+// const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
 const URL = process.env.NODE_ENV === 'development' ? 'https://banklingoapi.monee.ng/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
 // const URL = process.env.API_URL
-
+// https://theprojectsplash.com/Fintech.CBS.Backend/swagger/index.html
 const BASEURL = URL;  
 
 export const routes = {

@@ -51,7 +51,7 @@ class InitiateDisbursement extends React.Component {
 
     getDisbursementBanks = () => {
         const { dispatch } = this.props;
-
+        dispatch(disbursementActions.postNewDisbursementBatch("CLEAR"));
         dispatch(disbursementActions.getDisbursementBanks());
     }
 

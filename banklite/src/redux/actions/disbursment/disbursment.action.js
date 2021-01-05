@@ -248,7 +248,7 @@ function exportAllDisbursments  (payload, tempData){
     
     return dispatch =>{
         let 
-            url = routes.HIT_NIP+`/disbursementitemsexport?${payload}`;  
+            url = routes.HIT_DISBURSEMENT+`/disbursementitemsexport?${payload}`;  
 
             
         let consume = ApiService.request(url, "GET", '','','', "blob");
@@ -569,6 +569,7 @@ function postNewDisbursementBatch   (newDisbursmentBatch){
             dispatch(request(consume));
             return consume
                 .then(response => {
+                    
                     dispatch(success(response));
                     
                     history.push(`/disbursements/partial/${response.data.batchReference}`)

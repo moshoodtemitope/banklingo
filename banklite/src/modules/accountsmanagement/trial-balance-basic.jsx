@@ -208,7 +208,7 @@ class TrialBalanceBasic extends React.Component {
 
                                                 
                                                 let payload = {
-                                                    branchId: values.branchId.value,
+                                                    branchId: values.branchId,
                                                     // StartDate: values.startDate.toISOString(),
                                                     // StartDate: null,
                                                     // StartDate: this.state.startDate.toISOString(),

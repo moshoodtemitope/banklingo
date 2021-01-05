@@ -879,7 +879,8 @@ class ViewADisbursmentBatch extends React.Component {
                         <div className="row">
                             <div className="col-sm-12">
                                 <div className="">
-                                    <h2>Partial Application</h2>
+                                    {/* <h2>Partial Application</h2> */}
+                                    <h2>{batchDetails.batchInfo.batchStatusDescription}</h2>
                                 </div>
                             </div>
                         </div>

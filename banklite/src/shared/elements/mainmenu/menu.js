@@ -111,7 +111,7 @@ export const menuList = [
             {
                 subMenuLabel: "All Disbursements",
                 permissionCode: "bnk_view_disbursements",
-                subMmenuRoute: "/disbursements",
+                subMmenuRoute: "/disbursements/all-items",
             },
             {
                 subMenuLabel: "All Batches",
@@ -628,7 +628,7 @@ export const disbursementMenuList = [
         permissionName: "View Disbursements",
         mainMenu: "All Disbursements",
         permissionCode: "bnk_view_disbursements",
-        menuRoute: "/disbursements",
+        menuRoute: "/disbursements/all-items",
     },
 
     {
