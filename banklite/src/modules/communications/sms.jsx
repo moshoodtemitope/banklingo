@@ -51,11 +51,11 @@ class SMSCommunications extends React.Component {
         setPagesize = (PageSize, tempData)=>{
             const {dispatch} = this.props;
             let sizeOfPage = PageSize.target.value,
-                {CurrentPage, NotificationType} = this.state;
+                {CurrentPage, NotificationType, SearchText, startDate, endDate} = this.state;
     
             this.setState({PageSize: sizeOfPage});
     
-            let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&NotificationType=${NotificationType}`;
+            let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&NotificationType=${NotificationType}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
             // this.getNotifications(params);
 
             if(tempData){
@@ -68,13 +68,13 @@ class SMSCommunications extends React.Component {
         loadNextPage = (nextPage, tempData)=>{
         
             const {dispatch} = this.props;
-            let {PageSize,CurrentPage,NotificationType} = this.state;
+            let {PageSize,CurrentPage,NotificationType, SearchText, startDate, endDate} = this.state;
     
             // this.setState({PageSize: sizeOfPage});
     
             // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
             // this.getTransactionChannels(params);
-            let params= `PageSize=${PageSize}&CurrentPage=${nextPage}&NotificationType=${NotificationType}`;
+            let params= `PageSize=${PageSize}&CurrentPage=${nextPage}&NotificationType=${NotificationType}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     
             if(tempData){
                 dispatch(administrationActions.getNotifications(params,tempData));

@@ -74,11 +74,11 @@ class ClientsManagement extends React.Component {
         // console.log('----here', PageSize.target.value);
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
-            {FullDetails, CurrentPage, BranchId,ClientState} = this.state;
+            {FullDetails, CurrentPage, BranchId,ClientState,endDate, startDate} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
-        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
+        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}`;
         // this.getClients(params);
 
         if(tempData){
@@ -92,11 +92,11 @@ class ClientsManagement extends React.Component {
         const {dispatch} = this.props;
         // console.log('----here', PageSize.target.value);
         let showDetails = FullDetails.target.checked,
-            {CurrentPage, PageSize, BranchId,ClientState} = this.state;
+            {CurrentPage, PageSize, BranchId,ClientState, endDate, startDate} = this.state;
 
         this.setState({FullDetails: showDetails});
 
-        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
+        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}`;
         // this.getClients(params);
 
         if(tempData){
@@ -158,13 +158,13 @@ class ClientsManagement extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage,FullDetails, BranchId, ClientState} = this.state;
+        let {PageSize,CurrentPage,FullDetails, BranchId, ClientState, endDate, startDate} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
+        let params= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}`;
 
         if(tempData){
             dispatch(clientsActions.getClients(params,tempData));

@@ -86,7 +86,7 @@ class DisbursementManagement extends React.Component {
 
         this.setState({PageSize: sizeOfPage});
 
-        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         // this.getDisbursements(params);
 
         if(tempData){

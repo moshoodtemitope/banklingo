@@ -67,11 +67,11 @@ class LoanTransactions extends React.Component {
     setPagesize = (PageSize, tempData) => {
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value,
-            { CurrentPage, CurrentSelectedPage } = this.state;
+            { CurrentPage, CurrentSelectedPage, SearchText, startDate, endDate } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
-        let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         
         if(tempData){
             dispatch(loanActions.getLoanTransactions(params,tempData));
@@ -83,8 +83,8 @@ class LoanTransactions extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let { PageSize } = this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${nextPage}`;
+        let {PageSize,CurrentPage, SearchText, startDate, endDate} = this.state;
+        let params= `&PageSize=${PageSize}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
         if(tempData){
             dispatch(loanActions.getLoanTransactions(params,tempData));

@@ -70,11 +70,11 @@ class AllLoanSchedules extends React.Component {
     setPagesize = (PageSize,tempData) => {
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
-            { FullDetails, CurrentPage, CurrentSelectedPage, ScheduleState } = this.state;
+            { FullDetails, CurrentPage, CurrentSelectedPage, ScheduleState, SearchText, startDate, endDate } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
-        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${ScheduleState}`;
+        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${ScheduleState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         if(tempData){
             dispatch(loanActions.getAllLoanSchedules(params,tempData));
         }else{
@@ -85,11 +85,11 @@ class AllLoanSchedules extends React.Component {
     setScheduleState = (stateChosen,tempData) => {
         const {dispatch} = this.props;
         let currentState = stateChosen.target.value,
-            { FullDetails, CurrentPage,PageSize, CurrentSelectedPage } = this.state;
+            { FullDetails, CurrentPage,PageSize, CurrentSelectedPage, SearchText, startDate, endDate } = this.state;
 
         this.setState({ ScheduleState: currentState });
 
-        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${currentState}`;
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${currentState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         if(tempData){
             dispatch(loanActions.getAllLoanSchedules(params,tempData));
         }else{
@@ -100,11 +100,11 @@ class AllLoanSchedules extends React.Component {
     setShowDetails = (FullDetails,tempData) => {
         const {dispatch} = this.props;
         let showDetails = FullDetails.target.checked,
-            { CurrentPage, CurrentSelectedPage, PageSize, ScheduleState } = this.state;
+            { CurrentPage, CurrentSelectedPage, PageSize, ScheduleState, SearchText, startDate, endDate } = this.state;
 
         this.setState({ FullDetails: showDetails });
 
-        let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${ScheduleState}`;
+        let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&ScheduleState=${ScheduleState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         if(tempData){
             dispatch(loanActions.getAllLoanSchedules(params,tempData));
         }else{
@@ -143,13 +143,13 @@ class AllLoanSchedules extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage,FullDetails, ScheduleState} = this.state;
+        let {PageSize,CurrentPage,FullDetails, ScheduleState, SearchText, startDate, endDate} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}&ScheduleState=${ScheduleState}`;
+        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}&ScheduleState=${ScheduleState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
         if(tempData){
             dispatch(loanActions.getAllLoanSchedules(params,tempData));

@@ -64,7 +64,7 @@ class BranchesManagement extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage,FullDetails} = this.state;
+        let {PageSize,CurrentPage,FullDetails, endDate, startDate} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 

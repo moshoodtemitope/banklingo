@@ -479,8 +479,8 @@ class CustomerAccountContainer extends React.Component {
                             <Button size="sm" onClick={this.handleTaskShow}>New Task</Button>
                         </li>
                     }
-                    {   (customerDetails.clientState===4 && 
-                        (allUSerPermissions.indexOf("bnk_create_loan") >-1 ||allUSerPermissions.indexOf("bnk_create_deposit") >-1  )) &&
+                    {   ((customerDetails.clientState===4 || customerDetails.clientState===1) && 
+                        (allUSerPermissions.indexOf("bnk_create_loan") >-1 || allUSerPermissions.indexOf("bnk_create_deposit") >-1  )) &&
                         <li>
                             <DropdownButton
                                 size="sm"
@@ -507,7 +507,7 @@ class CustomerAccountContainer extends React.Component {
                             </Button>
                         </li>
                     }
-                    {(customerDetails.clientState===4 && allUSerPermissions.indexOf("bnk_blacklist_customer") >-1) &&
+                    {((customerDetails.clientState===4 || customerDetails.clientState===1) && allUSerPermissions.indexOf("bnk_blacklist_customer") >-1) &&
                         <li>
                             <DropdownButton
                                 size="sm"

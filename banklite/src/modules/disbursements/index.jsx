@@ -82,11 +82,11 @@ class DisbursementManagement extends React.Component {
         // console.log('----here', PageSize.target.value);
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
-            {CurrentPage} = this.state;
+            {CurrentPage, SearchText, startDate, endDate} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
-        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
+        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         // this.getDisbursements(params);
 
         if(tempData){
@@ -127,13 +127,13 @@ class DisbursementManagement extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage} = this.state;
+        let {PageSize,CurrentPage, SearchText, startDate, endDate} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
         // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
         // this.getTransactionChannels(params);
-        let params= `&PageSize=${PageSize}&CurrentPage=${nextPage}`;
+        let params= `&PageSize=${PageSize}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
         if(tempData){
             dispatch(disbursementActions.getDisbursement(params,tempData));

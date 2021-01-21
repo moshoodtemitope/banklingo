@@ -19,7 +19,7 @@ const instance = axios.create({
     }
 });
 
-
+let cancelToken;
 
 export class ApiService {
 
@@ -121,6 +121,7 @@ export class ApiService {
             "/api/Login/refreshtoken",
             "api/Login",
         ],
+        globalSearch ="Search/items?SearchText",
         serviceToTest = url.split("Fintech.CBS.Backend")[1];
 
         if(localStorage.getItem('lingoAuth' === null)){
@@ -143,9 +144,19 @@ export class ApiService {
             }
             let serviceResponse ="",
                 serviceResponse2 ="";
+            
+                if(url.indexOf(globalSearch)>-1){
+                   
+                    if (typeof cancelToken != typeof undefined) {
+                        cancelToken.cancel("Operation canceled due to new request.");
+                    }
+                    cancelToken = axios.CancelToken.source();
+                }
             if(lingoAuth!==null && lingoAuth!==undefined && skipTokenRefreshForUrls.indexOf(serviceToTest) === -1){
                 lastRefreshTime = lingoAuth.lastLogForAuth;
                 currenTimestamp = Date.now();
+
+
                 
                 if(parseInt(((currenTimestamp -lastRefreshTime)/60000))>=3){ // If Last Token refresh is more than 3 mins, Pause GET reqeust, refresh token, and resume the GET request
                     let tempRequest = {
@@ -178,7 +189,13 @@ export class ApiService {
                                 // responseType
                                 instance.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
                                 if(responseType ===undefined){
-                                    service = instance.get(tempRequest.url, tempRequest.bodyData);
+                                    
+                                    if(url.indexOf(globalSearch)>-1){
+                            
+                                        service = instance.get(tempRequest.url,  { cancelToken: cancelToken.token });
+                                    }else{
+                                        service = instance.get(tempRequest.url, tempRequest.bodyData);
+                                    }
                                 }
                                 if(responseType ==="blob"){
                                     service = instance.request({url:tempRequest.url, method: 'GET', data:tempRequest.bodyData, responseType: 'blob'})
@@ -250,7 +267,12 @@ export class ApiService {
                     });
                 }else{
                     if(responseType ===undefined){
-                        service = instance.get(url, bodyData);
+                        if(url.indexOf(globalSearch)>-1){
+                            
+                            service = instance.get(url, { cancelToken: cancelToken.token });
+                        }else{
+                            service = instance.get(url, bodyData);
+                        }
                     }
                     if(responseType ==="blob"){
                         service = instance.request({url:url, method: 'GET', data:bodyData, responseType: 'blob'})

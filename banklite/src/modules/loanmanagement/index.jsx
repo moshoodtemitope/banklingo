@@ -78,11 +78,11 @@ class LoansManagement extends React.Component {
         // console.log('----here', PageSize.target.value);
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value,
-            { FullDetails, CurrentPage, CurrentSelectedPage } = this.state;
+            { FullDetails, CurrentPage, CurrentSelectedPage, endDate, startDate } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
-        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
+        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}`;
         
 
         if(tempData){
@@ -149,7 +149,7 @@ class LoansManagement extends React.Component {
         // console.log('----here', PageSize.target.value);
         const { dispatch } = this.props;
         let showDetails = FullDetails.target.checked,
-            { CurrentPage, CurrentSelectedPage, PageSize } = this.state;
+            { CurrentPage, CurrentSelectedPage, PageSize, endDate, startDate } = this.state;
 
         this.setState({ FullDetails: showDetails });
 
@@ -166,7 +166,7 @@ class LoansManagement extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage,FullDetails} = this.state;
+        let {PageSize,CurrentPage,FullDetails, endDate, startDate} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
