@@ -318,6 +318,10 @@ class ViewCustomer extends React.Component {
                                                                     <td>{customerDetails.nextOfKin.nextOfKinMobileNumber}</td>
                                                                 </tr>
                                                                 <tr>
+                                                                    <td>Relationship</td>
+                                                                    <td>{customerDetails.nextOfKin.relationship}</td>
+                                                                </tr>
+                                                                <tr>
                                                                     <td>Home address</td>
                                                                     <td>{customerDetails.nextOfKin.nextofKinHomeAddress}</td>
                                                                 </tr>

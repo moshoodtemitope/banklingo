@@ -109,6 +109,9 @@ class NewClient extends React.Component {
         nextOfKinMobile:  Yup.string()
             .min(11, 'Valid response required')
             .max(16, 'Max limit reached'),
+        nextOfKinRelationship:  Yup.string()
+            .min(11, 'Valid response required')
+            .max(16, 'Max limit reached'),
         notes:  Yup.string()
             .min(3, 'Valid response required'), 
       });
@@ -170,6 +173,7 @@ class NewClient extends React.Component {
                                     nextOfKinFullName: '',
                                     nextOfKinAddress: '',
                                     nextOfKinMobile: '',
+                                    nextOfKinRelationship:'',
                                     gender:'',
                                     dateOfBirth:'',
                                     notes:'',
@@ -199,10 +203,11 @@ class NewClient extends React.Component {
                                             contactMobile: values.contactMobile,
                                             contactEmail: values.contactEmail
                                         },
-                                        nexOfKin: {
+                                        nextOfKin: {
                                             nextOfKinFullName: values.nextOfKinFullName,
                                             nextofKinHomeAddress: values.nextOfKinAddress,
                                             nextOfKinMobileNumber: values.nextOfKinMobile,
+                                            relationship: values.nextOfKinRelationship
                                         },
                                         bvn:values.BVN,
                                         gender:values.gender,
@@ -579,7 +584,17 @@ class NewClient extends React.Component {
                                                                     <span className="invalid-feedback">{errors.nextOfKinMobile}</span>
                                                                 ) : null}
                                                             </Col>
-                                                            <Col></Col>
+                                                            <Col>
+                                                                <Form.Label className="block-level">Next of Kin Relationship</Form.Label>
+                                                                    <Form.Control type="text" 
+                                                                        name="nextOfKinRelationship"
+                                                                        onChange={handleChange} 
+                                                                        value={values.nextOfKinRelationship}
+                                                                        className={errors.nextOfKinRelationship && touched.nextOfKinRelationship ? "is-invalid": null} />
+                                                                    {errors.nextOfKinRelationship && touched.nextOfKinRelationship ? (
+                                                                        <span className="invalid-feedback">{errors.nextOfKinRelationship}</span>
+                                                                    ) : null}
+                                                            </Col>
                                                         </Form.Row>
                                                     </div>
                                                 </Accordion.Collapse>

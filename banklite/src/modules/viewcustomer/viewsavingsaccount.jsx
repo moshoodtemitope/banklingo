@@ -157,7 +157,7 @@ class ViewSavingsAccount extends React.Component {
         dispatch(depositActions.getADepositAccountCommunications(this.depositEncodedKey,params));
     }
     setCommunicationsRequestPagesize = (PageSize, tempData) => {
-        // console.log('----here', PageSize.target.value);
+        
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value;
 
@@ -210,7 +210,7 @@ class ViewSavingsAccount extends React.Component {
     }
 
     setTransactionRequestPagesize = (PageSize, tempData) => {
-        // console.log('----here', PageSize.target.value);
+        
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value;
 
@@ -265,7 +265,7 @@ class ViewSavingsAccount extends React.Component {
     }
 
     setCommentsRequestPagesize = (PageSize, tempData) => {
-        // console.log('----here', PageSize.target.value);
+        
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value;
 
@@ -314,7 +314,7 @@ class ViewSavingsAccount extends React.Component {
     }
 
     setAttachmentRequestPagesize = (PageSize, tempData) => {
-        // console.log('----here', PageSize.target.value);
+        
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value;
 
@@ -379,7 +379,7 @@ class ViewSavingsAccount extends React.Component {
     }
 
     setActivitiesRequestPagesize = (PageSize, tempData) => {
-        // console.log('----here', PageSize.target.value);
+        
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value;
 
@@ -2411,7 +2411,7 @@ class ViewSavingsAccount extends React.Component {
                     .then(
                         ()=>{
                         if (searchAccountNumberRequest.request_status === loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS) {
-                            // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
+                            
                             searchResultsData = searchAccountNumberRequest.request_data.response.data;
                             
                             
@@ -2517,8 +2517,8 @@ class ViewSavingsAccount extends React.Component {
       return  await dispatch(depositActions.searchForAccountsWithCustomerKey(selectedClientEncodedKey));
     }
 
-    getSearchForCustomerOptionValue = (option) => option.searchItemEncodedKey; // maps the result 'id' as the 'value'
-    getSearchOptionForCustomerLabel = (option) => `${option.clientName} -${option.clientCode}`; // maps the result 'name' as the 'label'
+    getSearchForCustomerOptionValue = (option) => {return option.searchItemEncodedKey}; // maps the result 'id' as the 'value'
+    getSearchOptionForCustomerLabel = (option) => {  return`${option.clientName} -${option.clientCode}`}; // maps the result 'name' as the 'label'
     noOptionsForCustomerMessage(inputValue) {
         
         return ""
@@ -2548,12 +2548,12 @@ class ViewSavingsAccount extends React.Component {
             return this.getSearchedCustomerResults(inputValue)
                     .then(
                         ()=>{
-                           
-                        if (searchCustomerAccountRequest.request_status === loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS) {
-                            // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
-                            searchResultsData = searchCustomerAccountRequest.request_data.response.data;
                             
-                            // console.log("+++++", searchResultsData);
+                        if (this.props.searchCustomerAccountReducer.request_status === loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS) {
+                            // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
+                            searchResultsData = this.props.searchCustomerAccountReducer.request_data.response.data;
+                            
+                            
                             // searchResultsData = searchResultsData.filter(eachResult=>(
                             //         (
                             //             (eachResult.searchItemType===3 && (eachResult.state===3 || eachResult.state===5))
@@ -2887,7 +2887,7 @@ class ViewSavingsAccount extends React.Component {
 
                         // let changeDepositStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
 
-                        // console.log("Transfer Payload", changeDepositStatePayload);
+                        
                         
                         // return false;
 

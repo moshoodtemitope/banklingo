@@ -27,6 +27,8 @@ class LoanTransactions extends React.Component {
             CurrentSelectedPage: 1,
             endDate: "",
             startDate: "",
+            endDateText:"",
+            startDateText:"",
             SearchText:""
         }
         
@@ -67,11 +69,11 @@ class LoanTransactions extends React.Component {
     setPagesize = (PageSize, tempData) => {
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value,
-            { CurrentPage, CurrentSelectedPage, SearchText, startDate, endDate } = this.state;
+            { CurrentPage, CurrentSelectedPage, SearchText, startDateText, endDateText } = this.state;
 
         this.setState({ PageSize: sizeOfPage });
 
-        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+        let params= `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDateText}&endDate=${endDateText}&SearchText=${SearchText}`;
         
         if(tempData){
             dispatch(loanActions.getLoanTransactions(params,tempData));
@@ -83,8 +85,9 @@ class LoanTransactions extends React.Component {
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize,CurrentPage, SearchText, startDate, endDate} = this.state;
-        let params= `&PageSize=${PageSize}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+        let {PageSize,CurrentPage, SearchText, startDate, endDate, startDateText, endDateText} = this.state;
+        
+        let params= `&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}&StartDate=${startDateText}&endDate=${endDateText}&SearchText=${SearchText}`;
 
         if(tempData){
             dispatch(loanActions.getLoanTransactions(params,tempData));
@@ -98,7 +101,7 @@ class LoanTransactions extends React.Component {
     handleStartDatePicker = (startDate) => {
         startDate.setHours(startDate.getHours() + 1);
         
-        this.setState({ startDate }, ()=>{
+        this.setState({ startDate, startDateText:startDate.toISOString() }, ()=>{
             if(this.state.endDate!==""){
                 //this.getHistory();
             }
@@ -108,7 +111,7 @@ class LoanTransactions extends React.Component {
     handleEndDatePicker = (endDate) => {
         endDate.setHours(endDate.getHours() + 1);
        
-        this.setState({ endDate }, ()=>{
+        this.setState({ endDate,endDateText: endDate.toISOString()  }, ()=>{
                 if(this.state.startDate!==""){
                     //this.getHistory();
                 }
@@ -131,8 +134,9 @@ class LoanTransactions extends React.Component {
             if(startDate!==""){
                 startDate = startDate.toISOString()
             }
+            
             let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
-
+            this.setState({endDateText:endDate,startDateText:startDate})
             if(tempData){
                 dispatch(loanActions.getLoanTransactions(params,tempData));
             }else{

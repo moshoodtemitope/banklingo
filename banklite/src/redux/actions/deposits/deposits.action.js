@@ -622,6 +622,7 @@ function searchCustomerAccount(params) {
             return consume
                 .then(response => {
                     dispatch(success(response));
+                   
                 }).catch(error => {
 
                     dispatch(failure(handleRequestErrors(error)));

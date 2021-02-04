@@ -216,11 +216,13 @@ class NipRequests extends React.Component {
                                         <th>Fee</th>
                                         <th>Status</th>
                                         <th>Narration</th>
+                                        <th>Status Code</th>
                                         <th>Session ID</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -331,6 +333,7 @@ class NipRequests extends React.Component {
                                         <th>Fee</th>
                                         <th>Status</th>
                                         <th>Narration</th>
+                                        <th>Status Code</th>
                                         <th>Session ID</th>
                                     </tr>
                                 </thead>
@@ -352,6 +355,7 @@ class NipRequests extends React.Component {
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
                                                             <td>{eachRequest.status}</td>
                                                             <td>{eachRequest.narration}</td>
+                                                            <td>{eachRequest.statusCode}</td>
                                                             <td>{eachRequest.sessionId}</td>
                                                         </tr>
                                                     </Fragment>
@@ -481,6 +485,7 @@ class NipRequests extends React.Component {
                                             <th>Fee</th>
                                             <th>Status</th>
                                             <th>Narration</th>
+                                            <th>Status Code</th>
                                             <th>Session ID</th>
                                         </tr>
                                     </thead>
@@ -502,6 +507,7 @@ class NipRequests extends React.Component {
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
                                                             <td>{eachRequest.status}</td>
                                                             <td>{eachRequest.narration}</td>
+                                                            <td>{eachRequest.statusCode}</td>
                                                             <td>{eachRequest.sessionId}</td>
                                                         </tr>
                                                     </Fragment>
@@ -606,11 +612,13 @@ class NipRequests extends React.Component {
                                             <th>Fee</th>
                                             <th>Status</th>
                                             <th>Narration</th>
+                                            <th>Status Code</th>
                                             <th>Session ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

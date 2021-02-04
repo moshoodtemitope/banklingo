@@ -135,6 +135,62 @@ class EditAClient extends React.Component {
             userAllowedBraches = this.state.user.AllowedBranches,
             selecBranchList = [];
 
+            let updateACustomerValidationSchema = Yup.object().shape({
+                FName: Yup.string()
+                    .min(1, 'Valid Response required')
+                    .max(50, 'Max limit reached')
+                    .required('Required'),
+                LName:  Yup.string()
+                    .min(1, 'Valid response required')
+                    .max(50, 'Max limit reached')
+                    .required('Required'),
+                MName:  Yup.string()
+                    .min(1, 'Valid response required')
+                    .max(50, 'Max limit reached'),
+                custType:  Yup.string()
+                    .min(1, 'Valid response required'),
+                clientBranchEncodedKey:  Yup.string()
+                    .required('Required'),
+                accountOfficerEncodedKey:  Yup.string()
+                    .required('Required'),
+                BVN:  Yup.string()
+                    .required('Required'),
+                addressLine1: Yup.string()
+                    .min(2, 'Valid response required')
+                    .max(70, 'Max limit reached'),
+                addressLine2:  Yup.string()
+                    .min(2, 'Valid response required')
+                    .max(70, 'Max limit reached'),
+                addressCity: Yup.string()
+                    .min(2, 'Valid response required')
+                    .max(40, 'Max limit reached'),
+                addressState:  Yup.string()
+                    .min(2, 'Valid response required')
+                    .max(40, 'Max limit reached'),
+                addressCountry:  Yup.string()
+                    .min(2, 'Valid response required')
+                    .max(35, 'Max limit reached'),
+                zipCode:  Yup.string()
+                    .min(2, 'Valid response required')
+                    .max(10, 'Max limit reached'),
+                contactMobile:  Yup.string()
+                    .min(8, 'Valid response required')
+                    .max(17, 'Max limit reached'),
+                contactEmail:  Yup.string()
+                    .min(8, 'Valid response required')
+                    .max(50, 'Max limit reached'),
+                nextOfKinFullName:  Yup.string()
+                    .min(2, 'Valid response required')
+                    .max(50, 'Max limit reached'),
+                nextOfKinAddress:  Yup.string()
+                    .min(2, 'Valid response required')
+                    .max(50, 'Max limit reached'),
+                nextOfKinMobile:  Yup.string()
+                    .min(11, 'Valid response required')
+                    .max(16, 'Max limit reached'),
+                notes:  Yup.string()
+                    .min(3, 'Valid response required'),
+              });
 
             userAllowedBraches.map((branch, id)=>{
                 selecBranchList.push({label: branch.name, value:branch.encodedKey});
@@ -190,16 +246,18 @@ class EditAClient extends React.Component {
                                     nextOfKinFullName: allCustomerData.nextOfKin.nextOfKinFullName!==null?allCustomerData.nextOfKin.nextOfKinFullName:"",
                                     nextOfKinAddress: allCustomerData.nextOfKin.nextofKinHomeAddress!==null?allCustomerData.nextOfKin.nextofKinHomeAddress:"",
                                     nextOfKinMobile: allCustomerData.nextOfKin.nextOfKinMobileNumber!==null?allCustomerData.nextOfKin.nextOfKinMobileNumber:"",
+                                    nextOfKinRelationship: allCustomerData.nextOfKin.relationship!==null?allCustomerData.nextOfKin.relationship:"",
                                     gender:(allCustomerData.gender!==undefined && allCustomerData.gender!==null && allCustomerData.gender!=='') ?allCustomerData.gender:"",
                                     // dateOfBirth: (allCustomerData.dateOfBirth!==null && allCustomerData.dateOfBirth!==undefined && allCustomerData.dateOfBirth!=='')? getDateFromISO(allCustomerData.dateOfBirth):null,
                                     dateOfBirth: null,
                                     custType:allCustomerData.clientTypeId,
-                                    notes:allCustomerData.notes.notes?allCustomerData.notes.notes:null,
+                                    notes:allCustomerData.notes.notes?allCustomerData.notes.notes:"",
                                     clientBranchEncodedKey:allCustomerData.branchEncodedKey?allCustomerData.branchEncodedKey:null,
                                     accountOfficerEncodedKey:allCustomerData.accountOfficerEncodedKey?allCustomerData.accountOfficerEncodedKey:null,
                                 }}
                 
-                                validationSchema={this.updateCustomerValidationSchema}
+                                validationSchema={updateACustomerValidationSchema}
+                                // validationSchema={this.updateCustomerValidationSchema}
                                 onSubmit={(values, { resetForm }) => {
                 
                                     let updateCustomerPayload = {
@@ -224,11 +282,12 @@ class EditAClient extends React.Component {
                                             nextOfKinFullName: values.nextOfKinFullName,
                                             nextofKinHomeAddress: values.nextOfKinAddress,
                                             nextOfKinMobileNumber: values.nextOfKinMobile,
+                                            relationship: values.nextOfKinRelationship
                                         },
                                         bvn:values.BVN,
                                         gender:values.gender?values.gender:'',
-                                        dateOfBirth: values.dateOfBirth?values.dateOfBirth.toISOString():'',
-                                        notes: values.notes,
+                                        dateOfBirth: values.dateOfBirth?values.dateOfBirth.toISOString():null,
+                                        notes: values.notes||null,
                                         encodedKey:this.props.match.params.encodedkey,
                                         clientBranchEncodedKey:values.clientBranchEncodedKey,
                                         accountOfficerEncodedKey: values.accountOfficerEncodedKey
@@ -244,9 +303,9 @@ class EditAClient extends React.Component {
                                                 //     resetForm();
                                                 // }
                 
-                                                setTimeout(() => {
-                                                    this.props.dispatch(clientsActions.updateAClient("CLEAR"))
-                                                }, 3000);
+                                                // setTimeout(() => {
+                                                //     this.props.dispatch(clientsActions.updateAClient("CLEAR"))
+                                                // }, 3000);
                 
                                             }
                                         )
@@ -604,7 +663,17 @@ class EditAClient extends React.Component {
                                                                     <span className="invalid-feedback">{errors.nextOfKinMobile}</span>
                                                                 ) : null}
                                                             </Col>
-                                                            <Col></Col>
+                                                            <Col>
+                                                                <Form.Label className="block-level">Next of Kin Relationship</Form.Label>
+                                                                <Form.Control type="text" 
+                                                                    name="nextOfKinRelationship"
+                                                                    onChange={handleChange} 
+                                                                    value={values.nextOfKinRelationship}
+                                                                    className={errors.nextOfKinRelationship && touched.nextOfKinRelationship ? "is-invalid": null} />
+                                                                {errors.nextOfKinRelationship && touched.nextOfKinRelationship ? (
+                                                                    <span className="invalid-feedback">{errors.nextOfKinRelationship}</span>
+                                                                ) : null}
+                                                            </Col>
                                                         </Form.Row>
                                                     </div>
                                                 </Accordion.Collapse>

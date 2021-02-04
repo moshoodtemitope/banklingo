@@ -208,11 +208,13 @@ class NipOutwardsRequests extends React.Component {
                                         <th>Amount</th>
                                         <th>Fee</th>
                                         <th>Narration</th>
+                                        <th>Status Code</th>
                                         <th>Session ID</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -321,6 +323,7 @@ class NipOutwardsRequests extends React.Component {
                                         <th>Amount</th>
                                         <th>Fee</th>
                                         <th>Narration</th>
+                                        <th>Status Code</th>
                                         <th>Session ID</th>
                                     </tr>
                                 </thead>
@@ -341,6 +344,7 @@ class NipOutwardsRequests extends React.Component {
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.amount, true, true)}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
                                                             <td>{eachRequest.narration}</td>
+                                                            <td>{eachRequest.statusCode}</td>
                                                             <td>{eachRequest.sessionId}</td>
                                                         </tr>
                                                     </Fragment>
@@ -469,6 +473,7 @@ class NipOutwardsRequests extends React.Component {
                                             <th>Amount</th>
                                             <th>Fee</th>
                                             <th>Narration</th>
+                                            <th>Status Code</th>
                                             <th>Session ID</th>
                                         </tr>
                                     </thead>
@@ -489,6 +494,7 @@ class NipOutwardsRequests extends React.Component {
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.amount, true, true)}</td>
                                                             <td>&#x20A6;{numberWithCommas(eachRequest.fee, true, true)}</td>
                                                             <td>{eachRequest.narration}</td>
+                                                            <td>{eachRequest.statusCode}</td>
                                                             <td>{eachRequest.sessionId}</td>
                                                         </tr>
                                                     </Fragment>
@@ -586,11 +592,13 @@ class NipOutwardsRequests extends React.Component {
                                             <th>Amount</th>
                                             <th>Fee</th>
                                             <th>Narration</th>
+                                            <th>Status Code</th>
                                             <th>Session ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

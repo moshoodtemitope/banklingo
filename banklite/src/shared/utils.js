@@ -173,9 +173,7 @@ export const getDateFromISO =(date, returnTime) =>{
 
         return convertedDate;
 
-    // let convertedDateAndTime = `${convertedDate} ${convertedTime}`;
-    // return convertedDateAndTime;
-    // console.log(year+'-' + month + '-'+dt) 
+    
 }
 
 export const accountNumber = (accountNum, maxChars)=>{

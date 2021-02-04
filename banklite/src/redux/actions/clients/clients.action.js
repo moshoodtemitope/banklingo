@@ -225,8 +225,9 @@ function updateAClient   (updateUserPayload){
             return consume
                 .then(response =>{
                     dispatch(success(response));
+                    console.log("")
                     setTimeout(() => {
-                        history.push(`/customer/${updateUserPayload.encodedKey}`);
+                        // history.push(`/customer/${updateUserPayload.encodedKey}`);
                     }, 2500);
                     
                     
