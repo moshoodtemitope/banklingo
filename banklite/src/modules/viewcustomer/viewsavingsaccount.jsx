@@ -2318,7 +2318,7 @@ class ViewSavingsAccount extends React.Component {
                         </TableComponent>
                     </div>
                     <div className="each-overview">
-                        <h6>Account Interest</h6>
+                        <h6>Other details</h6>
                         <TableComponent classnames="striped bordered hover">
 
                             <tbody>
@@ -2341,6 +2341,11 @@ class ViewSavingsAccount extends React.Component {
                                 <tr>
                                     <td>Blocked Amount</td>
                                     <td>&#x20A6;{numberWithCommas(depositAccountData.blockedAmount, true, true)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Withdrawal Limit</td>
+                                    {depositAccountData.withdrawalLimit && <td> &#x20A6;{numberWithCommas(depositAccountData.withdrawalLimit, true, true)}</td> }
+                                    {!depositAccountData.withdrawalLimit && <td></td> }
                                 </tr>
 
                             </tbody>
