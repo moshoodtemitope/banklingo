@@ -41,7 +41,8 @@ function Login   (loginPayload){
                             // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                             let user = JSON.parse(localStorage.getItem('lingoAuth'));
                                 user.AllowedBranches = response2.data;
-                                user.BranchId = response2.data[0].id;
+                                // user.BranchId = response2.data[0].id;
+                                user.BranchId = response2.data[0].encodedKey;
                                 user.BranchName = response2.data[0].name;
                                 localStorage.setItem('lingoAuth', JSON.stringify(user));
                             

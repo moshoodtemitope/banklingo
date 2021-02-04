@@ -305,11 +305,15 @@ class AllDisbursements extends React.Component {
                                             <th>Amount (NGN)</th>
                                             <th>Inititated By</th>
                                             <th>Approved By</th>
+                                            <th>Session ID</th>
+                                            <th>Nibss Status code</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -413,6 +417,8 @@ class AllDisbursements extends React.Component {
                                             <th>Amount (NGN)</th>
                                             <th>Inititated By</th>
                                             <th>Approved By</th>
+                                            <th>Session ID</th>
+                                            <th>Nibss Status code</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -438,6 +444,8 @@ class AllDisbursements extends React.Component {
                                                             {/* <td>-</td> */}
                                                             <td>{eachDisburment.approvedBy}</td>
                                                             {/* <td>-</td> */}
+                                                            <td>{eachDisburment.sessionId}</td>
+                                                            <td>{eachDisburment.nipStatusCode}</td>
                                                             <td>{eachDisburment.disbursmentStatusDescription}</td>
                                                         </tr>
                                                     </Fragment>
@@ -554,6 +562,8 @@ class AllDisbursements extends React.Component {
                                                     <th>Amount (NGN)</th>
                                                     <th>Inititated By</th>
                                                     <th>Approved By</th>
+                                                    <th>Session ID</th>
+                                                    <th>Nibss Status code</th>
                                                     <th>Status</th>
                                                     
                                                 </tr>
@@ -579,7 +589,8 @@ class AllDisbursements extends React.Component {
                                                                     <td>{eachDisburment.initiatedBy}</td>
                                                                     {/* <td>-</td> */}
                                                                     <td>{eachDisburment.approvedBy}</td>
-                                                                    {/* <td>-</td> */}
+                                                                    <td>{eachDisburment.sessionId}</td>
+                                                                    <td>{eachDisburment.nipStatusCode}</td>
                                                                     <td>{eachDisburment.disbursmentStatusDescription}</td>
                                                                 </tr>
                                                             </Fragment>
@@ -677,11 +688,15 @@ class AllDisbursements extends React.Component {
                                                     <th>Amount (NGN)</th>
                                                     <th>Inititated By</th>
                                                     <th>Approved By</th>
+                                                    <th>Session ID</th>
+                                                    <th>Nibss Status code</th>
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

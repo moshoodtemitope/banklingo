@@ -64,7 +64,7 @@ export class ApiService {
                 delete instance.defaults.headers.common.Bid;
                 
                 if (urlsWithoutBranchIdInRequest.indexOf(serviceToTest) === -1) {
-                    instance.defaults.headers.common.Bid = `${parseInt(user.BranchId)}`;
+                    instance.defaults.headers.common.Bid = `${user.BranchId}`;
                     
                 }
                 // else{
