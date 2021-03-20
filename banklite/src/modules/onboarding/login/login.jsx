@@ -44,10 +44,12 @@ class LoginWrap extends React.Component {
     }
 
     checkTenancy = async ()=>{
+        localStorage.clear();
         let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
         if(getTenant===null){
             
             let tenantPayload = {domain: window.location.origin};
+            
             
             const {dispatch} = this.props;
        

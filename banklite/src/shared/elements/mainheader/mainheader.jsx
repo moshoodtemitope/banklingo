@@ -654,6 +654,7 @@ class MainHeader extends React.Component{
     renderHeadingWrap(){
         // let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
         const {user} = this.state;
+        let {AllowedBranches} = this.state.user;
         return(
             <div className="mainheader-wrap">
                 
@@ -664,18 +665,20 @@ class MainHeader extends React.Component{
                         {/* <Nav className="">
                             <Nav.Link href="/"></Nav.Link>
                         </Nav> */}
-                        <div className="user-branch">
-                            {this.state.showDropdown===false && 
-                                <div className="branch-text" 
-                                    onClick={this.handleCurrentBranchClicked}> <div className="activebranch"></div>  {this.state.activeBranch}</div>
-                            }
-                            { this.state.showDropdown &&
-                                    <div className="branch-dropdown">
-                                        {this.renderAllowedBranches()}
-                                        
-                                    </div>
+                        {AllowedBranches.length >=1 &&
+                            <div className="user-branch">
+                                {this.state.showDropdown===false && 
+                                    <div className="branch-text" 
+                                        onClick={this.handleCurrentBranchClicked}> <div className="activebranch"></div>  {this.state.activeBranch}</div>
                                 }
-                        </div>
+                                { this.state.showDropdown &&
+                                        <div className="branch-dropdown">
+                                            {this.renderAllowedBranches()}
+                                            
+                                        </div>
+                                    }
+                            </div>
+                        }
                         <div className="other-headingitems">
                             
                             {/* <DropdownButton

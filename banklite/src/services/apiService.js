@@ -107,6 +107,16 @@ export class ApiService {
             currenTimestamp;
         bodyData = noStringify ? JSON.stringify(data) : data;
 
+        let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
+
+            if(getTenant!==null){
+                url = `https://${getTenant.beApi}${url}`;
+            }
+            else{
+                url = url
+                // url = `https://theprojectsplash.com/Fintech.CBS.Backend${url}`
+            }
+
         let urlsToAuthenticate = [
             "api/Login",
             // "api/Login/refreshtoken",

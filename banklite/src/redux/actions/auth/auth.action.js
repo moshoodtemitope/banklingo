@@ -1,5 +1,5 @@
 import { ApiService } from "../../../services/apiService";
-import { routes } from "../../../services/urls";
+import { routes, routesA } from "../../../services/urls";
 import { history } from './../../../_helpers/history';
 import {authConstants} from '../../actiontypes/auth/auth.constants'
 import { handleRequestErrors, saveRouteForRedirect, removeRouteForRedirect } from "../../../shared/utils";
@@ -21,7 +21,7 @@ export const authActions = {
 function confirmTenant   (tenantPayload){
     if(tenantPayload!=="CLEAR"){
         return dispatch =>{
-            let url = routes.GET_TENANCY;
+            let url = routesA.GET_TENANCY;
             let consume = ApiService.request(url, "POST", tenantPayload);
             dispatch(request(consume));
             return consume
@@ -86,19 +86,19 @@ function Login   (loginPayload){
                                     localStorage.setItem('x-u-perm', JSON.stringify(response3.data));
                                     dispatch(success(response2.data));
 
-                            
-                                    if(window.location.href.indexOf('#')>-1){
-                                        // if(window.location.href.indexOf('retUrl=')>-1){
-                                        // let retUrl = window.location.href.split('retUrl=');
-                                        let retUrl = window.location.href.split('#');
+                                    history.push('/dashboard');
+                                    // if(window.location.href.indexOf('#')>-1){
+                                    //     // if(window.location.href.indexOf('retUrl=')>-1){
+                                    //     // let retUrl = window.location.href.split('retUrl=');
+                                    //     let retUrl = window.location.href.split('#');
                                         
-                                        if(retUrl.length===2){
-                                            history.push(retUrl[1]);
-                                            removeRouteForRedirect();
-                                        }
-                                    }else{
-                                        history.push('/dashboard');
-                                    }
+                                    //     if(retUrl.length===2){
+                                    //         history.push(retUrl[1]);
+                                    //         removeRouteForRedirect();
+                                    //     }
+                                    // }else{
+                                    //     history.push('/dashboard');
+                                    // }
                                 })
                                 .catch(error =>{
                             

@@ -7,26 +7,36 @@
 // const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
 
 //Teanancy BASE
-let URL = "";
+let URL = "", 
+    BASEURL="",
+    getTenant="";
 
-let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
+    getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
 
-if(getTenant){
-    URL = `https://${getTenant.beApi}`;
-}else{
-    URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
-}
+    
+    // if(getTenant!==null){
+    //     URL = `https://${getTenant.beApi}`;
+    // }
+    // else{
+    //     URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
+    // }
 
 
 // const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
 // const URL = process.env.NODE_ENV === 'development' ? 'https://banklingoapi.monee.ng/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
 // const URL = process.env.API_URL
 // https://theprojectsplash.com/Fintech.CBS.Backend/swagger/index.html
-const BASEURL = URL;  
+    BASEURL = URL;  
+    
+
+export const routesA = {
+    GET_TENANCY:'https://cb-api.banklingo.app/api/Login/confirmtenant',
+}
 
 export const routes = {
-    BASEURL: BASEURL,
-    GET_TENANCY:'https://cb-api.banklingo.app/api/Login/confirmtenant',
+    // BASEURL: BASEURL,
+    // BASEURL: localStorage.getItem("lingoAuthTenant") ? 'https://'+JSON.parse(localStorage.getItem("lingoAuthTenant").beApi : null,
+    // GET_TENANCY:'https://cb-api.banklingo.app/api/Login/confirmtenant',
     // Administration endpoints
     
     LOGIN_USER: BASEURL + '/api/Login',
