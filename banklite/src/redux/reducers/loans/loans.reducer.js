@@ -753,6 +753,166 @@ export function changeLoanStateReducer(state=[], action) {
     }
 }
 
+export function payOffALoanReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.PAYOFF_LOAN_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.PAYOFF_LOAN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.PAYOFF_LOAN_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.PAYOFF_LOAN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.PAYOFF_LOAN_RESET:
+            return {
+                request_status: loanAndDepositsConstants.PAYOFF_LOAN_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function writeOffALoanReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.WRITEOFF_LOAN_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.WRITEOFF_LOAN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.WRITEOFF_LOAN_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.WRITEOFF_LOAN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.WRITEOFF_LOAN_RESET:
+            return {
+                request_status: loanAndDepositsConstants.WRITEOFF_LOAN_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function rescheduleALoanReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.RESCHEDULE_LOAN_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.RESCHEDULE_LOAN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.RESCHEDULE_LOAN_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.RESCHEDULE_LOAN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.RESCHEDULE_LOAN_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.RESCHEDULE_LOAN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.RESCHEDULE_LOAN_RESET:
+            return {
+                request_status: loanAndDepositsConstants.RESCHEDULE_LOAN_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function refianceALoanReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.REFINANCE_LOAN_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.REFINANCE_LOAN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.REFINANCE_LOAN_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.REFINANCE_LOAN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.REFINANCE_LOAN_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.REFINANCE_LOAN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.REFINANCE_LOAN_RESET:
+            return {
+                request_status: loanAndDepositsConstants.REFINANCE_LOAN_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function editALoanReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.EDIT_A_LOAN_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.EDIT_A_LOAN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EDIT_A_LOAN_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.EDIT_A_LOAN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EDIT_A_LOAN_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.EDIT_A_LOAN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.EDIT_A_LOAN_RESET:
+            return {
+                request_status: loanAndDepositsConstants.EDIT_A_LOAN_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 
 
 

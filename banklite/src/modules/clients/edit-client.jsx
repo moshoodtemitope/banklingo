@@ -18,7 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import Select from 'react-select';
 
-import { getDateFromISO, allowNumbersOnly} from '../../shared/utils';
+import { getDateFromISO, allowNumbersOnly, numberWithCommas} from '../../shared/utils';
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants';
 
@@ -222,6 +222,11 @@ class EditAClient extends React.Component {
 
                         defaultAccountOfficer =allUserDataList.filter(eachOfficer=>eachOfficer.value===allCustomerData.accountOfficerEncodedKey)[0];
                     }
+
+                    let daysWrap = []
+                        for(var i = 1; i <= 31; i++){
+                            daysWrap.push(<option key={i} value={i}>{i}</option>)
+                        }
                 
                 let custTypes = this.props.adminGetCustomerTypes.request_data.response,
                     selectedCustype  = custTypes.filter(type=>type.id===allCustomerData.clientTypeId)[0];
@@ -254,6 +259,19 @@ class EditAClient extends React.Component {
                                     notes:allCustomerData.notes.notes?allCustomerData.notes.notes:"",
                                     clientBranchEncodedKey:allCustomerData.branchEncodedKey?allCustomerData.branchEncodedKey:null,
                                     accountOfficerEncodedKey:allCustomerData.accountOfficerEncodedKey?allCustomerData.accountOfficerEncodedKey:null,
+
+                                    employerName: allCustomerData.employeeInfo.employerName!==null?allCustomerData.employeeInfo.employerName:"",
+                                    // employmentDate: allCustomerData.employeeInfo.employerName!==null?allCustomerData.employeeInfo.employerName:"",
+                                    employmentDate: null,
+                                    officialEmail: allCustomerData.employeeInfo.officialEmail!==null?allCustomerData.employeeInfo.officialEmail:"",
+                                    monthlySalary: allCustomerData.employeeInfo.monthlySalary!==null?numberWithCommas(allCustomerData.employeeInfo.monthlySalary, true):"",
+                                    employeeSector: allCustomerData.employeeInfo.employeeSector!==null? allCustomerData.employeeInfo.employeeSector:"",
+                                    employeeSubSector: allCustomerData.employeeInfo.employeeSubSector!==null? allCustomerData.employeeInfo.employeeSubSector:"",
+                                    payDay: allCustomerData.employeeInfo.payDay!==null? numberWithCommas(allCustomerData.employeeInfo.payDay, true):"",
+                                    employerAddress: allCustomerData.employeeInfo.employerAddress!==null? allCustomerData.employeeInfo.employerAddress:"",
+                                    employerAddressState: allCustomerData.employeeInfo.employerAddressState!==null? allCustomerData.employeeInfo.employerAddressState:"",
+                                    employerAddressCity: allCustomerData.employeeInfo.employerAddressCity!==null? allCustomerData.employeeInfo.employerAddressCity:"",
+                                    workStatus: allCustomerData.employeeInfo.workStatus!==null? allCustomerData.employeeInfo.workStatus:"",
                                 }}
                 
                                 validationSchema={updateACustomerValidationSchema}
@@ -438,7 +456,8 @@ class EditAClient extends React.Component {
                                                 <Col>
                                                     <Form.Group controlId="debitLocation" className={errors.dateOfBirth && touched.dateOfBirth ? "has-invaliderror fullwidthdate" : "fullwidthdate"}>
                                                         <Form.Label className="block-level">Date of Birth</Form.Label>
-                                                        <DatePicker placeholderText="Choose  date"
+ <DatePicker                                                        placeholderText="Choose  date"
+                                                            autoComplete="new-password"
 
                                                             // onChange={this.handleDatePicker}
                                                             // onChangeRaw={(e) => this.handleDateChange(e)}
@@ -585,6 +604,176 @@ class EditAClient extends React.Component {
                                                                 ) : null}
                                                             </Col>
                                                         </Form.Row>
+                                                    </div>
+                                                </Accordion.Collapse>
+                                            </Accordion>
+                                            <Accordion defaultActiveKey="0">
+                                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                                    Employment Information
+                                                </Accordion.Toggle>
+                                                <Accordion.Collapse eventKey="0">
+                                                    <div className="each-formsection">
+                                                        <Form.Row>
+                                                                <Col>
+                                                                    <Form.Label className="block-level">Are you employed</Form.Label>
+                                                                    <select 
+                                                                        onChange={handleChange}
+                                                                        name="workStatus"
+                                                                        value={values.workStatus}
+                                                                        className="countdropdown form-control form-control-sm">
+                                                                            <option value="">Select</option>
+                                                                            <option value="1">Yes</option>
+                                                                            <option value="2">No</option>
+                                                                    </select>
+                                                                    {errors.workStatus && touched.workStatus ? (
+                                                                        <span className="invalid-feedback">{errors.payDay}</span>
+                                                                    ) : null}
+                                                            </Col>
+                                                            <Col></Col>
+                                                        </Form.Row>
+                                                        {(values.workStatus==="1" && values.workStatus===1) && 
+                                                            <div>
+                                                                <Form.Row>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Employer name</Form.Label>
+                                                                        <Form.Control type="text"
+                                                                            name="employerName"
+                                                                            onChange={handleChange}
+                                                                            value={values.employerName}
+                                                                            className={errors.employerName && touched.employerName ? "is-invalid" : null} />
+                                                                        {errors.employerName && touched.employerName ? (
+                                                                            <span className="invalid-feedback">{errors.employerName}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                    <Col>
+                                                                        <Form.Group controlId="debitLocation" className={errors.employmentDate && touched.employmentDate ? "has-invaliderror fullwidthdate" : "fullwidthdate"}>
+                                                                            <Form.Label className="block-level">Date of Birth</Form.Label>
+                                                                            <DatePicker
+                                                                                placeholderText="Choose  date"
+                                                                                autoComplete="new-password"
+                                                                                autoComplete="new-password"
+                                                                                // onChange={this.handleDatePicker}
+                                                                                // onChangeRaw={(e) => this.handleDateChange(e)}
+                                                                                dateFormat="d MMMM, yyyy"
+                                                                                className="form-control form-control-sm"
+                                                                                peekNextMonth
+                                                                                showMonthDropdown
+                                                                                showYearDropdown
+                                                                                dropdownMode="select"
+                                                                                name="employmentDate"
+                                                                                value={values.employmentDate}
+                                                                                onChange={setFieldValue}
+                                                                                maxDate={new Date()}
+                                                                                className={errors.employmentDate && touched.employmentDate ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+
+                                                                            />
+                                                                            {errors.employmentDate && touched.employmentDate ? (
+                                                                                <span className="invalid-feedback">{errors.employmentDate}</span>
+                                                                            ) : null}
+                                                                        </Form.Group>
+                                                                    </Col>
+                                                                </Form.Row>
+                                                                <Form.Row>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Official Email</Form.Label>
+                                                                        <Form.Control type="text"
+                                                                            name="officialEmail"
+                                                                            onChange={handleChange}
+                                                                            value={values.officialEmail}
+                                                                            className={errors.officialEmail && touched.officialEmail ? "is-invalid" : null} />
+                                                                        {errors.officialEmail && touched.officialEmail ? (
+                                                                            <span className="invalid-feedback">{errors.officialEmail}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Monthly Salary</Form.Label>
+                                                                        <Form.Control type="text"
+                                                                            name="monthlySalary"
+                                                                            onChange={handleChange}
+                                                                            value={numberWithCommas(values.monthlySalary, true)}
+                                                                            className={errors.monthlySalary && touched.monthlySalary ? "is-invalid" : null} />
+                                                                        {errors.monthlySalary && touched.monthlySalary ? (
+                                                                            <span className="invalid-feedback">{errors.monthlySalary}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                </Form.Row>
+                                                                <Form.Row>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Employee Sector</Form.Label>
+                                                                        <Form.Control type="text"
+                                                                            name="employeeSector"
+                                                                            onChange={handleChange}
+                                                                            value={values.employeeSector}
+                                                                            className={errors.employeeSector && touched.employeeSector ? "is-invalid" : null} />
+                                                                        {errors.employeeSector && touched.employeeSector ? (
+                                                                            <span className="invalid-feedback">{errors.employeeSector}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Employee SubSector</Form.Label>
+                                                                        <Form.Control type="text"
+                                                                            name="employeeSubSector"
+                                                                            onChange={handleChange}
+                                                                            value={values.employeeSubSector}
+                                                                            className={errors.employeeSubSector && touched.employeeSubSector ? "is-invalid" : null} />
+                                                                        {errors.employeeSubSector && touched.employeeSubSector ? (
+                                                                            <span className="invalid-feedback">{errors.employeeSubSector}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                </Form.Row>
+                                                                <Form.Row>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Pay Day</Form.Label>
+                                                                        <select id="toshow"
+                                                                            onChange={handleChange}
+                                                                            name="payDay"
+                                                                            value={values.gender}
+                                                                            className="countdropdown form-control form-control-sm">
+                                                                            <option value="">Select</option>
+                                                                            {daysWrap}
+                                                                        </select>
+                                                                        {errors.payDay && touched.payDay ? (
+                                                                            <span className="invalid-feedback">{errors.payDay}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Employer Address</Form.Label>
+                                                                        <Form.Control type="text"
+                                                                            name="employerAddress"
+                                                                            onChange={handleChange}
+                                                                            value={values.employerAddress}
+                                                                            className={errors.employerAddress && touched.employerAddress ? "is-invalid" : null} />
+                                                                        {errors.employerAddress && touched.employerAddress ? (
+                                                                            <span className="invalid-feedback">{errors.employerAddress}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                </Form.Row>
+                                                                <Form.Row>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Employer Address State</Form.Label>
+                                                                        <Form.Control type="text"
+                                                                            name="employerAddressState"
+                                                                            onChange={handleChange}
+                                                                            value={values.employerAddressState}
+                                                                            className={errors.employerAddressState && touched.employerAddressState ? "is-invalid" : null} />
+                                                                        {errors.employerAddressState && touched.employerAddressState ? (
+                                                                            <span className="invalid-feedback">{errors.employerAddressState}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                    <Col>
+                                                                        <Form.Label className="block-level">Employer Address City</Form.Label>
+                                                                        <Form.Control type="text"
+                                                                            name="employerAddressCity"
+                                                                            onChange={handleChange}
+                                                                            value={values.employerAddressCity}
+                                                                            className={errors.employerAddressCity && touched.employerAddressCity ? "is-invalid" : null} />
+                                                                        {errors.employerAddressCity && touched.employerAddressCity ? (
+                                                                            <span className="invalid-feedback">{errors.employerAddressCity}</span>
+                                                                        ) : null}
+                                                                    </Col>
+                                                                </Form.Row>
+                                                            </div>
+                                                        }
                                                     </div>
                                                 </Accordion.Collapse>
                                             </Accordion>

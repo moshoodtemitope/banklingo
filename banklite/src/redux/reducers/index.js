@@ -8,6 +8,7 @@ import {
     deposits,
     clients,
     disbursment,
+    platform,
     products} from "./export";
 
 import {LoginReducer} from "./auth/auth.reducer";
@@ -67,6 +68,19 @@ const administrationReducers = combineReducers({
     adminSetCurrencyConversionRateReducer: administration.setCurrencyConversionRateReducer,
     getNotificationsReducer: administration.getNotificationsReducer,
     uploadDataReducer: administration.uploadDataReducer,
+    fetchAllNotificationTemplate: administration.fetchAllNotificationTemplate,
+    getANotificationTemplate: administration.getANotificationTemplate,
+    createANotificationTemplate: administration.createANotificationTemplate,
+    updateANotificationTemplate: administration.updateANotificationTemplate,
+    fetchAllChannelServices: administration.fetchAllChannelServices,
+    getAChannelServices: administration.getAChannelServices,
+    createAChannelServices : administration.createAChannelServices,
+    updateAChannelServices : administration.updateAChannelServices,
+    fetchAllRiskLevel: administration.fetchAllRiskLevel,
+    getARiskLevel: administration.getARiskLevel,
+    createARiskLevel: administration.createARiskLevel,
+    updateARiskLevel: administration.updateARiskLevel
+    
 })
 
 const accountingReducers = combineReducers({
@@ -135,10 +149,16 @@ const loansReducers = combineReducers({
     exportLoansSchedulesReducer: loans.exportLoansSchedulesReducer, 
     getLoanPARReducer: loans.getLoanPARReducer, 
     exportLoanPARReducer: loans.exportLoanPARReducer, 
+    payOffALoanReducer: loans.payOffALoanReducer, 
+    writeOffALoanReducer: loans.writeOffALoanReducer, 
+    rescheduleALoanReducer: loans.rescheduleALoanReducer, 
+    refianceALoanReducer: loans.refianceALoanReducer, 
+    editALoanReducer: loans.editALoanReducer, 
    
 })
 
 const authReducers = combineReducers({
+    confirmTenantReducer: auth.confirmTenantReducer, 
     LoginReducer: auth.LoginReducer, 
     ChangePasswordReducer: auth.ChangePasswordReducer, 
     ChangePinReducer: auth.ChangePinReducer, 
@@ -153,6 +173,35 @@ const dashboardReducers = combineReducers({
     getActivitiesReducer: dashboard.getActivitiesReducer, 
     getLoggedInUserActivitiesReducer: dashboard.getLoggedInUserActivitiesReducer, 
     globalSearchAnItemReducer: dashboard.globalSearchAnItemReducer, 
+    searchForCustomerReducer: dashboard.searchForCustomerReducer, 
+   
+})
+
+const platformReducers = combineReducers({
+    fetchAllCreditScoreByPassReducer: platform.fetchAllCreditScoreByPassReducer,
+    fetchSingleCreditScoreByPassReducer: platform.fetchSingleCreditScoreByPassReducer,
+    createCreditScoreByPassReducer: platform.createCreditScoreByPassReducer,
+    updateCreditScoreByPassReducer: platform.updateCreditScoreByPassReducer,
+    getAllCompanyInfoReducer: platform.getAllCompanyInfoReducer,
+    getACompanyInfoReducer: platform.getACompanyInfoReducer,
+    newCompanyInfoReducer: platform.newCompanyInfoReducer,
+    updateCompanyInfoReducer: platform.updateCompanyInfoReducer,
+    fetchAllPayrollGroupsReducer: platform.fetchAllPayrollGroupsReducer,
+    getAPayrollGroupReducer: platform.getAPayrollGroupReducer,
+    createAPayrollGroupReducer: platform.createAPayrollGroupReducer,
+    updateAPayrollGroupReducer: platform.updateAPayrollGroupReducer,
+    fetchAllCardProvider: platform.fetchAllCardProvider,
+    getACardProvider: platform.getACardProvider,
+    createACardProvider: platform.createACardProvider,
+    updateACardProvider: platform.updateACardProvider,
+    fetchAllEmployeeInfo: platform.fetchAllEmployeeInfo,
+    fetchSingleEmployeeInfo: platform.fetchSingleEmployeeInfo,
+    createEmployeeInfo: platform.createEmployeeInfo,
+    updateEmployeeInfo: platform.updateEmployeeInfo,
+    fetchAllBankInfoReducer: platform.fetchAllBankInfoReducer,
+    fetchSingleBankInfoReducer: platform.fetchSingleBankInfoReducer,
+    createBankInfoReducer: platform.createBankInfoReducer,
+    updateBankInfoReducer: platform.updateBankInfoReducer,
    
 })
 
@@ -226,7 +275,8 @@ const appReducer = combineReducers({
     // LoginReducer,
     productReducers,
     authReducers,
-    dashboardReducers
+    dashboardReducers,
+    platformReducers
 })
 
 

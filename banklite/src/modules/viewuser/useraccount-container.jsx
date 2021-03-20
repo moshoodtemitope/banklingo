@@ -41,11 +41,15 @@ class UserAccountContainer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.userEncodedKey = this.props.match.params.userid;
+        this.userEncodedKey = this.props.match.params.userid!==undefined?this.props.match.params.userid:null;
         this.state={
             user:'',
+            PageSize: 100,
+            CurrentPage: 1,
             generatedRoutes :{
                 user: `/user/${this.userEncodedKey}`,
+                PageSize: 100,
+                CurrentPage: 1,
             },
 
         }
@@ -61,17 +65,30 @@ class UserAccountContainer extends React.Component {
 
 
     loadInitialCustomerData = ()=>{
+        let { PageSize, CurrentPage} = this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`; 
+        const {dispatch} = this.props;
+        // console.log("key is ", this.userEncodedKey)
+        if(this.userEncodedKey){
+            this.getUserInfo(this.userEncodedKey)
+        }else{
+            this.getUserInfo(this.userEncodedKey)
+                .then(()=>{
+                        if(this.props.adminGetAUserReducer.request_status === administrationConstants.GET_A_USER_SUCCESS){
+                            let adminGetAUserRequest = this.props.adminGetAUserReducer;
+                            dispatch(administrationActions.getAUserActivities(adminGetAUserRequest.request_data.response.data.encodedKey, params));
+                        }
+                    })
+        }
         
-
-        this.getUserInfo(this.userEncodedKey);
     }
 
 
 
-    getUserInfo = (userEncodedKey)=>{
+    getUserInfo = async(userEncodedKey)=>{
         const {dispatch} = this.props;
 
-        dispatch(administrationActions.getAUser(userEncodedKey, true));
+       await dispatch(administrationActions.getAUser(userEncodedKey, true));
     }
 
     
@@ -96,11 +113,13 @@ class UserAccountContainer extends React.Component {
         return(
             <div className="module-submenu">
                 <div className="content-container">
-                    <ul className="nav">
-                        <li>
-                            <NavLink exact to={generatedRoutes.user}>Overview</NavLink>
-                        </li>
-                    </ul>
+                    {this.userEncodedKey &&
+                        <ul className="nav">
+                            <li>
+                                <NavLink exact to={generatedRoutes.user}>Overview</NavLink>
+                            </li>
+                        </ul>
+                    }
                     
                 </div>
             </div>
@@ -182,6 +201,7 @@ class UserAccountContainer extends React.Component {
                         
                         {this.props.children}
                         <Route exact to='/user/:id'  component={AccountContainer} /> 
+                        <Route  to='/my-profile'  component={AccountContainer} /> 
                         
                     </div>
                 </InnerPageContainer>

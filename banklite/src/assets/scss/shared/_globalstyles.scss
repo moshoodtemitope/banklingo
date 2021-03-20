@@ -165,6 +165,40 @@ select, select.form-control{
         }
     }
 }
+.dropdown-item{
+    cursor: pointer;
+}
+.heading-ctas .dropdown-item:not(:last-of-type), .dropdown-item.with-botom {
+    border-bottom: 1px solid #E5E8E8 !important;
+}
+.heading-ctas .dropdown-item:not(:last-of-type), .dropdown-item.with-top {
+    border-top: 1px solid #E5E8E8 !important;
+}
+.modal-section {
+    border-bottom: 1px solid #CCD1D1;
+}
+.each-msg {
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    width: 44%;
+    &.bolden{
+        font-weight: 600;
+    }
+    span{
+        display: block;
+    }
+}
+.modal-notes {
+    color: #F39C12;
+    font-weight: 600;
+    font-size: 12px;
+    margin: 10px 0;
+    &.grayed{
+        color: #707B7C;
+    }
+}
 .form-cta{
 
     .btn-success, .btn-success:hover, .btn-success:active, .btn-success:not(:disabled):not(.disabled):active{

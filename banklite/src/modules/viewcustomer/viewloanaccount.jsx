@@ -1,11 +1,11 @@
 import * as React from "react";
 // import {Router} from "react-router";
 
-import {Fragment} from "react";
+import { Fragment } from "react";
 import { connect } from 'react-redux';
-import { NavLink} from 'react-router-dom';
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-import  CustomerHeading from './customerheader'
+import { NavLink } from 'react-router-dom';
+import InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import CustomerHeading from './customerheader'
 // import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Nav from 'react-bootstrap/Nav'
@@ -15,27 +15,27 @@ import Button from 'react-bootstrap/Button'
 import Select from 'react-select';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import  TableComponent from '../../shared/elements/table'
-import  TablePagination from '../../shared/elements/table/pagination'
-import "./customerprofile.scss"; 
+import TableComponent from '../../shared/elements/table'
+import TablePagination from '../../shared/elements/table/pagination'
+import "./customerprofile.scss";
 import { loanActions } from '../../redux/actions/loans/loans.action';
 
 
 import DatePicker from '../../_helpers/datepickerfield'
-import {default as DatePickerFilter} from "react-datepicker";
+import { default as DatePickerFilter } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import Modal from 'react-bootstrap/Modal'
-import { numberWithCommas, getDateFromISO} from '../../shared/utils';
+import { numberWithCommas, getDateFromISO } from '../../shared/utils';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import {clientsActions} from '../../redux/actions/clients/clients.action';
-import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
+import { clientsActions } from '../../redux/actions/clients/clients.action';
+import { clientsConstants } from '../../redux/actiontypes/clients/clients.constants'
 
-import {administrationActions} from '../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import { administrationActions } from '../../redux/actions/administration/administration.action';
+import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants'
 
 import Alert from 'react-bootstrap/Alert'
 
@@ -45,9 +45,9 @@ class ViewLoanAccount extends React.Component {
     constructor(props) {
         super(props);
         this.loanEncodedKey = this.props.match.params.loanid;
-        this.state={
-            user:'',
-            FullDetails:true,
+        this.state = {
+            user: '',
+            FullDetails: true,
             PageSize: 100,
             CurrentPage: 1,
 
@@ -63,7 +63,7 @@ class ViewLoanAccount extends React.Component {
 
             CommentsPageSize: 100,
             CommentsCurrentPage: 1,
-            showAddComment:false,
+            showAddComment: false,
 
             ActivitiesPageSize: 100,
             ActivitiesCurrentPage: 1,
@@ -71,41 +71,42 @@ class ViewLoanAccount extends React.Component {
             AttachmentPageSize: 100,
             AttachmentCurrentPage: 1,
 
-            showAddAttachment:false,
+            showAddAttachment: false,
             isDocAdded: null,
-            filename:null,
-            docuploaded:'',
+            filename: null,
+            docuploaded: '',
 
             CommunicationsPageSize: 100,
             CommunicationsCurrentPage: 1,
-            NotificationType:0,
+            NotificationType: 0,
 
             changeLoanState: false,
             showDisburseLoanForm: false,
-
+            showPayOffLoan: false,
+            showWriteOffLoan:false,
 
             txtnEndDate: "",
             txtnStartDate: "",
         }
 
-        this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
+        this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
 
     }
 
     componentDidMount() {
-       
+
         this.loadInitialCustomerData();
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.match.params.loanid !== this.props.match.params.loanid) {
-        
-        this.loanEncodedKey = nextProps.match.params.loanid;
+
+            this.loanEncodedKey = nextProps.match.params.loanid;
             this.loadInitialCustomerData();
         }
     }
 
-    loadInitialCustomerData = ()=>{
+    loadInitialCustomerData = () => {
         this.getCustomerLoanAccountDetails(this.loanEncodedKey);
         this.getTransactionChannels();
         // this.getCustomerLoanSchedule();
@@ -116,20 +117,20 @@ class ViewLoanAccount extends React.Component {
         // this.getALoanCommunications();
     }
 
-    getTransactionChannels = ()=>{
-        const {dispatch} = this.props;
+    getTransactionChannels = () => {
+        const { dispatch } = this.props;
         let params = `PageSize=200&CurrentPage=1`;
 
         dispatch(administrationActions.getTransactionChannels(params));
     }
 
-    getCustomerLoanAccountDetails = (clientEncodedKey )=>{
+    getCustomerLoanAccountDetails = (clientEncodedKey) => {
         const { dispatch } = this.props;
 
         dispatch(loanActions.getAClientLoanAccount(clientEncodedKey));
     }
 
-    getCustomerLoanSchedule = ()=>{
+    getCustomerLoanSchedule = () => {
         const { dispatch } = this.props;
         let { loanSchedulePageSize, loanScheduleCurrentPage } = this.state;
 
@@ -138,8 +139,8 @@ class ViewLoanAccount extends React.Component {
         dispatch(loanActions.getAccountLoanschedule(params));
     }
 
-    getALoanActivities = ()=>{
-        const {dispatch} = this.props;
+    getALoanActivities = () => {
+        const { dispatch } = this.props;
 
         let { ActivitiesPageSize, ActivitiesCurrentPage } = this.state;
 
@@ -148,18 +149,18 @@ class ViewLoanAccount extends React.Component {
         dispatch(loanActions.getALoanActivities(this.loanEncodedKey, params));
     }
 
-    getALoanCommunications = ()=>{
+    getALoanCommunications = () => {
         const { dispatch } = this.props;
 
-        let { CommunicationsPageSize, CommunicationsCurrentPage,NotificationType } = this.state;
+        let { CommunicationsPageSize, CommunicationsCurrentPage, NotificationType } = this.state;
 
         let params = `PageSize=${CommunicationsPageSize}&CurrentPage=${CommunicationsCurrentPage}&NotificationType=${NotificationType}`;
-        dispatch(loanActions.getALoanCommunications(this.loanEncodedKey,params));
+        dispatch(loanActions.getALoanCommunications(this.loanEncodedKey, params));
     }
-    
-    
 
-    getCustomerLoanTransactions = ()=>{
+
+
+    getCustomerLoanTransactions = () => {
         const { dispatch } = this.props;
         let { loanTransactionPageSize, loanTransactionCurrentPage } = this.state;
 
@@ -168,7 +169,7 @@ class ViewLoanAccount extends React.Component {
         dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey, params));
     }
 
-    getALoanComments = ()=>{
+    getALoanComments = () => {
         const { dispatch } = this.props;
         let { CommentsPageSize, CommentsCurrentPage } = this.state;
 
@@ -176,17 +177,17 @@ class ViewLoanAccount extends React.Component {
         dispatch(loanActions.getAccountLoansComments(params));
     }
 
-    getACustomerLoanAttachments = ()=>{
+    getACustomerLoanAttachments = () => {
         const { dispatch } = this.props;
 
-        let {AttachmentPageSize, AttachmentCurrentPage} = this.state
+        let { AttachmentPageSize, AttachmentCurrentPage } = this.state
         let params = `PageSize=${AttachmentPageSize}&CurrentPage=${AttachmentCurrentPage}&AccountEncodedKey=${this.loanEncodedKey}`;
         dispatch(loanActions.getAccountLoanAttachments(params));
     }
 
-    setScheduleFilter = (filterState, filterItem)=>{
-        
-        this.setState({[filterItem]:filterState.target.checked})
+    setScheduleFilter = (filterState, filterItem) => {
+
+        this.setState({ [filterItem]: filterState.target.checked })
     }
 
     setTransactionRequestPagesize = (PageSize, tempData) => {
@@ -194,42 +195,42 @@ class ViewLoanAccount extends React.Component {
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value;
 
-        
+
 
         this.setState({ loanTransactionPageSize: sizeOfPage });
 
-        
-        
-        let {loanTransactionCurrentPage } = this.state;
+
+
+        let { loanTransactionCurrentPage } = this.state;
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${loanTransactionCurrentPage}&accountEncodedKey=${this.loanEncodedKey}`;
 
         // dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey, params));
 
-        if(tempData){
-            dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey,params, tempData));
-            
-        }else{
-            dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey,params));
+        if (tempData) {
+            dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey, params, tempData));
+
+        } else {
+            dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey, params));
         }
     }
 
-    setTransactionRequestNextPage = (nextPage, tempData)=>{
-        
-        const {dispatch} = this.props;
-        
+    setTransactionRequestNextPage = (nextPage, tempData) => {
 
-        
+        const { dispatch } = this.props;
 
-        
-        
-        let {loanTransactionPageSize} = this.state;
+
+
+
+
+
+        let { loanTransactionPageSize } = this.state;
 
         let params = `PageSize=${loanTransactionPageSize}&CurrentPage=${nextPage}&accountEncodedKey=${this.loanEncodedKey}`;
-        if(tempData){
-            dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey,params, tempData));
-        }else{
-            dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey,params));
+        if (tempData) {
+            dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey, params, tempData));
+        } else {
+            dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey, params));
         }
     }
 
@@ -241,44 +242,44 @@ class ViewLoanAccount extends React.Component {
 
         this.setState({ AttachmentPageSize: sizeOfPage });
 
-        
-        
-        let {AttachmentCurrentPage } = this.state;
 
-       
+
+        let { AttachmentCurrentPage } = this.state;
+
+
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${AttachmentCurrentPage}&AccountEncodedKey=${this.loanEncodedKey}`;
-        
 
-        if(tempData){
+
+        if (tempData) {
             dispatch(loanActions.getAccountLoanAttachments(params, tempData));
-            
-        }else{
+
+        } else {
             dispatch(loanActions.getAccountLoanAttachments(params));
         }
     }
 
-    setAttachmentRequestNextPage = (nextPage, tempData)=>{
-        
-        const {dispatch} = this.props;
-        
+    setAttachmentRequestNextPage = (nextPage, tempData) => {
 
-        let {AttachmentPageSize } = this.state;
+        const { dispatch } = this.props;
 
-       
+
+        let { AttachmentPageSize } = this.state;
+
+
 
         let params = `PageSize=${AttachmentPageSize}&CurrentPage=${nextPage}&AccountEncodedKey=${this.loanEncodedKey}`;
 
-        
 
-       
-        if(tempData){
+
+
+        if (tempData) {
             dispatch(loanActions.getAccountLoanAttachments(params, tempData));
-        }else{
+        } else {
             dispatch(loanActions.getAccountLoanAttachments(params));
         }
     }
-    
+
 
     setCommentsRequestPagesize = (PageSize, tempData) => {
         // console.log('----here', PageSize.target.value);
@@ -288,35 +289,35 @@ class ViewLoanAccount extends React.Component {
 
         this.setState({ CommentsPageSize: sizeOfPage });
 
-        
-        
-        let {CommentsCurrentPage } = this.state;
+
+
+        let { CommentsCurrentPage } = this.state;
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${CommentsCurrentPage}&AccountEncodedKey=${this.loanEncodedKey}`;
-        
 
-        if(tempData){
+
+        if (tempData) {
             dispatch(loanActions.getAccountLoansComments(params, tempData));
-            
-        }else{
+
+        } else {
             dispatch(loanActions.getAccountLoansComments(params));
         }
     }
 
-    setCommentsRequestNextPage = (nextPage, tempData)=>{
-        
-        const {dispatch} = this.props;
-        
+    setCommentsRequestNextPage = (nextPage, tempData) => {
 
-        let {CommentsPageSize } = this.state;
+        const { dispatch } = this.props;
+
+
+        let { CommentsPageSize } = this.state;
 
         let params = `PageSize=${CommentsPageSize}&CurrentPage=${nextPage}&AccountEncodedKey=${this.loanEncodedKey}`;
 
-       
-       
-        if(tempData){
+
+
+        if (tempData) {
             dispatch(loanActions.getAccountLoansComments(params, tempData));
-        }else{
+        } else {
             dispatch(loanActions.getAccountLoansComments(params));
         }
     }
@@ -329,38 +330,38 @@ class ViewLoanAccount extends React.Component {
 
         this.setState({ CommunicationsPageSize: sizeOfPage });
 
-        
-        
-        
-        
 
-        let {CommunicationsCurrentPage,NotificationType } = this.state;
+
+
+
+
+        let { CommunicationsCurrentPage, NotificationType } = this.state;
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${CommunicationsCurrentPage}&NotificationType=${NotificationType}`;
-        
 
-        if(tempData){
+
+        if (tempData) {
             dispatch(loanActions.getALoanCommunications(this.loanEncodedKey, params, tempData));
-            
-        }else{
+
+        } else {
             dispatch(loanActions.getALoanCommunications(this.loanEncodedKey, params));
         }
     }
 
-    setCommunicationsRequestNextPage = (nextPage, tempData)=>{
-        
-        const {dispatch} = this.props;
-        
+    setCommunicationsRequestNextPage = (nextPage, tempData) => {
+
+        const { dispatch } = this.props;
 
 
-        let {CommunicationsPageSize,NotificationType } = this.state;
+
+        let { CommunicationsPageSize, NotificationType } = this.state;
 
         let params = `PageSize=${CommunicationsPageSize}&CurrentPage=${nextPage}&NotificationType=${NotificationType}`;
-       
-       
-        if(tempData){
+
+
+        if (tempData) {
             dispatch(loanActions.getALoanCommunications(this.loanEncodedKey, params, tempData));
-        }else{
+        } else {
             dispatch(loanActions.getALoanCommunications(this.loanEncodedKey, params));
         }
     }
@@ -374,38 +375,38 @@ class ViewLoanAccount extends React.Component {
 
         this.setState({ ActivitiesPageSize: sizeOfPage });
 
-       
 
-       
-        
-        
-        let {ActivitiesCurrentPage } = this.state;
+
+
+
+
+        let { ActivitiesCurrentPage } = this.state;
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${ActivitiesCurrentPage}`;
-        
 
-        if(tempData){
-            dispatch(loanActions.getALoanActivities(this.loanEncodedKey,params, tempData));
-            
-        }else{
-            dispatch(loanActions.getALoanActivities(this.loanEncodedKey,params));
+
+        if (tempData) {
+            dispatch(loanActions.getALoanActivities(this.loanEncodedKey, params, tempData));
+
+        } else {
+            dispatch(loanActions.getALoanActivities(this.loanEncodedKey, params));
         }
     }
 
-    setActivitiesRequestNextPage = (nextPage, tempData)=>{
-        
-        const {dispatch} = this.props;
-        
+    setActivitiesRequestNextPage = (nextPage, tempData) => {
 
-        let {ActivitiesPageSize } = this.state;
+        const { dispatch } = this.props;
+
+
+        let { ActivitiesPageSize } = this.state;
 
         let params = `PageSize=${ActivitiesPageSize}&CurrentPage=${nextPage}`;
 
-       
-       
-        if(tempData){
+
+
+        if (tempData) {
             dispatch(loanActions.getALoanActivities(this.loanEncodedKey, params, tempData));
-        }else{
+        } else {
             dispatch(loanActions.getALoanActivities(this.loanEncodedKey, params));
         }
     }
@@ -415,9 +416,9 @@ class ViewLoanAccount extends React.Component {
     }
     handleTxtnStartDatePicker = (txtnStartDate) => {
         txtnStartDate.setHours(txtnStartDate.getHours() + 1);
-        
-        this.setState({ txtnStartDate }, ()=>{
-            if(this.state.txtnEndDate!==""){
+
+        this.setState({ txtnStartDate }, () => {
+            if (this.state.txtnEndDate !== "") {
                 //this.getHistory();
             }
         });
@@ -425,22 +426,22 @@ class ViewLoanAccount extends React.Component {
 
     handleTxtnEndDatePicker = (txtnEndDate) => {
         txtnEndDate.setHours(txtnEndDate.getHours() + 1);
-       
-        this.setState({ txtnEndDate }, ()=>{
-                if(this.state.txtnStartDate!==""){
-                    //this.getHistory();
-                }
+
+        this.setState({ txtnEndDate }, () => {
+            if (this.state.txtnStartDate !== "") {
+                //this.getHistory();
+            }
         });
     }
-    renderLoanActivities =()=>{
+    renderLoanActivities = () => {
         // this.getALoanActivities();
 
         let getALoanAccountActivitiesRequest = this.props.getALoanAccountActivitiesReducer;
 
-        let saveRequestData= getALoanAccountActivitiesRequest.request_data!==undefined?getALoanAccountActivitiesRequest.request_data.tempData:null;
-        if(getALoanAccountActivitiesRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_PENDING){
-            if(saveRequestData===undefined){
-                return(
+        let saveRequestData = getALoanAccountActivitiesRequest.request_data !== undefined ? getALoanAccountActivitiesRequest.request_data.tempData : null;
+        if (getALoanAccountActivitiesRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_PENDING) {
+            if (saveRequestData === undefined) {
+                return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta">
@@ -466,7 +467,7 @@ class ViewLoanAccount extends React.Component {
                                     <option value="50">50</option>
                                     <option value="200">200</option>
                                 </select>
-                                
+
                             </div>
                         </div>
                         <TableComponent classnames="striped bordered hover">
@@ -496,9 +497,9 @@ class ViewLoanAccount extends React.Component {
                         </TableComponent>
                     </div>
                 )
-            }else{
-                
-                return(
+            } else {
+
+                return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta">
@@ -516,9 +517,9 @@ class ViewLoanAccount extends React.Component {
 
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select id="toshow" 
-                                        value={this.state.ActivitiesPageSize}
-                                        className="countdropdown form-control form-control-sm">
+                                <select id="toshow"
+                                    value={this.state.ActivitiesPageSize}
+                                    className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -541,8 +542,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                    saveRequestData.map((eachActivity, index)=>{
-                                        return(
+                                    saveRequestData.map((eachActivity, index) => {
+                                        return (
                                             <Fragment key={index}>
                                                 <tr>
                                                     <td>{eachActivity.activityDescription}</td>
@@ -557,7 +558,7 @@ class ViewLoanAccount extends React.Component {
                                         )
                                     })
                                 }
-                                
+
                             </tbody>
                         </TableComponent>
 
@@ -567,11 +568,11 @@ class ViewLoanAccount extends React.Component {
         }
 
 
-        if(getALoanAccountActivitiesRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_SUCCESS){
+        if (getALoanAccountActivitiesRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_SUCCESS) {
             let loanAccountActivitiesData = getALoanAccountActivitiesRequest.request_data.response.data;
-            
-            if(loanAccountActivitiesData.result.length>=1){
-                return(
+
+            if (loanAccountActivitiesData.result.length >= 1) {
+                return (
                     <div>
                         <div className="heading-with-cta">
                             <Form className="one-liner">
@@ -588,10 +589,10 @@ class ViewLoanAccount extends React.Component {
 
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select id="toshow" 
-                                        onChange={(e)=>this.setActivitiesRequestPagesize(e, loanAccountActivitiesData.result)}
-                                        value={this.state.ActivitiesPageSize}
-                                        className="countdropdown form-control form-control-sm">
+                                <select id="toshow"
+                                    onChange={(e) => this.setActivitiesRequestPagesize(e, loanAccountActivitiesData.result)}
+                                    value={this.state.ActivitiesPageSize}
+                                    className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -623,8 +624,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                    loanAccountActivitiesData.result.map((eachActivity, index)=>{
-                                        return(
+                                    loanAccountActivitiesData.result.map((eachActivity, index) => {
+                                        return (
                                             <Fragment key={index}>
                                                 <tr>
                                                     <td>{eachActivity.activityDescription}</td>
@@ -639,14 +640,14 @@ class ViewLoanAccount extends React.Component {
                                         )
                                     })
                                 }
-                               
+
                             </tbody>
                         </TableComponent>
 
                     </div>
                 )
-            }else{
-                return(
+            } else {
+                return (
                     <div>
                         <div className="heading-with-cta">
                             <Form className="one-liner">
@@ -664,8 +665,8 @@ class ViewLoanAccount extends React.Component {
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
-                                        // onChange={this.setPagesize}
-                                        value={this.state.ActivitiesPageSize}
+                                    // onChange={this.setPagesize}
+                                    value={this.state.ActivitiesPageSize}
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
                                     <option value="25" >25</option>
@@ -702,28 +703,28 @@ class ViewLoanAccount extends React.Component {
                     </div>
                 )
             }
-            
-            
+
+
         }
 
 
 
-        if(getALoanAccountActivitiesRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_FAILURE){
+        if (getALoanAccountActivitiesRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_FAILURE) {
 
-            return(
-                <div className="loading-content errormsg"> 
-                <div>{getALoanAccountActivitiesRequest.request_data.error}</div>
-            </div>
+            return (
+                <div className="loading-content errormsg">
+                    <div>{getALoanAccountActivitiesRequest.request_data.error}</div>
+                </div>
             )
         }
     }
 
-    renderALoanCommunicatons=()=>{
-        let getALoanAccountCommunicationsRequest =  this.props.getALoanAccountCommunicationsReducer;
-        let saveRequestData= getALoanAccountCommunicationsRequest.request_data!==undefined?getALoanAccountCommunicationsRequest.request_data.tempData:null;
-        if(getALoanAccountCommunicationsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_PENDING){
-            if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
-                return(
+    renderALoanCommunicatons = () => {
+        let getALoanAccountCommunicationsRequest = this.props.getALoanAccountCommunicationsReducer;
+        let saveRequestData = getALoanAccountCommunicationsRequest.request_data !== undefined ? getALoanAccountCommunicationsRequest.request_data.tempData : null;
+        if (getALoanAccountCommunicationsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_PENDING) {
+            if ((saveRequestData === undefined) || (saveRequestData !== undefined && saveRequestData.length < 1)) {
+                return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta ">
@@ -766,15 +767,15 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        
+
                     </div>
                 )
-            }else{
-                return(
+            } else {
+                return (
                     <div>
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta ">
-                        <Form className="one-liner"></Form>
+                            <Form className="one-liner"></Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
@@ -803,8 +804,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                   saveRequestData.map((eachCommunication, index)=>{
-                                        return(
+                                    saveRequestData.map((eachCommunication, index) => {
+                                        return (
                                             <tr key={index}>
                                                 <td>{eachCommunication.id} </td>
                                                 <td>{eachCommunication.sentBy} </td>
@@ -816,7 +817,7 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{eachCommunication.failureReason} </td>
                                             </tr>
                                         )
-                                   }) 
+                                    })
                                 }
                             </tbody>
                         </TableComponent>
@@ -825,21 +826,21 @@ class ViewLoanAccount extends React.Component {
             }
         }
 
-        if(getALoanAccountCommunicationsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_SUCCESS){
+        if (getALoanAccountCommunicationsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_SUCCESS) {
             let getALoanAccountCommunicationsInfo = getALoanAccountCommunicationsRequest.request_data.response.data;
             let getALoanAccountCommunicationsData = getALoanAccountCommunicationsRequest.request_data.response.data.result;
 
-            if(getALoanAccountCommunicationsData.length>=1){
+            if (getALoanAccountCommunicationsData.length >= 1) {
 
 
-                return(
+                return (
                     <div>
                         <div className="heading-with-cta ">
                             <Form className="one-liner"></Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
-                                    onChange={(e)=>this.setCommunicationsRequestPagesize(e, getALoanAccountCommunicationsData)}
+                                    onChange={(e) => this.setCommunicationsRequestPagesize(e, getALoanAccountCommunicationsData)}
                                     value={this.state.CommunicationsPageSize}
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
@@ -873,8 +874,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                   getALoanAccountCommunicationsData.map((eachCommunication, index)=>{
-                                        return(
+                                    getALoanAccountCommunicationsData.map((eachCommunication, index) => {
+                                        return (
                                             <tr key={index}>
                                                 <td>{eachCommunication.id} </td>
                                                 <td>{eachCommunication.sentBy} </td>
@@ -886,22 +887,22 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{eachCommunication.failureReason} </td>
                                             </tr>
                                         )
-                                   }) 
+                                    })
                                 }
                             </tbody>
                         </TableComponent>
                     </div>
                 )
-            }else{
+            } else {
 
-                return(
+                return (
                     <div className="no-records">
                         <div className="heading-with-cta ">
                             <Form className="one-liner"></Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
-                                    onChange={(e)=>this.setCommunicationsRequestPagesize(e, getALoanAccountCommunicationsData)}
+                                    onChange={(e) => this.setCommunicationsRequestPagesize(e, getALoanAccountCommunicationsData)}
                                     value={this.state.CommunicationsPageSize}
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
@@ -942,29 +943,29 @@ class ViewLoanAccount extends React.Component {
 
         }
 
-        if(getALoanAccountCommunicationsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_FAILURE){
+        if (getALoanAccountCommunicationsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_FAILURE) {
 
-            return(
-                <div className="loading-content errormsg"> 
-                <div>{getALoanAccountCommunicationsRequest.request_data.error}</div>
-            </div>
+            return (
+                <div className="loading-content errormsg">
+                    <div>{getALoanAccountCommunicationsRequest.request_data.error}</div>
+                </div>
             )
         }
     }
 
 
 
-    renderLoanSchedule = ()=>{
+    renderLoanSchedule = () => {
         // this.getCustomerLoanSchedule();
         let getAClientLoanAccountScheduleRequest = this.props.getAClientLoanAccountScheduleReducer;
 
-        let saveRequestData= getAClientLoanAccountScheduleRequest.request_data!==undefined?getAClientLoanAccountScheduleRequest.request_data.tempData:null;
-        if(getAClientLoanAccountScheduleRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_PENDING){
-            if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
-                return(
+        let saveRequestData = getAClientLoanAccountScheduleRequest.request_data !== undefined ? getAClientLoanAccountScheduleRequest.request_data.tempData : null;
+        if (getAClientLoanAccountScheduleRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_PENDING) {
+            if ((saveRequestData === undefined) || (saveRequestData !== undefined && saveRequestData.length < 1)) {
+                return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
-                        
+
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
@@ -987,15 +988,15 @@ class ViewLoanAccount extends React.Component {
                         </TableComponent>
                     </div>
                 )
-            }else{
-               return(
+            } else {
+                return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
-                        
+
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                <th>#</th>
+                                    <th>#</th>
                                     <th>Due</th>
                                     <th>Payment Due</th>
                                     <th>Total Balance</th>
@@ -1017,15 +1018,15 @@ class ViewLoanAccount extends React.Component {
             }
         }
 
-        if(getAClientLoanAccountScheduleRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_SUCCESS){
+        if (getAClientLoanAccountScheduleRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_SUCCESS) {
             let getAClientLoanAccountScheduleInfo = getAClientLoanAccountScheduleRequest.request_data.response.data;
             let getAClientLoanAccountScheduleData = getAClientLoanAccountScheduleRequest.request_data.response.data.result;
 
             // if(getAClientLoanAccountScheduleInfo.length>=1){
-            if(getAClientLoanAccountScheduleInfo!==null && getAClientLoanAccountScheduleInfo.loanScheduleModels.length>=1 ){
-                return(
+            if (getAClientLoanAccountScheduleInfo !== null && getAClientLoanAccountScheduleInfo.loanScheduleModels.length >= 1) {
+                return (
                     <div>
-                         {/* <div className="heading-with-cta ">
+                        {/* <div className="heading-with-cta ">
                             <Form className="one-liner"></Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
@@ -1040,18 +1041,18 @@ class ViewLoanAccount extends React.Component {
                             </div>
                         </div> */}
                         <div className="table-helper">
-                            <input type="checkbox" name="" 
-                                onChange={(e)=>this.setScheduleFilter(e, 'showAmountExpected')}
+                            <input type="checkbox" name=""
+                                onChange={(e) => this.setScheduleFilter(e, 'showAmountExpected')}
                                 checked={this.state.showAmountExpected}
                                 id="showAmountExpected" />
                             <label htmlFor="showAmountExpected">Amount Expected</label>
-                            <input type="checkbox" name="" 
-                                onChange={(e)=>this.setScheduleFilter(e, 'showAmountPaid')}
+                            <input type="checkbox" name=""
+                                onChange={(e) => this.setScheduleFilter(e, 'showAmountPaid')}
                                 checked={this.state.showAmountPaid}
                                 id="showAmountPaid" />
                             <label htmlFor="showAmountPaid">Amount Paid</label>
-                            <input type="checkbox" name="" 
-                                onChange={(e)=>this.setScheduleFilter(e, 'showAmountDue')}
+                            <input type="checkbox" name=""
+                                onChange={(e) => this.setScheduleFilter(e, 'showAmountDue')}
                                 checked={this.state.showAmountDue}
                                 id="showAmountDue" />
                             <label htmlFor="showAmountDue">Amount Due</label>
@@ -1063,46 +1064,46 @@ class ViewLoanAccount extends React.Component {
                                     <th>Due</th>
                                     <th>Payment Due</th>
                                     {/* <th>Interest Rate</th> */}
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected === true &&
                                         <th className="borderdleft">Expected Principal</th>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected === true &&
                                         <th>Expected Interest</th>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected === true &&
                                         <th>Expected Fees</th>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected === true &&
                                         <th className="borderdright">Expected Penalty</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th className="borderdleft">Principal Paid</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th>Fees Paid</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th>Interest Paid</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th className="borderdright">Penalty Paid</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th className="borderdright">Total Paid</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th className="borderdleft">Principal Due</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th>Interest Due</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th>Fee Due</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th>Penalty Due</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th className="borderdright">Total Due</th>
                                     }
                                     {/* <th>Total Balance</th> */}
@@ -1111,58 +1112,58 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                    getAClientLoanAccountScheduleInfo.loanScheduleModels.map((eachSchedule, index)=>{
-                                        return(
+                                    getAClientLoanAccountScheduleInfo.loanScheduleModels.map((eachSchedule, index) => {
+                                        return (
                                             <tr key={index}>
                                                 <td>{index}</td>
-                                                <td>{(eachSchedule.installmentDate!==null && eachSchedule.installmentDate!=="")? getDateFromISO(eachSchedule.installmentDate):"-"}</td>
-                                                <td>{(eachSchedule.paymentDue!==null && eachSchedule.paymentDue>0)? `₦${numberWithCommas(eachSchedule.paymentDue, true)}`: "-"}</td>
+                                                <td>{(eachSchedule.installmentDate !== null && eachSchedule.installmentDate !== "") ? getDateFromISO(eachSchedule.installmentDate) : "-"}</td>
+                                                <td>{(eachSchedule.paymentDue !== null && eachSchedule.paymentDue > 0) ? `₦${numberWithCommas(eachSchedule.paymentDue, true)}` : "-"}</td>
                                                 {/* <td>{numberWithCommas(eachSchedule.interestRate)}</td> */}
-                                                {this.state.showAmountExpected===true && 
-                                                    <td className="borderdleft">{( eachSchedule.loanScheduleExpected.expectedPrincipal!==null && eachSchedule.loanScheduleExpected.expectedPrincipal>0) ? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedPrincipal, true)}` : "-"}</td>
+                                                {this.state.showAmountExpected === true &&
+                                                    <td className="borderdleft">{(eachSchedule.loanScheduleExpected.expectedPrincipal !== null && eachSchedule.loanScheduleExpected.expectedPrincipal > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedPrincipal, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountExpected===true && 
-                                                    <td>{(eachSchedule.loanScheduleExpected.expectedInterest !==null && eachSchedule.loanScheduleExpected.expectedInterest>0) ? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedInterest, true)}` : "-"}</td>
+                                                {this.state.showAmountExpected === true &&
+                                                    <td>{(eachSchedule.loanScheduleExpected.expectedInterest !== null && eachSchedule.loanScheduleExpected.expectedInterest > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedInterest, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountExpected===true && 
-                                                    <td>{(eachSchedule.loanScheduleExpected.expectedFees!==null && eachSchedule.loanScheduleExpected.expectedFees >0)? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedFees, true)}` : "-"}</td>
+                                                {this.state.showAmountExpected === true &&
+                                                    <td>{(eachSchedule.loanScheduleExpected.expectedFees !== null && eachSchedule.loanScheduleExpected.expectedFees > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedFees, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountExpected===true && 
-                                                    <td className="borderdright">{(eachSchedule.loanScheduleExpected.expectedPenalty!==null && eachSchedule.loanScheduleExpected.expectedPenalty>0)? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedPenalty, true)}`:"-"}</td>
+                                                {this.state.showAmountExpected === true &&
+                                                    <td className="borderdright">{(eachSchedule.loanScheduleExpected.expectedPenalty !== null && eachSchedule.loanScheduleExpected.expectedPenalty > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleExpected.expectedPenalty, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
-                                                    <td className="borderdleft">{(eachSchedule.loanSchedulePaid.principalPaid!==null && eachSchedule.loanSchedulePaid.principalPaid>0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.principalPaid, true)}`:"-"}</td>
+                                                {this.state.showAmountPaid &&
+                                                    <td className="borderdleft">{(eachSchedule.loanSchedulePaid.principalPaid !== null && eachSchedule.loanSchedulePaid.principalPaid > 0) ? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.principalPaid, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
-                                                    <td>{(eachSchedule.loanSchedulePaid.feesPaid!==null && eachSchedule.loanSchedulePaid.feesPaid>0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.feesPaid, true)}`:"-"}</td>
+                                                {this.state.showAmountPaid &&
+                                                    <td>{(eachSchedule.loanSchedulePaid.feesPaid !== null && eachSchedule.loanSchedulePaid.feesPaid > 0) ? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.feesPaid, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
-                                                    <td>{(eachSchedule.loanSchedulePaid.interestPaid!==null && eachSchedule.loanSchedulePaid.interestPaid>0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.interestPaid, true)}`:"-"}</td>
+                                                {this.state.showAmountPaid &&
+                                                    <td>{(eachSchedule.loanSchedulePaid.interestPaid !== null && eachSchedule.loanSchedulePaid.interestPaid > 0) ? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.interestPaid, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
-                                                    <td className="borderdright">{(eachSchedule.loanSchedulePaid.penalyPaid!==null && eachSchedule.loanSchedulePaid.penalyPaid >0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.penalyPaid, true)}`:"-"}</td>
+                                                {this.state.showAmountPaid &&
+                                                    <td className="borderdright">{(eachSchedule.loanSchedulePaid.penalyPaid !== null && eachSchedule.loanSchedulePaid.penalyPaid > 0) ? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.penalyPaid, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
-                                                    <td className="borderdright">{(eachSchedule.loanSchedulePaid.totalPaid!==null && eachSchedule.loanSchedulePaid.totalPaid >0)? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.totalPaid, true)}`:"-"}</td>
+                                                {this.state.showAmountPaid &&
+                                                    <td className="borderdright">{(eachSchedule.loanSchedulePaid.totalPaid !== null && eachSchedule.loanSchedulePaid.totalPaid > 0) ? `₦${numberWithCommas(eachSchedule.loanSchedulePaid.totalPaid, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
-                                                    <td className="borderdleft">{(eachSchedule.loanScheduleDue.principalDue!==null && eachSchedule.loanScheduleDue.principalDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.principalDue, true)}`:"-"}</td>
+                                                {this.state.showAmountDue &&
+                                                    <td className="borderdleft">{(eachSchedule.loanScheduleDue.principalDue !== null && eachSchedule.loanScheduleDue.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleDue.principalDue, true)}` : "-"}</td>
                                                 }
-                                                
-                                                {this.state.showAmountDue && 
-                                                    <td>{(eachSchedule.loanScheduleDue.interestDue!==null && eachSchedule.loanScheduleDue.interestDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.interestDue, true)}`:"-"}</td>
+
+                                                {this.state.showAmountDue &&
+                                                    <td>{(eachSchedule.loanScheduleDue.interestDue !== null && eachSchedule.loanScheduleDue.interestDue > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleDue.interestDue, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
-                                                    <td>{(eachSchedule.loanScheduleDue.feesDue!==null && eachSchedule.loanScheduleDue.feesDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.feesDue, true)}`:"-"}</td>
+                                                {this.state.showAmountDue &&
+                                                    <td>{(eachSchedule.loanScheduleDue.feesDue !== null && eachSchedule.loanScheduleDue.feesDue > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleDue.feesDue, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
-                                                    <td>{(eachSchedule.loanScheduleDue.penalyDue!==null && eachSchedule.loanScheduleDue.penalyDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.penalyDue, true)}`:"-"}</td>
+                                                {this.state.showAmountDue &&
+                                                    <td>{(eachSchedule.loanScheduleDue.penalyDue !== null && eachSchedule.loanScheduleDue.penalyDue > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleDue.penalyDue, true)}` : "-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
-                                                    <td className="borderdright">{(eachSchedule.loanScheduleDue.totalDue!==null && eachSchedule.loanScheduleDue.totalDue>0)? `₦${numberWithCommas(eachSchedule.loanScheduleDue.totalDue,true)}`:"-"}</td>
+                                                {this.state.showAmountDue &&
+                                                    <td className="borderdright">{(eachSchedule.loanScheduleDue.totalDue !== null && eachSchedule.loanScheduleDue.totalDue > 0) ? `₦${numberWithCommas(eachSchedule.loanScheduleDue.totalDue, true)}` : "-"}</td>
                                                 }
                                                 {/* <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td> */}
-                                                <td>{(eachSchedule.stateDescription !==null && eachSchedule.stateDescription!==undefined) ? eachSchedule.stateDescription : "-"}</td>
+                                                <td>{(eachSchedule.stateDescription !== null && eachSchedule.stateDescription !== undefined) ? eachSchedule.stateDescription : "-"}</td>
                                             </tr>
                                         )
                                     })
@@ -1170,57 +1171,57 @@ class ViewLoanAccount extends React.Component {
 
                                 <tr>
                                     <td colSpan="3" className="bolden borderdright">Totals</td>
-                                    {this.state.showAmountExpected===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal, true)}` : "-"} </td>
+                                    {this.state.showAmountExpected === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal !== null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountExpected===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest, true)}` : "-"} </td>
+                                    {this.state.showAmountExpected === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest !== null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountExpected===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees, true)}` : "-"} </td>
+                                    {this.state.showAmountExpected === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees !== null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountExpected===true && 
-                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty, true)}` : "-"} </td>
+                                    {this.state.showAmountExpected === true &&
+                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty !== null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid, true)}` : "-"} </td>
+                                    {this.state.showAmountPaid === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid !== null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid, true)}` : "-"} </td>
+                                    {this.state.showAmountPaid === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid !== null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid, true)}` : "-"} </td>
+                                    {this.state.showAmountPaid === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid !== null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
-                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid, true)}` : "-"} </td>
+                                    {this.state.showAmountPaid === true &&
+                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid !== null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
-                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid, true)}` : "-"} </td>
+                                    {this.state.showAmountPaid === true &&
+                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid !== null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.totalPaid, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue, true)}` : "-"} </td>
+                                    {this.state.showAmountDue === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue !== null && getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue, true)}` : "-"} </td>
+                                    {this.state.showAmountDue === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue !== null && getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue, true)}` : "-"} </td>
+                                    {this.state.showAmountDue === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue !== null && getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
-                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue, true)}` : "-"} </td>
+                                    {this.state.showAmountDue === true &&
+                                        <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue !== null && getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue, true)}` : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
-                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue>0)? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue, true)}` : "-"} </td>
+                                    {this.state.showAmountDue === true &&
+                                        <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue !== null && getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue > 0) ? `₦${numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue, true)}` : "-"} </td>
                                     }
                                     <td className="">-</td>
                                 </tr>
-                                
+
                             </tbody>
                         </TableComponent>
                     </div>
                 )
-            }else{
-                return(
+            } else {
+                return (
                     <div>
                         <div className="heading-with-cta ">
                             <Form className="one-liner"></Form>
@@ -1269,24 +1270,24 @@ class ViewLoanAccount extends React.Component {
         }
 
 
-        if(getAClientLoanAccountScheduleRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_FAILURE){
+        if (getAClientLoanAccountScheduleRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_FAILURE) {
 
-            return(
-                <div className="loading-content errormsg"> 
-                <div>{getAClientLoanAccountScheduleRequest.request_data.error}</div>
-            </div>
+            return (
+                <div className="loading-content errormsg">
+                    <div>{getAClientLoanAccountScheduleRequest.request_data.error}</div>
+                </div>
             )
         }
 
-        
+
     }
 
-    renderLoanTransaction = ()=>{
-        let getAccountLoanTransactionRequest =  this.props.getAccountLoanTransactionReducer;
-        let saveRequestData= getAccountLoanTransactionRequest.request_data!==undefined?getAccountLoanTransactionRequest.request_data.tempData:null;
-        if(getAccountLoanTransactionRequest.request_status===loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING){
-            if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
-                return(
+    renderLoanTransaction = () => {
+        let getAccountLoanTransactionRequest = this.props.getAccountLoanTransactionReducer;
+        let saveRequestData = getAccountLoanTransactionRequest.request_data !== undefined ? getAccountLoanTransactionRequest.request_data.tempData : null;
+        if (getAccountLoanTransactionRequest.request_status === loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_PENDING) {
+            if ((saveRequestData === undefined) || (saveRequestData !== undefined && saveRequestData.length < 1)) {
+                return (
                     <div>
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta ">
@@ -1328,9 +1329,9 @@ class ViewLoanAccount extends React.Component {
                         </TableComponent>
                     </div>
                 )
-            }else{
+            } else {
 
-                return(
+                return (
                     <div>
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta ">
@@ -1360,8 +1361,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                    saveRequestData.map((eachTxt, index)=>{
-                                        return(
+                                    saveRequestData.map((eachTxt, index) => {
+                                        return (
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
                                                 <td>{eachTxt.transactionKey} </td>
@@ -1381,12 +1382,12 @@ class ViewLoanAccount extends React.Component {
             }
         }
 
-        if(getAccountLoanTransactionRequest.request_status===loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_SUCCESS){
+        if (getAccountLoanTransactionRequest.request_status === loanAndDepositsConstants.GET_ACCOUNTLOAN_TRANSACTIONS_SUCCESS) {
             let getAccountLoanTransactionInfo = getAccountLoanTransactionRequest.request_data.response.data;
             let getAccountLoanTransactionData = getAccountLoanTransactionRequest.request_data.response.data.result;
 
-            if(getAccountLoanTransactionData.length>=1){
-                return(
+            if (getAccountLoanTransactionData.length >= 1) {
+                return (
                     <div>
                         <div className="heading-with-cta ">
                             <Form className="one-liner">
@@ -1404,6 +1405,7 @@ class ViewLoanAccount extends React.Component {
                                         showYearDropdown
                                         dropdownMode="select"
                                         placeholderText="Start date"
+                                                            autoComplete="new-password"
                                         maxDate={new Date()}
                                         // className="form-control form-control-sm h-38px"
                                         className="form-control form-control-sm "
@@ -1435,12 +1437,12 @@ class ViewLoanAccount extends React.Component {
                             </Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select 
-                                    id="toshow" 
+                                <select
+                                    id="toshow"
                                     className="countdropdown form-control form-control-sm"
-                                    onChange={(e)=>this.setTransactionRequestPagesize(e, getAccountLoanTransactionData)}
+                                    onChange={(e) => this.setTransactionRequestPagesize(e, getAccountLoanTransactionData)}
                                     value={this.state.loanTransactionPageSize}>
-                                    
+
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -1471,8 +1473,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                    getAccountLoanTransactionData.map((eachTxt, index)=>{
-                                        return(
+                                    getAccountLoanTransactionData.map((eachTxt, index) => {
+                                        return (
                                             <tr key={index}>
                                                 <td>{eachTxt.accountHolderName} </td>
                                                 <td>{eachTxt.transactionKey} </td>
@@ -1489,17 +1491,17 @@ class ViewLoanAccount extends React.Component {
                         </TableComponent>
                     </div>
                 )
-            }else{
-                return(
+            } else {
+                return (
                     <div>
                         <div className="heading-with-cta ">
                             <div></div>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select 
-                                    id="toshow" 
+                                <select
+                                    id="toshow"
                                     className="countdropdown form-control form-control-sm"
-                                    onChange={(e)=>this.setTransactionRequestPagesize(e, getAccountLoanTransactionData)}
+                                    onChange={(e) => this.setTransactionRequestPagesize(e, getAccountLoanTransactionData)}
                                     value={this.state.loanTransactionPageSize}>
                                     <option value="10">10</option>
                                     <option value="25">25</option>
@@ -1535,19 +1537,19 @@ class ViewLoanAccount extends React.Component {
                         </TableComponent>
                     </div>
                 )
-            }   
+            }
         }
     }
-    
-    renderLoanAccountDetails = (loanAccountData)=>{
+
+    renderLoanAccountDetails = (loanAccountData) => {
 
 
-        return(
+        return (
             <div>
                 <div className="amounts-wrap w-65">
                     <div className="eachamount">
                         <h6>Total Balance</h6>
-                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.loanAmount, true)}</div>
+                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.totalBalance, true)}</div>
                     </div>
                     <div className="eachamount">
                         <h6>Total Due</h6>
@@ -1574,11 +1576,15 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Assigned to Branch</td>
-                                    <td>{loanAccountData.branchEncodedKey}</td>
+                                    <td>{loanAccountData.assignedBranch}</td>
                                 </tr>
                                 <tr>
                                     <td>Account State</td>
                                     <td>{loanAccountData.loanStateDescription}</td>
+                                </tr>
+                                <tr>
+                                    <td>Account Sub-State</td>
+                                    <td>{loanAccountData.loanSubStateDescription}</td>
                                 </tr>
                                 <tr>
                                     <td>Account Officer</td>
@@ -1596,7 +1602,7 @@ class ViewLoanAccount extends React.Component {
                                     <td>Date Created</td>
                                     <td>{loanAccountData.dateCreated}</td>
                                 </tr>
-                                
+
                             </tbody>
                         </TableComponent>
                     </div>
@@ -1611,7 +1617,7 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Principal Due</td>
-                                    <td>{numberWithCommas(loanAccountData.principalDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.duePrincipal, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Rate</td>
@@ -1623,11 +1629,11 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Interest Due</td>
-                                    <td>{numberWithCommas(loanAccountData.interestDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.dueInterest, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Due</td>
-                                    <td>{numberWithCommas(loanAccountData.penaltyDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.duePenalty, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Paid</td>
@@ -1635,7 +1641,7 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Fee Due</td>
-                                    <td>{numberWithCommas(loanAccountData.feeDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.dueFees, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Fee Paid</td>
@@ -1649,38 +1655,38 @@ class ViewLoanAccount extends React.Component {
         )
     }
 
-    handleCommentsBoxClose = () => this.setState({showAddComment:false});
-    handleCommentsBoxShow = () => this.setState({showAddComment:true});
+    handleCommentsBoxClose = () => this.setState({ showAddComment: false });
+    handleCommentsBoxShow = () => this.setState({ showAddComment: true });
 
-    handleAttachmentBoxClose = () => this.setState({showAddAttachment:false});
-    handleAttachmentBoxShow = () => this.setState({showAddAttachment:true});
+    handleAttachmentBoxClose = () => this.setState({ showAddAttachment: false });
+    handleAttachmentBoxShow = () => this.setState({ showAddAttachment: true });
 
-    handleAddLoanComments = async (addLoanCommentsPayload)=>{
-        const {dispatch} = this.props;
-       
+    handleAddLoanComments = async (addLoanCommentsPayload) => {
+        const { dispatch } = this.props;
+
         await dispatch(loanActions.creatALoanComment(addLoanCommentsPayload));
-    } 
-    addNewCommentBox = ()=>{
-        const {showAddComment} = this.state;
-        let  createALoanCommentRequest = this.props.createALoanCommentReducer;
+    }
+    addNewCommentBox = () => {
+        const { showAddComment } = this.state;
+        let createALoanCommentRequest = this.props.createALoanCommentReducer;
         let addLoanCommentsValidationSchema = Yup.object().shape({
-                comment:  Yup.string()
-                    .required('Required'),
-            
-           });
-        return(
+            comment: Yup.string()
+                .required('Required'),
+
+        });
+        return (
             <Modal show={showAddComment} onHide={this.handleCommentsBoxClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
                 <Formik
                     initialValues={{
-                        comment:""
+                        comment: ""
                     }}
 
                     validationSchema={addLoanCommentsValidationSchema}
                     onSubmit={(values, { resetForm }) => {
 
                         let addCustomerCommentsPayload = {
-                            comment:values.comment,
-                            accountEncodedKey:this.loanEncodedKey
+                            comment: values.comment,
+                            accountEncodedKey: this.loanEncodedKey
                         }
 
 
@@ -1701,7 +1707,7 @@ class ViewLoanAccount extends React.Component {
                                         }, 3000);
                                     }
 
-                                    
+
 
                                 }
                             )
@@ -1717,98 +1723,98 @@ class ViewLoanAccount extends React.Component {
                         touched,
                         isValid,
                         errors, }) => (
-                            <Form
-                                noValidate
-                                onSubmit={handleSubmit}
-                                className="">
-                                <Modal.Header>
-                                    <Modal.Title>Add Loan comment</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <Form.Group >
-                                        <Form.Label className="block-level">Comments</Form.Label>
-                                        <Form.Control as="textarea"
-                                            rows="3"
-                                            onChange={handleChange}
-                                            name="comment"
-                                            value={values.comment}
-                                            className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null} />
+                        <Form
+                            noValidate
+                            onSubmit={handleSubmit}
+                            className="">
+                            <Modal.Header>
+                                <Modal.Title>Add Loan comment</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Form.Group >
+                                    <Form.Label className="block-level">Comments</Form.Label>
+                                    <Form.Control as="textarea"
+                                        rows="3"
+                                        onChange={handleChange}
+                                        name="comment"
+                                        value={values.comment}
+                                        className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null} />
 
-                                        {errors.comment && touched.comment ? (
-                                            <span className="invalid-feedback">{errors.comment}</span>
-                                        ) : null}
-                                    </Form.Group>
-                                </Modal.Body>
-                                <Modal.Footer>
+                                    {errors.comment && touched.comment ? (
+                                        <span className="invalid-feedback">{errors.comment}</span>
+                                    ) : null}
+                                </Form.Group>
+                            </Modal.Body>
+                            <Modal.Footer>
 
-                                    <Button variant="light" onClick={this.handleCommentsBoxClose}>
-                                        Cancel
+                                <Button variant="light" onClick={this.handleCommentsBoxClose}>
+                                    Cancel
                                     </Button>
-                                    <Button 
-                                        variant="success"
-                                        type="submit"
-                                        disabled={createALoanCommentRequest.is_request_processing}
-                                    >
-                                        {createALoanCommentRequest.is_request_processing?"Please wait...":"Save Comment"}
-                                        
-                                    </Button>
+                                <Button
+                                    variant="success"
+                                    type="submit"
+                                    disabled={createALoanCommentRequest.is_request_processing}
+                                >
+                                    {createALoanCommentRequest.is_request_processing ? "Please wait..." : "Save Comment"}
 
-                                </Modal.Footer>
+                                </Button>
 
-                                {createALoanCommentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_SUCCESS && 
-                                    <Alert variant="success" className="w-65 mlr-auto">
-                                        {createALoanCommentRequest.request_data.response.data.message}
-                                    </Alert>
-                                }
-                                {createALoanCommentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_FAILURE && 
-                                    <Alert variant="danger" className="w-65 mlr-auto">
-                                        {createALoanCommentRequest.request_data.error}
-                                    </Alert>
-                                }
-                            </Form>
-                        )}
+                            </Modal.Footer>
+
+                            {createALoanCommentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_SUCCESS &&
+                                <Alert variant="success" className="w-65 mlr-auto">
+                                    {createALoanCommentRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            {createALoanCommentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_FAILURE &&
+                                <Alert variant="danger" className="w-65 mlr-auto">
+                                    {createALoanCommentRequest.request_data.error}
+                                </Alert>
+                            }
+                        </Form>
+                    )}
                 </Formik>
 
-                
+
             </Modal>
         )
     }
-    
+
     HandleFileUpLoad = (event) => {
         let filename = event.target.files[0].name,
             ext = event.target.files[0].type;
-        
 
-       
-     
- 
-        this.setState({docuploaded: event.target.files[0], filename,isDocAdded:true});
+
+
+
+
+        this.setState({ docuploaded: event.target.files[0], filename, isDocAdded: true });
     }
 
-    handleAddAttachment = async (addAttachmentPayload)=>{
-        const {dispatch} = this.props;
-       
-        await dispatch(loanActions.creatALoanAttachment(addAttachmentPayload));
-    } 
+    handleAddAttachment = async (addAttachmentPayload) => {
+        const { dispatch } = this.props;
 
-    addNewAttachmentBox = ()=>{
-        const {showAddAttachment, docuploaded,isDocAdded} = this.state;
-        let  createALoanAttachmentRequest = this.props.createALoanAttachmentReducer;
+        await dispatch(loanActions.creatALoanAttachment(addAttachmentPayload));
+    }
+
+    addNewAttachmentBox = () => {
+        const { showAddAttachment, docuploaded, isDocAdded } = this.state;
+        let createALoanAttachmentRequest = this.props.createALoanAttachmentReducer;
         let addLoanAttachmentsValidationSchema = Yup.object().shape({
-            Title:  Yup.string()
-                    .min(2, 'Valid response required')
-                    .required('Required'),
+            Title: Yup.string()
+                .min(2, 'Valid response required')
+                .required('Required'),
             Description: Yup.string()
-                    .required('Required')
-                    .min(3, 'Valid response required'),
-            
-           });
-        return(
+                .required('Required')
+                .min(3, 'Valid response required'),
+
+        });
+        return (
             <Modal show={showAddAttachment} onHide={this.handleAttachmentBoxClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
                 <Formik
                     initialValues={{
-                        Description:"",
-                        Title:""
+                        Description: "",
+                        Title: ""
                     }}
 
                     validationSchema={addLoanAttachmentsValidationSchema}
@@ -1819,8 +1825,8 @@ class ViewLoanAccount extends React.Component {
                         //     ClientEncodedKey:this.clientEncodedKey
                         // }
 
-                        if(docuploaded!==''){
-                            this.setState({isDocAdded:true});
+                        if (docuploaded !== '') {
+                            this.setState({ isDocAdded: true });
 
                             const attachmentFormData = new FormData();
                             attachmentFormData.append('DocumentFile', this.state.docuploaded);
@@ -1841,18 +1847,18 @@ class ViewLoanAccount extends React.Component {
 
                                             setTimeout(() => {
                                                 this.props.dispatch(loanActions.creatALoanAttachment("CLEAR"))
-                                                this.setState({docuploaded: '', filename:'', isDocAdded:false});
+                                                this.setState({ docuploaded: '', filename: '', isDocAdded: false });
                                                 this.handleAttachmentBoxClose();
                                                 this.getACustomerLoanAttachments();;
                                             }, 3000);
                                         }
 
-                                        
+
 
                                     }
                                 )
-                        }else{
-                            this.setState({isDocAdded:false})
+                        } else {
+                            this.setState({ isDocAdded: false })
                         }
 
                     }}
@@ -1866,102 +1872,102 @@ class ViewLoanAccount extends React.Component {
                         touched,
                         isValid,
                         errors, }) => (
-                            <Form
-                                noValidate
-                                onSubmit={handleSubmit}
-                                className="">
-                                <Modal.Header>
-                                    <Modal.Title>Upload Document</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <Form.Group>
-                                        <Form.Label className="block-level">Title</Form.Label>
-                                        <Form.Control 
-                                            type="text"
-                                            onChange={handleChange}
-                                            name="Title"
-                                            value={values.Title}
-                                            className={errors.Title && touched.Title ? "is-invalid form-control form-control-sm" : null} />
-                                            
-                                            {errors.Title && touched.Title ? (
-                                            <span className="invalid-feedback">{errors.Title}</span>
-                                            ) : null}
-                                    </Form.Group>
-                                    <Form.Group >
-                                        <Form.Label className="block-level">Description</Form.Label>
-                                        <Form.Control as="textarea"
-                                            rows="3"
-                                            onChange={handleChange}
-                                            name="Description"
-                                            value={values.Description}
-                                            className={errors.Description && touched.Description ? "is-invalid form-control form-control-sm" : null} />
+                        <Form
+                            noValidate
+                            onSubmit={handleSubmit}
+                            className="">
+                            <Modal.Header>
+                                <Modal.Title>Upload Document</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Form.Group>
+                                    <Form.Label className="block-level">Title</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={handleChange}
+                                        name="Title"
+                                        value={values.Title}
+                                        className={errors.Title && touched.Title ? "is-invalid form-control form-control-sm" : null} />
 
-                                        {errors.Description && touched.Description ? (
-                                            <span className="invalid-feedback">{errors.Description}</span>
-                                        ) : null}
-                                        <div className="footer-with-cta">
-                                            <label htmlFor="file-upload3" className="btn btn-primary">Choose file</label>
-                                            <input name="docuploaded"  type="file" id="file-upload3"  onChange={this.HandleFileUpLoad}/>
+                                    {errors.Title && touched.Title ? (
+                                        <span className="invalid-feedback">{errors.Title}</span>
+                                    ) : null}
+                                </Form.Group>
+                                <Form.Group >
+                                    <Form.Label className="block-level">Description</Form.Label>
+                                    <Form.Control as="textarea"
+                                        rows="3"
+                                        onChange={handleChange}
+                                        name="Description"
+                                        value={values.Description}
+                                        className={errors.Description && touched.Description ? "is-invalid form-control form-control-sm" : null} />
+
+                                    {errors.Description && touched.Description ? (
+                                        <span className="invalid-feedback">{errors.Description}</span>
+                                    ) : null}
+                                    <div className="footer-with-cta">
+                                        <label htmlFor="file-upload3" className="btn btn-primary">Choose file</label>
+                                        <input name="docuploaded" type="file" id="file-upload3" onChange={this.HandleFileUpLoad} />
+                                    </div>
+
+                                    {this.state.filename !== null &&
+
+                                        <div className="filename">
+                                            File: <span>{this.state.filename}</span>
                                         </div>
-
-                                        {this.state.filename!==null && 
-                                
-                                            <div className="filename">
-                                              File: <span>{this.state.filename}</span>  
-                                            </div>
-                                        }
-                                    </Form.Group>
-                                    {isDocAdded ===false &&
-                                        <Alert variant="danger" className="w-65 mlr-auto">
-                                            Please upload document
-                                        </Alert>
                                     }
-                                </Modal.Body>
-                                <Modal.Footer>
-
-                                    <Button variant="light" onClick={this.handleAttachmentBoxClose}>
-                                        Cancel
-                                    </Button>
-                                    <Button 
-                                        variant="success"
-                                        type="submit"
-                                        disabled={createALoanAttachmentRequest.is_request_processing}
-                                    >
-                                        {createALoanAttachmentRequest.is_request_processing?"Please wait...":"Upload attachment"}
-                                        
-                                    </Button>
-
-                                </Modal.Footer>
-
-                                {createALoanAttachmentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_SUCCESS && 
-                                    <Alert variant="success" className="w-65 mlr-auto">
-                                        {createALoanAttachmentRequest.request_data.response.data.message}
-                                    </Alert>
-                                }
-                                {createALoanAttachmentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_FAILURE && 
+                                </Form.Group>
+                                {isDocAdded === false &&
                                     <Alert variant="danger" className="w-65 mlr-auto">
-                                        {createALoanAttachmentRequest.request_data.error}
-                                    </Alert>
+                                        Please upload document
+                                        </Alert>
                                 }
-                            </Form>
-                        )}
+                            </Modal.Body>
+                            <Modal.Footer>
+
+                                <Button variant="light" onClick={this.handleAttachmentBoxClose}>
+                                    Cancel
+                                    </Button>
+                                <Button
+                                    variant="success"
+                                    type="submit"
+                                    disabled={createALoanAttachmentRequest.is_request_processing}
+                                >
+                                    {createALoanAttachmentRequest.is_request_processing ? "Please wait..." : "Upload attachment"}
+
+                                </Button>
+
+                            </Modal.Footer>
+
+                            {createALoanAttachmentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_SUCCESS &&
+                                <Alert variant="success" className="w-65 mlr-auto">
+                                    {createALoanAttachmentRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            {createALoanAttachmentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_FAILURE &&
+                                <Alert variant="danger" className="w-65 mlr-auto">
+                                    {createALoanAttachmentRequest.request_data.error}
+                                </Alert>
+                            }
+                        </Form>
+                    )}
                 </Formik>
 
-                
+
             </Modal>
         )
     }
 
-    renderAloanAttachments=()=>{
-        let getALoanAccountAttachmentsRequest =  this.props.getALoanAccountAttachmentsReducer;
-        let allUSerPermissions =[];
-        this.userPermissions.map(eachPermission=>{
+    renderAloanAttachments = () => {
+        let getALoanAccountAttachmentsRequest = this.props.getALoanAccountAttachmentsReducer;
+        let allUSerPermissions = [];
+        this.userPermissions.map(eachPermission => {
             allUSerPermissions.push(eachPermission.permissionCode)
         })
-        let saveRequestData= getALoanAccountAttachmentsRequest.request_data!==undefined?getALoanAccountAttachmentsRequest.request_data.tempData:null;
-        if(getALoanAccountAttachmentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_PENDING){
-            if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
-                return(
+        let saveRequestData = getALoanAccountAttachmentsRequest.request_data !== undefined ? getALoanAccountAttachmentsRequest.request_data.tempData : null;
+        if (getALoanAccountAttachmentsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_PENDING) {
+            if ((saveRequestData === undefined) || (saveRequestData !== undefined && saveRequestData.length < 1)) {
+                return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta ">
@@ -1998,19 +2004,19 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") >-1 &&
+                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") > -1 &&
                             <div className="footer-with-cta toright">
                                 <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
                             </div>
                         }
                     </div>
                 )
-            }else{
-                return(
+            } else {
+                return (
                     <div>
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta ">
-                        <Form className="one-liner"></Form>
+                            <Form className="one-liner"></Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
@@ -2035,8 +2041,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                   saveRequestData.map((eachAttachment, index)=>{
-                                        return(
+                                    saveRequestData.map((eachAttachment, index) => {
+                                        return (
                                             <tr key={index}>
                                                 <td>{eachAttachment.title} </td>
                                                 <td>{eachAttachment.fileName} </td>
@@ -2045,11 +2051,11 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachAttachment.timeStamp)} </td>
                                             </tr>
                                         )
-                                   }) 
+                                    })
                                 }
                             </tbody>
                         </TableComponent>
-                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") >-1 &&
+                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") > -1 &&
                             <div className="footer-with-cta toright">
                                 <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
                             </div>
@@ -2059,21 +2065,21 @@ class ViewLoanAccount extends React.Component {
             }
         }
 
-        if(getALoanAccountAttachmentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_SUCCESS){
+        if (getALoanAccountAttachmentsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_SUCCESS) {
             let getALoanAttachmentsInfo = getALoanAccountAttachmentsRequest.request_data.response.data;
             let getALoanAttachmentsData = getALoanAccountAttachmentsRequest.request_data.response.data.result;
 
-            if(getALoanAttachmentsData.length>=1){
+            if (getALoanAttachmentsData.length >= 1) {
 
 
-                return(
+                return (
                     <div>
                         <div className="heading-with-cta ">
-                        <Form className="one-liner"></Form>
+                            <Form className="one-liner"></Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
-                                    onChange={(e)=>this.setAttachmentRequestPagesize(e, getALoanAttachmentsData)}
+                                    onChange={(e) => this.setAttachmentRequestPagesize(e, getALoanAttachmentsData)}
                                     value={this.state.AttachmentPageSize}
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
@@ -2104,8 +2110,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                   getALoanAttachmentsData.map((eachAttachment, index)=>{
-                                        return(
+                                    getALoanAttachmentsData.map((eachAttachment, index) => {
+                                        return (
                                             <tr key={index}>
                                                 <td>{eachAttachment.title} </td>
                                                 <td>{eachAttachment.fileName} </td>
@@ -2114,20 +2120,20 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachAttachment.timeStamp)} </td>
                                             </tr>
                                         )
-                                   }) 
+                                    })
                                 }
                             </tbody>
                         </TableComponent>
-                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") >-1 &&
+                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") > -1 &&
                             <div className="footer-with-cta toright">
                                 <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
                             </div>
                         }
                     </div>
                 )
-            }else{
+            } else {
 
-                return(
+                return (
                     <div className="no-records">
                         <div className="heading-with-cta ">
                             <Form className="one-liner">
@@ -2166,7 +2172,7 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") >-1 &&
+                        {allUSerPermissions.indexOf("bnk_manage_loan_attachments") > -1 &&
                             <div className="footer-with-cta toright">
                                 <Button onClick={this.handleAttachmentBoxShow}>Upload Document</Button>
                             </div>
@@ -2175,33 +2181,33 @@ class ViewLoanAccount extends React.Component {
                 )
             }
 
-           
+
         }
 
-        if(getALoanAccountAttachmentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_FAILURE){
+        if (getALoanAccountAttachmentsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_FAILURE) {
 
-            return(
-                <div className="loading-content errormsg"> 
-                <div>{getALoanAccountAttachmentsRequest.request_data.error}</div>
-            </div>
+            return (
+                <div className="loading-content errormsg">
+                    <div>{getALoanAccountAttachmentsRequest.request_data.error}</div>
+                </div>
             )
         }
     }
 
-    renderLoanAccountComments =()=>{
-        let getAClientLoanAccountCommentsRequest =  this.props.getAClientLoanAccountCommentsReducer;
+    renderLoanAccountComments = () => {
+        let getAClientLoanAccountCommentsRequest = this.props.getAClientLoanAccountCommentsReducer;
 
-        let saveRequestData= getAClientLoanAccountCommentsRequest.request_data!==undefined?getAClientLoanAccountCommentsRequest.request_data.tempData:null;
-        let allUSerPermissions =[];
-            this.userPermissions.map(eachPermission=>{
-                allUSerPermissions.push(eachPermission.permissionCode)
-            })
+        let saveRequestData = getAClientLoanAccountCommentsRequest.request_data !== undefined ? getAClientLoanAccountCommentsRequest.request_data.tempData : null;
+        let allUSerPermissions = [];
+        this.userPermissions.map(eachPermission => {
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
 
-        if(getAClientLoanAccountCommentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMENTS_PENDING){
-            if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
-                return(
+        if (getAClientLoanAccountCommentsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_COMMENTS_PENDING) {
+            if ((saveRequestData === undefined) || (saveRequestData !== undefined && saveRequestData.length < 1)) {
+                return (
                     <div className="loading-content">
-                         {this.addNewCommentBox()}
+                        {this.addNewCommentBox()}
                         <div className="loading-text">Please wait... </div>
                         <div className="heading-with-cta ">
                             <Form className="one-liner">
@@ -2210,7 +2216,7 @@ class ViewLoanAccount extends React.Component {
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
-                                    
+
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
@@ -2237,16 +2243,16 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") >-1 &&
+                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") > -1 &&
                             <div className="footer-with-cta toright">
                                 <Button onClick={this.handleCommentsBoxShow}>New Comment</Button>
                             </div>
                         }
-                        
+
                     </div>
                 )
-            }else{
-                return(
+            } else {
+                return (
                     <div>
                         {this.addNewCommentBox()}
                         <div className="loading-text">Please wait... </div>
@@ -2278,8 +2284,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                   saveRequestData.map((eachComments, index)=>{
-                                        return(
+                                    saveRequestData.map((eachComments, index) => {
+                                        return (
                                             <tr key={index}>
                                                 {/* <td>{eachComments.id} </td> */}
                                                 <td>{eachComments.comment} </td>
@@ -2287,11 +2293,11 @@ class ViewLoanAccount extends React.Component {
                                                 <td><NavLink to={`/user/${eachComments.userEncodedKey}`}>{eachComments.userName} </NavLink> </td>
                                             </tr>
                                         )
-                                   }) 
+                                    })
                                 }
                             </tbody>
                         </TableComponent>
-                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") >-1 &&
+                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") > -1 &&
                             <div className="footer-with-cta toright">
                                 <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
                             </div>
@@ -2301,24 +2307,24 @@ class ViewLoanAccount extends React.Component {
             }
         }
 
-        if(getAClientLoanAccountCommentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMENTS_SUCCESS){
+        if (getAClientLoanAccountCommentsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_COMMENTS_SUCCESS) {
             let getALoanCommentsInfo = getAClientLoanAccountCommentsRequest.request_data.response.data;
             let getALoanCommentsData = getAClientLoanAccountCommentsRequest.request_data.response.data.result;
 
-            if(getALoanCommentsData.length>=1){
+            if (getALoanCommentsData.length >= 1) {
 
 
-                return(
+                return (
                     <div>
                         {this.addNewCommentBox()}
                         <div className="heading-with-cta ">
-                        <Form className="one-liner">
+                            <Form className="one-liner">
 
-                        </Form>
+                            </Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
-                                    onChange={(e)=>this.setCommentsRequestPagesize(e, getALoanCommentsData)}
+                                    onChange={(e) => this.setCommentsRequestPagesize(e, getALoanCommentsData)}
                                     value={this.state.CommentsPageSize}
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
@@ -2348,8 +2354,8 @@ class ViewLoanAccount extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                   getALoanCommentsData.map((eachComments, index)=>{
-                                        return(
+                                    getALoanCommentsData.map((eachComments, index) => {
+                                        return (
                                             <tr key={index}>
                                                 {/* <td>{eachComments.id} </td> */}
                                                 <td>{eachComments.comment} </td>
@@ -2357,30 +2363,30 @@ class ViewLoanAccount extends React.Component {
                                                 <td><NavLink to={`/user/${eachComments.userEncodedKey}`}>{eachComments.userName} </NavLink> </td>
                                             </tr>
                                         )
-                                   }) 
+                                    })
                                 }
                             </tbody>
                         </TableComponent>
-                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") >-1 &&
+                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") > -1 &&
                             <div className="footer-with-cta toright">
                                 <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
                             </div>
                         }
                     </div>
                 )
-            }else{
+            } else {
 
-                return(
+                return (
                     <div className="no-records">
                         {this.addNewCommentBox()}
                         <div className="heading-with-cta ">
-                        <Form className="one-liner">
+                            <Form className="one-liner">
 
-                        </Form>
+                            </Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
-                                    onChange={(e)=>this.setCommentsRequestPagesize(e, getALoanCommentsData)}
+                                    onChange={(e) => this.setCommentsRequestPagesize(e, getALoanCommentsData)}
                                     value={this.state.CommentsPageSize}
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
@@ -2409,7 +2415,7 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") >-1 &&
+                        {allUSerPermissions.indexOf("bnk_manage_loan_comments") > -1 &&
                             <div className="footer-with-cta toright">
                                 <Button onClick={this.handleCommentsBoxShow}>Add Comment</Button>
                             </div>
@@ -2420,192 +2426,130 @@ class ViewLoanAccount extends React.Component {
 
         }
 
-        if(getAClientLoanAccountCommentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMENTS_FAILURE){
+        if (getAClientLoanAccountCommentsRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_COMMENTS_FAILURE) {
 
-            return(
-                <div className="loading-content errormsg"> 
-                <div>{getAClientLoanAccountCommentsRequest.request_data.error}</div>
-            </div>
+            return (
+                <div className="loading-content errormsg">
+                    <div>{getAClientLoanAccountCommentsRequest.request_data.error}</div>
+                </div>
             )
         }
     }
 
 
-    handleLoanChangeStateClose = () => this.setState({changeLoanState:false, showDisburseLoanForm:false});
-    
-    handleLoanChangeStateShow = () => this.setState({changeLoanState:true});
+    handleLoanChangeStateClose = () => this.setState({ changeLoanState: false, showDisburseLoanForm: false });
 
-    handleNewLoanState = async (changeLoanStatePayload, newStateUpdate)=>{
-        const {dispatch} = this.props;
-       
+    handleLoanChangeStateShow = () => this.setState({ changeLoanState: true });
+
+    handleNewLoanState = async (changeLoanStatePayload, newStateUpdate) => {
+        const { dispatch } = this.props;
+
         await dispatch(loanActions.changeLoanState(changeLoanStatePayload, newStateUpdate));
-    } 
+    }
 
-    changeLoanStateBox = (loanDetails)=>{
-        const {changeLoanState, newState,ctaText, newStateUpdate, showDisburseLoanForm} = this.state;
-        let  changeLoanStateRequest = this.props.changeLoanStateReducer;
-        let getAClientLoanAccountRequest = this.props.getAClientLoanAccountReducer,
+    handlePayOffLoan = async (loanPayload) => {
+        const { dispatch } = this.props;
+
+        await dispatch(loanActions.payOffALoan(loanPayload));
+    }
+
+    handleShowPayOffClose = () => {
+        this.props.dispatch(loanActions.payOffALoan("CLEAR"));
+        this.setState({ showPayOffLoan: false })
+    };
+    handleShowPayOffShow = () => {
+        this.props.dispatch(loanActions.payOffALoan("CLEAR"));
+        this.setState({ showPayOffLoan: true })
+    };
+
+    handleWriteOffLoan = async (loanPayload) => {
+        const { dispatch } = this.props;
+
+        await dispatch(loanActions.writeOffALoan(loanPayload));
+    }
+
+    handleShowWriteOffClose = () => {
+        if(this.props.writeOffALoanReducer.is_request_processing===false){
+            this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ showWriteOffLoan: false })
+        }
+    };
+    handleShowWriteOffShow = () => {
+        this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+        this.setState({ showWriteOffLoan: true })
+    };
+
+    payOffLoanBox = (loanDetails) => {
+        const { showPayOffLoan  } = this.state;
+        let payOffALoanRequest = this.props.payOffALoanReducer,
+        
             adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
-            allChannels =[], 
-            channelsList;
-        // this.props.dispatch(loanActions.changeLoanState("CLEAR"));
+            allChannels = [],
+            channelsList,
+            payoffAmount = loanDetails.interestExpected + loanDetails.principalExpected;
 
-        if(adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
-            && adminGetTransactionChannelsRequest.request_data.response.data.result.length>=1){
-                channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+        // if(showPayOffLoan){
+        //     this.props.dispatch(loanActions.payOffALoan("CLEAR"));
+        // }
 
-                channelsList.map((channel, id)=>{
-                    allChannels.push({label: channel.name, value:channel.encodedKey});
-                })
+        if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+            && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
+            channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+
+            channelsList.map((channel, id) => {
+                allChannels.push({ label: channel.name, value: channel.encodedKey });
+            })
         }
 
-        let changeLoanStateValidationSchema;
-        if(showDisburseLoanForm!==true && newState !== "repayloan"){
-            changeLoanStateValidationSchema = Yup.object().shape({
-                comment:  Yup.string()
-                    .min(2, 'Valid comments required'),
-                notes:  Yup.string()
+        let loanStateValidationSchema;
+       
+            loanStateValidationSchema = Yup.object().shape({
+                txtChannelEncodedKey: Yup.string()
+                    .required('Required'),
+                notes: Yup.string()
                     .min(2, 'Valid notes required'),
-            
-            });
-        }
 
-        if(showDisburseLoanForm===true){
-            changeLoanStateValidationSchema = Yup.object().shape({
-                    notes:  Yup.string()
-                        .min(2, 'Valid notes required'),
-                    txtChannelEncodedKey:  Yup.string()
-                        .required('Required'),
-                    firstRepaymentDate:  Yup.string()
-                        .when('showFirstRepayment',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-                    backDateChosen:  Yup.string()
-                        .when('allowBackDate',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-                    bookingDateChosen:  Yup.string()
-                        .when('showBookingDate',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-                
             });
-        }
+        
 
-        if(newState === "repayloan" ){
-            changeLoanStateValidationSchema = Yup.object().shape({
-                    notes:  Yup.string()
-                        .min(2, 'Valid notes required'),
-                    txtChannelEncodedKey:  Yup.string()
-                        .required('Required'),
-                    amountToRepay:  Yup.string()
-                        .required('Required'),
-                    firstRepaymentDate:  Yup.string()
-                        .when('showFirstRepayment',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-                    backDateChosen:  Yup.string()
-                        .when('allowBackDate',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-                    bookingDateChosen:  Yup.string()
-                        .when('showBookingDate',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-                
-            });
-        }
 
-        return(
-            <Modal show={changeLoanState} onHide={this.handleLoanChangeStateClose} size="lg" centered="true" dialogClassName={showDisburseLoanForm!==true?"modal-40w withcentered-heading": "modal-50w withcentered-heading"}  animation={false}>
+        return (
+            <Modal show={showPayOffLoan} onHide={this.handleShowPayOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
                 <Formik
                     initialValues={{
-                        comment:"",
-                        showFirstRepayment:false,
-                        allowBackDate:false,
-                        showBookingDate:false,
-                        txtChannelEncodedKey:"",
-                        firstRepaymentDate:"",
-                        backDateChosen:"",
-                        bookingDateChosen:"",
-                        notes:"",
-                        amountToRepay:""
+                        txtChannelEncodedKey: "",
+                        notes: "",
                     }}
 
-                    validationSchema={changeLoanStateValidationSchema}
+                    validationSchema={loanStateValidationSchema}
                     onSubmit={(values, { resetForm }) => {
 
-                        let changeLoanStatePayload;
-                        if(showDisburseLoanForm!==true && newState !== "repayloan"){
-                            changeLoanStatePayload = {
-                                comment:values.comment,
-                                accountEncodedKey:this.loanEncodedKey
-                            }
-                        }
-
-                        if(showDisburseLoanForm===true || newState === "repayloan"){
-                            changeLoanStatePayload = {
-                                accountEncodedKey:this.loanEncodedKey,
-                                notes:values.notes,
-                                channelEncodedKey:values.txtChannelEncodedKey,
-                                isBackDated:values.allowBackDate,
-                                backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
-                                isBookingDate: values.showBookingDate,
-                                bookingDate: values.bookingDateChosen!==""? values.bookingDateChosen.toISOString() : null,
-                            }
-                        }
-
-                        if(newState === "repayloan"){
-                            changeLoanStatePayload.amount= parseFloat(values.amountToRepay.replace(/,/g, ''));
-                        }else{
-                            if(changeLoanStatePayload.amount){
-                                delete changeLoanStatePayload.amount;
-                            }
-                        }
-                        
-
-                        // let changeLoanStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
+                        let changeLoanStatePayload ={
+                            accountEncodedKey:loanDetails.encodedKey,
+                            clientEncodedKey:this.props.match.params.id,
+                            channelEncodedKey:values.txtChannelEncodedKey,
+                            notes:values.notes
+                        };
+                       
 
 
-                        
 
-                        this.handleNewLoanState(changeLoanStatePayload,newStateUpdate )
+
+                        this.handlePayOffLoan(changeLoanStatePayload)
                             .then(
                                 () => {
 
-                                    if (this.props.changeLoanStateReducer.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_SUCCESS) {
+                                    if (this.props.payOffALoanReducer.request_status === loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS) {
                                         resetForm();
                                         // value = {null}
 
                                         setTimeout(() => {
-                                            this.props.dispatch(loanActions.changeLoanState("CLEAR"))
-                                            this.handleLoanChangeStateClose();
+                                            // this.props.dispatch(loanActions.payOffALoan("CLEAR"))
                                             this.getCustomerLoanAccountDetails(this.loanEncodedKey);
+                                            this.handleShowPayOffClose();
                                         }, 3000);
                                     }
 
-                                    if(this.props.changeLoanStateReducer.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_FAILURE) {
-                                        resetForm();
-                                        // value = {null}
-
-                                        setTimeout(() => {
-                                            this.props.dispatch(loanActions.changeLoanState("CLEAR"))
-                                        }, 3000);
-                                    }
-
-                                    
 
                                 }
                             )
@@ -2622,452 +2566,954 @@ class ViewLoanAccount extends React.Component {
                         touched,
                         isValid,
                         errors, }) => (
-                            <Form
-                                noValidate
-                                onSubmit={handleSubmit}
-                                className="">
-                                <Modal.Header>
-                                    <Modal.Title>
-                                        {newState !== "repayloan"? "Change Loan State" : "Apply A Repayment"} 
+                        <Form
+                            noValidate
+                            onSubmit={handleSubmit}
+                            className="">
+                            <Modal.Header>
+                                <Modal.Title>
+                                    Pay Off Loan
                                     </Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    {newState !== "repayloan" &&
-                                        <Form.Group>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Present State</Form.Label>
-                                                    <span className="form-text">{loanDetails.loanStateDescription} </span>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Label className="block-level">New State</Form.Label>
-                                                    <span className="form-text">{newState}</span>
-                                                </Col>
-                                            </Form.Row>
-                                        </Form.Group>
-                                    }
-                                    {(showDisburseLoanForm!==true && newState !== "repayloan") &&
-                                        <Form.Group>
-                                            <Form.Label className="block-level">Comments</Form.Label>
-                                            <Form.Control as="textarea"
-                                                rows="3"
-                                                onChange={handleChange}
-                                                name="comment"
-                                            value={values.comment}
-                                            className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null} 
-                                            />
-                                            {errors.comment && touched.comment ? (
-                                                <span className="invalid-feedback">{errors.comment}</span>
-                                            ) : null}
-                                        </Form.Group>
-                                    }
-                                    {showDisburseLoanForm===true &&
-                                        <div>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Amount</Form.Label>
-                                                    <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5>
-                                                </Col>
-                                                <Col>
-                                                    
-                                                </Col>
-                                            </Form.Row>
-                                            <Form.Row className="mb-10">
-                                                <Col>
-                                                    <Form.Group className="mb-0">
-                                                        <Form.Label className="block-level mb-10">Transaction Channel</Form.Label>
-                                                        {allChannels.length >=1 &&
-                                                            <div>
-                                                                <Select
-                                                                    options={allChannels}
-                                                                    
-                                                                    onChange={(selected) => {
-                                                                        setFieldValue('txtChannelEncodedKey', selected.value)
-                                                                    }}
-                                                                    onBlur={()=> setFieldTouched('txtChannelEncodedKey', true)}
-                                                                    className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
-                                                                    name="txtChannelEncodedKey"
-                                                                />
-                                                                {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
-                                                                    <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
-                                                                ) : null}
-                                                            </div>
-                                                        }
-                                                        {adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
-                                                            <div className="errormsg"> Unable to load Disbursment channels</div>
-                                                        }
-                                                        {/* <Form.Control
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.collectPrincipalEveryRepayments)}
-                                                            className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid h-38px" : "h-38px"}
-                                                            name="collectPrincipalEveryRepayments" required /> */}
-                                                        
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col className="date-wrap">
-                                                    <Form.Group className="table-helper m-b-5">
-                                                        <input type="checkbox"
-                                                        name="showFirstRepayment" 
-                                                        onChange={handleChange} 
-                                                        checked={values.showFirstRepayment? values.showFirstRepayment:null}
-                                                        value={values.showFirstRepayment}
-                                                        id="firstRepaymentDate"/>
-                                                        <label htmlFor="firstRepaymentDate">First Repayment Date</label>
-                                                    </Form.Group>
-                                                    {values.showFirstRepayment===true &&
-                                                        <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
-                                                                dateFormat="d MMMM, yyyy"
-                                                                className="form-control form-control-sm h-38px"
-                                                                peekNextMonth
-                                                                showMonthDropdown
-                                                                name="firstRepaymentDate"
-                                                                value={values.firstRepaymentDate}
-                                                                onChange={setFieldValue}
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                minDate={new Date()}
-                                                                className={errors.firstRepaymentDate && touched.firstRepaymentDate ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                            />
-                                                            {errors.firstRepaymentDate && touched.firstRepaymentDate ? (
-                                                                <span className="invalid-feedback">{errors.firstRepaymentDate}</span>
-                                                            ) : null}
-                                                        </Form.Group>
-                                                    }
-                                                </Col>
-                                            </Form.Row>
-                                            <Form.Row className="mb-10">
-                                                <Col className="date-wrap">
-                                                    <Form.Group className="table-helper m-b-5">
-                                                        <input type="checkbox"
-                                                        name="allowBackDate" 
-                                                        onChange={handleChange} 
-                                                        checked={values.allowBackDate? values.allowBackDate:null}
-                                                        value={values.allowBackDate}
-                                                        id="allowBackDate"/>
-                                                        <label htmlFor="allowBackDate">Backdate</label>
-                                                    </Form.Group>
-                                                    {values.allowBackDate===true &&
-                                                        <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
-                                                                dateFormat="d MMMM, yyyy"
-                                                                className="form-control form-control-sm"
-                                                                peekNextMonth
-                                                                showMonthDropdown
-                                                                name="backDateChosen"
-                                                                value={values.backDateChosen}
-                                                                onChange={setFieldValue}
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                minDate={new Date()}
-                                                                className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                            />
-                                                            {errors.backDateChosen && touched.backDateChosen ? (
-                                                                <span className="invalid-feedback">{errors.backDateChosen}</span>
-                                                            ) : null}
-                                                        </Form.Group>
-                                                    }
-                                                </Col>
-                                                <Col className="date-wrap">
-                                                    <Form.Group className="table-helper m-b-5">
-                                                        <input type="checkbox"
-                                                        name="showBookingDate" 
-                                                        onChange={handleChange} 
-                                                        checked={values.showBookingDate? values.showBookingDate:null}
-                                                        value={values.showBookingDate}
-                                                        id="showBookingDate"/>
-                                                        <label htmlFor="showBookingDate">Booking Date</label>
-                                                    </Form.Group>
-                                                    {values.showBookingDate===true &&
-                                                        <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
-                                                                dateFormat="d MMMM, yyyy"
-                                                                className="form-control form-control-sm"
-                                                                peekNextMonth
-                                                                showMonthDropdown
-                                                                name="bookingDateChosen"
-                                                                value={values.bookingDateChosen}
-                                                                onChange={setFieldValue}
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                minDate={new Date()}
-                                                                className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
-                                                            />
-                                                            {errors.bookingDateChosen && touched.bookingDateChosen ? (
-                                                                <span className="invalid-feedback">{errors.bookingDateChosen}</span>
-                                                            ) : null}
-                                                        </Form.Group>
-                                                    }
-                                                </Col>
-                                            </Form.Row>
-                                            
-                                            <Form.Group>
-                                                <Form.Label className="block-level">Notes</Form.Label>
-                                                <Form.Control as="textarea"
-                                                    rows="3"
-                                                    onChange={handleChange}
-                                                    name="notes"
-                                                value={values.notes}
-                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null} 
-                                                />
-                                                {errors.notes && touched.notes ? (
-                                                    <span className="invalid-feedback">{errors.notes}</span>
-                                                ) : null}
-                                            </Form.Group>
-                                        </div>
-                                    }
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div className="modal-notes">
+                                    Remaining balance will be paid off and the account will be closed
+                                </div>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label className="block-level">Principal Balance</Form.Label>
+                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
+                                        <h5>&#8358;{numberWithCommas(loanDetails.principalExpected,true)}</h5>
+                                    </Col>
+                                    <Col>
+                                        <Form.Label className="block-level">Interest Balance</Form.Label>
+                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
+                                        <h5>&#8358;{numberWithCommas(loanDetails.interestExpected,true)}</h5>
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Label className="block-level">Pay Off Amount</Form.Label>
+                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
+                                        <h5>&#8358;{numberWithCommas(payoffAmount,true)}</h5>
+                                    </Col>
+                                    <Col>
 
-                                    {
-                                        newState === "repayloan" &&
-                                        <div>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Amount to repay (&#8358;)</Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        autoComplete="off"
-                                                        onChange={handleChange}
-                                                        value={numberWithCommas(values.amountToRepay)}
-                                                        className={errors.amountToRepay && touched.amountToRepay ? "is-invalid h-38px" : "h-38px"}
-                                                        name="amountToRepay" required />
-                                                    {errors.amountToRepay && touched.amountToRepay ? (
-                                                        <span className="invalid-feedback">{errors.amountToRepay}</span>
+                                    </Col>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Col>
+                                        <Form.Group className="mb-0">
+                                            <Form.Label className="block-level mb-10">Transaction Channel</Form.Label>
+                                            {allChannels.length >= 1 &&
+                                                <div>
+                                                    <Select
+                                                        options={allChannels}
+
+                                                        onChange={(selected) => {
+                                                            setFieldValue('txtChannelEncodedKey', selected.value)
+                                                        }}
+                                                        onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
+                                                        className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+                                                        name="txtChannelEncodedKey"
+                                                    />
+                                                    {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
+                                                        <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
                                                     ) : null}
-                                                </Col>
-                                                <Col></Col>
-                                            </Form.Row>
-                                            <Form.Row className="mb-10">
-                                                <Col>
-                                                    <Form.Group className="mb-0">
-                                                        <Form.Label className="block-level mb-10">Transaction Channel</Form.Label>
-                                                        {allChannels.length >=1 &&
-                                                            <div>
-                                                                <Select
-                                                                    options={allChannels}
-                                                                    
-                                                                    onChange={(selected) => {
-                                                                        setFieldValue('txtChannelEncodedKey', selected.value)
-                                                                    }}
-                                                                    onBlur={()=> setFieldTouched('txtChannelEncodedKey', true)}
-                                                                    className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
-                                                                    name="txtChannelEncodedKey"
-                                                                />
-                                                                {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
-                                                                    <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
-                                                                ) : null}
-                                                            </div>
-                                                        }
-                                                        {adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
-                                                            <div className="errormsg"> Unable to load Disbursment channels</div>
-                                                        }
-                                                        {/* <Form.Control
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.collectPrincipalEveryRepayments)}
-                                                            className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid h-38px" : "h-38px"}
-                                                            name="collectPrincipalEveryRepayments" required /> */}
-                                                        
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col className="date-wrap">
-                                                </Col>
-                                            </Form.Row>
-                                            <Form.Row className="mb-10">
-                                                <Col className="date-wrap">
-                                                    <Form.Group className="table-helper m-b-5">
-                                                        <input type="checkbox"
-                                                        name="allowBackDate" 
-                                                        onChange={handleChange} 
-                                                        checked={values.allowBackDate? values.allowBackDate:null}
-                                                        value={values.allowBackDate}
-                                                        id="allowBackDate"/>
-                                                        <label htmlFor="allowBackDate">Backdate</label>
-                                                    </Form.Group>
-                                                    {values.allowBackDate===true &&
-                                                        <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
-                                                                dateFormat="d MMMM, yyyy"
-                                                                className="form-control form-control-sm"
-                                                                peekNextMonth
-                                                                showMonthDropdown
-                                                                name="backDateChosen"
-                                                                value={values.backDateChosen}
-                                                                onChange={setFieldValue}
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                maxDate={new Date()}
-                                                                className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                            />
-                                                            {errors.backDateChosen && touched.backDateChosen ? (
-                                                                <span className="invalid-feedback">{errors.backDateChosen}</span>
-                                                            ) : null}
-                                                        </Form.Group>
-                                                    }
-                                                </Col>
-                                                <Col className="date-wrap">
-                                                    <Form.Group className="table-helper m-b-5">
-                                                        <input type="checkbox"
-                                                        name="showBookingDate" 
-                                                        onChange={handleChange} 
-                                                        checked={values.showBookingDate? values.showBookingDate:null}
-                                                        value={values.showBookingDate}
-                                                        id="showBookingDate"/>
-                                                        <label htmlFor="showBookingDate">Booking Date</label>
-                                                    </Form.Group>
-                                                    {values.showBookingDate===true &&
-                                                        <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
-                                                                dateFormat="d MMMM, yyyy"
-                                                                className="form-control form-control-sm"
-                                                                peekNextMonth
-                                                                showMonthDropdown
-                                                                name="bookingDateChosen"
-                                                                value={values.bookingDateChosen}
-                                                                onChange={setFieldValue}
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                // minDate={new Date()}
-                                                                className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
-                                                            />
-                                                            {errors.bookingDateChosen && touched.bookingDateChosen ? (
-                                                                <span className="invalid-feedback">{errors.bookingDateChosen}</span>
-                                                            ) : null}
-                                                        </Form.Group>
-                                                    }
-                                                </Col>
-                                            </Form.Row>
-                                            <Form.Group>
-                                                <Form.Label className="block-level">Notes</Form.Label>
-                                                <Form.Control as="textarea"
-                                                    rows="3"
-                                                    onChange={handleChange}
-                                                    name="notes"
-                                                value={values.notes}
-                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null} 
-                                                />
-                                                {errors.notes && touched.notes ? (
-                                                    <span className="invalid-feedback">{errors.notes}</span>
-                                                ) : null}
-                                            </Form.Group>
-                                        </div>
-                                    }
-                                </Modal.Body>
-                                <Modal.Footer>
+                                                </div>
+                                            }
+                                            {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+                                                <div className="errormsg"> Unable to load channels</div>
+                                            }
+                                           
 
-                                    <Button variant="light" onClick={this.handleLoanChangeStateClose}>
-                                        Cancel
-                                    </Button>
-                                    <Button 
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+
+                                    </Col>
+                                </Form.Row>
+                                <Form.Group>
+                                    <Form.Label className="block-level">Notes</Form.Label>
+                                    <Form.Control as="textarea"
+                                        rows="3"
+                                        onChange={handleChange}
+                                        name="notes"
+                                        value={values.notes}
+                                        className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+                                    />
+                                    {errors.notes && touched.notes ? (
+                                        <span className="invalid-feedback">{errors.notes}</span>
+                                    ) : null}
+                                </Form.Group>
+                                
+                               
+                            </Modal.Body>
+                            <Modal.Footer>
+
+                                <Button variant="light" onClick={this.handleShowPayOffClose}>
+                                    Cancel
+                                </Button>
+                                {payOffALoanRequest.request_status !== loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS &&
+                                    <Button
                                         variant="success"
                                         type="submit"
-                                        disabled={changeLoanStateRequest.is_request_processing}
+                                        disabled={payOffALoanRequest.is_request_processing}
                                     >
-                                        {changeLoanStateRequest.is_request_processing?"Please wait...":`${ctaText}`}
-                                        
-                                    </Button>
+                                        {payOffALoanRequest.is_request_processing ? "Please wait..." : "Pay Off"}
 
-                                </Modal.Footer>
-                                <div className="footer-alert">
-                                    {changeLoanStateRequest.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_SUCCESS && 
-                                        <Alert variant="success" className="w-65 mlr-auto">
-                                            {changeLoanStateRequest.request_data.response.data.message}
-                                        </Alert>
-                                    }
-                                    {(changeLoanStateRequest.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_FAILURE && changeLoanStateRequest.request_data.error )&& 
-                                        <Alert variant="danger" className="w-65 mlr-auto">
-                                            {changeLoanStateRequest.request_data.error}
-                                        </Alert>
-                                    }
-                                </div>
-                            </Form>
-                        )}
+                                    </Button>
+                                }
+
+                            </Modal.Footer>
+                            <div className="footer-alert">
+                                {payOffALoanRequest.request_status === loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS &&
+                                    <Alert variant="success" className="w-65 mlr-auto">
+                                        {payOffALoanRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+                                {(payOffALoanRequest.request_status === loanAndDepositsConstants.PAYOFF_LOAN_FAILURE && payOffALoanRequest.request_data.error) &&
+                                    <Alert variant="danger" className="w-65 mlr-auto">
+                                        {payOffALoanRequest.request_data.error}
+                                    </Alert>
+                                }
+                            </div>
+                        </Form>
+                    )}
                 </Formik>
             </Modal>
         )
     }
 
-    renderLoanCtas =(loanDetails)=>{
-    //     public enum LoanStateEnum
-    // {
-    //     [Description("Partial Application")]
-    //     Partial_Application = 1,
-    //     [Description("Pending Approval")]
-    //     Pending_Approval = 2,
-    //     [Description("Approved")]
-    //     Approved = 3,
-    //     [Description("Rejected")]
-    //     Rejected = 4,
-    //     [Description("Active")]
-    //     Active = 5,
-    //     [Description("In Arears")]
-    //     In_Arears = 6,
-    //     [Description("Closed")]
-    //     Closed = 7,
-    //     [Description("Closed Written Off")]
-    //     Closed_Written_Off = 8,
-    //     Closed_Withdrawn = 9
-    // }
+    writeOffLoanBox = (loanDetails) => {
+        const { showWriteOffLoan  } = this.state;
+        let writeOffALoanRequest = this.props.writeOffALoanReducer,
+        
+            adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
+            allChannels = [],
+            channelsList;
 
-    let allUSerPermissions =[];
-            this.userPermissions.map(eachPermission=>{
-                allUSerPermissions.push(eachPermission.permissionCode)
+        // if(showWriteOffLoan){
+        //     this.props.dispatch(loanActions.payOffALoan("CLEAR"));
+        // }
+
+        // console.log("props info", this.props.match.params);
+        // console.log("loanDetails", loanDetails);
+
+        if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+            && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
+            channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+
+            channelsList.map((channel, id) => {
+                allChannels.push({ label: channel.name, value: channel.encodedKey });
             })
-        return(
+        }
+
+        let loanStateValidationSchema;
+       
+            loanStateValidationSchema = Yup.object().shape({
+                notes: Yup.string()
+                    .min(2, 'Valid notes required'),
+
+            });
+        
+
+
+        return (
+            <Modal show={showWriteOffLoan} onHide={this.handleShowWriteOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
+                <Formik
+                    initialValues={{
+                       
+                        notes: "",
+                    }}
+
+                    validationSchema={loanStateValidationSchema}
+                    onSubmit={(values, { resetForm }) => {
+
+                        let changeLoanStatePayload ={
+                            accountEncodedKey:loanDetails.encodedKey,
+                            clientEncodedKey:this.props.match.params.id,
+                            notes:values.notes
+                        };
+                       
+
+
+
+
+                        this.handleWriteOffLoan(changeLoanStatePayload)
+                            .then(
+                                () => {
+
+                                    if (this.props.writeOffALoanReducer.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS) {
+                                        resetForm();
+                                        // value = {null}
+
+                                        setTimeout(() => {
+                                            // this.props.dispatch(loanActions.payOffALoan("CLEAR"))
+                                            this.getCustomerLoanAccountDetails(this.loanEncodedKey);
+                                            this.handleShowWriteOffClose()
+                                        }, 5000);
+                                    }
+
+
+                                }
+                            )
+
+                    }}
+                >
+                    {({ handleSubmit,
+                        handleChange,
+                        handleBlur,
+                        resetForm,
+                        values,
+                        setFieldValue,
+                        setFieldTouched,
+                        touched,
+                        isValid,
+                        errors, }) => (
+                        <Form
+                            noValidate
+                            onSubmit={handleSubmit}
+                            className="">
+                            <Modal.Header>
+                                <Modal.Title>
+                                    Write Off Loan Account
+                                    </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div className="modal-section">
+                                    <Form.Group>
+                                        <Form.Label className="block-level">Account Recipient</Form.Label>
+                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
+                                        <h5>{loanDetails.clientName}</h5>
+                                    </Form.Group>
+
+                                    <Form.Group>
+                                        <Form.Label className="block-level">Loan Account</Form.Label>
+                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
+                                        <h5>{loanDetails.productName}</h5>
+                                    </Form.Group>
+                                </div>
+                                <div>
+                                    <div className="modal-notes grayed">Outstanding Balances</div>
+                                    <div className="each-msg bolden">
+                                       <span>Total</span> 
+                                       <span>&#8358;{numberWithCommas(loanDetails.totalExpected, true)}</span> 
+                                    </div>
+                                    <div className="each-msg">
+                                       <span>Principal</span> 
+                                       <span>&#8358;{numberWithCommas(loanDetails.interestExpected, true)}</span> 
+                                    </div>
+                                    <div className="each-msg">
+                                       <span>Interest</span> 
+                                       <span>&#8358;{numberWithCommas(loanDetails.principalExpected, true)}</span> 
+                                    </div>
+                                    <div className="each-msg">
+                                       <span>Fees</span> 
+                                       <span>&#8358;{numberWithCommas(loanDetails.feesExpected, true)}</span> 
+                                    </div>
+                                    <div className="each-msg">
+                                       <span>Penalty</span> 
+                                       <span>&#8358;{numberWithCommas(loanDetails.penaltyExpected, true)}</span> 
+                                    </div>
+
+                                    <Form.Group className="mt-20">
+                                        <Form.Label className="block-level">Write Off Amount</Form.Label>
+                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
+                                        <h4>&#8358;{numberWithCommas(loanDetails.totalExpected, true)}</h4>
+                                    </Form.Group>
+                                </div>
+                                
+                                
+                                <Form.Group>
+                                    <Form.Label className="block-level">Notes</Form.Label>
+                                    <Form.Control as="textarea"
+                                        rows="3"
+                                        onChange={handleChange}
+                                        name="notes"
+                                        value={values.notes}
+                                        className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+                                    />
+                                    {errors.notes && touched.notes ? (
+                                        <span className="invalid-feedback">{errors.notes}</span>
+                                    ) : null}
+                                </Form.Group>
+                                
+                               
+                            </Modal.Body>
+                            <Modal.Footer>
+
+                                <Button variant="light" onClick={this.handleShowWriteOffClose}>
+                                    Cancel
+                                </Button>
+                                {writeOffALoanRequest.request_status !== loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS &&
+                                    <Button
+                                        variant="success"
+                                        type="submit"
+                                        disabled={writeOffALoanRequest.is_request_processing}
+                                    >
+                                        {writeOffALoanRequest.is_request_processing ? "Please wait..." : "Write Off"}
+
+                                    </Button>
+                                }
+
+                            </Modal.Footer>
+                            <div className="footer-alert">
+                                {writeOffALoanRequest.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS &&
+                                    <Alert variant="success" className="w-65 mlr-auto">
+                                        {writeOffALoanRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+                                {(writeOffALoanRequest.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_FAILURE && writeOffALoanRequest.request_data.error) &&
+                                    <Alert variant="danger" className="w-65 mlr-auto">
+                                        {writeOffALoanRequest.request_data.error}
+                                    </Alert>
+                                }
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </Modal>
+        )
+    }
+
+    changeLoanStateBox = (loanDetails) => {
+        const { changeLoanState, newState, ctaText, newStateUpdate, showDisburseLoanForm } = this.state;
+        let changeLoanStateRequest = this.props.changeLoanStateReducer;
+        let getAClientLoanAccountRequest = this.props.getAClientLoanAccountReducer,
+            adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
+            allChannels = [],
+            channelsList;
+        // this.props.dispatch(loanActions.changeLoanState("CLEAR"));
+
+        if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+            && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
+            channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+
+            channelsList.map((channel, id) => {
+                allChannels.push({ label: channel.name, value: channel.encodedKey });
+            })
+        }
+
+        let changeLoanStateValidationSchema;
+        if (showDisburseLoanForm !== true && newState !== "repayloan") {
+            changeLoanStateValidationSchema = Yup.object().shape({
+                comment: Yup.string()
+                    .min(2, 'Valid comments required'),
+                notes: Yup.string()
+                    .min(2, 'Valid notes required'),
+
+            });
+        }
+
+        if (showDisburseLoanForm === true) {
+            changeLoanStateValidationSchema = Yup.object().shape({
+                notes: Yup.string()
+                    .min(2, 'Valid notes required'),
+                txtChannelEncodedKey: Yup.string()
+                    .required('Required'),
+                firstRepaymentDate: Yup.string()
+                    .when('showFirstRepayment', {
+                        is: (value) => value === true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+                backDateChosen: Yup.string()
+                    .when('allowBackDate', {
+                        is: (value) => value === true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+                bookingDateChosen: Yup.string()
+                    .when('showBookingDate', {
+                        is: (value) => value === true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+
+            });
+        }
+
+        if (newState === "repayloan") {
+            changeLoanStateValidationSchema = Yup.object().shape({
+                notes: Yup.string()
+                    .min(2, 'Valid notes required'),
+                txtChannelEncodedKey: Yup.string()
+                    .required('Required'),
+                amountToRepay: Yup.string()
+                    .required('Required'),
+                firstRepaymentDate: Yup.string()
+                    .when('showFirstRepayment', {
+                        is: (value) => value === true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+                backDateChosen: Yup.string()
+                    .when('allowBackDate', {
+                        is: (value) => value === true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+                bookingDateChosen: Yup.string()
+                    .when('showBookingDate', {
+                        is: (value) => value === true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+
+            });
+        }
+
+        return (
+            <Modal show={changeLoanState} onHide={this.handleLoanChangeStateClose} size="lg" centered="true" dialogClassName={showDisburseLoanForm !== true ? "modal-40w withcentered-heading" : "modal-50w withcentered-heading"} animation={false}>
+                <Formik
+                    initialValues={{
+                        comment: "",
+                        showFirstRepayment: false,
+                        allowBackDate: false,
+                        showBookingDate: false,
+                        txtChannelEncodedKey: "",
+                        firstRepaymentDate: "",
+                        backDateChosen: "",
+                        bookingDateChosen: "",
+                        notes: "",
+                        amountToRepay: ""
+                    }}
+
+                    validationSchema={changeLoanStateValidationSchema}
+                    onSubmit={(values, { resetForm }) => {
+
+                        let changeLoanStatePayload;
+                        if (showDisburseLoanForm !== true && newState !== "repayloan") {
+                            changeLoanStatePayload = {
+                                comment: values.comment,
+                                accountEncodedKey: this.loanEncodedKey
+                            }
+                        }
+
+                        if (showDisburseLoanForm === true || newState === "repayloan") {
+                            changeLoanStatePayload = {
+                                accountEncodedKey: this.loanEncodedKey,
+                                notes: values.notes,
+                                channelEncodedKey: values.txtChannelEncodedKey,
+                                isBackDated: values.allowBackDate,
+                                backDateValueDate: values.backDateChosen !== "" ? values.backDateChosen.toISOString() : null,
+                                isBookingDate: values.showBookingDate,
+                                bookingDate: values.bookingDateChosen !== "" ? values.bookingDateChosen.toISOString() : null,
+                            }
+                        }
+
+                        if (newState === "repayloan") {
+                            changeLoanStatePayload.amount = parseFloat(values.amountToRepay.replace(/,/g, ''));
+                        } else {
+                            if (changeLoanStatePayload.amount) {
+                                delete changeLoanStatePayload.amount;
+                            }
+                        }
+
+
+                        // let changeLoanStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
+
+
+
+
+                        this.handleNewLoanState(changeLoanStatePayload, newStateUpdate)
+                            .then(
+                                () => {
+
+                                    if (this.props.changeLoanStateReducer.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_SUCCESS) {
+                                        resetForm();
+                                        // value = {null}
+
+                                        setTimeout(() => {
+                                            this.props.dispatch(loanActions.changeLoanState("CLEAR"))
+                                            this.handleLoanChangeStateClose();
+                                            this.getCustomerLoanAccountDetails(this.loanEncodedKey);
+                                        }, 3000);
+                                    }
+
+                                    if (this.props.changeLoanStateReducer.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_FAILURE) {
+                                        resetForm();
+                                        // value = {null}
+
+                                        setTimeout(() => {
+                                            this.props.dispatch(loanActions.changeLoanState("CLEAR"))
+                                        }, 3000);
+                                    }
+
+
+
+                                }
+                            )
+
+                    }}
+                >
+                    {({ handleSubmit,
+                        handleChange,
+                        handleBlur,
+                        resetForm,
+                        values,
+                        setFieldValue,
+                        setFieldTouched,
+                        touched,
+                        isValid,
+                        errors, }) => (
+                        <Form
+                            noValidate
+                            onSubmit={handleSubmit}
+                            className="">
+                            <Modal.Header>
+                                <Modal.Title>
+                                    {newState !== "repayloan" ? "Change Loan State" : "Apply A Repayment"}
+                                </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                {newState !== "repayloan" &&
+                                    <Form.Group>
+                                        <Form.Row>
+                                            <Col>
+                                                <Form.Label className="block-level">Present State</Form.Label>
+                                                <span className="form-text">{loanDetails.loanStateDescription} </span>
+                                            </Col>
+                                            <Col>
+                                                <Form.Label className="block-level">New State</Form.Label>
+                                                <span className="form-text">{newState}</span>
+                                            </Col>
+                                        </Form.Row>
+                                    </Form.Group>
+                                }
+                                {(showDisburseLoanForm !== true && newState !== "repayloan") &&
+                                    <Form.Group>
+                                        <Form.Label className="block-level">Comments</Form.Label>
+                                        <Form.Control as="textarea"
+                                            rows="3"
+                                            onChange={handleChange}
+                                            name="comment"
+                                            value={values.comment}
+                                            className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null}
+                                        />
+                                        {errors.comment && touched.comment ? (
+                                            <span className="invalid-feedback">{errors.comment}</span>
+                                        ) : null}
+                                    </Form.Group>
+                                }
+                                {showDisburseLoanForm === true &&
+                                    <div>
+                                        <Form.Row>
+                                            <Col>
+                                                <Form.Label className="block-level">Amount</Form.Label>
+                                                <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5>
+                                            </Col>
+                                            <Col>
+
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row className="mb-10">
+                                            <Col>
+                                                <Form.Group className="mb-0">
+                                                    <Form.Label className="block-level mb-10">Transaction Channel</Form.Label>
+                                                    {allChannels.length >= 1 &&
+                                                        <div>
+                                                            <Select
+                                                                options={allChannels}
+
+                                                                onChange={(selected) => {
+                                                                    setFieldValue('txtChannelEncodedKey', selected.value)
+                                                                }}
+                                                                onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
+                                                                className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+                                                                name="txtChannelEncodedKey"
+                                                            />
+                                                            {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
+                                                                <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
+                                                            ) : null}
+                                                        </div>
+                                                    }
+                                                    {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+                                                        <div className="errormsg"> Unable to load Disbursment channels</div>
+                                                    }
+                                                    {/* <Form.Control
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={numberWithCommas(values.collectPrincipalEveryRepayments)}
+                                                            className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid h-38px" : "h-38px"}
+                                                            name="collectPrincipalEveryRepayments" required /> */}
+
+                                                </Form.Group>
+                                            </Col>
+                                            <Col className="date-wrap">
+                                                <Form.Group className="table-helper m-b-5">
+                                                    <input type="checkbox"
+                                                        name="showFirstRepayment"
+                                                        onChange={handleChange}
+                                                        checked={values.showFirstRepayment ? values.showFirstRepayment : null}
+                                                        value={values.showFirstRepayment}
+                                                        id="firstRepaymentDate" />
+                                                    <label htmlFor="firstRepaymentDate">First Repayment Date</label>
+                                                </Form.Group>
+                                                {values.showFirstRepayment === true &&
+                                                    <Form.Group className="mb-0 date-wrap">
+                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password"
+                                                            dateFormat="d MMMM, yyyy"
+                                                            className="form-control form-control-sm h-38px"
+                                                            peekNextMonth
+                                                            showMonthDropdown
+                                                            name="firstRepaymentDate"
+                                                            value={values.firstRepaymentDate}
+                                                            onChange={setFieldValue}
+                                                            showYearDropdown
+                                                            dropdownMode="select"
+                                                            minDate={new Date()}
+                                                            className={errors.firstRepaymentDate && touched.firstRepaymentDate ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                                                        />
+                                                        {errors.firstRepaymentDate && touched.firstRepaymentDate ? (
+                                                            <span className="invalid-feedback">{errors.firstRepaymentDate}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                }
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row className="mb-10">
+                                            <Col className="date-wrap">
+                                                <Form.Group className="table-helper m-b-5">
+                                                    <input type="checkbox"
+                                                        name="allowBackDate"
+                                                        onChange={handleChange}
+                                                        checked={values.allowBackDate ? values.allowBackDate : null}
+                                                        value={values.allowBackDate}
+                                                        id="allowBackDate" />
+                                                    <label htmlFor="allowBackDate">Backdate</label>
+                                                </Form.Group>
+                                                {values.allowBackDate === true &&
+                                                    <Form.Group className="mb-0 date-wrap">
+                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password"
+                                                            dateFormat="d MMMM, yyyy"
+                                                            className="form-control form-control-sm"
+                                                            peekNextMonth
+                                                            showMonthDropdown
+                                                            name="backDateChosen"
+                                                            value={values.backDateChosen}
+                                                            onChange={setFieldValue}
+                                                            showYearDropdown
+                                                            dropdownMode="select"
+                                                            minDate={new Date()}
+                                                            className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                                                        />
+                                                        {errors.backDateChosen && touched.backDateChosen ? (
+                                                            <span className="invalid-feedback">{errors.backDateChosen}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                }
+                                            </Col>
+                                            <Col className="date-wrap">
+                                                <Form.Group className="table-helper m-b-5">
+                                                    <input type="checkbox"
+                                                        name="showBookingDate"
+                                                        onChange={handleChange}
+                                                        checked={values.showBookingDate ? values.showBookingDate : null}
+                                                        value={values.showBookingDate}
+                                                        id="showBookingDate" />
+                                                    <label htmlFor="showBookingDate">Booking Date</label>
+                                                </Form.Group>
+                                                {values.showBookingDate === true &&
+                                                    <Form.Group className="mb-0 date-wrap">
+                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password"
+                                                            dateFormat="d MMMM, yyyy"
+                                                            className="form-control form-control-sm"
+                                                            peekNextMonth
+                                                            showMonthDropdown
+                                                            name="bookingDateChosen"
+                                                            value={values.bookingDateChosen}
+                                                            onChange={setFieldValue}
+                                                            showYearDropdown
+                                                            dropdownMode="select"
+                                                            minDate={new Date()}
+                                                            className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+                                                        />
+                                                        {errors.bookingDateChosen && touched.bookingDateChosen ? (
+                                                            <span className="invalid-feedback">{errors.bookingDateChosen}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                }
+                                            </Col>
+                                        </Form.Row>
+
+                                        <Form.Group>
+                                            <Form.Label className="block-level">Notes</Form.Label>
+                                            <Form.Control as="textarea"
+                                                rows="3"
+                                                onChange={handleChange}
+                                                name="notes"
+                                                value={values.notes}
+                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+                                            />
+                                            {errors.notes && touched.notes ? (
+                                                <span className="invalid-feedback">{errors.notes}</span>
+                                            ) : null}
+                                        </Form.Group>
+                                    </div>
+                                }
+
+                                {
+                                    newState === "repayloan" &&
+                                    <div>
+                                        <Form.Row>
+                                            <Col>
+                                                <Form.Label className="block-level">Amount to repay (&#8358;)</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    autoComplete="off"
+                                                    onChange={handleChange}
+                                                    value={numberWithCommas(values.amountToRepay)}
+                                                    className={errors.amountToRepay && touched.amountToRepay ? "is-invalid h-38px" : "h-38px"}
+                                                    name="amountToRepay" required />
+                                                {errors.amountToRepay && touched.amountToRepay ? (
+                                                    <span className="invalid-feedback">{errors.amountToRepay}</span>
+                                                ) : null}
+                                            </Col>
+                                            <Col></Col>
+                                        </Form.Row>
+                                        <Form.Row className="mb-10">
+                                            <Col>
+                                                <Form.Group className="mb-0">
+                                                    <Form.Label className="block-level mb-10">Transaction Channel</Form.Label>
+                                                    {allChannels.length >= 1 &&
+                                                        <div>
+                                                            <Select
+                                                                options={allChannels}
+
+                                                                onChange={(selected) => {
+                                                                    setFieldValue('txtChannelEncodedKey', selected.value)
+                                                                }}
+                                                                onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
+                                                                className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+                                                                name="txtChannelEncodedKey"
+                                                            />
+                                                            {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
+                                                                <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
+                                                            ) : null}
+                                                        </div>
+                                                    }
+                                                    {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+                                                        <div className="errormsg"> Unable to load Disbursment channels</div>
+                                                    }
+                                                    {/* <Form.Control
+                                                            type="text"
+                                                            onChange={handleChange}
+                                                            value={numberWithCommas(values.collectPrincipalEveryRepayments)}
+                                                            className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid h-38px" : "h-38px"}
+                                                            name="collectPrincipalEveryRepayments" required /> */}
+
+                                                </Form.Group>
+                                            </Col>
+                                            <Col className="date-wrap">
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row className="mb-10">
+                                            <Col className="date-wrap">
+                                                <Form.Group className="table-helper m-b-5">
+                                                    <input type="checkbox"
+                                                        name="allowBackDate"
+                                                        onChange={handleChange}
+                                                        checked={values.allowBackDate ? values.allowBackDate : null}
+                                                        value={values.allowBackDate}
+                                                        id="allowBackDate" />
+                                                    <label htmlFor="allowBackDate">Backdate</label>
+                                                </Form.Group>
+                                                {values.allowBackDate === true &&
+                                                    <Form.Group className="mb-0 date-wrap">
+                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password"
+                                                            dateFormat="d MMMM, yyyy"
+                                                            className="form-control form-control-sm"
+                                                            peekNextMonth
+                                                            showMonthDropdown
+                                                            name="backDateChosen"
+                                                            value={values.backDateChosen}
+                                                            onChange={setFieldValue}
+                                                            showYearDropdown
+                                                            dropdownMode="select"
+                                                            maxDate={new Date()}
+                                                            className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                                                        />
+                                                        {errors.backDateChosen && touched.backDateChosen ? (
+                                                            <span className="invalid-feedback">{errors.backDateChosen}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                }
+                                            </Col>
+                                            <Col className="date-wrap">
+                                                <Form.Group className="table-helper m-b-5">
+                                                    <input type="checkbox"
+                                                        name="showBookingDate"
+                                                        onChange={handleChange}
+                                                        checked={values.showBookingDate ? values.showBookingDate : null}
+                                                        value={values.showBookingDate}
+                                                        id="showBookingDate" />
+                                                    <label htmlFor="showBookingDate">Booking Date</label>
+                                                </Form.Group>
+                                                {values.showBookingDate === true &&
+                                                    <Form.Group className="mb-0 date-wrap">
+                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password"
+                                                            dateFormat="d MMMM, yyyy"
+                                                            className="form-control form-control-sm"
+                                                            peekNextMonth
+                                                            showMonthDropdown
+                                                            name="bookingDateChosen"
+                                                            value={values.bookingDateChosen}
+                                                            onChange={setFieldValue}
+                                                            showYearDropdown
+                                                            dropdownMode="select"
+                                                            // minDate={new Date()}
+                                                            className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+                                                        />
+                                                        {errors.bookingDateChosen && touched.bookingDateChosen ? (
+                                                            <span className="invalid-feedback">{errors.bookingDateChosen}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                }
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Group>
+                                            <Form.Label className="block-level">Notes</Form.Label>
+                                            <Form.Control as="textarea"
+                                                rows="3"
+                                                onChange={handleChange}
+                                                name="notes"
+                                                value={values.notes}
+                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+                                            />
+                                            {errors.notes && touched.notes ? (
+                                                <span className="invalid-feedback">{errors.notes}</span>
+                                            ) : null}
+                                        </Form.Group>
+                                    </div>
+                                }
+                            </Modal.Body>
+                            <Modal.Footer>
+
+                                <Button variant="light" onClick={this.handleLoanChangeStateClose}>
+                                    Cancel
+                                    </Button>
+                                <Button
+                                    variant="success"
+                                    type="submit"
+                                    disabled={changeLoanStateRequest.is_request_processing}
+                                >
+                                    {changeLoanStateRequest.is_request_processing ? "Please wait..." : `${ctaText}`}
+
+                                </Button>
+
+                            </Modal.Footer>
+                            <div className="footer-alert">
+                                {changeLoanStateRequest.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_SUCCESS &&
+                                    <Alert variant="success" className="w-65 mlr-auto">
+                                        {changeLoanStateRequest.request_data.response.data.message}
+                                    </Alert>
+                                }
+                                {(changeLoanStateRequest.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_FAILURE && changeLoanStateRequest.request_data.error) &&
+                                    <Alert variant="danger" className="w-65 mlr-auto">
+                                        {changeLoanStateRequest.request_data.error}
+                                    </Alert>
+                                }
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </Modal>
+        )
+    }
+
+    renderLoanCtas = (loanDetails) => {
+        //     public enum LoanStateEnum
+        // {
+        //     [Description("Partial Application")]
+        //     Partial_Application = 1,
+        //     [Description("Pending Approval")]
+        //     Pending_Approval = 2,
+        //     [Description("Approved")]
+        //     Approved = 3,
+        //     [Description("Rejected")]
+        //     Rejected = 4,
+        //     [Description("Active")]
+        //     Active = 5,
+        //     [Description("In Arears")]
+        //     In_Arears = 6,
+        //     [Description("Closed")]
+        //     Closed = 7,
+        //     [Description("Closed Written Off")]
+        //     Closed_Written_Off = 8,
+        //     Closed_Withdrawn = 9
+        // }
+
+        let allUSerPermissions = [];
+        this.userPermissions.map(eachPermission => {
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
+        return (
             <div className="heading-ctas">
                 <ul className="nav">
-                    {(loanDetails.loanState ===2 && allUSerPermissions.indexOf("bnk_approve_loan_account") >-1) &&
+                {(loanDetails.loanState === 5 || loanDetails.loanState === 6) &&
+                    <li>
+                        <NavLink className="btn btn-primary btn-sm" to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/edit`}>Edit Loan</NavLink>
+                    </li>
+                }
+                    {(loanDetails.loanState === 2 && allUSerPermissions.indexOf("bnk_approve_loan_account") > -1) &&
                         <li>
                             <Button size="sm"
-                                onClick={()=>{
-                                    this.setState({newState: "Approved", newStateUpdate: "approve", ctaText:"Approve Loan"})
+                                onClick={() => {
+                                    this.setState({ newState: "Approved", newStateUpdate: "approve", ctaText: "Approve Loan" })
                                     this.handleLoanChangeStateShow()
                                 }}
                             >Approve</Button>
                         </li>
                     }
-                    {(loanDetails.loanState ===2) &&
+                    {(loanDetails.loanState === 2) &&
                         <li>
-                            <Button size="sm" 
-                                onClick={()=>{
-                                    this.setState({newState: "Set Incomplete", newStateUpdate: "settopartialapplication", ctaText:"Set Incomplete"})
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Set Incomplete", newStateUpdate: "settopartialapplication", ctaText: "Set Incomplete" })
                                     this.handleLoanChangeStateShow()
                                 }}
                             >Set Incomplete</Button>
                         </li>
                     }
-                    {(loanDetails.loanState ===5 || loanDetails.loanState ===6) &&
+                    {(loanDetails.loanState === 5 || loanDetails.loanState === 6) &&
                         <li>
-                            <Button size="sm" 
-                                onClick={()=>{
-                                    this.setState({newState: "repayloan", newStateUpdate: "repayloan", ctaText:"Apply Repayment", showDisburseLoanForm:false})
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "repayloan", newStateUpdate: "repayloan", ctaText: "Apply Repayment", showDisburseLoanForm: false })
                                     this.handleLoanChangeStateShow()
                                 }}
                             >Enter Repayment</Button>
                         </li>
                     }
-                    {(loanDetails.loanState ===1 && allUSerPermissions.indexOf("bnk_request_loan_approval") >-1) &&
+                    {(loanDetails.loanState === 1 && allUSerPermissions.indexOf("bnk_request_loan_approval") > -1) &&
                         <li>
-                            <Button size="sm" 
-                                onClick={()=>{
-                                    this.setState({newState: "Request Approval", newStateUpdate: "requestapproval", ctaText:"Request Approval"})
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Request Approval", newStateUpdate: "requestapproval", ctaText: "Request Approval" })
                                     this.handleLoanChangeStateShow()
                                 }}
                             >Request Approval</Button>
                         </li>
                     }
 
-                    {(loanDetails.loanState ===3) &&
+                    {(loanDetails.loanState === 3) &&
                         <li>
                             <Button size="sm"
-                                 onClick={()=>{
-                                    this.setState({newState: "Disbursed", newStateUpdate: "disburseloan", ctaText:"Disburse Loan", showDisburseLoanForm:true})
+                                onClick={() => {
+                                    this.setState({ newState: "Disbursed", newStateUpdate: "disburseloan", ctaText: "Disburse Loan", showDisburseLoanForm: true })
                                     this.handleLoanChangeStateShow()
                                 }}
                             >Disburse Loan</Button>
                         </li>
                     }
-                    {(loanDetails.loanState ===1 || loanDetails.loanState ===2 || loanDetails.loanState ===3) &&
+                    {(loanDetails.loanState === 1 || loanDetails.loanState === 2 || loanDetails.loanState === 3) &&
                         <li>
                             <DropdownButton
                                 size="sm"
@@ -3076,158 +3522,198 @@ class ViewLoanAccount extends React.Component {
                                 className="customone"
                                 alignRight
                             >
-                                {((loanDetails.loanState ===1 || loanDetails.loanState ===2) && allUSerPermissions.indexOf("bnk_reject_loan_account") >-1) &&
+
+                                {((loanDetails.loanState === 1 || loanDetails.loanState === 2) && allUSerPermissions.indexOf("bnk_reject_loan_account") > -1) &&
                                     <Dropdown.Item eventKey="1"
-                                        onClick={()=>{
-                                            this.setState({newState: "Rejected", newStateUpdate: "reject", ctaText:"Reject"})
+                                        onClick={() => {
+                                            this.setState({ newState: "Rejected", newStateUpdate: "reject", ctaText: "Reject" })
                                             this.handleLoanChangeStateShow()
                                         }}
                                     >Reject</Dropdown.Item>
                                 }
-                                {(loanDetails.loanState ===1 || loanDetails.loanState ===2 || loanDetails.loanState ===3) &&
-                                    <Dropdown.Item eventKey="1"
-                                        onClick={()=>{
-                                            this.setState({newState: "Closed(Withdrawn)", newStateUpdate: "withdraw", ctaText:"Withdraw"})
+                                {(loanDetails.loanState === 1 || loanDetails.loanState === 2 || loanDetails.loanState === 3) &&
+                                    <Dropdown.Item eventKey="2"
+                                        onClick={() => {
+                                            this.setState({ newState: "Closed(Withdrawn)", newStateUpdate: "withdraw", ctaText: "Withdraw" })
                                             this.handleLoanChangeStateShow()
                                         }}
                                     >Withdraw</Dropdown.Item>
                                 }
-                                {(loanDetails.loanState ===5) &&
-                                    <Dropdown.Item eventKey="1">Pay Off</Dropdown.Item>
+                                {(loanDetails.loanState === 5) &&
+                                    <Dropdown.Item eventKey="3">Pay Off</Dropdown.Item>
                                 }
-                                {(loanDetails.loanState ===5) &&
-                                    <Dropdown.Item eventKey="1">Write Off</Dropdown.Item>
+                                {(loanDetails.loanState === 5) &&
+                                    <Dropdown.Item eventKey="4">Write Off</Dropdown.Item>
                                 }
                             </DropdownButton>
                         </li>
                     }
-                   
-                    
+
+                    {(loanDetails.loanState === 5 || loanDetails.loanState === 6) &&
+                        <li>
+                            <DropdownButton
+                                size="sm"
+                                title="Close"
+                                key="inActiveCurrency"
+                                className="customone"
+                                alignRight
+                            >
+
+
+
+                                {/* <Dropdown.Item eventKey="1"
+                                    onClick={()=>this.handleShowWriteOffShow()}
+                                // onClick={()=>{
+                                //     this.setState({newState: "Closed(Withdrawn)", newStateUpdate: "withdraw", ctaText:"Withdraw"})
+                                //     this.handleLoanChangeStateShow()
+                                // }}
+                                >Write off Loan</Dropdown.Item> */}
+                                <div className="dropdown-item with-botom"
+                                    onClick={()=>this.handleShowWriteOffShow()}
+                                >Write off Loan</div>
+                                {/* <Dropdown.Item eventKey="1"> */}
+                                    <NavLink className="dropdown-item" to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/refinance`}>Refinance loan</NavLink>
+                                {/* </Dropdown.Item> */}
+                                {/* <Dropdown.Item eventKey="1"> */}
+                                    <NavLink className="dropdown-item" to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/reschedule`}>Reschedule loan</NavLink>
+                                {/* </Dropdown.Item> */}
+                                {/* <Dropdown.Item eventKey="1" onClick={()=>this.handleShowPayOffShow()} >Pay-off Loan</Dropdown.Item> */}
+                                <div className="dropdown-item with-top"
+                                    onClick={()=>this.handleShowPayOffShow()}
+                                >Pay-off Loan</div>
+                            </DropdownButton>
+                        </li>
+                    }
+
+
                 </ul>
             </div>
         )
     }
 
-    renderPage = ()=>{
+    renderPage = () => {
         let getAClientRequest = this.props.getAClientReducer,
             getClientLoansRequest = this.props.getClientLoansReducer,
             getAClientLoanAccountRequest = this.props.getAClientLoanAccountReducer,
             getClientDepositsRequest = this.props.getClientDepositsReducer;
 
-            let allUSerPermissions =[];
-            this.userPermissions.map(eachPermission=>{
-                allUSerPermissions.push(eachPermission.permissionCode)
-            })
+        let allUSerPermissions = [];
+        this.userPermissions.map(eachPermission => {
+            allUSerPermissions.push(eachPermission.permissionCode)
+        })
 
-            if(getAClientLoanAccountRequest.request_status ===loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_SUCCESS){
-                return(
-                    <div className="row">
-                        {this.changeLoanStateBox(getAClientLoanAccountRequest.request_data.response.data)}
-                        <div className="col-sm-12">
-                            <div className="middle-content">
-                                <div className="customerprofile-tabs">
-                                    <Tab.Container defaultActiveKey="details" mountOnEnter={true}>
+        if (getAClientLoanAccountRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_SUCCESS) {
+            return (
+                <div className="row">
+                    
+                    {this.payOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)}
+                    {this.writeOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)}
+                    {this.changeLoanStateBox(getAClientLoanAccountRequest.request_data.response.data)}
+                    <div className="col-sm-12">
+                        <div className="middle-content">
+                            <div className="customerprofile-tabs">
+                                <Tab.Container defaultActiveKey="details" mountOnEnter={true}>
 
-                                        <Nav variant="pills" >
+                                    <Nav variant="pills" >
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="details">Details</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="schedule" onSelect={this.getCustomerLoanSchedule} >Schedule</Nav.Link>
+                                        </Nav.Item>
+                                        {allUSerPermissions.indexOf("bnk_manage_loan_transactions") > -1 &&
                                             <Nav.Item>
-                                                <Nav.Link eventKey="details">Details</Nav.Link>
+                                                <Nav.Link eventKey="transactions" onSelect={this.getCustomerLoanTransactions} >Transactions</Nav.Link>
                                             </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="schedule" onSelect={this.getCustomerLoanSchedule} >Schedule</Nav.Link>
-                                            </Nav.Item>
-                                            {allUSerPermissions.indexOf("bnk_manage_loan_transactions") >-1 &&
-                                                <Nav.Item>
-                                                    <Nav.Link eventKey="transactions" onSelect={this.getCustomerLoanTransactions} >Transactions</Nav.Link>
-                                                </Nav.Item>
-                                            }
-                                            {/* <Nav.Item>
+                                        }
+                                        {/* <Nav.Item>
                                                 <Nav.Link eventKey="securities">Securities</Nav.Link>
                                             </Nav.Item> */}
-                                            {allUSerPermissions.indexOf("bnk_view_loan_activities") >-1 &&
-                                                <Nav.Item>
-                                                    <Nav.Link eventKey="activity" onSelect={this.getALoanActivities}>Activity</Nav.Link>
-                                                </Nav.Item>
-                                            }
-                                            {allUSerPermissions.indexOf("bnk_view_loan_attachments") >-1 &&
-                                                <Nav.Item>
-                                                    <Nav.Link eventKey="attachments" onSelect={this.getACustomerLoanAttachments}>Attachments</Nav.Link>
-                                                </Nav.Item>
-                                            }
+                                        {allUSerPermissions.indexOf("bnk_view_loan_activities") > -1 &&
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="activity" onSelect={this.getALoanActivities}>Activity</Nav.Link>
+                                            </Nav.Item>
+                                        }
+                                        {allUSerPermissions.indexOf("bnk_view_loan_attachments") > -1 &&
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="attachments" onSelect={this.getACustomerLoanAttachments}>Attachments</Nav.Link>
+                                            </Nav.Item>
+                                        }
 
-                                            {allUSerPermissions.indexOf("bnk_view_loan_comments") >-1 &&
-                                                <Nav.Item>
-                                                    <Nav.Link eventKey="comments" onSelect={this.getALoanComments}>Comments</Nav.Link>
-                                                </Nav.Item>
-                                            }
-                                            {allUSerPermissions.indexOf("bnk_view_loan_communications") >-1 &&
-                                                <Nav.Item>
-                                                    <Nav.Link eventKey="communications" onSelect={this.getALoanCommunications}>Communications</Nav.Link>
-                                                </Nav.Item>
-                                            }
-                                        </Nav>
-                                        {this.renderLoanCtas(getAClientLoanAccountRequest.request_data.response.data)}
-                                        <Tab.Content>
-                                            <Tab.Pane eventKey="details">
-                                                {this.renderLoanAccountDetails(getAClientLoanAccountRequest.request_data.response.data)}
-                                            </Tab.Pane>
-                                            <Tab.Pane eventKey="schedule" mountOnEnter={true}>
-                                                
-                                                {this.renderLoanSchedule()}
-                                            </Tab.Pane>
-                                            <Tab.Pane eventKey="transactions">
-                                                {this.renderLoanTransaction()}
-                                            </Tab.Pane>
-                                            
-                                            <Tab.Pane eventKey="activity">
-                                                {this.renderLoanActivities()}
-                                            </Tab.Pane>
-                                            <Tab.Pane eventKey="attachments">
-                                                {this.addNewAttachmentBox()}
-                                                {this.renderAloanAttachments()}
-                                            </Tab.Pane>
-                                            <Tab.Pane eventKey="comments">
-                                                {this.renderLoanAccountComments()}
-                                            </Tab.Pane>
-                                            <Tab.Pane eventKey="communications">
-                                                {this.renderALoanCommunicatons()}
-                                            </Tab.Pane>
-                                        </Tab.Content>
+                                        {allUSerPermissions.indexOf("bnk_view_loan_comments") > -1 &&
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="comments" onSelect={this.getALoanComments}>Comments</Nav.Link>
+                                            </Nav.Item>
+                                        }
+                                        {allUSerPermissions.indexOf("bnk_view_loan_communications") > -1 &&
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="communications" onSelect={this.getALoanCommunications}>Communications</Nav.Link>
+                                            </Nav.Item>
+                                        }
+                                    </Nav>
+                                    {this.renderLoanCtas(getAClientLoanAccountRequest.request_data.response.data)}
+                                    <Tab.Content>
+                                        <Tab.Pane eventKey="details">
+                                            {this.renderLoanAccountDetails(getAClientLoanAccountRequest.request_data.response.data)}
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="schedule" mountOnEnter={true}>
 
-                                    </Tab.Container>
-                                </div>
+                                            {this.renderLoanSchedule()}
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="transactions">
+                                            {this.renderLoanTransaction()}
+                                        </Tab.Pane>
+
+                                        <Tab.Pane eventKey="activity">
+                                            {this.renderLoanActivities()}
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="attachments">
+                                            {this.addNewAttachmentBox()}
+                                            {this.renderAloanAttachments()}
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="comments">
+                                            {this.renderLoanAccountComments()}
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="communications">
+                                            {this.renderALoanCommunicatons()}
+                                        </Tab.Pane>
+                                    </Tab.Content>
+
+                                </Tab.Container>
                             </div>
                         </div>
                     </div>
-                )
-            }
+                </div>
+            )
+        }
 
-            if((getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_SUCCESS
-                &&  getClientLoansRequest.request_status ===loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
-                && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS)
-                &&
-                getAClientLoanAccountRequest.request_status ===loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_PENDING){
-    
-                return(
-                    <div className="loading-text mt-30">Please wait... </div>
-                )
-            }
+        if ((getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_SUCCESS
+            && getClientLoansRequest.request_status === loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
+            && getClientDepositsRequest.request_status === loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS)
+            &&
+            getAClientLoanAccountRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_PENDING) {
+
+            return (
+                <div className="loading-text mt-30">Please wait... </div>
+            )
+        }
 
     }
-    
+
 
     render() {
-        
+
         return (
             <Fragment>
                 {/* <InnerPageContainer {...this.props}> */}
-                    <div className="content-wrapper">
-                        {/* <CustomerHeading {...this.props}/> */}
-                        <div className="module-content">
-                                <div className="content-container">
-                                    {this.renderPage()}
-                                </div>
-                            </div>
+                <div className="content-wrapper">
+                    {/* <CustomerHeading {...this.props}/> */}
+                    <div className="module-content">
+                        <div className="content-container">
+                            {this.renderPage()}
+                        </div>
                     </div>
+                </div>
                 {/* </InnerPageContainer> */}
             </Fragment>
         );
@@ -3236,7 +3722,7 @@ class ViewLoanAccount extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        adminGetTransactionChannels : state.administrationReducers.adminGetTransactionChannelsReducer,
+        adminGetTransactionChannels: state.administrationReducers.adminGetTransactionChannelsReducer,
         getAClientReducer: state.clientsReducers.getAClientReducer,
         getClientDepositsReducer: state.depositsReducers.getClientDepositsReducer,
         getClientLoansReducer: state.loansReducers.getClientLoansReducer,
@@ -3250,6 +3736,8 @@ function mapStateToProps(state) {
         createALoanAttachmentReducer: state.loansReducers.createALoanAttachmentReducer,
         getALoanAccountCommunicationsReducer: state.loansReducers.getALoanAccountCommunicationsReducer,
         changeLoanStateReducer: state.loansReducers.changeLoanStateReducer,
+        writeOffALoanReducer: state.loansReducers.writeOffALoanReducer,
+        payOffALoanReducer: state.loansReducers.payOffALoanReducer,
     };
 }
 

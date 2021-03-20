@@ -640,7 +640,7 @@ class JournalEntries extends React.Component {
                                         <Col>
                                             <Form.Group controlId="debitLocation" className={errors.entryDate && touched.entryDate ? "has-invaliderror" : null}>
                                                 <Form.Label className="block-level">Booking Date (Entry Date)</Form.Label>
-                                                <DatePicker placeholderText="Choose entry date" 
+                                                 placeholderText="Choose entry date" 
                                                     
                                                     // onChange={this.handleDatePicker}
                                                     // onChangeRaw={(e) => this.handleDateChange(e)}
@@ -813,6 +813,7 @@ class JournalEntries extends React.Component {
                                             showYearDropdown
                                             dropdownMode="select"
                                             placeholderText="Start date"
+                                                            autoComplete="new-password"
                                             maxDate={new Date()}
                                             // className="form-control form-control-sm h-38px"
                                             className="form-control form-control-sm "
@@ -932,6 +933,7 @@ class JournalEntries extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
+                                                            autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
@@ -1051,6 +1053,7 @@ class JournalEntries extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
+                                                            autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "

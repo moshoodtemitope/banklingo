@@ -1,14 +1,15 @@
+@import "../../../assets/scss/shared/colors";
 .menu-container{
-    border: 1px solid #D6EAF8;
+    // border: 1px solid #D6EAF8;
     border-top: none;
-    background: #ECF0F1;
+    background: #ffffff;
     .mainmenu-wrap {
         // margin-top: 5px;
         margin-left: 1rem;
         .nav-item{
             position: relative;
             &:not(:last-of-type){
-                border-right: 1px solid #AEB6BF;
+                border-right: 1px solid #E8E8F0;
             }
             ul{
                 position: absolute;
@@ -31,22 +32,27 @@
         a, span{
             display: block;
             padding: 10px 8px;
-            font-size: 12px;
+            font-size: 11px;
             color: #5D6D7E;
             font-weight: 600;
+            transition: .2s ease;
             &.active{
-                background: #7FB3D5;
+                // background: #7FB3D5;
                 text-decoration: none;
-                color: #fff;
+                border-bottom: 5px solid $brand-green;
+                // color: #fff;
+                transition: .5s ease;
                 &:hover{
-                    background: #7FB3D5;
+                    // background: #7FB3D5;
                     text-decoration: none;
-                    color: #fff;
+                    // color: #fff;
+                    border-bottom: 5px solid $brand-green;
                 }
             }
             &:hover{
-                background: #D4E6F1;
+                // background: #D4E6F1;
                 text-decoration: none;
+                // border-bottom: 5px solid $brand-green;
                 cursor: pointer;
             }
             @media only screen and (max-width: 1024px) {
@@ -64,15 +70,22 @@
         list-style: none;
         li{
             a{
-                padding: 5px 6px;
-                color: #85929E;
+                padding: 10px 6px;
+                color: #6E7297;
                 font-weight: normal;
-                &:hover{
-                    background: none;
-                    color: #5D6D7E;
+                font-size: 12px;
+                &:hover, &.active{
+                    border-bottom: none !important;
+                    background: #F8F8FA !important;
+                    color: #000000;
                     font-weight: 600;
                 }
             }
+            // ul{
+            //     li a:hover{
+                    
+            //     }
+            // }
         }
     }
 

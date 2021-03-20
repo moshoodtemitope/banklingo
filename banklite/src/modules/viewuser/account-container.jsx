@@ -23,6 +23,7 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 
 
 import ViewUser from '.'
+import MyProfile from './myprofile'
 
 
 
@@ -52,6 +53,7 @@ class AccountContainer extends React.Component {
                         
                         {this.props.children}
                         <Route  exact path='/user/:userid'  component={ViewUser} /> 
+                        <Route  path='/my-profile'  component={MyProfile} /> 
                         
                         
                         

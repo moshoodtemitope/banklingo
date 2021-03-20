@@ -88,7 +88,8 @@ class EditCustomerAccount extends React.Component {
                                                                 <Form.Row>
                                                                     <Col className="date-wrap">
                                                                         <Form.Label className="block-level">Birth Date</Form.Label>
-                                                                        <DatePicker placeholderText="Choose  date" selected={this.state.dob} 
+                                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
                                                                             onChangeRaw={(e)=>this.handleChange(e)}
                                                                             dateFormat="d MMMM, yyyy"
@@ -276,7 +277,8 @@ class EditCustomerAccount extends React.Component {
                                                                 <Form.Row>
                                                                     <Col>
                                                                         <Form.Label className="block-level">Employment Date</Form.Label>
-                                                                        <DatePicker placeholderText="Choose  date" selected={this.state.dob} 
+                                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
                                                                             onChangeRaw={(e)=>this.handleChange(e)}
                                                                             dateFormat="d MMMM, yyyy"
@@ -376,7 +378,8 @@ class EditCustomerAccount extends React.Component {
                                                                     </Col>
                                                                     <Col className="date-wrap">
                                                                         <Form.Label className="block-level">Contract Expiration Date</Form.Label>
-                                                                        <DatePicker placeholderText="Choose  date" selected={this.state.dob} 
+                                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
                                                                             onChangeRaw={(e)=>this.handleChange(e)}
                                                                             dateFormat="d MMMM, yyyy"
@@ -571,7 +574,8 @@ class EditCustomerAccount extends React.Component {
                                                                     </Col>
                                                                     <Col className="date-wrap">
                                                                         <Form.Label className="block-level">Valid Until</Form.Label>
-                                                                        <DatePicker placeholderText="Choose  date" selected={this.state.dob} 
+                                                                         placeholderText="Choose  date"
+                                                            autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
                                                                             onChangeRaw={(e)=>this.handleChange(e)}
                                                                             dateFormat="d MMMM, yyyy"

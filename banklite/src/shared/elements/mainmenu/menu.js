@@ -188,6 +188,31 @@ export const menuList = [
     },
 
     {
+        menuGroup: "Administration",
+        mainMenu: "Platform",
+        permissionCode: "bnk_manage_organisation",
+        hasSubMenu: true,
+        subMenus: [
+            {
+                subMenuLabel: "Company Information",
+                subMmenuRoute: "/platform/company-info"
+            },
+            {
+                subMenuLabel: "Customer Whitelist",
+                subMmenuRoute: "/platform/customer-whitelist"
+            },
+            {
+                subMenuLabel: "Payroll Information",
+                subMmenuRoute: "/platform/payroll-info"
+            },
+            {
+                subMenuLabel: "Bank Information",
+                subMmenuRoute: "/platform/bank-info"
+            }
+        ]
+    },
+
+    {
         menuGroup: "Activities",
         mainMenu: "Activities",
         permissionCode: "bnk_view_activities",
@@ -363,6 +388,12 @@ export const menuList = [
                 permissionCode: "bnk_manage_email_provider",
                 subMmenuRoute: "/administration/email",
             },
+            {
+                // permissionName: "Manage Organisation",
+                subMenuLabel: "Plaform",
+                permissionCode: "bnk_manage_organisation",
+                subMmenuRoute: "/administration/platform",
+            },
         ]
     },
     
@@ -459,6 +490,7 @@ export const administrationModuleMenuList = [
         permissionCode: "bnk_manage_organisation",
         menuRoute: "/administration/general",
     },
+    
     {
         permissionName: "Manage Organisation",
         mainMenu: "Organization",
@@ -491,6 +523,12 @@ export const administrationModuleMenuList = [
         permissionCode: "bnk_manage_email_provider",
         menuRoute: "/administration/email",
     },
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "Plaform",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/platform",
+    },
 ]
 
 export const adminGeneralMenuList = [
@@ -506,6 +544,26 @@ export const adminGeneralMenuList = [
         mainMenu: "Currency",
         permissionCode: "bnk_manage_organisation",
         menuRoute: "/administration/general/currency",
+    },
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "Risk Levels",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/general/risk-levels",
+    },
+
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "Notifications",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/general/notifications",
+    },
+
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "Transaction Services",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/general/transaction",
     },
     
     {
@@ -549,6 +607,22 @@ export const adminAccessMenuList = [
         permissionCode: "bnk_manage_organisation",
         menuRoute: "/administration/access/preferences"
     },
+]
+
+export const adminPlatformMenuList = [
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "Card Provider",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/platform",
+    },
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "Payroll Group",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/platform/payroll-group",
+    },
+
 ]
 
 export const communicationsMenuList = [

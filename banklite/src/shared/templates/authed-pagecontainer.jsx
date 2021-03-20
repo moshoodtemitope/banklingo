@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import MainHeader from "../elements/mainheader/mainheader";
 import MainMenu from "../elements/mainmenu/mainmenu";
 import { history } from '../../_helpers/history';
+import { IdleTimeoutManager } from "idle-timer-manager";
+
 import {authActions} from '../../redux/actions/auth/auth.action';
 
 class InnerPageContainer extends React.Component{
@@ -15,6 +17,7 @@ class InnerPageContainer extends React.Component{
         if(Object.keys(user).length<=1){
             history.push('/');
        }
+       this.autoLogout();
     
     }
 
@@ -27,6 +30,29 @@ class InnerPageContainer extends React.Component{
     callRefeshToken= async(refreshTokenPayload)=>{
         const {dispatch} = this.props;
         await dispatch(authActions.ResfreshToken(refreshTokenPayload));
+    }
+
+    autoLogout = ()=>{
+        new IdleTimeoutManager({
+            timeout: 180, //expired after 10 secs,
+            key:"xSessionTracker",
+            onExpired: (time) => {
+              this.logout();
+              
+            }
+        });
+    }
+
+    logout =()=>{
+        const { dispatch } = this.props;
+        // let currentRoute = window.location.pathname;
+
+        // dispatch(authActions.Logout("timeout",currentRoute));
+        // console.log("----------+++---")
+        dispatch(authActions.Logout());
+        
+        localStorage.removeItem("user");
+        history.push('/');
     }
 
     refreshTokenTask =()=>{

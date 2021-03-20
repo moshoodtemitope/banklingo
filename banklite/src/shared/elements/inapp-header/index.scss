@@ -1,0 +1,64 @@
+@import "../../../assets/scss/shared/constants";
+@import "../../../assets/scss/shared/colors";
+.headingwrap {
+    padding: 20px 25px;
+    &.inapp{
+        background: #ffffff;
+        border-bottom: 1px solid #D5D9FF;
+        height: 64px;
+        position: fixed;
+        right: 0;
+        left: 20%;
+    }
+    @media only screen and (max-width: 1023px){
+        padding-left: 45px;
+    }
+}
+.client-logo img {
+    width: 40px;
+}
+h3.heading-txt {
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 27px;
+}
+.heading-actions-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 30px;
+}
+
+
+.inapp-heading {
+    display: flex;
+    .logo-wrap{
+        width: 261px;
+        a{
+            display: block;
+            img{
+                width: 100%;
+            }
+        }
+    }
+    .has-search{
+        display: flex;
+        .form-control{
+            padding: 0 !important;
+        }
+    }
+    .search-wrap{
+        .form-control{
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin-left: 12px;
+            color: #828282;
+            min-width: 350px;
+        }
+    }
+    .search-form{
+        display: flex;
+        align-items: center;
+    }
+}

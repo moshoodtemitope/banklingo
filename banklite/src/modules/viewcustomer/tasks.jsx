@@ -280,7 +280,7 @@ class ViewCustomerTasks extends React.Component {
                                                 </Col>
                                                 <Col className="date-wrap">
                                                     <Form.Label className="block-level">Due Date</Form.Label>
-                                                    <DatePicker placeholderText="Choose entry date"
+                                                     placeholderText="Choose entry date"
                                                         dateFormat="d MMMM, yyyy"
                                                         className="form-control form-control-sm"
                                                         peekNextMonth

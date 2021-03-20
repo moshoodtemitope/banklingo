@@ -40,7 +40,19 @@ import{
     createNewBranchReducer,
     updateABranchReducer,
     getNotificationsReducer,
-    uploadDataReducer
+    uploadDataReducer,
+    fetchAllNotificationTemplate,
+    getANotificationTemplate,
+    createANotificationTemplate,
+    updateANotificationTemplate,
+    fetchAllChannelServices,
+    getAChannelServices,
+    createAChannelServices,
+    updateAChannelServices,
+    fetchAllRiskLevel,
+    getARiskLevel,
+    createARiskLevel,
+    updateARiskLevel
 }
  from './administration/administration.reducer'
 
@@ -91,7 +103,12 @@ import{
     getAllLoanSchedulesReducer,
     exportLoansSchedulesReducer,
     getLoanPARReducer,
-    exportLoanPARReducer
+    exportLoanPARReducer,
+    payOffALoanReducer,
+    writeOffALoanReducer,
+    rescheduleALoanReducer,
+    refianceALoanReducer,
+    editALoanReducer
     
 } from './loans/loans.reducer'
 
@@ -141,6 +158,7 @@ import{
 
 import{
     LoginReducer,
+    confirmTenantReducer,
     ChangePasswordReducer,
     ChangePinReducer,
     ResetPinReducer,
@@ -150,10 +168,39 @@ import{
 } from './auth/auth.reducer'
 
 import{
+    fetchAllCreditScoreByPassReducer,
+    fetchSingleCreditScoreByPassReducer,
+    createCreditScoreByPassReducer,
+    updateCreditScoreByPassReducer,
+    getAllCompanyInfoReducer,
+    getACompanyInfoReducer,
+    newCompanyInfoReducer,
+    updateCompanyInfoReducer,
+    fetchAllPayrollGroupsReducer,
+    getAPayrollGroupReducer,
+    createAPayrollGroupReducer,
+    updateAPayrollGroupReducer,
+    fetchAllCardProvider,
+    getACardProvider,
+    createACardProvider,
+    updateACardProvider,
+    fetchAllEmployeeInfo,
+    fetchSingleEmployeeInfo,
+    createEmployeeInfo,
+    updateEmployeeInfo,
+    fetchAllBankInfoReducer,
+    fetchSingleBankInfoReducer,
+    createBankInfoReducer,
+    updateBankInfoReducer
+    
+} from './platform/platform.reducer'
+
+import{
     getDashboardStatReducer,
     getActivitiesReducer,
     getLoggedInUserActivitiesReducer,
-    globalSearchAnItemReducer
+    globalSearchAnItemReducer,
+    searchForCustomerReducer
     
 } from './dashboard/dashboard.reducer'
 
@@ -242,7 +289,21 @@ export const administration ={
     createNewBranchReducer,
     updateABranchReducer,
     getNotificationsReducer,
-    uploadDataReducer
+    uploadDataReducer,
+    fetchAllNotificationTemplate,
+    getANotificationTemplate,
+    createANotificationTemplate,
+    updateANotificationTemplate,
+    fetchAllChannelServices,
+    getAChannelServices,
+    createAChannelServices,
+    updateAChannelServices,
+    fetchAllRiskLevel,
+    getARiskLevel,
+    createARiskLevel,
+    updateARiskLevel
+    
+    
 }
 
 export const accounting = {
@@ -287,11 +348,17 @@ export const loans = {
     getAllLoanSchedulesReducer,
     exportLoansSchedulesReducer,
     getLoanPARReducer,
-    exportLoanPARReducer
+    exportLoanPARReducer,
+    payOffALoanReducer,
+    writeOffALoanReducer,
+    rescheduleALoanReducer,
+    refianceALoanReducer,
+    editALoanReducer
 }
 
 export const auth = {
     LoginReducer,
+    confirmTenantReducer,
     ChangePasswordReducer,
     ChangePinReducer,
     ResetPinReducer,
@@ -303,7 +370,35 @@ export const dashboard = {
     getDashboardStatReducer,
     getActivitiesReducer,
     getLoggedInUserActivitiesReducer,
-    globalSearchAnItemReducer
+    globalSearchAnItemReducer,
+    searchForCustomerReducer
+}
+
+export const platform = {
+    fetchAllCreditScoreByPassReducer,
+    fetchSingleCreditScoreByPassReducer,
+    createCreditScoreByPassReducer,
+    updateCreditScoreByPassReducer,
+    getAllCompanyInfoReducer,
+    getACompanyInfoReducer,
+    newCompanyInfoReducer,
+    updateCompanyInfoReducer,
+    fetchAllPayrollGroupsReducer,
+    getAPayrollGroupReducer,
+    createAPayrollGroupReducer,
+    updateAPayrollGroupReducer,
+    fetchAllCardProvider,
+    getACardProvider,
+    createACardProvider,
+    updateACardProvider,
+    fetchAllEmployeeInfo,
+    fetchSingleEmployeeInfo,
+    createEmployeeInfo,
+    updateEmployeeInfo,
+    fetchAllBankInfoReducer,
+    fetchSingleBankInfoReducer,
+    createBankInfoReducer,
+    updateBankInfoReducer
 }
 
 export const deposits = {

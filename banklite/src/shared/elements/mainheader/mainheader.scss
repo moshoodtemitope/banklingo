@@ -102,19 +102,23 @@ a.dropdown-item, a.dropdown-item:hover{
         display: none;
     }
     .btn.btn-secondary{
-        background: #1F618D;
+        background: $brand-green;
         border: none;
-        font-size: 13px;
+        font-size: 12px;
+        border-radius: 2px !important;
     }
     .btn-secondary:not(:disabled):not(.disabled).active, 
     .btn-secondary:not(:disabled):not(.disabled):active, &.show>.btn-secondary.dropdown-toggle{
-        background: #1F618D;
+        background: $brand-green;
+        font-size: 12px;
+        border-radius: 2px !important;
     }
 }
 .searchfieldwrap{
     input{
         width: 100%!important;
         min-width: 330px;
+        height: 26px !important;
     }
     .css-1hb7zxy-IndicatorsContainer{
         display: none;
@@ -129,7 +133,7 @@ a.dropdown-item, a.dropdown-item:hover{
     background: #ffffff;
     width: 100%;
     position: absolute;
-    top: 38px;
+    top: 25px;
     z-index: 1;
     border-bottom-left-radius: .25rem;
     border-bottom-right-radius: .25rem;

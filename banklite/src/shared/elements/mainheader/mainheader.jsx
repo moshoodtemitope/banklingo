@@ -81,8 +81,10 @@ class MainHeader extends React.Component{
         
         let user = JSON.parse(localStorage.getItem('lingoAuth'));
             user.BranchId = e.target.value;
-            localStorage.setItem('lingoAuth', JSON.stringify(user));
+            // localStorage.setItem('lingoAuth', JSON.stringify(user));
             let selectedBranch = user.AllowedBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].name;
+            user.BranchName = selectedBranch;
+            localStorage.setItem('lingoAuth', JSON.stringify(user));
         this.setState({showDropdown: false, 
                         activeBranch: selectedBranch
                     })
@@ -699,7 +701,7 @@ class MainHeader extends React.Component{
                             <Form inline>
                                 {/* <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" /> */}
                                 <NavDropdown title={user.displayName!==undefined?user.displayName:'Unverified Account'} id="basic-nav-dropdown">
-                                    <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={()=> history.push("/my-profile")}>Manage profile</NavDropdown.Item>
                                     <NavDropdown.Item onClick={()=> history.push("/profile/change-password")} >
                                         Change Password
                                     </NavDropdown.Item>

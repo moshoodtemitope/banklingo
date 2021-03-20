@@ -26,6 +26,8 @@ export function getDashboardStatReducer(state=[], action) {
     }
 }
 
+
+
 export function getActivitiesReducer(state=[], action) {
     switch (action.type) {
         case dashboardConstants.GET_ACTIVITIES_DATA_PENDING:
@@ -101,6 +103,38 @@ export function globalSearchAnItemReducer(state=[], action) {
         case dashboardConstants.GLOBAL_SEARCH_ITEM_RESET:
             return {
                 request_status: dashboardConstants.GLOBAL_SEARCH_ITEM_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function searchForCustomerReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.SEARCH_FOR_CUSTOMER_PENDING:
+            return {
+                request_status: dashboardConstants.SEARCH_FOR_CUSTOMER_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.SEARCH_FOR_CUSTOMER_SUCCESS:
+            return {
+                request_status: dashboardConstants.SEARCH_FOR_CUSTOMER_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.SEARCH_FOR_CUSTOMER_FAILURE:
+            return {
+                request_status: dashboardConstants.SEARCH_FOR_CUSTOMER_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.SEARCH_FOR_CUSTOMER_RESET:
+            return {
+                request_status: dashboardConstants.SEARCH_FOR_CUSTOMER_RESET,
                 is_request_processing: false,
                 request_data: {}
             };

@@ -8,7 +8,8 @@ export const dashboardActions = {
     getDashboardData,
     getActivitiesData,
     getLoggedInUserActivitiesData,
-    globalSearchAnItem
+    globalSearchAnItem,
+    searchForCustomer
 }
 
 
@@ -129,5 +130,37 @@ function globalSearchAnItem(params) {
     function success(response) { return { type: dashboardConstants.GLOBAL_SEARCH_ITEM_SUCCESS, response } }
     function failure(error) { return { type: dashboardConstants.GLOBAL_SEARCH_ITEM_FAILURE, error } }
     function clear() { return { type: dashboardConstants.GLOBAL_SEARCH_ITEM_RESET, clear_data:""} }
+
+}
+
+function searchForCustomer(params) {
+    if(params!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/clients?SearchText=${params}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+
+
+    function request(user) { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_PENDING, user } }
+    function success(response) { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_SUCCESS, response } }
+    function failure(error) { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_FAILURE, error } }
+    function clear() { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_RESET, clear_data:""} }
 
 }

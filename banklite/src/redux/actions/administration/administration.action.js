@@ -4,6 +4,7 @@ import { routes } from "../../../services/urls";
 import {administrationConstants} from '../../actiontypes/administration/administration.constants'
 import { handleRequestErrors } from "../../../shared/utils";
 
+
 export const administrationActions = {
     getUsers,
     createUser,
@@ -44,7 +45,23 @@ export const administrationActions = {
     updateCurrency,
     setCurrencyConversionRate,
     getNotifications,
-    uploadData
+    uploadData,
+    fetchAllCreditScoreByPass,
+    fetchSingleCreditScoreByPass,
+    createCreditScoreByPass,
+    updateCreditScoreByPass,
+    fetchAllNotificationTemplate,
+    getANotificationTemplate,
+    createANotificationTemplate,
+    updateANotificationTemplate,
+    fetchAllChannelServices,
+    getAChannelServices,
+    createAChannelServices,
+    updateAChannelServices,
+    fetchAllRiskLevel,
+    getARiskLevel,
+    createARiskLevel,
+    updateARiskLevel
 }
 
 function getUsers  (params, tempData){
@@ -83,8 +100,13 @@ function failure(error) { return { type: administrationConstants.GET_USERS_FAILU
 function getAUser  (encodedKey, isEdit){
     
     return dispatch =>{
-        
-        let consume = ApiService.request(routes.HIT_USERS+`/${encodedKey}`, "GET", null);
+        let url;
+        if(encodedKey!==null && encodedKey!==undefined){
+            url = `${routes.HIT_USERS}/${encodedKey}`;
+        }else{
+            url = `${routes.HIT_USERS}/myuserdetails`;
+        }   
+        let consume = ApiService.request(url, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response =>{
@@ -1316,5 +1338,512 @@ function uploadData  (uploadDataPayload){
     function success(response) { return { type: administrationConstants.UPLOAD_DATA_SUCCESS, response } }
     function failure(error) { return { type: administrationConstants.UPLOAD_DATA_FAILURE, error } }
     function clear() { return { type: administrationConstants.UPLOAD_DATA_RESET, clear_data:""} }
+
+}
+
+
+function fetchAllCreditScoreByPass  (params){
+    if(params!=="CLEAR"){
+        return dispatch =>{
+            
+            let consume = ApiService.request(routes.HIT_LOAN_CREDIT_SCORE_PASSS+`?${params}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+    }
+    
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.FETCH_ALLCREDIT_SCORE_BYPASS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.FETCH_ALLCREDIT_SCORE_BYPASS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.FETCH_ALLCREDIT_SCORE_BYPASS_FAILURE, error } }
+    function clear() { return { type: administrationConstants.FETCH_ALLCREDIT_SCORE_BYPASS_RESET, clear_data:""} }
+}
+
+function fetchSingleCreditScoreByPass  (params){
+    if(params!=="CLEAR"){
+        return dispatch =>{
+            
+            let consume = ApiService.request(routes.HIT_LOAN_CREDIT_SCORE_PASSS+`/${params}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+    }
+    
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.FETCH_SINGLECREDIT_SCORE_BYPASS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.FETCH_SINGLECREDIT_SCORE_BYPASS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.FETCH_SINGLECREDIT_SCORE_BYPASS_FAILURE, error } }
+    function clear() { return { type: administrationConstants.FETCH_SINGLECREDIT_SCORE_BYPASS_RESET, clear_data:""} }
+}
+
+function createCreditScoreByPass  (requestPayload){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_LOAN_CREDIT_SCORE_PASSS, "POST", requestPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.CREATE_CREDIT_SCORE_BYPASS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.CREATE_CREDIT_SCORE_BYPASS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.CREATE_CREDIT_SCORE_BYPASS_FAILURE, error } }
+    function clear() { return { type: administrationConstants.CREATE_CREDIT_SCORE_BYPASS_RESET, clear_data:""} }
+
+}
+
+function updateCreditScoreByPass  (requestPayload){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_LOAN_CREDIT_SCORE_PASSS+`/${requestPayload}`, "POST", requestPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_CREDIT_SCORE_BYPASS_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_CREDIT_SCORE_BYPASS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_CREDIT_SCORE_BYPASS_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_CREDIT_SCORE_BYPASS_RESET, clear_data:""} }
+
+}
+
+
+///Notification templates
+function fetchAllNotificationTemplate  (params,tempData){
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_NOTIFICATIONS_TEMPLATE+`/NotificationTemplates?${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response,));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+    
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_PENDING, user, tempData } 
+        }
+    }
+
+    
+    function success(response) { return { type: administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_FAILURE, error } }
+    
+}
+
+function getANotificationTemplate  (encodedKey){
+    if(encodedKey!=="CLEAR"){
+        return dispatch =>{
+            
+            let consume = ApiService.request(routes.HIT_NOTIFICATIONS_TEMPLATE+`/NotificationTemplate/${encodedKey}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+        
+
+    function request(user) { return { type: administrationConstants.GET_A_NOTIFICATION_TEMPLATE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_A_NOTIFICATION_TEMPLATE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_A_NOTIFICATION_TEMPLATE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.GET_A_NOTIFICATION_TEMPLATE_RESET, clear_data:""} }
+}
+
+function createANotificationTemplate  (requestPayload){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_NOTIFICATIONS_TEMPLATE+'/NotificationTemplate', "POST", requestPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_RESET, clear_data:""} }
+
+}
+
+function updateANotificationTemplate  (requestPayload, encodedKey){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_NOTIFICATIONS_TEMPLATE+`/NotificationTemplate/${encodedKey}`, "POST", requestPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_RESET, clear_data:""} }
+
+}
+
+///Channel Services
+function fetchAllChannelServices  (params,tempData){
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_TRANASACTION_SERVICES+`/ChannelServices?${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                
+                let consume2 = ApiService.request(routes.ALL_GLACCOUNTS, "GET", null);
+                dispatch(request(consume2, tempData));
+                return consume2
+                    .then(response2 => {
+                        dispatch(success(response, response2));
+                    }).catch(error => {
+                        dispatch(success(response));
+                        // dispatch(failure(handleRequestErrors(error)));
+                    });
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+    
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_ALL_CHANNEL_SERVICE_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_ALL_CHANNEL_SERVICE_PENDING, user, tempData } 
+        }
+    }
+
+    
+    function success(response, response2) { return { type: administrationConstants.GET_ALL_CHANNEL_SERVICE_SUCCESS, response, response2 } }
+    function failure(error) { return { type: administrationConstants.GET_ALL_CHANNEL_SERVICE_FAILURE, error } }
+    
+}
+
+function getAChannelServices  (encodedKey){
+    if(encodedKey!=="CLEAR"){
+        return dispatch =>{
+            
+            let consume = ApiService.request(routes.HIT_TRANASACTION_SERVICES+`/ChannelServices/${encodedKey}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+        
+
+    function request(user) { return { type: administrationConstants.GET_A_CHANNEL_SERVICE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_A_CHANNEL_SERVICE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_A_CHANNEL_SERVICE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.GET_A_CHANNEL_SERVICE_RESET, clear_data:""} }
+}
+
+function createAChannelServices  (requestPayload){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_TRANASACTION_SERVICES+`/ChannelService`, "POST", requestPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.ADD_A_CHANNEL_SERVICE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.ADD_A_CHANNEL_SERVICE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.ADD_A_CHANNEL_SERVICE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.ADD_A_CHANNEL_SERVICE_RESET, clear_data:""} }
+
+}
+
+function updateAChannelServices  (requestPayload, encodedKey){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_TRANASACTION_SERVICES+`/ChannelService/${encodedKey}`, "POST", requestPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_A_CHANNEL_SERVICE_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_A_CHANNEL_SERVICE_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_A_CHANNEL_SERVICE_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_A_CHANNEL_SERVICE_RESET, clear_data:""} }
+
+}
+
+//Risk Levels
+function fetchAllRiskLevel  (params,tempData){
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_RISK_LEVEL+`/RiskLevels?${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                
+                let consume2 = ApiService.request(routes.ALL_GLACCOUNTS, "GET", null);
+                dispatch(request(consume2, tempData));
+                return consume2
+                    .then(response2 => {
+                        dispatch(success(response, response2));
+                    }).catch(error => {
+                        dispatch(success(response));
+                        // dispatch(failure(handleRequestErrors(error)));
+                    });
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+    
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_ALL_RISK_LEVEL_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_ALL_RISK_LEVEL_PENDING, user, tempData } 
+        }
+    }
+
+    
+    function success(response, response2) { return { type: administrationConstants.GET_ALL_RISK_LEVEL_SUCCESS, response, response2 } }
+    function failure(error) { return { type: administrationConstants.GET_ALL_RISK_LEVEL_FAILURE, error } }
+    
+}
+
+function getARiskLevel  (encodedKey){
+    if(encodedKey!=="CLEAR"){
+        return dispatch =>{
+            
+            let consume = ApiService.request(routes.HIT_RISK_LEVEL+`/RiskLevels/${encodedKey}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+        
+
+    function request(user) { return { type: administrationConstants.GET_A_RISK_LEVEL_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_A_RISK_LEVEL_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_A_RISK_LEVEL_FAILURE, error } }
+    function clear() { return { type: administrationConstants.GET_A_RISK_LEVEL_RESET, clear_data:""} }
+}
+
+function createARiskLevel  (requestPayload){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_RISK_LEVEL+`/RiskLevel`, "POST", requestPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.ADD_A_RISK_LEVEL_PENDING, user } }
+    function success(response) { return { type: administrationConstants.ADD_A_RISK_LEVEL_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.ADD_A_RISK_LEVEL_FAILURE, error } }
+    function clear() { return { type: administrationConstants.ADD_A_RISK_LEVEL_RESET, clear_data:""} }
+
+}
+
+function updateARiskLevel  (requestPayload, encodedKey){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.HIT_RISK_LEVEL+`/RiskLevels/${encodedKey}`, "POST", requestPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.UPDATE_A_RISK_LEVEL_PENDING, user } }
+    function success(response) { return { type: administrationConstants.UPDATE_A_RISK_LEVEL_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.UPDATE_A_RISK_LEVEL_FAILURE, error } }
+    function clear() { return { type: administrationConstants.UPDATE_A_RISK_LEVEL_RESET, clear_data:""} }
 
 }

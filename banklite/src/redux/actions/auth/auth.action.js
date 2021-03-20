@@ -5,6 +5,7 @@ import {authConstants} from '../../actiontypes/auth/auth.constants'
 import { handleRequestErrors, saveRouteForRedirect, removeRouteForRedirect } from "../../../shared/utils";
 
 export const authActions = {
+    confirmTenant,
     Login,
     Logout,
     ResfreshToken,
@@ -17,7 +18,38 @@ export const authActions = {
     ForbiddenAccess
 }
 
+function confirmTenant   (tenantPayload){
+    if(tenantPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routes.GET_TENANCY;
+            let consume = ApiService.request(url, "POST", tenantPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    
+                    localStorage.setItem('lingoAuthTenant', JSON.stringify(response.data));
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
 
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: authConstants.GET_TENANCY_PENDING, user } }
+    function success(response) { return { type: authConstants.GET_TENANCY_SUCCESS, response } }
+    function failure(error) { return { type: authConstants.GET_TENANCY_FAILURE, error } }
+    function clear() { return { type: authConstants.GET_TENANCY_RESET, clear_data:""} }
+
+}
 
 function Login   (loginPayload){
     if(loginPayload!=="CLEAR"){

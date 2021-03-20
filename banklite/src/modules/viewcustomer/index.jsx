@@ -285,6 +285,47 @@ class ViewCustomer extends React.Component {
                                                         </TableComponent>
                                                     </div>
                                                     <div className="each-overview">
+                                                        <h6>Employment Information</h6>
+                                                        <TableComponent classnames="striped bordered hover">
+
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>Work Status</td>
+                                                                    <td>{customerDetails.employeeInfo.workStatus}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Employer Name</td>
+                                                                    <td>{customerDetails.employeeInfo.employerName}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Employment Date</td>
+                                                                    <td>{customerDetails.employeeInfo.employmentDate ? getDateFromISO(customerDetails.employeeInfo.employmentDate):""}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Sector</td>
+                                                                    <td>{customerDetails.employeeInfo.employeeSector}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Monthly Salary</td>
+                                                                    <td>{numberWithCommas(customerDetails.employeeInfo.monthlySalary, true)}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Pay Day</td>
+                                                                    <td>{customerDetails.employeeInfo.payDay}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Official Email</td>
+                                                                    <td>{customerDetails.employeeInfo.officialEmail}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Employer Address</td>
+                                                                    <td>{customerDetails.employeeInfo.employerAddress}</td>
+                                                                </tr>
+                                                                
+                                                            </tbody>
+                                                        </TableComponent>
+                                                    </div>
+                                                    <div className="each-overview">
                                                         <h6>Contact</h6>
                                                         <TableComponent classnames="striped bordered hover">
 

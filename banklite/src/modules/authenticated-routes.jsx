@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Fragment } from "react";
 import DashboardLanding from './dashboard'
 import UserLogin from './onboarding/login'
+import LoginWrap from './onboarding/login/login'
 
 import ChangePassword from './profile/change-password'
 import ChangePin from './profile/change-pin'
@@ -31,6 +32,10 @@ import PendingLoans from './loanmanagement/pending'
 import RejectedLoans from './loanmanagement/rejected'
 import LoanClient from './loanmanagement/loan-client'
 import NewLoanAccount from './loanmanagement/newloanaccount'
+import EditALoanAccount from './loanmanagement/edit-loan'
+
+import RefinanceALoanAccount from './loanmanagement/refinance-loan'
+import RescheduleALoanAccount from './loanmanagement/reschedule-loan'
 
 import AllDisbursements from './disbursements/all'
 import DisbursementManagement from './disbursements'
@@ -57,6 +62,7 @@ import Activties from './activities'
 import BranchesManagement from './branches'
 import UserManagement from './usermanagement'
 
+
 import CommunicationsManagement from './communications'
 import EmailCommunications from './communications/emails'
 import SMSCommunications from './communications/sms' 
@@ -75,6 +81,18 @@ import AdminManagement from './administration'
 import UploadData from './administration/uploaddata'
 
 import GeneralOrganization from './administration/general-organization'
+import RiskLevels from './administration/general-risks-levels'
+import Notifications from './administration/general-notifications'
+import TransactionServices from './administration/general-transaction-services'
+
+
+import ManageCustomerWhitelist from './platform/customer-whitelist'
+import ManageCompanyInfo from './platform/company-info'
+import ManageEmployeeInfo from './platform/employee-info'
+import ManageBankInfo from './platform/bank-info'
+
+
+
 import GeneralCurrency from './administration/general-currency'
 import GeneralTxtChannels from './administration/general-txtchannels'
 import NewTxtChannels from './administration/general-txtchannels-new'
@@ -109,6 +127,9 @@ import EditUser from './administration/access-edituser'
 import AccessPreferences from './administration/access-preferences'
 import AccessAuth from './administration/access-authentication'
 
+import PlatformCardProvider from './administration/platform-cardprovider'
+import PlatformPayrollGroup from './administration/platform-payroll-group'
+
 
 import CustomerAccountContainer from './viewcustomer/customeraccount-container'
 
@@ -127,6 +148,7 @@ import CustomerAccountContainer from './viewcustomer/customeraccount-container'
 // import ViewClosedAccount from './viewcustomer/viewclosedaccount'
 
 import UserAccountContainer from './viewuser/useraccount-container'
+
 
 import DepositProductInfoContainer from './view-depositproduct/product-container'
 
@@ -229,7 +251,8 @@ class AuthenticatedRoutes extends React.Component {
                     <Router history={history}>
                     <Switch>
                         
-                        <Route exact path='/' render={(props) => <UserLogin  />} /> 
+                        {/* <Route exact path='/' render={(props) => <UserLogin  />} />  */}
+                        <Route exact path='/' render={(props) => <LoginWrap  />} /> 
 
                         <PrivateRoute path='/profile/change-password' {...this.props} authed={this.props.user} component={ChangePassword} />
                         <PrivateRoute path='/profile/change-pin' {...this.props} authed={this.props.user} component={ChangePin} />
@@ -276,7 +299,10 @@ class AuthenticatedRoutes extends React.Component {
 
                         <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
                         <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account/:clientId' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
-
+                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/:clientId/:loanId/edit' {...this.props} authed={this.props.user} component={EditALoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/:clientId/:loanId/refinance' {...this.props} authed={this.props.user} component={RefinanceALoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/:clientId/:loanId/reschedule' {...this.props} authed={this.props.user} component={RescheduleALoanAccount} />  
+                        
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/all-loans/:clientId' {...this.props} authed={this.props.user} component={LoanClient} />  
                         {/* <Route exact path='/all-loans/:clientId' render={(props) => <LoanClient clientId={props.match.params.clientId} {...this.props} />} /> */}
 
@@ -333,8 +359,22 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_view_balance_sheet" exact path='/balancesheet' {...this.props} authed={this.props.user} component={BalanceSheet} /> 
                         {/* <PrivateRoute accessRequired="bnk_view_branches" exact path='/balancesheet' {...this.props} authed={this.props.user} component={BalanceSheet} />  */}
                         
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/platform/customer-whitelist' {...this.props} authed={this.props.user} component={ManageCustomerWhitelist} />
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/platform/company-info' {...this.props} authed={this.props.user} component={ManageCompanyInfo} /> 
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/platform/payroll-info' {...this.props} authed={this.props.user} component={ManageEmployeeInfo} /> 
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/platform/bank-info' {...this.props} authed={this.props.user} component={ManageBankInfo} /> 
+                        
+                        {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/platform/payroll-info' {...this.props} authed={this.props.user} component={Notifications} /> 
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/platform/bank-info' {...this.props} authed={this.props.user} component={TransactionServices} /> */}
+
+
                         {/* <PrivateRoute accessRequired="bnk_view_branches" exact path='/administration' {...this.props} authed={this.props.user} component={AdminManagement} />  */}
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general' {...this.props} authed={this.props.user} component={GeneralOrganization} /> 
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/risk-levels' {...this.props} authed={this.props.user} component={RiskLevels} /> 
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/notifications' {...this.props} authed={this.props.user} component={Notifications} /> 
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/transaction' {...this.props} authed={this.props.user} component={TransactionServices} /> 
+                        
+                        
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/currency' {...this.props} authed={this.props.user} component={GeneralCurrency} /> 
                         <PrivateRoute accessRequired="bnk_manage_transaction_channels" exact path='/administration/general/txt-channels' {...this.props} authed={this.props.user} component={GeneralTxtChannels} /> 
                         <PrivateRoute accessRequired="bnk_manage_transaction_channels" exact path='/administration/general/new-txt-channels' {...this.props} authed={this.props.user} component={NewTxtChannels} /> 
@@ -369,12 +409,16 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <Route accessRequired="bnk_manage_users" exact path='/administration/access/new-user' render={(props) => <CreateNewUser {...this.props} />} /> */}
                         <PrivateRoute accessRequired="bnk_manage_users" exact path='/administration/access/edit-user/:encodedKey' {...this.props} authed={this.props.user} component={EditUser} /> 
                         
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/platform' {...this.props} authed={this.props.user} component={PlatformCardProvider} /> 
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/platform/payroll-group' {...this.props} authed={this.props.user} component={PlatformPayrollGroup} /> 
+                        
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/access/preferences' {...this.props} authed={this.props.user} component={AccessPreferences} /> 
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/access/authentication' {...this.props} authed={this.props.user} component={AccessAuth} /> 
                         
                         
                         <PrivateRoute accessRequired="bnk_view_clients" path='/customer/:id' {...this.props} authed={this.props.user} component={CustomerAccountContainer} /> 
                         <PrivateRoute accessRequired="bnk_view_all_users" path='/user/:userid' {...this.props} authed={this.props.user} component={UserAccountContainer} /> 
+                        <PrivateRoute accessRequired="bnk_view_all_users" exact path='/my-profile' {...this.props} authed={this.props.user} component={UserAccountContainer} /> 
                         <PrivateRoute accessRequired="bnk_manage_products" path='/depositproduct/:productid' {...this.props} authed={this.props.user} component={DepositProductInfoContainer} /> 
                         <PrivateRoute accessRequired="bnk_manage_products" path='/loanproduct/:productid' {...this.props} authed={this.props.user} component={LoanProductInfoContainer} /> 
                         <PrivateRoute  exact path='/forbidden-access' {...this.props} authed={this.props.user} component={ForbiddenPage} />

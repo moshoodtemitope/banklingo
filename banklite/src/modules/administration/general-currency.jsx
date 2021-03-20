@@ -21,6 +21,7 @@ import Button from 'react-bootstrap/Button'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
+import GeneralNav from './menus/_general-menu'
 import "./administration.scss"; 
 class GeneralCurrency extends React.Component {
     constructor(props) {
@@ -1030,7 +1031,8 @@ class GeneralCurrency extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <AdminNav />
-                                    <div className="lowerlevel-menu">
+                                    <GeneralNav />
+                                    {/* <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>
                                                 <NavLink exact to={'/administration/general'}>Organization</NavLink>
@@ -1048,7 +1050,7 @@ class GeneralCurrency extends React.Component {
                                                 <NavLink to={'/administration/general/control'}>Internal Control</NavLink>
                                             </li>
                                         </ul>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className="module-content">
