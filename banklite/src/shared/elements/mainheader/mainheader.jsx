@@ -152,7 +152,7 @@ class MainHeader extends React.Component{
                 let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data||adminGetCustomerTypesRequest.request_data.response,
                     allCustomerTypes=[];
                     // console.log("====", allCustomerTypesData);
-                if(allCustomerTypesData.length>=1){
+                // if(allCustomerTypesData.length>=1){
                     if(allQuickMenus.length >=1){
                         return(
                         
@@ -195,7 +195,7 @@ class MainHeader extends React.Component{
                     }else{
                         return null
                     }
-                }
+                // }
             }
             default :
             return null;
@@ -680,6 +680,14 @@ class MainHeader extends React.Component{
                                             
                                         </div>
                                     }
+                            </div>
+                        }
+                        {AllowedBranches.length ===0 &&
+                            <div className="user-branch">
+                                {this.state.showDropdown===false && 
+                                    <div className="branch-text" 
+                                        onClick={this.handleCurrentBranchClicked}> <div className="nobranch"></div> No associated branch</div>
+                                }
                             </div>
                         }
                         <div className="other-headingitems">
