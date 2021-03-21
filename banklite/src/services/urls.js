@@ -18,7 +18,7 @@ let URL = "",
     //     URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
     // }
 
-
+    
 // const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
 // const URL = process.env.NODE_ENV === 'development' ? 'https://banklingoapi.monee.ng/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
 // const URL = process.env.API_URL

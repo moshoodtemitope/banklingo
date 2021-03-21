@@ -264,7 +264,7 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} /> */}
 
                         <PrivateRoute accessRequired="bnk_create_client" exact path='/clients/new/:customertype/:custTypeid'  authed={this.props.user} component={NewClient} />
-                        {/* <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} /> */}
+                        <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} />
 
                         <PrivateRoute accessRequired="bnk_edit_client" exact path='/clients/edit/:encodedkey'    authed={this.props.user} component={EditAClient} />
                         {/* <PrivateRoute path='/clients/edit/:encodedkey' exact  encodedKey={this.props.computedMatch.params.encodedkey} authed={this.props.user} component={EditAClient} /> */}

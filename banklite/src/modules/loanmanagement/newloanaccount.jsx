@@ -424,11 +424,11 @@ class NewLoanAccount extends React.Component {
                 && adminGetAllBranchesRequest.request_status=== administrationConstants.GET_ALL_BRANCHES_SUCCESS
                 && adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS){
                 
-                    if(getAllLoanProductsRequest.request_data.response.data.result.length>=1){
-                        if(adminGetAllBranchesRequest.request_data.response.data.result.length>=1){
-                            if(getAllUsersRequest.request_data.response.data.length>=1){
-                                if(adminGetTransactionChannelsRequest.request_data.response.data.result.length>=1){
-                                    if(getClientsRequest.request_data.response.data.length>=1){
+                    if(getAllLoanProductsRequest.request_data.response.data.result.length>=0){
+                        if(adminGetAllBranchesRequest.request_data.response.data.result.length>=0){
+                            if(getAllUsersRequest.request_data.response.data.length>=0){
+                                if(adminGetTransactionChannelsRequest.request_data.response.data.result.length>=0){
+                                    if(getClientsRequest.request_data.response.data.length>=0){
 
                                         let allLoanProducts             = getAllLoanProductsRequest.request_data.response.data.result,
                                             allCustomers                = getClientsRequest.request_data.response.data,
@@ -504,7 +504,7 @@ class NewLoanAccount extends React.Component {
                                             this.selectedLoanProductDetails = selectedLoanProductDetails;
                                         }
 
-                                        let loanProductType = allProductTypes.filter((eachType)=>eachType.value=== this.selectedLoanProductDetails.loanProductType.toString())[0];
+                                        let loanProductType = this.selectedLoanProductDetails ? allProductTypes.filter((eachType)=>eachType.value=== this.selectedLoanProductDetails.loanProductType.toString())[0] :null;
 
                                         
                                         
@@ -557,29 +557,29 @@ class NewLoanAccount extends React.Component {
                                                     productDisplayName:  this.selectedLoanProductDetails.productName,
                                                     notes:"",
                                                     loanAmount:"",
-                                                    loanAmountMin:this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==null?this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun:"",
-                                                    loanAmountMax:this.selectedLoanProductDetails.loanAmountSetting.interestRateMax!==null?this.selectedLoanProductDetails.loanAmountSetting.interestRateMax:"",
+                                                    loanAmountMin:this.selectedLoanProductDetails ? this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==null?this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun:"" : '',
+                                                    loanAmountMax:this.selectedLoanProductDetails ? this.selectedLoanProductDetails.loanAmountSetting.interestRateMax!==null?this.selectedLoanProductDetails.loanAmountSetting.interestRateMax:"" : '',
                                                     installments:"",
                                                     maximumWithdrawalAmount:"",
                                                     accountOfficerEncodedKey:"",
                                                     accountOfficerBranchEncodedKey:"",
                                                     associatedBranchEncodedKey:"",
-                                                    repayedEvery: (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentEvery!==null) ? numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentEvery.toString()) : '',
-                                                    repayPeriod:(this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriod!==null) ? numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriod.toString()) : '',
-                                                    repayPeriodText:(this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription : '',
+                                                    repayedEvery: this.selectedLoanProductDetails? (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentEvery!==null) ? numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentEvery.toString()) : ''  : '',
+                                                    repayPeriod:this.selectedLoanProductDetails? (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriod!==null) ? numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriod.toString()) : '' : '',
+                                                    repayPeriodText:this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription : '' : '',
                                                     glAccountId:"",
-                                                    installmentsDefault:(this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsDefault!==null) ? numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsDefault.toString()) : '',
+                                                    installmentsDefault:this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsDefault!==null) ? numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsDefault.toString()) : '' : '',
                                                     // installmentsDefault:"",
-                                                    installmentsMin:(this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin.toString() : '',
-                                                    installmentsMax:(this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax.toString() : '',
-                                                    interestRate:(this.selectedLoanProductDetails.loanProductInterestSetting!==null && this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault!==null) ? numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault.toString(), true) : '',
-                                                    interestRateTermsText:this.selectedLoanProductDetails.loanProductInterestSetting.interestRateTermsDescription!==null ? this.selectedLoanProductDetails.loanProductInterestSetting.interestRateTermsDescription : '',
+                                                    installmentsMin:this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin.toString() : '' : '',
+                                                    installmentsMax: this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax.toString() : '' :'',
+                                                    interestRate: this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.loanProductInterestSetting!==null && this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault!==null) ? numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault.toString(), true) : '': '',
+                                                    interestRateTermsText: this.selectedLoanProductDetails ? this.selectedLoanProductDetails.loanProductInterestSetting.interestRateTermsDescription!==null ? this.selectedLoanProductDetails.loanProductInterestSetting.interestRateTermsDescription : '' : '',
                                                     // interestRateCalcMethod:this.selectedLoanProductDetails.loanProductInterestSetting.interestBalanceCalculation!==null ? this.selectedLoanProductDetails.loanProductInterestSetting.interestBalanceCalculation : '',
-                                                    interestCalcMethod:(this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculation!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculation.toString() : '',
-                                                    interestCalcMethodText:(this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculationDescription!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculationDescription.toString() : '',
-                                                    arearsTolerancePeriodInDaysDefault:(this.selectedLoanProductDetails.arrearsSetting!==null && this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysDefault!==null) ? this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysDefault.toString() : '',
-                                                    arearsTolerancePeriodInDaysMin:(this.selectedLoanProductDetails.arrearsSetting!==null && this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMin!==null) ? this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMin.toString() : '',
-                                                    arearsTolerancePeriodInDaysMax:(this.selectedLoanProductDetails.arrearsSetting!==null && this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMax!==null) ? this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMax.toString() : '',
+                                                    interestCalcMethod: this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculation!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculation.toString() : '' : '',
+                                                    interestCalcMethodText: this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculationDescription!==null) ? this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculationDescription.toString() : '' : '',
+                                                    arearsTolerancePeriodInDaysDefault: this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.arrearsSetting!==null && this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysDefault!==null) ? this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysDefault.toString() : '' : '',
+                                                    arearsTolerancePeriodInDaysMin: this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.arrearsSetting!==null && this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMin!==null) ? this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMin.toString() : '' : '',
+                                                    arearsTolerancePeriodInDaysMax: this.selectedLoanProductDetails ? (this.selectedLoanProductDetails.arrearsSetting!==null && this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMax!==null) ? this.selectedLoanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMax.toString() : '' : '',
                                                     disbursementChannelEncodedKey:"",
                                                     anticipatedDisbursmentDate:"",
                                                     firstRepaymentDate:""
@@ -702,8 +702,8 @@ class NewLoanAccount extends React.Component {
                                                                     
                                                                     <Select
                                                                         options={allLoanProductsList}
-                                                                        defaultValue ={{label:allLoanProductsList!==null?allLoanProductsList[0].label:null, 
-                                                                            value:allLoanProductsList!==null? allLoanProductsList[0].value:null}}
+                                                                        defaultValue ={{label:(allLoanProductsList!==null && allLoanProductsList[0]!==undefined)?allLoanProductsList[0].label:'', 
+                                                                            value:(allLoanProductsList!==null && allLoanProductsList[0]!==undefined)? allLoanProductsList[0].value:''}}
                                                                         
                                                                         onChange={(selected) => {
                                                                             values.productDisplayName = selected.label;
@@ -752,7 +752,7 @@ class NewLoanAccount extends React.Component {
                                                             <Form.Row>
                                                                 <Col>
                                                                     <Form.Label className="block-level">Product Type</Form.Label>
-                                                                    <span className="form-text">{loanProductType.label} </span>
+                                                                    {loanProductType && <span className="form-text">{loanProductType.label} </span>}
                                                                 </Col>
                                                                 <Col>
                                                                 </Col>
@@ -816,22 +816,24 @@ class NewLoanAccount extends React.Component {
                                                                                     className={errors.loanAmount && touched.loanAmount ? "is-invalid" : null}
                                                                                     name="loanAmount" required
                                                                                 />
-                                                                                <span className="input-helptext form-text">
-                                                                                    {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==null &&
-                                                                                        <span>Min: &#8358;{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum!==null &&
-                                                                                        <span>  Max: &#8358;{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
-                                                                                    }
+                                                                                {(this.selectedLoanProductDetails!==null && this.selectedLoanProductDetails.loanAmountSetting!==undefined) &&
+                                                                                    <span className="input-helptext form-text">
+                                                                                        {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==null &&
+                                                                                            <span>Min: &#8358;{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+                                                                                        }
+                                                                                        {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum!==null &&
+                                                                                            <span>  Max: &#8358;{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
+                                                                                        }
 
-                                                                                    {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun===null &&
-                                                                                        <span>Min: N/A</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum===null &&
-                                                                                        <span>  Max: N/A</span>
-                                                                                    }
-                                                                                    
-                                                                                </span>
+                                                                                        {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun===null &&
+                                                                                            <span>Min: N/A</span>
+                                                                                        }
+                                                                                        {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum===null &&
+                                                                                            <span>  Max: N/A</span>
+                                                                                        }
+                                                                                        
+                                                                                    </span>
+                                                                                }
                                                                                 {errors.loanAmount && touched.loanAmount ? (
                                                                                     <span className="invalid-feedback">{errors.loanAmount}</span>
                                                                                 ) : null}
@@ -853,23 +855,24 @@ class NewLoanAccount extends React.Component {
                                                                                 value={numberWithCommas(values.interestRate)}
                                                                                 className={errors.interestRate && touched.interestRate ? "is-invalid h-38px" : "h-38px"}
                                                                                 name="interestRate" required />
-                                                                                
-                                                                                <span className="input-helptext form-text">
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin!==null &&
-                                                                                        <span >Min: {numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin)}%</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax!==null &&
-                                                                                        <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax)}%</span>
-                                                                                    }
+                                                                                {(this.selectedLoanProductDetails!==null && this.selectedLoanProductDetails.loanProductInterestSetting!==undefined) &&
+                                                                                    <span className="input-helptext form-text">
+                                                                                        {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin!==null &&
+                                                                                            <span >Min: {numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin)}%</span>
+                                                                                        }
+                                                                                        {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax!==null &&
+                                                                                            <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax)}%</span>
+                                                                                        }
 
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin===null &&
-                                                                                        <span>Min: N/A</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax===null &&
-                                                                                        <span>  Max: N/A</span>
-                                                                                    }
-                                                                                    
-                                                                                </span>
+                                                                                        {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin===null &&
+                                                                                            <span>Min: N/A</span>
+                                                                                        }
+                                                                                        {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax===null &&
+                                                                                            <span>  Max: N/A</span>
+                                                                                        }
+                                                                                        
+                                                                                    </span>
+                                                                                }
                                                                                 {errors.interestRate && touched.interestRate ? (
                                                                                     <span className="invalid-feedback">{errors.interestRate}</span>
                                                                                 ) : null}
@@ -891,19 +894,20 @@ class NewLoanAccount extends React.Component {
                                                                                     disabled
                                                                                 />
                                                                                 {/* <span className="input-helptext">{values.repayPeriodText}</span> */}
+                                                                                {(this.selectedLoanProductDetails!==null && this.selectedLoanProductDetails.repaymentReschedulingModel!==undefined) &&
+                                                                                    <span className="input-helptext form-text">
+                                                                                        {(this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription!==null 
+                                                                                            && this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription!=="" ) &&
+                                                                                            <span > {this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription}</span>
+                                                                                        }
 
-                                                                                <span className="input-helptext form-text">
-                                                                                    {(this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription!==null 
-                                                                                        && this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription!=="" ) &&
-                                                                                        <span > {this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription}</span>
-                                                                                    }
-
-                                                                                    {(this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription===null
-                                                                                        || this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription==="") &&
-                                                                                        <span>  N/A</span>
-                                                                                    }
-                                                                                    
-                                                                                </span>
+                                                                                        {(this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription===null
+                                                                                            || this.selectedLoanProductDetails.repaymentReschedulingModel.repaymentPeriodDescription==="") &&
+                                                                                            <span>  N/A</span>
+                                                                                        }
+                                                                                        
+                                                                                    </span>
+                                                                                }
                                                                                 {errors.repayedEvery && touched.repayedEvery ? (
                                                                                     <span className="invalid-feedback">{errors.repayedEvery}</span>
                                                                                 ) : null}
@@ -929,44 +933,46 @@ class NewLoanAccount extends React.Component {
                                                                                     value={values.installmentsDefault}
                                                                                     name="installmentsDefault" 
                                                                                     
-                                                                                    disabled={(this.selectedLoanProductDetails.repaymentReschedulingModel!==null 
+                                                                                    disabled={(this.selectedLoanProductDetails!==null && this.selectedLoanProductDetails.repaymentReschedulingModel!==null && this.selectedLoanProductDetails.repaymentReschedulingModel!==undefined 
                                                                                                 && (this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin===null || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin==="" 
                                                                                                         || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax===""
                                                                                                         )) ? false : true}
                                                                                                         
                                                                                 />
-                                                                                <span className="input-helptext form-text">
-                                                                                    {/* Min: {values.installmentsMin}%
-                                                                                    Max: {values.installmentsMax}% */}
+                                                                                {(this.selectedLoanProductDetails!==null && this.selectedLoanProductDetails.repaymentReschedulingModel!==undefined) &&
+                                                                                    <span className="input-helptext form-text">
+                                                                                        {/* Min: {values.installmentsMin}%
+                                                                                        Max: {values.installmentsMax}% */}
 
-                                                                                    {(this.selectedLoanProductDetails.repaymentReschedulingModel!==null 
-                                                                                        && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin!==null
-                                                                                        && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin!=='')
-                                                                                        &&
-                                                                                        <span>Min: {numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin)}</span>
-                                                                                    }
-                                                                                    { (this.selectedLoanProductDetails.repaymentReschedulingModel!==null 
-                                                                                        && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax!==null
-                                                                                        && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax!=='')
-                                                                                        &&
-                                                                                    
-                                                                                        <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax)}</span>
-                                                                                    }
+                                                                                        {(this.selectedLoanProductDetails.repaymentReschedulingModel!==null 
+                                                                                            && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin!==null
+                                                                                            && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin!=='')
+                                                                                            &&
+                                                                                            <span>Min: {numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin)}</span>
+                                                                                        }
+                                                                                        { (this.selectedLoanProductDetails.repaymentReschedulingModel!==null 
+                                                                                            && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax!==null
+                                                                                            && this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax!=='')
+                                                                                            &&
+                                                                                        
+                                                                                            <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax)}</span>
+                                                                                        }
 
-                                                                                    {(this.selectedLoanProductDetails.repaymentReschedulingModel===null 
-                                                                                        || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin===null
-                                                                                        || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin==='')
-                                                                                        &&
-                                                                                        <span>Min: N/A</span>
-                                                                                    }
-                                                                                    { (this.selectedLoanProductDetails.repaymentReschedulingModel===null 
-                                                                                        || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax===null
-                                                                                        || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax==='')
-                                                                                        &&
-                                                                                    
-                                                                                        <span>  Max: N/A</span>
-                                                                                    }
-                                                                                </span>
+                                                                                        {(this.selectedLoanProductDetails.repaymentReschedulingModel===null 
+                                                                                            || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin===null
+                                                                                            || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin==='')
+                                                                                            &&
+                                                                                            <span>Min: N/A</span>
+                                                                                        }
+                                                                                        { (this.selectedLoanProductDetails.repaymentReschedulingModel===null 
+                                                                                            || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax===null
+                                                                                            || this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax==='')
+                                                                                            &&
+                                                                                        
+                                                                                            <span>  Max: N/A</span>
+                                                                                        }
+                                                                                    </span>
+                                                                                }
                                                                                 {errors.installmentsDefault && touched.installmentsDefault ? (
                                                                                     <span className="invalid-feedback">{errors.installmentsDefault}</span>
                                                                                 ) : null}

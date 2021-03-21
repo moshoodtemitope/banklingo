@@ -650,8 +650,8 @@ class CreateNewUser extends React.Component {
                     let rolesDataData = getRolesRequest.request_data.response.data,
                         branchesData = getRolesRequest.request_data.response2.data;
                         if(rolesDataData!==undefined && branchesData!==undefined){
-                            if(rolesDataData.length>=1){
-                                if(branchesData.length>=1){
+                            if(rolesDataData.length>=0){
+                                if(branchesData.length>=0){
                                     return(
                                         this.renderCreateUserForm(rolesDataData, branchesData)
                                     )

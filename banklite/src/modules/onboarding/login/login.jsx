@@ -177,7 +177,7 @@ class LoginWrap extends React.Component {
                                 </Button>
 
                                 <div className="copy-info">
-                                    Copyright &copy; Nidcom Solutions
+                                     &copy; 2021 Nidcom Solutions
                                 </div>
                             </div>
 

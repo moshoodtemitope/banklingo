@@ -156,7 +156,7 @@ class NewClient extends React.Component {
                         daysWrap.push(<option key={i} value={i}>{i}</option>)
                     }
                    
-                    if(allUsersData.length>=1){
+                    // if(allUsersData.length>=1){
                         allUsersData.map((eachUser, id)=>{
                             allUserDataList.push({label: eachUser.name, value:eachUser.key});
                         })
@@ -280,9 +280,11 @@ class NewClient extends React.Component {
                                             noValidate 
                                             onSubmit={handleSubmit}
                                             className="form-content card">
+                                            {selectedCustype &&
                                             <div className="form-heading">
                                                 <h3>Create {selectedCustype.name}</h3>
                                             </div>
+                                            }
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">First Name</Form.Label>
@@ -325,7 +327,7 @@ class NewClient extends React.Component {
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Customer Type</Form.Label>
-                                                    <span className="form-text">{selectedCustype.name}</span>
+                                                    { selectedCustype && <span className="form-text">{selectedCustype.name}</span>}
                                                     {/* <Select
                                                             options={allCustomerTypes}
                                                             onChange={(selectedCustType) => {
@@ -367,6 +369,7 @@ class NewClient extends React.Component {
                                                         name="gender"
                                                         value={values.gender}
                                                         className="countdropdown form-control form-control-sm">
+                                                        <option value="">Select</option>
                                                         <option value="Female">Female</option>
                                                         <option value="Male">Male</option>
                                                     </select>
@@ -860,13 +863,13 @@ class NewClient extends React.Component {
                                     )}
                             </Formik>
                         )
-                    }else{
-                        return(
-                            <div className="loading-content card"> 
-                                <div>No Account Officer. Please contact Admin</div>
-                            </div>
-                        )
-                    }
+                    // }else{
+                    //     return(
+                    //         <div className="loading-content card"> 
+                    //             <div>No Account Officer. Please contact Admin</div>
+                    //         </div>
+                    //     )
+                    // }
                 }
                     
            

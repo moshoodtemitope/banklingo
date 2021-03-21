@@ -161,8 +161,8 @@ class NewDepositAccount extends React.Component {
                             && getClientsRequest.request_status === clientsConstants.GET_ALL_CLIENTS_SUCCESS)
                     )){
                         
-                        if(getAllDepositProductsRequest.request_data.response.data.length>=1){
-                            if(getClientsRequest.request_data.response.data.length>=1){
+                        if(getAllDepositProductsRequest.request_data.response.data.length>=0){
+                            if(getClientsRequest.request_data.response.data.length>=0){
                                 let allDepositProducts = getAllDepositProductsRequest.request_data.response.data,
                                     allCustomers                = getClientsRequest.request_data.response.data,
                                     allCustomersList            =[],
@@ -241,13 +241,13 @@ class NewDepositAccount extends React.Component {
 
                                 // console.log("produc info", this.selectedDepositProductDetails);
 
-                                let depositProductType = allProductTypes.filter((eachType)=>eachType.value=== this.selectedDepositProductDetails.depositAccountType.toString())[0];
+                                let depositProductType = this.selectedDepositProductDetails ? allProductTypes.filter((eachType)=>eachType.value=== this.selectedDepositProductDetails.depositAccountType.toString())[0] : null;
                                 
-                                let depositInterestCalculation = interestBalanceCalculations.filter((eachType)=>eachType.value === this.selectedDepositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation.toString())[0];
+                                let depositInterestCalculation = this.selectedDepositProductDetails ? interestBalanceCalculations.filter((eachType)=>eachType.value === this.selectedDepositProductDetails.depositProductInterestSettingModel.interestBalanceCalculation.toString())[0] : null;
 
-                                let whenInterestIsPaidReturned = whenInterestIsPaidList.filter(eachItem=>eachItem.value===this.selectedDepositProductDetails.depositProductInterestSettingModel.whenInterestIsPaid.toString())[0]||null;
+                                let whenInterestIsPaidReturned = this.selectedDepositProductDetails ? whenInterestIsPaidList.filter(eachItem=>eachItem.value===this.selectedDepositProductDetails.depositProductInterestSettingModel.whenInterestIsPaid.toString())[0]||null : null;
                                 
-                                let interestRateTermsReturned = interestRateTerms.filter(eachItem=>eachItem.value===this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateTerms)[0]||null;
+                                let interestRateTermsReturned = this.selectedDepositProductDetails ? interestRateTerms.filter(eachItem=>eachItem.value===this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateTerms)[0]||null : null;
                                 // console.log("sdsdsds", depositInterestCalculation);
                                 let depositAccountValidationSchema = Yup.object().shape({
                                     clientEncodedKey: Yup.string()
@@ -269,14 +269,14 @@ class NewDepositAccount extends React.Component {
                                         // productDisplayName:  allLoanProductsList[0].label,
                                         // interestRate:this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault!==null ? this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault : '',
                                         clientEncodedKey:(customerFetchedData!==undefined && this.props.match.params.clientId!==undefined)?customerFetchedData.encodedKey :'',
-                                        depositProductEncodedKey:allDepositProductsList!==null?allDepositProductsList[0].value:null,
+                                        depositProductEncodedKey: this.selectedDepositProductDetails?  allDepositProductsList!==null?allDepositProductsList[0].value:null : '',
                                         // depositProductName:allDepositProductsList[0].label,
                                         notes:'',
-                                        depositProductName:allDepositProductsList!==null?allDepositProductsList[0].label:null,
+                                        depositProductName: this.selectedDepositProductDetails?  allDepositProductsList!==null?allDepositProductsList[0].label:null :'',
                                         // maximumWithdrawalAmount:this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString(),
-                                        maximumWithdrawalAmount:this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount!==null ? this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString() : '',
-                                        recommendedDepositAmount:this.selectedDepositProductDetails.depositSavingsSettingModel.recommendedDepositAmount!==null ? this.selectedDepositProductDetails.depositSavingsSettingModel.recommendedDepositAmount.toString() : '',
-                                        interestRate:this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateDefault!==null ? this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateDefault.toString() : '',
+                                        maximumWithdrawalAmount:this.selectedDepositProductDetails?  this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount!==null ? this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString() : '' : '',
+                                        recommendedDepositAmount:this.selectedDepositProductDetails?  this.selectedDepositProductDetails.depositSavingsSettingModel.recommendedDepositAmount!==null ? this.selectedDepositProductDetails.depositSavingsSettingModel.recommendedDepositAmount.toString() : '' : '',
+                                        interestRate: this.selectedDepositProductDetails ? this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateDefault!==null ? this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateDefault.toString() : '' :'',
                                     }}
 
                                     enableReinitialize={false}
@@ -411,8 +411,8 @@ class NewDepositAccount extends React.Component {
                                                         <Form.Label className="block-level">Product</Form.Label>
                                                         <Select
                                                             options={allDepositProductsList}
-                                                            defaultValue ={{label:allDepositProductsList!==null?allDepositProductsList[0].label:null, 
-                                                                value:allDepositProductsList!==null? allDepositProductsList[0].value:null}}
+                                                            defaultValue ={{label:(allDepositProductsList!==null && allDepositProductsList[0])?allDepositProductsList[0].label:'', 
+                                                                value:(allDepositProductsList!==null && allDepositProductsList[0])? allDepositProductsList[0].value:''}}
                                                             
                                                             onChange={(selected) => {
                                                                 
@@ -448,12 +448,12 @@ class NewDepositAccount extends React.Component {
                                                 <Form.Row>
                                                     <Col>
                                                         <Form.Label className="block-level">Product Type</Form.Label>
-                                                        <span className="form-text">{depositProductType.label} </span>
+                                                        { depositProductType && <span className="form-text">{depositProductType.label} </span>}
                                                         {/* <span className="form-text">Simulation of TBills</span> */}
                                                     </Col>
                                                     <Col>
                                                         <Form.Label className="block-level">Currency</Form.Label>
-                                                        <span className="form-text">{this.selectedDepositProductDetails.currencyCode}</span>
+                                                        { this.selectedDepositProductDetails && <span className="form-text">{this.selectedDepositProductDetails.currencyCode}</span> }
                                                     </Col>
                                                 </Form.Row>
 
@@ -463,7 +463,7 @@ class NewDepositAccount extends React.Component {
                                                             </Accordion.Toggle>
                                                     <Accordion.Collapse eventKey="0">
                                                         <div className="each-formsection">
-                                                            {depositProductType.value!=='4' &&
+                                                            {( depositProductType && depositProductType.value!=='4') &&
                                                                 <div>
                                                                     <Form.Row>
                                                                         <Col sm={6}>
@@ -473,9 +473,11 @@ class NewDepositAccount extends React.Component {
                                                                                 value={values.interestRate}
                                                                                 className={errors.interestRate && touched.interestRate ? "is-invalid h-38px" : "h-38px"}
                                                                                 name="interestRate" required />
-                                                                            <span className="input-helptext">Min: {numberWithCommas(this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateMin.toString())}%
-                                                                                    Max: {numberWithCommas(this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateMax.toString())}%
-                                                                            </span>
+                                                                            { this.selectedDepositProductDetails &&
+                                                                                <span className="input-helptext">Min: {numberWithCommas(this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateMin.toString())}%
+                                                                                        Max: {numberWithCommas(this.selectedDepositProductDetails.depositProductInterestSettingModel.interestRateMax.toString())}%
+                                                                                </span>
+                                                                            }
                                                                             {errors.interestRate && touched.interestRate ? (
                                                                                 <span className="invalid-feedback">{errors.interestRate}</span>
                                                                             ) : null}
@@ -488,8 +490,10 @@ class NewDepositAccount extends React.Component {
                                                                         </Col>
                                                                         <Col sm={6}>
                                                                             <Form.Label className="block-level">Opening Balance</Form.Label>
-                                                                            <span className="form-text">Min: {this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance!==null?`₦${numberWithCommas(this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString())}`:"N/A"}
-                                                                            </span>
+                                                                            { this.selectedDepositProductDetails &&
+                                                                                <span className="form-text">Min: {this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance!==null?`₦${numberWithCommas(this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString())}`:"N/A"}
+                                                                                </span>
+                                                                            }
                                                                         </Col>
                                                                     </Form.Row>
                                                                     <Form.Row>
@@ -512,12 +516,14 @@ class NewDepositAccount extends React.Component {
                                                                         className={errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? "is-invalid h-38px" : "h-38px"}
                                                                         name="maximumWithdrawalAmount" 
                                                                         required/>
-                                                                    <span className="input-helptext">Max: {this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount!==null?`₦${numberWithCommas(this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString())}`:"N/A"}</span>
+                                                                    {this.selectedDepositProductDetails && 
+                                                                        <span className="input-helptext">Max: {this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount!==null?`₦${numberWithCommas(this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString())}`:"N/A"}</span>
+                                                                    }
                                                                     {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
                                                                         <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
                                                                     ) : null}
                                                                 </Col>
-                                                                {depositProductType.value==='4' &&
+                                                                {( depositProductType && depositProductType.value==='4') &&
                                                                     <Col sm={6}>
                                                                         <Form.Label className="block-level">Recommended Deposit Amount(₦)</Form.Label>
                                                                         <Form.Control 
@@ -538,10 +544,12 @@ class NewDepositAccount extends React.Component {
                                                                         <span> {interestRateTermsReturned!==null?interestRateTermsReturned.label:"N/A"}</span>
                                                                     </Form.Label>
                                                                 </Col>
-                                                                {depositProductType.value!=='4' &&
+                                                                {(depositProductType && depositProductType.value!=='4') &&
                                                                     <Col sm={6}>
                                                                         <Form.Label className="block-level">Term Length</Form.Label>
-                                                                        <span className="form-text">{this.selectedDepositProductDetails.depositTermSettingModel.defaultTermLength!==null?`${numberWithCommas(this.selectedDepositProductDetails.depositTermSettingModel.defaultTermLength.toString())}`:"N/A"}</span>
+                                                                        {this.selectedDepositProductDetails &&
+                                                                            <span className="form-text">{this.selectedDepositProductDetails.depositTermSettingModel.defaultTermLength!==null?`${numberWithCommas(this.selectedDepositProductDetails.depositTermSettingModel.defaultTermLength.toString())}`:"N/A"}</span>
+                                                                        }
                                                                     </Col>
                                                                 }
                                                             </Form.Row>
