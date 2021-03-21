@@ -131,7 +131,7 @@ class LoginWrap extends React.Component {
                             onSubmit={handleSubmit}>
 
                             <Form.Group>
-                                <Form.Label className="block-level">Email</Form.Label>
+                                <Form.Label className="block-level">Username</Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="email"
