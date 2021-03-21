@@ -104,17 +104,20 @@ export class ApiService {
         let bodyData;
         let service,
             lastRefreshTime,
-            currenTimestamp;
+            currenTimestamp,
+            getToken = "";
         bodyData = noStringify ? JSON.stringify(data) : data;
 
         let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
 
             if(getTenant!==null){
                 url = `https://${getTenant.beApi}${url}`;
+                getToken = `https://${getTenant.beApi}${routes.REFRESH_TOKEN}`;
             }
             else{
                 url = url
                 // url = `https://theprojectsplash.com/Fintech.CBS.Backend${url}`
+                getToken = `https://theprojectsplash.com/Fintech.CBS.Backend${routes.REFRESH_TOKEN}`;
             }
 
         let urlsToAuthenticate = [
@@ -140,6 +143,9 @@ export class ApiService {
         globalSearch ="/Search/",
         refreshTokenUrl ="/refreshtoken",
         serviceToTest = url.split("Fintech.CBS.Backend")[1];
+        
+
+
 
         if(localStorage.getItem('lingoAuth' === null)){
             headers = undefined;
@@ -187,8 +193,8 @@ export class ApiService {
                         username:lingoAuth.userName,
                         refreshToken:lingoAuth.refreshToken
                     }
-                    this.setTokenAuthorization(routes.REFRESH_TOKEN);
-                    let tokenService = instance.post(routes.REFRESH_TOKEN, refreshpayload);
+                    this.setTokenAuthorization(getToken);
+                    let tokenService = instance.post(getToken, refreshpayload);
                         
                     return tokenService.then(function (response) {
                         
@@ -467,8 +473,8 @@ export class ApiService {
                         username:lingoAuth.userName,
                         refreshToken:lingoAuth.refreshToken
                     }
-                    this.setTokenAuthorization(routes.REFRESH_TOKEN);
-                    let tokenService = instance.post(routes.REFRESH_TOKEN, refreshpayload);
+                    this.setTokenAuthorization(getToken);
+                    let tokenService = instance.post(getToken, refreshpayload);
 
                     return tokenService.then(function (response) {
                         

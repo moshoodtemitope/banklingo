@@ -44,17 +44,18 @@ class LoginWrap extends React.Component {
     }
 
     checkTenancy = async ()=>{
-        localStorage.clear();
+        
         let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
-        if(getTenant===null){
-            
-            let tenantPayload = {domain: window.location.origin};
+        // if(getTenant===null){
+            localStorage.clear();
+            let tenantPayload = {domain: "https://cititrustliberia.banklingo.app"};
+            // let tenantPayload = {domain: window.location.origin};
             
             
             const {dispatch} = this.props;
        
             await dispatch(authActions.confirmTenant(tenantPayload));
-        }
+        // }
     }
 
     renderPreloader = ()=>{

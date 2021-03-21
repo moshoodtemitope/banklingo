@@ -655,11 +655,14 @@ class MainHeader extends React.Component{
         // let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
         const {user} = this.state;
         let {AllowedBranches} = this.state.user;
+        let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
         return(
             <div className="mainheader-wrap">
                 
-                <Navbar  expand="lg">
-                    <Navbar.Brand as={Link} to="/dashboard">Empire Trust</Navbar.Brand>
+                <Navbar  >
+                {/* <Navbar  expand="lg"> */}
+                    {getTenant && <Navbar.Brand as={Link} to="/dashboard">{getTenant.companyName}</Navbar.Brand>}
+                    {!getTenant && <Navbar.Brand as={Link} to="/dashboard">Empire Trust</Navbar.Brand>}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="heading-nav">
                         {/* <Nav className="">

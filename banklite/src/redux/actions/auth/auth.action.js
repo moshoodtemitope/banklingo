@@ -74,8 +74,10 @@ function Login   (loginPayload){
                             let user = JSON.parse(localStorage.getItem('lingoAuth'));
                                 user.AllowedBranches = response2.data;
                                 // user.BranchId = response2.data[0].id;
-                                user.BranchId = response2.data[0].encodedKey;
-                                user.BranchName = response2.data[0].name;
+                                if(response2.data.length>=1){
+                                    user.BranchId = response2.data[0].encodedKey;
+                                    user.BranchName = response2.data[0].name;
+                                }
                                 localStorage.setItem('lingoAuth', JSON.stringify(user));
                             
                                 let consume3 = ApiService.request(routes.HIT_ROLE+'/mypermissions', "GET", null);
@@ -406,9 +408,12 @@ function activateDeactivateUser   (actionType, userPayload){
 
 function Logout(redirectType,retUrl) {
     
-    localStorage.clear();
+    // localStorage.clear();
     // console.log("testwe",retUrl);
-    
+    localStorage.removeItem("lingoAuth");
+    localStorage.removeItem("state");
+    localStorage.removeItem("x-u-perm");
+    localStorage.removeItem("xSessionTracker");
     if(retUrl!==undefined){
         
         saveRouteForRedirect(redirectType,retUrl);
@@ -453,7 +458,11 @@ function ForbiddenAccess(retUrl) {
 }
 
 function initStore() {
-    localStorage.clear();
+    // localStorage.clear();
+    localStorage.removeItem("lingoAuth");
+    localStorage.removeItem("state");
+    localStorage.removeItem("x-u-perm");
+    localStorage.removeItem("xSessionTracker");
     return (dispatch) => {
         dispatch(logout());
     }

@@ -14,10 +14,7 @@ let URL = "",
     getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
 
     
-    // if(getTenant!==null){
-    //     URL = `https://${getTenant.beApi}`;
-    // }
-    // else{
+    // if(getTenant===null){
     //     URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
     // }
 

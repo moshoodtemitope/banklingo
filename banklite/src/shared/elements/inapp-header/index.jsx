@@ -42,7 +42,7 @@ class InAppHeader extends React.Component{
             )
         }
 
-        if(confirmTenantRequest.request_status===authConstants.GET_TENANCY_SUCCESS){
+        if(confirmTenantRequest.request_status===authConstants.GET_TENANCY_SUCCESS || getTenant!==null){
             return(
                 <div className="client-logo">
                     <div className="client-name">{getTenant.companyName}</div>

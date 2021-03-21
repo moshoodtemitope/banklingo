@@ -114,6 +114,9 @@ a.dropdown-item, a.dropdown-item:hover{
         border-radius: 2px !important;
     }
 }
+.heading-nav.navbar-collapse{
+    justify-content: flex-end;
+}
 .searchfieldwrap{
     input{
         width: 100%!important;
