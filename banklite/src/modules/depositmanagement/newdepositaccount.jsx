@@ -124,7 +124,7 @@ class NewDepositAccount extends React.Component {
             .then(productDetails=>{
                 
                 this.selectedDepositProductDetails = this.props.getSingleDepositProductsReducer.request_data.response.data;
-                this.setState({selectedDepositProductDetails: this.selectedDepositProductDetails})
+                this.setState({selectedDepositProductDetails: this.selectedDepositProductDetails, currencyCode: this.selectedDepositProductDetails.currencyCode})
             })
     }
 
@@ -134,7 +134,7 @@ class NewDepositAccount extends React.Component {
             createDepositAccountRequest = this.props.createDepositAccountReducer,
             getClientsRequest = this.props.getAllClientsReducer,
             getAClientRequest = this.props.getAClientReducer,
-            {selectedDepositProductDetails} = this.state;
+            {selectedDepositProductDetails, currencyCode} = this.state;
 
            
                 if(getAllDepositProductsRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING 
@@ -509,7 +509,7 @@ class NewDepositAccount extends React.Component {
                                                                 
                                                                 {/* Display this two alone if settlement product is chosen */}
                                                                 <Col sm={6}>
-                                                                    <Form.Label className="block-level">Maximum Withdrawal Amount(₦)</Form.Label>
+                                                                    <Form.Label className="block-level">Maximum Withdrawal Amount {currencyCode? `(${currencyCode})` : ""}</Form.Label>
                                                                     <Form.Control type="text" 
                                                                         onChange={handleChange}
                                                                         value={numberWithCommas(values.maximumWithdrawalAmount)}
@@ -517,7 +517,7 @@ class NewDepositAccount extends React.Component {
                                                                         name="maximumWithdrawalAmount" 
                                                                         required/>
                                                                     {this.selectedDepositProductDetails && 
-                                                                        <span className="input-helptext">Max: {this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount!==null?`₦${numberWithCommas(this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString())}`:"N/A"}</span>
+                                                                        <span className="input-helptext">Max: {this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount!==null?`${currencyCode? `(${currencyCode})` : ""}${numberWithCommas(this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString())}`:"N/A"}</span>
                                                                     }
                                                                     {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
                                                                         <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
@@ -525,7 +525,7 @@ class NewDepositAccount extends React.Component {
                                                                 </Col>
                                                                 {( depositProductType && depositProductType.value==='4') &&
                                                                     <Col sm={6}>
-                                                                        <Form.Label className="block-level">Recommended Deposit Amount(₦)</Form.Label>
+                                                                        <Form.Label className="block-level">Recommended Deposit Amount{currencyCode? `(${currencyCode})` : ""}</Form.Label>
                                                                         <Form.Control 
                                                                             onChange={handleChange}
                                                                             value={numberWithCommas(values.recommendedDepositAmount)}

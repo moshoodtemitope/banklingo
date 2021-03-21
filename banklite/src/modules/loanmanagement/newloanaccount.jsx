@@ -312,7 +312,7 @@ class NewLoanAccount extends React.Component {
             .then(productDetails=>{
                 
                 this.selectedLoanProductDetails = this.props.getSingleLoanProductsReducer.request_data.response.data;
-                this.setState({selectedLoanProductDetails: this.selectedLoanProductDetails})
+                this.setState({selectedLoanProductDetails: this.selectedLoanProductDetails, currencyCode: this.selectedLoanProductDetails.currencyCode})
             })
     }
 
@@ -390,7 +390,7 @@ class NewLoanAccount extends React.Component {
             getAClientRequest = this.props.getAClientReducer,
             adminGetAllBranchesRequest = this.props.adminGetAllBranches,
             adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
-            {selectedLoanProductDetails} = this.state;
+            {selectedLoanProductDetails, currencyCode} = this.state;
         
 
             if(getAllLoanProductsRequest.request_status===productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING 
@@ -771,7 +771,7 @@ class NewLoanAccount extends React.Component {
                                                                     <div className="each-formsection">
                                                                         <Form.Row>
                                                                             <Col>
-                                                                                <Form.Label className="block-level">Loan Amount (&#8358;)</Form.Label>
+                                                                                <Form.Label className="block-level">Loan Amount {currencyCode? `(${currencyCode})` : ""}</Form.Label>
                                                                                 <Form.Control 
                                                                                     type="text"
                                                                                     autoComplete="off"
@@ -819,10 +819,10 @@ class NewLoanAccount extends React.Component {
                                                                                 {(this.selectedLoanProductDetails!==null && this.selectedLoanProductDetails.loanAmountSetting!==undefined) &&
                                                                                     <span className="input-helptext form-text">
                                                                                         {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==null &&
-                                                                                            <span>Min: &#8358;{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+                                                                                            <span>Min: {currencyCode}{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
                                                                                         }
                                                                                         {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum!==null &&
-                                                                                            <span>  Max: &#8358;{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
+                                                                                            <span>  Max: {currencyCode}{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
                                                                                         }
 
                                                                                         {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun===null &&
@@ -839,7 +839,7 @@ class NewLoanAccount extends React.Component {
                                                                                 ) : null}
                                                                             </Col>
                                                                             <Col>
-                                                                                <Form.Label className="block-level">Interest Rate ({values.interestRateTermsText==="% per x days"?"% per day":values.interestRateTermsText})</Form.Label>
+                                                                                <Form.Label className="block-level">Interest Rate {values.interestRateTermsText!==""? `{(${values.interestRateTermsText==="% per x days"?"% per day":values.interestRateTermsText})`: ""}</Form.Label>
                                                                             <Form.Control 
                                                                                 type="text"
                                                                                 autoComplete="off"

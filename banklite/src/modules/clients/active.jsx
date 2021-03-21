@@ -186,8 +186,8 @@ class ActiveClients extends React.Component {
                 case (clientsConstants.GET_CLIENTS_PENDING):
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                         return (
-                            <div className="loading-content"> 
-                            <div className="heading-with-cta ">
+                            <div className="loading-content">
+                                <div className="heading-with-cta ">
                                     <Form className="one-liner">
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
@@ -198,11 +198,11 @@ class ActiveClients extends React.Component {
                                             </Form.Control>
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                        
+
                                     </Form>
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" 
+                                        <select id="toshow"
                                             onChange={this.setPagesize}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
@@ -211,7 +211,7 @@ class ActiveClients extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        
+
                                     </div>
                                 </div>
                                 <TableComponent classnames="striped bordered hover">
@@ -221,8 +221,8 @@ class ActiveClients extends React.Component {
                                             <th>Customer ID</th>
                                             <th>Customer Status</th>
                                             <th>Account Officer</th>
-                                            <th>Account Currency</th>
-                                            <th>Account Balance</th>
+                                            <th>Branch</th>
+                                            <th>Customer Type</th>
                                             <th>Date Created</th>
                                             {/* <th></th> */}
                                         </tr>
@@ -243,7 +243,7 @@ class ActiveClients extends React.Component {
                             </div>
                         )
                     }else{
-                        return(
+                        return (
                             <div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
@@ -263,9 +263,9 @@ class ActiveClients extends React.Component {
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"
-                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                            <DatePicker autoComplete="new-off"
+                                                onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
                                                 dateFormat="d MMMM, yyyy"
@@ -274,15 +274,15 @@ class ActiveClients extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -313,7 +313,7 @@ placeholderText="End  date"
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
                                         <select id="toshow"
-                                           onChange={(e)=>this.setPagesize(e, saveRequestData)}
+                                            onChange={(e) => this.setPagesize(e, saveRequestData)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -331,10 +331,10 @@ placeholderText="End  date"
                                             <th>Customer ID</th>
                                             <th>Customer Status</th>
                                             <th>Account Officer</th>
-                                            <th>Account Currency</th>
-                                            <th>Account Balance</th>
+                                            <th>Branch</th>
+                                            <th>Customer Type</th>
                                             <th>Date Created</th>
-                                            {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                                            {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
                                                 <th></th>
                                             }
                                         </tr>
@@ -352,7 +352,7 @@ placeholderText="End  date"
                                                             <td>{eachClient.currency}</td>
                                                             <td>{eachClient.totalBalance}</td>
                                                             <td>{eachClient.lastUpdated}</td>
-                                                            {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                                                            {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
                                                                 <td>
                                                                     <DropdownButton
                                                                         size="sm"
@@ -381,17 +381,17 @@ placeholderText="End  date"
                     let allClientsData = getClientsRequest.request_data.response.data;
                     if(allClientsData!==undefined){
                         if(allClientsData.result.length>=1){
-                            return(
+                            return (
                                 <div>
                                     <div className="table-helper">
-                                        <input type="checkbox" name="" 
-                                            onChange={(e)=>this.setShowDetails(e, allClientsData.result)}
+                                        <input type="checkbox" name=""
+                                            onChange={(e) => this.setShowDetails(e, allClientsData.result)}
                                             checked={this.state.FullDetails}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show full details</label>
                                     </div>
                                     <div className="heading-with-cta ">
-                                        <Form className="one-liner" onSubmit={(e)=>this.searchTxtn(e,allClientsData.result)} >
+                                        <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allClientsData.result)} >
 
                                             <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                                 <Form.Control as="select" size="sm">
@@ -402,8 +402,8 @@ placeholderText="End  date"
                                             </Form.Group>
 
                                             <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                                <DatePicker autoComplete="new-off" onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleStartDatePicker}
                                                     selected={this.state.startDate}
                                                     dateFormat="d MMMM, yyyy"
@@ -412,15 +412,15 @@ placeholderText="End  date"
                                                     showYearDropdown
                                                     dropdownMode="select"
                                                     placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                    autoComplete="new-password"
                                                     maxDate={new Date()}
                                                     // className="form-control form-control-sm h-38px"
                                                     className="form-control form-control-sm "
 
                                                 />
-                                                 <DatePicker autoComplete="new-off" 
+                                                <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                                    placeholderText="End  date"
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleEndDatePicker}
                                                     selected={this.state.endDate}
@@ -446,7 +446,7 @@ placeholderText="End  date"
     <span className="invalid-feedback">{errors.startDate}</span>
 ) : null} */}
                                             </Form.Group>
-                                            
+
                                             <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
                                             <div className="actions-wrap">
                                                 <Button onClick={this.exportClients} className="action-icon" variant="outline-secondary" type="button">
@@ -456,8 +456,8 @@ placeholderText="End  date"
                                         </Form>
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
-                                            <select id="toshow" 
-                                                onChange={(e)=>this.setPagesize(e, allClientsData.result)}
+                                            <select id="toshow"
+                                                onChange={(e) => this.setPagesize(e, allClientsData.result)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>
@@ -483,28 +483,28 @@ placeholderText="End  date"
                                                 <th>Customer ID</th>
                                                 <th>Customer Status</th>
                                                 <th>Account Officer</th>
-                                                <th>Account Currency</th>
-                                                <th>Account Balance</th>
+                                                <th>Branch</th>
+                                                <th>Customer Type</th>
                                                 <th>Date Created</th>
-                                                {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                                                {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
                                                     <th></th>
                                                 }
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {
-                                                allClientsData.result.map((eachClient, index)=>{
-                                                    return(
+                                                allClientsData.result.map((eachClient, index) => {
+                                                    return (
                                                         <Fragment key={index}>
                                                             <tr>
                                                                 <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
                                                                 <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.clientCode}</NavLink></td>
                                                                 <td>{eachClient.clientStateDescription}</td>
                                                                 <td>{eachClient.accountOfficer}</td>
-                                                                <td>{eachClient.currency}</td>
-                                                                <td>{eachClient.totalBalance}</td>
+                                                                <td>{eachClient.clientBranch}</td>
+                                                                <td>{eachClient.clientTypeId}</td>
                                                                 <td>{eachClient.lastUpdated}</td>
-                                                                {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
+                                                                {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
                                                                     <td>
                                                                         <DropdownButton
                                                                             size="sm"
@@ -530,12 +530,12 @@ placeholderText="End  date"
                                     </div> */}
                                 </div>
                             )
-                        }else{
-                            return(
+                        } else {
+                            return (
                                 <div className="no-records">
 
                                     <div className="heading-with-cta ">
-                                        <Form className="one-liner" onSubmit={(e)=>this.searchTxtn(e,allClientsData.result)} >
+                                        <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allClientsData.result)} >
 
                                             <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                                 <Form.Control as="select" size="sm">
@@ -546,8 +546,8 @@ placeholderText="End  date"
                                             </Form.Group>
 
                                             <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                                <DatePicker autoComplete="new-off" onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleStartDatePicker}
                                                     selected={this.state.startDate}
                                                     dateFormat="d MMMM, yyyy"
@@ -556,15 +556,15 @@ placeholderText="End  date"
                                                     showYearDropdown
                                                     dropdownMode="select"
                                                     placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                    autoComplete="new-password"
                                                     maxDate={new Date()}
                                                     // className="form-control form-control-sm h-38px"
                                                     className="form-control form-control-sm "
 
                                                 />
-                                                 <DatePicker autoComplete="new-off" 
+                                                <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                                    placeholderText="End  date"
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleEndDatePicker}
                                                     selected={this.state.endDate}
@@ -595,7 +595,7 @@ placeholderText="End  date"
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
                                             <select id="toshow"
-                                                
+
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
                                                 <option value="10">10</option>
@@ -603,8 +603,8 @@ placeholderText="End  date"
                                                 <option value="50">50</option>
                                                 <option value="200">200</option>
                                             </select>
-                                            
-                                            
+
+
                                         </div>
                                     </div>
                                     <TableComponent classnames="striped bordered hover">
@@ -614,8 +614,8 @@ placeholderText="End  date"
                                                 <th>Customer ID</th>
                                                 <th>Customer Status</th>
                                                 <th>Account Officer</th>
-                                                <th>Account Currency</th>
-                                                <th>Account Balance</th>
+                                                <th>Branch</th>
+                                                <th>Customer Type</th>
                                                 <th>Date Created</th>
                                                 {/* <th></th> */}
                                             </tr>
