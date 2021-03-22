@@ -148,7 +148,7 @@ class NewLoanProduct extends React.Component {
                 })
                     
 
-                if(getAllGLAccountsRequest.request_data.response.data.length>=1){
+                if(getAllGLAccountsRequest.request_data.response.data.length>=0){
                     glAccountsList= getAllGLAccountsRequest.request_data.response.data;
                     glAccountsList.map((channel, id)=>{
                         allGlAccounts.push({label: channel.accountDescription, value:channel.id, accType:channel.accountTypeId});

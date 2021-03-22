@@ -172,8 +172,8 @@ class NewDepositsProduct extends React.Component {
 
                         
 
-                    if(getAllGLAccountsRequest.request_data.response.data.length>=1 &&
-                        getAllCurrencies.request_data.response.data.length>=1){
+                    if(getAllGLAccountsRequest.request_data.response.data.length>=0 &&
+                        getAllCurrencies.request_data.response.data.length>=0){
 
                         glAccountsList= getAllGLAccountsRequest.request_data.response.data;
                         currenciesList = getAllCurrencies.request_data.response.data;

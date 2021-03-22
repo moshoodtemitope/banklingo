@@ -23,6 +23,21 @@
 .mt-30{
     margin-top: 30px;
 }
+.logout-modal{
+    .btn.btn-primary, .btn.btn-primary:hover{
+        outline: none;
+        background-color: #34495E !important;
+        border-color: #34495E !important;
+        // padding-bottom: 4px !important;
+        // padding-top: 4px !important;
+        font-size: 13px !important;
+        box-shadow: none;
+    }
+    .btn.btn-danger, .btn.btn-danger:hover{
+        font-size: 13px !important;
+        box-shadow: none;
+    }
+}
 
 .mt-40{
     margin-top: 40px;
