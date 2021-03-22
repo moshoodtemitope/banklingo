@@ -481,9 +481,11 @@ class GeneralCurrency extends React.Component {
     newCurrencyPopUp = () =>{
         let allCountry =[
             {value: 'NGN', label: 'NGN - Nigeria'},
-            {value: 'ERN', label: 'ERN - Eritrean'},
-            {value: 'ILS', label: 'ILS - Israeli'},
-            {value: 'NIO', label: 'NIO - Cordoba oro'},
+            {value: 'USD', label: 'USD - UNITED STATES DOLLARS'},
+            {value: 'LRD', label: 'LIBERIAN DOLLARS'},
+            {value: 'EUR', label: 'EURO'},
+            {value: 'GBP', label: 'POUNDS'},
+            {value: 'ZAR', label: 'SOUTH AFRICAN RANDS'},
         ];
         // currencyValidationSchema = Yup.object().shape({
         //     currencyName: Yup.string()
