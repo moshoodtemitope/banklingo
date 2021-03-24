@@ -23,6 +23,7 @@ import {administrationConstants} from '../../redux/actiontypes/administration/ad
 import Alert from 'react-bootstrap/Alert'
 import GeneralNav from './menus/_general-menu'
 import "./administration.scss"; 
+import { getDateFromISO, numberWithCommas } from "../../shared/utils";
 class GeneralCurrency extends React.Component {
     constructor(props) {
         super(props);
@@ -320,7 +321,9 @@ class GeneralCurrency extends React.Component {
                 
             case (administrationConstants.GET_ALLCURRENCIES_SUCCESS):
                 // contentToDisplay = this.renderCurrencies();
-                    let currenciesList = getAllCurrencies.request_data.response.data;
+                    let currenciesList = getAllCurrencies.request_data.response.data,
+                        exchangeList = getAllCurrencies.request_data.response2.data,
+                        converstionTable = getAllCurrencies.request_data.response3.data;
 
                 return (
                     <div>
@@ -390,7 +393,7 @@ class GeneralCurrency extends React.Component {
 
                         <Accordion defaultActiveKey="0">
                             <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                Exchange Rates - From Nigerian naira (NGN)
+                                Exchange Rates - From {exchangeList.defaultCurrencyName} ({exchangeList.defaultCurrencyCode})
                                                     </Accordion.Toggle>
                             <Accordion.Collapse eventKey="0">
                                 <div>
@@ -406,16 +409,16 @@ class GeneralCurrency extends React.Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {currenciesList.map((eachCurrency, index)=>{
+                                        {exchangeList.result.map((eachCurrency, index)=>{
                                             if(eachCurrency.code!=="NGN"){
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
                                                             <td>{eachCurrency.code}</td>
                                                             <td>{eachCurrency.name}</td>
-                                                            <td>Not set</td>
-                                                            <td> Not set </td>
-                                                            <td> Not set </td>
+                                                            <td>{eachCurrency.isSet? eachCurrency.buyRate :"Not Set"}</td>
+                                                            <td>{eachCurrency.isSet? eachCurrency.sellRate :"Not Set"} </td>
+                                                            <td> {getDateFromISO(eachCurrency.dateSet)} </td>
                                                             <td>
                                                                 <DropdownButton
                                                                     size="sm"
@@ -426,6 +429,49 @@ class GeneralCurrency extends React.Component {
                                                                     <Dropdown.Item eventKey="1" data-currencycode={eachCurrency.code} onClick={()=>this.handleRateShow(eachCurrency.code, eachCurrency.name)}>Set Rate</Dropdown.Item>
                                                                 </DropdownButton>
                                                             </td>
+                                                        </tr>
+                                                    </Fragment>
+                                                )
+                                            }
+                                        })}
+                                            
+
+                                        </tbody>
+                                    </TableComponent>
+
+                                </div>
+                            </Accordion.Collapse>
+                        </Accordion>
+
+                        <Accordion defaultActiveKey="0">
+                            <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                Conversions Table 
+                                                    </Accordion.Toggle>
+                            <Accordion.Collapse eventKey="0">
+                                <div>
+                                    <TableComponent classnames="striped bordered hover">
+                                        <thead>
+                                            <tr>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Buy Rate</th>
+                                                <th>Sell Rate</th>
+                                                <th>Margin</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {converstionTable.map((eachCurrency, index)=>{
+                                            if(eachCurrency.code!=="NGN"){
+                                                return (
+                                                    <Fragment key={index}>
+                                                        <tr>
+                                                            <td>{eachCurrency.from}</td>
+                                                            <td>{eachCurrency.to}</td>
+                                                            <td>{eachCurrency.buyRate}</td>
+                                                            <td>{eachCurrency.sellRate} </td>
+                                                            <td>{numberWithCommas(eachCurrency.margin)} </td>
+                                                            {/* <td> {getDateFromISO(eachCurrency.margin)} </td> */}
+                                                            
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -864,9 +910,11 @@ class GeneralCurrency extends React.Component {
                 .matches(/^[0-9]*$/, 'Invalid repsonse')
                 .required('Required')
           });
+          
 
         let allCurrenciesData = (this.props.adminGetAllCurrencies.request_data!==undefined && this.props.adminGetAllCurrencies.request_data.response!==undefined)
                                         ? this.props.adminGetAllCurrencies.request_data.response.data :null;
+        let baseCurrencyCode = allCurrenciesData.filter(eachCurrency=>eachCurrency.isBaseCurrency===true)[0]
 
         const {showRateEdit, selectCurrencyForRateSetting, selectCurrencyNameForRateSetting} = this.state;
         if(selectCurrencyForRateSetting!==undefined){
@@ -885,7 +933,7 @@ class GeneralCurrency extends React.Component {
                         onSubmit={(values, { resetForm }) => {
                             
                             let currencyConvertionPayload = {
-                                baseCurrencyCode: 'NGN',
+                                baseCurrencyCode: baseCurrencyCode.code,
                                 currencyCode:selectCurrencyForRateSetting,
                                 buyRate: values.currencyBuyRate,
                                 sellRate: values.currencySellRate
@@ -940,7 +988,7 @@ class GeneralCurrency extends React.Component {
                                 onSubmit={handleSubmit}>
                             <Form.Group controlId="countriesList">
                                 <Form.Label className="block-level">From</Form.Label>
-                                <span className="form-text">Nigerian naira</span>
+                                <span className="form-text">{baseCurrencyCode.name}</span>
                             </Form.Group>
                             <Form.Group controlId="currencyName">
                                 <Form.Label className="block-level">To</Form.Label>

@@ -834,7 +834,25 @@ function getAllCurrencies  (tempData){
             dispatch(request(consume,tempData));
             return consume
                 .then(response =>{
-                    dispatch(success(response));
+                    // dispatch(success(response));
+                    let consume2 = ApiService.request(routes.GET_EXCHANGE_RATE, "GET", null);
+                    dispatch(request(consume2,tempData));
+                    return consume2
+                        .then(response2 =>{
+                            // dispatch(success(response2));
+                            let consume3 = ApiService.request(routes.GET_CONVERSION_TABLE, "GET", null);
+                            dispatch(request(consume3,tempData));
+                            return consume3
+                                .then(response3 =>{
+                                    dispatch(success(response, response2, response3));
+                                }).catch(error =>{
+                                    
+                                    dispatch(failure(handleRequestErrors(error)));
+                                });
+                        }).catch(error =>{
+                            
+                            dispatch(failure(handleRequestErrors(error)));
+                        });
                 }).catch(error =>{
                     
                     dispatch(failure(handleRequestErrors(error)));
@@ -853,7 +871,7 @@ function getAllCurrencies  (tempData){
         }
          
     }
-    function success(response) { return { type: administrationConstants.GET_ALLCURRENCIES_SUCCESS, response } }
+    function success(response, response2, response3) { return { type: administrationConstants.GET_ALLCURRENCIES_SUCCESS, response, response2, response3 } }
     function failure(error) { return { type: administrationConstants.GET_ALLCURRENCIES_FAILURE, error } }
     // function clear() { return { type: administrationConstants.CREATE_NEWCURRENCY_RESET, clear_data:""} }
 

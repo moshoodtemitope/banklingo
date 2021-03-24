@@ -249,10 +249,10 @@ function createCreditScoreByPass  (requestPayload){
 
 }
 
-function updateCreditScoreByPass  (requestPayload, encodedKey){
+function updateCreditScoreByPass  (requestPayload, bypasstype){
     if(requestPayload!=="CLEAR"){
         return dispatch =>{
-            let consume = ApiService.request(routes.HIT_LOAN_CREDIT_SCORE_PASS+`/${encodedKey}`, "POST", requestPayload);
+            let consume = ApiService.request(routes.HIT_LOAN_CREDIT_SCORE_PASS+`/${bypasstype}`, "POST", requestPayload);
             dispatch(request(consume));
             return consume
                 .then(response =>{

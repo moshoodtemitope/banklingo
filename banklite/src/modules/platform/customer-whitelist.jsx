@@ -278,11 +278,11 @@ class ManageCustomerWhitelist extends React.Component {
 
         
     }
-    updateARecord = async (payload, encodedKey) => {
+    updateARecord = async (payload, bypasstype) => {
         const { dispatch } = this.props;
 
 
-        await dispatch(platformActions.updateCreditScoreByPass(payload, encodedKey));
+        await dispatch(platformActions.updateCreditScoreByPass(payload, bypasstype));
 
 
     }
@@ -314,58 +314,64 @@ class ManageCustomerWhitelist extends React.Component {
         return (
             <Modal show={showEditRecord} onHide={this.handleEditRecordClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
                 <Modal.Header>
-                    {this.state.updateType === "edit" && <Modal.Title>Edit Customer Information</Modal.Title>}
-                    {this.state.updateType === "activate" && <Modal.Title>Confirm Activation</Modal.Title>}
-                    {this.state.updateType === "deactivate" && <Modal.Title>Confirm De-Activation</Modal.Title>}
+                    {/* {this.state.updateType === "edit" && <Modal.Title>Edit Customer Information</Modal.Title>} */}
+                    {this.state.updateType === "whitelist" && <Modal.Title>Confirm Whitelisting</Modal.Title>}
+                    {this.state.updateType === "blacklist" && <Modal.Title>Confirm Blacklisting</Modal.Title>}
 
                 </Modal.Header>
                 <Modal.Body>
                     <Formik
                         initialValues={{
-                            amount: recordToUpdate.amount.toString(),
-                            clientEncodedKey: recordToUpdate.clientEncodedKey,
-                            creditScore: recordToUpdate.creditScore.toString(),
-                            loanCreditScoreByPassStatus: recordToUpdate.loanCreditScoreByPassStatus,
-                            bvn: recordToUpdate.bvn,
+                            // amount: recordToUpdate.amount.toString(),
+                            // clientEncodedKey: recordToUpdate.clientEncodedKey,
+                            // creditScore: recordToUpdate.creditScore.toString(),
+                            // loanCreditScoreByPassStatus: recordToUpdate.loanCreditScoreByPassStatus,
+                            // bvn: recordToUpdate.bvn,
                             
                         }}
-                        validationSchema={checkValidationSchema}
+                        // validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
 
                             let requestPayload;
-                            if (this.state.updateType === "edit") {
+                            // if (this.state.updateType === "edit") {
                                 
-                                requestPayload = {
-                                    amount: parseFloat(values.amount.replace(/,/g, '')),
-                                    clientEncodedKey: recordToUpdate.clientEncodedKey,
-                                    creditScore: parseFloat(values.creditScore.replace(/,/g, '')),
-                                    loanCreditScoreByPassStatus: values.loanCreditScoreByPassStatus,
-                                    bvn: values.bvn,
-                                    // objectState: recordToUpdate.objectState
-                                };
+                            //     requestPayload = {
+                            //         amount: parseFloat(values.amount.replace(/,/g, '')),
+                            //         clientEncodedKey: recordToUpdate.clientEncodedKey,
+                            //         creditScore: parseFloat(values.creditScore.replace(/,/g, '')),
+                            //         loanCreditScoreByPassStatus: values.loanCreditScoreByPassStatus,
+                            //         bvn: values.bvn,
+                            //         // objectState: recordToUpdate.objectState
+                            //     };
+                            // }
+
+                            if (this.state.updateType === "whitelist") {
+                                requestPayload={
+                                    encodedKey : recordToUpdate.encodedKey
+                                }
+                                // requestPayload = {
+                                //     amount: recordToUpdate.amount,
+                                //     clientEncodedKey: recordToUpdate.clientEncodedKey,
+                                //     creditScore: recordToUpdate.creditScore,
+                                //     loanCreditScoreByPassStatus: 0,
+                                //     bvn: recordToUpdate.bvn,
+                                //     // objectState: 0
+                                // };
                             }
 
-                            if (this.state.updateType === "activate") {
-                                requestPayload = {
-                                    amount: recordToUpdate.amount,
-                                    clientEncodedKey: recordToUpdate.clientEncodedKey,
-                                    creditScore: recordToUpdate.creditScore,
-                                    loanCreditScoreByPassStatus: 0,
-                                    bvn: recordToUpdate.bvn,
-                                    // objectState: 0
-                                };
-                            }
-
-                            if (this.state.updateType === "deactivate") {
-                                requestPayload = {
-                                    amount: recordToUpdate.amount,
-                                    clientEncodedKey: recordToUpdate.clientEncodedKey,
-                                    creditScore: recordToUpdate.creditScore,
-                                    loanCreditScoreByPassStatus: 1,
-                                    bvn: recordToUpdate.bvn,
-                                    // objectState: 1
-                                };
+                            if (this.state.updateType === "blacklist") {
+                                requestPayload={
+                                    encodedKey : recordToUpdate.encodedKey
+                                }
+                                // requestPayload = {
+                                //     amount: recordToUpdate.amount,
+                                //     clientEncodedKey: recordToUpdate.clientEncodedKey,
+                                //     creditScore: recordToUpdate.creditScore,
+                                //     loanCreditScoreByPassStatus: 1,
+                                //     bvn: recordToUpdate.bvn,
+                                //     // objectState: 1
+                                // };
                             }
 
 
@@ -373,7 +379,8 @@ class ManageCustomerWhitelist extends React.Component {
 
 
 
-                            this.updateARecord(requestPayload, recordToUpdate.encodedKey)
+                            this.updateARecord(requestPayload, this.state.updateType)
+                            // this.updateARecord(requestPayload, recordToUpdate.encodedKey)
                                 .then(
                                     () => {
                                         if (this.props.updateCreditScoreByPassReducer.request_status === platformConstants.UPDATE_CREDIT_SCORE_BYPASS_SUCCESS) {
@@ -403,7 +410,22 @@ class ManageCustomerWhitelist extends React.Component {
                             return (
                                 <Form noValidate
                                     onSubmit={handleSubmit}>
-                                    <Form.Row>
+                                        {updateCreditScoreByPassRequest.request_status !== platformConstants.UPDATE_CREDIT_SCORE_BYPASS_SUCCESS &&
+                                            <div>
+                                                {this.state.updateType === "whitelist" &&
+                                                    <div className="confirmation-msg text-center">
+                                                        Please confirm you want to proceed with whitelisting
+                                                </div>
+                                                }
+                                                {this.state.updateType === "blacklist" &&
+                                                    <div className="confirmation-msg text-center">
+                                                        Please confirm you want to proceed with blacklisting
+                                                </div>
+                                                }
+                                            </div>
+                                        }
+                                        
+                                    {/* <Form.Row>
 
                                         <Col>
                                             <Form.Label className="block-level">Customer</Form.Label>
@@ -537,22 +559,23 @@ class ManageCustomerWhitelist extends React.Component {
 
                                         
 
-                                    </Form.Row>
+                                    </Form.Row> */}
                                  
-
-                                    <div className="footer-with-cta toleft">
-                                        <Button
-                                            disabled={updateCreditScoreByPassRequest.is_request_processing}
-                                            variant="secondary" className="grayed-out" onClick={this.handleEditRecordClose}>Cancel</Button>
-                                        <Button
-                                            type="submit"
-                                            disabled={updateCreditScoreByPassRequest.is_request_processing}>
-                                            {updateCreditScoreByPassRequest.is_request_processing && "Please wait..."}
-                                            {(!updateCreditScoreByPassRequest.is_request_processing && this.state.updateType === "edit") && "Update"}
-                                            {(!updateCreditScoreByPassRequest.is_request_processing && this.state.updateType === "activate") && "Activate"}
-                                            {(!updateCreditScoreByPassRequest.is_request_processing && this.state.updateType === "deactivate") && "De-Activate"}
-                                        </Button>
-                                    </div>
+                                    {updateCreditScoreByPassRequest.request_status !== platformConstants.UPDATE_CREDIT_SCORE_BYPASS_SUCCESS &&
+                                        <div className="footer-with-cta centered">
+                                            <Button
+                                                disabled={updateCreditScoreByPassRequest.is_request_processing}
+                                                variant="secondary" className="grayed-out" onClick={this.handleEditRecordClose}>Cancel</Button>
+                                            <Button
+                                                type="submit"
+                                                disabled={updateCreditScoreByPassRequest.is_request_processing}>
+                                                {updateCreditScoreByPassRequest.is_request_processing && "Please wait..."}
+                                                {(!updateCreditScoreByPassRequest.is_request_processing && this.state.updateType === "edit") && "Update"}
+                                                {(!updateCreditScoreByPassRequest.is_request_processing && this.state.updateType === "whitelist") && "Whitelist"}
+                                                {(!updateCreditScoreByPassRequest.is_request_processing && this.state.updateType === "blacklist") && "Blacklist"}
+                                            </Button>
+                                        </div>
+                                    }
                                 </Form>
                             )
                         }}
@@ -630,15 +653,17 @@ class ManageCustomerWhitelist extends React.Component {
                                 requestPayload = {
                                     amount: parseFloat(values.amount.replace(/,/g, '')),
                                     clientEncodedKey: selectedCustomer.clientEncodedKey,
+                                    byPassType :1,
                                     creditScore: parseFloat(values.creditScore.replace(/,/g, '')),
                                     loanCreditScoreByPassStatus: parseInt(values.loanCreditScoreByPassStatus),
-                                    bvn: values.bvn,
+                                    bvn: null,
                                 };
                             }
                             if(values.whitelistOption ==="bvn"){
                                 requestPayload = {
                                     amount: parseFloat(values.amount.replace(/,/g, '')),
-                                    clientEncodedKey: selectedCustomer.clientEncodedKey,
+                                    clientEncodedKey: null,
+                                    byPassType :0,
                                     creditScore: parseFloat(values.creditScore.replace(/,/g, '')),
                                     loanCreditScoreByPassStatus: parseInt(values.loanCreditScoreByPassStatus),
                                     bvn: values.bvn,
@@ -876,7 +901,7 @@ class ManageCustomerWhitelist extends React.Component {
                                         <tr>
                                             <th>BVN</th>
                                             <th>Amount</th>
-                                            <th>Client Key</th>
+                                            <th>Customer name</th>
                                             <th>Status</th>
                                             <th>Credit Score</th>
                                             <th>Whitelisted by</th>
@@ -934,7 +959,7 @@ class ManageCustomerWhitelist extends React.Component {
                                         <tr>
                                             <th>BVN</th>
                                             <th>Amount</th>
-                                            <th>Client Key</th>
+                                            <th>Customer name</th>
                                             <th>Status</th>
                                             <th>Credit Score</th>
                                             <th>Whitelisted by</th>
@@ -1009,7 +1034,8 @@ class ManageCustomerWhitelist extends React.Component {
 
                                             <Form.Group className="table-filters">
                                                 
-                                                <DatePicker autoComplete="new-off"                                        onChangeRaw={this.handleDateChangeRaw}
+                                                <DatePicker autoComplete="new-off"                                        
+                                                    onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleStartDatePicker}
                                                     selected={this.state.startDate}
                                                     dateFormat="d MMMM, yyyy"
@@ -1025,7 +1051,6 @@ class ManageCustomerWhitelist extends React.Component {
 
                                                 />
                                                  <DatePicker autoComplete="new-off" 
-
                                                     placeholderText="End  date"
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleEndDatePicker}
@@ -1087,7 +1112,7 @@ class ManageCustomerWhitelist extends React.Component {
                                             <tr>
                                                 <th>BVN</th>
                                                 <th>Amount</th>
-                                                <th>Client Key</th>
+                                                <th>Customer name</th>
                                                 <th>Status</th>
                                                 <th>Credit Score</th>
                                                 <th>Whitelisted by</th>
@@ -1103,7 +1128,7 @@ class ManageCustomerWhitelist extends React.Component {
                                                             <tr>
                                                                 <td>{eachItem.bvn}</td>
                                                                 <td>{numberWithCommas(eachItem.amount, true)}</td>
-                                                                <td>{eachItem.clientEncodedKey}</td>
+                                                                <td>{eachItem.customerName}</td>
                                                                 <td>{eachItem.loanCreditScoreByPassStatusDescription}</td>
                                                                 <td>{eachItem.creditScore}</td>
                                                                 <td>{eachItem.whitelistedByUserName}</td>
@@ -1121,8 +1146,8 @@ class ManageCustomerWhitelist extends React.Component {
                                                                         { eachItem.loanCreditScoreByPassStatus===1 &&  <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>} */}
 
                                                                         {/* <Dropdown.Item eventKey="1" onClick={() => this.handleEditRecordShow(eachItem, "edit")}>Edit</Dropdown.Item> */}
-                                                                        {eachItem.loanCreditScoreByPassStatus === 0 && <Dropdown.Item eventKey="1" onClick={() => this.handleEditRecordShow(eachItem, "activate")}>Whitelist</Dropdown.Item>}
-                                                                        {eachItem.loanCreditScoreByPassStatus === 1 && <Dropdown.Item eventKey="1" onClick={() => this.handleEditRecordShow(eachItem, "deactivate")}>Blacklist</Dropdown.Item>}
+                                                                        {eachItem.loanCreditScoreByPassStatus === 2 && <Dropdown.Item eventKey="1" onClick={() => this.handleEditRecordShow(eachItem, "whitelist")}>Whitelist</Dropdown.Item>}
+                                                                        {eachItem.loanCreditScoreByPassStatus === 1 && <Dropdown.Item eventKey="1" onClick={() => this.handleEditRecordShow(eachItem, "blacklist")}>Blacklist</Dropdown.Item>}
                                                                     </DropdownButton>
                                                                 </td>
                                                             </tr>
@@ -1175,7 +1200,7 @@ class ManageCustomerWhitelist extends React.Component {
                                             <tr>
                                                 <th>BVN</th>
                                                 <th>Amount</th>
-                                                <th>Client Key</th>
+                                                <th>Customer name</th>
                                                 <th>Status</th>
                                                 <th>Credit Score</th>
                                                 <th>Whitelisted by</th>

@@ -74,6 +74,8 @@ export const routes = {
     HIT_CUSTOMER_TYPES: BASEURL + '/api/CustomerType',
     
     ADD_EXCHANGE_RATE: BASEURL + '/api/Account/exchangerate',
+    GET_EXCHANGE_RATE: BASEURL + '/api/Account/exchangerates',
+    GET_CONVERSION_TABLE: BASEURL + '/api/Account/conversiontable',
     
     HIT_ROLE: BASEURL + '/api/Role', //works
 
