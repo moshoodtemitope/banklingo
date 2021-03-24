@@ -428,6 +428,10 @@ class GeneralCustomerTypes extends React.Component {
                                         </tr>
                                     </tbody>
                                 </TableComponent>
+                                <div className="footer-with-cta toleft">
+                                    {/* <Button variant="secondary" className="grayed-out">Rearrange</Button> */}
+                                    <Button onClick={this.handleShow}>Add Type</Button>
+                                </div>
                             </div>
                         )
                     }

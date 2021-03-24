@@ -186,7 +186,7 @@ class Notifications extends React.Component {
         return (
             <Modal show={showCreateNewRecord} onHide={this.handleCloseNewRecord} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
                 <Modal.Header>
-                    <Modal.Title>Add New</Modal.Title>
+                    <Modal.Title>Add new template</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Formik
@@ -385,23 +385,42 @@ class Notifications extends React.Component {
         // let getAllCurrencies =  this.props.adminGetAllCurrencies;
 
 
-        let checkValidationSchema = Yup.object().shape({
-            name: Yup.string()
-                .required('Required'),
-            key: Yup.string()
-                .required('Required'),
-            communicationType: Yup.string()
-                .required('Required'),
-            messageTemplate: Yup.string()
-                .required('Required'),
-            notificationTemplatesSource: Yup.string()
-                .required('Required'),
-        });
+        let checkValidationSchema ;
+            if(this.state.updateType !== "edit"){
+                checkValidationSchema = Yup.object().shape({
+                    name: Yup.string()
+                        .required('Required'),
+                    key: Yup.string()
+                        .required('Required'),
+                    communicationType: Yup.string()
+                        .required('Required'),
+                    messageTemplate: Yup.string()
+                        .required('Required'),
+                    notificationTemplatesSource: Yup.string()
+                        .required('Required'),
+                });
+            }
+            if(this.state.updateType === "edit"){
+                checkValidationSchema = Yup.object().shape({
+                    name: Yup.string()
+                        .required('Required'),
+                    key: Yup.string()
+                        .required('Required'),
+                    communicationType: Yup.string()
+                        .required('Required'),
+                    messageTemplate: Yup.string()
+                        .required('Required'),
+                    status: Yup.string()
+                        .required('Required'),
+                    notificationTemplatesSource: Yup.string()
+                        .required('Required'),
+                });
+            }
 
         return (
             <Modal show={showEditRecord} onHide={this.handleEditRecordClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
                 <Modal.Header>
-                    {this.state.updateType === "edit" && <Modal.Title>Edit</Modal.Title>}
+                    {this.state.updateType === "edit" && <Modal.Title>Edit {recordToUpdate.name} </Modal.Title>}
                     {this.state.updateType === "activate" && <Modal.Title>Confirm Activation</Modal.Title>}
                     {this.state.updateType === "deactivate" && <Modal.Title>Confirm De-Activation</Modal.Title>}
 
@@ -411,6 +430,7 @@ class Notifications extends React.Component {
                         initialValues={{
                             name: recordToUpdate.name,
                             key: recordToUpdate.key,
+                            status: recordToUpdate.objectState.toString(),
                             communicationType: recordToUpdate.communicationType,
                             messageTemplate: recordToUpdate.messageTemplate,
                             notificationTemplatesSource: recordToUpdate.notificationTemplatesSource,
@@ -427,7 +447,7 @@ class Notifications extends React.Component {
                                     communicationType: parseInt(values.communicationType),
                                     messageTemplate: values.messageTemplate,
                                     notificationTemplatesSource: values.notificationTemplatesSource,
-                                    objectState: recordToUpdate.objectState
+                                    objectState: parseInt(values.status)
                                 };
                             }
 
@@ -439,6 +459,8 @@ class Notifications extends React.Component {
                                     messageTemplate: recordToUpdate.messageTemplate,
                                     notificationTemplatesSource: recordToUpdate.notificationTemplatesSource,
                                     objectState: 0
+                                    // objectState:  parseInt(values.status)
+                                   
                                 };
                             }
 
@@ -450,6 +472,7 @@ class Notifications extends React.Component {
                                     messageTemplate: recordToUpdate.messageTemplate,
                                     notificationTemplatesSource: recordToUpdate.notificationTemplatesSource,
                                     objectState: 1
+                                    // objectState:  parseInt(values.status)
                                 };
                             }
 
@@ -589,6 +612,30 @@ class Notifications extends React.Component {
                                         </Col>
 
                                     </Form.Row>
+                                    {this.state.updateType === "edit" &&
+                                    <Form.Row>
+                                        <Col>
+                                            <Form.Label className="block-level">Status</Form.Label>
+                                            <select id="toshow"
+                                                name="status"
+                                                onChange={handleChange}
+                                                value={values.status}
+                                                className={errors.status && touched.status ? "form-control form-control-sm is-invalid h-38px" : "form-control form-control-sm h-38px"}
+                                            >
+                                                <option value="">Select</option>
+                                                <option value="0">Active</option>
+                                                <option value="1">InActive</option>
+                                            </select>
+
+                                            {errors.status && touched.status ? (
+                                                <span className="invalid-feedback">{errors.status}</span>
+                                            ) : null}
+
+                                        </Col>
+                                        <Col></Col>
+
+                                    </Form.Row>
+                                    }
                                     <Form.Group>
                                         <Form.Label className="block-level">Message Template</Form.Label>
                                         <Form.Control

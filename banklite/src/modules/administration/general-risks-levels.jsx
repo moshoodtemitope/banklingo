@@ -184,7 +184,7 @@ class RiskLevels extends React.Component {
         return (
             <Modal show={showCreateNewRecord} onHide={this.handleCloseNewRecord} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
                 <Modal.Header>
-                    <Modal.Title>Add New</Modal.Title>
+                    <Modal.Title>Add Risk Level</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Formik
@@ -200,14 +200,15 @@ class RiskLevels extends React.Component {
 
                             let requestPayload = {
                                 name: values.name,
-                                fromDays: values.fromDays,
-                                toDays: values.toDays,
+                                fromDays: parseInt(values.fromDays),
+                                toDays: parseInt(values.toDays),
                                 percentageProvision: parseFloat(values.percentageProvision.replace(/,/g, '')),
                             };
 
+                            
 
 
-
+                            
                             this.createNewRecord(requestPayload)
                                 .then(
                                     () => {
@@ -259,7 +260,7 @@ class RiskLevels extends React.Component {
                                     <Form.Row>
 
                                         <Col>
-                                            <Form.Label className="block-level">From</Form.Label>
+                                            <Form.Label className="block-level">From(days)</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={handleChange}
                                                 value={numberWithCommas(values.fromDays)}
@@ -273,7 +274,7 @@ class RiskLevels extends React.Component {
 
                                         </Col>
                                         <Col>
-                                            <Form.Label className="block-level">To</Form.Label>
+                                            <Form.Label className="block-level">To(days)</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={handleChange}
                                                 value={numberWithCommas(values.toDays)}
@@ -386,10 +387,10 @@ class RiskLevels extends React.Component {
                 <Modal.Body>
                     <Formik
                         initialValues={{
-                            name: recordToUpdate.name,
-                            fromDays: recordToUpdate.fromDays,
-                            toDays: recordToUpdate.toDays,
-                            percentageProvision: recordToUpdate.percentageProvision,
+                            name: recordToUpdate.name||"",
+                            fromDays: recordToUpdate.fromDays||"",
+                            toDays: recordToUpdate.toDays||"",
+                            percentageProvision: recordToUpdate.percentageProvision||"",
                         }}
                         validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
@@ -467,6 +468,7 @@ class RiskLevels extends React.Component {
                                             <Form.Label className="block-level">Name</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={(e) => {
+                                                    console.log("dsdsdsdsd", this.state.updateType);
                                                     if (this.state.updateType !== "edit") {
                                                         setFieldValue("name", recordToUpdate.name)
                                                     } else {
@@ -475,7 +477,7 @@ class RiskLevels extends React.Component {
 
                                                 }}
                                                 disabled={this.state.updateType !== "edit"}
-                                                value={numberWithCommas(values.name)}
+                                                value={values.name}
                                                 className={errors.name && touched.name ? "is-invalid h-38px" : "h-38px"}
                                                 name="name"
                                                 required />
@@ -490,7 +492,7 @@ class RiskLevels extends React.Component {
                                     <Form.Row>
 
                                         <Col>
-                                            <Form.Label className="block-level">From</Form.Label>
+                                            <Form.Label className="block-level">From (days) </Form.Label>
                                             <Form.Control type="text"
                                                 onChange={(e) => {
                                                     if (this.state.updateType !== "edit") {
@@ -512,7 +514,7 @@ class RiskLevels extends React.Component {
 
                                         </Col>
                                         <Col>
-                                            <Form.Label className="block-level">To</Form.Label>
+                                            <Form.Label className="block-level">To(days) </Form.Label>
                                             <Form.Control type="text"
                                                 onChange={(e) => {
                                                     if (this.state.updateType !== "edit") {
@@ -684,7 +686,7 @@ class RiskLevels extends React.Component {
                                         />
                                          <DatePicker autoComplete="new-off" 
 
-placeholderText="End  date"
+                                            placeholderText="End  date"
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleEndDatePicker}
                                             selected={this.state.endDate}
@@ -819,7 +821,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                        <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off" 
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
@@ -837,7 +839,7 @@ placeholderText="End  date"
                                             />
                                              <DatePicker autoComplete="new-off" 
 
-placeholderText="End  date"
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -959,7 +961,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                        <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off" 
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
@@ -977,7 +979,7 @@ placeholderText="End  date"
                                             />
                                              <DatePicker autoComplete="new-off" 
 
-placeholderText="End  date"
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}

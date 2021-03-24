@@ -914,6 +914,7 @@ class GeneralCurrency extends React.Component {
 
         let allCurrenciesData = (this.props.adminGetAllCurrencies.request_data!==undefined && this.props.adminGetAllCurrencies.request_data.response!==undefined)
                                         ? this.props.adminGetAllCurrencies.request_data.response.data :null;
+                                        console.log("lololo",allCurrenciesData);
         let baseCurrencyCode = allCurrenciesData.filter(eachCurrency=>eachCurrency.isBaseCurrency===true)[0]
 
         const {showRateEdit, selectCurrencyForRateSetting, selectCurrencyNameForRateSetting} = this.state;
@@ -1063,7 +1064,7 @@ class GeneralCurrency extends React.Component {
             <Fragment>
                 <InnerPageContainer {...this.props}>
                     {this.newCurrencyPopUp()}
-                    {this.setCurrencyConversion()}
+                    {getAllCurrencies.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS && this.setCurrencyConversion()}
                     {getAllCurrencies.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS && this.editACurrencyPopUp()}
                     <div className="content-wrapper">
                         <div className="module-heading">

@@ -51,7 +51,7 @@ class NewLoanProduct extends React.Component {
     getAllDepositProducts = ()=>{
         const {dispatch} = this.props;
 
-        dispatch(productActions.getAllDepositProducts());
+        dispatch(productActions.getAllDepositProducts(null, true));
     }
 
     handleCreateNewLoanProduct = async(newLoanProductPayload)=>{
@@ -81,6 +81,8 @@ class NewLoanProduct extends React.Component {
             repaymentPeriod: Yup.string()
                 .required('Required'),
             collectPrincipalEveryRepayments: Yup.string()
+                .required('Required'),
+            currency: Yup.string()
                 .required('Required'),
             description:  Yup.string()
                 .min(5, 'Valid response required')
@@ -136,6 +138,7 @@ class NewLoanProduct extends React.Component {
                     glAccountsList;
                 
                 let allDepositProducts = getAllDepositProductsRequest.request_data.response.data,
+                    allCurrencies = getAllDepositProductsRequest.request_data.response3.data,
                     allDepositProductsList      =[
                         {
                             label: "ANY",
@@ -196,6 +199,7 @@ class NewLoanProduct extends React.Component {
                                 minimumLoanAmount:null,
                                 maximumLoanAmount:null,
                                 methodology: '0',
+                                currency:"",
                                 isActive: true,
                                 interestPaid:true,
                                 interestRateTerms:null,
@@ -228,6 +232,7 @@ class NewLoanProduct extends React.Component {
                                     productName: values.productName,
                                     loanProductType: parseInt(values.loanProductType),
                                     description: values.description,
+                                    currencyCode:values.currency,
                                     loanProductAccountingRuleModel :{
                                         id:0,
                                         portfolioControlAccountId: values.portfolioControlAccountId!==null? parseInt(values.portfolioControlAccountId): null,
@@ -388,6 +393,30 @@ class NewLoanProduct extends React.Component {
                                         ) : null}
                                     </Col>
                                     <Col>
+                                        <Form.Group  className="center-aligned">
+                                            <Form.Label  className="block-level">Currency</Form.Label>
+
+
+                                            <select id="currency"
+                                                name="currency"
+                                                onChange={handleChange}
+                                                value={values.currency}
+                                                className={errors.currency && touched.currency ? "is-invalid countdropdown form-control form-control-sm h-38px" : "countdropdown form-control form-control-sm h-38px"}
+                                                >
+                                                <option value="">Select</option>
+                                                {
+                                                    allCurrencies.map((eachItem, index)=>{
+                                                        return(
+                                                            <option key={index} value={eachItem.code}>{eachItem.name} - {eachItem.code}</option>
+                                                        )
+
+                                                    })
+                                                }
+                                            </select>
+                                            {errors.currency && touched.currency ? (
+                                                <span className="invalid-feedback">{errors.currency}</span>
+                                            ) : null}
+                                        </Form.Group>
                                     </Col>
                                 </Form.Row>
                                 
@@ -792,7 +821,7 @@ class NewLoanProduct extends React.Component {
                                                 </Col>
                                             </Form.Row>
                                             <Form.Row>
-                                                <Col>
+                                                {/* <Col>
                                                     <Form.Label className="block-level">Interest Calculation Method</Form.Label>
                                                     <Select
                                                         options={interestBalanceCalculationOptions}
@@ -811,7 +840,7 @@ class NewLoanProduct extends React.Component {
                                                     {errors.interestBalanceCalculationSelected && touched.interestBalanceCalculationSelected ? (
                                                         <span className="invalid-feedback">{errors.interestBalanceCalculationSelected}</span>
                                                     ) : null}
-                                                </Col>
+                                                </Col> */}
                                                 <Col>
                                                     <Form.Label className="block-level">First Due Date Offset Default (days)</Form.Label>
                                                     <Form.Control
@@ -824,6 +853,7 @@ class NewLoanProduct extends React.Component {
                                                         <span className="invalid-feedback">{errors.firstDueDateOffsetConstraintDefault}</span>
                                                     ) : null}
                                                 </Col>
+                                                <Col></Col>
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
