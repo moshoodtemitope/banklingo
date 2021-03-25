@@ -551,7 +551,7 @@ class NewClient extends React.Component {
                                                     <div className="each-formsection">
                                                         <Form.Row>
                                                                 <Col>
-                                                                    <Form.Label className="block-level">Are you employed</Form.Label>
+                                                                    <Form.Label className="block-level">Employed?</Form.Label>
                                                                     <select 
                                                                         onChange={handleChange}
                                                                         name="workStatus"
@@ -583,7 +583,7 @@ class NewClient extends React.Component {
                                                                 </Col>
                                                                 <Col>
                                                                     <Form.Group controlId="debitLocation" className={errors.employmentDate && touched.employmentDate ? "has-invaliderror fullwidthdate" : "fullwidthdate"}>
-                                                                        <Form.Label className="block-level">Date of Birth</Form.Label>
+                                                                        <Form.Label className="block-level">Employment Date</Form.Label>
                                                                         <DatePicker
                                                                             placeholderText="Choose  date"
                                                                             autoComplete="new-password"
@@ -611,22 +611,25 @@ class NewClient extends React.Component {
                                                             </Form.Row>
                                                             <Form.Row>
                                                                 <Col>
-                                                                    <Form.Label className="block-level">Official Email</Form.Label>
-                                                                    <Form.Control type="text"
-                                                                        name="officialEmail"
+                                                                    <Form.Label className="block-level">Pay Day</Form.Label>
+                                                                    <select id="toshow"
                                                                         onChange={handleChange}
-                                                                        value={values.officialEmail}
-                                                                        className={errors.officialEmail && touched.officialEmail ? "is-invalid" : null} />
-                                                                    {errors.officialEmail && touched.officialEmail ? (
-                                                                        <span className="invalid-feedback">{errors.officialEmail}</span>
+                                                                        name="payDay"
+                                                                        value={values.gender}
+                                                                        className="countdropdown form-control form-control-sm">
+                                                                        <option value="">Select</option>
+                                                                        {daysWrap}
+                                                                    </select>
+                                                                    {errors.payDay && touched.payDay ? (
+                                                                        <span className="invalid-feedback">{errors.payDay}</span>
                                                                     ) : null}
                                                                 </Col>
                                                                 <Col>
-                                                                    <Form.Label className="block-level">Monthly Salary</Form.Label>
+                                                                    <Form.Label className="block-level">Monthly Salary(Net Pay) </Form.Label>
                                                                     <Form.Control type="text"
                                                                         name="monthlySalary"
                                                                         onChange={handleChange}
-                                                                        value={numberWithCommas(values.monthlySalary, true)}
+                                                                        value={numberWithCommas(values.monthlySalary)}
                                                                         className={errors.monthlySalary && touched.monthlySalary ? "is-invalid" : null} />
                                                                     {errors.monthlySalary && touched.monthlySalary ? (
                                                                         <span className="invalid-feedback">{errors.monthlySalary}</span>
@@ -658,18 +661,16 @@ class NewClient extends React.Component {
                                                                 </Col>
                                                             </Form.Row>
                                                             <Form.Row>
+                                                                
                                                                 <Col>
-                                                                    <Form.Label className="block-level">Pay Day</Form.Label>
-                                                                    <select id="toshow"
+                                                                    <Form.Label className="block-level">Official Email</Form.Label>
+                                                                    <Form.Control type="text"
+                                                                        name="officialEmail"
                                                                         onChange={handleChange}
-                                                                        name="payDay"
-                                                                        value={values.gender}
-                                                                        className="countdropdown form-control form-control-sm">
-                                                                        <option value="">Select</option>
-                                                                        {daysWrap}
-                                                                    </select>
-                                                                    {errors.payDay && touched.payDay ? (
-                                                                        <span className="invalid-feedback">{errors.payDay}</span>
+                                                                        value={values.officialEmail}
+                                                                        className={errors.officialEmail && touched.officialEmail ? "is-invalid" : null} />
+                                                                    {errors.officialEmail && touched.officialEmail ? (
+                                                                        <span className="invalid-feedback">{errors.officialEmail}</span>
                                                                     ) : null}
                                                                 </Col>
                                                                 <Col>

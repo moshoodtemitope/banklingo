@@ -3205,6 +3205,21 @@ class ViewClosedLoanAccount extends React.Component {
                 )
             }
 
+            if(getAClientLoanAccountRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_FAILURE){
+
+                return(
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="middle-content">
+                                <div className="loading-content errormsg">
+                                    <div>{getAClientLoanAccountRequest.request_data.error}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
     }
     
 

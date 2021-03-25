@@ -632,17 +632,16 @@ class RiskLevels extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>From</th>
-                                        <th>To</th>
-                                        <th>Percentage Provision</th>
-                                        <th>Status</th>
-                                        <th>Date Created</th>
+                                            <th>Name</th>
+                                            <th>Days</th>
+                                            <th>Provision(%) </th>
+                                            {/* <th>Status</th> */}
+                                            <th>Date Created</th>
+                                            <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -734,11 +733,11 @@ class RiskLevels extends React.Component {
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>From</th>
-                                        <th>To</th>
-                                        <th>Percentage Provision</th>
+                                        <th>Days</th>
+                                        <th>Provision(%) </th>
                                         {/* <th>Status</th> */}
                                         <th>Date Created</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -748,8 +747,7 @@ class RiskLevels extends React.Component {
                                                 <Fragment key={index}>
                                                     <tr>
                                                         <td>{eachItem.name}</td>
-                                                        <td>{eachItem.fromDays}</td>
-                                                        <td>{eachItem.toDays}</td>
+                                                        <td>{eachItem.fromDays} to {eachItem.toDays} days</td>
                                                         <td>{eachItem.percentageProvision}</td>
                                                         {/* <td>{eachItem.objectStateDescription}</td> */}
                                                         <td>{getDateFromISO(eachItem.dateCreated)}</td>
@@ -783,25 +781,8 @@ class RiskLevels extends React.Component {
                     if (allFetchedData.result.length >= 1) {
                         return (
                             <div>
-                                <div className="heading-with-cta ">
-                                    <div>
-                                        <input type="checkbox" name=""
-                                            onChange={(e) => this.setShowDeactivated(e, allFetchedData.result)}
-
-                                            checked={this.state.ShowDeactivated}
-                                            id="showFullDetails" />
-                                        <label htmlFor="showFullDetails">Show Deactivated</label>
-                                    </div>
-                                    <Button onClick={this.handleShowNewRecord} className="no-margins" variant="primary" type="submit">Create New</Button>
-                                </div>
-                                <div className="table-helper mb-10">
-                                    {/* <input type="checkbox" name=""
-                                        onChange={(e) => this.setShowDeactivated(e, allFetchedData.result)}
-
-                                        checked={this.state.ShowDeactivated}
-                                        id="showFullDetails" />
-                                    <label htmlFor="showFullDetails">Show Deactivated</label> */}
-                                </div>
+                                
+                                
                                 <div className="heading-with-cta">
                                     <Form className="one-liner" onSubmit={(e) => this.searchAllData(e, allFetchedData.result)}>
 
@@ -895,6 +876,17 @@ class RiskLevels extends React.Component {
                                             refreshFunc={this.loadNextPage}
                                         />
                                     </div>
+                                    <div className="heading-with-cta ">
+                                        <div>
+                                            {/* <input type="checkbox" name=""
+                                            onChange={(e) => this.setShowDeactivated(e, allFetchedData.result)}
+
+                                            checked={this.state.ShowDeactivated}
+                                            id="showFullDetails" />
+                                        <label htmlFor="showFullDetails">Show Deactivated</label> */}
+                                        </div>
+                                        <Button onClick={this.handleShowNewRecord} className="no-margins" variant="primary" type="submit">Create New</Button>
+                                    </div>
                                 </div>
                                 
 
@@ -902,9 +894,8 @@ class RiskLevels extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>From</th>
-                                            <th>To</th>
-                                            <th>Percentage Provision</th>
+                                            <th>Days</th>
+                                            <th>Provision(%) </th>
                                             {/* <th>Status</th> */}
                                             <th>Date Created</th>
                                             <th></th>
@@ -917,8 +908,7 @@ class RiskLevels extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             <td>{eachItem.name}</td>
-                                                            <td>{eachItem.fromDays}</td>
-                                                            <td>{eachItem.toDays}</td>
+                                                            <td>{eachItem.fromDays} to {eachItem.toDays} days</td>
                                                             <td>{eachItem.percentageProvision}</td>
                                                             {/* <td>{eachItem.objectStateDescription}</td> */}
                                                             <td>{getDateFromISO(eachItem.dateCreated)}</td>
@@ -1040,11 +1030,11 @@ class RiskLevels extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>From</th>
-                                            <th>To</th>
-                                            <th>Percentage Provision</th>
+                                            <th>Days</th>
+                                            <th>Provision(%) </th>
                                             {/* <th>Status</th> */}
                                             <th>Date Created</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>

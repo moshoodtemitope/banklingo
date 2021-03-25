@@ -51,110 +51,7 @@ class GeneralCurrency extends React.Component {
         }
     }
 
-    renderCurrencies =()=>{
-        return (
-            <div>
-                <Accordion defaultActiveKey="0">
-
-                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">Currencies In Use
-                                                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                        <div>
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        <th>Code</th>
-                                        <th>Name</th>
-                                        <th>Symbol</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>NGN</td>
-                                        <td>Nigerian naira</td>
-                                        <td>&#8358;</td>
-                                        <td>
-                                            <DropdownButton
-                                                size="sm"
-                                                title="Actions"
-                                                key="activeCurrency"
-                                                className="customone"
-                                            >
-                                                <Dropdown.Item eventKey="1" onClick={this.handleShow}>Edit</Dropdown.Item>
-                                            </DropdownButton>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>XOF</td>
-                                        <td>CFA Franc BCEAO</td>
-                                        <td>CFA</td>
-                                        <td>
-                                            <DropdownButton
-                                                size="sm"
-                                                title="Actions"
-                                                key="inActiveCurrency"
-                                                className="customone"
-                                            >
-                                                <Dropdown.Item eventKey="1" onClick={this.handleShow}>Edit</Dropdown.Item>
-                                                <Dropdown.Item eventKey="1">Delete</Dropdown.Item>
-                                            </DropdownButton>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </TableComponent>
-                            <div className="footer-with-cta toleft">
-                                <Button onClick={this.handleShow}>Add Currency</Button>
-                            </div>
-                        </div>
-                    </Accordion.Collapse>
-                </Accordion>
-
-                <Accordion>
-                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                        Exchange Rates - From Nigerian naira (NGN)
-                                                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                        <div>
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        <th>Code</th>
-                                        <th>Name</th>
-                                        <th>Buy Rate</th>
-                                        <th>Sell Rate</th>
-                                        <th>Date Set</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>XOF</td>
-                                        <td>CFA Franc BCEAO</td>
-                                        <td>Not Set</td>
-                                        <td>Not Set</td>
-                                        <td>Not Set</td>
-                                        <td>
-                                            <DropdownButton
-                                                size="sm"
-                                                title="Actions"
-                                                key="setRate"
-                                                className="customone"
-                                            >
-                                                <Dropdown.Item eventKey="3" onClick={this.handleRateShow}>Set Rate</Dropdown.Item>
-                                            </DropdownButton>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </TableComponent>
-
-                        </div>
-                    </Accordion.Collapse>
-                </Accordion>
-            </div>
-        )
-    }
+   
 
     displayAllCurrencies =()=>{
 
@@ -264,7 +161,7 @@ class GeneralCurrency extends React.Component {
                                 </Accordion.Collapse>
                             </Accordion>
 
-                            <Accordion defaultActiveKey="0">
+                            {/* <Accordion defaultActiveKey="0">
                                 <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                     Exchange Rates - From Nigerian naira (NGN)
                                                     </Accordion.Toggle>
@@ -314,7 +211,7 @@ class GeneralCurrency extends React.Component {
 
                                     </div>
                                 </Accordion.Collapse>
-                            </Accordion>
+                            </Accordion> */}
                         </div>
                     )
                 }
@@ -365,7 +262,7 @@ class GeneralCurrency extends React.Component {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachCurrency.code} {eachCurrency.code==="NGN" && <span className="base-currency">Base</span>}</td>
+                                                            <td>{eachCurrency.code} {eachCurrency.isBaseCurrency===true && <span className="base-currency">Base</span>}</td>
                                                             <td>{eachCurrency.name}</td>
                                                             <td>{eachCurrency.symbol}</td>
                                                             <td>
@@ -410,7 +307,7 @@ class GeneralCurrency extends React.Component {
                                         </thead>
                                         <tbody>
                                         {exchangeList.result.map((eachCurrency, index)=>{
-                                            if(eachCurrency.code!=="NGN"){
+                                            if(eachCurrency.isBaseCurrency!==true){
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
@@ -461,7 +358,7 @@ class GeneralCurrency extends React.Component {
                                         </thead>
                                         <tbody>
                                         {converstionTable.map((eachCurrency, index)=>{
-                                            if(eachCurrency.code!=="NGN"){
+                                            if(eachCurrency.isBaseCurrency!==true){
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
@@ -914,15 +811,17 @@ class GeneralCurrency extends React.Component {
 
         let allCurrenciesData = (this.props.adminGetAllCurrencies.request_data!==undefined && this.props.adminGetAllCurrencies.request_data.response!==undefined)
                                         ? this.props.adminGetAllCurrencies.request_data.response.data :null;
-                                        console.log("lololo",allCurrenciesData);
+                                        // console.log("lololo",allCurrenciesData);
         let baseCurrencyCode = allCurrenciesData.filter(eachCurrency=>eachCurrency.isBaseCurrency===true)[0]
+
+        console.log("lololo",allCurrenciesData);
 
         const {showRateEdit, selectCurrencyForRateSetting, selectCurrencyNameForRateSetting} = this.state;
         if(selectCurrencyForRateSetting!==undefined){
             return(
                 <Modal show={showRateEdit} onHide={this.handleRateClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
                     <Modal.Header>
-                        <Modal.Title>Set NGN To {selectCurrencyForRateSetting} Exchange Rate</Modal.Title>
+                        <Modal.Title>Set {baseCurrencyCode.code} To {selectCurrencyForRateSetting} Exchange Rate</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                     <Formik
@@ -936,8 +835,8 @@ class GeneralCurrency extends React.Component {
                             let currencyConvertionPayload = {
                                 baseCurrencyCode: baseCurrencyCode.code,
                                 currencyCode:selectCurrencyForRateSetting,
-                                buyRate: values.currencyBuyRate,
-                                sellRate: values.currencySellRate
+                                buyRate: parseFloat(values.currencyBuyRate.replace(/,/g, '')),
+                                sellRate: parseFloat(values.currencySellRate.replace(/,/g, ''))
                             };
                            
                             

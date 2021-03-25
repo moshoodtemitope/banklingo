@@ -508,7 +508,7 @@ class ClientsManagement extends React.Component {
                                                             <td>{eachClient.clientStateDescription}</td>
                                                             <td>{eachClient.accountOfficer}</td>
                                                             <td>{eachClient.clientBranch}</td>
-                                                            <td>{eachClient.clientTypeId}</td>
+                                                            <td>{eachClient. clientType}</td>
                                                             <td>{eachClient.lastUpdated}</td>
                                                             {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
                                                                 <td>

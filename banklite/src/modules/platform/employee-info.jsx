@@ -20,10 +20,10 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 
 // import GeneralNav from './menus/_general-menu'
 import Select from 'react-select';
-// import DatePicker from '../../_helpers/datepickerfield'
-import DatePicker from "react-datepicker";
+import DatePicker from '../../_helpers/datepickerfield'
+// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { getDateFromISO, numberWithCommas } from '../../shared/utils';
+import { accountNumber, getDateFromISO, numberWithCommas } from '../../shared/utils';
 
 import {platformActions} from '../../redux/actions/platform/platform.action';
 import {platformConstants} from '../../redux/actiontypes/platform/platform.constants'
@@ -179,11 +179,20 @@ class ManageEmployeeInfo extends React.Component {
         let fetchAllEmployeeInfoRequest = this.props.fetchAllEmployeeInfo,
             allPayGroups = fetchAllEmployeeInfoRequest.request_data.response2.data.result;
         
-        console.log("jaja jaja", allPayGroups);
+        
         let allPayGroupList =[];
         allPayGroups.map((eachData, index)=>{
             allPayGroupList.push({value:eachData.groupCode, label:eachData.groupName})
         })
+
+        let allBanksList = [],
+        allbanks = fetchAllEmployeeInfoRequest.request_data.response3.data;
+
+        if (allbanks.length >= 1) {
+            allbanks.map(eachBank => {
+                allBanksList.push({ label: eachBank.bankName, value: eachBank.bankCode })
+            })
+        }
 
         let checkValidationSchema = Yup.object().shape({
             payrollGroupCode: Yup.string()
@@ -232,7 +241,7 @@ class ManageEmployeeInfo extends React.Component {
                                 bankName: values.bankName,
                                 department: values.department,
                                 employeeNumber: values.employeeNumber,
-                                employmentDate: values.employmentDate,
+                                employmentDate: values.employmentDate.toISOString(),
                                 firstName: values.firstName,
                                 lastName: values.lastName,
                             };
@@ -328,7 +337,7 @@ class ManageEmployeeInfo extends React.Component {
                                             <Form.Label className="block-level">Account number</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={handleChange}
-                                                value={values.accountNumber}
+                                                value={accountNumber(values.accountNumber, 10)}
                                                 className={errors.accountNumber && touched.accountNumber ? "is-invalid h-38px" : "h-38px"}
                                                 name="accountNumber"
                                                 required />
@@ -340,12 +349,15 @@ class ManageEmployeeInfo extends React.Component {
                                         </Col>
                                         <Col>
                                             <Form.Label className="block-level">Bank name</Form.Label>
-                                            <Form.Control type="text"
-                                                onChange={handleChange}
-                                                value={values.bankName}
-                                                className={errors.bankName && touched.bankName ? "is-invalid h-38px" : "h-38px"}
+                                            <Select
+                                                options={allBanksList}
+                                                className={errors.bankName && touched.bankName ? "is-invalid" : null}
+                                                onChange={(selected) => setFieldValue('bankName', selected.value)}
+                                                onBlur={() => setFieldTouched('bankName', true)}
                                                 name="bankName"
-                                                required />
+                                                required
+                                            />
+                                            
 
                                             {errors.bankName && touched.bankName ? (
                                                 <span className="invalid-feedback">{errors.bankName}</span>
@@ -386,18 +398,31 @@ class ManageEmployeeInfo extends React.Component {
                                     </Form.Row>
                                     <Form.Row>
                                         <Col>
-                                            <Form.Label className="block-level">Employment date</Form.Label>
-                                            <Form.Control type="text"
-                                                onChange={handleChange}
-                                                value={numberWithCommas(values.employmentDate)}
-                                                className={errors.employmentDate && touched.employmentDate ? "is-invalid h-38px" : "h-38px"}
-                                                name="employmentDate"
-                                                required />
+                                            <Form.Group controlId="debitLocation" className={errors.employmentDate && touched.employmentDate ? "has-invaliderror fullwidthdate" : "fullwidthdate"}>
+                                                <Form.Label className="block-level">Employment Date</Form.Label>
+                                                <DatePicker
+                                                    placeholderText="Choose  date"
+                                                    autoComplete="new-password"
+                                                    autoComplete="new-password"
+                                                    // onChange={this.handleDatePicker}
+                                                    // onChangeRaw={(e) => this.handleDateChange(e)}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    className="form-control form-control-sm"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    name="employmentDate"
+                                                    value={values.employmentDate}
+                                                    onChange={setFieldValue}
+                                                    maxDate={new Date()}
+                                                    className={errors.employmentDate && touched.employmentDate ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
 
-                                            {errors.employmentDate && touched.employmentDate ? (
-                                                <span className="invalid-feedback">{errors.employmentDate}</span>
-                                            ) : null}
-
+                                                />
+                                                {errors.employmentDate && touched.employmentDate ? (
+                                                    <span className="invalid-feedback">{errors.employmentDate}</span>
+                                                ) : null}
+                                            </Form.Group>
                                         </Col>
                                     </Form.Row>
                                     <div className="footer-with-cta toleft">
@@ -801,7 +826,7 @@ class ManageEmployeeInfo extends React.Component {
     renderContentWrap = () => {
         let fetchAllEmployeeInfoRequest = this.props.fetchAllEmployeeInfo;
 
-       
+        
         let saveRequestData = fetchAllEmployeeInfoRequest.request_data !== undefined ? fetchAllEmployeeInfoRequest.request_data.tempData : null;
 
         switch (fetchAllEmployeeInfoRequest.request_status) {
@@ -875,9 +900,9 @@ class ManageEmployeeInfo extends React.Component {
                                         </Form.Control>
                                     </Form.Group>
                                     <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"
-                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                        <DatePicker autoComplete="new-off"
+                                            onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleStartDatePicker}
                                             selected={this.state.startDate}
                                             dateFormat="d MMMM, yyyy"
@@ -886,15 +911,15 @@ class ManageEmployeeInfo extends React.Component {
                                             showYearDropdown
                                             dropdownMode="select"
                                             placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                            autoComplete="new-password"
                                             maxDate={new Date()}
                                             // className="form-control form-control-sm h-38px"
                                             className="form-control form-control-sm "
 
                                         />
-                                         <DatePicker autoComplete="new-off" 
+                                        <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                            placeholderText="End  date"
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleEndDatePicker}
                                             selected={this.state.endDate}
@@ -989,7 +1014,7 @@ placeholderText="End  date"
                 }
 
             case (platformConstants.GET_ALL_PAYROLLINFO_SUCCESS):
-                
+
                 let allFetchedData = fetchAllEmployeeInfoRequest.request_data.response.data,
                     allData = fetchAllEmployeeInfoRequest.request_data;
 
@@ -1030,7 +1055,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
                                             <DatePicker autoComplete="new-off"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -1041,13 +1066,13 @@ placeholderText="End  date"
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off"
 
                                                 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -1106,7 +1131,7 @@ placeholderText="End  date"
                                         />
                                     </div>
                                 </div>
-                                
+
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -1163,7 +1188,7 @@ placeholderText="End  date"
                                 <div className="heading-with-cta">
                                     <Form className="one-liner" onSubmit={(e) => this.searchAllData(e, allFetchedData.result)}>
 
-                                       
+
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                             <Form.Control as="select" size="sm">
                                                 <option>No Filter</option>
@@ -1173,7 +1198,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
                                             <DatePicker autoComplete="new-off"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -1184,13 +1209,13 @@ placeholderText="End  date"
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off"
 
                                                 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -1273,10 +1298,10 @@ placeholderText="End  date"
                                         </tr>
                                     </tbody>
                                 </TableComponent>
-                                
+
                                 {allData.response2 &&
                                     <div className="footer-with-cta toleft">
-                                            <Button onClick={this.handleShowNewRecord} className="no-margins" variant="primary" type="submit">Create New</Button>
+                                        <Button onClick={this.handleShowNewRecord} className="no-margins" variant="primary" type="submit">Create New</Button>
                                     </div>
                                 }
                             </div>
@@ -1303,7 +1328,7 @@ placeholderText="End  date"
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
-                    {showCreateNewRecord && this.createNewRecordPopUp()}
+                    {/* {showCreateNewRecord && this.createNewRecordPopUp()} */}
                     {(recordToUpdate && showEditRecord) && this.updateRecordPopUp()}
                     <div className="content-wrapper">
                         <div className="module-heading">
