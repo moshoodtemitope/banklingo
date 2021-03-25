@@ -913,13 +913,7 @@ placeholderText="End  date"
                                                 <option>Custom Filter</option>
                                             </Form.Control>
                                         </Form.Group>
-                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <Form.Control as="select" size="sm">
-                                                <option>No Filter</option>
-                                                <option>Add New Filter</option>
-                                                <option>Custom Filter</option>
-                                            </Form.Control>
-                                        </Form.Group>
+                                        
 
                                         <Form.Group className="table-filters">
                                                 
@@ -1021,7 +1015,7 @@ placeholderText="End  date"
                                                         <tr>
                                                             <td>{eachItem.name}</td>
                                                             <td>{eachItem.key}</td>
-                                                            <td>{eachItem.communicationType}</td>
+                                                            <td>{eachItem.communicationTypeDescription}</td>
                                                             <td>{eachItem.notificationTemplatesSource}</td>
                                                             <td>{eachItem.messageTemplate}</td>
                                                             <td>{eachItem.objectStateDescription}</td>

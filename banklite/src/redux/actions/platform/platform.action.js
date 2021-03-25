@@ -539,7 +539,7 @@ function fetchAllEmployeeInfo  (params,tempData){
                 dispatch(request(consume2, tempData));
                 return consume2
                     .then(response2 => {
-                        dispatch(success(response, response2));
+                        // dispatch(success(response, response2));
                         let consume3 = ApiService.request(`${routes.HIT_DISBURSEMENT}/banks`, "GET", null);
                             dispatch(request(consume3, tempData));
                             return consume3

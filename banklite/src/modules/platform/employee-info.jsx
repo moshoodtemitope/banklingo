@@ -20,15 +20,15 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 
 // import GeneralNav from './menus/_general-menu'
 import Select from 'react-select';
-import DatePicker from '../../_helpers/datepickerfield'
-// import DatePicker from "react-datepicker";
+import DatePickerEx from '../../_helpers/datepickerfield'
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { accountNumber, getDateFromISO, numberWithCommas } from '../../shared/utils';
 
 import {platformActions} from '../../redux/actions/platform/platform.action';
 import {platformConstants} from '../../redux/actiontypes/platform/platform.constants'
 
-import {administrationActions} from '../../redux/actions/administration/administration.action';
+
 
 import Alert from 'react-bootstrap/Alert'
 
@@ -156,11 +156,11 @@ class ManageEmployeeInfo extends React.Component {
     };
 
     handleEditRecordClose = () => {
-        if (this.props.updateAChannelServices.is_request_processing === false) {
+        if (this.props.updateEmployeeInfo.is_request_processing === false) {
             this.setState({ showEditRecord: false });
         }
 
-        if (this.props.updateAChannelServices.request_status === platformConstants.UPDATE_A_CHANNEL_SERVICE_SUCCESS) {
+        if (this.props.updateEmployeeInfo.request_status === platformConstants.UPDATE_A_PAYROLLINFO_SUCCESS) {
             
             this.loadInitialData();
         }
@@ -211,6 +211,8 @@ class ManageEmployeeInfo extends React.Component {
                 .required('Required'),
             lastName: Yup.string()
                 .required('Required'),
+            // middleName: Yup.string(),
+                
         });
 
         
@@ -230,20 +232,26 @@ class ManageEmployeeInfo extends React.Component {
                             employmentDate: '',
                             firstName: '',
                             lastName: '',
+                            middleName: '',
                         }}
-                        validationSchema={checkValidationSchema}
+                        // validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
 
                             let requestPayload = {
                                 payrollGroupCode: values.payrollGroupCode,
-                                accountNumber: values.accountNumber,
-                                bankName: values.bankName,
-                                department: values.department,
-                                employeeNumber: values.employeeNumber,
-                                employmentDate: values.employmentDate.toISOString(),
-                                firstName: values.firstName,
-                                lastName: values.lastName,
+                                employeeInformation:{
+                                    accountNumber: values.accountNumber,
+                                    bankCode: values.bankName,
+                                    bankName: this.state.selectedBank.label,
+                                    department: values.department,
+                                    employeeNumber: values.employeeNumber,
+                                    employmentDate: values.employmentDate.toISOString(),
+                                    firstName: values.firstName,
+                                    lastName: values.lastName,
+                                    middleName: values.middleName,
+                                }
+                                
                             };
 
 
@@ -254,7 +262,7 @@ class ManageEmployeeInfo extends React.Component {
                                     () => {
                                         if (this.props.createEmployeeInfo.request_status === platformConstants.ADD_A_PAYROLLINFO_SUCCESS) {
                                             resetForm();
-                                            // this.loadInitialData();
+                                            this.loadInitialData();
                                         }
 
                                     }
@@ -334,6 +342,25 @@ class ManageEmployeeInfo extends React.Component {
                                     </Form.Row>
                                     <Form.Row>
                                         <Col>
+                                            <Form.Label className="block-level">Midle name</Form.Label>
+                                            <Form.Control type="text"
+                                                onChange={handleChange}
+                                                value={values.middleName}
+                                                className={errors.middleName && touched.middleName ? "is-invalid h-38px" : "h-38px"}
+                                                name="middleName"
+                                                required />
+
+                                            {errors.middleName && touched.middleName ? (
+                                                <span className="invalid-feedback">{errors.middleName}</span>
+                                            ) : null}
+
+                                        </Col>
+                                        <Col>
+
+                                        </Col>
+                                    </Form.Row>
+                                    <Form.Row>
+                                        <Col>
                                             <Form.Label className="block-level">Account number</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={handleChange}
@@ -352,7 +379,10 @@ class ManageEmployeeInfo extends React.Component {
                                             <Select
                                                 options={allBanksList}
                                                 className={errors.bankName && touched.bankName ? "is-invalid" : null}
-                                                onChange={(selected) => setFieldValue('bankName', selected.value)}
+                                                onChange={(selectedBank) => {
+                                                    setFieldValue('bankName', selectedBank.value); 
+                                                    this.setState({selectedBank})
+                                                }}
                                                 onBlur={() => setFieldTouched('bankName', true)}
                                                 name="bankName"
                                                 required
@@ -400,7 +430,7 @@ class ManageEmployeeInfo extends React.Component {
                                         <Col>
                                             <Form.Group controlId="debitLocation" className={errors.employmentDate && touched.employmentDate ? "has-invaliderror fullwidthdate" : "fullwidthdate"}>
                                                 <Form.Label className="block-level">Employment Date</Form.Label>
-                                                <DatePicker
+                                                <DatePickerEx
                                                     placeholderText="Choose  date"
                                                     autoComplete="new-password"
                                                     autoComplete="new-password"
@@ -476,9 +506,9 @@ class ManageEmployeeInfo extends React.Component {
         let { showEditRecord,
             recordToUpdate,
         } = this.state;
-        let updateAChannelServicesRequest = this.props.updateAChannelServices;
+        let updateEmployeeInfoRequest = this.props.updateEmployeeInfo;
         let fetchAllEmployeeInfoRequest = this.props.fetchAllEmployeeInfo,
-            allPayGroups = fetchAllEmployeeInfoRequest.request_data.response2.data;
+            allPayGroups = fetchAllEmployeeInfoRequest.request_data.response2.data.result;
         
         // let getAllCurrencies =  this.props.adminGetAllCurrencies;
         let allPayGroupList =[],
@@ -489,8 +519,16 @@ class ManageEmployeeInfo extends React.Component {
 
         filteredData = allPayGroupList.filter(eachData=>eachData.value=== recordToUpdate.serviceCommisionGLAcccountId)[0];
         // let getAllCurrencies =  this.props.adminGetAllCurrencies;
+        let allBanksList = [],
+        allbanks = fetchAllEmployeeInfoRequest.request_data.response3.data;
 
+        if (allbanks.length >= 1) {
+            allbanks.map(eachBank => {
+                allBanksList.push({ label: eachBank.bankName, value: eachBank.bankCode })
+            })
+        }
 
+        // console.log("lalaa", recordToUpdate);
         let checkValidationSchema = Yup.object().shape({
             name: Yup.string()
                 .required('Required'),
@@ -510,65 +548,48 @@ class ManageEmployeeInfo extends React.Component {
         return (
             <Modal show={showEditRecord} onHide={this.handleEditRecordClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
                 <Modal.Header>
-                    {this.state.updateType === "edit" && <Modal.Title>Edit</Modal.Title>}
-                    {this.state.updateType === "activate" && <Modal.Title>Confirm Activation</Modal.Title>}
-                    {this.state.updateType === "deactivate" && <Modal.Title>Confirm De-Activation</Modal.Title>}
+                    {this.state.updateType === "edit" && <Modal.Title>Editing {recordToUpdate.firstName} {recordToUpdate.lastName} </Modal.Title>}
+                    {/* {this.state.updateType === "activate" && <Modal.Title>Confirm Activation</Modal.Title>}
+                    {this.state.updateType === "deactivate" && <Modal.Title>Confirm De-Activation</Modal.Title>} */}
 
                 </Modal.Header>
                 <Modal.Body>
                     <Formik
                         initialValues={{
-                            name: recordToUpdate.serviceName,
-                            serviceCode: recordToUpdate.serviceCode,
-                            serviceDescription: recordToUpdate.serviceDescription,
-                            maxServiceCommissionValue: recordToUpdate.maxServiceCommissionValue,
-                            serviceCommisionCalculation: recordToUpdate.serviceCommisionCalculation,
-                            serviceCommission: recordToUpdate.serviceCommission,
-                            serviceCommisionGLAcccountId: recordToUpdate.serviceCommisionGLAcccountId,
+                            payrollGroupCode: '',
+                            accountNumber: recordToUpdate.accountNumber,
+                            bankName: recordToUpdate.bankCode,
+                            department: recordToUpdate.department,
+                            employeeNumber: recordToUpdate.employeeNumber,
+                            employmentDate: '',
+                            firstName: recordToUpdate.firstName,
+                            lastName: recordToUpdate.lastName,
+                            middleName: recordToUpdate.middleName,
                         }}
-                        validationSchema={checkValidationSchema}
+                        // validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
 
                             let requestPayload;
                             if (this.state.updateType === "edit") {
-                                requestPayload = {
-                                    name: values.name,
-                                    serviceCode: values.serviceCode,
-                                    serviceDescription: values.serviceDescription,
-                                    maxServiceCommissionValue: values.maxServiceCommissionValue,
-                                    serviceCommisionCalculation: values.serviceCommisionCalculation,
-                                    serviceCommission: values.serviceCommission,
-                                    serviceCommisionGLAcccountId: values.serviceCommisionGLAcccountId,
-                                    objectState: recordToUpdate.objectState
+                                let requestPayload = {
+                                    payrollGroupCode: values.payrollGroupCode,
+                                    employeeInformation:{
+                                        accountNumber: values.accountNumber,
+                                        bankCode: values.bankName||recordToUpdate.bankCode,
+                                        bankName: this.state.selectedBank ? this.state.selectedBank.label : recordToUpdate.bankName,
+                                        department: values.department,
+                                        employeeNumber: values.employeeNumber,
+                                        employmentDate: values.employmentDate.toISOString(),
+                                        firstName: values.firstName,
+                                        lastName: values.lastName,
+                                        middleName: values.middleName,
+                                    }
+                                    
                                 };
                             }
 
-                            if (this.state.updateType === "activate") {
-                                requestPayload = {
-                                    name: recordToUpdate.serviceName,
-                                    serviceCode: recordToUpdate.serviceCode,
-                                    serviceDescription: recordToUpdate.serviceDescription,
-                                    maxServiceCommissionValue: recordToUpdate.maxServiceCommissionValue,
-                                    serviceCommisionCalculation: recordToUpdate.serviceCommisionCalculation,
-                                    serviceCommission: recordToUpdate.serviceCommission,
-                                    serviceCommisionGLAcccountId: recordToUpdate.serviceCommisionGLAcccountId,
-                                    objectState: 0
-                                };
-                            }
-
-                            if (this.state.updateType === "deactivate") {
-                                requestPayload = {
-                                    name: recordToUpdate.serviceName,
-                                    serviceCode: recordToUpdate.serviceCode,
-                                    serviceDescription: recordToUpdate.serviceDescription,
-                                    maxServiceCommissionValue: recordToUpdate.maxServiceCommissionValue,
-                                    serviceCommisionCalculation: recordToUpdate.serviceCommisionCalculation,
-                                    serviceCommission: recordToUpdate.serviceCommission,
-                                    serviceCommisionGLAcccountId: recordToUpdate.serviceCommisionGLAcccountId,
-                                    objectState: 1
-                                };
-                            }
+                           
 
 
 
@@ -578,7 +599,7 @@ class ManageEmployeeInfo extends React.Component {
                             this.updateARecord(requestPayload, recordToUpdate.encodedKey)
                                 .then(
                                     () => {
-                                        if (this.props.updateAChannelServices.request_status === platformConstants.UPDATE_A_CHANNEL_SERVICE_SUCCESS) {
+                                        if (this.props.updateEmployeeInfo.request_status === platformConstants.UPDATE_A_PAYROLLINFO_SUCCESS) {
 
                                             // this.loadInitialData();
                                         }
@@ -605,217 +626,205 @@ class ManageEmployeeInfo extends React.Component {
                             return (
                                 <Form noValidate
                                     onSubmit={handleSubmit}>
-                                    
-                                    <Form.Row>
-
-                                        <Col>
-                                            <Form.Label className="block-level">Service name</Form.Label>
-                                            <Form.Control type="text"
-                                                onChange={(e) => {
-                                                    if (this.state.updateType !== "edit") {
-                                                        setFieldValue("name", recordToUpdate.serviceName)
-                                                    } else {
-                                                        setFieldValue("name", e.target.value)
-                                                    }
-
-                                                }}
-                                                disabled={this.state.updateType !== "edit"}
-                                                value={values.name}
-                                                className={errors.name && touched.name ? "is-invalid h-38px" : "h-38px"}
-                                                name="name"
-                                                required />
-
-                                            {errors.name && touched.name ? (
-                                                <span className="invalid-feedback">{errors.name}</span>
-                                            ) : null}
-
-                                        </Col>
-                                        <Col>
-                                            <Form.Label className="block-level">Service Code</Form.Label>
-                                            <Form.Control type="text"
-                                                onChange={(e) => {
-                                                    if (this.state.updateType !== "edit") {
-                                                        setFieldValue("serviceCode", recordToUpdate.serviceCode)
-                                                    } else {
-                                                        setFieldValue("serviceCode", e.target.value)
-                                                    }
-
-                                                }}
-                                                disabled={this.state.updateType !== "edit"}
-                                                value={values.serviceCode}
-                                                className={errors.serviceCode && touched.serviceCode ? "is-invalid h-38px" : "h-38px"}
-                                                name="serviceCode"
-                                                required />
-
-                                            {errors.serviceCode && touched.serviceCode ? (
-                                                <span className="invalid-feedback">{errors.serviceCode}</span>
-                                            ) : null}
-
-                                        </Col>
-
-                                    </Form.Row>
-                                    <Form.Row>
-
-                                        <Col>
-                                            <Form.Label className="block-level">Max Service Commission</Form.Label>
-                                            <Form.Control type="text"
-                                                onChange={(e) => {
-                                                    if (this.state.updateType !== "edit") {
-                                                        setFieldValue("maxServiceCommissionValue", recordToUpdate.maxServiceCommissionValue)
-                                                    } else {
-                                                        setFieldValue("maxServiceCommissionValue", e.target.value)
-                                                    }
-
-                                                }}
-                                                disabled={this.state.updateType !== "edit"}
-                                                value={numberWithCommas(values.maxServiceCommissionValue)}
-                                                className={errors.maxServiceCommissionValue && touched.maxServiceCommissionValue ? "is-invalid h-38px" : "h-38px"}
-                                                name="maxServiceCommissionValue"
-                                                required />
-
-                                            {errors.maxServiceCommissionValue && touched.maxServiceCommissionValue ? (
-                                                <span className="invalid-feedback">{errors.maxServiceCommissionValue}</span>
-                                            ) : null}
-
-                                        </Col>
-                                        <Col>
-                                            <Form.Label className="block-level">Service Commision Calculation</Form.Label>
-                                            <select id="toshow"
-                                                name="serviceCommisionCalculation"
-                                                onChange={(e) => {
-                                                    if (this.state.updateType !== "edit") {
-                                                        setFieldValue("serviceCommisionCalculation", recordToUpdate.serviceCommisionCalculation)
-                                                    } else {
-                                                        setFieldValue("serviceCommisionCalculation", e.target.value)
-                                                    }
-
-                                                }}
-                                                disabled={this.state.updateType !== "edit"}
-                                                value={values.serviceCommisionCalculation}
-                                                className={errors.serviceCommisionCalculation && touched.serviceCommisionCalculation ? "form-control form-control-sm is-invalid h-38px" : "form-control form-control-sm h-38px"}
-                                            >
-                                                <option value="">Select</option>
-                                                <option value="1">Fixed Value</option>
-                                                <option value="2">Percentage</option>
-                                            </select>
-                                            
-
-                                            {errors.serviceCommisionCalculation && touched.serviceCommisionCalculation ? (
-                                                <span className="invalid-feedback">{errors.serviceCommisionCalculation}</span>
-                                            ) : null}
-
-                                        </Col>
-
-                                    </Form.Row>
 
                                     <Form.Row>
-
                                         <Col>
-                                            <Form.Label className="block-level">Service Commission</Form.Label>
-                                            <Form.Control type="text"
-                                                onChange={(e) => {
-                                                    if (this.state.updateType !== "edit") {
-                                                        setFieldValue("serviceCommission", recordToUpdate.serviceCommission)
-                                                    } else {
-                                                        setFieldValue("serviceCommission", e.target.value)
-                                                    }
-
-                                                }}
-                                                disabled={this.state.updateType !== "edit"}
-                                                value={numberWithCommas(values.serviceCommission)}
-                                                className={errors.serviceCommission && touched.serviceCommission ? "is-invalid h-38px" : "h-38px"}
-                                                name="serviceCommission"
-                                                required />
-
-                                            {errors.serviceCommission && touched.serviceCommission ? (
-                                                <span className="invalid-feedback">{errors.serviceCommission}</span>
-                                            ) : null}
-
-                                        </Col>
-                                        <Col>
-                                            <Form.Label className="block-level">Service Commision GL Account</Form.Label>
+                                            <Form.Label className="block-level">Paygroup Code</Form.Label>
                                             <Select
                                                 options={allPayGroupList}
-                                                defaultValue ={{label:filteredData!==null?filteredData.label:null, 
-                                                    value:filteredData!==null? filteredData.value:null}}
                                                 onChange={(selectedAccount) => {
-                                                    if (this.state.updateType !== "edit") {
-                                                        setFieldValue("serviceCommisionGLAcccountId", recordToUpdate.serviceCommisionGLAcccountId)
-                                                    } else {
-                                                        this.setState({ selectedAccount });
-                                                        errors.serviceCommisionGLAcccountId = null
-                                                        values.serviceCommisionGLAcccountId = selectedAccount.value
-                                                    }
-                                                    
+                                                    this.setState({ selectedAccount });
+                                                    errors.payrollGroupCode = null
+                                                    values.payrollGroupCode = selectedAccount.value
                                                 }}
-                                                isDisabled={this.state.updateType !== "edit"}
-                                                className={errors.serviceCommisionGLAcccountId && touched.serviceCommisionGLAcccountId ? "is-invalid" : null}
-                                                // value="serviceCommisionGLAcccountId"
-                                                name="serviceCommisionGLAcccountId"
-                                                // value={values.serviceCommisionGLAcccountId || ''}
+                                                className={errors.payrollGroupCode && touched.payrollGroupCode ? "is-invalid" : null}
+                                                // value="payrollGroupCode"
+                                                name="payrollGroupCode"
+                                                // value={values.payrollGroupCode || ''}
+                                                required
+                                            />
+
+                                            {errors.payrollGroupCode && touched.payrollGroupCode ? (
+                                                <span className="invalid-feedback">{errors.payrollGroupCode}</span>
+                                            ) : null}
+
+                                        </Col>
+                                    </Form.Row>
+                                    <Form.Row>
+                                        <Col>
+                                            <Form.Label className="block-level">First name</Form.Label>
+                                            <Form.Control type="text"
+                                                onChange={handleChange}
+                                                value={values.firstName}
+                                                className={errors.firstName && touched.firstName ? "is-invalid h-38px" : "h-38px"}
+                                                name="firstName"
+                                                required />
+
+                                            {errors.firstName && touched.firstName ? (
+                                                <span className="invalid-feedback">{errors.firstName}</span>
+                                            ) : null}
+
+                                        </Col>
+                                        <Col>
+                                            <Form.Label className="block-level">Last name</Form.Label>
+                                            <Form.Control type="text"
+                                                onChange={handleChange}
+                                                value={values.lastName}
+                                                className={errors.lastName && touched.lastName ? "is-invalid h-38px" : "h-38px"}
+                                                name="lastName"
+                                                required />
+
+                                            {errors.lastName && touched.lastName ? (
+                                                <span className="invalid-feedback">{errors.lastName}</span>
+                                            ) : null}
+
+                                        </Col>
+                                    </Form.Row>
+                                    <Form.Row>
+                                        <Col>
+                                            <Form.Label className="block-level">Midle name</Form.Label>
+                                            <Form.Control type="text"
+                                                onChange={handleChange}
+                                                value={values.middleName}
+                                                className={errors.middleName && touched.middleName ? "is-invalid h-38px" : "h-38px"}
+                                                name="middleName"
+                                                required />
+
+                                            {errors.middleName && touched.middleName ? (
+                                                <span className="invalid-feedback">{errors.middleName}</span>
+                                            ) : null}
+
+                                        </Col>
+                                        <Col>
+
+                                        </Col>
+                                    </Form.Row>
+                                    <Form.Row>
+                                        <Col>
+                                            <Form.Label className="block-level">Account number</Form.Label>
+                                            <Form.Control type="text"
+                                                onChange={handleChange}
+                                                value={accountNumber(values.accountNumber, 10)}
+                                                className={errors.accountNumber && touched.accountNumber ? "is-invalid h-38px" : "h-38px"}
+                                                name="accountNumber"
+                                                required />
+
+                                            {errors.accountNumber && touched.accountNumber ? (
+                                                <span className="invalid-feedback">{errors.accountNumber}</span>
+                                            ) : null}
+
+                                        </Col>
+                                        <Col>
+                                            <Form.Label className="block-level">Bank name</Form.Label>
+                                            <Select
+                                                options={allBanksList}
+                                                className={errors.bankName && touched.bankName ? "is-invalid" : null}
+                                                defaultValue ={{label:recordToUpdate!==null?recordToUpdate.bankName:null, 
+                                                    value:recordToUpdate!==null? recordToUpdate.bankCode:null}}
+                                                onChange={(selectedBank) => {
+                                                    setFieldValue('bankName', selectedBank.value);
+                                                    this.setState({ selectedBank })
+                                                }}
+                                                onBlur={() => setFieldTouched('bankName', true)}
+                                                name="bankName"
                                                 required
                                             />
 
 
-                                            {errors.serviceCommisionGLAcccountId && touched.serviceCommisionGLAcccountId ? (
-                                                <span className="invalid-feedback">{errors.serviceCommisionGLAcccountId}</span>
+                                            {errors.bankName && touched.bankName ? (
+                                                <span className="invalid-feedback">{errors.bankName}</span>
                                             ) : null}
 
                                         </Col>
 
                                     </Form.Row>
-                                    
-                                    
-                                    <Form.Group>
-                                        <Form.Label className="block-level">Service Description</Form.Label>
-                                        <Form.Control
-                                            as="textarea" rows="3"
-                                            onChange={(e) => {
-                                                if (this.state.updateType !== "edit") {
-                                                    setFieldValue("serviceDescription", recordToUpdate.serviceDescription)
-                                                } else {
-                                                    setFieldValue("serviceDescription", e.target.value)
-                                                }
+                                    <Form.Row>
+                                        <Col>
+                                            <Form.Label className="block-level">Department</Form.Label>
+                                            <Form.Control type="text"
+                                                onChange={handleChange}
+                                                value={values.department}
+                                                className={errors.department && touched.department ? "is-invalid h-38px" : "h-38px"}
+                                                name="department"
+                                                required />
 
-                                            }}
-                                            disabled={this.state.updateType !== "edit"}
-                                            value={values.serviceDescription}
-                                            className={errors.serviceDescription && touched.serviceDescription ? "is-invalid" : null}
-                                            name="serviceDescription"
-                                        />
+                                            {errors.department && touched.department ? (
+                                                <span className="invalid-feedback">{errors.department}</span>
+                                            ) : null}
 
-                                        {errors.serviceDescription && touched.serviceDescription ? (
-                                            <span className="invalid-feedback">{errors.serviceDescription}</span>
-                                        ) : null}
-                                    </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Label className="block-level">Employee number</Form.Label>
+                                            <Form.Control type="text"
+                                                onChange={handleChange}
+                                                value={values.employeeNumber}
+                                                className={errors.employeeNumber && touched.employeeNumber ? "is-invalid h-38px" : "h-38px"}
+                                                name="employeeNumber"
+                                                required />
+
+                                            {errors.employeeNumber && touched.employeeNumber ? (
+                                                <span className="invalid-feedback">{errors.employeeNumber}</span>
+                                            ) : null}
+
+                                        </Col>
+                                    </Form.Row>
+                                    <Form.Row>
+                                        <Col>
+                                            <Form.Group controlId="debitLocation" className={errors.employmentDate && touched.employmentDate ? "has-invaliderror fullwidthdate" : "fullwidthdate"}>
+                                                <Form.Label className="block-level">Employment Date</Form.Label>
+                                                <DatePickerEx
+                                                    placeholderText="Choose  date"
+                                                    autoComplete="new-password"
+                                                    autoComplete="new-password"
+                                                    // onChange={this.handleDatePicker}
+                                                    // onChangeRaw={(e) => this.handleDateChange(e)}
+                                                    dateFormat="d MMMM, yyyy"
+                                                    className="form-control form-control-sm"
+                                                    peekNextMonth
+                                                    showMonthDropdown
+                                                    showYearDropdown
+                                                    dropdownMode="select"
+                                                    name="employmentDate"
+                                                    value={values.employmentDate}
+                                                    onChange={setFieldValue}
+                                                    maxDate={new Date()}
+                                                    className={errors.employmentDate && touched.employmentDate ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+
+                                                />
+                                                {errors.employmentDate && touched.employmentDate ? (
+                                                    <span className="invalid-feedback">{errors.employmentDate}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                        </Col>
+                                    </Form.Row>
 
 
 
                                     <div className="footer-with-cta toleft">
                                         <Button
-                                            disabled={updateAChannelServicesRequest.is_request_processing}
+                                            disabled={updateEmployeeInfoRequest.is_request_processing}
                                             variant="secondary" className="grayed-out" onClick={this.handleEditRecordClose}>Cancel</Button>
                                         <Button
                                             type="submit"
-                                            disabled={updateAChannelServicesRequest.is_request_processing}>
-                                            {updateAChannelServicesRequest.is_request_processing && "Please wait..."}
-                                            {(!updateAChannelServicesRequest.is_request_processing && this.state.updateType === "edit") && "Update"}
-                                            {(!updateAChannelServicesRequest.is_request_processing && this.state.updateType === "activate") && "Activate"}
-                                            {(!updateAChannelServicesRequest.is_request_processing && this.state.updateType === "deactivate") && "De-Activate"}
+                                            disabled={updateEmployeeInfoRequest.is_request_processing}>
+                                            {updateEmployeeInfoRequest.is_request_processing && "Please wait..."}
+                                            {(!updateEmployeeInfoRequest.is_request_processing && this.state.updateType === "edit") && "Update"}
+                                            {(!updateEmployeeInfoRequest.is_request_processing && this.state.updateType === "activate") && "Activate"}
+                                            {(!updateEmployeeInfoRequest.is_request_processing && this.state.updateType === "deactivate") && "De-Activate"}
                                         </Button>
                                     </div>
                                 </Form>
                             )
                         }}
                     </Formik>
-                    {updateAChannelServicesRequest.request_status === platformConstants.UPDATE_A_CHANNEL_SERVICE_SUCCESS &&
+                    {updateEmployeeInfoRequest.request_status === platformConstants.UPDATE_A_PAYROLLINFO_SUCCESS &&
                         <Alert variant="success">
-                            {updateAChannelServicesRequest.request_data.response.data.message}
+                            {updateEmployeeInfoRequest.request_data.response.data.message}
                         </Alert>
                     }
-                    {updateAChannelServicesRequest.request_status === platformConstants.UPDATE_A_CHANNEL_SERVICE_FAILURE &&
+                    {updateEmployeeInfoRequest.request_status === platformConstants.UPDATE_A_PAYROLLINFO_FAILURE &&
                         <Alert variant="danger">
-                            {updateAChannelServicesRequest.request_data.error}
+                            {updateEmployeeInfoRequest.request_data.error}
                         </Alert>
                     }
                 </Modal.Body>
@@ -1166,8 +1175,8 @@ class ManageEmployeeInfo extends React.Component {
                                                                     key="activeCurrency"
                                                                     className="customone"
                                                                 >
-                                                                    {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1" onClick={() => this.handleEditRecordShow(eachItem, "edit")}>Edit</Dropdown.Item>
+                                                                    {/* <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                                                     {/* {eachItem.objectState === 0 && <Dropdown.Item eventKey="1">Activate</Dropdown.Item>}
                                                                 {eachItem.objectState === 1 && <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>} */}
                                                                 </DropdownButton>
@@ -1328,7 +1337,7 @@ class ManageEmployeeInfo extends React.Component {
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
-                    {/* {showCreateNewRecord && this.createNewRecordPopUp()} */}
+                    {showCreateNewRecord && this.createNewRecordPopUp()}
                     {(recordToUpdate && showEditRecord) && this.updateRecordPopUp()}
                     <div className="content-wrapper">
                         <div className="module-heading">

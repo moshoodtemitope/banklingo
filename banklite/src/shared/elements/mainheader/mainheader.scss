@@ -124,6 +124,9 @@ a.dropdown-item, a.dropdown-item:hover{
 .heading-nav.navbar-collapse{
     justify-content: space-between;
 }
+.mainheading .navbar-light .navbar-brand{
+    font-size: 14px !important;
+}
 .searchfieldwrap{
     input{
         width: 100%!important;

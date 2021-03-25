@@ -793,13 +793,6 @@ class RiskLevels extends React.Component {
                                                 <option>Custom Filter</option>
                                             </Form.Control>
                                         </Form.Group>
-                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <Form.Control as="select" size="sm">
-                                                <option>No Filter</option>
-                                                <option>Add New Filter</option>
-                                                <option>Custom Filter</option>
-                                            </Form.Control>
-                                        </Form.Group>
 
                                         <Form.Group className="table-filters">
                                             <DatePicker autoComplete="new-off" 
@@ -876,17 +869,18 @@ class RiskLevels extends React.Component {
                                             refreshFunc={this.loadNextPage}
                                         />
                                     </div>
-                                    <div className="heading-with-cta ">
-                                        <div>
-                                            {/* <input type="checkbox" name=""
-                                            onChange={(e) => this.setShowDeactivated(e, allFetchedData.result)}
+                                    
+                                </div>
+                                <div className="heading-with-cta ">
+                                    <div>
+                                        {/* <input type="checkbox" name=""
+                                        onChange={(e) => this.setShowDeactivated(e, allFetchedData.result)}
 
-                                            checked={this.state.ShowDeactivated}
-                                            id="showFullDetails" />
-                                        <label htmlFor="showFullDetails">Show Deactivated</label> */}
-                                        </div>
-                                        <Button onClick={this.handleShowNewRecord} className="no-margins" variant="primary" type="submit">Create New</Button>
+                                        checked={this.state.ShowDeactivated}
+                                        id="showFullDetails" />
+                                    <label htmlFor="showFullDetails">Show Deactivated</label> */}
                                     </div>
+                                    <Button onClick={this.handleShowNewRecord} className="no-margins" variant="primary" type="submit">Create New</Button>
                                 </div>
                                 
 
