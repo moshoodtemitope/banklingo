@@ -1,0 +1,22 @@
+@import "../../../assets/scss/shared/colors";
+@import "../../../assets/scss/shared/formhelpers";
+@import "../../../assets/scss/shared/globalstyles";
+
+
+.transaction-infowrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    .eachtype-info {
+        flex-basis: 50%;
+        margin-bottom: 20px;
+    }
+    .info-title {
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .info-value {
+        font-size: 13px;
+    }
+}

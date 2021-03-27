@@ -200,7 +200,8 @@ import{
     getActivitiesReducer,
     getLoggedInUserActivitiesReducer,
     globalSearchAnItemReducer,
-    searchForCustomerReducer
+    searchForCustomerReducer,
+    reverseATransactionReducer
     
 } from './dashboard/dashboard.reducer'
 
@@ -371,7 +372,8 @@ export const dashboard = {
     getActivitiesReducer,
     getLoggedInUserActivitiesReducer,
     globalSearchAnItemReducer,
-    searchForCustomerReducer
+    searchForCustomerReducer,
+    reverseATransactionReducer
 }
 
 export const platform = {

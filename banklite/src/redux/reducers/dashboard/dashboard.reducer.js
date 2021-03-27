@@ -144,4 +144,36 @@ export function searchForCustomerReducer(state=[], action) {
     }
 }
 
+export function reverseATransactionReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.REVERSE_TRANSACTION_PENDING:
+            return {
+                request_status: dashboardConstants.REVERSE_TRANSACTION_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.REVERSE_TRANSACTION_SUCCESS:
+            return {
+                request_status: dashboardConstants.REVERSE_TRANSACTION_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.REVERSE_TRANSACTION_FAILURE:
+            return {
+                request_status: dashboardConstants.REVERSE_TRANSACTION_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.REVERSE_TRANSACTION_RESET:
+            return {
+                request_status: dashboardConstants.REVERSE_TRANSACTION_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 

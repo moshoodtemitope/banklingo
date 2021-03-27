@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 import Modal from 'react-bootstrap/Modal'
 
 import AsyncSelect from 'react-select/async';
+import Select from 'react-select';
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Dropdown from 'react-bootstrap/Dropdown'
@@ -57,9 +58,11 @@ class ManageBankInfo extends React.Component {
 
     loadInitialData = () => {
         let { PageSize, CurrentPage, ShowDeactivated } = this.state;
+        const {dispatch} = this.props;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&ShowDeactivated=${ShowDeactivated}`;
 
         this.fetchAllRecords(params);
+        dispatch(dashboardActions.searchForCustomer("CLEAR"));
         // this.clearAllData()
     }
 
@@ -255,6 +258,46 @@ class ManageBankInfo extends React.Component {
 
     }
 
+    //Search Customer
+    loadSearchResults = (inputValue, callback) => {
+        return this.getSearchedCustomerResults(inputValue)
+                .then(()=>{
+                    if(this.props.searchForCustomerReducer.request_status===dashboardConstants.SEARCH_FOR_CUSTOMER_SUCCESS){
+                        let searchResults = this.props.searchForCustomerReducer.request_data.response.data;
+                        this.setState({defaultOptions:searchResults })
+                        return searchResults;
+                    }
+                })
+    }
+
+    
+
+
+    getSearchedCustomerResults = async (inputValue)=> {
+        const {dispatch} = this.props;
+
+        if (!inputValue || inputValue.length===0) {
+          return null;
+        }
+       
+
+         await dispatch(dashboardActions.searchForCustomer(inputValue));
+
+        
+    }
+    handleSearchCustomerChange =(inputValue)=>{
+        const customerSearchText = inputValue.replace(/\W/g, '');
+
+        this.setState({customerSearchText})
+
+    }
+
+    handleSelectedCustomer =(inputValue)=>{
+        
+
+        this.setState({selectedCustomer: inputValue})
+        
+    }
 
     createNewRecordPopUp = () => {
 
@@ -263,19 +306,26 @@ class ManageBankInfo extends React.Component {
             selectedCustomer,
             defaultOptions } = this.state;
         let createBankInfoRequest = this.props.createBankInfoReducer;
+        let fetchAllBankInfoRequest = this.props.fetchAllBankInfoReducer;
+        let allBanksList = [],
+        allbanks = fetchAllBankInfoRequest.request_data.response2.data;
 
+        if (allbanks.length >= 1) {
+            allbanks.map(eachBank => {
+                allBanksList.push({ label: eachBank.bankName, value: eachBank.bankCode })
+            })
+        }
         // let getAllCurrencies =  this.props.adminGetAllCurrencies;
 
 
         let checkValidationSchema = Yup.object().shape({
-            companyCategory: Yup.string()
+            accountName: Yup.string()
                 .required('Required'),
-            companyDomains: Yup.string()
+            accountNumber: Yup.string()
                 .required('Required'),
-            companyName: Yup.string()
+            bankCode: Yup.string()
                 .required('Required'),
-            maximumLoanAmount: Yup.string()
-                .required('Required'),
+            clientEncodedKey: Yup.string()
         });
         return (
             <Modal show={showCreateNewRecord} onHide={this.handleCloseNewRecord} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
@@ -285,26 +335,23 @@ class ManageBankInfo extends React.Component {
                 <Modal.Body>
                     <Formik
                         initialValues={{
-                            companyCategory: '',
-                            companyDomains: '',
-                            companyName: '',
-                            maximumLoanAmount: '',
+                            accountName: '',
+                            accountNumber: '',
+                            bankCode: '',
+                            clientEncodedKey: '',
                         }}
                         validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
-
-                            let requestPayload = {
-                                companyCategory: values.companyCategory,
-                                companyDomains: values.companyDomains,
-                                companyName: values.companyName,
-                                maximumLoanAmount: parseFloat(values.maximumLoanAmount.replace(/,/g, '')),
-                            };
-
-
-
-
-                            this.createNewRecord(requestPayload)
+                            
+                            if(selectedCustomer !==""){
+                                let requestPayload = {
+                                    accountName: values.accountName,
+                                    accountNumber: values.accountNumber,
+                                    bankCode: values.bankCode,
+                                    clientEncodedKey: selectedCustomer.clientEncodedKey,
+                                };
+                                this.createNewRecord(requestPayload)
                                 .then(
                                     () => {
                                         if (this.props.createBankInfoReducer.request_status === platformConstants.ADD_A_BANKINFO_SUCCESS) {
@@ -314,6 +361,12 @@ class ManageBankInfo extends React.Component {
 
                                     }
                                 )
+                            }
+
+
+
+
+                            
 
 
 
@@ -335,75 +388,99 @@ class ManageBankInfo extends React.Component {
                                 <Form noValidate
                                     onSubmit={handleSubmit}>
                                     <Form.Row>
+                                        <Col>
+                                            <Form.Label className="block-level">Customer</Form.Label>
+                                            <AsyncSelect
+                                                cacheOptions
+                                                value={selectedCustomer}
+                                                getOptionLabel={e => e.clientName}
+                                                getOptionValue={e => e.clientEncodedKey}
+                                                loadOptions={this.loadSearchResults}
+                                                defaultOptions={defaultOptions}
+                                                name="clientEncodedKey"
+                                                placeholder="Search"
+                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
+                                                // onChange={(e)=> {
+                                                //     setFieldValue("clientEncodedKey", )
+                                                //     this.handleSelectedCustomer(e.target.value)
+
+                                                // }}
+                                                onChange={this.handleSelectedCustomer}
+                                                // onChange={(selectedCustomer) => {
+                                                //     this.setState({ selectedCustomer });
+                                                //     errors.clientEncodedKey = null
+                                                //     values.clientEncodedKey = selectedCustomer.value
+                                                //     setFieldValue('clientEncodedKey', selectedCustomer.value);
+                                                // }}
+                                                onInputChange={this.handleSearchCustomerChange}
+                                            />
+
+                                            {errors.clientEncodedKey && touched.clientEncodedKey ? (
+                                                <span className="invalid-feedback">{errors.clientEncodedKey}</span>
+                                            ) : null}
+                                        </Col>
+
+                                    </Form.Row>
+                                    <Form.Row>
 
                                         <Col>
-                                            <Form.Label className="block-level">Company name</Form.Label>
+                                            <Form.Label className="block-level">Account Number</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={handleChange}
-                                                value={values.companyName}
-                                                className={errors.companyName && touched.companyName ? "is-invalid h-38px" : "h-38px"}
-                                                name="companyName"
+                                                value={values.accountNumber}
+                                                className={errors.accountNumber && touched.accountNumber ? "is-invalid h-38px" : "h-38px"}
+                                                name="accountNumber"
                                                 required />
 
-                                            {errors.companyName && touched.companyName ? (
-                                                <span className="invalid-feedback">{errors.companyName}</span>
+                                            {errors.accountNumber && touched.accountNumber ? (
+                                                <span className="invalid-feedback">{errors.accountNumber}</span>
                                             ) : null}
 
-                                            {errors.companyName && touched.companyName ? (
-                                                <span className="invalid-feedback">{errors.companyName}</span>
+                                            {errors.accountNumber && touched.accountNumber ? (
+                                                <span className="invalid-feedback">{errors.accountNumber}</span>
                                             ) : null}
                                         </Col>
                                         <Col>
-                                            <Form.Label className="block-level">Company category</Form.Label>
-                                            <Form.Control type="text"
-                                                onChange={handleChange}
-                                                value={values.companyCategory}
-                                                className={errors.companyCategory && touched.companyCategory ? "is-invalid h-38px" : "h-38px"}
-                                                name="companyCategory"
-                                                required />
+                                            <Form.Label className="block-level">Bank name</Form.Label>
+                                            <Select
+                                                options={allBanksList}
+                                                className={errors.bankCode && touched.bankCode ? "is-invalid" : null}
+                                                onChange={(selectedBank) => {
+                                                    setFieldValue('bankCode', selectedBank.value); 
+                                                    this.setState({selectedBank})
+                                                }}
+                                                onBlur={() => setFieldTouched('bankCode', true)}
+                                                name="bankCode"
+                                                required
+                                            />
+                                            
 
-                                            {errors.companyCategory && touched.companyCategory ? (
-                                                <span className="invalid-feedback">{errors.companyCategory}</span>
-                                            ) : null}
-
-                                            {errors.companyCategory && touched.companyCategory ? (
-                                                <span className="invalid-feedback">{errors.companyCategory}</span>
+                                            {errors.bankCode && touched.bankCode ? (
+                                                <span className="invalid-feedback">{errors.bankCode}</span>
                                             ) : null}
                                         </Col>
 
                                     </Form.Row>
                                     <Form.Row>
                                         <Col>
-                                            <Form.Label className="block-level">Company domains</Form.Label>
+                                            <Form.Label className="block-level">Account Name</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={handleChange}
-                                                value={values.companyDomains}
-                                                className={errors.companyDomains && touched.companyDomains ? "is-invalid h-38px" : "h-38px"}
-                                                name="companyDomains"
+                                                value={values.accountName}
+                                                className={errors.accountName && touched.accountName ? "is-invalid h-38px" : "h-38px"}
+                                                name="accountName"
                                                 required />
 
-                                            {errors.companyDomains && touched.companyDomains ? (
-                                                <span className="invalid-feedback">{errors.companyDomains}</span>
+                                            {errors.accountName && touched.accountName ? (
+                                                <span className="invalid-feedback">{errors.accountName}</span>
                                             ) : null}
 
-                                            {errors.companyDomains && touched.companyDomains ? (
-                                                <span className="invalid-feedback">{errors.companyDomains}</span>
+                                            {errors.accountName && touched.accountName ? (
+                                                <span className="invalid-feedback">{errors.accountName}</span>
                                             ) : null}
                                         </Col>
 
-                                        <Col>
-                                            <Form.Label className="block-level">Maximum loan amount (₦)</Form.Label>
-                                            <Form.Control type="text"
-                                                onChange={handleChange}
-                                                value={numberWithCommas(values.maximumLoanAmount)}
-                                                className={errors.maximumLoanAmount && touched.maximumLoanAmount ? "is-invalid h-38px" : "h-38px"}
-                                                name="maximumLoanAmount"
-                                                required />
-
-                                            {errors.maximumLoanAmount && touched.maximumLoanAmount ? (
-                                                <span className="invalid-feedback">{errors.maximumLoanAmount}</span>
-                                            ) : null}
-                                        </Col>
+                                        
 
 
 
@@ -755,9 +832,9 @@ class ManageBankInfo extends React.Component {
                                         </Form.Control>
                                     </Form.Group>
                                     <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"
-                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                        <DatePicker autoComplete="new-off"
+                                            onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleStartDatePicker}
                                             selected={this.state.startDate}
                                             dateFormat="d MMMM, yyyy"
@@ -766,15 +843,15 @@ class ManageBankInfo extends React.Component {
                                             showYearDropdown
                                             dropdownMode="select"
                                             placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                            autoComplete="new-password"
                                             maxDate={new Date()}
                                             // className="form-control form-control-sm h-38px"
                                             className="form-control form-control-sm "
 
                                         />
-                                         <DatePicker autoComplete="new-off" 
+                                        <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                            placeholderText="End  date"
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleEndDatePicker}
                                             selected={this.state.endDate}
@@ -894,7 +971,7 @@ placeholderText="End  date"
                                 <div className="heading-with-cta">
                                     <Form className="one-liner" onSubmit={(e) => this.searchAllData(e, allFetchedData.result)}>
 
-                                        
+
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                             <Form.Control as="select" size="sm">
                                                 <option>No Filter</option>
@@ -904,9 +981,9 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"
-                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                            <DatePicker autoComplete="new-off"
+                                                onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
                                                 dateFormat="d MMMM, yyyy"
@@ -915,15 +992,15 @@ placeholderText="End  date"
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -945,7 +1022,7 @@ placeholderText="End  date"
                                                     this.setState({ SearchText: e.target.value.trim() })
                                                 }}
                                             />
-                                           
+
                                         </Form.Group>
 
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
@@ -978,7 +1055,7 @@ placeholderText="End  date"
                                         />
                                     </div>
                                 </div>
-                                
+
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -1036,7 +1113,7 @@ placeholderText="End  date"
                                 <div className="heading-with-cta">
                                     <Form className="one-liner" onSubmit={(e) => this.searchAllData(e, allFetchedData.result)}>
 
-                                        
+
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                             <Form.Control as="select" size="sm">
                                                 <option>No Filter</option>
@@ -1046,9 +1123,9 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"
-                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                            <DatePicker autoComplete="new-off"
+                                                onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
                                                 dateFormat="d MMMM, yyyy"
@@ -1057,15 +1134,15 @@ placeholderText="End  date"
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -1171,7 +1248,7 @@ placeholderText="End  date"
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
-                    {this.createNewRecordPopUp()}
+                    {this.props.fetchAllBankInfoReducer.request_status ===platformConstants.GET_ALL_BANKINFO_SUCCESS && this.createNewRecordPopUp()}
                     {recordToUpdate && this.updateRecordPopUp()}
                     <div className="content-wrapper">
                         <div className="module-heading">

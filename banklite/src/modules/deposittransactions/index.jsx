@@ -9,10 +9,15 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import ReverseTransaction from '../../shared/components/reverse-txt'
+import ViewATransaction from '../../shared/components/view-txt'
 import Button from 'react-bootstrap/Button'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
+import {dashboardActions} from '../../redux/actions/dashboard/dashboard.action';
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./deposittransactions.scss"; 
@@ -159,6 +164,27 @@ class DepositTransactions extends React.Component {
             }
         }
     }
+    handleShowReverseClose = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ showReverseBox: false })
+        // }
+    };
+    handleShowReverseShow = (transactionDetails, txtxType, txtKey) => {
+        this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ showReverseBox: true , transactionDetails, transactionType:txtxType, transactionKey: txtKey })
+    };
+
+    handleViewTxtnClose = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ ViewTxtnBox: false })
+        // }
+    };
+    handleViewTxtnShow = (transactionDetails, txtxType, txtKey) => {
+        this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ ViewTxtnBox: true , transactionDetails, transactionType:txtxType, transactionKey: txtKey })
+    };
 
     renderDepositTransactions = () => {
         let getDepositTransactionRequest = this.props.getDepositTransactionRequest;
@@ -169,32 +195,32 @@ class DepositTransactions extends React.Component {
 
         switch (getDepositTransactionRequest.request_status) {
             case (loanAndDepositsConstants.GET_DEPOSIT_TRANSACTION_PENDING):
-                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result!==undefined && saveRequestData.result.length<1)){
+                if ((saveRequestData === undefined) || (saveRequestData !== undefined && saveRequestData.result !== undefined && saveRequestData.result.length < 1)) {
                     return (
                         <div className="loading-content">
                             <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                <Form className="one-liner">
 
-                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <Form.Control as="select" size="sm">
-                                                <option>No Filter</option>
-                                                <option>Add New Filter</option>
-                                                <option>Custom Filter</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                    </Form>
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                                </Form>
 
-                                    <div className="pagination-wrap">
-                                        <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" className="countdropdown form-control form-control-sm">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="200">200</option>
-                                        </select>
-                                    </div>
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow" className="countdropdown form-control form-control-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
                                 </div>
+                            </div>
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
@@ -225,7 +251,7 @@ class DepositTransactions extends React.Component {
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
-                }else{
+                } else {
                     return (
                         <div>
                             <div className="heading-with-cta">
@@ -240,9 +266,9 @@ class DepositTransactions extends React.Component {
                                     </Form.Group>
 
                                     <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"
-                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                        <DatePicker autoComplete="new-off"
+                                            onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleStartDatePicker}
                                             selected={this.state.startDate}
                                             dateFormat="d MMMM, yyyy"
@@ -251,15 +277,15 @@ class DepositTransactions extends React.Component {
                                             showYearDropdown
                                             dropdownMode="select"
                                             placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                            autoComplete="new-password"
                                             maxDate={new Date()}
                                             // className="form-control form-control-sm h-38px"
                                             className="form-control form-control-sm "
 
                                         />
-                                         <DatePicker autoComplete="new-off" 
+                                        <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                            placeholderText="End  date"
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleEndDatePicker}
                                             selected={this.state.endDate}
@@ -290,7 +316,7 @@ placeholderText="End  date"
 
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" 
+                                    <select id="toshow"
                                         value={this.state.PageSize}
                                         className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
@@ -306,7 +332,7 @@ placeholderText="End  date"
                                     id="showFullDetails" />
                                 <label htmlFor="showFullDetails">Show full details</label>
                             </div>
-                            
+
                             <div className="loading-text">Please wait... </div>
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
@@ -320,6 +346,7 @@ placeholderText="End  date"
                                         <th>User Name</th>
                                         {/* <th>Entry Date</th> */}
                                         <th>Date Created</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -332,12 +359,24 @@ placeholderText="End  date"
                                                         <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
                                                         <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/savingsaccount/${eachTransaction.depositAccountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
                                                         <td>{eachTransaction.typeDescription}</td>
-                                                        <td>{numberWithCommas(eachTransaction.transactionAmount, true,true)}</td>
+                                                        <td>{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
                                                         <td>{eachTransaction.key}</td>
                                                         <td>{eachTransaction.narration}</td>
                                                         <td>{eachTransaction.userName}</td>
                                                         {/* <td>{eachTransaction.entryDate}</td> */}
                                                         <td>{eachTransaction.dateCreated}</td>
+                                                        <td>
+                                                            <DropdownButton
+                                                                size="sm"
+                                                                title="Actions"
+                                                                key="activeCurrency"
+                                                                className="customone"
+                                                            >
+                                                                {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                                <Dropdown.Item eventKey="1">View</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="1">Reverse transaction</Dropdown.Item>
+                                                            </DropdownButton>
+                                                        </td>
                                                     </tr>
                                                 </Fragment>
                                             )
@@ -370,9 +409,9 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"
-                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                            <DatePicker autoComplete="new-off"
+                                                onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
                                                 dateFormat="d MMMM, yyyy"
@@ -381,15 +420,15 @@ placeholderText="End  date"
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -425,8 +464,8 @@ placeholderText="End  date"
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" 
-                                            onChange={(e)=>this.setPagesize(e, allDepositTransactions.result)}
+                                        <select id="toshow"
+                                            onChange={(e) => this.setPagesize(e, allDepositTransactions.result)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -434,7 +473,7 @@ placeholderText="End  date"
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        
+
                                         <TablePagination
                                             totalPages={allDepositTransactions.totalPages}
                                             currPage={allDepositTransactions.currentPage}
@@ -448,12 +487,12 @@ placeholderText="End  date"
                                 </div>
                                 <div className="table-helper">
                                     <input type="checkbox" name=""
-                                        onChange={(e)=>this.setShowDetails(e, allDepositTransactions.result)}
+                                        onChange={(e) => this.setShowDetails(e, allDepositTransactions.result)}
                                         checked={this.state.FullDetails}
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
                                 </div>
-                                
+
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -467,6 +506,7 @@ placeholderText="End  date"
                                             <th>User Name</th>
                                             {/* <th>Entry Date</th> */}
                                             <th>Date Created</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -475,15 +515,27 @@ placeholderText="End  date"
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
-                                                        <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
+                                                            <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}/savingsaccount/${eachTransaction.depositAccountEncodedKey}`}>{eachTransaction.depositAccountNumber}</NavLink> </td>
                                                             <td>{eachTransaction.typeDescription}</td>
-                                                            <td >{numberWithCommas(eachTransaction.transactionAmount, true,true)}</td>
+                                                            <td >{numberWithCommas(eachTransaction.transactionAmount, true, true)}</td>
                                                             <td>{eachTransaction.key}</td>
                                                             <td width="300">{eachTransaction.narration}</td>
                                                             <td>{eachTransaction.userName}</td>
                                                             {/* <td>{eachTransaction.entryDate}</td> */}
                                                             <td>{eachTransaction.dateCreated}</td>
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    key="activeCurrency"
+                                                                    className="customone"
+                                                                >
+                                                                    {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                                    <Dropdown.Item eventKey="1" onClick={()=> this.handleViewTxtnShow(eachTransaction, eachTransaction.typeDescription, eachTransaction.key)}>View</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1" onClick={()=> this.handleShowReverseShow(eachTransaction, eachTransaction.typeDescription, eachTransaction.key)}>Reverse transaction</Dropdown.Item>
+                                                                </DropdownButton>
+                                                            </td>
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -496,8 +548,8 @@ placeholderText="End  date"
                                 </div> */}
                             </div>
                         )
-                    }else{
-                        return(
+                    } else {
+                        return (
                             <div className="no-records">
                                 <div className="heading-with-cta">
                                     <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allDepositTransactions.result)} >
@@ -511,9 +563,9 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
-             <DatePicker autoComplete="new-off"
-                                        onChangeRaw={this.handleDateChangeRaw}
+
+                                            <DatePicker autoComplete="new-off"
+                                                onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
                                                 dateFormat="d MMMM, yyyy"
@@ -522,15 +574,15 @@ placeholderText="End  date"
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
-                                                            autoComplete="new-password"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                            <DatePicker autoComplete="new-off"
 
-placeholderText="End  date"
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -557,7 +609,7 @@ placeholderText="End  date"
 ) : null} */}
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
-                                        
+
                                     </Form>
 
                                     <div className="pagination-wrap">
@@ -623,6 +675,9 @@ placeholderText="End  date"
             <Fragment>
                 <InnerPageContainer {...this.props}>
                     <div className="content-wrapper">
+                        <ReverseTransaction transactionKey={this.state.transactionKey} transactionType={this.state.transactionType} handleCloseReverse={this.handleShowReverseClose} transactionDetails ={this.state.transactionDetails} showReverseTransaction={this.state.showReverseBox} transactionMode="Deposit"/>
+                        <ViewATransaction transactionKey={this.state.transactionKey} transactionType={this.state.transactionType} handleViewTxtnClose={this.handleViewTxtnClose} transactionDetails ={this.state.transactionDetails} ViewTxtnBox={this.state.ViewTxtnBox} transactionMode="Deposit"/>
+                        
                         <div className="module-heading">
                             <div className="module-title">
                                 <div className="content-container">

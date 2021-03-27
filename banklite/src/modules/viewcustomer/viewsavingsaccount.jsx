@@ -21,7 +21,8 @@ import  TablePagination from '../../shared/elements/table/pagination'
 import DatePicker from '../../_helpers/datepickerfield'
 import {default as DatePickerFilter} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import ReverseTransaction from '../../shared/components/reverse-txt'
+import ViewATransaction from '../../shared/components/view-txt'
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import Modal from 'react-bootstrap/Modal'
@@ -40,6 +41,7 @@ import {clientsConstants} from '../../redux/actiontypes/clients/clients.constant
 
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {dashboardActions} from '../../redux/actions/dashboard/dashboard.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
@@ -1178,7 +1180,26 @@ class ViewSavingsAccount extends React.Component {
             )
         }
     }
-
+    handleShowReverseClose = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ showReverseBox: false })
+        // }
+    };
+    handleShowReverseShow = (transactionDetails, txtxType, txtKey) => {
+        this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ showReverseBox: true , transactionDetails, transactionType:txtxType, transactionKey: txtKey })
+    };
+    handleViewTxtnClose = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ ViewTxtnBox: false })
+        // }
+    };
+    handleViewTxtnShow = (transactionDetails, txtxType, txtKey) => {
+        this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ ViewTxtnBox: true , transactionDetails, transactionType:txtxType, transactionKey: txtKey })
+    };
     renderDepositTransaction = ()=>{
         let getDepositTransactionRequest =  this.props.getAccountDepositTransactionReducer;
         let saveRequestData= getDepositTransactionRequest.request_data!==undefined?getDepositTransactionRequest.request_data.tempData:null;
@@ -1254,6 +1275,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Entry Type</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1268,6 +1290,18 @@ class ViewSavingsAccount extends React.Component {
                                                 <td>{eachTxt.entryType}</td>
                                                 <td>{eachTxt.typeDescription}</td>
                                                 <td>{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
+                                                <td>
+                                                    <DropdownButton
+                                                        size="sm"
+                                                        title="Actions"
+                                                        key="activeCurrency"
+                                                        className="customone"
+                                                    >
+                                                        {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                        <Dropdown.Item eventKey="1">View</Dropdown.Item>
+                                                        <Dropdown.Item eventKey="1">Reverse transaction</Dropdown.Item>
+                                                    </DropdownButton>
+                                                </td>
                                             </tr>
                                         )
                                     })
@@ -1366,6 +1400,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Entry Type</th>
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1380,6 +1415,18 @@ class ViewSavingsAccount extends React.Component {
                                                 <td>{eachTxt.entryType}</td>
                                                 <td>{eachTxt.typeDescription}</td>
                                                 <td>{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
+                                                <td>
+                                                    <DropdownButton
+                                                        size="sm"
+                                                        title="Actions"
+                                                        key="activeCurrency"
+                                                        className="customone"
+                                                    >
+                                                        {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                        <Dropdown.Item eventKey="1" onClick={()=> this.handleViewTxtnShow(eachTxt, eachTxt.typeDescription, eachTxt.key)}>View</Dropdown.Item>
+                                                        <Dropdown.Item eventKey="1" onClick={()=> this.handleShowReverseShow(eachTxt, eachTxt.typeDescription, eachTxt.key)}>Reverse transaction</Dropdown.Item>
+                                                    </DropdownButton>
+                                                </td>
                                             </tr>
                                         )
                                     })
@@ -3718,6 +3765,8 @@ class ViewSavingsAccount extends React.Component {
                                                 {this.renderOverview(getAClientDepositAccountRequest.request_data.response.data)}
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="transactions">
+                                                <ReverseTransaction transactionKey={this.state.transactionKey} transactionType={this.state.transactionType} handleCloseReverse={this.handleShowReverseClose} transactionDetails ={this.state.transactionDetails} showReverseTransaction={this.state.showReverseBox} transactionMode="Deposit" />
+                                                <ViewATransaction transactionKey={this.state.transactionKey} transactionType={this.state.transactionType} handleViewTxtnClose={this.handleViewTxtnClose} transactionDetails ={this.state.transactionDetails} ViewTxtnBox={this.state.ViewTxtnBox} transactionMode="Deposit"/>
                                                 {this.renderDepositTransaction()}
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="activity">

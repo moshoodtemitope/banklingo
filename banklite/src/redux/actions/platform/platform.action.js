@@ -701,7 +701,7 @@ function fetchAllBankInfo  (params,tempData){
     }
 
     
-    function success(response) { return { type: platformConstants.GET_ALL_BANKINFO_SUCCESS, response } }
+    function success(response, response2) { return { type: platformConstants.GET_ALL_BANKINFO_SUCCESS, response, response2 } }
     // function success(response, response3) { return { type: platformConstants.GET_ALL_BANKINFO_SUCCESS, response, response3 } }
     function failure(error) { return { type: platformConstants.GET_ALL_BANKINFO_FAILURE, error } }
     

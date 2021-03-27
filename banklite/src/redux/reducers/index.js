@@ -174,6 +174,7 @@ const dashboardReducers = combineReducers({
     getLoggedInUserActivitiesReducer: dashboard.getLoggedInUserActivitiesReducer, 
     globalSearchAnItemReducer: dashboard.globalSearchAnItemReducer, 
     searchForCustomerReducer: dashboard.searchForCustomerReducer, 
+    reverseATransactionReducer: dashboard.reverseATransactionReducer, 
    
 })
 

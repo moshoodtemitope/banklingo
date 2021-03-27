@@ -9,7 +9,8 @@ export const dashboardActions = {
     getActivitiesData,
     getLoggedInUserActivitiesData,
     globalSearchAnItem,
-    searchForCustomer
+    searchForCustomer,
+    reverseATransaction
 }
 
 
@@ -162,5 +163,34 @@ function searchForCustomer(params) {
     function success(response) { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_SUCCESS, response } }
     function failure(error) { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_FAILURE, error } }
     function clear() { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_RESET, clear_data:""} }
+
+}
+
+function reverseATransaction  (depositProductPayload){
+    if(depositProductPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume = ApiService.request(routes.REVERSE_TRANSACTION, "POST", depositProductPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: dashboardConstants.REVERSE_TRANSACTION_PENDING, user } }
+    function success(response) { return { type: dashboardConstants.REVERSE_TRANSACTION_SUCCESS, response } }
+    function failure(error) { return { type: dashboardConstants.REVERSE_TRANSACTION_FAILURE, error } }
+    function clear() { return { type: dashboardConstants.REVERSE_TRANSACTION_RESET, clear_data:""} }
 
 }

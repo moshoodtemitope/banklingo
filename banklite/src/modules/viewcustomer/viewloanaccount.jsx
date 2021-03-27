@@ -17,6 +17,13 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import TableComponent from '../../shared/elements/table'
 import TablePagination from '../../shared/elements/table/pagination'
+
+
+
+
+
+import ReverseTransaction from '../../shared/components/reverse-txt'
+import ViewATransaction from '../../shared/components/view-txt'
 import "./customerprofile.scss";
 import { loanActions } from '../../redux/actions/loans/loans.action';
 
@@ -34,6 +41,7 @@ import * as Yup from 'yup';
 import { clientsActions } from '../../redux/actions/clients/clients.action';
 import { clientsConstants } from '../../redux/actiontypes/clients/clients.constants'
 
+import {dashboardActions} from '../../redux/actions/dashboard/dashboard.action';
 import { administrationActions } from '../../redux/actions/administration/administration.action';
 import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants'
 
@@ -1282,6 +1290,28 @@ class ViewLoanAccount extends React.Component {
 
     }
 
+    handleShowReverseClose = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ showReverseBox: false })
+        // }
+    };
+    handleShowReverseShow = (transactionDetails, txtxType, txtKey) => {
+        this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ showReverseBox: true , transactionDetails, transactionType:txtxType, transactionKey: txtKey })
+    };
+
+    handleViewTxtnClose = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ ViewTxtnBox: false })
+        // }
+    };
+    handleViewTxtnShow = (transactionDetails, txtxType, txtKey) => {
+        this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ ViewTxtnBox: true , transactionDetails, transactionType:txtxType, transactionKey: txtKey })
+    };
+
     renderLoanTransaction = () => {
         let getAccountLoanTransactionRequest = this.props.getAccountLoanTransactionReducer;
         let saveRequestData = getAccountLoanTransactionRequest.request_data !== undefined ? getAccountLoanTransactionRequest.request_data.tempData : null;
@@ -1357,6 +1387,7 @@ class ViewLoanAccount extends React.Component {
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
                                     <th>Narration</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1371,6 +1402,18 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{eachTxt.typeDescription}</td>
                                                 <td>₦{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
                                                 <td>{eachTxt.remarks}</td>
+                                                <td>
+                                                    <DropdownButton
+                                                        size="sm"
+                                                        title="Actions"
+                                                        key="activeCurrency"
+                                                        className="customone"
+                                                    >
+                                                        {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                        <Dropdown.Item eventKey="1">View</Dropdown.Item>
+                                                        <Dropdown.Item eventKey="1">Reverse transaction</Dropdown.Item>
+                                                    </DropdownButton>
+                                                </td>
                                             </tr>
                                         )
                                     })
@@ -1469,6 +1512,7 @@ class ViewLoanAccount extends React.Component {
                                     <th>Type</th>
                                     <th>Transaction Amount</th>
                                     <th>Narration</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1483,6 +1527,18 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{eachTxt.typeDescription}</td>
                                                 <td>₦{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
                                                 <td>{eachTxt.remarks}</td>
+                                                <td>
+                                                    <DropdownButton
+                                                        size="sm"
+                                                        title="Actions"
+                                                        key="activeCurrency"
+                                                        className="customone"
+                                                    >
+                                                        {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                        <Dropdown.Item eventKey="1" onClick={()=> this.handleViewTxtnShow(eachTxt, eachTxt.typeDescription, eachTxt.key)}>View</Dropdown.Item>
+                                                        <Dropdown.Item eventKey="1" onClick={()=> this.handleShowReverseShow(eachTxt,eachTxt.typeDescription,eachTxt.transactionKey )}>Reverse transaction</Dropdown.Item>
+                                                    </DropdownButton>
+                                                </td>
                                             </tr>
                                         )
                                     })
@@ -3662,6 +3718,8 @@ class ViewLoanAccount extends React.Component {
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="transactions">
                                             {this.renderLoanTransaction()}
+                                            <ReverseTransaction transactionKey={this.state.transactionKey} transactionType={this.state.transactionType} handleCloseReverse={this.handleShowReverseClose} transactionDetails ={this.state.transactionDetails} showReverseTransaction={this.state.showReverseBox} transactionMode="Loan" />
+                                            <ViewATransaction transactionKey={this.state.transactionKey} transactionType={this.state.transactionType} handleViewTxtnClose={this.handleViewTxtnClose} transactionDetails ={this.state.transactionDetails} ViewTxtnBox={this.state.ViewTxtnBox} transactionMode="Loan"/>
                                         </Tab.Pane>
 
                                         <Tab.Pane eventKey="activity">
@@ -3695,6 +3753,21 @@ class ViewLoanAccount extends React.Component {
 
             return (
                 <div className="loading-text mt-30">Please wait... </div>
+            )
+        }
+
+        if(getAClientLoanAccountRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_FAILURE){
+
+            return(
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div className="middle-content">
+                            <div className="loading-content errormsg">
+                                <div>{getAClientLoanAccountRequest.request_data.error}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )
         }
 

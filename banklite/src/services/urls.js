@@ -126,6 +126,9 @@ export const routes = {
     //Search Endpoints
     HIT_GLOBAL_SEARCH: BASEURL + '/api/Search',
 
+    //Reverse Transaction
+    REVERSE_TRANSACTION: BASEURL + '/api/Deposits/reversetransaction',
+
     //Task Endpoints
     HIT_TASKS: BASEURL + '/api/ApplicationTasks',
 
