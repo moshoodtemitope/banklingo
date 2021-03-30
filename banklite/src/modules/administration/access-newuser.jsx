@@ -230,7 +230,7 @@ class CreateNewUser extends React.Component {
             })
 
             branches.map((eachBranch, index)=>{
-                allBranches.push({value:eachBranch.encodedKey, label:eachBranch.name})
+                allBranches.push({value:eachBranch.encodedKey, id:eachBranch.id, label:eachBranch.name})
             })
 
         return(
@@ -303,7 +303,7 @@ class CreateNewUser extends React.Component {
                             userName: values.userName !== "" ? values.userName : null,
                             emailAddress: values.emailAddress !== "" ? values.emailAddress : null,
                             password: values.password !== "" ? values.password : null,
-                            branchId: values.branchId !== "" ? values.branchId : null,
+                            branchId: values.branchId !== "" ? parseInt(values.branchId) : null,
                             note: values.note !== "" ? values.note : null,
                             canAccessAllBranches: values.canAccessAllBranches !== "" ? values.canAccessAllBranches : null,
                             transactionAccessRightModels: this.selectTxtnLimitsList.length >= 1 ? this.selectTxtnLimitsList : null,
@@ -758,7 +758,7 @@ class CreateNewUser extends React.Component {
                                                     onChange={(selectedBranch) => {
                                                         this.setState({ selectedBranch });
                                                         errors.branchId = null
-                                                        values.branchId = selectedBranch.value
+                                                        values.branchId = selectedBranch.id
                                                     }}
                                                     className={errors.branchId && touched.branchId ? "is-invalid" : null}
                                                     // value="branchId"

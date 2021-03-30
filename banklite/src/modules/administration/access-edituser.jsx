@@ -21,28 +21,67 @@ import Alert from 'react-bootstrap/Alert'
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import { numberWithCommas } from "../../shared/utils";
 import "./administration.scss"; 
 class EditUser extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            selectBranchesToAdd:[],
+            selectTxtnLimitsToAdd:[],
+            submitError:""
         }
 
+        this.selectBranchesToAdd = [];
+        this.selectBranchesList = [];
+
+        this.selectTxtnLimitsToAdd = [];
+        this.selectTxtnLimitsList = [];
         
     }
 
     componentDidMount() {
 
         // this.getAllPermissions();
-        this.getAUser(this.props.match.params.encodedKey);
+        this.fetchUser(this.props.match.params.encodedKey);
     }
 
-    getAUser =  (encodedKey)=>{
+    fetchUser =(encodedKey)=>{
+        this.getAUser(encodedKey)
+            .then(()=>{
+                if(this.props.adminGetAUserRequest.request_status === administrationConstants.GET_A_USER_SUCCESS){
+                    let adminGetAUser = this.props.adminGetAUserRequest;
+                    let userData = adminGetAUser.request_data.response.data;
+                    console.log("data returned", userData);
+                    userData.branchAccessModels.map((eachItem, index)=>{
+                        this.selectBranchesToAdd.push({label:eachItem.branchName, value: eachItem.branchEncodedKey})
+                        this.selectBranchesList.push(eachItem.branchEncodedKey)
+                    })
+
+                    userData.transactionAccessRightModels.map((eachItem, index)=>{
+                        let itemToUpdate =  {label: eachItem.name, value: eachItem.transactionAccessRightOptions, amount:eachItem.amount.toString()}
+
+                        this.selectTxtnLimitsToAdd.push(itemToUpdate)
+                        this.selectTxtnLimitsList.push({transactionAccessRightOptions:eachItem.transactionAccessRightOptions, amount: eachItem.amount})
+                        
+                        // this.selectBranchesToAdd.push({label:eachItem.branchName, value: eachItem.branchEncodedKey})
+                        // this.selectBranchesList.push(eachItem.branchEncodedKey)
+                    })
+
+                    this.setState({selectTxtnLimitsToAdd: this.selectTxtnLimitsToAdd})
+                    this.setState({selectBranchesToAdd: this.selectBranchesToAdd})
+                }
+            })
+    }
+
+    getAUser =  async(encodedKey)=>{
         const {dispatch} = this.props;
        
-         dispatch(administrationActions.getAUser(encodedKey, true));
+        await dispatch(administrationActions.getAUser(encodedKey, true));
     }
+
+    
 
     updateUserRequest = async (payload)=>{
         const {dispatch} = this.props;
@@ -50,9 +89,77 @@ class EditUser extends React.Component {
         await dispatch(administrationActions.updateAUser(payload));
     }
 
+    updateBranchList = (branchToUpdate, operation) =>{
+        // console.log("branch info", branchToUpdate);
+        if(operation==="add"){
+            if(this.selectBranchesList.indexOf(branchToUpdate.value)===-1){
+                this.selectBranchesToAdd.push(branchToUpdate)
+                this.selectBranchesList.push(branchToUpdate.value)
+                this.setState({selectBranchesToAdd: this.selectBranchesToAdd})
+            }
+        }
+       
+        
+
+        if(operation==="remove"){
+            // let idToRemove = branchToUpdate.value;
+            let idToRemove = this.selectBranchesList.indexOf(branchToUpdate.value);
+            let branchFiltered = this.selectBranchesToAdd.filter(branch=>branch.value!==branchToUpdate.value);
+            // console.log("remove info", idToRemove);
+            if (idToRemove !== -1) {
+                this.selectBranchesList.splice(idToRemove, 1);
+                this.selectBranchesToAdd = [];
+                this.selectBranchesToAdd.push(...branchFiltered)
+                this.setState({selectBranchesToAdd: this.selectBranchesToAdd})
+            }
+            
+            // console.log("filtered info", this.selectBranchesToAdd);
+            // this.selectBranchesToAdd.push(branchToAdd)
+        }
+
+    }
+
+    updateLimitsList = (itemToUpdate, operation) =>{
+       
+        if(operation==="add"){
+            let filteredItemsToAdd = this.selectTxtnLimitsList.filter(item=>item.transactionAccessRightOptions===parseInt(itemToUpdate.value));
+            if(filteredItemsToAdd.length===0){
+                // if(this.selectTxtnLimitsList.indexOf(itemToUpdate.value)===-1){
+                this.selectTxtnLimitsToAdd.push(itemToUpdate)
+                this.selectTxtnLimitsList.push({transactionAccessRightOptions:itemToUpdate.value, amount: parseFloat(itemToUpdate.amount.replace(/,/g, ''))})
+                this.setState({selectTxtnLimitsToAdd: this.selectTxtnLimitsToAdd})
+            }
+        }
+       
+        
+
+        if(operation==="remove"){
+            // let idToRemove = itemToUpdate.value;
+            // let idToRemove = this.selectTxtnLimitsList.indexOf(itemToUpdate.value);
+            let idToRemove = this.selectTxtnLimitsList.filter(item=>item.transactionAccessRightOptions===parseInt(itemToUpdate.value));
+            let itemFiltered = this.selectTxtnLimitsToAdd.filter(item=>item.value!==itemToUpdate.value);
+            // console.log("remove info", idToRemove);
+            
+            // if (idToRemove.length >= 1) {
+            // if (idToRemove !== -1) {
+                this.selectTxtnLimitsList.splice(idToRemove[0], 1);
+                this.selectTxtnLimitsToAdd = [];
+                this.selectTxtnLimitsToAdd.push(...itemFiltered)
+                this.setState({selectTxtnLimitsToAdd: this.selectTxtnLimitsToAdd})
+            // }
+            
+            // console.log("filtered info", this.selectTxtnLimitsToAdd);
+            // this.selectTxtnLimitsToAdd.push(branchToAdd)
+        }
+
+
+        
+    }
+
     renderUpdateUserForm =(userData,roles, branches)=>{
         let adminUpdateAUserRequest = this.props.adminUpdateAUserRequest,
             allRoles =[],
+            {submitError} = this.state,
             allBranches =[],
             updateUserValidationSchema = Yup.object().shape({
                 firstName: Yup.string()
@@ -116,7 +223,43 @@ class EditUser extends React.Component {
                     .min(5, 'Provide detailed notes'),
             });
             
+            let allLimits = [
+                {
+                    label: "Select",
+                    value:""
+                },
+                {
+                    label: "Approve Loan",
+                    value:0
+                },
+                {
+                    label: "Disburse Loan",
+                    value:1
+                },
+                {
+                    label: "Apply Fee",
+                    value:2
+                },
+                {
+                    label: "Make Deposit",
+                    value:3
+                },
+                {
+                    label: "Make Withdrawal",
+                    value:4
+                },
+                {
+                    label: "Make Repayment",
+                    value:5
+                },
+                
+            ];
 
+            let allReturnedBranches = userData.branchAccessModels;
+
+            // allReturnedBranches.map((eachItem, index)=>{
+            //     this.selectBranchesToAdd.push({})
+            // })
             roles.map((eachRole, index)=>{
                 allRoles.push({value:eachRole.roleId, label:eachRole.name})
             })
@@ -150,6 +293,7 @@ class EditUser extends React.Component {
                     userIsAdministrator: userData.isAdministrator,
                     userIsPortalAdministrator: userData.isPortalAdministrator,
                     userHasApiAccessRight: userData.isAccountOfficer,
+                    canAccessAllBranches: userData.canAccessAllBranches!==null? userData.canAccessAllBranches :false,
                     note: userData.notes.notes!==null?userData.notes.notes:'',
                     addressLine1: userAddress.addressLine1!==null?userAddress.addressLine1:'',
                     addressLine2: userAddress.addressLine2!==null?userAddress.addressLine2:'',
@@ -168,85 +312,103 @@ class EditUser extends React.Component {
                 // validateOnChange={true}
                 validationSchema={updateUserValidationSchema}
                 onSubmit={(values, { resetForm }) => {
-                   
-                    let updateNewUserPayload = {
-                        firstName: values.firstName,
-                        lastName: values.lastName,
-                        title: values.title,
-                        roleId: parseInt(values.roleId),
-                        isAccountOfficer: values.userIsAccountOfficer,
-                        isTeller: values.userIsTeller,
-                        isApiAccess: values.userHasApiAccessRight,
-                        isPortalAdministrator: values.userIsPortalAdministrator,
-                        isAdministrator: values.userIsAdministrator,
-                        contact:{
-                            // contactMobile:values.contactMobile,
-                            // contactEmail:values.contactEmail,
-                        },
-                        address:{
-                            // addressLine1: values.addressLine1,
-                            // addressLine2: values.addressLine2,
-                            // addressCity: values.addressCity,
-                            // addressState: values.addressState,
-                            // addressCountry: values.addressCountry,
-                            // zipCode: values.zipCode,
-                        },
-                        userName: values.userName,
-                        emailAddress: values.emailAddress,
-                        password: values.password,
-                        branchId: values.branchId,
-                        note: values.note,
-                        encodedKey: this.props.match.params.encodedKey
-                    };
-                    if(values.addressLine1!==''){
-                        updateNewUserPayload.address.addressLine1 =values.addressLine1;
-                    }
-                    if(values.addressLine2!==''){
-                        updateNewUserPayload.address.addressLine2 =values.addressLine2;
-                    }
-                    if(values.addressCity!==''){
-                        updateNewUserPayload.address.addressCity =values.addressCity;
-                    }
-                    if(values.addressState!==''){
-                        updateNewUserPayload.address.addressState =values.addressState;
-                    }
-                    if(values.addressCountry!==''){
-                        updateNewUserPayload.address.addressCountry =values.addressCountry;
-                    }
-                    if(values.zipCode!==''){
-                        updateNewUserPayload.address.zipCode =values.zipCode;
+                    let allErrors = "";
+                    if(values.canAccessAllBranches ===false && this.selectBranchesList.length===0){
+                        allErrors += "Select allowed branches"
+                    }else{
+                        allErrors =""
                     }
 
-                    if(values.contactMobile!==''){
-                        updateNewUserPayload.contact.contactMobile =values.contactMobile;
-                    }
+                    this.setState({submitError:allErrors});
+                    if (allErrors === "") {
+                        let branchesChosen = [];
+                        this.selectBranchesList.map(eachBranch=>branchesChosen.push({branchEncodedKey : eachBranch}))
+                        
+                        let updateNewUserPayload = {
+                            firstName: values.firstName,
+                            lastName: values.lastName,
+                            title: values.title,
+                            roleId: parseInt(values.roleId),
+                            isAccountOfficer: values.userIsAccountOfficer,
+                            isTeller: values.userIsTeller,
+                            isApiAccess: values.userHasApiAccessRight,
+                            isPortalAdministrator: values.userIsPortalAdministrator,
+                            isAdministrator: values.userIsAdministrator,
+                            contact:{
+                                // contactMobile:values.contactMobile,
+                                // contactEmail:values.contactEmail,
+                            },
+                            address:{
+                                // addressLine1: values.addressLine1,
+                                // addressLine2: values.addressLine2,
+                                // addressCity: values.addressCity,
+                                // addressState: values.addressState,
+                                // addressCountry: values.addressCountry,
+                                // zipCode: values.zipCode,
+                            },
+                            userName: values.userName,
+                            emailAddress: values.emailAddress,
+                            password: values.password,
+                            branchId: values.branchId,
+                            note: values.note,
+                            encodedKey: this.props.match.params.encodedKey,
+                            canAccessAllBranches: values.canAccessAllBranches !== "" ? values.canAccessAllBranches : null,
+                            transactionAccessRightModels: this.selectTxtnLimitsList.length >= 1 ? this.selectTxtnLimitsList : null,
+                            branchAccessModels: (values.canAccessAllBranches === true || this.selectBranchesList.length === 0) ? null : branchesChosen
+                        };
+                        if(values.addressLine1!==''){
+                            updateNewUserPayload.address.addressLine1 =values.addressLine1;
+                        }
+                        if(values.addressLine2!==''){
+                            updateNewUserPayload.address.addressLine2 =values.addressLine2;
+                        }
+                        if(values.addressCity!==''){
+                            updateNewUserPayload.address.addressCity =values.addressCity;
+                        }
+                        if(values.addressState!==''){
+                            updateNewUserPayload.address.addressState =values.addressState;
+                        }
+                        if(values.addressCountry!==''){
+                            updateNewUserPayload.address.addressCountry =values.addressCountry;
+                        }
+                        if(values.zipCode!==''){
+                            updateNewUserPayload.address.zipCode =values.zipCode;
+                        }
 
-                    if(values.contactEmail!==''){
-                        updateNewUserPayload.contact.contactEmail =values.contactEmail;
-                    }
+                        if(values.contactMobile!==''){
+                            updateNewUserPayload.contact.contactMobile =values.contactMobile;
+                        }
 
-                    
-
-                    this.updateUserRequest(updateNewUserPayload)
-                        .then(
-                            () => {
-
-                                if (this.props.adminUpdateAUserRequest.request_status === administrationConstants.UPDATE_A_USER_SUCCESS) {
+                        if(values.contactEmail!==''){
+                            updateNewUserPayload.contact.contactEmail =values.contactEmail;
+                        }
 
 
-                                    setTimeout(() => {
-                                        this.props.dispatch(administrationActions.updateAUser("CLEAR"));
-                                        // resetForm();
-                                    }, 3000);
-                                } else {
-                                    setTimeout(() => {
-                                        // this.props.dispatch(administrationActions.updateAUser("CLEAR"))
-                                    }, 3000);
+                        console.log("test values", updateNewUserPayload);
+
+                        return false;
+                        
+
+                        this.updateUserRequest(updateNewUserPayload)
+                            .then(
+                                () => {
+
+                                    if (this.props.adminUpdateAUserRequest.request_status === administrationConstants.UPDATE_A_USER_SUCCESS) {
+
+
+                                        setTimeout(() => {
+                                            this.props.dispatch(administrationActions.updateAUser("CLEAR"));
+                                            // resetForm();
+                                        }, 3000);
+                                    } else {
+                                        setTimeout(() => {
+                                            // this.props.dispatch(administrationActions.updateAUser("CLEAR"))
+                                        }, 3000);
+                                    }
+
                                 }
-
-                            }
-                        )
-
+                            )
+                    }
                 }}
             >
                 {({ handleSubmit,
@@ -413,7 +575,90 @@ class EditUser extends React.Component {
                                 </Accordion.Collapse>
                             </Accordion>
 
-                            
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Transation Limits
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div className="each-formsection">
+                                        
+                                        {/* <Form.Row> */}
+                                        
+                                        <div className="wrap-selection">
+                                            <div className="option-select flexed">
+                                                <div className="maininfo">
+                                                    <Form.Label className="block-level">Select Transaction</Form.Label>
+                                                    <Select
+                                                        options={allLimits}
+                                                        onChange={(limitToAdd) => {
+                                                            this.setState({ limitToAdd });
+                                                            errors.limitToAdd = null
+                                                            values.limitToAdd = limitToAdd.value
+                                                        }}
+                                                        className={errors.limitToAdd && touched.limitToAdd ? "is-invalid h-38px" : "h-38px"}
+                                                        // value="limitToAdd"
+                                                        name="limitToAdd"
+                                                        // value={values.branchToAdd || ''}
+                                                        required
+                                                    />
+                                                    {errors.limitToAdd && touched.limitToAdd ? (
+                                                        <span className="invalid-feedback">{errors.limitToAdd}</span>
+                                                    ) : null}
+                                                </div>
+                                                <div className="other-info-wrapper">
+                                                    <Form.Label className="block-level">Amount</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.amountLimit)}
+                                                        className={errors.amountLimit && touched.amountLimit ? "is-invalid h-38px": "h-38px"}
+                                                        name="amountLimit"  />
+                                                    {errors.amountLimit && touched.amountLimit ? (
+                                                        <span className="invalid-feedback">{errors.amountLimit}</span>
+                                                    ) : null}
+                                                </div>
+                                            </div>
+                                            <div className="add-option-cta">
+                                                <Button variant="success" 
+                                                    className="btn btn-secondary"
+                                                    onClick={()=>{
+                                                        if(this.state.limitToAdd && values.amountLimit!==""){
+                                                            this.updateLimitsList({...this.state.limitToAdd,amount: values.amountLimit}, "add")
+                                                        }
+                                                    }}
+                                                >
+                                                    Add Limit
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                            <div className="options-list">
+                                                <div className="title-txt">All Transaction Limits</div>
+                                                <div className="each-option-wrap">
+                                                    {this.selectTxtnLimitsList.length>=1 && 
+                                                        <div>
+                                                            {
+                                                                this.state.selectTxtnLimitsToAdd.map((eachItem, index) => {
+                                                                    return (
+                                                                        <div className="each-option-added" key={index}>
+                                                                            <div className="each-option-txt">{eachItem.label} (Limit:{numberWithCommas(eachItem.amount, true)})</div>
+                                                                            <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}></div>
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                    }
+                                                    
+                                                </div>
+                                            </div>
+                                        
+                                            
+                                        {/* </Form.Row> */}
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
 
 
                            
@@ -626,6 +871,91 @@ class EditUser extends React.Component {
                                 </Accordion.Collapse>
                             </Accordion>
                             
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Access Rights
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div className="each-formsection">
+                                        <Form.Row>
+                                            <Col>
+                                                <div className="checkbox-wrap">
+                                                    <input type="checkbox" 
+                                                        id="canAccessAllBranches" 
+                                                        checked={values.canAccessAllBranches? values.canAccessAllBranches:null}
+                                                        name="canAccessAllBranches"
+                                                        onChange={handleChange} 
+                                                        value={values.canAccessAllBranches}  />
+                                                    <label className="mb-0" htmlFor="canAccessAllBranches">Can access all branches</label>
+                                                </div>
+                                            </Col>
+                                            <Col></Col>
+                                        </Form.Row>
+                                        {/* <Form.Row> */}
+                                        {values.canAccessAllBranches===false &&
+                                            <div className="wrap-selection">
+                                                <div className="option-select">
+                                                    <Form.Label className="block-level">Branch</Form.Label>
+                                                    <Select
+                                                        options={allBranches}
+                                                        onChange={(branchToAdd) => {
+                                                            this.setState({ branchToAdd });
+                                                            errors.branchToAdd = null
+                                                            values.branchToAdd = branchToAdd.value
+                                                        }}
+                                                        className={errors.branchToAdd && touched.branchToAdd ? "is-invalid" : null}
+                                                        // value="branchToAdd"
+                                                        name="branchToAdd"
+                                                        // value={values.branchToAdd || ''}
+                                                        required
+                                                    />
+                                                    {errors.branchToAdd && touched.branchToAdd ? (
+                                                        <span className="invalid-feedback">{errors.branchToAdd}</span>
+                                                    ) : null}
+                                                </div>
+                                                <div className="add-option-cta">
+                                                    <Button variant="success" 
+                                                        className="btn btn-secondary"
+                                                        onClick={()=>{
+                                                            if(this.state.branchToAdd){
+                                                                this.setState({submitError:""})
+                                                                this.updateBranchList(this.state.branchToAdd, "add")
+                                                            }
+                                                        }}
+                                                    >
+                                                        Add branch
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        }
+                                        {values.canAccessAllBranches===false &&
+                                            <div className="options-list">
+                                                <div className="title-txt">Branch Access</div>
+                                                <div className="each-option-wrap">
+                                                    {this.selectBranchesList.length>=1 && 
+                                                        <div>
+                                                            {
+                                                                this.state.selectBranchesToAdd.map((eachBranch, index) => {
+                                                                    return (
+                                                                        <div className="each-option-added" key={index}>
+                                                                            <div className="each-option-txt">{eachBranch.label}</div>
+                                                                            <div className="remove-option-cta" onClick={() => this.updateBranchList(eachBranch, "remove")}></div>
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                    }
+                                                    
+                                                </div>
+                                                {submitError!=="" && <div className="errormsg">{submitError}</div>}
+                                            </div>
+                                        }
+                                            
+                                        {/* </Form.Row> */}
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
                             
 
                             <Accordion defaultActiveKey="0">
@@ -674,6 +1004,11 @@ class EditUser extends React.Component {
                                 <Alert variant="danger">
                                     {adminUpdateAUserRequest.request_data.error}
                             
+                                </Alert>
+                            }
+                            {submitError!=="" &&
+                                <Alert variant="danger">
+                                    {submitError}
                                 </Alert>
                             }
                         </Form>
