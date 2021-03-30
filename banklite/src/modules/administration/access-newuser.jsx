@@ -25,13 +25,22 @@ import Alert from 'react-bootstrap/Alert'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import "./administration.scss"; 
+import { numberWithCommas } from "../../shared/utils";
 class CreateNewUser extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            user:''
+            user:'',
+            selectBranchesToAdd:[],
+            selectTxtnLimitsToAdd:[],
+            submitError:""
         }
 
+        this.selectBranchesToAdd = [];
+        this.selectBranchesList = [];
+
+        this.selectTxtnLimitsToAdd = [];
+        this.selectTxtnLimitsList = [];
         
     }
 
@@ -50,11 +59,77 @@ class CreateNewUser extends React.Component {
         
         await dispatch(administrationActions.createUser(payload));
     }
+
+    updateBranchList = (branchToUpdate, operation) =>{
+        // console.log("branch info", branchToUpdate);
+        if(operation==="add"){
+            if(this.selectBranchesList.indexOf(branchToUpdate.value)===-1){
+                this.selectBranchesToAdd.push(branchToUpdate)
+                this.selectBranchesList.push(branchToUpdate.value)
+                this.setState({selectBranchesToAdd: this.selectBranchesToAdd})
+            }
+        }
+       
+        
+
+        if(operation==="remove"){
+            // let idToRemove = branchToUpdate.value;
+            let idToRemove = this.selectBranchesList.indexOf(branchToUpdate.value);
+            let branchFiltered = this.selectBranchesToAdd.filter(branch=>branch.value!==branchToUpdate.value);
+            // console.log("remove info", idToRemove);
+            if (idToRemove !== -1) {
+                this.selectBranchesList.splice(idToRemove, 1);
+                this.selectBranchesToAdd = [];
+                this.selectBranchesToAdd.push(...branchFiltered)
+                this.setState({selectBranchesToAdd: this.selectBranchesToAdd})
+            }
+            
+            // console.log("filtered info", this.selectBranchesToAdd);
+            // this.selectBranchesToAdd.push(branchToAdd)
+        }
+
+    }
+
+    updateLimitsList = (itemToUpdate, operation) =>{
+       
+        if(operation==="add"){
+            let filteredItemsToAdd = this.selectTxtnLimitsList.filter(item=>item.transactionAccessRightOptions===parseInt(itemToUpdate.value));
+            if(filteredItemsToAdd.length===0){
+                // if(this.selectTxtnLimitsList.indexOf(itemToUpdate.value)===-1){
+                this.selectTxtnLimitsToAdd.push(itemToUpdate)
+                this.selectTxtnLimitsList.push({transactionAccessRightOptions:itemToUpdate.value, amount: parseFloat(itemToUpdate.amount.replace(/,/g, ''))})
+                this.setState({selectTxtnLimitsToAdd: this.selectTxtnLimitsToAdd})
+            }
+        }
+       
+        
+
+        if(operation==="remove"){
+            // let idToRemove = itemToUpdate.value;
+            // let idToRemove = this.selectTxtnLimitsList.indexOf(itemToUpdate.value);
+            let idToRemove = this.selectTxtnLimitsList.filter(item=>item.transactionAccessRightOptions===parseInt(itemToUpdate.value))[0];
+            let itemFiltered = this.selectTxtnLimitsToAdd.filter(item=>item.value!==itemToUpdate.value);
+            // console.log("remove info", idToRemove);
+            if (idToRemove !== -1) {
+                this.selectTxtnLimitsList.splice(idToRemove[0], 1);
+                this.selectTxtnLimitsToAdd = [];
+                this.selectTxtnLimitsToAdd.push(...itemFiltered)
+                this.setState({selectTxtnLimitsToAdd: this.selectTxtnLimitsToAdd})
+            }
+            
+            // console.log("filtered info", this.selectTxtnLimitsToAdd);
+            // this.selectTxtnLimitsToAdd.push(branchToAdd)
+        }
+
+
+        
+    }
     
     
 
     renderCreateUserForm =(roles, branches)=>{
         let adminCreateAUserRequest = this.props.adminCreateAUserReducer,
+            {submitError} = this.state,
             allRoles =[],
             allBranches =[],
             createUserValidationSchema = Yup.object().shape({
@@ -118,12 +193,44 @@ class CreateNewUser extends React.Component {
                     .min(5, 'Provide detailed notes'),
             });
 
+            let allLimits = [
+                {
+                    label: "Select",
+                    value:""
+                },
+                {
+                    label: "Approve Loan",
+                    value:0
+                },
+                {
+                    label: "Disburse Loan",
+                    value:1
+                },
+                {
+                    label: "Apply Fee",
+                    value:2
+                },
+                {
+                    label: "Make Deposit",
+                    value:3
+                },
+                {
+                    label: "Make Withdrawal",
+                    value:4
+                },
+                {
+                    label: "Make Repayment",
+                    value:5
+                },
+                
+            ]
+
             roles.map((eachRole, index)=>{
                 allRoles.push({value:eachRole.roleId, label:eachRole.name})
             })
 
             branches.map((eachBranch, index)=>{
-                allBranches.push({value:eachBranch.id, label:eachBranch.name})
+                allBranches.push({value:eachBranch.encodedKey, label:eachBranch.name})
             })
 
         return(
@@ -140,6 +247,7 @@ class CreateNewUser extends React.Component {
                     userHasApiAccessRight: false,
                     note: '',
                     addressLine1: '',
+                    amountLimit: '',
                     addressLine2: '',
                     addressCity: '',
                     addressState: '',
@@ -151,92 +259,108 @@ class CreateNewUser extends React.Component {
                     emailAddress: '',
                     password: '',
                     branchId: '',
-                    canAccessAllBranches:false
+                    canAccessAllBranches:false,
+                    
                 }}
 
                 validationSchema={createUserValidationSchema}
                 onSubmit={(values, { resetForm }) => {
+                    let allErrors = "";
+                    if(values.canAccessAllBranches ===false && this.selectBranchesList.length===0){
+                        allErrors += "Select allowed branches"
+                    }else{
+                        allErrors =""
+                    }
 
-                    let createNewUserPayload = {
-                        firstName: values.firstName,
-                        lastName: values.lastName,
-                        title: values.title !==''? values.title:null,
-                        roleId: values.roleId!==''? values.roleId:null,
-                        isAccountOfficer: values.userIsAccountOfficer!==""? values.userIsAccountOfficer:null ,
-                        isTeller: values.userIsTeller!==''? values.userIsTeller : null,
-                        isApiAccess: values.userHasApiAccessRight!==""? values.userHasApiAccessRight: null,
-                        isPortalAdministrator: values.userIsPortalAdministrator!==""? values.userIsPortalAdministrator: null,
-                        isAdministrator: values.userIsAdministrator!==""?values.userIsAdministrator: null ,
-                        contact:{
-                            contactMobile:values.contactMobile !==""? values.contactMobile: null,
-                            contactEmail:values.contactEmail!=="" ? values.contactEmail:null,
-                        },
-                        address:{
-                            addressLine1: values.addressLine1 !==""? values.addressLine1: null,
-                            addressLine2: values.addressLine2!==""? values.addressLine2: null,
-                            addressCity: values.addressCity !==""? values.addressCity: null,
-                            addressState: values.addressState!==""? values.addressState: null,
-                            addressCountry: values.addressCountry !==""? values.addressCountry :null,
-                            zipCode: values.zipCode!==""? values.zipCode: null,
-                        },
-                        userName: values.userName!==""? values.userName: null,
-                        emailAddress: values.emailAddress!=="" ? values.emailAddress: null,
-                        password: values.password!==""? values.password: null,
-                        branchId: values.branchId!==""? values.branchId: null,
-                        note: values.note!==""? values.note: null,
-                        canAccessAllBranches: values.canAccessAllBranches!==""? values.canAccessAllBranches: null
-                    };
-                    // if(values.addressLine1!==''){
-                    //     createNewUserPayload.address.addressLine1 =values.addressLine1;
-                    // }
-                    // if(values.addressLine2!==''){
-                    //     createNewUserPayload.address.addressLine2 =values.addressLine2;
-                    // }
-                    // if(values.addressCity!==''){
-                    //     createNewUserPayload.address.addressCity =values.addressCity;
-                    // }
-                    // if(values.addressState!==''){
-                    //     createNewUserPayload.address.addressState =values.addressState;
-                    // }
-                    // if(values.addressCountry!==''){
-                    //     createNewUserPayload.address.addressCountry =values.addressCountry;
-                    // }
-                    // if(values.zipCode!==''){
-                    //     createNewUserPayload.address.zipCode =values.zipCode;
-                    // }
+                    this.setState({submitError:allErrors});
+                    if (allErrors === "") {
+                        let branchesChosen = [];
+                        this.selectBranchesList.map(eachBranch=>branchesChosen.push({branchEncodedKey : eachBranch}))
+                        // this.selectTxtnLimitsToAdd.map(eachLimit=>allLimitsChosen.push({branchEncodedKey : eachLimit}))
 
-                    // if(values.contactMobile!==''){
-                    //     createNewUserPayload.contact.contactMobile =values.contactMobile;
-                    // }
+                        let createNewUserPayload = {
+                            firstName: values.firstName,
+                            lastName: values.lastName,
+                            title: values.title !== '' ? values.title : null,
+                            roleId: values.roleId !== '' ? values.roleId : null,
+                            isAccountOfficer: values.userIsAccountOfficer !== "" ? values.userIsAccountOfficer : null,
+                            isTeller: values.userIsTeller !== '' ? values.userIsTeller : null,
+                            isApiAccess: values.userHasApiAccessRight !== "" ? values.userHasApiAccessRight : null,
+                            isPortalAdministrator: values.userIsPortalAdministrator !== "" ? values.userIsPortalAdministrator : null,
+                            isAdministrator: values.userIsAdministrator !== "" ? values.userIsAdministrator : null,
+                            contact: {
+                                contactMobile: values.contactMobile !== "" ? values.contactMobile : null,
+                                contactEmail: values.contactEmail !== "" ? values.contactEmail : null,
+                            },
+                            address: {
+                                addressLine1: values.addressLine1 !== "" ? values.addressLine1 : null,
+                                addressLine2: values.addressLine2 !== "" ? values.addressLine2 : null,
+                                addressCity: values.addressCity !== "" ? values.addressCity : null,
+                                addressState: values.addressState !== "" ? values.addressState : null,
+                                addressCountry: values.addressCountry !== "" ? values.addressCountry : null,
+                                zipCode: values.zipCode !== "" ? values.zipCode : null,
+                            },
+                            userName: values.userName !== "" ? values.userName : null,
+                            emailAddress: values.emailAddress !== "" ? values.emailAddress : null,
+                            password: values.password !== "" ? values.password : null,
+                            branchId: values.branchId !== "" ? values.branchId : null,
+                            note: values.note !== "" ? values.note : null,
+                            canAccessAllBranches: values.canAccessAllBranches !== "" ? values.canAccessAllBranches : null,
+                            transactionAccessRightModels: this.selectTxtnLimitsList.length >= 1 ? this.selectTxtnLimitsList : null,
+                            branchAccessModels: (values.canAccessAllBranches === true || this.selectBranchesList.length === 0) ? null : branchesChosen
+                        };
+                        // if(values.addressLine1!==''){
+                        //     createNewUserPayload.address.addressLine1 =values.addressLine1;
+                        // }
+                        // if(values.addressLine2!==''){
+                        //     createNewUserPayload.address.addressLine2 =values.addressLine2;
+                        // }
+                        // if(values.addressCity!==''){
+                        //     createNewUserPayload.address.addressCity =values.addressCity;
+                        // }
+                        // if(values.addressState!==''){
+                        //     createNewUserPayload.address.addressState =values.addressState;
+                        // }
+                        // if(values.addressCountry!==''){
+                        //     createNewUserPayload.address.addressCountry =values.addressCountry;
+                        // }
+                        // if(values.zipCode!==''){
+                        //     createNewUserPayload.address.zipCode =values.zipCode;
+                        // }
 
-                    // createNewUserPayload.contact.contactEmail =values.emailAddress;
-                    // if(values.contactEmail!==''){
-                    //     createNewUserPayload.contact.contactEmail =values.emailAddress;
-                    //     // createNewUserPayload.contact.contactEmail =values.contactEmail;
-                    // }
+                        // if(values.contactMobile!==''){
+                        //     createNewUserPayload.contact.contactMobile =values.contactMobile;
+                        // }
 
-                    
-
-                    this.createUserRequest(createNewUserPayload)
-                        .then(
-                            () => {
-
-                                if (this.props.adminCreateAUserReducer.request_status === administrationConstants.CREATE_A_USER_SUCCESS) {
+                        // createNewUserPayload.contact.contactEmail =values.emailAddress;
+                        // if(values.contactEmail!==''){
+                        //     createNewUserPayload.contact.contactEmail =values.emailAddress;
+                        //     // createNewUserPayload.contact.contactEmail =values.contactEmail;
+                        // }
 
 
-                                    setTimeout(() => {
-                                        this.props.dispatch(administrationActions.createUser("CLEAR"));
-                                        resetForm();
-                                        values.roleId = null;
-                                    }, 3000);
-                                } else {
-                                    setTimeout(() => {
-                                        // this.props.dispatch(administrationActions.createUser("CLEAR"))
-                                    }, 3000);
+                        
+                        this.createUserRequest(createNewUserPayload)
+                            .then(
+                                () => {
+
+                                    if (this.props.adminCreateAUserReducer.request_status === administrationConstants.CREATE_A_USER_SUCCESS) {
+
+
+                                        setTimeout(() => {
+                                            this.props.dispatch(administrationActions.createUser("CLEAR"));
+                                            resetForm();
+                                            values.roleId = null;
+                                        }, 3000);
+                                    } else {
+                                        setTimeout(() => {
+                                            // this.props.dispatch(administrationActions.createUser("CLEAR"))
+                                        }, 3000);
+                                    }
+
                                 }
-
-                            }
-                        )
+                            )
+                    }
 
                 }}
             >
@@ -377,7 +501,91 @@ class CreateNewUser extends React.Component {
                                     </div>
                                 </Accordion.Collapse>
                             </Accordion>
-
+                            
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Transation Limits
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div className="each-formsection">
+                                        
+                                        {/* <Form.Row> */}
+                                        
+                                        <div className="wrap-selection">
+                                            <div className="option-select flexed">
+                                                <div className="maininfo">
+                                                    <Form.Label className="block-level">Select Transaction</Form.Label>
+                                                    <Select
+                                                        options={allLimits}
+                                                        onChange={(limitToAdd) => {
+                                                            this.setState({ limitToAdd });
+                                                            errors.limitToAdd = null
+                                                            values.limitToAdd = limitToAdd.value
+                                                        }}
+                                                        className={errors.limitToAdd && touched.limitToAdd ? "is-invalid h-38px" : "h-38px"}
+                                                        // value="limitToAdd"
+                                                        name="limitToAdd"
+                                                        // value={values.branchToAdd || ''}
+                                                        required
+                                                    />
+                                                    {errors.limitToAdd && touched.limitToAdd ? (
+                                                        <span className="invalid-feedback">{errors.limitToAdd}</span>
+                                                    ) : null}
+                                                </div>
+                                                <div className="other-info-wrapper">
+                                                    <Form.Label className="block-level">Amount</Form.Label>
+                                                    <Form.Control 
+                                                        type="text"
+                                                        onChange={handleChange}
+                                                        value={numberWithCommas(values.amountLimit)}
+                                                        className={errors.amountLimit && touched.amountLimit ? "is-invalid h-38px": "h-38px"}
+                                                        name="amountLimit"  />
+                                                    {errors.amountLimit && touched.amountLimit ? (
+                                                        <span className="invalid-feedback">{errors.amountLimit}</span>
+                                                    ) : null}
+                                                </div>
+                                            </div>
+                                            <div className="add-option-cta">
+                                                <Button variant="success" 
+                                                    className="btn btn-secondary"
+                                                    onClick={()=>{
+                                                        if(this.state.limitToAdd && values.amountLimit!==""){
+                                                            this.updateLimitsList({...this.state.limitToAdd,amount: values.amountLimit}, "add")
+                                                        }
+                                                    }}
+                                                >
+                                                    Add Limit
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                            <div className="options-list">
+                                                <div className="title-txt">All Transaction Limits</div>
+                                                <div className="each-option-wrap">
+                                                    {this.selectTxtnLimitsList.length>=1 && 
+                                                        <div>
+                                                            {
+                                                                this.state.selectTxtnLimitsToAdd.map((eachItem, index) => {
+                                                                    return (
+                                                                        <div className="each-option-added" key={index}>
+                                                                            <div className="each-option-txt">{eachItem.label} (Limit:{eachItem.amount})</div>
+                                                                            <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}></div>
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                    }
+                                                    
+                                                </div>
+                                            </div>
+                                        
+                                            
+                                        {/* </Form.Row> */}
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
                             
 
 
@@ -563,6 +771,17 @@ class CreateNewUser extends React.Component {
                                                 ) : null} 
                                             </Col>
                                         </Form.Row>
+                                        
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Access Rights
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div className="each-formsection">
                                         <Form.Row>
                                             <Col>
                                                 <div className="checkbox-wrap">
@@ -575,7 +794,70 @@ class CreateNewUser extends React.Component {
                                                     <label className="mb-0" htmlFor="canAccessAllBranches">Can access all branches</label>
                                                 </div>
                                             </Col>
+                                            <Col></Col>
                                         </Form.Row>
+                                        {/* <Form.Row> */}
+                                        {values.canAccessAllBranches===false &&
+                                            <div className="wrap-selection">
+                                                <div className="option-select">
+                                                    <Form.Label className="block-level">Branch</Form.Label>
+                                                    <Select
+                                                        options={allBranches}
+                                                        onChange={(branchToAdd) => {
+                                                            this.setState({ branchToAdd });
+                                                            errors.branchToAdd = null
+                                                            values.branchToAdd = branchToAdd.value
+                                                        }}
+                                                        className={errors.branchToAdd && touched.branchToAdd ? "is-invalid" : null}
+                                                        // value="branchToAdd"
+                                                        name="branchToAdd"
+                                                        // value={values.branchToAdd || ''}
+                                                        required
+                                                    />
+                                                    {errors.branchToAdd && touched.branchToAdd ? (
+                                                        <span className="invalid-feedback">{errors.branchToAdd}</span>
+                                                    ) : null}
+                                                </div>
+                                                <div className="add-option-cta">
+                                                    <Button variant="success" 
+                                                        className="btn btn-secondary"
+                                                        onClick={()=>{
+                                                            if(this.state.branchToAdd){
+                                                                this.setState({submitError:""})
+                                                                this.updateBranchList(this.state.branchToAdd, "add")
+                                                            }
+                                                        }}
+                                                    >
+                                                        Add branch
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        }
+                                        {values.canAccessAllBranches===false &&
+                                            <div className="options-list">
+                                                <div className="title-txt">Branch Access</div>
+                                                <div className="each-option-wrap">
+                                                    {this.selectBranchesList.length>=1 && 
+                                                        <div>
+                                                            {
+                                                                this.state.selectBranchesToAdd.map((eachBranch, index) => {
+                                                                    return (
+                                                                        <div className="each-option-added" key={index}>
+                                                                            <div className="each-option-txt">{eachBranch.label}</div>
+                                                                            <div className="remove-option-cta" onClick={() => this.updateBranchList(eachBranch, "remove")}></div>
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                    }
+                                                    
+                                                </div>
+                                                {submitError!=="" && <div className="errormsg">{submitError}</div>}
+                                            </div>
+                                        }
+                                            
+                                        {/* </Form.Row> */}
                                     </div>
                                 </Accordion.Collapse>
                             </Accordion>
@@ -628,6 +910,11 @@ class CreateNewUser extends React.Component {
                                 <Alert variant="danger">
                                     {adminCreateAUserRequest.request_data.error}
                             
+                                </Alert>
+                            }
+                            {submitError!=="" &&
+                                <Alert variant="danger">
+                                    {submitError}
                                 </Alert>
                             }
                         </Form>

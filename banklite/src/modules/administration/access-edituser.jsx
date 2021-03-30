@@ -309,7 +309,7 @@ class EditUser extends React.Component {
                                         onChange={handleChange}
                                         name="roleId"
                                         value={values.roleId}
-                                        defaultValue={currentRole.roleId}
+                                        defaultValue={currentRole? currentRole.roleId : ""}
                                         className={errors.roleId && touched.roleId ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
                                     >
                                         {
@@ -584,7 +584,7 @@ class EditUser extends React.Component {
                                                     onChange={handleChange}
                                                     name="branchId"
                                                     value={values.branchId}
-                                                    defaultValue={currentBranch.id}
+                                                    defaultValue={currentBranch? currentBranch.id:""}
                                                     className={errors.branchId && touched.branchId ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
                                                 >
                                                     {
