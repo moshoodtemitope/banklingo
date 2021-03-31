@@ -45,6 +45,9 @@ class CreateNewUser extends React.Component {
         
     }
 
+    selectRef = null;
+    selectRef2 = null;
+
     componentDidMount(){
         this.getRoles();
     }
@@ -520,10 +523,15 @@ class CreateNewUser extends React.Component {
                                                     <Form.Label className="block-level">Select Transaction</Form.Label>
                                                     <Select
                                                         options={allLimits}
+                                                        ref={ref => {
+                                                            this.selectRef = ref;
+                                                        }}
                                                         onChange={(limitToAdd) => {
                                                             this.setState({ limitToAdd });
-                                                            errors.limitToAdd = null
-                                                            values.limitToAdd = limitToAdd.value
+                                                            if(limitToAdd){
+                                                                errors.limitToAdd = null
+                                                                values.limitToAdd = limitToAdd.value
+                                                            }
                                                         }}
                                                         className={errors.limitToAdd && touched.limitToAdd ? "is-invalid h-38px" : "h-38px"}
                                                         // value="limitToAdd"
@@ -558,6 +566,7 @@ class CreateNewUser extends React.Component {
                                                         if(this.state.limitToAdd && values.amountLimit!=="" && values.amountLimit!==undefined){
                                                             this.setState({amountLimitError: false})
                                                             this.updateLimitsList({...this.state.limitToAdd,amount: values.amountLimit}, "add")
+                                                            this.selectRef.select.clearValue();
                                                         }else{
                                                             this.setState({amountLimitError: true})
                                                         }
@@ -812,10 +821,16 @@ class CreateNewUser extends React.Component {
                                                     <Form.Label className="block-level">Branch</Form.Label>
                                                     <Select
                                                         options={allBranches}
+                                                        ref={ref => {
+                                                            this.selectRef2 = ref;
+                                                        }}
                                                         onChange={(branchToAdd) => {
                                                             this.setState({ branchToAdd });
                                                             errors.branchToAdd = null
-                                                            values.branchToAdd = branchToAdd.value
+                                                            if(branchToAdd){
+                                                                errors.branchToAdd = null
+                                                                values.branchToAdd = branchToAdd.value
+                                                            }
                                                         }}
                                                         className={errors.branchToAdd && touched.branchToAdd ? "is-invalid" : null}
                                                         // value="branchToAdd"
@@ -834,6 +849,7 @@ class CreateNewUser extends React.Component {
                                                             if(this.state.branchToAdd){
                                                                 this.setState({submitError:""})
                                                                 this.updateBranchList(this.state.branchToAdd, "add")
+                                                                this.selectRef2.select.clearValue();
                                                             }
                                                         }}
                                                     >

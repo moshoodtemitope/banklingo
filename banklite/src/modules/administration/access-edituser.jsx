@@ -1,4 +1,5 @@
 import * as React from "react";
+
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
@@ -41,6 +42,8 @@ class EditUser extends React.Component {
         this.selectTxtnLimitsList = [];
         
     }
+    selectRef = null;
+    selectRef2 = null;
 
     componentDidMount() {
 
@@ -49,6 +52,7 @@ class EditUser extends React.Component {
     }
 
     fetchUser =(encodedKey)=>{
+        this.props.dispatch(administrationActions.updateAUser("CLEAR"));
         this.getAUser(encodedKey)
             .then(()=>{
                 if(this.props.adminGetAUserRequest.request_status === administrationConstants.GET_A_USER_SUCCESS){
@@ -162,6 +166,7 @@ class EditUser extends React.Component {
     }
 
     renderUpdateUserForm =(userData,roles, branches)=>{
+        
         let adminUpdateAUserRequest = this.props.adminUpdateAUserRequest,
             allRoles =[],
             {submitError} = this.state,
@@ -224,8 +229,8 @@ class EditUser extends React.Component {
                     // .min(1, 'Branch  required')
                     // .max(100, 'Max limit reached')
                     .required('Required'),
-                note:  Yup.string()
-                    .min(5, 'Provide detailed notes'),
+                // note:  Yup.string()
+                //     .min(5, 'Provide detailed notes'),
             });
             
             let allLimits = [
@@ -316,7 +321,7 @@ class EditUser extends React.Component {
                 }}
                 // validateOnBlur={true}
                 // validateOnChange={true}
-                validationSchema={updateUserValidationSchema}
+                // validationSchema={updateUserValidationSchema}
                 onSubmit={(values, { resetForm }) => {
                     let allErrors = "";
                     if(values.canAccessAllBranches ===false && this.selectBranchesList.length===0){
@@ -598,10 +603,15 @@ class EditUser extends React.Component {
                                                     <Form.Label className="block-level">Select Transaction</Form.Label>
                                                     <Select
                                                         options={allLimits}
+                                                        ref={ref => {
+                                                            this.selectRef = ref;
+                                                        }}
                                                         onChange={(limitToAdd) => {
                                                             this.setState({ limitToAdd });
-                                                            errors.limitToAdd = null
-                                                            values.limitToAdd = limitToAdd.value
+                                                            if(limitToAdd){
+                                                                errors.limitToAdd = null
+                                                                values.limitToAdd = limitToAdd.value
+                                                            }
                                                         }}
                                                         className={errors.limitToAdd && touched.limitToAdd ? "is-invalid h-38px" : "h-38px"}
                                                         // value="limitToAdd"
@@ -638,6 +648,9 @@ class EditUser extends React.Component {
                                                             this.setState({amountLimitError: false})
                                                             // errors.amountLimit = false;
                                                             this.updateLimitsList({...this.state.limitToAdd,amount: values.amountLimit}, "add")
+                                                            setFieldValue("amountLimit", "");
+                                                            this.selectRef.select.clearValue();
+                                                            
                                                         }else{
                                                             this.setState({amountLimitError: true})
                                                             // errors.amountLimit = true;
@@ -681,7 +694,7 @@ class EditUser extends React.Component {
 
                            
                             <Accordion defaultActiveKey="0">
-                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                     Contact
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="0">
@@ -797,7 +810,7 @@ class EditUser extends React.Component {
                             </Accordion>
 
                             <Accordion defaultActiveKey="0">
-                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="3">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                     Login Details
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="0">
@@ -916,10 +929,15 @@ class EditUser extends React.Component {
                                                     <Form.Label className="block-level">Branch</Form.Label>
                                                     <Select
                                                         options={allBranches}
+                                                        ref={ref => {
+                                                            this.selectRef2 = ref;
+                                                        }}
                                                         onChange={(branchToAdd) => {
                                                             this.setState({ branchToAdd });
-                                                            errors.branchToAdd = null
-                                                            values.branchToAdd = branchToAdd.value
+                                                            if(branchToAdd){
+                                                                errors.branchToAdd = null
+                                                                values.branchToAdd = branchToAdd.value
+                                                            }
                                                         }}
                                                         className={errors.branchToAdd && touched.branchToAdd ? "is-invalid" : null}
                                                         // value="branchToAdd"
@@ -938,6 +956,7 @@ class EditUser extends React.Component {
                                                             if(this.state.branchToAdd){
                                                                 this.setState({submitError:""})
                                                                 this.updateBranchList(this.state.branchToAdd, "add")
+                                                                this.selectRef2.select.clearValue();
                                                             }
                                                         }}
                                                     >

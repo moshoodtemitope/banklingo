@@ -93,31 +93,32 @@ class UserLogin extends React.Component {
                             userEmail:'',
                             userPassword:''
                         }}
-                        validationSchema={loginValidationSchema}
+                        // validationSchema={loginValidationSchema}
                         onSubmit={(values, { resetForm }) => {
-                            
-                            let loginPayload ={
-                                username: values.userEmail,
-                                password:values.userPassword
-                            }
+                            if(values.userEmail!=="" && values.userPassword!==""){
+                                let loginPayload ={
+                                    username: values.userEmail,
+                                    password:values.userPassword
+                                }
 
-                            this.handleLoginForm(loginPayload)
-                                        .then(
-                                            () => {
-                
-                                                // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
-                                                //     resetForm();
-                                                // }
-                                                
-                                                // setTimeout(() => {
-                                                    if(this.props.loginRequest.request_status===authConstants.LOGIN_USER_SUCCESS){
-                                                        this.props.dispatch(authActions.Login("CLEAR"));
-                                                    }
+                                this.handleLoginForm(loginPayload)
+                                            .then(
+                                                () => {
+                    
+                                                    // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
+                                                    //     resetForm();
+                                                    // }
                                                     
-                                                // }, 1500);
-                
-                                            }
-                                        )
+                                                    // setTimeout(() => {
+                                                        if(this.props.loginRequest.request_status===authConstants.LOGIN_USER_SUCCESS){
+                                                            this.props.dispatch(authActions.Login("CLEAR"));
+                                                        }
+                                                        
+                                                    // }, 1500);
+                    
+                                                }
+                                            )
+                            }
         
                         }}
                     >
