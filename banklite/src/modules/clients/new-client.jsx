@@ -109,9 +109,9 @@ class NewClient extends React.Component {
         nextOfKinMobile:  Yup.string()
             .min(11, 'Valid response required')
             .max(16, 'Max limit reached'),
-        nextOfKinRelationship:  Yup.string()
-            .min(11, 'Valid response required')
-            .max(16, 'Max limit reached'),
+        nextOfKinRelationship:  Yup.string(),
+            // .min(11, 'Valid response required')
+            // .max(16, 'Max limit reached'),
         notes:  Yup.string()
             .min(3, 'Valid response required'),
         // notes:  Yup.string()

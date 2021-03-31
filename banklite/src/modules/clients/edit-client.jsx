@@ -182,9 +182,9 @@ class EditAClient extends React.Component {
                 nextOfKinFullName:  Yup.string()
                     .min(2, 'Valid response required')
                     .max(50, 'Max limit reached'),
-                nextOfKinAddress:  Yup.string()
-                    .min(2, 'Valid response required')
-                    .max(50, 'Max limit reached'),
+                nextOfKinAddress:  Yup.string(),
+                    // .min(2, 'Valid response required')
+                    // .max(50, 'Max limit reached'),
                 nextOfKinMobile:  Yup.string()
                     .min(11, 'Valid response required')
                     .max(16, 'Max limit reached'),
