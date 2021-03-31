@@ -205,9 +205,9 @@ class MainHeader extends React.Component{
     }
 
     renderAllowableBranches =()=>{
-        let {AllowableBranches} = this.state.user;
+        let {AllowableBranches, BranchId} = this.state.user;
         return(
-            <select name="" id="" onBlur={this.chooseBranch} onChange={this.chooseBranch}>
+            <select name="" id="" defaultValue={BranchId} onBlur={this.chooseBranch} onChange={this.chooseBranch}>
                 {
                     AllowableBranches.map(eachBranch=>{
                         return(

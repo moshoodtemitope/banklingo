@@ -870,7 +870,7 @@ class EditUser extends React.Component {
                                                     {
                                                         allBranches.map((eachBranch, index) => {
                                                             return (
-                                                                <option key={index} value={eachBranch.value}>{eachBranch.label}</option>
+                                                                <option key={index} value={eachBranch.id}>{eachBranch.label}</option>
                                                             )
                                                         })
                                                     }
