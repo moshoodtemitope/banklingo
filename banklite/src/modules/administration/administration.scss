@@ -50,10 +50,10 @@
     min-height: 47px;
     .each-option-added {
         font-size: 13px;
-        width: 62%;
+        // width: 62%;
         margin: 0 auto;
         padding: 10px;
-        background: #F2F3F4;
+        // background: #F2F3F4;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -61,8 +61,8 @@
             margin-bottom: 10px;
         }
         .remove-option-cta {
-            background: #EC7063;
-            height: 5px;
+            // background: #EC7063;
+            height: 20px;
             width: 20px;
             cursor: pointer;
         }

@@ -21,6 +21,7 @@ import Alert from 'react-bootstrap/Alert'
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import RemoveIco from '../../assets/img/remove_icon.png';
 import { numberWithCommas } from "../../shared/utils";
 import "./administration.scss"; 
 class EditUser extends React.Component {
@@ -53,7 +54,7 @@ class EditUser extends React.Component {
                 if(this.props.adminGetAUserRequest.request_status === administrationConstants.GET_A_USER_SUCCESS){
                     let adminGetAUser = this.props.adminGetAUserRequest;
                     let userData = adminGetAUser.request_data.response.data;
-                    console.log("data returned", userData);
+                    
                     userData.branchAccessModels.map((eachItem, index)=>{
                         this.selectBranchesToAdd.push({label:eachItem.branchName, value: eachItem.branchEncodedKey})
                         this.selectBranchesList.push(eachItem.branchEncodedKey)
@@ -68,6 +69,8 @@ class EditUser extends React.Component {
                         // this.selectBranchesToAdd.push({label:eachItem.branchName, value: eachItem.branchEncodedKey})
                         // this.selectBranchesList.push(eachItem.branchEncodedKey)
                     })
+
+                    
 
                     this.setState({selectTxtnLimitsToAdd: this.selectTxtnLimitsToAdd})
                     this.setState({selectBranchesToAdd: this.selectBranchesToAdd})
@@ -115,7 +118,9 @@ class EditUser extends React.Component {
             
             // console.log("filtered info", this.selectBranchesToAdd);
             // this.selectBranchesToAdd.push(branchToAdd)
+            
         }
+        console.log("data returned", this.selectBranchesList);
 
     }
 
@@ -175,8 +180,8 @@ class EditUser extends React.Component {
                     .max(40, 'Max limit reached')
                     .required('Required'),
                 roleId: Yup.string()
-                    .min(1, 'Valid Role required')
-                    .max(40, 'Max limit reached')
+                    // .min(1, 'Valid Role required')
+                    // .max(40, 'Max limit reached')
                     .required('Required'),
                 addressLine1: Yup.string()
                     .min(2, 'Valid address required')
@@ -216,8 +221,8 @@ class EditUser extends React.Component {
                     // .required('Required')
                     ,
                 branchId: Yup.string()
-                    .min(1, 'Branch  required')
-                    .max(100, 'Max limit reached')
+                    // .min(1, 'Branch  required')
+                    // .max(100, 'Max limit reached')
                     .required('Required'),
                 note:  Yup.string()
                     .min(5, 'Provide detailed notes'),
@@ -265,7 +270,7 @@ class EditUser extends React.Component {
             })
 
             branches.map((eachBranch, index)=>{
-                allBranches.push({value:eachBranch.id, label:eachBranch.name})
+                allBranches.push({value:eachBranch.encodedKey, id:eachBranch.id, label:eachBranch.name})
             })
 
             let currentRole = roles.filter(eachrole=>eachrole.roleId===userData.roleId)[0],
@@ -306,6 +311,7 @@ class EditUser extends React.Component {
                     userName: userData.userName,
                     emailAddress: userData.emailAddress,
                     password: '',
+                    amountLimit:'',
                     branchId: userData.branchId!==null? userData.branchId :'',
                 }}
                 // validateOnBlur={true}
@@ -319,11 +325,13 @@ class EditUser extends React.Component {
                         allErrors =""
                     }
 
+                    // console.log("kjkhgh", )
+
                     this.setState({submitError:allErrors});
                     if (allErrors === "") {
                         let branchesChosen = [];
                         this.selectBranchesList.map(eachBranch=>branchesChosen.push({branchEncodedKey : eachBranch}))
-                        
+
                         let updateNewUserPayload = {
                             firstName: values.firstName,
                             lastName: values.lastName,
@@ -384,9 +392,9 @@ class EditUser extends React.Component {
                         }
 
 
-                        console.log("test values", updateNewUserPayload);
+                        // console.log("test values", updateNewUserPayload);
 
-                        return false;
+                        // return false;
                         
 
                         this.updateUserRequest(updateNewUserPayload)
@@ -397,7 +405,7 @@ class EditUser extends React.Component {
 
 
                                         setTimeout(() => {
-                                            this.props.dispatch(administrationActions.updateAUser("CLEAR"));
+                                            // this.props.dispatch(administrationActions.updateAUser("CLEAR"));
                                             // resetForm();
                                         }, 3000);
                                     } else {
@@ -609,21 +617,31 @@ class EditUser extends React.Component {
                                                     <Form.Label className="block-level">Amount</Form.Label>
                                                     <Form.Control 
                                                         type="text"
-                                                        onChange={handleChange}
+                                                        onChange={(e)=> {
+                                                            this.setState({amountLimitError: false})
+                                                            setFieldValue("amountLimit", e.target.value)
+                                                        }}
                                                         value={numberWithCommas(values.amountLimit)}
-                                                        className={errors.amountLimit && touched.amountLimit ? "is-invalid h-38px": "h-38px"}
+                                                        className={((errors.amountLimit && touched.amountLimit) || this.state.amountLimitError===true) ? "is-invalid h-38px": "h-38px"}
                                                         name="amountLimit"  />
-                                                    {errors.amountLimit && touched.amountLimit ? (
+                                                    {/* {errors.amountLimit && touched.amountLimit ? (
                                                         <span className="invalid-feedback">{errors.amountLimit}</span>
-                                                    ) : null}
+                                                    ) : null} */}
                                                 </div>
                                             </div>
                                             <div className="add-option-cta">
                                                 <Button variant="success" 
                                                     className="btn btn-secondary"
                                                     onClick={()=>{
-                                                        if(this.state.limitToAdd && values.amountLimit!==""){
+                                                        
+                                                        if(this.state.limitToAdd && values.amountLimit!=="" && values.amountLimit!==undefined){
+                                                            this.setState({amountLimitError: false})
+                                                            // errors.amountLimit = false;
                                                             this.updateLimitsList({...this.state.limitToAdd,amount: values.amountLimit}, "add")
+                                                        }else{
+                                                            this.setState({amountLimitError: true})
+                                                            // errors.amountLimit = true;
+                                                            // touched.amountLimit = true;
                                                         }
                                                     }}
                                                 >
@@ -643,7 +661,7 @@ class EditUser extends React.Component {
                                                                     return (
                                                                         <div className="each-option-added" key={index}>
                                                                             <div className="each-option-txt">{eachItem.label} (Limit:{numberWithCommas(eachItem.amount, true)})</div>
-                                                                            <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}></div>
+                                                                            <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}> <img src={RemoveIco} alt=""/></div>
                                                                         </div>
                                                                     )
                                                                 })
@@ -939,7 +957,7 @@ class EditUser extends React.Component {
                                                                     return (
                                                                         <div className="each-option-added" key={index}>
                                                                             <div className="each-option-txt">{eachBranch.label}</div>
-                                                                            <div className="remove-option-cta" onClick={() => this.updateBranchList(eachBranch, "remove")}></div>
+                                                                            <div className="remove-option-cta" onClick={() => this.updateBranchList(eachBranch, "remove")}> <img src={RemoveIco} alt=""/></div>
                                                                         </div>
                                                                     )
                                                                 })

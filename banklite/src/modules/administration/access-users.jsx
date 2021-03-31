@@ -331,6 +331,7 @@ class AccessUsers extends React.Component {
                                             <th>Title</th>
                                             <th>Email</th>
                                             <th>Role</th>
+                                            <th>Branch</th>
                                             <th>Last updated</th>
                                             <th>State</th>
                                             <th>Created by</th>
@@ -338,6 +339,7 @@ class AccessUsers extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -444,6 +446,7 @@ placeholderText="End  date"
                                             <th>Title</th>
                                             <th>Email</th>
                                             <th>Role</th>
+                                            <th>Branch</th>
                                             <th>Last updated</th>
                                             <th>State</th>
                                             <th>Created by</th>
@@ -467,6 +470,7 @@ placeholderText="End  date"
                                                             <td>{eachUser.title}</td>
                                                             <td>{eachUser.emailAddress}</td>
                                                             <td>{eachUser.role}</td>
+                                                            <td>{eachUser.branch}</td>
                                                             <td>{eachUser.lastUpdated}</td>
                                                             <td>{eachUser.objectStateDescription}</td>
                                                             <td>{(eachUser.createdBy !== "" && eachUser.createdBy !== null) ? eachUser.createdBy : "-"}</td>
@@ -627,6 +631,7 @@ placeholderText="End  date"
                                                             <th>Title</th>
                                                             <th>Email</th>
                                                             <th>Role</th>
+                                                            <th>Branch</th>
                                                             <th>Last updated</th>
                                                             <th>State</th>
                                                             <th>Created by</th>
@@ -650,6 +655,7 @@ placeholderText="End  date"
                                                                             <td>{eachUser.title}</td>
                                                                             <td>{eachUser.emailAddress}</td>
                                                                             <td>{eachUser.role}</td>
+                                                                            <td>{eachUser.branch}</td>
                                                                             <td>{eachUser.lastUpdated}</td>
                                                                             <td>{eachUser.objectStateDescription}</td>
                                                                             {
@@ -794,6 +800,7 @@ placeholderText="End  date"
                                                     <th>Title</th>
                                                     <th>Email</th>
                                                     <th>Role</th>
+                                                    <th>Branch</th>
                                                     <th>Last updated</th>
                                                     <th>State</th>
                                                     <th>Created by</th>
@@ -801,6 +808,7 @@ placeholderText="End  date"
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>

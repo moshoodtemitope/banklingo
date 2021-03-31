@@ -25,6 +25,7 @@ import Alert from 'react-bootstrap/Alert'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import "./administration.scss"; 
+import RemoveIco from '../../assets/img/remove_icon.png';
 import { numberWithCommas } from "../../shared/utils";
 class CreateNewUser extends React.Component {
     constructor(props) {
@@ -259,6 +260,7 @@ class CreateNewUser extends React.Component {
                     emailAddress: '',
                     password: '',
                     branchId: '',
+                    amountLimit:'',
                     canAccessAllBranches:false,
                     
                 }}
@@ -367,6 +369,7 @@ class CreateNewUser extends React.Component {
                 {({ handleSubmit,
                     handleChange,
                     handleBlur,
+                    setFieldValue,
                     resetForm,
                     values,
                     touched,
@@ -536,9 +539,12 @@ class CreateNewUser extends React.Component {
                                                     <Form.Label className="block-level">Amount</Form.Label>
                                                     <Form.Control 
                                                         type="text"
-                                                        onChange={handleChange}
+                                                        onChange={(e)=> {
+                                                            this.setState({amountLimitError: false})
+                                                            setFieldValue("amountLimit", e.target.value)
+                                                        }}
                                                         value={numberWithCommas(values.amountLimit)}
-                                                        className={errors.amountLimit && touched.amountLimit ? "is-invalid h-38px": "h-38px"}
+                                                        className={((errors.amountLimit && touched.amountLimit) || this.state.amountLimitError===true) ? "is-invalid h-38px": "h-38px"}
                                                         name="amountLimit"  />
                                                     {errors.amountLimit && touched.amountLimit ? (
                                                         <span className="invalid-feedback">{errors.amountLimit}</span>
@@ -549,8 +555,11 @@ class CreateNewUser extends React.Component {
                                                 <Button variant="success" 
                                                     className="btn btn-secondary"
                                                     onClick={()=>{
-                                                        if(this.state.limitToAdd && values.amountLimit!==""){
+                                                        if(this.state.limitToAdd && values.amountLimit!=="" && values.amountLimit!==undefined){
+                                                            this.setState({amountLimitError: false})
                                                             this.updateLimitsList({...this.state.limitToAdd,amount: values.amountLimit}, "add")
+                                                        }else{
+                                                            this.setState({amountLimitError: true})
                                                         }
                                                     }}
                                                 >
@@ -570,7 +579,7 @@ class CreateNewUser extends React.Component {
                                                                     return (
                                                                         <div className="each-option-added" key={index}>
                                                                             <div className="each-option-txt">{eachItem.label} (Limit:{eachItem.amount})</div>
-                                                                            <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}></div>
+                                                                            <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}><img src={RemoveIco} alt=""/></div>
                                                                         </div>
                                                                     )
                                                                 })
@@ -844,7 +853,7 @@ class CreateNewUser extends React.Component {
                                                                     return (
                                                                         <div className="each-option-added" key={index}>
                                                                             <div className="each-option-txt">{eachBranch.label}</div>
-                                                                            <div className="remove-option-cta" onClick={() => this.updateBranchList(eachBranch, "remove")}></div>
+                                                                            <div className="remove-option-cta" onClick={() => this.updateBranchList(eachBranch, "remove")}><img src={RemoveIco} alt=""/></div>
                                                                         </div>
                                                                     )
                                                                 })

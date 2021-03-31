@@ -104,12 +104,14 @@ class UserManagement extends React.Component {
                                             <th>Title</th>
                                             <th>Email</th>
                                             <th>Role</th>
+                                            <th>Branch</th>
                                             <th>Last updated</th>
                                             <th>State</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -159,6 +161,7 @@ class UserManagement extends React.Component {
                                                     <th>Title</th>
                                                     <th>Email</th>
                                                     <th>Role</th>
+                                                    <th>Branch</th>
                                                     <th>Last updated</th>
                                                     <th>State</th>
                                                 </tr>
@@ -179,6 +182,7 @@ class UserManagement extends React.Component {
                                                                     <td>{eachUser.title}</td>
                                                                     <td>{eachUser.emailAddress}</td>
                                                                     <td>{eachUser.role}</td>
+                                                                    <td>{eachUser.branch}</td>
                                                                     <td>{eachUser.lastUpdated}</td>
                                                                     <td>{eachUser.objectStateDescription}</td>
                                                                 </tr>
@@ -243,6 +247,7 @@ class UserManagement extends React.Component {
                                                             <th>Title</th>
                                                             <th>Email</th>
                                                             <th>Role</th>
+                                                            <th>Branch</th>
                                                             <th>Last updated</th>
                                                             <th>State</th>
                                                         </tr>
@@ -263,6 +268,7 @@ class UserManagement extends React.Component {
                                                                             <td>{eachUser.title}</td>
                                                                             <td>{eachUser.emailAddress}</td>
                                                                             <td>{eachUser.role}</td>
+                                                                            <td>{eachUser.branch}</td>
                                                                             <td>{eachUser.lastUpdated}</td>
                                                                             <td>{eachUser.objectStateDescription}</td>
                                                                         </tr>
@@ -310,12 +316,14 @@ class UserManagement extends React.Component {
                                                     <th>Title</th>
                                                     <th>Email</th>
                                                     <th>Role</th>
+                                                    <th>Branch</th>
                                                     <th>Last updated</th>
                                                     <th>State</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
