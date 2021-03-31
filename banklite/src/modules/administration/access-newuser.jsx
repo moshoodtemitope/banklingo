@@ -193,8 +193,8 @@ class CreateNewUser extends React.Component {
                     .min(1, 'Branch  required')
                     .max(100, 'Max limit reached')
                     .required('Required'),
-                note:  Yup.string()
-                    .min(5, 'Provide detailed notes'),
+                // note:  Yup.string()
+                //     .min(5, 'Provide detailed notes'),
             });
 
             let allLimits = [
