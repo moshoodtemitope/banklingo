@@ -846,8 +846,12 @@ class EditUser extends React.Component {
                                                 <Form.Label className="block-level">Password</Form.Label>
                                                 <Form.Control 
                                                     type="password"
-                                                    onChange={handleChange}
+                                                    onChange={(e)=> {
+                                                        
+                                                        setFieldValue("password", "")
+                                                    }}
                                                     value={values.password}
+                                                    disabled = {true}
                                                     className={errors.password && touched.password ? "is-invalid" : null}
                                                     name="password" />
                                                 {errors.password && touched.password ? (
