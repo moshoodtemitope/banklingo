@@ -71,7 +71,7 @@ class MainHeader extends React.Component{
 
     handleCurrentBranchClicked = () =>{
         let {user} = this.state;
-        if(user.AllowedBranches.length>1){
+        if(user.AllowableBranches.length>1){
             this.setState({showDropdown: true})
         }
         
@@ -82,7 +82,7 @@ class MainHeader extends React.Component{
         let user = JSON.parse(localStorage.getItem('lingoAuth'));
             user.BranchId = e.target.value;
             // localStorage.setItem('lingoAuth', JSON.stringify(user));
-            let selectedBranch = user.AllowedBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].name;
+            let selectedBranch = user.AllowableBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].name;
             user.BranchName = selectedBranch;
             localStorage.setItem('lingoAuth', JSON.stringify(user));
         this.setState({showDropdown: false, 
@@ -203,12 +203,12 @@ class MainHeader extends React.Component{
         // return( <NavLink to={'/dashboard'}>dsdhsjdhshjd</NavLink>)
     }
 
-    renderAllowedBranches =()=>{
-        let {AllowedBranches} = this.state.user;
+    renderAllowableBranches =()=>{
+        let {AllowableBranches} = this.state.user;
         return(
             <select name="" id="" onBlur={this.chooseBranch} onChange={this.chooseBranch}>
                 {
-                    AllowedBranches.map(eachBranch=>{
+                    AllowableBranches.map(eachBranch=>{
                         return(
                             <option key={eachBranch.id} value={eachBranch.id}>{eachBranch.name}</option>
                         )
@@ -654,7 +654,7 @@ class MainHeader extends React.Component{
     renderHeadingWrap(){
         // let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
         const {user} = this.state;
-        let {AllowedBranches} = this.state.user;
+        let {AllowableBranches} = this.state.user;
         let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
         return(
             <div className="mainheader-wrap">
@@ -668,7 +668,7 @@ class MainHeader extends React.Component{
                         {/* <Nav className="">
                             <Nav.Link href="/"></Nav.Link>
                         </Nav> */}
-                        {AllowedBranches.length >=1 &&
+                        {AllowableBranches.length >=1 &&
                             <div className="user-branch">
                                 {this.state.showDropdown===false && 
                                     <div className="branch-text" 
@@ -676,13 +676,13 @@ class MainHeader extends React.Component{
                                 }
                                 { this.state.showDropdown &&
                                         <div className="branch-dropdown">
-                                            {this.renderAllowedBranches()}
+                                            {this.renderAllowableBranches()}
                                             
                                         </div>
                                     }
                             </div>
                         }
-                        {AllowedBranches.length ===0 &&
+                        {AllowableBranches.length ===0 &&
                             <div className="user-branch">
                                 {this.state.showDropdown===false && 
                                     <div className="branch-text" 
