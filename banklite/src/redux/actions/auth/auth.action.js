@@ -75,7 +75,7 @@ function Login   (loginPayload){
                                 user.AllowableBranches = response2.data;
                                 // user.BranchId = response2.data[0].id;
                                 if(response2.data.length>=1){
-                                    user.BranchId = response2.data[0].encodedKey;
+                                    user.BranchId = response2.data[0].id;
                                     user.BranchName = response2.data[0].name;
                                 }
                                 // localStorage.setItem('lingoAuth', JSON.stringify(user));
