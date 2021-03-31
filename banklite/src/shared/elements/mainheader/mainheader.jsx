@@ -88,6 +88,7 @@ class MainHeader extends React.Component{
         this.setState({showDropdown: false, 
                         activeBranch: selectedBranch
                     })
+            window.location.reload();
     }
 
     logout =()=>{
