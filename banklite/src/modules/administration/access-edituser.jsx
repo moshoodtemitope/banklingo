@@ -362,7 +362,7 @@ class EditUser extends React.Component {
                             userName: values.userName,
                             emailAddress: values.emailAddress,
                             password: values.password,
-                            branchId: values.branchId,
+                            branchId: parseInt(values.branchId),
                             note: values.note,
                             encodedKey: this.props.match.params.encodedKey,
                             canAccessAllBranches: values.canAccessAllBranches !== "" ? values.canAccessAllBranches : null,
