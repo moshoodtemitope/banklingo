@@ -186,10 +186,9 @@ class EditAClient extends React.Component {
                     // .min(2, 'Valid response required')
                     // .max(50, 'Max limit reached'),
                 nextOfKinMobile:  Yup.string()
-                    .min(11, 'Valid response required')
+                    .min(11, 'Valid mobile number is required')
                     .max(16, 'Max limit reached'),
-                notes:  Yup.string()
-                    .min(3, 'Valid response required'),
+                notes:  Yup.string(),
               });
 
             userAllowedBraches.map((branch, id)=>{

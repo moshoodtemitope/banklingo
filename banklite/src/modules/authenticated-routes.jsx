@@ -4,7 +4,7 @@ import { Redirect, Router } from "react-router";
 import {history} from "../_helpers/history";
 import { connect } from 'react-redux';
 import { Fragment } from "react";
-import DashboardLanding from './dashboard'
+import DashboardLanding from './dashboard/new-index'
 import UserLogin from './onboarding/login'
 import LoginWrap from './onboarding/login/login'
 
