@@ -201,7 +201,12 @@ import{
     getLoggedInUserActivitiesReducer,
     globalSearchAnItemReducer,
     searchForCustomerReducer,
-    reverseATransactionReducer
+    reverseATransactionReducer,
+    postATransactionReducer,
+    openATillReducer,
+    addRemoveCashToTillReducer,
+    closeUndoCloseToTillReducer,
+    fetchTillTransactionsReducer
     
 } from './dashboard/dashboard.reducer'
 
@@ -373,7 +378,12 @@ export const dashboard = {
     getLoggedInUserActivitiesReducer,
     globalSearchAnItemReducer,
     searchForCustomerReducer,
-    reverseATransactionReducer
+    reverseATransactionReducer,
+    postATransactionReducer,
+    openATillReducer,
+    addRemoveCashToTillReducer,
+    closeUndoCloseToTillReducer,
+    fetchTillTransactionsReducer
 }
 
 export const platform = {

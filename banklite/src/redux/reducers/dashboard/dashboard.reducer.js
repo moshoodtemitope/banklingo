@@ -176,4 +176,164 @@ export function reverseATransactionReducer(state=[], action) {
     }
 }
 
+export function postATransactionReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.POST_TRANSACTION_PENDING:
+            return {
+                request_status: dashboardConstants.POST_TRANSACTION_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.POST_TRANSACTION_SUCCESS:
+            return {
+                request_status: dashboardConstants.POST_TRANSACTION_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.POST_TRANSACTION_FAILURE:
+            return {
+                request_status: dashboardConstants.POST_TRANSACTION_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.POST_TRANSACTION_RESET:
+            return {
+                request_status: dashboardConstants.POST_TRANSACTION_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function openATillReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.OPEN_A_TILL_PENDING:
+            return {
+                request_status: dashboardConstants.OPEN_A_TILL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.OPEN_A_TILL_SUCCESS:
+            return {
+                request_status: dashboardConstants.OPEN_A_TILL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.OPEN_A_TILL_FAILURE:
+            return {
+                request_status: dashboardConstants.OPEN_A_TILL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.OPEN_A_TILL_RESET:
+            return {
+                request_status: dashboardConstants.OPEN_A_TILL_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function addRemoveCashToTillReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.ADD_REMOVE_CASH_TO_TILL_PENDING:
+            return {
+                request_status: dashboardConstants.ADD_REMOVE_CASH_TO_TILL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.ADD_REMOVE_CASH_TO_TILL_SUCCESS:
+            return {
+                request_status: dashboardConstants.ADD_REMOVE_CASH_TO_TILL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.ADD_REMOVE_CASH_TO_TILL_FAILURE:
+            return {
+                request_status: dashboardConstants.ADD_REMOVE_CASH_TO_TILL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.ADD_REMOVE_CASH_TO_TILL_RESET:
+            return {
+                request_status: dashboardConstants.ADD_REMOVE_CASH_TO_TILL_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function closeUndoCloseToTillReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.CLOSE_UNDOCLOSE_TILL_PENDING:
+            return {
+                request_status: dashboardConstants.CLOSE_UNDOCLOSE_TILL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.CLOSE_UNDOCLOSE_TILL_SUCCESS:
+            return {
+                request_status: dashboardConstants.CLOSE_UNDOCLOSE_TILL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.CLOSE_UNDOCLOSE_TILL_FAILURE:
+            return {
+                request_status: dashboardConstants.CLOSE_UNDOCLOSE_TILL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.CLOSE_UNDOCLOSE_TILL_RESET:
+            return {
+                request_status: dashboardConstants.CLOSE_UNDOCLOSE_TILL_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function fetchTillTransactionsReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.GET_TILL_TRANSACTIONS_PENDING:
+            return {
+                request_status: dashboardConstants.GET_TILL_TRANSACTIONS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS:
+            return {
+                request_status: dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.GET_TILL_TRANSACTIONS_FAILURE:
+            return {
+                request_status: dashboardConstants.GET_TILL_TRANSACTIONS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.GET_TILL_TRANSACTIONS_RESET:
+            return {
+                request_status: dashboardConstants.GET_TILL_TRANSACTIONS_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 

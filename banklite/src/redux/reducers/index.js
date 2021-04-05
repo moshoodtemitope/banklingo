@@ -175,6 +175,11 @@ const dashboardReducers = combineReducers({
     globalSearchAnItemReducer: dashboard.globalSearchAnItemReducer, 
     searchForCustomerReducer: dashboard.searchForCustomerReducer, 
     reverseATransactionReducer: dashboard.reverseATransactionReducer, 
+    postATransactionReducer: dashboard.postATransactionReducer, 
+    openATillReducer: dashboard.openATillReducer, 
+    addRemoveCashToTillReducer: dashboard.addRemoveCashToTillReducer, 
+    closeUndoCloseToTillReducer: dashboard.closeUndoCloseToTillReducer, 
+    fetchTillTransactionsReducer: dashboard.fetchTillTransactionsReducer, 
    
 })
 

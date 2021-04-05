@@ -128,6 +128,8 @@ export const routes = {
 
     //Reverse Transaction
     REVERSE_TRANSACTION: BASEURL + '/api/Deposits/reversetransaction',
+    
+    TELLER_MANAGEMENT: BASEURL + '/api/TellerManagement',
 
     //Task Endpoints
     HIT_TASKS: BASEURL + '/api/ApplicationTasks',
