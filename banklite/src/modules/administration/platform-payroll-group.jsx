@@ -380,6 +380,8 @@ class PlatformPayrollGroup extends React.Component {
                 .required('Required'),
             employeeNumberLabel: Yup.string()
                 .required('Required'),
+            employeeNumberCode: Yup.string()
+                .required('Required'),
             groupName: Yup.string()
                 .required('Required'),
         });
@@ -387,7 +389,7 @@ class PlatformPayrollGroup extends React.Component {
         return (
             <Modal show={showEditRecord} onHide={this.handleEditRecordClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
                 <Modal.Header>
-                    {this.state.updateType === "edit" && <Modal.Title>Edit</Modal.Title>}
+                    {this.state.updateType === "edit" && <Modal.Title>Edit Group</Modal.Title>}
                     {this.state.updateType === "activate" && <Modal.Title>Confirm Activation</Modal.Title>}
                     {this.state.updateType === "deactivate" && <Modal.Title>Confirm De-Activation</Modal.Title>}
 
@@ -398,6 +400,7 @@ class PlatformPayrollGroup extends React.Component {
                             description: recordToUpdate.description,
                             groupCode: recordToUpdate.groupCode,
                             employeeNumberLabel: recordToUpdate.employeeNumberLabel,
+                            employeeNumberCode: "",
                             groupName: recordToUpdate.groupName,
                         }}
                         validationSchema={checkValidationSchema}
@@ -410,6 +413,7 @@ class PlatformPayrollGroup extends React.Component {
                                     description: values.description,
                                     groupCode: values.groupCode,
                                     employeeNumberLabel: values.employeeNumberLabel,
+                                    employeeNumberCode: values.employeeNumberCode,
                                     groupName: values.groupName,
                                     objectState: recordToUpdate.objectState
                                 };
@@ -420,6 +424,7 @@ class PlatformPayrollGroup extends React.Component {
                                     description: recordToUpdate.description,
                                     groupCode: recordToUpdate.groupCode,
                                     employeeNumberLabel: recordToUpdate.employeeNumberLabel,
+                                    employeeNumberCode: values.employeeNumberCode,
                                     groupName: recordToUpdate.groupName,
                                     objectState: 0
                                 };
@@ -430,6 +435,7 @@ class PlatformPayrollGroup extends React.Component {
                                     description: recordToUpdate.description,
                                     groupCode: recordToUpdate.groupCode,
                                     employeeNumberLabel: recordToUpdate.employeeNumberLabel,
+                                    employeeNumberCode: values.employeeNumberCode,
                                     groupName: recordToUpdate.groupName,
                                     objectState: 1
                                 };
@@ -538,6 +544,21 @@ class PlatformPayrollGroup extends React.Component {
 
                                             {errors.employeeNumberLabel && touched.employeeNumberLabel ? (
                                                 <span className="invalid-feedback">{errors.employeeNumberLabel}</span>
+                                            ) : null}
+
+                                        </Col>
+                                        <Col>
+                                            <Form.Label className="block-level">Employee Number Code </Form.Label>
+                                            <Form.Control type="text"
+                                                onChange={handleChange}
+                                                // disabled={this.state.updateType !== "edit"}
+                                                value={values.employeeNumberCode}
+                                                className={errors.employeeNumberCode && touched.employeeNumberCode ? "is-invalid h-38px" : "h-38px"}
+                                                name="employeeNumberCode"
+                                                required />
+
+                                            {errors.employeeNumberCode && touched.employeeNumberCode ? (
+                                                <span className="invalid-feedback">{errors.employeeNumberCode}</span>
                                             ) : null}
 
                                         </Col>

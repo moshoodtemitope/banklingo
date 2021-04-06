@@ -530,27 +530,27 @@ class AccountManagement extends React.Component {
                                 }
                                 <div className="filter-nav">
                                     <div className={typeToShow === "all" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("all",0)}>
+                                        onClick={(e) => this.filterWithType("all", 0)}>
                                         All({this.returnGLTypeCount("All", getGLAccountsStatsData, "all")})
                                 </div>
                                     <div className={typeToShow === "assets" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("assets",1)}>
+                                        onClick={(e) => this.filterWithType("assets", 1)}>
                                         Asset({this.returnGLTypeCount("Asset", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "liability" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("liability",2)}>
+                                        onClick={(e) => this.filterWithType("liability", 2)}>
                                         Liability({this.returnGLTypeCount("Liability", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "equity" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("equity",3)}>
+                                        onClick={(e) => this.filterWithType("equity", 3)}>
                                         Equity({this.returnGLTypeCount("Equity", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "income" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("income",4)}>
+                                        onClick={(e) => this.filterWithType("income", 4)}>
                                         Income({this.returnGLTypeCount("Income", getGLAccountsStatsData)})
                                 </div>
                                     <div className={typeToShow === "expense" ? 'active-type' : ''}
-                                        onClick={(e) => this.filterWithType("expense",5)}>
+                                        onClick={(e) => this.filterWithType("expense", 5)}>
                                         Expense({this.returnGLTypeCount("Expense", getGLAccountsStatsData)})
                                 </div>
                                     {/* {accounTypes!==undefined &&
@@ -675,6 +675,47 @@ class AccountManagement extends React.Component {
                                         </select>
                                         
                                     </div>
+                                </div>
+                                <div className="filter-nav">
+                                    <div className={typeToShow === "all" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("all", 0)}>
+                                        All({this.returnGLTypeCount("All", getGLAccountsStatsData, "all")})
+                                </div>
+                                    <div className={typeToShow === "assets" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("assets", 1)}>
+                                        Asset({this.returnGLTypeCount("Asset", getGLAccountsStatsData)})
+                                </div>
+                                    <div className={typeToShow === "liability" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("liability", 2)}>
+                                        Liability({this.returnGLTypeCount("Liability", getGLAccountsStatsData)})
+                                </div>
+                                    <div className={typeToShow === "equity" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("equity", 3)}>
+                                        Equity({this.returnGLTypeCount("Equity", getGLAccountsStatsData)})
+                                </div>
+                                    <div className={typeToShow === "income" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("income", 4)}>
+                                        Income({this.returnGLTypeCount("Income", getGLAccountsStatsData)})
+                                </div>
+                                    <div className={typeToShow === "expense" ? 'active-type' : ''}
+                                        onClick={(e) => this.filterWithType("expense", 5)}>
+                                        Expense({this.returnGLTypeCount("Expense", getGLAccountsStatsData)})
+                                </div>
+                                    {/* {accounTypes!==undefined &&
+
+                                    accounTypes.map((eachType, index)=>{
+                                        
+                                        let typeDataLength = countOfAccounTypes[eachType].length;
+                                        return(
+                                            <div key={index}
+                                                    className={typeToShow===eachType?'active-type':''}
+                                                    onClick={(e)=>this.filterWithType(eachType)} >
+                                                        {eachType} ({typeDataLength}) 
+                                            </div>
+                                        )
+                                    })
+                                
+                                } */}
                                 </div>
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>

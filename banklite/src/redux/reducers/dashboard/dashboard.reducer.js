@@ -336,4 +336,68 @@ export function fetchTillTransactionsReducer(state=[], action) {
     }
 }
 
+export function fetchLoggedonTillsReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.GET_LOGGEDON_TILLS_PENDING:
+            return {
+                request_status: dashboardConstants.GET_LOGGEDON_TILLS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS:
+            return {
+                request_status: dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.GET_LOGGEDON_TILLS_FAILURE:
+            return {
+                request_status: dashboardConstants.GET_LOGGEDON_TILLS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.GET_LOGGEDON_TILLS_RESET:
+            return {
+                request_status: dashboardConstants.GET_LOGGEDON_TILLS_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function fetchAllTillsReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.GET_ALL_TILLS_PENDING:
+            return {
+                request_status: dashboardConstants.GET_ALL_TILLS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.GET_ALL_TILLS_SUCCESS:
+            return {
+                request_status: dashboardConstants.GET_ALL_TILLS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.GET_ALL_TILLS_FAILURE:
+            return {
+                request_status: dashboardConstants.GET_ALL_TILLS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.GET_ALL_TILLS_RESET:
+            return {
+                request_status: dashboardConstants.GET_LOGGEDON_TILLS_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 

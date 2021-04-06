@@ -95,22 +95,23 @@ class LoginWrap extends React.Component {
                         email: "",
                         password: ""
                     }}
-                    validationSchema={validationSchema}
+                    // validationSchema={validationSchema}
                     onSubmit={(values, { resetForm }) => {
-                      
+                        if(values.email!=="" && values.password!==""){
                         let loginPayload ={
                             username: values.email,
                             password:values.password
                         }
-                        this.handleLoginForm(loginPayload)
-                            .then(
-                                () => {         
-                                    if(this.props.loginRequest.request_status===authConstants.LOGIN_USER_SUCCESS){
-                                        // this.props.dispatch(authActions.Login("CLEAR"));
+                            this.handleLoginForm(loginPayload)
+                                .then(
+                                    () => {         
+                                        if(this.props.loginRequest.request_status===authConstants.LOGIN_USER_SUCCESS){
+                                            // this.props.dispatch(authActions.Login("CLEAR"));
+                                        }
+        
                                     }
-    
-                                }
-                            )
+                                )
+                        }
 
 
 

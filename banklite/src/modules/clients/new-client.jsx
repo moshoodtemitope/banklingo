@@ -94,6 +94,8 @@ class NewClient extends React.Component {
         zipCode:  Yup.string()
             .min(2, 'Valid response required')
             .max(10, 'Max limit reached'),
+        workStatus:  Yup.string()
+            .required('Required'),
         contactMobile:  Yup.string()
             .min(8, 'Valid response required')
             .max(17, 'Max limit reached'),
@@ -113,6 +115,7 @@ class NewClient extends React.Component {
             // .min(11, 'Valid response required')
             // .max(16, 'Max limit reached'),
         notes:  Yup.string(),
+
             // .min(3, 'Valid response required'),
         // notes:  Yup.string()
         //     .min(3, 'Valid response required'), 
@@ -556,13 +559,14 @@ class NewClient extends React.Component {
                                                                         onChange={handleChange}
                                                                         name="workStatus"
                                                                         value={values.workStatus}
-                                                                        className="countdropdown form-control form-control-sm">
+                                                                        className={errors.workStatus && touched.workStatus ? "is-invalid countdropdown form-control form-control-sm": "countdropdown form-control form-control-sm"}
+                                                                        >
                                                                             <option value="">Select</option>
                                                                             <option value="1">Yes</option>
                                                                             <option value="2">No</option>
                                                                     </select>
                                                                     {errors.workStatus && touched.workStatus ? (
-                                                                        <span className="invalid-feedback">{errors.payDay}</span>
+                                                                        <span className="invalid-feedback">{errors.workStatus}</span>
                                                                     ) : null}
                                                             </Col>
                                                             <Col></Col>

@@ -180,6 +180,8 @@ const dashboardReducers = combineReducers({
     addRemoveCashToTillReducer: dashboard.addRemoveCashToTillReducer, 
     closeUndoCloseToTillReducer: dashboard.closeUndoCloseToTillReducer, 
     fetchTillTransactionsReducer: dashboard.fetchTillTransactionsReducer, 
+    fetchLoggedonTillsReducer: dashboard.fetchLoggedonTillsReducer, 
+    fetchAllTillsReducer: dashboard.fetchAllTillsReducer, 
    
 })
 

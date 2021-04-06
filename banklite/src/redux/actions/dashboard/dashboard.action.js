@@ -15,7 +15,9 @@ export const dashboardActions = {
     openATill,
     addRemoveCashToTill,
     closeUndoCloseToTill,
-    fetchTillTransactions
+    fetchTillTransactions,
+    fetchLoggedonTills,
+    fetchAllTills
 }
 
 
@@ -33,46 +35,10 @@ function getDashboardData() {
         dispatch(request(consume));
         return consume
             .then(response => {
+                dispatch(success(response));
                 
-                let consume2 = ApiService.request(`${routes.TELLER_MANAGEMENT}/fetchtills${requestPayload}`, "GET", null);
-                dispatch(request(consume2));
-                return consume2
-                    .then(response2 => {
-                       
-                        let consume3 = ApiService.request(`${routes.TELLER_MANAGEMENT}/fetchloggedontellertills${requestPayload}`, "GET", null);
                 
-                        dispatch(request(consume3));
-                        return consume3
-                            .then(response3 => {
-                                let consume4 = ApiService.request(`${routes.HIT_USERS}/all?RoleSearchType=2`, "GET", null);
                 
-                                dispatch(request(consume4));
-                                return consume4
-                                    .then(response4 => {
-                                        let consume5 = ApiService.request(`${routes.GET_ALL_CURRENCIES}`, "GET", null);
-                
-                                        dispatch(request(consume5));
-                                        return consume5
-                                            .then(response5 => {
-                                                dispatch(success(response, response2, response3, response4, response5));
-                                            }).catch(error4 => {
-                
-                                                dispatch(failure(handleRequestErrors(error4)));
-                                            });
-                                        // dispatch(success(response, response2, response3, response4));
-                                    }).catch(error3 => {
-        
-                                        dispatch(failure(handleRequestErrors(error3)));
-                                    });
-                                // dispatch(success(response, response2, response3));
-                            }).catch(error3 => {
-
-                                dispatch(failure(handleRequestErrors(error3)));
-                            });
-                    }).catch(error2 => {
-
-                        dispatch(failure(handleRequestErrors(error2)));
-                    });
             }).catch(error => {
 
                 dispatch(failure(handleRequestErrors(error)));
@@ -82,7 +48,7 @@ function getDashboardData() {
 
 
     function request(user) { return { type: dashboardConstants.GET_DASHOBOARD_DATA_PENDING, user } }
-    function success(response, response2, response3, response4,response5) { return { type: dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS, response, response2, response3, response4,response5 } }
+    function success(response) { return { type: dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS, response } }
     function failure(error) { return { type: dashboardConstants.GET_DASHOBOARD_DATA_FAILURE, error } }
 
 }
@@ -407,5 +373,83 @@ function fetchTillTransactions(params) {
     function success(response) { return { type: dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS, response } }
     function failure(error) { return { type: dashboardConstants.GET_TILL_TRANSACTIONS_FAILURE, error } }
     function clear() { return { type: dashboardConstants.GET_TILL_TRANSACTIONS_RESET, clear_data:""} }
+
+}
+
+function fetchLoggedonTills(params) {
+    let requestPayload = `?includeClosed=true&pageSize=1000&currentPage=1`;
+    if(params!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(`${routes.TELLER_MANAGEMENT}/fetchloggedontellertills${requestPayload}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+
+
+    function request(user) { return { type: dashboardConstants.GET_LOGGEDON_TILLS_PENDING, user } }
+    function success(response) { return { type: dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS, response } }
+    function failure(error) { return { type: dashboardConstants.GET_LOGGEDON_TILLS_FAILURE, error } }
+    function clear() { return { type: dashboardConstants.GET_LOGGEDON_TILLS_RESET, clear_data:""} }
+
+}
+
+function fetchAllTills(params) {
+    let requestPayload = `?includeClosed=true&pageSize=1000&currentPage=1`;
+    
+    return dispatch => {
+        let consume2 = ApiService.request(`${routes.TELLER_MANAGEMENT}/fetchtills${requestPayload}`, "GET", null);
+                dispatch(request(consume2));
+                return consume2
+                    .then(response2 => {
+                       
+                        let consume4 = ApiService.request(`${routes.HIT_USERS}/all?RoleSearchType=2`, "GET", null);
+                
+                                dispatch(request(consume4));
+                                return consume4
+                                    .then(response4 => {
+                                        let consume5 = ApiService.request(`${routes.GET_ALL_CURRENCIES}`, "GET", null);
+                
+                                        dispatch(request(consume5));
+                                        return consume5
+                                            .then(response5 => {
+                                                dispatch(success( response2, response4, response5));
+                                            }).catch(error4 => {
+                
+                                                dispatch(failure(handleRequestErrors(error4)));
+                                            });
+                                        // dispatch(success(response, response2, response3, response4));
+                                    }).catch(error3 => {
+        
+                                        dispatch(failure(handleRequestErrors(error3)));
+                                    });
+                    }).catch(error2 => {
+
+                        dispatch(failure(handleRequestErrors(error2)));
+                    });
+    }
+    
+
+
+
+    function request(user) { return { type: dashboardConstants.GET_ALL_TILLS_PENDING, user } }
+    function success(response2,  response4,response5) { return { type: dashboardConstants.GET_ALL_TILLS_SUCCESS,  response2,  response4,response5 } }
+    function failure(error) { return { type: dashboardConstants.GET_ALL_TILLS_FAILURE, error } }
+    // function clear() { return { type: dashboardConstants.GET_ALL_TILLS_RESET, clear_data:""} }
 
 }

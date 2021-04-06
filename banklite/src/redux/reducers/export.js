@@ -206,7 +206,9 @@ import{
     openATillReducer,
     addRemoveCashToTillReducer,
     closeUndoCloseToTillReducer,
-    fetchTillTransactionsReducer
+    fetchTillTransactionsReducer,
+    fetchLoggedonTillsReducer,
+    fetchAllTillsReducer
     
 } from './dashboard/dashboard.reducer'
 
@@ -383,7 +385,9 @@ export const dashboard = {
     openATillReducer,
     addRemoveCashToTillReducer,
     closeUndoCloseToTillReducer,
-    fetchTillTransactionsReducer
+    fetchTillTransactionsReducer,
+    fetchLoggedonTillsReducer,
+    fetchAllTillsReducer
 }
 
 export const platform = {

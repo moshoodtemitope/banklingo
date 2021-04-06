@@ -90,6 +90,10 @@ class NewDepositsProduct extends React.Component {
           });
 
         let allProductTypes =[
+            {   value: '', 
+                label: 'Select', 
+                desc:   ''
+            },
             {   value: '1', 
                 label: 'Current Account', 
                 desc:   'A transactional account where a customer may perform regular deposit and withdrawals, accrue interest and may optionally be allowed to go into overdraft.'
@@ -166,7 +170,7 @@ class NewDepositsProduct extends React.Component {
             if (getAllGLAccountsRequest.request_status === accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS &&
                 getAllCurrencies.request_status === administrationConstants.GET_ALLCURRENCIES_SUCCESS){
                     let allGlAccounts = [],
-                        allCurrencies = [],
+                        allCurrencies = [{label: "Select", value:""}],
                         glAccountsList,
                         currenciesList;
 

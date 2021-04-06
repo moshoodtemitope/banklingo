@@ -640,6 +640,7 @@ class JournalEntries extends React.Component {
                                         <Col>
                                             <Form.Group controlId="debitLocation" className={errors.entryDate && touched.entryDate ? "has-invaliderror" : null}>
                                                 <Form.Label className="block-level">Booking Date (Entry Date)</Form.Label>
+                                                <DatePicker
                                                  placeholderText="Choose entry date" 
                                                     
                                                     // onChange={this.handleDatePicker}
