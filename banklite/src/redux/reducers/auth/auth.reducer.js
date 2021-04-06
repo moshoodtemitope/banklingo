@@ -6,6 +6,39 @@ let user = JSON.parse(localStorage.getItem('lingoAuth'));
 
 const initialState = (user && user.AllowedBranches!==undefined) ? { loggedIn: true, user } : {};
 
+export function confirmTenantReducer(state=initialState, action) {
+    
+    switch (action.type) {
+        case authConstants.GET_TENANCY_PENDING:
+            return {
+                request_status: authConstants.GET_TENANCY_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case authConstants.GET_TENANCY_SUCCESS:
+            return {
+                request_status: authConstants.GET_TENANCY_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.GET_TENANCY_FAILURE:
+            return {
+                request_status: authConstants.GET_TENANCY_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case authConstants.GET_TENANCY_RESET:
+            return {
+                request_status: authConstants.GET_TENANCY_RESET,
+                is_request_processing: false,
+                request_data: {},
+            };
+        
+
+        default:
+            return { ...state }
+    }
+}
 export function LoginReducer(state=initialState, action) {
     
     switch (action.type) {

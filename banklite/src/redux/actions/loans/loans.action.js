@@ -33,7 +33,12 @@ export const loanActions = {
     getAllLoanSchedules,
     exportLoansSchedules,
     getLoanPAR,
-    exportLoanPAR
+    exportLoanPAR,
+    payOffALoan,
+    writeOffALoan,
+    rescheduleALoan,
+    refianceALoan,
+    editALoan
 }
 
 function getLoans(params,tempData) {
@@ -777,7 +782,7 @@ function getAClientLoanAccount(accountEncodedKey) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_LOAN + `/${accountEncodedKey}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_LOAN + `/loandetails/${accountEncodedKey}`, "GET", null);
         dispatch(request(consume));
         return consume
             .then(response => {
@@ -1055,5 +1060,180 @@ function changeLoanState   (newLoanStatePayload, newState){
     function success(response) { return { type: loanAndDepositsConstants.CHANGE_LOANSTATE_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.CHANGE_LOANSTATE_FAILURE, error } }
     function clear() { return { type: loanAndDepositsConstants.CHANGE_LOANSTATE_RESET, clear_data:""} }
+
+}
+
+function payOffALoan   (loanPayload){
+    if(loanPayload!=="CLEAR"){
+        return dispatch =>{
+            let 
+            url = `${routes.PAY_OFF_LOAN}/payoffloan`,
+                
+            consume = ApiService.request(url, "POST", loanPayload);
+
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.PAYOFF_LOAN_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.PAYOFF_LOAN_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.PAYOFF_LOAN_RESET, clear_data:""} }
+
+}
+
+function writeOffALoan   (loanPayload){
+    if(loanPayload!=="CLEAR"){
+        return dispatch =>{
+            let 
+            url = `${routes.WRITE_OFF_LOAN}/writeoffloan`,
+                
+            consume = ApiService.request(url, "POST", loanPayload);
+
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.WRITEOFF_LOAN_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.WRITEOFF_LOAN_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.WRITEOFF_LOAN_RESET, clear_data:""} }
+
+}
+
+function rescheduleALoan   (loanPayload){
+    if(loanPayload!=="CLEAR"){
+        return dispatch =>{
+            let 
+            url = `${routes.REFINANCE_LOAN}/rescheduleloan`,
+                
+            consume = ApiService.request(url, "POST", loanPayload);
+
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.RESCHEDULE_LOAN_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.RESCHEDULE_LOAN_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.RESCHEDULE_LOAN_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.RESCHEDULE_LOAN_RESET, clear_data:""} }
+
+}
+
+function refianceALoan   (loanPayload){
+    if(loanPayload!=="CLEAR"){
+        return dispatch =>{
+            let 
+            url = `${routes.REFINANCE_LOAN}/refinanceloan`,
+                
+            consume = ApiService.request(url, "POST", loanPayload);
+
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.REFINANCE_LOAN_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.REFINANCE_LOAN_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.REFINANCE_LOAN_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.REFINANCE_LOAN_RESET, clear_data:""} }
+
+}
+
+function editALoan   (loanPayload, loanState){
+    if(loanPayload!=="CLEAR"){
+        return dispatch =>{
+            let url;
+            
+            if(loanState===3 || loanState===5 || loanState===6){
+                url = `${routes.REFINANCE_LOAN}/editapprovedloan`
+            }
+            if(loanState===1 || loanState===2){
+                url = `${routes.REFINANCE_LOAN}/editnotyetpprovedloan`
+            }
+            let consume = ApiService.request(url, "POST", loanPayload);
+
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: loanAndDepositsConstants.EDIT_A_LOAN_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.EDIT_A_LOAN_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.EDIT_A_LOAN_FAILURE, error } }
+    function clear() { return { type: loanAndDepositsConstants.EDIT_A_LOAN_RESET, clear_data:""} }
 
 }

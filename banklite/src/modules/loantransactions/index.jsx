@@ -8,13 +8,20 @@ import { NavLink} from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+
+import ReverseTransaction from '../../shared/components/reverse-txt'
+import ViewATransaction from '../../shared/components/view-txt'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import { loanActions } from '../../redux/actions/loans/loans.action';
+import {dashboardActions} from '../../redux/actions/dashboard/dashboard.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./loantransactions.scss"; 
 class LoanTransactions extends React.Component {
@@ -145,13 +152,35 @@ class LoanTransactions extends React.Component {
         }
     }
 
+    handleShowReverseClose = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ showReverseBox: false })
+        // }
+    };
+    handleShowReverseShow = (transactionDetails, txtxType, txtKey) => {
+        this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ showReverseBox: true , transactionDetails, transactionType:txtxType, transactionKey: txtKey})
+    };
+
+    handleViewTxtnClose = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ ViewTxtnBox: false })
+        // }
+    };
+    handleViewTxtnShow = (transactionDetails, txtxType, txtKey) => {
+        this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ ViewTxtnBox: true , transactionDetails, transactionType:txtxType, transactionKey: txtKey })
+    };
+
 
     renderLoanTransactions = () => {
         let getLoanTransactionsRequest = this.props.getLoanTransactions;
-        let saveRequestData= getLoanTransactionsRequest.request_data!==undefined?getLoanTransactionsRequest.request_data.tempData:null;
+        let saveRequestData = getLoanTransactionsRequest.request_data !== undefined ? getLoanTransactionsRequest.request_data.tempData : null;
         switch (getLoanTransactionsRequest.request_status) {
             case (loanAndDepositsConstants.GET_LOAN_TRANSACTIONS_PENDING):
-                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
+                if ((saveRequestData === undefined) || (saveRequestData !== undefined && saveRequestData.length < 1)) {
                     return (
                         <div className="loading-content">
                             <div className="heading-with-cta">
@@ -207,7 +236,7 @@ class LoanTransactions extends React.Component {
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
-                }else{
+                } else {
                     return (
                         <div>
                             <div className="heading-with-cta">
@@ -222,7 +251,8 @@ class LoanTransactions extends React.Component {
                                     </Form.Group>
 
                                     <Form.Group className="table-filters">
-                                        <DatePicker
+
+                                        <DatePicker autoComplete="new-off"
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleStartDatePicker}
                                             selected={this.state.startDate}
@@ -232,12 +262,15 @@ class LoanTransactions extends React.Component {
                                             showYearDropdown
                                             dropdownMode="select"
                                             placeholderText="Start date"
+                                            autoComplete="new-password"
                                             maxDate={new Date()}
                                             // className="form-control form-control-sm h-38px"
                                             className="form-control form-control-sm "
 
                                         />
-                                        <DatePicker placeholderText="End  date"
+                                        <DatePicker autoComplete="new-off"
+
+                                            placeholderText="End  date"
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleEndDatePicker}
                                             selected={this.state.endDate}
@@ -268,7 +301,7 @@ class LoanTransactions extends React.Component {
 
                                 <div className="pagination-wrap">
                                     <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" 
+                                    <select id="toshow"
                                         // value={this.state.PageSize}
                                         className="countdropdown form-control form-control-sm">
                                         <option value="10">10</option>
@@ -290,6 +323,7 @@ class LoanTransactions extends React.Component {
                                         <th>UserName</th>
                                         <th>Narration</th>
                                         <th>Transaction Date</th>
+                                        <th></th>
                                         {/* <th>Entry Date</th> */}
                                     </tr>
                                 </thead>
@@ -307,7 +341,18 @@ class LoanTransactions extends React.Component {
                                                         <td>{eachTransaction.transactionKey}</td>
                                                         <td>{eachTransaction.remarks}</td>
                                                         <td>{eachTransaction.transactionDate}</td>
-                                                        {/* <td>{eachTransaction.entryDate}</td> */}
+                                                        <td>
+                                                            <DropdownButton
+                                                                size="sm"
+                                                                title="Actions"
+                                                                key="activeCurrency"
+                                                                className="customone"
+                                                            >
+                                                                {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                                <Dropdown.Item eventKey="1">View</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="1">Reverse transaction</Dropdown.Item>
+                                                            </DropdownButton>
+                                                        </td>
                                                     </tr>
                                                 </Fragment>
                                             )
@@ -340,7 +385,8 @@ class LoanTransactions extends React.Component {
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                            <DatePicker
+
+                                            <DatePicker autoComplete="new-off"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
@@ -350,12 +396,15 @@ class LoanTransactions extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                            <DatePicker placeholderText="End  date"
+                                            <DatePicker autoComplete="new-off"
+
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -391,8 +440,8 @@ class LoanTransactions extends React.Component {
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" 
-                                            onChange={(e)=>this.setPagesize(e, allLoanTransactions.result)}
+                                        <select id="toshow"
+                                            onChange={(e) => this.setPagesize(e, allLoanTransactions.result)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
                                             <option value="10">10</option>
@@ -401,14 +450,14 @@ class LoanTransactions extends React.Component {
                                             <option value="200">200</option>
                                         </select>
                                         <TablePagination
-                                                totalPages={allLoanTransactions.totalPages}
-                                                currPage={allLoanTransactions.currentPage}
-                                                currRecordsCount={allLoanTransactions.result.length}
-                                                totalRows={allLoanTransactions.totalRows}
-                                                tempData={allLoanTransactions.result}
-                                                pagesCountToshow={4}
-                                                refreshFunc={this.loadNextPage}
-                                            />
+                                            totalPages={allLoanTransactions.totalPages}
+                                            currPage={allLoanTransactions.currentPage}
+                                            currRecordsCount={allLoanTransactions.result.length}
+                                            totalRows={allLoanTransactions.totalRows}
+                                            tempData={allLoanTransactions.result}
+                                            pagesCountToshow={4}
+                                            refreshFunc={this.loadNextPage}
+                                        />
                                     </div>
                                 </div>
 
@@ -423,6 +472,7 @@ class LoanTransactions extends React.Component {
                                             <th>UserName</th>
                                             <th>Narration</th>
                                             <th>Transaction Date</th>
+                                            <th></th>
                                             {/* <th>Entry Date</th> */}
                                         </tr>
                                     </thead>
@@ -441,7 +491,19 @@ class LoanTransactions extends React.Component {
                                                             <td>{eachTransaction.remarks}</td>
                                                             {/* <td></td> */}
                                                             <td>{eachTransaction.transactionDate}</td>
-                                                            {/* <td>{eachTransaction.entryDate}</td> */}
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    key="activeCurrency"
+                                                                    className="customone"
+                                                                >
+                                                                    {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                                    {/* <Dropdown.Item eventKey="1">View</Dropdown.Item> */}
+                                                                    <Dropdown.Item eventKey="1" onClick={()=> this.handleViewTxtnShow(eachTransaction, eachTransaction.typeDescription, eachTransaction.transactionKey)}>View</Dropdown.Item>
+                                                                    <Dropdown.Item eventKey="1" onClick={()=> this.handleShowReverseShow(eachTransaction, eachTransaction.typeDescription,eachTransaction.transactionKey )}>Reverse transaction</Dropdown.Item>
+                                                                </DropdownButton>
+                                                            </td>
                                                         </tr>
                                                     </Fragment>
                                                 )
@@ -454,8 +516,8 @@ class LoanTransactions extends React.Component {
                                 </div> */}
                             </div>
                         )
-                    }else{
-                        return(
+                    } else {
+                        return (
                             <div className="no-records">
                                 <div className="heading-with-cta">
                                     <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allLoanTransactions.result)} >
@@ -469,7 +531,8 @@ class LoanTransactions extends React.Component {
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                            <DatePicker
+
+                                            <DatePicker autoComplete="new-off"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
@@ -479,12 +542,15 @@ class LoanTransactions extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
+                                                autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                            <DatePicker placeholderText="End  date"
+                                            <DatePicker autoComplete="new-off"
+
+                                                placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -581,6 +647,8 @@ class LoanTransactions extends React.Component {
             <Fragment>
                 <InnerPageContainer {...this.props}>
                     <div className="content-wrapper">
+                        <ReverseTransaction transactionKey={this.state.transactionKey} transactionType={this.state.transactionType} handleCloseReverse={this.handleShowReverseClose} transactionDetails ={this.state.transactionDetails} showReverseTransaction={this.state.showReverseBox} transactionMode="Loan" />
+                        <ViewATransaction transactionKey={this.state.transactionKey} transactionType={this.state.transactionType} handleViewTxtnClose={this.handleViewTxtnClose} transactionDetails ={this.state.transactionDetails} ViewTxtnBox={this.state.ViewTxtnBox} transactionMode="Loan"/>
                         <div className="module-heading">
                             <div className="module-title">
                                 <div className="content-container">

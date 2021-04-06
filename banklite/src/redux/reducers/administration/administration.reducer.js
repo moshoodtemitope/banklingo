@@ -1208,3 +1208,403 @@ export function uploadDataReducer(state=[], action) {
 }
 
 
+//Notification Templates
+export function fetchAllNotificationTemplate(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_PENDING:
+            return {
+                request_status: administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_RESET:
+            return {
+                request_status: administrationConstants.GET_ALL_NOTIFICATION_TEMPLATE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function getANotificationTemplate(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_A_NOTIFICATION_TEMPLATE_PENDING:
+            return {
+                request_status: administrationConstants.GET_A_NOTIFICATION_TEMPLATE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_A_NOTIFICATION_TEMPLATE_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_A_NOTIFICATION_TEMPLATE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_NOTIFICATION_TEMPLATE_FAILURE:
+            return {
+                request_status: administrationConstants.GET_A_NOTIFICATION_TEMPLATE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_NOTIFICATION_TEMPLATE_RESET:
+            return {
+                request_status: administrationConstants.GET_A_NOTIFICATION_TEMPLATE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function createANotificationTemplate(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_PENDING:
+            return {
+                request_status: administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_SUCCESS:
+            return {
+                request_status: administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_FAILURE:
+            return {
+                request_status: administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_RESET:
+            return {
+                request_status: administrationConstants.ADD_A_NOTIFICATION_TEMPLATE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function updateANotificationTemplate(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_A_NOTIFICATION_TEMPLATE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+//Channel Services
+export function fetchAllChannelServices(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ALL_CHANNEL_SERVICE_PENDING:
+            return {
+                request_status: administrationConstants.GET_ALL_CHANNEL_SERVICE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_CHANNEL_SERVICE_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ALL_CHANNEL_SERVICE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_CHANNEL_SERVICE_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ALL_CHANNEL_SERVICE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_CHANNEL_SERVICE_RESET:
+            return {
+                request_status: administrationConstants.GET_ALL_CHANNEL_SERVICE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function getAChannelServices(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_A_CHANNEL_SERVICE_PENDING:
+            return {
+                request_status: administrationConstants.GET_A_CHANNEL_SERVICE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_A_CHANNEL_SERVICE_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_A_CHANNEL_SERVICE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_CHANNEL_SERVICE_FAILURE:
+            return {
+                request_status: administrationConstants.GET_A_CHANNEL_SERVICE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_CHANNEL_SERVICE_RESET:
+            return {
+                request_status: administrationConstants.GET_A_CHANNEL_SERVICE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function createAChannelServices(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.ADD_A_CHANNEL_SERVICE_PENDING:
+            return {
+                request_status: administrationConstants.ADD_A_CHANNEL_SERVICE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_CHANNEL_SERVICE_SUCCESS:
+            return {
+                request_status: administrationConstants.ADD_A_CHANNEL_SERVICE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_CHANNEL_SERVICE_FAILURE:
+            return {
+                request_status: administrationConstants.ADD_A_CHANNEL_SERVICE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_CHANNEL_SERVICE_RESET:
+            return {
+                request_status: administrationConstants.ADD_A_CHANNEL_SERVICE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function updateAChannelServices(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_A_CHANNEL_SERVICE_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_A_CHANNEL_SERVICE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_CHANNEL_SERVICE_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_A_CHANNEL_SERVICE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_CHANNEL_SERVICE_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_A_CHANNEL_SERVICE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_CHANNEL_SERVICE_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_A_CHANNEL_SERVICE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+//Risk Level
+export function fetchAllRiskLevel(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ALL_RISK_LEVEL_PENDING:
+            return {
+                request_status: administrationConstants.GET_ALL_RISK_LEVEL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_RISK_LEVEL_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ALL_RISK_LEVEL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_RISK_LEVEL_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ALL_RISK_LEVEL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_RISK_LEVEL_RESET:
+            return {
+                request_status: administrationConstants.GET_ALL_RISK_LEVEL_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function getARiskLevel(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_A_RISK_LEVEL_PENDING:
+            return {
+                request_status: administrationConstants.GET_A_RISK_LEVEL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_A_RISK_LEVEL_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_A_RISK_LEVEL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_RISK_LEVEL_FAILURE:
+            return {
+                request_status: administrationConstants.GET_A_RISK_LEVEL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_A_RISK_LEVEL_RESET:
+            return {
+                request_status: administrationConstants.GET_A_RISK_LEVEL_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function createARiskLevel(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.ADD_A_RISK_LEVEL_PENDING:
+            return {
+                request_status: administrationConstants.ADD_A_RISK_LEVEL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_RISK_LEVEL_SUCCESS:
+            return {
+                request_status: administrationConstants.ADD_A_RISK_LEVEL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_RISK_LEVEL_FAILURE:
+            return {
+                request_status: administrationConstants.ADD_A_RISK_LEVEL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.ADD_A_RISK_LEVEL_RESET:
+            return {
+                request_status: administrationConstants.ADD_A_RISK_LEVEL_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function updateARiskLevel(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.UPDATE_A_RISK_LEVEL_PENDING:
+            return {
+                request_status: administrationConstants.UPDATE_A_RISK_LEVEL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_RISK_LEVEL_SUCCESS:
+            return {
+                request_status: administrationConstants.UPDATE_A_RISK_LEVEL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_RISK_LEVEL_FAILURE:
+            return {
+                request_status: administrationConstants.UPDATE_A_RISK_LEVEL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.UPDATE_A_RISK_LEVEL_RESET:
+            return {
+                request_status: administrationConstants.UPDATE_A_RISK_LEVEL_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+

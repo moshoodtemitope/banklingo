@@ -192,7 +192,7 @@ class CustomerAccountContainer extends React.Component {
                             </Col>
                             <Col className="date-wrap">
                                 <Form.Label className="block-level">Due Date</Form.Label>
-                                <DatePicker placeholderText="Choose entry date" selected={this.state.dob} 
+                                 placeholderText="Choose entry date" selected={this.state.dob} 
                                     onChange={this.handleDatePicker}
                                     onChangeRaw={(e)=>this.handleChange(e)}
                                     dateFormat="d MMMM, yyyy"
@@ -579,6 +579,7 @@ class CustomerAccountContainer extends React.Component {
         )
     }
     renderLoanAccountsNav = (loanAccounts)=>{
+        
         return(
             loanAccounts.map((eachLoanAccount,  index)=>{
                 

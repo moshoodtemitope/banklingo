@@ -218,8 +218,10 @@ class DashboardLanding extends React.Component {
                             </div>
                             
                         </div>
-                        <div className="module-content">
+                        <div className="module-content ">
+                        {/* <div className="module-content grayed-bg"> */}
                             <div className="content-container">
+                                
                                 <div className="row">
                                     <div className="col-sm-12">
                                         <div className="middle-content">

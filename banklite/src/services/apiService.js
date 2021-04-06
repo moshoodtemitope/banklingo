@@ -104,8 +104,21 @@ export class ApiService {
         let bodyData;
         let service,
             lastRefreshTime,
-            currenTimestamp;
+            currenTimestamp,
+            getToken = "";
         bodyData = noStringify ? JSON.stringify(data) : data;
+
+        let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
+
+            if(getTenant!==null){
+                url = `https://${getTenant.beApi}${url}`;
+                getToken = `https://${getTenant.beApi}${routes.REFRESH_TOKEN}`;
+            }
+            else{
+                url = url
+                // url = `https://theprojectsplash.com/Fintech.CBS.Backend${url}`
+                getToken = `https://theprojectsplash.com/Fintech.CBS.Backend${routes.REFRESH_TOKEN}`;
+            }
 
         let urlsToAuthenticate = [
             "api/Login",
@@ -121,8 +134,18 @@ export class ApiService {
             "/api/Login/refreshtoken",
             "api/Login",
         ],
-        globalSearch ="Search/items?SearchText",
+
+        urlsNotAllowedDuplicateRequests = [
+            "/api/Search/items?SearchText",
+            "/api/Search/clients?SearchText",
+        ],
+        // globalSearch ="Search/items?SearchText",
+        globalSearch ="/Search/",
+        refreshTokenUrl ="/refreshtoken",
         serviceToTest = url.split("Fintech.CBS.Backend")[1];
+        
+
+
 
         if(localStorage.getItem('lingoAuth' === null)){
             headers = undefined;
@@ -145,7 +168,8 @@ export class ApiService {
             let serviceResponse ="",
                 serviceResponse2 ="";
             
-                if(url.indexOf(globalSearch)>-1){
+                if(url.indexOf(globalSearch)>-1 || url.indexOf(refreshTokenUrl)>-1){
+                // if(urlsNotAllowedDuplicateRequests.indexOf(serviceToTest) > -1 || url.indexOf(skipTokenRefreshForUrls)>-1){
                    
                     if (typeof cancelToken != typeof undefined) {
                         cancelToken.cancel("Operation canceled due to new request.");
@@ -169,8 +193,8 @@ export class ApiService {
                         username:lingoAuth.userName,
                         refreshToken:lingoAuth.refreshToken
                     }
-                    this.setTokenAuthorization(routes.REFRESH_TOKEN);
-                    let tokenService = instance.post(routes.REFRESH_TOKEN, refreshpayload);
+                    this.setTokenAuthorization(getToken);
+                    let tokenService = instance.post(getToken, refreshpayload);
                         
                     return tokenService.then(function (response) {
                         
@@ -190,8 +214,8 @@ export class ApiService {
                                 instance.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
                                 if(responseType ===undefined){
                                     
-                                    if(url.indexOf(globalSearch)>-1){
-                            
+                                    if(url.indexOf(globalSearch)>-1 || url.indexOf(refreshTokenUrl)>-1){
+                                    // if(urlsNotAllowedDuplicateRequests.indexOf(serviceToTest) > -1 || url.indexOf(skipTokenRefreshForUrls)>-1){
                                         service = instance.get(tempRequest.url,  { cancelToken: cancelToken.token });
                                     }else{
                                         service = instance.get(tempRequest.url, tempRequest.bodyData);
@@ -267,8 +291,8 @@ export class ApiService {
                     });
                 }else{
                     if(responseType ===undefined){
-                        if(url.indexOf(globalSearch)>-1){
-                            
+                        if(url.indexOf(globalSearch)>-1 || url.indexOf(refreshTokenUrl)>-1){
+                        // if(urlsNotAllowedDuplicateRequests.indexOf(serviceToTest) >-1 || url.indexOf(skipTokenRefreshForUrls)>-1){
                             service = instance.get(url, { cancelToken: cancelToken.token });
                         }else{
                             service = instance.get(url, bodyData);
@@ -449,8 +473,8 @@ export class ApiService {
                         username:lingoAuth.userName,
                         refreshToken:lingoAuth.refreshToken
                     }
-                    this.setTokenAuthorization(routes.REFRESH_TOKEN);
-                    let tokenService = instance.post(routes.REFRESH_TOKEN, refreshpayload);
+                    this.setTokenAuthorization(getToken);
+                    let tokenService = instance.post(getToken, refreshpayload);
 
                     return tokenService.then(function (response) {
                         
@@ -499,7 +523,8 @@ export class ApiService {
                         if(responseData.config.url.indexOf("Login/refreshtoken")>-1){
                             dispatch(authActions.Logout())
                         }else{
-                             return tokenService;
+                             return service;
+                            //  return tokenService;
                         }
                         
                     });

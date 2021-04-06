@@ -95,14 +95,14 @@ class GeneralOrganization extends React.Component {
                             <div>
                             <Formik
                                 initialValues={{
-                                    institutionName: organizationDetails.organizationName !== '' ? organizationDetails.organizationName : '',
-                                    streetAddress: organizationDetails.streetAddress !== '' ? organizationDetails.streetAddress : '',
-                                    institutionCity: organizationDetails.city !== '' ? organizationDetails.city : '',
-                                    institutionState: organizationDetails.state !== '' ? organizationDetails.state : '',
-                                    institutionCountry: organizationDetails.country !== '' ? organizationDetails.country : '',
-                                    institutionEmail: organizationDetails.email !== '' ? organizationDetails.email : '',
-                                    institutionDateFormat: organizationDetails.localDateFormat !== '' ? organizationDetails.localDateFormat : '',
-                                    institutionDateTimeFormat: organizationDetails.localDateTimeFormat !== '' ? organizationDetails.localDateTimeFormat : '',
+                                    institutionName: organizationDetails.organizationName  ? organizationDetails.organizationName : '',
+                                    streetAddress: organizationDetails.streetAddress  ? organizationDetails.streetAddress : '',
+                                    institutionCity: organizationDetails.city  ? organizationDetails.city : '',
+                                    institutionState: organizationDetails.state  ? organizationDetails.state : '',
+                                    institutionCountry: organizationDetails.country  ? organizationDetails.country : '',
+                                    institutionEmail: organizationDetails.email  ? organizationDetails.email : '',
+                                    institutionDateFormat: organizationDetails.localDateFormat  ? organizationDetails.localDateFormat : '',
+                                    institutionDateTimeFormat: organizationDetails.localDateTimeFormat  ? organizationDetails.localDateTimeFormat : '',
                                 }}
                                 validationSchema={orgDetailsValidationSchema}
                                 onSubmit={(values, { resetForm }) => {

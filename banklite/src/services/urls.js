@@ -2,16 +2,38 @@
 // const URL = 'http://52.170.209.118';
 // const URL = 'http://40.76.69.211/Banklot';
 // const URL = 'http://40.76.69.211/Fintech.CBS.Backend';
-// const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
+
+
 // const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
-const URL = process.env.NODE_ENV === 'development' ? 'https://banklingoapi.monee.ng/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
+
+//Teanancy BASE
+let URL = "", 
+    BASEURL="",
+    getTenant="";
+
+    getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
+
+    
+    // if(getTenant===null){
+    //     URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
+    // }
+
+    
+// const URL = process.env.NODE_ENV === 'development' ? 'https://theprojectsplash.com/Fintech.CBS.Backend' : 'https://theprojectsplash.com/Fintech.CBS.Backend'
+// const URL = process.env.NODE_ENV === 'development' ? 'https://banklingoapi.monee.ng/Fintech.CBS.Backend' : 'https://banklingoapi.monee.ng/Fintech.CBS.Backend'
 // const URL = process.env.API_URL
 // https://theprojectsplash.com/Fintech.CBS.Backend/swagger/index.html
-const BASEURL = URL;  
+    BASEURL = URL;  
+    
+
+export const routesA = {
+    GET_TENANCY:'https://cb-api.banklingo.app/api/Login/confirmtenant',
+}
 
 export const routes = {
-    BASEURL: BASEURL,
-
+    // BASEURL: BASEURL,
+    // BASEURL: localStorage.getItem("lingoAuthTenant") ? 'https://'+JSON.parse(localStorage.getItem("lingoAuthTenant").beApi : null,
+    // GET_TENANCY:'https://cb-api.banklingo.app/api/Login/confirmtenant',
     // Administration endpoints
     
     LOGIN_USER: BASEURL + '/api/Login',
@@ -52,6 +74,8 @@ export const routes = {
     HIT_CUSTOMER_TYPES: BASEURL + '/api/CustomerType',
     
     ADD_EXCHANGE_RATE: BASEURL + '/api/Account/exchangerate',
+    GET_EXCHANGE_RATE: BASEURL + '/api/Account/exchangerates',
+    GET_CONVERSION_TABLE: BASEURL + '/api/Account/conversiontable',
     
     HIT_ROLE: BASEURL + '/api/Role', //works
 
@@ -102,6 +126,11 @@ export const routes = {
     //Search Endpoints
     HIT_GLOBAL_SEARCH: BASEURL + '/api/Search',
 
+    //Reverse Transaction
+    REVERSE_TRANSACTION: BASEURL + '/api/Deposits/reversetransaction',
+    
+    TELLER_MANAGEMENT: BASEURL + '/api/TellerManagement',
+
     //Task Endpoints
     HIT_TASKS: BASEURL + '/api/ApplicationTasks',
 
@@ -110,6 +139,18 @@ export const routes = {
 
     //Change Client state Endpoints
     HIT_LOAN_STATE: BASEURL + '/api/ChangeLoanState',
+
+    //Pay Off Loan
+    PAY_OFF_LOAN: BASEURL + '/api/ChangeLoanState',
+
+    //Write Off Loan
+    WRITE_OFF_LOAN: BASEURL + '/api/ChangeLoanState',
+
+    //Reschedule  Loan
+    RESCHEDULE_LOAN: BASEURL + '/api/ChangeLoanState',
+
+    //Refinance  Loan
+    REFINANCE_LOAN: BASEURL + '/api/ChangeLoanState',
 
     //Change Client state Endpoints
     HIT_DEPOSIT_STATE: BASEURL + '/api/ChangeDepositState',
@@ -134,7 +175,42 @@ export const routes = {
     //Profit Loss Endpoints
     HIT_PROFIT_LOSS: BASEURL + '/api/AccountingReport/profitandloss',
     HIT_PROFIT_LOSS_EXPORT: BASEURL + '/api/AccountingReport/profitandlossexport',
+    
+    //Whitelist
+    HIT_LOAN_CREDIT_SCORE_PASS: BASEURL + '/api/LoanCreditScoreByPass',
+
+    //Whitelist
+    HIT_CARD_PROVIDER: BASEURL + '/api/CardProvider',
+
+    //Payroll Group
+    HIT_PAYROLL_GORUP: BASEURL + '/api/PayrollGroup',
+
+    //Employee Payroll Info
+    HIT_EMPLOYEE_PAYROLL_INFO: BASEURL + '/api/PayrollEmployeeInformation',
+
+    //Employee Payroll Info
+    HIT_BANK_INFO: BASEURL + '/api/BankAccount',
+
+    //Employee Payroll Info
+    // HIT_BANK_INFO: BASEURL + '/api/BankAccount',
+
+    //Notification Templates
+    HIT_NOTIFICATIONS_TEMPLATE: BASEURL + '/api/NotificationTemplate',
+
+    //Transaction Services
+    HIT_TRANASACTION_SERVICES: BASEURL + '/api/ChannelService',
+
+    //Risk Levels
+    HIT_RISK_LEVEL: BASEURL + '/api/RiskLevel',
+
+
 
     //Download
     GET_DOWNLOAD: BASEURL + '/api/Downloads/download?',
+
+    //Company Info
+    HIT_COMPANY_INFO: BASEURL + '/api/CompanyInformation',
+
+    
+    
 }

@@ -264,7 +264,7 @@ function getDepositProducts  (params, tempData){
 }
 
 
-function getAllDepositProducts  (fetchDetailsOfFirstProduct){
+function getAllDepositProducts  (fetchDetailsOfFirstProduct, fetchCurrency){
     
     return dispatch =>{
         
@@ -285,14 +285,41 @@ function getAllDepositProducts  (fetchDetailsOfFirstProduct){
                         dispatch(request(consume2));
                         return consume2
                             .then(response2 =>{
-                                dispatch(success(response, response2));
+                                if(!fetchCurrency){
+                                    dispatch(success(response, response2, null));
+                                }
+                                if(fetchCurrency===true){
+                                    let consume3 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
+                                    dispatch(request(consume3));
+                                    return consume3
+                                        .then(response3 =>{
+                                            dispatch(success(response, response2, response3));
+                                        }).catch(error =>{
+                                            
+                                            dispatch(failure(handleRequestErrors(error)));
+                                        });
+                                }
                             }).catch(error =>{
                                 
                                 dispatch(failure(handleRequestErrors(error)));
                             });
                     }else{
                         // console.log("####", response)
-                        dispatch(success(response));
+                        // dispatch(success(response));
+                        if(!fetchCurrency){
+                            dispatch(success(response));
+                        }
+                        if(fetchCurrency===true){
+                            let consume3 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
+                            dispatch(request(consume3));
+                            return consume3
+                                .then(response3 =>{
+                                    dispatch(success(response, null, response3));
+                                }).catch(error =>{
+                                    
+                                    dispatch(failure(handleRequestErrors(error)));
+                                });
+                        }
                     }
 
 
@@ -308,7 +335,10 @@ function getAllDepositProducts  (fetchDetailsOfFirstProduct){
     
 
     function request(user) { return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING, user } }
-    function success(response, response2) { 
+    function success(response, response2, response3) { 
+        if(response3){
+            return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS, response, response2, response3 }     
+        }
         if(response2){
             return { type: productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS, response, response2 }     
         }

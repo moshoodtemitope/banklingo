@@ -1,0 +1,206 @@
+// @import "../../../assets/scss/shared/constants";
+@import "../../../assets/scss/shared/colors";
+@import "../../../assets/scss/shared/globalstyles";
+
+.heading-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%;
+}
+.client-logo {
+    display: flex;
+    align-items: center;
+    .client-name {
+        margin-right: 10px;
+    }
+}
+.form-cta.full-width{
+    button{
+        width: 100%;
+    }
+}
+.headingwrapper.inapp {
+    background: #FFFFFF;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    &.underlay{
+        z-index: 0;
+    }
+}
+.page-wrap{
+    background: #F5F5FA;
+}
+.page-wrapper{
+    height: 100vh;
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    width: 100%;
+    z-index: 0;
+    background: #EEF0F2;
+    >div{
+        height: 100vh;
+    }
+}
+.preload-wrap{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    background: #EEF0F2;
+    .preloading-ico {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        img{
+            transform: scale(1.0);
+            animation: shrink .8s infinite alternate;
+        }
+    }
+}
+.failed-tenancy{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    background: #EEF0F2;
+    .tenancy-error-wrap {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        .heading-txt {
+            font-size: 37px;
+            font-weight: 800;
+            color: #01216C;
+        }
+        .tenancy-error {
+            font-size: 22px;
+        }
+    }
+}
+@keyframes shrink {
+    0% {
+        transform: scale(1.0)
+    }
+    100% {
+        transform: scale(2.0)
+    }
+}
+
+.cardicon img {
+    width: 80%;
+    margin: 0 auto;
+}
+.cardicon{
+    text-align: center;
+    position: absolute;
+    top: 41%;
+    transform: translateY(-50%);
+}
+
+.login-wrapper {
+    display: flex;
+    height: 100vh;
+    .form-control {
+        background: #ffffff !important;
+        border: 1px solid #B6C1DE !important;
+        border-radius: 0 !important;
+        font-size: 13px !important;
+        font-weight: 300 !important;
+        padding: 13px !important;
+        height: 54px !important;
+    }
+    .form-control:focus {
+        border: 1px solid !important;
+        border-color: #01216C !important;
+        box-shadow: none !important;
+    }
+    .btn{
+        border-radius: 0!important;
+    }
+    .btn.btn-primary.btn-sm{
+        padding: 4px 10px !important;
+        font-size: 12px !important;
+    }
+    .btn.btn-primary, .btn.btn-primary:hover{
+        background-color:$brand-color !important;
+        border-color:$brand-color !important; 
+        padding: 12px 15px !important;
+        font-size: 14px;
+    }
+    .login-img {
+        background: #405891;
+        position: relative;
+        width: 38%;
+    }
+    .login-form {
+        width: 62%;
+        position: relative;
+        form{
+            background: #FFFFFF;
+            padding: 30px 40px 20px;
+        }
+        .form-wrap{
+            width: 55%;
+            margin: 0 auto;
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .form-cta.full-width {
+            button{
+                margin: 25px 0;
+            }
+            .copy-info {
+                font-size: 16px;
+                text-align: center;
+                color: $secondary-color;
+            }
+        }
+    }
+}
+
+.form-heading {
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    margin-bottom: 10px;
+    padding: 15px;
+    justify-content: center;
+    h3{
+        font-size: 16px;
+        color: $secondary-color;
+        margin-left: 10px;
+        margin-bottom: 0;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px){
+    .login-wrapper .login-form .form-wrap{
+        width: 80%;
+    }
+}
+@media screen and (max-width: 767px){
+    .client-name{
+        display: none;
+    }
+    .login-img{
+        display: none;
+    }
+    .login-wrapper .login-form{
+        width: 100%;
+    }
+    .login-wrapper .login-form .form-wrap{
+        width: 80%;
+    }
+    .login-wrapper .login-form form{
+        padding: 30px 25px 20px;
+    }
+}
+

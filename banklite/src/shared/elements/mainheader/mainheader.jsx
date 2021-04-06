@@ -71,7 +71,7 @@ class MainHeader extends React.Component{
 
     handleCurrentBranchClicked = () =>{
         let {user} = this.state;
-        if(user.AllowedBranches.length>1){
+        if(user.AllowableBranches.length>1){
             this.setState({showDropdown: true})
         }
         
@@ -81,11 +81,14 @@ class MainHeader extends React.Component{
         
         let user = JSON.parse(localStorage.getItem('lingoAuth'));
             user.BranchId = e.target.value;
+            // localStorage.setItem('lingoAuth', JSON.stringify(user));
+            let selectedBranch = user.AllowableBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].name;
+            user.BranchName = selectedBranch;
             localStorage.setItem('lingoAuth', JSON.stringify(user));
-            let selectedBranch = user.AllowedBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].name;
         this.setState({showDropdown: false, 
                         activeBranch: selectedBranch
                     })
+            window.location.reload();
     }
 
     logout =()=>{
@@ -150,7 +153,7 @@ class MainHeader extends React.Component{
                 let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data||adminGetCustomerTypesRequest.request_data.response,
                     allCustomerTypes=[];
                     // console.log("====", allCustomerTypesData);
-                if(allCustomerTypesData.length>=1){
+                // if(allCustomerTypesData.length>=1){
                     if(allQuickMenus.length >=1){
                         return(
                         
@@ -193,7 +196,7 @@ class MainHeader extends React.Component{
                     }else{
                         return null
                     }
-                }
+                // }
             }
             default :
             return null;
@@ -201,12 +204,12 @@ class MainHeader extends React.Component{
         // return( <NavLink to={'/dashboard'}>dsdhsjdhshjd</NavLink>)
     }
 
-    renderAllowedBranches =()=>{
-        let {AllowedBranches} = this.state.user;
+    renderAllowableBranches =()=>{
+        let {AllowableBranches, BranchId} = this.state.user;
         return(
-            <select name="" id="" onBlur={this.chooseBranch} onChange={this.chooseBranch}>
+            <select name="" id="" defaultValue={BranchId} onBlur={this.chooseBranch} onChange={this.chooseBranch}>
                 {
-                    AllowedBranches.map(eachBranch=>{
+                    AllowableBranches.map(eachBranch=>{
                         return(
                             <option key={eachBranch.id} value={eachBranch.id}>{eachBranch.name}</option>
                         )
@@ -652,28 +655,42 @@ class MainHeader extends React.Component{
     renderHeadingWrap(){
         // let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
         const {user} = this.state;
+        let {AllowableBranches} = this.state.user;
+        let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
         return(
             <div className="mainheader-wrap">
                 
-                <Navbar  expand="lg">
-                    <Navbar.Brand as={Link} to="/dashboard">Empire Trust</Navbar.Brand>
+                <Navbar  >
+                {/* <Navbar  expand="lg"> */}
+                    {getTenant && <Navbar.Brand as={Link} to="/dashboard">{getTenant.companyName}</Navbar.Brand>}
+                    {!getTenant && <Navbar.Brand as={Link} to="/dashboard">Empire Trust</Navbar.Brand>}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="heading-nav">
                         {/* <Nav className="">
                             <Nav.Link href="/"></Nav.Link>
                         </Nav> */}
-                        <div className="user-branch">
-                            {this.state.showDropdown===false && 
-                                <div className="branch-text" 
-                                    onClick={this.handleCurrentBranchClicked}> <div className="activebranch"></div>  {this.state.activeBranch}</div>
-                            }
-                            { this.state.showDropdown &&
-                                    <div className="branch-dropdown">
-                                        {this.renderAllowedBranches()}
-                                        
-                                    </div>
+                        {AllowableBranches.length >=1 &&
+                            <div className="user-branch">
+                                {this.state.showDropdown===false && 
+                                    <div className="branch-text" 
+                                        onClick={this.handleCurrentBranchClicked}> <div className="activebranch"></div>  {this.state.activeBranch}</div>
                                 }
-                        </div>
+                                { this.state.showDropdown &&
+                                        <div className="branch-dropdown">
+                                            {this.renderAllowableBranches()}
+                                            
+                                        </div>
+                                    }
+                            </div>
+                        }
+                        {AllowableBranches.length ===0 &&
+                            <div className="user-branch">
+                                {this.state.showDropdown===false && 
+                                    <div className="branch-text" 
+                                        onClick={this.handleCurrentBranchClicked}> <div className="nobranch"></div> No associated branch</div>
+                                }
+                            </div>
+                        }
                         <div className="other-headingitems">
                             
                             {/* <DropdownButton
@@ -699,7 +716,7 @@ class MainHeader extends React.Component{
                             <Form inline>
                                 {/* <FormControl type="text" placeholder="Search" className="mr-sm-2 noborder-input heading-searchInput" /> */}
                                 <NavDropdown title={user.displayName!==undefined?user.displayName:'Unverified Account'} id="basic-nav-dropdown">
-                                    <NavDropdown.Item href="#action">Update profile</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={()=> history.push("/my-profile")}>Manage profile</NavDropdown.Item>
                                     <NavDropdown.Item onClick={()=> history.push("/profile/change-password")} >
                                         Change Password
                                     </NavDropdown.Item>

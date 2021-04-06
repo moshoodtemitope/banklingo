@@ -20,7 +20,7 @@ import {administrationActions} from '../../redux/actions/administration/administ
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
 
-// import  SidebarElement from '../../shared/elements/sidebar'
+import GeneralNav from './menus/_general-menu'
 import "./administration.scss"; 
 import { setTimeout } from "timers";
 class GeneralCustomerTypes extends React.Component {
@@ -428,6 +428,10 @@ class GeneralCustomerTypes extends React.Component {
                                         </tr>
                                     </tbody>
                                 </TableComponent>
+                                <div className="footer-with-cta toleft">
+                                    {/* <Button variant="secondary" className="grayed-out">Rearrange</Button> */}
+                                    <Button onClick={this.handleShow}>Add Type</Button>
+                                </div>
                             </div>
                         )
                     }
@@ -756,15 +760,14 @@ class GeneralCustomerTypes extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <AdminNav />
-                                    <div className="lowerlevel-menu">
+                                    <GeneralNav />
+                                    {/* <div className="lowerlevel-menu">
                                         <ul className="nav">
                                             <li>
-                                                {/* <NavLink to={'/administration-generalorganization'}>Organization</NavLink> */}
                                                 <NavLink exact to={'/administration/general'}>Organization</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to={'/administration/general/currency'}>Currency</NavLink>
-                                                {/* <NavLink to={'/administration/administration-generalcurrency'}>Currency</NavLink> */}
                                             </li>
                                             <li>
                                                 <NavLink to={'/administration/general/txt-channels'}>Transaction Channels</NavLink>
@@ -775,11 +778,9 @@ class GeneralCustomerTypes extends React.Component {
                                             <li>
                                                 <NavLink to={'/administration/general/control'}>Internal Control</NavLink>
                                             </li>
-                                            {/* <li>
-                                                <NavLink to={'/administration/general/branding'}>Branding</NavLink>
-                                            </li> */}
+                                           
                                         </ul>
-                                    </div>
+                                    </div> */}
                                     
                                 </div>
                             </div>

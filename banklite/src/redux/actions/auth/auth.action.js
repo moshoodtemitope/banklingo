@@ -1,10 +1,11 @@
 import { ApiService } from "../../../services/apiService";
-import { routes } from "../../../services/urls";
+import { routes, routesA } from "../../../services/urls";
 import { history } from './../../../_helpers/history';
 import {authConstants} from '../../actiontypes/auth/auth.constants'
 import { handleRequestErrors, saveRouteForRedirect, removeRouteForRedirect } from "../../../shared/utils";
 
 export const authActions = {
+    confirmTenant,
     Login,
     Logout,
     ResfreshToken,
@@ -17,7 +18,38 @@ export const authActions = {
     ForbiddenAccess
 }
 
+function confirmTenant   (tenantPayload){
+    if(tenantPayload!=="CLEAR"){
+        return dispatch =>{
+            let url = routesA.GET_TENANCY;
+            let consume = ApiService.request(url, "POST", tenantPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    
+                    localStorage.setItem('lingoAuthTenant', JSON.stringify(response.data));
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
 
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: authConstants.GET_TENANCY_PENDING, user } }
+    function success(response) { return { type: authConstants.GET_TENANCY_SUCCESS, response } }
+    function failure(error) { return { type: authConstants.GET_TENANCY_FAILURE, error } }
+    function clear() { return { type: authConstants.GET_TENANCY_RESET, clear_data:""} }
+
+}
 
 function Login   (loginPayload){
     if(loginPayload!=="CLEAR"){
@@ -40,33 +72,55 @@ function Login   (loginPayload){
                         .then(response2 =>{
                             // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                             let user = JSON.parse(localStorage.getItem('lingoAuth'));
-                                user.AllowedBranches = response2.data;
+                                user.AllowableBranches = response2.data;
                                 // user.BranchId = response2.data[0].id;
-                                user.BranchId = response2.data[0].encodedKey;
-                                user.BranchName = response2.data[0].name;
-                                localStorage.setItem('lingoAuth', JSON.stringify(user));
-                            
-                                let consume3 = ApiService.request(routes.HIT_ROLE+'/mypermissions', "GET", null);
+                                if(response2.data.length>=1){
+                                    user.BranchId = response2.data[0].id;
+                                    user.BranchName = response2.data[0].name;
+                                }
+                                // localStorage.setItem('lingoAuth', JSON.stringify(user));
+
+                                let consume3 = ApiService.request(`${routes.ADD_BRANCH}/allowedbranches?ExcludeAllBranches=true`, "GET", null);
                                 dispatch(request(consume3));
                                 return consume3
                                 .then(response3 =>{
-                                    // console.log("Permissions are", response3.data);
-                                    localStorage.setItem('x-u-perm', JSON.stringify(response3.data));
-                                    dispatch(success(response2.data));
 
-                            
-                                    if(window.location.href.indexOf('#')>-1){
-                                        // if(window.location.href.indexOf('retUrl=')>-1){
-                                        // let retUrl = window.location.href.split('retUrl=');
-                                        let retUrl = window.location.href.split('#');
-                                        
-                                        if(retUrl.length===2){
-                                            history.push(retUrl[1]);
-                                            removeRouteForRedirect();
-                                        }
-                                    }else{
-                                        history.push('/dashboard');
-                                    }
+                                    user.AllowedBranches = response3.data;
+                                    
+                                    localStorage.setItem('lingoAuth', JSON.stringify(user));
+                                    
+                                        let consume4 = ApiService.request(routes.HIT_ROLE + '/mypermissions', "GET", null);
+                                        dispatch(request(consume4));
+                                        return consume4
+                                            .then(response4 => {
+                                                // console.log("Permissions are", response4.data);
+                                                localStorage.setItem('x-u-perm', JSON.stringify(response4.data));
+                                                dispatch(success(response2.data));
+
+                                                history.push('/dashboard');
+                                                // if(window.location.href.indexOf('#')>-1){
+                                                //     // if(window.location.href.indexOf('retUrl=')>-1){
+                                                //     // let retUrl = window.location.href.split('retUrl=');
+                                                //     let retUrl = window.location.href.split('#');
+
+                                                //     if(retUrl.length===2){
+                                                //         history.push(retUrl[1]);
+                                                //         removeRouteForRedirect();
+                                                //     }
+                                                // }else{
+                                                //     history.push('/dashboard');
+                                                // }
+                                            })
+                                            .catch(error => {
+
+                                                if (error.response.status === 401) {
+                                                    dispatch(failure(handleRequestErrors("Unable to login. Please try again")))
+                                                } else {
+                                                    dispatch(failure(handleRequestErrors(error)));
+                                                }
+
+
+                                            });
                                 })
                                 .catch(error =>{
                             
@@ -78,6 +132,8 @@ function Login   (loginPayload){
                                     
                                     
                                 });
+                            
+                                
                                 
                             
                         })
@@ -374,9 +430,12 @@ function activateDeactivateUser   (actionType, userPayload){
 
 function Logout(redirectType,retUrl) {
     
-    localStorage.clear();
+    // localStorage.clear();
     // console.log("testwe",retUrl);
-    
+    localStorage.removeItem("lingoAuth");
+    localStorage.removeItem("state");
+    localStorage.removeItem("x-u-perm");
+    localStorage.removeItem("xSessionTracker");
     if(retUrl!==undefined){
         
         saveRouteForRedirect(redirectType,retUrl);
@@ -421,7 +480,11 @@ function ForbiddenAccess(retUrl) {
 }
 
 function initStore() {
-    localStorage.clear();
+    // localStorage.clear();
+    localStorage.removeItem("lingoAuth");
+    localStorage.removeItem("state");
+    localStorage.removeItem("x-u-perm");
+    localStorage.removeItem("xSessionTracker");
     return (dispatch) => {
         dispatch(logout());
     }

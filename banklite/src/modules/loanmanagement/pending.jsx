@@ -222,6 +222,7 @@ class PendingLoans extends React.Component {
                                         <th>Client Name</th>
                                         <th>Product Name</th>
                                         <th>Loan Amount</th>
+                                        <th>Currency</th>
                                         <th>Loan State</th>
                                         <th>Principal Due</th>
                                         <th>Total Paid</th>
@@ -230,6 +231,7 @@ class PendingLoans extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -248,60 +250,64 @@ class PendingLoans extends React.Component {
                     return(
                         <div>
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, saveRequestData)} >
+                                <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, saveRequestData)} >
 
-                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <Form.Control as="select" size="sm">
-                                                <option>No Filter</option>
-                                                <option>Add New Filter</option>
-                                                <option>Custom Filter</option>
-                                            </Form.Control>
-                                        </Form.Group>
+                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                                        <Form.Control as="select" size="sm">
+                                            <option>No Filter</option>
+                                            <option>Add New Filter</option>
+                                            <option>Custom Filter</option>
+                                        </Form.Control>
+                                    </Form.Group>
 
-                                        <Form.Group className="table-filters">
-                                            <DatePicker
-                                                onChangeRaw={this.handleDateChangeRaw}
-                                                onChange={this.handleStartDatePicker}
-                                                selected={this.state.startDate}
-                                                dateFormat="d MMMM, yyyy"
-                                                peekNextMonth
-                                                showMonthDropdown
-                                                showYearDropdown
-                                                dropdownMode="select"
-                                                placeholderText="Start date"
-                                                maxDate={new Date()}
-                                                // className="form-control form-control-sm h-38px"
-                                                className="form-control form-control-sm "
+                                    <Form.Group className="table-filters">
+                                                
+                                        <DatePicker autoComplete="new-off"
+                                            onChangeRaw={this.handleDateChangeRaw}
+                                            onChange={this.handleStartDatePicker}
+                                            selected={this.state.startDate}
+                                            dateFormat="d MMMM, yyyy"
+                                            peekNextMonth
+                                            showMonthDropdown
+                                            showYearDropdown
+                                            dropdownMode="select"
+                                            placeholderText="Start date"
+                                            autoComplete="new-password"
+                                            maxDate={new Date()}
+                                            // className="form-control form-control-sm h-38px"
+                                            className="form-control form-control-sm "
 
-                                            />
-                                            <DatePicker placeholderText="End  date"
-                                                onChangeRaw={this.handleDateChangeRaw}
-                                                onChange={this.handleEndDatePicker}
-                                                selected={this.state.endDate}
-                                                dateFormat="d MMMM, yyyy"
-                                                peekNextMonth
-                                                showMonthDropdown
-                                                showYearDropdown
-                                                dropdownMode="select"
-                                                maxDate={new Date()}
-                                                // className="form-control form-control-sm h-38px"
-                                                className="form-control form-control-sm"
+                                        />
+                                        <DatePicker autoComplete="new-off"
 
-                                            />
-                                            <input type="text"
-                                                className="form-control-sm search-table form-control"
-                                                placeholder="Search text"
-                                                value={this.state.SearchText}
-                                                onChange={(e) => {
-                                                    this.setState({ SearchText: e.target.value.trim() })
-                                                }}
-                                            />
-                                            {/* {errors.startDate && touched.startDate ? (
-    <span className="invalid-feedback">{errors.startDate}</span>
-    ) : null} */}
-                                        </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
-                                    </Form>
+                                            placeholderText="End  date"
+                                            onChangeRaw={this.handleDateChangeRaw}
+                                            onChange={this.handleEndDatePicker}
+                                            selected={this.state.endDate}
+                                            dateFormat="d MMMM, yyyy"
+                                            peekNextMonth
+                                            showMonthDropdown
+                                            showYearDropdown
+                                            dropdownMode="select"
+                                            maxDate={new Date()}
+                                            // className="form-control form-control-sm h-38px"
+                                            className="form-control form-control-sm"
+
+                                        />
+                                        <input type="text"
+                                            className="form-control-sm search-table form-control"
+                                            placeholder="Search text"
+                                            value={this.state.SearchText}
+                                            onChange={(e) => {
+                                                this.setState({ SearchText: e.target.value.trim() })
+                                            }}
+                                        />
+                                        {/* {errors.startDate && touched.startDate ? (
+<span className="invalid-feedback">{errors.startDate}</span>
+) : null} */}
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                </Form>
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
@@ -328,6 +334,7 @@ class PendingLoans extends React.Component {
                                             <th>Product Name</th>
                                             <th>Date Created</th>
                                             <th>Loan Amount</th>
+                                            <th>Currency</th>
                                             <th>Loan State</th>
                                             <th>Principal Due</th>
                                             <th>Total Paid</th>
@@ -350,6 +357,7 @@ class PendingLoans extends React.Component {
                                                             <td>{eachLoan.productName}</td>
                                                             <td>{eachLoan.dateCreated}</td>
                                                             <td>{numberWithCommas(eachLoan.loanAmount, true, true)}</td>
+                                                            <td>{eachLoan.currencyCode}</td>
                                                             <td>{eachLoan.loanStateDescription}</td>
                                                             <td>{numberWithCommas(eachLoan.principalDue, true, true)}</td>
                                                             <td>{numberWithCommas(eachLoan.totalPaid, true, true)}</td>
@@ -386,8 +394,9 @@ class PendingLoans extends React.Component {
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                            <DatePicker
-                                                onChangeRaw={this.handleDateChangeRaw}
+                                                
+             <DatePicker autoComplete="new-off"
+                                        onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
                                                 dateFormat="d MMMM, yyyy"
@@ -396,12 +405,15 @@ class PendingLoans extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
+                                                            autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                            <DatePicker placeholderText="End  date"
+                                             <DatePicker autoComplete="new-off" 
+
+placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -474,6 +486,7 @@ class PendingLoans extends React.Component {
                                             <th>Product Name</th>
                                             <th>Date Created</th>
                                             <th>Loan Amount</th>
+                                            <th>Currency</th>
                                             <th>Loan State</th>
                                             <th>Principal Due</th>
                                             <th>Total Paid</th>
@@ -496,6 +509,7 @@ class PendingLoans extends React.Component {
                                                             <td>{eachLoan.productName}</td>
                                                             <td>{eachLoan.dateCreated}</td>
                                                             <td>{numberWithCommas(eachLoan.loanAmount, true, true)}</td>
+                                                            <td>{eachLoan.currencyCode}</td>
                                                             <td>{eachLoan.loanStateDescription}</td>
                                                             <td>{numberWithCommas(eachLoan.principalDue, true, true)}</td>
                                                             <td>{numberWithCommas(eachLoan.totalPaid, true, true)}</td>
@@ -525,8 +539,9 @@ class PendingLoans extends React.Component {
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                            <DatePicker
-                                                onChangeRaw={this.handleDateChangeRaw}
+                                                
+             <DatePicker autoComplete="new-off"
+                                        onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
                                                 dateFormat="d MMMM, yyyy"
@@ -535,12 +550,15 @@ class PendingLoans extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
+                                                            autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                            <DatePicker placeholderText="End  date"
+                                             <DatePicker autoComplete="new-off" 
+
+placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -589,6 +607,7 @@ class PendingLoans extends React.Component {
                                             <th>Client Name</th>
                                             <th>Product Name</th>
                                             <th>Loan Amount</th>
+                                            <th>Currency</th>
                                             <th>Loan State</th>
                                             <th>Principal Due</th>
                                             <th>Total Paid</th>
@@ -597,6 +616,7 @@ class PendingLoans extends React.Component {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>

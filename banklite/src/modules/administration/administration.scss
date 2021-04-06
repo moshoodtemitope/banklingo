@@ -15,6 +15,64 @@
 .ml-20{
  margin-left: 20px !important;
 }
+.wrap-selection {
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    .option-select {
+        flex-basis: 80%;
+        padding-right: 14px;
+    }
+    .add-option-cta {
+        flex-basis: 20%;
+        .btn{
+            width: 100%;
+        }
+    }
+}
+.options-list {
+    margin-top: 20px;
+    .title-txt {
+        font-size: 14px;
+    }
+}
+.flexed{
+    display: flex;
+    align-items: center;
+    .maininfo {
+        flex-basis: 80%;
+        padding-right: 20px;
+    }
+}
+.each-option-wrap {
+    border: 1px dashed #5D6D7E;
+    padding: 3px;
+    min-height: 47px;
+    .each-option-added {
+        font-size: 13px;
+        // width: 62%;
+        margin: 0 auto;
+        padding: 10px;
+        // background: #F2F3F4;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        &:not(:last-of-type){
+            margin-bottom: 10px;
+        }
+        .remove-option-cta {
+            // background: #EC7063;
+            height: 20px;
+            width: 20px;
+            cursor: pointer;
+        }
+        .each-option-txt {
+            font-size: 13px;
+            font-weight: 600;
+            color: #5D6D7E;
+        }
+    }
+}
 .admin-logowrap.card{
     margin-top: 20px!important;
     flex-direction: unset;

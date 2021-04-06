@@ -21,21 +21,27 @@ class IndexRoute extends React.Component{
         let user ={
             name:'Segun Owa'
         }
-        let routerLayers
-        if(screenWidthSize>=1024){
-            routerLayers = (
-                <Fragment>
-                    {/* <OnboardingRoute /> */}
-                    <AuthenticatedRoutes  user={user}/>
-                </Fragment>
-            )
-        }else{
-            routerLayers =(
-                <Fragment>
-                    <DeviceRestriction/>
-                </Fragment>
-            )
-        }
+        let routerLayers;
+        routerLayers = (
+            <Fragment>
+                {/* <OnboardingRoute /> */}
+                <AuthenticatedRoutes  user={user}/>
+            </Fragment>
+        )
+        // if(screenWidthSize>=1024){
+        //     routerLayers = (
+        //         <Fragment>
+        //             {/* <OnboardingRoute /> */}
+        //             <AuthenticatedRoutes  user={user}/>
+        //         </Fragment>
+        //     )
+        // }else{
+        //     routerLayers =(
+        //         <Fragment>
+        //             <DeviceRestriction/>
+        //         </Fragment>
+        //     )
+        // }
 
         return routerLayers;
     }

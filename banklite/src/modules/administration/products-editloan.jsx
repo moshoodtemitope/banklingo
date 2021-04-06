@@ -86,6 +86,7 @@ class EditLoanProduct extends React.Component {
           });
 
           let allProductTypes =[
+            {value: '', label: 'Select'},
             {value: '0', label: 'Fixed Term Loan'},
             {value: '1', label: 'Dynamic Term Loan'},
             {value: '2', label: 'Interest Free Loan'},

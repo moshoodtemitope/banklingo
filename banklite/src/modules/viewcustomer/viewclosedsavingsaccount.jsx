@@ -1302,6 +1302,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                         showYearDropdown
                                         dropdownMode="select"
                                         placeholderText="Start date"
+                                                            autoComplete="new-password"
                                         maxDate={new Date()}
                                         // className="form-control form-control-sm h-38px"
                                         className="form-control form-control-sm "
@@ -2967,7 +2968,8 @@ class ViewClosedSavingsAccount extends React.Component {
                                             <Col className="date-wrap">
                                                 <Form.Label className="block-level">Maturity Date</Form.Label>
                                                 <Form.Group className="mb-0 date-wrap">
-                                                    <DatePicker placeholderText="Choose  date"
+                                                     placeholderText="Choose  date"
+                                                            autoComplete="new-password"
                                                         dateFormat="d MMMM, yyyy"
                                                         className="form-control form-control-sm"
                                                         peekNextMonth
@@ -3064,7 +3066,8 @@ class ViewClosedSavingsAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.allowBackDate === true &&
                                                         <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date"
+                                                             placeholderText="Choose  date"
+                                                            autoComplete="new-password"
                                                                 dateFormat="d MMMM, yyyy"
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -3144,7 +3147,8 @@ class ViewClosedSavingsAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.allowBackDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
+                                                             placeholderText="Choose  date"
+                                                            autoComplete="new-password" 
                                                                 dateFormat="d MMMM, yyyy"
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -3175,7 +3179,8 @@ class ViewClosedSavingsAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.showBookingDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
+                                                             placeholderText="Choose  date"
+                                                            autoComplete="new-password" 
                                                                 dateFormat="d MMMM, yyyy"
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth

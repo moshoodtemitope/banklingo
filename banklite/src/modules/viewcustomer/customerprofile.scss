@@ -43,6 +43,12 @@
 .profile-overview{
     display: flex;
     flex-wrap: wrap;
+    .each-profile-column{
+        flex-basis: 50%;
+        &:first-of-type{
+            padding-right: 18px;
+        }
+    }
 }
 .customerprofile-tabs, .overview-wrap{
     .nav-item{
@@ -94,7 +100,7 @@
         margin-top: 40px;
     }
     .each-overview{
-        flex-basis: 50%;
+        // flex-basis: 50%;
         padding-right: 35px;
         h6{
             border-bottom: 1px solid #cccccc;

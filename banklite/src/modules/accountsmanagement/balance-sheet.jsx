@@ -263,6 +263,7 @@ class BalanceSheet extends React.Component {
                                         showYearDropdown
                                         dropdownMode="select"
                                         placeholderText="Start date"
+                                                            autoComplete="new-password"
                                         maxDate={new Date()}
                                         className={errors.dateChosen && touched.dateChosen ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
                                     />

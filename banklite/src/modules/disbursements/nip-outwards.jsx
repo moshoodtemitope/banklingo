@@ -250,7 +250,7 @@ class NipOutwardsRequests extends React.Component {
                                     <Form.Group className="table-filters">
                                         <div>
                                             <Form.Label>Start Date</Form.Label>
-                                            <DatePicker
+                                            
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
@@ -260,6 +260,7 @@ class NipOutwardsRequests extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
+                                                            autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
@@ -268,7 +269,9 @@ class NipOutwardsRequests extends React.Component {
                                         </div>
                                         <div>
                                             <Form.Label>End Date</Form.Label>
-                                            <DatePicker placeholderText="End  date"
+                                             <DatePicker autoComplete="new-off" 
+
+placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
@@ -382,7 +385,7 @@ class NipOutwardsRequests extends React.Component {
                                         <Form.Group className="table-filters">
                                             <div>
                                                 {/* <Form.Label>Start Date</Form.Label> */}
-                                                <DatePicker
+                                                
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleStartDatePicker}
                                                     selected={this.state.startDate}
@@ -392,6 +395,7 @@ class NipOutwardsRequests extends React.Component {
                                                     showYearDropdown
                                                     dropdownMode="select"
                                                     placeholderText="Start date"
+                                                            autoComplete="new-password"
                                                     maxDate={new Date()}
                                                     // className="form-control form-control-sm h-38px"
                                                     className="form-control form-control-sm "
@@ -400,7 +404,9 @@ class NipOutwardsRequests extends React.Component {
                                             </div>
                                             <div>
                                                 {/* <Form.Label>Start Date</Form.Label> */}
-                                                <DatePicker placeholderText="End  date"
+                                                 <DatePicker autoComplete="new-off" 
+
+placeholderText="End  date"
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleEndDatePicker}
                                                     selected={this.state.endDate}
@@ -522,8 +528,9 @@ class NipOutwardsRequests extends React.Component {
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                            <DatePicker
-                                                onChangeRaw={this.handleDateChangeRaw}
+                                                
+             <DatePicker autoComplete="new-off"
+                                        onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
                                                 dateFormat="d MMMM, yyyy"
@@ -532,12 +539,15 @@ class NipOutwardsRequests extends React.Component {
                                                 showYearDropdown
                                                 dropdownMode="select"
                                                 placeholderText="Start date"
+                                                            autoComplete="new-password"
                                                 maxDate={new Date()}
                                                 // className="form-control form-control-sm h-38px"
                                                 className="form-control form-control-sm "
 
                                             />
-                                            <DatePicker placeholderText="End  date"
+                                             <DatePicker autoComplete="new-off" 
+
+placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}

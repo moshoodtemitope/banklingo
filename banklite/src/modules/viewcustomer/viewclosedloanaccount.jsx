@@ -1397,6 +1397,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         showYearDropdown
                                         dropdownMode="select"
                                         placeholderText="Start date"
+                                                            autoComplete="new-password"
                                         maxDate={new Date()}
                                         // className="form-control form-control-sm h-38px"
                                         className="form-control form-control-sm "
@@ -1563,7 +1564,7 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Assigned to Branch</td>
-                                    <td>{loanAccountData.branchEncodedKey}</td>
+                                    <td>{loanAccountData.assignedBranch}</td>
                                 </tr>
                                 <tr>
                                     <td>Account State</td>
@@ -1600,7 +1601,7 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Principal Due</td>
-                                    <td>{numberWithCommas(loanAccountData.principalDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.duePrincipal, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Rate</td>
@@ -1612,11 +1613,11 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Interest Due</td>
-                                    <td>{numberWithCommas(loanAccountData.interestDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.dueInterest, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Due</td>
-                                    <td>{numberWithCommas(loanAccountData.penaltyDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.duePenalty, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Paid</td>
@@ -1624,7 +1625,7 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Fee Due</td>
-                                    <td>{numberWithCommas(loanAccountData.feeDue, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.dueFees, true, true)}</td>
                                 </tr>
                                 <tr>
                                     <td>Fee Paid</td>
@@ -2705,7 +2706,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.showFirstRepayment===true &&
                                                         <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
+                                                             placeholderText="Choose  date"
+                                                            autoComplete="new-password" 
                                                                 dateFormat="d MMMM, yyyy"
                                                                 className="form-control form-control-sm h-38px"
                                                                 peekNextMonth
@@ -2738,7 +2740,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.allowBackDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
+                                                             placeholderText="Choose  date"
+                                                            autoComplete="new-password" 
                                                                 dateFormat="d MMMM, yyyy"
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -2769,7 +2772,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.showBookingDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
+                                                             placeholderText="Choose  date"
+                                                            autoComplete="new-password" 
                                                                 dateFormat="d MMMM, yyyy"
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -2874,7 +2878,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.allowBackDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
+                                                             placeholderText="Choose  date"
+                                                            autoComplete="new-password" 
                                                                 dateFormat="d MMMM, yyyy"
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -2905,7 +2910,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.showBookingDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
-                                                            <DatePicker placeholderText="Choose  date" 
+                                                             placeholderText="Choose  date"
+                                                            autoComplete="new-password" 
                                                                 dateFormat="d MMMM, yyyy"
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -3196,6 +3202,21 @@ class ViewClosedLoanAccount extends React.Component {
     
                 return(
                     <div className="loading-text mt-30">Please wait... </div>
+                )
+            }
+
+            if(getAClientLoanAccountRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_FAILURE){
+
+                return(
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="middle-content">
+                                <div className="loading-content errormsg">
+                                    <div>{getAClientLoanAccountRequest.request_data.error}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 )
             }
 
