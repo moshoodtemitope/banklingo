@@ -1296,7 +1296,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                         onChangeRaw={this.handleTxtnDateChangeRaw}
                                         onChange={this.handleTxtnStartDatePicker}
                                         selected={this.state.txtnStartDate}
-                                        dateFormat="d MMMM, yyyy"
+                                        dateFormat={window.dateformat}
                                         peekNextMonth
                                         showMonthDropdown
                                         showYearDropdown
@@ -1312,7 +1312,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                         onChangeRaw={this.handleTxtnDateChangeRaw}
                                         onChange={this.handleTxtnEndDatePicker}
                                         selected={this.state.txtnEndDate}
-                                        dateFormat="d MMMM, yyyy"
+                                        dateFormat={window.dateformat}
                                         peekNextMonth
                                         showMonthDropdown
                                         showYearDropdown
@@ -2970,7 +2970,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                                 <Form.Group className="mb-0 date-wrap">
                                                      placeholderText="Choose  date"
                                                             autoComplete="new-password"
-                                                        dateFormat="d MMMM, yyyy"
+                                                        dateFormat={window.dateformat}
                                                         className="form-control form-control-sm"
                                                         peekNextMonth
                                                         showMonthDropdown
@@ -3068,7 +3068,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password"
-                                                                dateFormat="d MMMM, yyyy"
+                                                                dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
                                                                 showMonthDropdown
@@ -3149,7 +3149,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                dateFormat="d MMMM, yyyy"
+                                                                dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
                                                                 showMonthDropdown
@@ -3181,7 +3181,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                dateFormat="d MMMM, yyyy"
+                                                                dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
                                                                 showMonthDropdown

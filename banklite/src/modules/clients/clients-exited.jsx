@@ -267,7 +267,7 @@ class ClientsExited extends React.Component {
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleStartDatePicker}
                                             selected={this.state.startDate}
-                                            dateFormat="d MMMM, yyyy"
+                                            dateFormat={window.dateformat}
                                             peekNextMonth
                                             showMonthDropdown
                                             showYearDropdown
@@ -285,7 +285,7 @@ class ClientsExited extends React.Component {
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleEndDatePicker}
                                             selected={this.state.endDate}
-                                            dateFormat="d MMMM, yyyy"
+                                            dateFormat={window.dateformat}
                                             peekNextMonth
                                             showMonthDropdown
                                             showYearDropdown
@@ -405,7 +405,7 @@ class ClientsExited extends React.Component {
                                             <DatePicker autoComplete="new-off" onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown
@@ -423,7 +423,7 @@ class ClientsExited extends React.Component {
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown
@@ -549,7 +549,7 @@ class ClientsExited extends React.Component {
                                             <DatePicker autoComplete="new-off" onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown
@@ -567,7 +567,7 @@ class ClientsExited extends React.Component {
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown

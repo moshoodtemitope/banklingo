@@ -92,7 +92,7 @@ class EditCustomerAccount extends React.Component {
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
                                                                             onChangeRaw={(e)=>this.handleChange(e)}
-                                                                            dateFormat="d MMMM, yyyy"
+                                                                            dateFormat={window.dateformat}
                                                                             className="form-control form-control-sm"
                                                                             peekNextMonth
                                                                             showMonthDropdown
@@ -281,7 +281,7 @@ class EditCustomerAccount extends React.Component {
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
                                                                             onChangeRaw={(e)=>this.handleChange(e)}
-                                                                            dateFormat="d MMMM, yyyy"
+                                                                            dateFormat={window.dateformat}
                                                                             className="form-control form-control-sm"
                                                                             peekNextMonth
                                                                             showMonthDropdown
@@ -382,7 +382,7 @@ class EditCustomerAccount extends React.Component {
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
                                                                             onChangeRaw={(e)=>this.handleChange(e)}
-                                                                            dateFormat="d MMMM, yyyy"
+                                                                            dateFormat={window.dateformat}
                                                                             className="form-control form-control-sm"
                                                                             peekNextMonth
                                                                             showMonthDropdown
@@ -578,7 +578,7 @@ class EditCustomerAccount extends React.Component {
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
                                                                             onChangeRaw={(e)=>this.handleChange(e)}
-                                                                            dateFormat="d MMMM, yyyy"
+                                                                            dateFormat={window.dateformat}
                                                                             className="form-control form-control-sm"
                                                                             peekNextMonth
                                                                             showMonthDropdown

@@ -1588,7 +1588,7 @@ class RefinanceALoanAccount extends React.Component {
                                                                                 <DatePicker  
                                                                                     placeholderText="Choose  date"
                                                                                     autoComplete="new-password" 
-                                                                                    dateFormat="d MMMM, yyyy"
+                                                                                    dateFormat={window.dateformat}
                                                                                     className="form-control form-control-sm"
                                                                                     peekNextMonth
                                                                                     showMonthDropdown
@@ -1615,7 +1615,7 @@ class RefinanceALoanAccount extends React.Component {
                                                                                 <DatePicker                                                                     
                                                                                     placeholderText="Choose  date"
                                                                                     autoComplete="new-off" 
-                                                                                    dateFormat="d MMMM, yyyy"
+                                                                                    dateFormat={window.dateformat}
                                                                                     className="form-control form-control-sm"
                                                                                     peekNextMonth
                                                                                     showMonthDropdown

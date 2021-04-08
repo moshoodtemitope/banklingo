@@ -338,7 +338,7 @@ class DisbursementManagement extends React.Component {
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown
@@ -356,7 +356,7 @@ placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown
@@ -455,7 +455,7 @@ placeholderText="End  date"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                         onChange={this.handleStartDatePicker}
                                                         selected={this.state.startDate}
-                                                        dateFormat="d MMMM, yyyy"
+                                                        dateFormat={window.dateformat}
                                                         peekNextMonth
                                                         showMonthDropdown
                                                         showYearDropdown
@@ -473,7 +473,7 @@ placeholderText="End  date"
                                                         onChangeRaw={this.handleDateChangeRaw}
                                                         onChange={this.handleEndDatePicker}
                                                         selected={this.state.endDate}
-                                                        dateFormat="d MMMM, yyyy"
+                                                        dateFormat={window.dateformat}
                                                         peekNextMonth
                                                         showMonthDropdown
                                                         showYearDropdown
@@ -619,7 +619,7 @@ placeholderText="End  date"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                         onChange={this.handleStartDatePicker}
                                                         selected={this.state.startDate}
-                                                        dateFormat="d MMMM, yyyy"
+                                                        dateFormat={window.dateformat}
                                                         peekNextMonth
                                                         showMonthDropdown
                                                         showYearDropdown
@@ -637,7 +637,7 @@ placeholderText="End  date"
                                                         onChangeRaw={this.handleDateChangeRaw}
                                                         onChange={this.handleEndDatePicker}
                                                         selected={this.state.endDate}
-                                                        dateFormat="d MMMM, yyyy"
+                                                        dateFormat={window.dateformat}
                                                         peekNextMonth
                                                         showMonthDropdown
                                                         showYearDropdown

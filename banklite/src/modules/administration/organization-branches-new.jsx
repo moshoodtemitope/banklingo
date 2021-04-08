@@ -131,8 +131,7 @@ class NewBranch extends React.Component {
                                         this.props.dispatch(administrationActions.createNewBranch("CLEAR"))
                                     }, 3000);
                                 }
-
-                               
+                           
 
                                
 

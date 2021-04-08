@@ -403,7 +403,7 @@ class NewClient extends React.Component {
                                                             autoComplete="new-password"
                                                             // onChange={this.handleDatePicker}
                                                             // onChangeRaw={(e) => this.handleDateChange(e)}
-                                                            dateFormat="d MMMM, yyyy"
+                                                            dateFormat={window.dateformat}
                                                             className="form-control form-control-sm"
                                                             peekNextMonth
                                                             showMonthDropdown
@@ -594,7 +594,7 @@ class NewClient extends React.Component {
                                                                             autoComplete="new-password"
                                                                             // onChange={this.handleDatePicker}
                                                                             // onChangeRaw={(e) => this.handleDateChange(e)}
-                                                                            dateFormat="d MMMM, yyyy"
+                                                                            dateFormat={window.dateformat}
                                                                             className="form-control form-control-sm"
                                                                             peekNextMonth
                                                                             showMonthDropdown

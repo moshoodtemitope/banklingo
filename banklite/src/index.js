@@ -7,6 +7,8 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from "react-redux";
 import {store} from "./redux/store";
 
+
+    window.dateformat = "dd-MMM-yyyy"
     ReactDOM.render(
         <Provider store={store}>
             <BrowserRouter forceRefresh={true}>

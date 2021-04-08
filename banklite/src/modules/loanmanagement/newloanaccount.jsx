@@ -1082,7 +1082,7 @@ class NewLoanAccount extends React.Component {
                                                                                 <Form.Label className="block-level">Anticipated Disbursement</Form.Label>
            <DatePicker                                                                      placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                                    dateFormat="d MMMM, yyyy"
+                                                                                    dateFormat={window.dateformat}
                                                                                     className="form-control form-control-sm"
                                                                                     peekNextMonth
                                                                                     showMonthDropdown
@@ -1102,7 +1102,7 @@ class NewLoanAccount extends React.Component {
                                                                                 <Form.Label className="block-level">First Repayment Date</Form.Label>
             <DatePicker                                                                     placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                                    dateFormat="d MMMM, yyyy"
+                                                                                    dateFormat={window.dateformat}
                                                                                     className="form-control form-control-sm"
                                                                                     peekNextMonth
                                                                                     showMonthDropdown

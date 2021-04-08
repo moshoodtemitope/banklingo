@@ -307,7 +307,7 @@ class TrialBalance extends React.Component {
                                                         onChangeRaw={this.handleDateChangeRaw}
                                                         onChange={(e)=>{this.handleStartDatePicker(e); setFieldValue('startDate', e)}}
                                                         selected={this.state.startDate}
-                                                        dateFormat="d MMMM, yyyy"
+                                                        dateFormat={window.dateformat}
                                                         peekNextMonth
                                                         showMonthDropdown
                                                         showYearDropdown
@@ -329,7 +329,7 @@ class TrialBalance extends React.Component {
                                                         onChangeRaw={this.handleDateChangeRaw}
                                                         onChange={(e)=>{this.handleEndDatePicker(e); setFieldValue('endDate', e)}}
                                                         selected={this.state.endDate}
-                                                        dateFormat="d MMMM, yyyy"
+                                                        dateFormat={window.dateformat}
                                                         peekNextMonth
                                                         showMonthDropdown
                                                         showYearDropdown

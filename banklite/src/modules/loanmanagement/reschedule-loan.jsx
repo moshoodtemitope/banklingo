@@ -1514,7 +1514,7 @@ class RescheduleALoanAccount extends React.Component {
                                                                                 <DatePicker  
                                                                                     placeholderText="Choose  date"
                                                                                     autoComplete="new-non" 
-                                                                                    dateFormat="d MMMM, yyyy"
+                                                                                    dateFormat={window.dateformat}
                                                                                     className="form-control form-control-sm"
                                                                                     peekNextMonth
                                                                                     showMonthDropdown
@@ -1541,7 +1541,7 @@ class RescheduleALoanAccount extends React.Component {
                                                                                 <DatePicker                                                                     
                                                                                     placeholderText="Choose  date"
                                                                                     autoComplete="new-edoff" 
-                                                                                    dateFormat="d MMMM, yyyy"
+                                                                                    dateFormat={window.dateformat}
                                                                                     className="form-control form-control-sm"
                                                                                     peekNextMonth
                                                                                     showMonthDropdown

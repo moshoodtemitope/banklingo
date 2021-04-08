@@ -436,7 +436,7 @@ class ManageEmployeeInfo extends React.Component {
                                                     autoComplete="new-password"
                                                     // onChange={this.handleDatePicker}
                                                     // onChangeRaw={(e) => this.handleDateChange(e)}
-                                                    dateFormat="d MMMM, yyyy"
+                                                    dateFormat={window.dateformat}
                                                     className="form-control form-control-sm"
                                                     peekNextMonth
                                                     showMonthDropdown
@@ -778,7 +778,7 @@ class ManageEmployeeInfo extends React.Component {
                                                     autoComplete="new-password"
                                                     // onChange={this.handleDatePicker}
                                                     // onChangeRaw={(e) => this.handleDateChange(e)}
-                                                    dateFormat="d MMMM, yyyy"
+                                                    dateFormat={window.dateformat}
                                                     className="form-control form-control-sm"
                                                     peekNextMonth
                                                     showMonthDropdown
@@ -914,7 +914,7 @@ class ManageEmployeeInfo extends React.Component {
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleStartDatePicker}
                                             selected={this.state.startDate}
-                                            dateFormat="d MMMM, yyyy"
+                                            dateFormat={window.dateformat}
                                             peekNextMonth
                                             showMonthDropdown
                                             showYearDropdown
@@ -932,7 +932,7 @@ class ManageEmployeeInfo extends React.Component {
                                             onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleEndDatePicker}
                                             selected={this.state.endDate}
-                                            dateFormat="d MMMM, yyyy"
+                                            dateFormat={window.dateformat}
                                             peekNextMonth
                                             showMonthDropdown
                                             showYearDropdown
@@ -1069,7 +1069,7 @@ class ManageEmployeeInfo extends React.Component {
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown
@@ -1087,7 +1087,7 @@ class ManageEmployeeInfo extends React.Component {
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown
@@ -1212,7 +1212,7 @@ class ManageEmployeeInfo extends React.Component {
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
                                                 selected={this.state.startDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown
@@ -1230,7 +1230,7 @@ class ManageEmployeeInfo extends React.Component {
                                                 onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleEndDatePicker}
                                                 selected={this.state.endDate}
-                                                dateFormat="d MMMM, yyyy"
+                                                dateFormat={window.dateformat}
                                                 peekNextMonth
                                                 showMonthDropdown
                                                 showYearDropdown

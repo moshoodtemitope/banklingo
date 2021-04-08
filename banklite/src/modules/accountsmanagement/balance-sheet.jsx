@@ -244,7 +244,7 @@ class BalanceSheet extends React.Component {
                                     <DatePickerEx placeholderText="Choose start date"
                                         // onChange={setFieldValue}
                                         // value={values.dateChosen}
-                                        // dateFormat="d MMMM, yyyy"
+                                        // dateFormat={window.dateformat}
                                         // className="form-control form-control-sm"
                                         // peekNextMonth
                                         // showMonthDropdown
@@ -257,7 +257,7 @@ class BalanceSheet extends React.Component {
                                         onChangeRaw={this.handleDateChangeRaw}
                                         onChange={(e)=>{this.handleStartDatePicker(e); setFieldValue('dateChosen', e)}}
                                         selected={this.state.dateChosen}
-                                        dateFormat="d MMMM, yyyy"
+                                        dateFormat={window.dateformat}
                                         peekNextMonth
                                         showMonthDropdown
                                         showYearDropdown
