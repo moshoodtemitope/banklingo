@@ -877,7 +877,7 @@ class EditADepositsProduct extends React.Component {
                                                         />
                                                     </Col>
                                                 </Form.Group>
-                                                {values.methodology!=='0' && 
+                                                {values.methodology!==0 && 
                                                     <div>
                                                         <Form.Group as={Row} className="center-aligned">
                                                             <Form.Label column sm={4} className="block-level">Transaction Source</Form.Label>

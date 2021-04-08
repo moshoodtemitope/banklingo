@@ -517,7 +517,10 @@ class NewDepositAccount extends React.Component {
                                                                         name="maximumWithdrawalAmount" 
                                                                         required/>
                                                                     {this.selectedDepositProductDetails && 
-                                                                        <span className="input-helptext">Max: {this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount!==null?`${currencyCode? `(${currencyCode})` : ""}${numberWithCommas(this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString())}`:"N/A"}</span>
+                                                                        <span className="input-helptext">Max: {this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount!==null?`
+                                                                                                                                ${numberWithCommas(this.selectedDepositProductDetails.depositSavingsSettingModel.maximumWithdrawalAmount.toString())}${currencyCode? `(${currencyCode})` : ""}`
+                                                                                                                            :"N/A"}
+                                                                                                                            </span>
                                                                     }
                                                                     {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
                                                                         <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
