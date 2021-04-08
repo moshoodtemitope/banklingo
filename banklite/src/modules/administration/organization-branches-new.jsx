@@ -79,7 +79,7 @@ class NewBranch extends React.Component {
       });
 
     renderCreateNewBranch = ()=>{
-        let adminCreateNewBranchRequest = this.props.adminCreateNewBranch;
+        let adminCreateNewBranchRequest = this.prop.adminCreateNewBranch;
         return (
             <Formik
                 initialValues={{
@@ -118,11 +118,9 @@ class NewBranch extends React.Component {
 
 
                     this.handleCreateNewBranch(createNewBranchPayload)
-                        .then(
-                            () => {
+                        .then(() => {
 
                                 if (this.props.adminCreateNewBranch.request_status === administrationConstants.CREATE_NEW_BRANCH_SUCCESS) {
-
 
                                     setTimeout(() => {
                                         this.props.dispatch(administrationActions.createNewBranch("CLEAR"))
@@ -364,12 +362,8 @@ class NewBranch extends React.Component {
                                     
                                     <div className="col-sm-12">
                                         <div className="middle-content">
-                                            <div className="full-pageforms w-60">
-                                                
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                            <div className="full-pageforms w-60">                                            
+    
                                                 {this.renderCreateNewBranch()}
                                             </div>
                                         </div>
