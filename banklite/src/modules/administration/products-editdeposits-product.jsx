@@ -85,17 +85,38 @@ class EditADepositsProduct extends React.Component {
             getSingleDepositProductsRequest =  this.props.getSingleDepositProductsReducer,
             getAllCurrencies =  this.props.adminGetAllCurrencies;
 
-        let depositProductValidationSchema = Yup.object().shape({
-            key: Yup.string()
-                .min(1, 'Response required')
-                .required('Required'),
-            productName:  Yup.string()
-                .min(2, 'Valid response required')
-                .required('Required'),
-            depositAccountType:  Yup.string()
-                .min(1, 'Valid response required')
-                .required('Required'),
-          });
+            let depositProductValidationSchema = Yup.object().shape({
+                key: Yup.string()
+                    .min(1, 'Response required')
+                    .required('Required'),
+                productName:  Yup.string()
+                    .min(2, 'Valid response required')
+                    .required('Required'),
+                depositAccountType:  Yup.string()
+                    .min(1, 'Valid response required')
+                    .required('Required'),
+                currencyCode:  Yup.string()
+                    .min(1, 'Valid response required')
+                    .required('Required'),
+                interestRateTerms: Yup.string()
+                    .when('interestPaid',{
+                        is:(value)=>value===true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+                interestBalanceCalculation: Yup.string()
+                    .when('interestPaid',{
+                        is:(value)=>value===true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+                whenInterestIsPaid: Yup.string()
+                    .when('interestPaid',{
+                        is:(value)=>value===true,
+                        then: Yup.string()
+                            .required('Required')
+                    }),
+              });
 
         let allProductTypes =[
             {   value: '', 
@@ -275,7 +296,7 @@ class EditADepositsProduct extends React.Component {
                                     maxmimumTermLength:(depositProductDetails.depositTermSettingModel!==undefined && depositProductDetails.depositTermSettingModel!==null)?depositProductDetails.depositTermSettingModel.maxmimumTermLength.toString():'',
                                 }}
                                 // enableReinitialize={true}
-                                // validationSchema={depositProductValidationSchema}
+                                validationSchema={depositProductValidationSchema}
                                 validator={() => ({})}
                                 onSubmit={(values, { resetForm }) => {
 
@@ -533,6 +554,9 @@ class EditADepositsProduct extends React.Component {
                                                                     
                                                                     
                                                                 />
+                                                                {errors.interestRateTerms && touched.interestRateTerms ? (
+                                                                    <span className="invalid-feedback">{errors.interestRateTerms}</span>
+                                                                ) : null}
                                                             </Col>
                                                             {values.interestRateTerms===5  &&
                                                                 <Col sm={6}>
@@ -565,6 +589,9 @@ class EditADepositsProduct extends React.Component {
                                                                     
                                                                     
                                                                 />
+                                                                 {errors.interestBalanceCalculation && touched.interestBalanceCalculation ? (
+                                                                    <span className="invalid-feedback">{errors.interestBalanceCalculation}</span>
+                                                                ) : null}
                                                             </Col>
                                                             
                                                         </Form.Row>
@@ -625,6 +652,9 @@ class EditADepositsProduct extends React.Component {
                                                                     
                                                                     
                                                                 />
+                                                                {errors.whenInterestIsPaid && touched.whenInterestIsPaid ? (
+                                                                    <span className="invalid-feedback">{errors.whenInterestIsPaid}</span>
+                                                                ) : null}
                                                             </Col>
 
                                                         </Form.Row>
