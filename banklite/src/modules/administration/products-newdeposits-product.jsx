@@ -206,7 +206,7 @@ class NewDepositsProduct extends React.Component {
                                 initialValues={{
                                     key: '',
                                     productName: '',
-                                    depositAccountType: '1',
+                                    depositAccountType: '',
                                     description: '',
                                     savingsControlAccountId: '',
                                     transactionSourceAccountId: '',
