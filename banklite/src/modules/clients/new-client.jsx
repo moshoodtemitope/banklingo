@@ -28,15 +28,16 @@ import Alert from 'react-bootstrap/Alert'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import "./clients.scss"; 
+import "./clients.scss";
 class NewClient extends React.Component {
     constructor(props) {
         super(props);
+        console.log("Lopncsc")
         this.state={
             user:JSON.parse(localStorage.getItem('lingoAuth')),
         }
 
-        
+
     }
 
     componentDidMount(){
@@ -45,15 +46,15 @@ class NewClient extends React.Component {
 
     getAllUsers = ()=>{
         const {dispatch} = this.props;
-        
+
         dispatch(administrationActions.getAllUsers(1));
     }
 
     handleCreateNewCustomer = async (createNewCustomerpayload)=>{
         const {dispatch} = this.props;
-       
+
         await dispatch(clientsActions.createClient(createNewCustomerpayload));
-    }                                   
+    }
 
 
     createCustomerValidationSchema = Yup.object().shape({
@@ -69,8 +70,15 @@ class NewClient extends React.Component {
             .required('Required'),
         accountOfficerEncodedKey:  Yup.string()
             .required('Required'),
-        BVN:  Yup.string()
-            .required('Required'),
+        BVN: Yup.string()
+          .required()
+          .matches(/^[0-9]+$/, "Must be only digits")
+          .min(11, 'Must be exactly 11 digits')
+          .max(11, 'Must be exactly 11 digits'),
+        gender: Yup.string()
+          .required('Required'),
+        dateOfBirth: Yup.date()
+          .required('Required'),
         MName:  Yup.string()
             .min(1, 'Valid response required')
             .max(50, 'Max limit reached'),
@@ -96,21 +104,25 @@ class NewClient extends React.Component {
             .max(10, 'Max limit reached'),
         workStatus:  Yup.string()
             .required('Required'),
-        contactMobile:  Yup.string()
-            .min(8, 'Valid response required')
-            .max(17, 'Max limit reached'),
-        contactEmail:  Yup.string()
+        contactMobile: Yup.string()
+          .required()
+          .matches(/^[0-9]+$/, "Must be only digits")
+          .min(8, 'Must be between 8 and 11 digits')
+          .max(15, 'Must be between 8 and 11 digits'),
+        contactEmail: Yup.string()
             .min(8, 'Valid response required')
             .max(50, 'Max limit reached'),
-        nextOfKinFullName:  Yup.string()
+        nextOfKinFullName: Yup.string()
             .min(2, 'Valid response required')
             .max(50, 'Max limit reached'),
-        nextOfKinAddress:  Yup.string()
+        nextOfKinAddress: Yup.string()
             .min(2, 'Valid response required')
             .max(50, 'Max limit reached'),
-        nextOfKinMobile:  Yup.string()
-            .min(11, 'Valid mobile number is required')
-            .max(16, 'Max limit reached'),
+        nextOfKinMobile: Yup.string()
+          .required()
+          .matches(/^[0-9]+$/, "Must be only digits")
+          .min(8, 'Must be between 8 and 11 digits')
+          .max(15, 'Must be between 8 and 11 digits'),
         nextOfKinRelationship:  Yup.string(),
             // .min(11, 'Valid response required')
             // .max(16, 'Max limit reached'),
@@ -118,7 +130,7 @@ class NewClient extends React.Component {
 
             // .min(3, 'Valid response required'),
         // notes:  Yup.string()
-        //     .min(3, 'Valid response required'), 
+        //     .min(3, 'Valid response required'),
       });
 
     renderCreateNewCustomer = ()=>{
@@ -128,37 +140,47 @@ class NewClient extends React.Component {
             userAllowedBraches = this.state.user.AllowedBranches,
             selecBranchList = [];
 
-            
             userAllowedBraches.map((branch, id)=>{
                 selecBranchList.push({label: branch.name, value:branch.encodedKey});
             })
 
-        
+            const genderList = [
+              {
+                label: 'Male',
+                value: 'Male'
+              },
+              {
+                label: 'Female',
+                value: 'Female'
+              }
+            ]
+
+
                 if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_PENDING
                     || adminGetCustomerTypesRequest.request_status ===administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING){
                     return (
-                        <div className="loading-content card"> 
+                        <div className="loading-content card">
                             <div className="loading-text">Please wait... </div>
                         </div>
                     )
                 }
 
-           
+
                 if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_SUCCESS
                     && adminGetCustomerTypesRequest.request_status ===administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS){
-                    
+
                         let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response,
                         allUsersData = getAllUsersRequest.request_data.response.data,
                         allUserDataList=[],
                         allCustomerTypesList;
-                        
+
                         // console.log("+++++",allCustomerTypesData);
                     let selectedCustype = allCustomerTypesData.filter(CustType=>CustType.encodedKey===this.props.match.params.custTypeid)[0];
                     let daysWrap = []
                     for(var i = 1; i <= 31; i++){
                         daysWrap.push(<option key={i} value={i}>{i}</option>)
                     }
-                   
+
                     // if(allUsersData.length>=1){
                         allUsersData.map((eachUser, id)=>{
                             allUserDataList.push({label: eachUser.name, value:eachUser.key});
@@ -199,10 +221,10 @@ class NewClient extends React.Component {
                                     employerAddressCity:"",
                                     workStatus:""
                                 }}
-                
+
                                 validationSchema={this.createCustomerValidationSchema}
                                 onSubmit={(values, { resetForm }) => {
-                
+
                                     let createNewCustomerPayload = {
                                         // clientTypeId:values.custType,
                                         // clientTypeId:selectedCustype.id,
@@ -219,13 +241,13 @@ class NewClient extends React.Component {
                                             zipCode: values.zipCode,
                                         },
                                         contact: {
-                                            contactMobile: values.contactMobile,
+                                            contactMobile: values.contactMobile.toString(),
                                             contactEmail: values.contactEmail
                                         },
                                         nextOfKin: {
                                             nextOfKinFullName: values.nextOfKinFullName,
                                             nextofKinHomeAddress: values.nextOfKinAddress,
-                                            nextOfKinMobileNumber: values.nextOfKinMobile,
+                                            nextOfKinMobileNumber: values.nextOfKinMobile.toString(),
                                             relationship: values.nextOfKinRelationship
                                         },
                                         employmentInformation: {
@@ -241,33 +263,33 @@ class NewClient extends React.Component {
                                             employerAddressCity: values.workStatus==="1" ? values.employerAddressCity : null,
                                             employerAddressState: values.workStatus==="1" ? values.employerAddressState : null
                                         },
-                                        bvn:values.BVN,
+                                        bvn:values.BVN.toString(),
                                         gender:values.gender,
                                         dateOfBirth: values.dateOfBirth!==''?values.dateOfBirth.toISOString():null,
                                         notes: values.notes,
                                         clientBranchEncodedKey:values.clientBranchEncodedKey.toString(),
                                         accountOfficerEncodedKey: values.accountOfficerEncodedKey
                                     }
-                
-                                    
-                                    
-                
+
+
+
+
                                     this.handleCreateNewCustomer(createNewCustomerPayload)
                                         .then(
                                             () => {
-                
+
                                                 if (this.props.createAClient.request_status === clientsConstants.CREATE_A_CLIENT_SUCCESS) {
                                                     resetForm();
                                                     // value = {null}
                                                 }
-                
+
                                                 setTimeout(() => {
                                                     this.props.dispatch(clientsActions.createClient("CLEAR"))
                                                 }, 3000);
-                
+
                                             }
                                         )
-                
+
                                 }}
                             >
                                 {({ handleSubmit,
@@ -279,8 +301,8 @@ class NewClient extends React.Component {
                                     touched,
                                     isValid,
                                     errors, }) => (
-                                        <Form 
-                                            noValidate 
+                                        <Form
+                                            noValidate
                                             onSubmit={handleSubmit}
                                             className="form-content card">
                                             {selectedCustype &&
@@ -293,7 +315,7 @@ class NewClient extends React.Component {
                                                     <Form.Label className="block-level">First Name</Form.Label>
                                                     <Form.Control type="text"
                                                         name="FName"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         value={values.FName}
                                                         className={errors.FName && touched.FName ? "is-invalid": null}
                                                         required  />
@@ -305,7 +327,7 @@ class NewClient extends React.Component {
                                                     <Form.Label className="block-level">Last Name</Form.Label>
                                                     <Form.Control type="text"
                                                          name="LName"
-                                                         onChange={handleChange} 
+                                                         onChange={handleChange}
                                                          value={values.LName}
                                                          className={errors.LName && touched.LName ? "is-invalid": null}
                                                          required />
@@ -313,14 +335,14 @@ class NewClient extends React.Component {
                                                         <span className="invalid-feedback">{errors.LName}</span>
                                                     ) : null}
                                                 </Col>
-                                                
+
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">Middle Name</Form.Label>
                                                     <Form.Control type="text"
                                                          name="MName"
-                                                         onChange={handleChange} 
+                                                         onChange={handleChange}
                                                          value={values.MName}
                                                          className={errors.MName && touched.MName ? "is-invalid h-38px": "h-38px"}
                                                          required />
@@ -352,10 +374,10 @@ class NewClient extends React.Component {
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">BVN</Form.Label>
-                                                    <Form.Control type="text"
+                                                    <Form.Control type="number"
                                                          name="BVN"
-                                                         onChange={handleChange} 
-                                                         value={allowNumbersOnly(values.BVN, 11)}
+                                                         onChange={handleChange}
+                                                         value={values.BVN}
                                                          className={errors.BVN && touched.BVN ? "is-invalid": null}
                                                          required />
                                                     {errors.BVN && touched.BVN ? (
@@ -367,25 +389,33 @@ class NewClient extends React.Component {
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label htmlFor="gender" className="block-level">Gender</Form.Label>
-                                                    <select id="gender"
-                                                        onChange={handleChange}
-                                                        name="gender"
-                                                        value={values.gender}
-                                                        className="countdropdown form-control form-control-sm">
-                                                        <option value="">Select</option>
-                                                        <option value="Female">Female</option>
-                                                        <option value="Male">Male</option>
-                                                    </select>
+                                                  <Select id="gender"
+                                                          options={genderList}
+                                                          onChange={(selectedGender) => {
+                                                            this.setState({ selectedGender });
+                                                            errors.gender = null
+                                                            values.gender = selectedGender.value
+                                                          }}
+                                                          name="gender"
+                                                          //value={values.gender}
+                                                          //className="countdropdown form-control form-control-sm"
+                                                          className={errors.gender && touched.gender ? "is-invalid" : null}
+                                                          required
+                                                  />
+                                                    {/*<option value="">Select</option>
+                                                    <option value="Female">Female</option>
+                                                    <option value="Male">Male</option>
+                                                  </Select>*/}
                                                     {/* <Form.Check type="radio"
                                                         name="radio"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         label="Female"
                                                         id="choose-female"
                                                         value={values.gender}
                                                           />
                                                     <Form.Check type="radio"
                                                         name="radio"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         label="Male"
                                                         id="choose-male"
                                                         value={values.gender}
@@ -397,14 +427,12 @@ class NewClient extends React.Component {
                                                 <Col>
                                                     <Form.Group controlId="debitLocation" className={errors.dateOfBirth && touched.dateOfBirth ? "has-invaliderror fullwidthdate" : "fullwidthdate"}>
                                                         <Form.Label className="block-level">Date of Birth</Form.Label>
-                                                            <DatePicker       
+                                                            <DatePicker
                                                             placeholderText="Choose  date"
-                                                            autoComplete="new-password"
                                                             autoComplete="new-password"
                                                             // onChange={this.handleDatePicker}
                                                             // onChangeRaw={(e) => this.handleDateChange(e)}
                                                             dateFormat={window.dateformat}
-                                                            className="form-control form-control-sm"
                                                             peekNextMonth
                                                             showMonthDropdown
                                                             showYearDropdown
@@ -421,7 +449,7 @@ class NewClient extends React.Component {
                                                         ) : null}
                                                     </Form.Group>
                                                 </Col>
-                                                
+
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
@@ -439,7 +467,7 @@ class NewClient extends React.Component {
                                                         // value={values.currencyCode}
                                                         required
                                                     />
-                                                    
+
                                                     {errors.clientBranchEncodedKey && touched.clientBranchEncodedKey ? (
                                                         <span className="invalid-feedback">{errors.clientBranchEncodedKey}</span>
                                                     ) : null}
@@ -476,7 +504,7 @@ class NewClient extends React.Component {
                                                                 <Form.Label className="block-level">Street Address - Line 1</Form.Label>
                                                                 <Form.Control type="text"
                                                                     name="addressLine1"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.addressLine1}
                                                                     className={errors.addressLine1 && touched.addressLine1 ? "is-invalid": null} />
                                                                 {errors.addressLine1 && touched.addressLine1 ? (
@@ -487,7 +515,7 @@ class NewClient extends React.Component {
                                                                 <Form.Label className="block-level">Street Address - Line 2</Form.Label>
                                                                 <Form.Control type="text"
                                                                     name="addressLine2"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.addressLine2}
                                                                     className={errors.addressLine2 && touched.addressLine2 ? "is-invalid": null} />
                                                                 {errors.addressLine2 && touched.addressLine2 ? (
@@ -500,7 +528,7 @@ class NewClient extends React.Component {
                                                                 <Form.Label className="block-level">City</Form.Label>
                                                                 <Form.Control type="text"
                                                                     name="addressCity"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.addressCity}
                                                                     className={errors.addressCity && touched.addressCity ? "is-invalid": null} />
                                                                 {errors.addressCity && touched.addressCity ? (
@@ -509,9 +537,9 @@ class NewClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">State/Province/Region</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                      name="addressState"
-                                                                     onChange={handleChange} 
+                                                                     onChange={handleChange}
                                                                      value={values.addressState}
                                                                      className={errors.addressState && touched.addressState ? "is-invalid": null} />
                                                                  {errors.addressState && touched.addressState ? (
@@ -522,9 +550,9 @@ class NewClient extends React.Component {
                                                         <Form.Row>
                                                             <Col>
                                                                 <Form.Label className="block-level">Zip Postal Code</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="zipCode"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.zipCode}
                                                                     className={errors.zipCode && touched.zipCode ? "is-invalid": null} />
                                                                 {errors.zipCode && touched.zipCode ? (
@@ -533,9 +561,9 @@ class NewClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">Country</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="addressCountry"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.addressCountry}
                                                                     className={errors.addressCountry && touched.addressCountry ? "is-invalid": null} />
                                                                 {errors.addressCountry && touched.addressCountry ? (
@@ -555,7 +583,7 @@ class NewClient extends React.Component {
                                                         <Form.Row>
                                                                 <Col>
                                                                     <Form.Label className="block-level">Employed?</Form.Label>
-                                                                    <select 
+                                                                    <select
                                                                         onChange={handleChange}
                                                                         name="workStatus"
                                                                         value={values.workStatus}
@@ -571,7 +599,7 @@ class NewClient extends React.Component {
                                                             </Col>
                                                             <Col></Col>
                                                         </Form.Row>
-                                                        {values.workStatus==="1" && 
+                                                        {values.workStatus==="1" &&
                                                         <div>
                                                             <Form.Row>
                                                                 <Col>
@@ -591,11 +619,9 @@ class NewClient extends React.Component {
                                                                         <DatePicker
                                                                             placeholderText="Choose  date"
                                                                             autoComplete="new-password"
-                                                                            autoComplete="new-password"
                                                                             // onChange={this.handleDatePicker}
                                                                             // onChangeRaw={(e) => this.handleDateChange(e)}
                                                                             dateFormat={window.dateformat}
-                                                                            className="form-control form-control-sm"
                                                                             peekNextMonth
                                                                             showMonthDropdown
                                                                             showYearDropdown
@@ -665,7 +691,7 @@ class NewClient extends React.Component {
                                                                 </Col>
                                                             </Form.Row>
                                                             <Form.Row>
-                                                                
+
                                                                 <Col>
                                                                     <Form.Label className="block-level">Official Email</Form.Label>
                                                                     <Form.Control type="text"
@@ -727,9 +753,9 @@ class NewClient extends React.Component {
                                                         <Form.Row>
                                                             <Col>
                                                                 <Form.Label className="block-level">Phone Number</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="number"
                                                                     name="contactMobile"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.contactMobile}
                                                                     className={errors.contactMobile && touched.contactMobile ? "is-invalid": null} />
                                                                 {errors.contactMobile && touched.contactMobile ? (
@@ -738,9 +764,9 @@ class NewClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">Email Address</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="contactEmail"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.contactEmail}
                                                                     className={errors.contactEmail && touched.contactEmail ? "is-invalid": null} />
                                                                 {errors.contactEmail && touched.contactEmail ? (
@@ -760,9 +786,9 @@ class NewClient extends React.Component {
                                                         <Form.Row>
                                                             <Col>
                                                                 <Form.Label className="block-level">Next of Kin Fullname</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="nextOfKinFullName"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.nextOfKinFullName}
                                                                     className={errors.nextOfKinFullName && touched.nextOfKinFullName ? "is-invalid": null} />
                                                                 {errors.nextOfKinFullName && touched.nextOfKinFullName ? (
@@ -771,9 +797,9 @@ class NewClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">Next of Kin Home Address</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="nextOfKinAddress"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.nextOfKinAddress}
                                                                     className={errors.nextOfKinAddress && touched.nextOfKinAddress ? "is-invalid": null} />
                                                                 {errors.nextOfKinAddress && touched.nextOfKinAddress ? (
@@ -784,9 +810,9 @@ class NewClient extends React.Component {
                                                         <Form.Row>
                                                             <Col>
                                                                 <Form.Label className="block-level">Next of Kin Phone Number</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="number"
                                                                     name="nextOfKinMobile"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.nextOfKinMobile}
                                                                     className={errors.nextOfKinMobile && touched.nextOfKinMobile ? "is-invalid": null} />
                                                                 {errors.nextOfKinMobile && touched.nextOfKinMobile ? (
@@ -795,9 +821,9 @@ class NewClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">Next of Kin Relationship</Form.Label>
-                                                                    <Form.Control type="text" 
+                                                                    <Form.Control type="text"
                                                                         name="nextOfKinRelationship"
-                                                                        onChange={handleChange} 
+                                                                        onChange={handleChange}
                                                                         value={values.nextOfKinRelationship}
                                                                         className={errors.nextOfKinRelationship && touched.nextOfKinRelationship ? "is-invalid": null} />
                                                                     {errors.nextOfKinRelationship && touched.nextOfKinRelationship ? (
@@ -822,7 +848,7 @@ class NewClient extends React.Component {
                                                                     name="notes"
                                                                     value={values.notes}
                                                                     className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}/>
-                                                                
+
                                                                 {errors.notes && touched.notes ? (
                                                                     <span className="invalid-feedback">{errors.notes}</span>
                                                                 ) : null}
@@ -830,36 +856,36 @@ class NewClient extends React.Component {
                                                 </div>
                                             </Accordion.Collapse>
                                         </Accordion>
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
                                             <div className="footer-with-cta toleft">
                                                 {/* <Button variant="light" className="btn btn-light">
                                                     Cancel</Button> */}
                                                 {/* <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
-                                                <Button variant="light" 
+                                                <Button variant="light"
                                                         className="btn btn-secondary grayed-out"
                                                         onClick={()=>this.props.history.goBack()}
                                                 >
                                                     Cancel</Button>
                                                 <Button variant="success" type="submit"
-                                                    disabled={createAClientRequest.is_request_processing} 
-                                                    className="ml-20"   
-                                                    > 
+                                                    disabled={createAClientRequest.is_request_processing}
+                                                    className="ml-20"
+                                                    >
                                                         {createAClientRequest.is_request_processing?"Please wait...": "Create Customer"}
                                                 </Button>
-                
-                                                
+
+
                                             </div>
-                                            {createAClientRequest.request_status === clientsConstants.CREATE_A_CLIENT_SUCCESS && 
+                                            {createAClientRequest.request_status === clientsConstants.CREATE_A_CLIENT_SUCCESS &&
                                                 <Alert variant="success">
                                                     {createAClientRequest.request_data.response.data.message}
                                                 </Alert>
                                             }
-                                            {createAClientRequest.request_status === clientsConstants.CREATE_A_CLIENT_FAILURE && 
+                                            {createAClientRequest.request_status === clientsConstants.CREATE_A_CLIENT_FAILURE &&
                                                 <Alert variant="danger">
                                                     {createAClientRequest.request_data.error}
                                                 </Alert>
@@ -870,17 +896,17 @@ class NewClient extends React.Component {
                         )
                     // }else{
                     //     return(
-                    //         <div className="loading-content card"> 
+                    //         <div className="loading-content card">
                     //             <div>No Account Officer. Please contact Admin</div>
                     //         </div>
                     //     )
                     // }
                 }
-                    
-           
+
+
                 if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_FAILURE){
                     return (
-                        <div className="loading-content card"> 
+                        <div className="loading-content card">
                             <div>{getAllUsersRequest.request_data.error}</div>
                         </div>
                     )
@@ -888,13 +914,13 @@ class NewClient extends React.Component {
 
                 if(adminGetCustomerTypesRequest.request_status ===administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE){
                     return (
-                        <div className="loading-content card"> 
+                        <div className="loading-content card">
                             <div>{adminGetCustomerTypesRequest.request_data.error}</div>
                         </div>
                     )
                 }
-            
-        
+
+
     }
 
     render() {
@@ -905,11 +931,11 @@ class NewClient extends React.Component {
                         <div className="module-content">
                             <div className="content-container">
                                 <div className="row">
-                                    
+
                                     <div className="col-sm-12">
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
-                                                
+
                                                 {/* <div className="footer-with-cta toleft">
                                                     <Button variant="secondary" className="grayed-out">Rearrange</Button>
                                                     <Button >Add Channel</Button>
