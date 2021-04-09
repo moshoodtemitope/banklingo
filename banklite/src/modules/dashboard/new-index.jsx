@@ -163,6 +163,12 @@ class DashboardLanding extends React.Component {
                                     <span className="stat-text">Total Overdrafts</span>
                                 </div>
                             </div>
+                            <div className="each-stat">
+                                <div className="stat-data card">
+                                    <h4 className="stat-value">{numberWithCommas(allDashboardStat.parAbove30Days)}</h4>
+                                    <span className="stat-text">PAR &gt; 30 Days</span>
+                                </div>
+                            </div>
                             {/* <div className="each-stat">
                                 <div className="stat-data card">
                                     <h4 className="stat-value">0.00</h4>
@@ -1039,15 +1045,15 @@ class DashboardLanding extends React.Component {
                         </div>
                         <div className="each-detail">
                             <div className="detail-title">Expected cash in Till</div>
-                            <div className="detail-value">{numberWithCommas(tillData.balance, true)}{tillData.currencyCode}</div>
+                            <div className="detail-value">{numberWithCommas(tillData.balance, true)} {tillData.currencyCode}</div>
                         </div>
                         <div className="each-detail">
                             <div className="detail-title">Minimum Balance</div>
-                            <div className="detail-value">{numberWithCommas(tillData.mimimumbalance, true)}{tillData.currencyCode}</div>
+                            <div className="detail-value">{numberWithCommas(tillData.mimimumbalance, true)} {tillData.currencyCode}</div>
                         </div>
                         <div className="each-detail">
                             <div className="detail-title">Maximum Balance</div>
-                            <div className="detail-value">{numberWithCommas(tillData.maximumBalance, true)}{tillData.currencyCode}</div>
+                            <div className="detail-value">{numberWithCommas(tillData.maximumBalance, true)} {tillData.currencyCode}</div>
                         </div>
                     </div>
                 
@@ -1313,6 +1319,13 @@ class DashboardLanding extends React.Component {
                                     <div className="indicator-txt">Active Savings</div>
                                 </div>
                             </div>
+                            <div className="each-indicator">
+                                <div>
+                                    <h4>{numberWithCommas(dashboardData.parAbove30Days)}</h4>
+                                    <div className="indicator-txt">PAR &gt; 30 Days</div>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -2138,7 +2151,7 @@ class DashboardLanding extends React.Component {
                                     return (
                                         <div className="each-indicator with-actions" key={index}>
                                             <div>
-                                                <h4><span>{eachData.tillUser}</span> <span> {numberWithCommas(eachData.balance, true)}{eachData.currencyCode}</span> </h4>
+                                                <h4><span>{eachData.tillUser}</span> <span> {numberWithCommas(eachData.balance, true)} {eachData.currencyCode}</span> </h4>
                                                 <div className="indicator-txt">
     
                                                     {eachData.tillAccountState === 1 &&
