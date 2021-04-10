@@ -15,7 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import { loanActions } from '../../redux/actions/loans/loans.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
-import "./styles.scss"; 
+import "./styles.scss";
 class AllLoanSchedules extends React.Component {
     constructor(props) {
         super(props);
@@ -33,7 +33,7 @@ class AllLoanSchedules extends React.Component {
             showAmountPaid: false,
             showAmountDue: true,
         }
-        
+
     }
 
     componentDidMount() {
@@ -54,7 +54,7 @@ class AllLoanSchedules extends React.Component {
 
     exportLoansSchedules=()=>{
         let {PageSize,CurrentPage,  SearchText,ScheduleState, endDate, startDate} = this.state;
-        
+
         if(endDate!==""){
             endDate = endDate.toISOString()
         }
@@ -117,7 +117,7 @@ class AllLoanSchedules extends React.Component {
     }
     handleStartDatePicker = (startDate) => {
         startDate.setHours(startDate.getHours() + 1);
-        
+
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
                 //this.getHistory();
@@ -127,7 +127,7 @@ class AllLoanSchedules extends React.Component {
 
     handleEndDatePicker = (endDate) => {
         endDate.setHours(endDate.getHours() + 1);
-       
+
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
                     //this.getHistory();
@@ -136,12 +136,12 @@ class AllLoanSchedules extends React.Component {
     }
 
     setScheduleFilter = (filterState, filterItem)=>{
-        
+
         this.setState({[filterItem]:filterState.target.checked})
     }
 
     loadNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
         let {PageSize,CurrentPage,FullDetails, ScheduleState, SearchText, startDate, endDate} = this.state;
 
@@ -197,7 +197,7 @@ class AllLoanSchedules extends React.Component {
                     return(
                         <div className="loading-content">
                             <div className="loading-text">Please wait... </div>
-                            
+
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
@@ -226,7 +226,7 @@ class AllLoanSchedules extends React.Component {
                    return(
                         <div className="loading-content">
                             <div className="loading-text">Please wait... </div>
-                            
+
                             <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
@@ -375,7 +375,7 @@ class AllLoanSchedules extends React.Component {
                                     <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allLoanSchedules.result)} >
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <select id="toshow" 
+                                            <select id="toshow"
                                                 onChange={(e)=>this.setScheduleState(e, allLoanSchedules.result)}
                                                 value={this.state.ScheduleState}
                                                 className="countdropdown form-control form-control-sm">
@@ -389,7 +389,7 @@ class AllLoanSchedules extends React.Component {
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -406,7 +406,7 @@ class AllLoanSchedules extends React.Component {
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                             <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -444,7 +444,7 @@ placeholderText="End  date"
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" 
+                                        <select id="toshow"
                                             onChange={(e)=>this.setPagesize(e, allLoanSchedules.result)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
@@ -453,7 +453,7 @@ placeholderText="End  date"
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        
+
                                         <TablePagination
                                             totalPages={allLoanSchedules.totalPages}
                                             currPage={allLoanSchedules.currentPage}
@@ -465,7 +465,7 @@ placeholderText="End  date"
                                         />
                                     </div>
                                 </div>
-                                {/* <div className="table-helper">
+                                {/* <div className="Table-helper">
                                     <input type="checkbox" name=""
                                         onChange={(e)=>this.setShowDetails(e, allLoanSchedules.result)}
                                         checked={this.state.FullDetails}
@@ -489,7 +489,7 @@ placeholderText="End  date"
                                         id="showAmountDue" />
                                     <label htmlFor="showAmountDue">Amount Due</label>
                                 </div>
-                                
+
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -637,7 +637,7 @@ placeholderText="End  date"
                                     <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allLoanSchedules.result)} >
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <select id="toshow" 
+                                            <select id="toshow"
                                                 onChange={(e)=>this.setScheduleState(e, allLoanSchedules.result)}
                                                 value={this.state.ScheduleState}
                                                 className="countdropdown form-control form-control-sm">
@@ -651,7 +651,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -668,7 +668,7 @@ placeholderText="End  date"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                             <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -697,7 +697,7 @@ placeholderText="End  date"
 ) : null} */}
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
-                                        
+
                                     </Form>
 
                                     <div className="pagination-wrap">

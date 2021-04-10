@@ -24,17 +24,28 @@ span.action-link {
 .amber-color{
     color: #ffbf00;
 }
+
 span.each-pagenum {
-    background: #D6EAF8;
-    padding: 2px 5px;
+    //border: 1px solid #78B943;
+    //color: #78B943;
+    background-color: white;
+    padding: 5px 10px;
     font-size: 11px;
     margin: 0 3px;
+    border: 1px solid #DFE3E8;
     &.active{
-        background: #5499C7;
-        color: #ffffff;
+        border: 1px solid #78B943;
+        color: #78B943;
     }
     &:hover{
         cursor: pointer;
         background: #A9CCE3;
     }
+}
+
+.middot {
+    background-color: white;
+    padding: 3px 8px;
+    margin: 1px 3px 0;
+    border: 1px solid #DFE3E8;
 }

@@ -15,7 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 import { loanActions } from '../../redux/actions/loans/loans.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
-import "./styles.scss"; 
+import "./styles.scss";
 class LoanPAR extends React.Component {
     constructor(props) {
         super(props);
@@ -28,12 +28,12 @@ class LoanPAR extends React.Component {
             endDate: "",
             startDate: "",
             SearchText:"",
-            
+
             showAmountExpected: true,
             showAmountPaid: false,
             showAmountDue: true,
         }
-        
+
     }
 
     componentDidMount() {
@@ -54,7 +54,7 @@ class LoanPAR extends React.Component {
 
     exportLoansPAR=()=>{
         let {PageSize,CurrentPage,  SearchText, endDate, startDate} = this.state;
-        
+
         if(endDate!==""){
             endDate = endDate.toISOString()
         }
@@ -82,7 +82,7 @@ class LoanPAR extends React.Component {
         }
     }
 
-   
+
     setShowDetails = (FullDetails,tempData) => {
         const {dispatch} = this.props;
         let showDetails = FullDetails.target.checked,
@@ -103,7 +103,7 @@ class LoanPAR extends React.Component {
     }
     handleStartDatePicker = (startDate) => {
         startDate.setHours(startDate.getHours() + 1);
-        
+
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
                 //this.getHistory();
@@ -113,7 +113,7 @@ class LoanPAR extends React.Component {
 
     handleEndDatePicker = (endDate) => {
         endDate.setHours(endDate.getHours() + 1);
-       
+
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
                     //this.getHistory();
@@ -122,12 +122,12 @@ class LoanPAR extends React.Component {
     }
 
     setPARFilter = (filterState, filterItem)=>{
-        
+
         this.setState({[filterItem]:filterState.target.checked})
     }
 
     loadNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
         let {PageSize,CurrentPage,FullDetails, endDate, startDate} = this.state;
 
@@ -183,7 +183,7 @@ class LoanPAR extends React.Component {
                     return(
                         <div className="loading-content">
                             <div className="loading-text">Please wait... </div>
-                            
+
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
@@ -215,7 +215,7 @@ class LoanPAR extends React.Component {
                    return(
                         <div className="loading-content">
                             <div className="loading-text">Please wait... </div>
-                            
+
                             <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
@@ -272,7 +272,7 @@ class LoanPAR extends React.Component {
                                                 <th className="borderdright">Total Due</th>
                                             }
                                             {/* <th>Total Balance</th> */}
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -335,7 +335,7 @@ class LoanPAR extends React.Component {
                                                                 <td className="borderdright">{(eachData.totalDue !== null && eachData.totalDue > 0) ? `${numberWithCommas(eachData.totalDue, true)}` : "-"}</td>
                                                             }
                                                             {/* <td>{(eachData.totalBalance !==null && eachData.totalBalance>0) ? numberWithCommas(eachData.totalBalance, true) : "-"}</td> */}
-                                                            
+
                                                         </tr>
                                                         {/* <tr>
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
@@ -366,11 +366,11 @@ class LoanPAR extends React.Component {
                                     <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, loansPAR.result)} >
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            
+
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -387,7 +387,7 @@ class LoanPAR extends React.Component {
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                             <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -425,7 +425,7 @@ placeholderText="End  date"
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" 
+                                        <select id="toshow"
                                             onChange={(e)=>this.setPagesize(e, loansPAR.result)}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
@@ -434,7 +434,7 @@ placeholderText="End  date"
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        
+
                                         <TablePagination
                                             totalPages={loansPAR.totalPages}
                                             currPage={loansPAR.currentPage}
@@ -446,7 +446,7 @@ placeholderText="End  date"
                                         />
                                     </div>
                                 </div>
-                                {/* <div className="table-helper">
+                                {/* <div className="Table-helper">
                                     <input type="checkbox" name=""
                                         onChange={(e)=>this.setShowDetails(e, loansPAR.result)}
                                         checked={this.state.FullDetails}
@@ -470,7 +470,7 @@ placeholderText="End  date"
                                         id="showAmountDue" />
                                     <label htmlFor="showAmountDue">Amount Due</label>
                                 </div>
-                                
+
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -528,7 +528,7 @@ placeholderText="End  date"
                                                 <th className="borderdright">Total Due</th>
                                             }
                                             {/* <th>Total Balance</th> */}
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -543,24 +543,24 @@ placeholderText="End  date"
                                                             <td><NavLink to={`/customer/${eachData.clientKey}/loanaccount/${eachData.encodedKey}`}> {eachData.accountNumber}</NavLink></td>
                                                             <td>{(eachData.loanAmount !== null && eachData.loanAmount > 0) ? `${numberWithCommas(eachData.loanAmount, true)}` : "-"}</td>
                                                             <td>{(eachData.maturityDate!==null && eachData.maturityDate!=="")? eachData.maturityDate:"-"}</td>
-                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue ===0) && 
+                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue ===0) &&
                                                                 <td className="amber-color">0</td>
                                                             }
 
-                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue >0) && 
+                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue >0) &&
                                                                 <td className="red-color">{numberWithCommas(eachData.daysPassDue, false)}</td>
                                                             }
 
-                                                            
 
-                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue <0) && 
+
+                                                            {(eachData.daysPassDue !== null && eachData.daysPassDue <0) &&
                                                                 <td className="green-color">0</td>
                                                             }
 
-                                                            {(eachData.daysPassDue === null) && 
+                                                            {(eachData.daysPassDue === null) &&
                                                                 <td>-</td>
                                                             }
-                                                            
+
                                                             {this.state.showAmountExpected === true &&
                                                                 <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
                                                             }
@@ -608,7 +608,7 @@ placeholderText="End  date"
                                                                 <td className="borderdright">{(eachData.totalDue !== null && eachData.totalDue > 0) ? `${numberWithCommas(eachData.totalDue, true)}` : "-"}</td>
                                                             }
                                                             {/* <td>{(eachData.totalBalance !==null && eachData.totalBalance>0) ? numberWithCommas(eachData.totalBalance, true) : "-"}</td> */}
-                                                           
+
                                                         </tr>
                                                         {/* <tr>
                                                             <td><NavLink to={`/customer/${eachTransaction.accountHolderEncodedKey}`}>{eachTransaction.accountHolderName}</NavLink> </td>
@@ -637,11 +637,11 @@ placeholderText="End  date"
                                     <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, loansPAR.result)} >
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            
+
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -658,7 +658,7 @@ placeholderText="End  date"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                             <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -687,7 +687,7 @@ placeholderText="End  date"
 ) : null} */}
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
-                                        
+
                                     </Form>
 
                                     <div className="pagination-wrap">

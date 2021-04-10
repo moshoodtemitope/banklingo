@@ -1,7 +1,6 @@
 @import "../../assets/scss/shared/colors";
 @import "../../assets/scss/shared/globalstyles";
 .module-title {
-    background: #F4F6F7;
     padding: 20px 0;
 }
 .disbursment-options-wrap {
@@ -119,7 +118,6 @@ button.batch-cta{
     }
 }
 .dissburseInfo{
-    background: #F4F6F7;
     padding: 8px;
     height: 100%;
 }
@@ -146,7 +144,7 @@ span.txt-cta {
     .form-heading{
         display: flex;
         justify-content: space-between;
-        
+
     }
     .close-icon {
         width: 31px;

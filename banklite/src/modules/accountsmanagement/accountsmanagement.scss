@@ -2,7 +2,6 @@
 @import "../../assets/scss/shared/globalstyles";
 
 .module-title {
-    background: #F4F6F7;
     padding: 20px 0;
 }
 pre{
@@ -42,11 +41,11 @@ pre{
 //   [data-title]:hover::after {
 //     content: '';
 //     // position: absolute;
-   
+
 //     // left: 8px;
 //     display: inline-block;
 //     color: #fff;
-//     // border: 8px solid transparent;	
+//     // border: 8px solid transparent;
 //     border-bottom: 8px solid #000;
 //   }
 
@@ -66,15 +65,15 @@ pre{
 .table-bordered tr.totalrow td {
     border: none;
     font-weight: 600;
-    font-size: 14px; 
+    font-size: 14px;
     &:nth-of-type(2){
         // font-weight: 600;
         text-transform: uppercase;
-        // font-size: 14px;    
+        // font-size: 14px;
     }
     // &:nth-of-type(3){
     //     font-weight: 600;
-    //     font-size: 14px;    
+    //     font-size: 14px;
     // }
 }
 .branchfilter{

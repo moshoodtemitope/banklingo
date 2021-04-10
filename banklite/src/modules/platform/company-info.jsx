@@ -28,7 +28,7 @@ import { platformConstants } from '../../redux/actiontypes/platform/platform.con
 import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
 import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 import Alert from 'react-bootstrap/Alert'
-// import "./clients.scss"; 
+// import "./clients.scss";
 
 class ManageCompanyInfo extends React.Component {
     constructor(props) {
@@ -115,7 +115,7 @@ class ManageCompanyInfo extends React.Component {
 
     }
 
-    
+
 
 
     loadNextPage = (nextPage, tempData) => {
@@ -607,7 +607,7 @@ class ManageCompanyInfo extends React.Component {
                                                 <span className="invalid-feedback">{errors.companyName}</span>
                                             ) : null}
                                             </Form.Group>
-                                           
+
                                         {/* </Col>
                                         <Col> */}
                                     <Form.Group>
@@ -798,7 +798,7 @@ class ManageCompanyInfo extends React.Component {
                                         </Form.Control>
                                     </Form.Group>
                                     <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleStartDatePicker}
@@ -815,7 +815,7 @@ class ManageCompanyInfo extends React.Component {
                                             className="form-control form-control-sm "
 
                                         />
-                                         <DatePicker autoComplete="new-off" 
+                                         <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                             onChangeRaw={this.handleDateChangeRaw}
@@ -937,7 +937,7 @@ placeholderText="End  date"
                                 <div className="heading-with-cta">
                                     <Form className="one-liner" onSubmit={(e) => this.searchAllData(e, allFetchedData.result)}>
 
-                                        
+
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                             <Form.Control as="select" size="sm">
                                                 <option>No Filter</option>
@@ -947,7 +947,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -964,7 +964,7 @@ placeholderText="End  date"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                             <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -988,7 +988,7 @@ placeholderText="End  date"
                                                     this.setState({ SearchText: e.target.value.trim() })
                                                 }}
                                             />
-                                           
+
                                         </Form.Group>
 
                                         <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
@@ -1021,7 +1021,7 @@ placeholderText="End  date"
                                         />
                                     </div>
                                 </div>
-                                
+
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -1079,7 +1079,7 @@ placeholderText="End  date"
                                 <div className="heading-with-cta">
                                     <Form className="one-liner" onSubmit={(e) => this.searchAllData(e, allFetchedData.result)}>
 
-                                        
+
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                             <Form.Control as="select" size="sm">
                                                 <option>No Filter</option>
@@ -1089,7 +1089,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -1106,7 +1106,7 @@ placeholderText="End  date"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                             <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -1260,7 +1260,7 @@ placeholderText="End  date"
                                                 <div className="heading-with-cta">
                                                     {/* <h3 className="section-title">Journal Entries</h3> */}
                                                     {/* <Form className="one-liner">
-                                                        <Form.Group className="table-filters">
+                                                        <Form.Group className="Table-filters">
                                                             <Form.Label>Account Officer</Form.Label>
                                                                 <Form.Control type="text" size="sm" />
                                                         </Form.Group>

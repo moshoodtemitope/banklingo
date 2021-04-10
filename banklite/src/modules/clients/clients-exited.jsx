@@ -14,7 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
-import "./clients.scss"; 
+import "./clients.scss";
 
 class ClientsExited extends React.Component {
     constructor(props) {
@@ -54,7 +54,7 @@ class ClientsExited extends React.Component {
     }
     handleStartDatePicker = (startDate) => {
         startDate.setHours(startDate.getHours() + 1);
-        
+
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
                 //this.getHistory();
@@ -64,8 +64,8 @@ class ClientsExited extends React.Component {
 
     exportClients=()=>{
         let {PageSize,CurrentPage,FullDetails, BranchId, ClientState, SearchText, endDate, startDate} = this.state;
-        
-        
+
+
         if(endDate!==""){
             endDate = endDate.toISOString()
         }
@@ -74,8 +74,8 @@ class ClientsExited extends React.Component {
         }
         let paramters= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
-            
-        
+
+
 
         const {dispatch} = this.props;
 
@@ -84,7 +84,7 @@ class ClientsExited extends React.Component {
 
     handleEndDatePicker = (endDate) => {
         endDate.setHours(endDate.getHours() + 1);
-       
+
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
                     //this.getHistory();
@@ -108,7 +108,7 @@ class ClientsExited extends React.Component {
         }else{
             dispatch(clientsActions.getClients(params));
         }
-        
+
     }
     setShowDetails = (FullDetails,tempData)=>{
         const {dispatch} = this.props;
@@ -130,7 +130,7 @@ class ClientsExited extends React.Component {
     }
 
     loadNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
         let {PageSize,CurrentPage,FullDetails, BranchId, ClientState, endDate, startDate} = this.state;
 
@@ -375,7 +375,7 @@ class ClientsExited extends React.Component {
                         </div>
                     )
                 }
-            
+
             case(clientsConstants.GET_CLIENTS_SUCCESS):
                 let allClientsData = getClientsRequest.request_data.response.data;
                 if(allClientsData!==undefined){
@@ -640,7 +640,7 @@ class ClientsExited extends React.Component {
 
             case (clientsConstants.GET_CLIENTS_FAILURE):
                 return (
-                    <div className="loading-content errormsg"> 
+                    <div className="loading-content errormsg">
                         <div>{getClientsRequest.request_data.error}</div>
                     </div>
                 )
@@ -669,24 +669,23 @@ class ClientsExited extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <ul className="nav">
-                                        
                                         <li>
-                                            <NavLink to={'/clients'}>All</NavLink>
+                                            <NavLink to={'/clients'} activeClassName="activeNavLink">All</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink exact to={'/active-clients'}>Active</NavLink>
+                                            <NavLink exact to={'/active-clients'} activeClassName="activeNavLink">Active</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/inactive-clients'}>Inactive</NavLink>
+                                            <NavLink to={'/inactive-clients'} activeClassName="activeNavLink">Inactive</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/clients-pending-approval'}>Pending Approval</NavLink>
+                                            <NavLink to={'/clients-pending-approval'} activeClassName="activeNavLink">Pending Approval</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/clients-exited'}>Exited</NavLink>
+                                            <NavLink to={'/clients-exited'} activeClassName="activeNavLink">Exited</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/clients-blacklisted'}>Blacklisted</NavLink>
+                                            <NavLink to={'/clients-blacklisted'} activeClassName="activeNavLink">Blacklisted</NavLink>
                                         </li>
                                     </ul>
                                 </div>
