@@ -1232,20 +1232,18 @@ placeholderText="End  date"
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <ul className="nav">
-
                                         <li>
-                                            <NavLink to={'/platform/company-info'}>Company Information</NavLink>
+                                            <NavLink to={'/platform/company-info'} activeClassName="activeNavLink">Company Information</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink exact to={'/platform/customer-whitelist'}>Customer Whitelist</NavLink>
+                                            <NavLink exact to={'/platform/customer-whitelist'} activeClassName="activeNavLink">Customer Whitelist</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/platform/payroll-info'}>Payroll Information</NavLink>
+                                            <NavLink to={'/platform/payroll-info'} activeClassName="activeNavLink">Payroll Information</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/platform/bank-info'}>Bank Information</NavLink>
+                                            <NavLink to={'/platform/bank-info'} activeClassName="activeNavLink">Bank Information</NavLink>
                                         </li>
-
                                     </ul>
                                 </div>
                             </div>

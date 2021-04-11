@@ -252,13 +252,14 @@ select, select.form-control{
     margin-top: 10px;
     .nav{
         background-color: white;
+        padding-left: 5px;
         >li{
-            margin-right: 10px;
-            margin-bottom: 10px;
+            //margin-right: 10px;
+            //margin-bottom: 10px;
             >a{
                 display: block;
                 font-size: 12px;
-                padding: 5px 8px;
+                padding: 10px;
                 background-color: white;
                 color: #6E7297;
                 &:hover{
@@ -395,7 +396,7 @@ select, select.form-control{
 
     .each-page-action, {
         background-color: #fff;
-        padding: 8px 12px;
+        padding: 8px 7px;
 
         &.unaallowed {
             background-color: #919EAB;

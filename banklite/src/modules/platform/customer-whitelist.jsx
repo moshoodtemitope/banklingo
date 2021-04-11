@@ -28,7 +28,7 @@ import {platformConstants} from '../../redux/actiontypes/platform/platform.const
 import {dashboardActions} from '../../redux/actions/dashboard/dashboard.action';
 import {dashboardConstants} from '../../redux/actiontypes/dashboard/dashboard.constants'
 import Alert from 'react-bootstrap/Alert'
-// import "./clients.scss"; 
+// import "./clients.scss";
 
 class ManageCustomerWhitelist extends React.Component {
     constructor(props) {
@@ -58,15 +58,15 @@ class ManageCustomerWhitelist extends React.Component {
     loadInitialData=()=>{
         let {PageSize, CurrentPage, ShowDeactivated}= this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&ShowDeactivated=${ShowDeactivated}`;
-        
+
         this.fetchAllCreditScoreByPass(params);
-        
+
     }
 
-    
 
-   
-    
+
+
+
 
     fetchAllCreditScoreByPass = (paramters)=>{
         const {dispatch} = this.props;
@@ -99,22 +99,22 @@ class ManageCustomerWhitelist extends React.Component {
 
     setShowDeactivated = (ShowDeactivated,tempData)=>{
         const {dispatch} = this.props;
-        
+
         let showNonActive = ShowDeactivated.target.checked,
             {CurrentPage, CurrentSelectedPage, PageSize} = this.state;
 
         this.setState({ShowDeactivated: showNonActive});
 
         let params= `ShowDeactivated=${showNonActive}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        
+
         if(tempData){
             dispatch(platformActions.fetchAllCreditScoreByPass(params, tempData));
         }else{
             dispatch(platformActions.fetchAllCreditScoreByPass(params));
         }
-        
+
     }
-    
+
     loadSearchResults = (inputValue, callback) => {
         return this.getSearchedCustomerResults(inputValue)
                 .then(()=>{
@@ -126,7 +126,7 @@ class ManageCustomerWhitelist extends React.Component {
                 })
     }
 
-    
+
 
 
     getSearchedCustomerResults = async (inputValue)=> {
@@ -135,16 +135,16 @@ class ManageCustomerWhitelist extends React.Component {
         if (!inputValue || inputValue.length===0) {
           return null;
         }
-       
+
 
          await dispatch(dashboardActions.searchForCustomer(inputValue));
 
-        
+
     }
 
 
     loadNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
         let {PageSize} = this.state;
 
@@ -167,7 +167,7 @@ class ManageCustomerWhitelist extends React.Component {
             this.props.dispatch(dashboardActions.searchForCustomer("CLEAR"));
         }
     }
-    
+
     handleShowNewRecord = () => {
         this.clearAllData();
         this.setState({showCreateNewRecord:true})
@@ -178,7 +178,7 @@ class ManageCustomerWhitelist extends React.Component {
             this.setState({ showEditRecord: false });
         }
     }
-    
+
     handleEditRecordShow = (recordToUpdate, updateType) => {
         this.clearAllData()
         this.setState({ updateType, recordToUpdate, showEditRecord: true, });
@@ -193,10 +193,10 @@ class ManageCustomerWhitelist extends React.Component {
     }
 
     handleSelectedCustomer =(inputValue)=>{
-        
+
 
         this.setState({selectedCustomer: inputValue})
-        
+
     }
 
     searchTxtn = (e,tempData)=>{
@@ -227,8 +227,8 @@ class ManageCustomerWhitelist extends React.Component {
 
     exportRecord=()=>{
         let {PageSize,CurrentPage, SearchText, endDate, startDate} = this.state;
-        
-        
+
+
         if(endDate!==""){
             endDate = endDate.toISOString()
         }
@@ -237,8 +237,8 @@ class ManageCustomerWhitelist extends React.Component {
         }
         let paramters= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
-            
-        
+
+
 
         const {dispatch} = this.props;
 
@@ -250,7 +250,7 @@ class ManageCustomerWhitelist extends React.Component {
     }
     handleStartDatePicker = (startDate) => {
         startDate.setHours(startDate.getHours() + 1);
-        
+
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
                 //this.getHistory();
@@ -260,7 +260,7 @@ class ManageCustomerWhitelist extends React.Component {
 
     handleEndDatePicker = (endDate) => {
         endDate.setHours(endDate.getHours() + 1);
-       
+
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
                     //this.getHistory();
@@ -272,11 +272,11 @@ class ManageCustomerWhitelist extends React.Component {
     createNewRecord = async (payload)=> {
         const {dispatch} = this.props;
 
-       
+
 
          await dispatch(platformActions.createCreditScoreByPass(payload));
 
-        
+
     }
     updateARecord = async (payload, bypasstype) => {
         const { dispatch } = this.props;
@@ -327,7 +327,7 @@ class ManageCustomerWhitelist extends React.Component {
                             // creditScore: recordToUpdate.creditScore.toString(),
                             // loanCreditScoreByPassStatus: recordToUpdate.loanCreditScoreByPassStatus,
                             // bvn: recordToUpdate.bvn,
-                            
+
                         }}
                         // validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
@@ -335,7 +335,7 @@ class ManageCustomerWhitelist extends React.Component {
 
                             let requestPayload;
                             // if (this.state.updateType === "edit") {
-                                
+
                             //     requestPayload = {
                             //         amount: parseFloat(values.amount.replace(/,/g, '')),
                             //         clientEncodedKey: recordToUpdate.clientEncodedKey,
@@ -424,7 +424,7 @@ class ManageCustomerWhitelist extends React.Component {
                                                 }
                                             </div>
                                         }
-                                        
+
                                     {/* <Form.Row>
 
                                         <Col>
@@ -463,7 +463,7 @@ class ManageCustomerWhitelist extends React.Component {
                                     <Form.Row>
                                         <Col>
                                             <Form.Label className="block-level">BVN</Form.Label>
-                                            <Form.Control type="text" 
+                                            <Form.Control type="text"
                                                 onChange={(e) => {
                                                     if (this.state.updateType !== "edit") {
                                                         setFieldValue("bvn", recordToUpdate.bvn)
@@ -475,9 +475,9 @@ class ManageCustomerWhitelist extends React.Component {
                                                 disabled={this.state.updateType !== "edit"}
                                                 value={allowNumbersOnly(values.bvn, 11)}
                                                 className={errors.bvn && touched.bvn ? "is-invalid h-38px" : "h-38px"}
-                                                name="bvn" 
+                                                name="bvn"
                                                 required/>
-                                            
+
                                             {errors.bvn && touched.bvn ? (
                                                 <span className="invalid-feedback">{errors.bvn}</span>
                                             ) : null}
@@ -510,7 +510,7 @@ class ManageCustomerWhitelist extends React.Component {
                                     <Form.Row>
                                         <Col>
                                             <Form.Label className="block-level">Credit Score</Form.Label>
-                                            <Form.Control type="text" 
+                                            <Form.Control type="text"
                                                 onChange={(e) => {
                                                     if (this.state.updateType !== "edit") {
                                                         setFieldValue("creditScore", recordToUpdate.creditScore)
@@ -522,9 +522,9 @@ class ManageCustomerWhitelist extends React.Component {
                                                 disabled={this.state.updateType !== "edit"}
                                                 value={numberWithCommas(values.creditScore)}
                                                 className={errors.creditScore && touched.creditScore ? "is-invalid h-38px" : "h-38px"}
-                                                name="creditScore" 
+                                                name="creditScore"
                                                 required/>
-                                            
+
                                             {errors.creditScore && touched.creditScore ? (
                                                 <span className="invalid-feedback">{errors.creditScore}</span>
                                             ) : null}
@@ -557,10 +557,10 @@ class ManageCustomerWhitelist extends React.Component {
                                             ) : null}
                                         </Col>
 
-                                        
+
 
                                     </Form.Row> */}
-                                 
+
                                     {updateCreditScoreByPassRequest.request_status !== platformConstants.UPDATE_CREDIT_SCORE_BYPASS_SUCCESS &&
                                         <div className="footer-with-cta centered">
                                             <Button
@@ -594,18 +594,18 @@ class ManageCustomerWhitelist extends React.Component {
             </Modal>
         )
     }
-  
+
 
     createNewRecordPopUp = () =>{
-        
-        
+
+
         let {showCreateNewRecord,
             selectedCustomer,
             defaultOptions} = this.state;
         let createCreditScoreByPassRequest = this.props.createCreditScoreByPassReducer;
 
         // let getAllCurrencies =  this.props.adminGetAllCurrencies;
-        
+
 
         let checkValidationSchema = Yup.object().shape({
                 creditScore:  Yup.string()
@@ -647,7 +647,7 @@ class ManageCustomerWhitelist extends React.Component {
                         validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
-                            
+
                             let requestPayload = {};
                             if(values.whitelistOption ==="customer"){
                                 requestPayload = {
@@ -670,9 +670,9 @@ class ManageCustomerWhitelist extends React.Component {
                                 };
                             }
 
-                            
-                           
-                            
+
+
+
                             this.createNewRecord(requestPayload)
                                 .then(
                                     () => {
@@ -683,9 +683,9 @@ class ManageCustomerWhitelist extends React.Component {
 
                                     }
                                 )
-                            
-                                
-                           
+
+
+
 
                         }}
                     >
@@ -698,7 +698,7 @@ class ManageCustomerWhitelist extends React.Component {
                             values,
                             touched,
                             isValid,
-                            errors, }) =>{ 
+                            errors, }) =>{
                                 // console.log("data is",values, errors);
                                 return(
                                     <Form noValidate
@@ -846,12 +846,12 @@ class ManageCustomerWhitelist extends React.Component {
                                     </Form>
                             )}}
                     </Formik>
-                    {createCreditScoreByPassRequest.request_status === platformConstants.CREATE_CREDIT_SCORE_BYPASS_SUCCESS && 
+                    {createCreditScoreByPassRequest.request_status === platformConstants.CREATE_CREDIT_SCORE_BYPASS_SUCCESS &&
                         <Alert variant="success">
                            {createCreditScoreByPassRequest.request_data.response.data.message}
                         </Alert>
                     }
-                    {createCreditScoreByPassRequest.request_status === platformConstants.CREATE_CREDIT_SCORE_BYPASS_FAILURE && 
+                    {createCreditScoreByPassRequest.request_status === platformConstants.CREATE_CREDIT_SCORE_BYPASS_FAILURE &&
                         <Alert variant="danger">
                           {createCreditScoreByPassRequest.request_data.error}
                         </Alert>
@@ -868,10 +868,10 @@ class ManageCustomerWhitelist extends React.Component {
 
             switch (fetchAllCreditScoreByPassRequest.request_status){
                 case (platformConstants.FETCH_ALLCREDIT_SCORE_BYPASS_PENDING):
-                    
+
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                         return (
-                            <div className="loading-content"> 
+                            <div className="loading-content">
                                 <div className="heading-with-cta">
                                     <Form className="one-liner">
 
@@ -893,7 +893,7 @@ class ManageCustomerWhitelist extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        
+
                                     </div>
                                 </div>
                                 <TableComponent classnames="striped bordered hover">
@@ -941,7 +941,7 @@ class ManageCustomerWhitelist extends React.Component {
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" 
+                                        <select id="toshow"
                                             // onChange={this.setPagesize}
                                             value={this.state.PageSize}
                                             className="countdropdown form-control form-control-sm">
@@ -950,7 +950,7 @@ class ManageCustomerWhitelist extends React.Component {
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        
+
                                     </div>
                                 </div>
                                 <div className="loading-text">Please wait... </div>
@@ -1003,7 +1003,7 @@ class ManageCustomerWhitelist extends React.Component {
                             </div>
                         )
                     }
-                
+
                 case(platformConstants.FETCH_ALLCREDIT_SCORE_BYPASS_SUCCESS):
                     let allFetchedData = fetchAllCreditScoreByPassRequest.request_data.response.data;
                     if(allFetchedData!==undefined){
@@ -1033,8 +1033,8 @@ class ManageCustomerWhitelist extends React.Component {
                                             </Form.Group>
 
                                             <Form.Group className="table-filters">
-                                                
-                                                <DatePicker autoComplete="new-off"                                        
+
+                                                <DatePicker autoComplete="new-off"
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleStartDatePicker}
                                                     selected={this.state.startDate}
@@ -1050,7 +1050,7 @@ class ManageCustomerWhitelist extends React.Component {
                                                     className="form-control form-control-sm "
 
                                                 />
-                                                 <DatePicker autoComplete="new-off" 
+                                                 <DatePicker autoComplete="new-off"
                                                     placeholderText="End  date"
                                                     onChangeRaw={this.handleDateChangeRaw}
                                                     onChange={this.handleEndDatePicker}
@@ -1085,7 +1085,7 @@ class ManageCustomerWhitelist extends React.Component {
 
                                         <div className="pagination-wrap">
                                             <label htmlFor="toshow">Show</label>
-                                            <select id="toshow" 
+                                            <select id="toshow"
                                                 onChange={(e)=>this.setPagesize(e, allFetchedData.result)}
                                                 value={this.state.PageSize}
                                                 className="countdropdown form-control form-control-sm">
@@ -1105,8 +1105,8 @@ class ManageCustomerWhitelist extends React.Component {
                                                 />
                                         </div>
                                     </div>
-                                   
-                                    
+
+
                                     <TableComponent classnames="striped bordered hover">
                                         <thead>
                                             <tr>
@@ -1157,7 +1157,7 @@ class ManageCustomerWhitelist extends React.Component {
                                             }
                                         </tbody>
                                     </TableComponent>
-                                    
+
                                 </div>
                             )
                         }else{
@@ -1184,13 +1184,13 @@ class ManageCustomerWhitelist extends React.Component {
                                                 <option value="50">50</option>
                                                 <option value="200">200</option>
                                             </select>
-                                            
+
                                         </div>
                                     </div>
                                     <div className="table-helper mb-10 text-left">
-                                        <input type="checkbox" name="" 
+                                        <input type="checkbox" name=""
                                              onChange={(e)=>this.setShowDeactivated(e, allFetchedData.result)}
-                                           
+
                                             checked={this.state.ShowDeactivated}
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Show Deactivated</label>
@@ -1219,7 +1219,7 @@ class ManageCustomerWhitelist extends React.Component {
                                             </tr>
                                         </tbody>
                                     </TableComponent>
-                                    
+
                                     <div className="footer-with-cta toleft">
                                         <Button onClick={this.handleShowNewRecord} className="no-margins" variant="primary" type="submit">Create New</Button>
                                     </div>
@@ -1232,7 +1232,7 @@ class ManageCustomerWhitelist extends React.Component {
 
                 case (platformConstants.FETCH_ALLCREDIT_SCORE_BYPASS_FAILURE):
                     return (
-                        <div className="loading-content errormsg"> 
+                        <div className="loading-content errormsg">
                             <div>{fetchAllCreditScoreByPassRequest.request_data.error}</div>
                         </div>
                     )
@@ -1264,20 +1264,18 @@ class ManageCustomerWhitelist extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <ul className="nav">
-                                        
                                         <li>
-                                            <NavLink to={'/platform/company-info'}>Company Information</NavLink>
+                                            <NavLink to={'/platform/company-info'} activeClassName="activeNavLink">Company Information</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink exact to={'/platform/customer-whitelist'}>Customer Whitelist</NavLink>
+                                            <NavLink exact to={'/platform/customer-whitelist'} activeClassName="activeNavLink">Customer Whitelist</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/platform/payroll-info'}>Payroll Information</NavLink>
+                                            <NavLink to={'/platform/payroll-info'} activeClassName="activeNavLink">Payroll Information</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/platform/bank-info'}>Bank Information</NavLink>
+                                            <NavLink to={'/platform/bank-info'} activeClassName="activeNavLink">Bank Information</NavLink>
                                         </li>
-                                        
                                     </ul>
                                 </div>
                             </div>

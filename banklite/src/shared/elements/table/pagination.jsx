@@ -240,12 +240,12 @@ class TablePagination extends React.Component{
                 <div
                     className={isPreviousPagesLeft===true?"each-page-action":"each-page-action unaallowed"}
                     onClick={isPreviousPagesLeft===true?()=>refreshFunc(1,tempData):null}>
-                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="25" height="10" />
+                    <img alt="from beginning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAL0lEQVR42mNgoBvo6en5D8PY5IjWgMsQrBrw2YohicwnqAEbpq4NZPmBrFDCFg8AaBGJHSqYGgAAAAAASUVORK5CYII=" width="20" height="10" />
                 </div>
                 <div
                     className={isPreviousPagesLeft===true?"each-page-action":"each-page-action unaallowed"}
                     onClick={isPreviousPagesLeft===true?()=>refreshFunc(currPage-1,tempData):null}>
-                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="25" height="10" />
+                    <img alt="go backward" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAAJ0lEQVR42mNgoBj09PT8xyqIIQETRJFAFoRLoAsS1oHXDryuQvcHAJqKQewTJHmSAAAAAElFTkSuQmCC" width="20" height="10" />
                 </div>
 
                 {/* {currPage===1 &&
@@ -280,12 +280,12 @@ class TablePagination extends React.Component{
                 <div
                     className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
                     onClick={isMorePagesLeft===true?()=>refreshFunc(currPage+1,tempData):null}>
-                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="25" height="10" />
+                    <img alt="from next page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAALCAYAAABcUvyWAAAALElEQVR42mNgIAv09PT8xymBVRImgSGJLIEiiS4BlyRKB4odvb29uF2FLgYAOVFB7xSm6sAAAAAASUVORK5CYII=" width="20" height="10" />
                 </div>
                 <div
                     className={isMorePagesLeft===true?"each-page-action":"each-page-action unaallowed"}
                     onClick={isMorePagesLeft===true?()=>refreshFunc(totalPages,tempData):null}>
-                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="25" height="10" />
+                    <img alt="go to last page" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAALElEQVR42mNgoBvo6en5j00MhhlwSZKsAVmSaA0wBSRpwGYA9WygXSgRYysAlRKJHRerQ3wAAAAASUVORK5CYII=" width="20" height="10" />
                 </div>
             </div>
         )

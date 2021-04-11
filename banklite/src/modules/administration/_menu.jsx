@@ -2,13 +2,13 @@ import * as React from 'react';
 
 import {Fragment} from "react";
 
-import "./administration.scss"; 
+import "./administration.scss";
 import { NavLink} from 'react-router-dom';
 
 import warning from '../../assets/img/alert.svg'
 import {administrationModuleMenuList} from '../../shared/elements/mainmenu/menu'
 class AdminNav extends React.Component{
-    
+
     render() {
         let userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
         let allMenu = administrationModuleMenuList,
@@ -21,7 +21,7 @@ class AdminNav extends React.Component{
                 if(allMenuGroups.indexOf(eachMenu.permissionName)===-1){
                     allMenuGroups.push(eachMenu.permissionName)
                 }
-                
+
             })
 
             userPermissions.map(eachPermission=>{
@@ -32,23 +32,23 @@ class AdminNav extends React.Component{
             })
 
         return (
-            
+
             <ul className="nav">
                 {
                     allMenu.map((eachGroup, menuIdx) =>{
                         if(allUSerPermissionNames.indexOf(eachGroup.permissionName)> -1 ){
                             return(
                                 <li key={menuIdx}>
-                                    <NavLink to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
+                                    <NavLink to={eachGroup.menuRoute} activeClassName="activeNavLink">{eachGroup.mainMenu}</NavLink>
                                 </li>
                             )
                         }
-                        if(eachGroup.permissionName ==="Access Universal" 
+                        if(eachGroup.permissionName ==="Access Universal"
                             && (allUSerPermissions.indexOf("bnk_manage_users")>-1 || allUSerPermissions.indexOf("bnk_manage_role")>-1) ){
-                            
+
                             return(
                                 <li key={menuIdx}>
-                                    <NavLink to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
+                                    <NavLink to={eachGroup.menuRoute} activeClassName="activeNavLink">{eachGroup.mainMenu}</NavLink>
                                 </li>
                             )
                         }
@@ -66,7 +66,7 @@ class AdminNav extends React.Component{
                 </li>
                 <li>
                     <NavLink to={'/administration/products'}>Products</NavLink>
-                </li> 
+                </li>
                 <li>
                     <NavLink to={'/administration/sms'}>SMS</NavLink>
                 </li>
