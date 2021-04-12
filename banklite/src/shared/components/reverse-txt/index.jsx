@@ -64,14 +64,15 @@ class ReverseTransaction extends React.Component {
             <Modal show={this.props.showReverseTransaction} onHide={this.props.handleCloseReverse} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
                 <Formik
                     initialValues={{
-                       
+                        reason:""
                     }}
 
                     // validationSchema={loanStateValidationSchema}
                     onSubmit={(values, { resetForm }) => {
 
                         let reversalPayload ={
-                            transactionKey: this.props.transactionKey
+                            transactionKey: this.props.transactionKey,
+                            reason: values.reason
                         };
                         
                         // console.log("reversalPayload", reversalPayload)
@@ -239,7 +240,17 @@ class ReverseTransaction extends React.Component {
                                 </div> */}
                                 
                                 
-                                
+                                <Form.Group>
+                                    <Form.Label className="block-level">Reason for reversal</Form.Label>
+                                    <Form.Control as="textarea" rows="3"
+                                        onChange={handleChange}
+                                        value={values.reason}
+                                        className={errors.reason && touched.reason ? "is-invalid" : null}
+                                        name="reason"  />
+                                    {errors.reason && touched.reason ? (
+                                        <span className="invalid-feedback">{errors.reason}</span>
+                                    ) : null}
+                                </Form.Group>
                                 
                                
                             </Modal.Body>

@@ -630,7 +630,7 @@ class EditAClient extends React.Component {
                                                             </Col>
                                                             <Col></Col>
                                                         </Form.Row>
-                                                        {(values.workStatus==="1" && values.workStatus===1) && 
+                                                        {(values.workStatus==="1" || values.workStatus===1) && 
                                                             <div>
                                                                 <Form.Row>
                                                                     <Col>

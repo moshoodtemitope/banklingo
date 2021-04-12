@@ -44,6 +44,7 @@ class NewLoanProduct extends React.Component {
 
     getAllGLAccounts = () =>{
         const {dispatch} = this.props;
+        this.props.dispatch(productActions.createLoanProduct("CLEAR"))
 
         dispatch(acoountingActions.getAllGLAccounts());
     }
@@ -289,9 +290,11 @@ class NewLoanProduct extends React.Component {
                                     createNewLoanProductPayload.loanProductLinkModel={
                                         enableLinking: false,
                                         depositProductEncodedKey: null,
-                                        settlementOptions: null,
-                                        autoSetSettlementAccountOnCreation: null,
-                                        autoCreateSettlementAccount: null
+                                        settlementOptions: 0,
+                                        autoSetSettlementAccountOnCreation: false,
+                                        // autoSetSettlementAccountOnCreation: null,
+                                        // autoCreateSettlementAccount: null
+                                        autoCreateSettlementAccount: false
                                     }
                                 }
 
@@ -314,11 +317,11 @@ class NewLoanProduct extends React.Component {
                                             if (this.props.createLoanProductReducer.request_status === productsConstants.CREATE_A_LOAN_PRODUCT_SUCCESS) {
                                                 setTimeout(() => {
                                                     resetForm();
-                                                    this.props.dispatch(productActions.createLoanProduct("CLEAR"))
+                                                    // this.props.dispatch(productActions.createLoanProduct("CLEAR"))
                                                 }, 3000);
                                             }else{
                                                 setTimeout(() => {
-                                                    this.props.dispatch(productActions.createLoanProduct("CLEAR"))
+                                                    // this.props.dispatch(productActions.createLoanProduct("CLEAR"))
                                                 }, 3000);
                                             }
 

@@ -525,6 +525,12 @@ export const administrationModuleMenuList = [
     },
     {
         permissionName: "Manage Organisation",
+        mainMenu: "Upload data",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/uploaddata",
+    },
+    {
+        permissionName: "Manage Organisation",
         mainMenu: "Plaform",
         permissionCode: "bnk_manage_organisation",
         menuRoute: "/administration/platform",

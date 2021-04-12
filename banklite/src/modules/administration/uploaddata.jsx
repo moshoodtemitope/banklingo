@@ -170,7 +170,7 @@ class UploadData extends React.Component {
                     </Accordion.Collapse>
                 </Accordion>
 
-                <Accordion defaultActiveKey="0">
+                {/* <Accordion defaultActiveKey="0">
                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                         Import Event
                     </Accordion.Toggle>
@@ -179,7 +179,7 @@ class UploadData extends React.Component {
 
                         </div>
                     </Accordion.Collapse>
-                </Accordion>
+                </Accordion> */}
             </div>
         )
     }
