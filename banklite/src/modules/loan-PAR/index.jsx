@@ -227,7 +227,7 @@ class LoanPAR extends React.Component {
                                             <th>Maturity Date</th>
                                             <th>DPD</th>
                                             {this.state.showAmountExpected === true &&
-                                                <th className="borderdleft">Expected Principal</th>
+                                                <th>Expected Principal</th>
                                             }
                                             {this.state.showAmountExpected === true &&
                                                 <th>Expected Interest</th>
@@ -242,7 +242,7 @@ class LoanPAR extends React.Component {
                                                 <th className="borderdright">Total Expected</th>
                                             }
                                             {this.state.showAmountPaid &&
-                                                <th className="borderdleft">Principal Paid</th>
+                                                <th>Principal Paid</th>
                                             }
                                             {this.state.showAmountPaid &&
                                                 <th>Fees Paid</th>
@@ -257,7 +257,7 @@ class LoanPAR extends React.Component {
                                                 <th className="borderdright">Total Paid</th>
                                             }
                                             {/* {this.state.showAmountDue &&
-                                                <th className="borderdleft">Principal Due</th>
+                                                <th>Principal Due</th>
                                             } */}
                                             {/* {this.state.showAmountDue &&
                                                 <th>Interest Due</th>
@@ -289,7 +289,7 @@ class LoanPAR extends React.Component {
                                                             <td>{(eachData.maturityDate!==null && eachData.maturityDate!=="")? eachData.maturityDate:"-"}</td>
                                                             <td>{(eachData.daysPassDue !== null ) ? `${numberWithCommas(eachData.daysPassDue, false)}` : "-"}</td>
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
                                                                 <td>{(eachData.interestExpected !== null && eachData.interestExpected > 0) ? `${numberWithCommas(eachData.interestExpected, true)}` : "-"}</td>
@@ -304,7 +304,7 @@ class LoanPAR extends React.Component {
                                                                 <td className="borderdright">{(eachData.totalExpected !== null && eachData.totalExpected > 0) ? `${numberWithCommas(eachData.totalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdleft">{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
                                                                 <td>{(eachData.feePaid !== null && eachData.feePaid > 0) ? `${numberWithCommas(eachData.feePaid, true)}` : "-"}</td>
@@ -319,7 +319,7 @@ class LoanPAR extends React.Component {
                                                                 <td className="borderdright">{(eachData.totalPaid !== null && eachData.totalPaid > 0) ? `${numberWithCommas(eachData.totalPaid, true)}` : "-"}</td>
                                                             }
                                                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                                                             {/* {this.state.showAmountDue &&
@@ -483,7 +483,7 @@ placeholderText="End  date"
                                             <th>Maturity Date</th>
                                             <th>DPD</th>
                                             {this.state.showAmountExpected === true &&
-                                                <th className="borderdleft">Expected Principal</th>
+                                                <th>Expected Principal</th>
                                             }
                                             {this.state.showAmountExpected === true &&
                                                 <th>Expected Interest</th>
@@ -498,7 +498,7 @@ placeholderText="End  date"
                                                 <th className="borderdright">Total Expected</th>
                                             }
                                             {this.state.showAmountPaid &&
-                                                <th className="borderdleft">Principal Paid</th>
+                                                <th>Principal Paid</th>
                                             }
                                             {this.state.showAmountPaid &&
                                                 <th>Fees Paid</th>
@@ -513,7 +513,7 @@ placeholderText="End  date"
                                                 <th className="borderdright">Total Paid</th>
                                             }
                                             {/* {this.state.showAmountDue &&
-                                                <th className="borderdleft">Principal Due</th>
+                                                <th>Principal Due</th>
                                             } */}
                                             {/* {this.state.showAmountDue &&
                                                 <th>Interest Due</th>
@@ -562,7 +562,7 @@ placeholderText="End  date"
                                                             }
 
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdleft">{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
+                                                                <td>{(eachData.principalExpected !== null && eachData.principalExpected > 0) ? `${numberWithCommas(eachData.principalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
                                                                 <td>{(eachData.interestExpected !== null && eachData.interestExpected > 0) ? `${numberWithCommas(eachData.interestExpected, true)}` : "-"}</td>
@@ -577,7 +577,7 @@ placeholderText="End  date"
                                                                 <td className="borderdright">{(eachData.totalExpected !== null && eachData.totalExpected > 0) ? `${numberWithCommas(eachData.totalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdleft">{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
+                                                                <td>{(eachData.principalPaid !== null && eachData.principalPaid > 0) ? `${numberWithCommas(eachData.principalPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
                                                                 <td>{(eachData.feePaid !== null && eachData.feePaid > 0) ? `${numberWithCommas(eachData.feePaid, true)}` : "-"}</td>
@@ -592,7 +592,7 @@ placeholderText="End  date"
                                                                 <td className="borderdright">{(eachData.totalPaid !== null && eachData.totalPaid > 0) ? `${numberWithCommas(eachData.totalPaid, true)}` : "-"}</td>
                                                             }
                                                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                                                             {/* {this.state.showAmountDue &&

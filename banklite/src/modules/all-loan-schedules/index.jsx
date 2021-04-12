@@ -237,7 +237,7 @@ class AllLoanSchedules extends React.Component {
                                             <th>Loan Amount</th>
                                             <th>Due Date</th>
                                             {this.state.showAmountExpected === true &&
-                                                <th className="borderdleft">Expected Principal</th>
+                                                <th>Expected Principal</th>
                                             }
                                             {this.state.showAmountExpected === true &&
                                                 <th>Expected Interest</th>
@@ -252,7 +252,7 @@ class AllLoanSchedules extends React.Component {
                                                 <th className="borderdright">Total Expected</th>
                                             }
                                             {this.state.showAmountPaid &&
-                                                <th className="borderdleft">Principal Paid</th>
+                                                <th>Principal Paid</th>
                                             }
                                             {this.state.showAmountPaid &&
                                                 <th>Fees Paid</th>
@@ -267,7 +267,7 @@ class AllLoanSchedules extends React.Component {
                                                 <th className="borderdright">Total Paid</th>
                                             }
                                             {/* {this.state.showAmountDue &&
-                                                <th className="borderdleft">Principal Due</th>
+                                                <th>Principal Due</th>
                                             } */}
                                             {/* {this.state.showAmountDue &&
                                                 <th>Interest Due</th>
@@ -298,7 +298,7 @@ class AllLoanSchedules extends React.Component {
                                                             <td>{(eachSchedule.loanAmount !== null && eachSchedule.loanAmount > 0) ? `₦${numberWithCommas(eachSchedule.loanAmount, true)}` : "-"}</td>
                                                             <td>{(eachSchedule.dueDate!==null && eachSchedule.dueDate!=="")? eachSchedule.dueDate:"-"}</td>
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdleft">{(eachSchedule.principalExpected !== null && eachSchedule.principalExpected > 0) ? `₦${numberWithCommas(eachSchedule.principalExpected, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.principalExpected !== null && eachSchedule.principalExpected > 0) ? `₦${numberWithCommas(eachSchedule.principalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
                                                                 <td>{(eachSchedule.interestExpected !== null && eachSchedule.interestExpected > 0) ? `₦${numberWithCommas(eachSchedule.interestExpected, true)}` : "-"}</td>
@@ -313,7 +313,7 @@ class AllLoanSchedules extends React.Component {
                                                                 <td className="borderdright">{(eachSchedule.totalExpected !== null && eachSchedule.totalExpected > 0) ? `₦${numberWithCommas(eachSchedule.totalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdleft">{(eachSchedule.principalPaid !== null && eachSchedule.principalPaid > 0) ? `₦${numberWithCommas(eachSchedule.principalPaid, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.principalPaid !== null && eachSchedule.principalPaid > 0) ? `₦${numberWithCommas(eachSchedule.principalPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
                                                                 <td>{(eachSchedule.feePaid !== null && eachSchedule.feePaid > 0) ? `₦${numberWithCommas(eachSchedule.feePaid, true)}` : "-"}</td>
@@ -328,7 +328,7 @@ class AllLoanSchedules extends React.Component {
                                                                 <td className="borderdright">{(eachSchedule.totalPaid !== null && eachSchedule.totalPaid > 0) ? `₦${numberWithCommas(eachSchedule.totalPaid, true)}` : "-"}</td>
                                                             }
                                                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                                                             {/* {this.state.showAmountDue &&
@@ -501,7 +501,7 @@ placeholderText="End  date"
                                             <th>Loan Amount</th>
                                             <th>Due Date</th>
                                             {this.state.showAmountExpected === true &&
-                                                <th className="borderdleft">Expected Principal</th>
+                                                <th>Expected Principal</th>
                                             }
                                             {this.state.showAmountExpected === true &&
                                                 <th>Expected Interest</th>
@@ -516,7 +516,7 @@ placeholderText="End  date"
                                                 <th className="borderdright">Total Expected</th>
                                             }
                                             {this.state.showAmountPaid &&
-                                                <th className="borderdleft">Principal Paid</th>
+                                                <th>Principal Paid</th>
                                             }
                                             {this.state.showAmountPaid &&
                                                 <th>Fees Paid</th>
@@ -531,7 +531,7 @@ placeholderText="End  date"
                                                 <th className="borderdright">Total Paid</th>
                                             }
                                             {/* {this.state.showAmountDue &&
-                                                <th className="borderdleft">Principal Due</th>
+                                                <th>Principal Due</th>
                                             } */}
                                             {/* {this.state.showAmountDue &&
                                                 <th>Interest Due</th>
@@ -562,7 +562,7 @@ placeholderText="End  date"
                                                             <td>{(eachSchedule.loanAmount !== null && eachSchedule.loanAmount > 0) ? `₦${numberWithCommas(eachSchedule.loanAmount, true)}` : "-"}</td>
                                                             <td>{(eachSchedule.dueDate!==null && eachSchedule.dueDate!=="")? eachSchedule.dueDate:"-"}</td>
                                                             {this.state.showAmountExpected === true &&
-                                                                <td className="borderdleft">{(eachSchedule.principalExpected !== null && eachSchedule.principalExpected > 0) ? `₦${numberWithCommas(eachSchedule.principalExpected, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.principalExpected !== null && eachSchedule.principalExpected > 0) ? `₦${numberWithCommas(eachSchedule.principalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountExpected === true &&
                                                                 <td>{(eachSchedule.interestExpected !== null && eachSchedule.interestExpected > 0) ? `₦${numberWithCommas(eachSchedule.interestExpected, true)}` : "-"}</td>
@@ -577,7 +577,7 @@ placeholderText="End  date"
                                                                 <td className="borderdright">{(eachSchedule.totalExpected !== null && eachSchedule.totalExpected > 0) ? `₦${numberWithCommas(eachSchedule.totalExpected, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
-                                                                <td className="borderdleft">{(eachSchedule.principalPaid !== null && eachSchedule.principalPaid > 0) ? `₦${numberWithCommas(eachSchedule.principalPaid, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.principalPaid !== null && eachSchedule.principalPaid > 0) ? `₦${numberWithCommas(eachSchedule.principalPaid, true)}` : "-"}</td>
                                                             }
                                                             {this.state.showAmountPaid &&
                                                                 <td>{(eachSchedule.feePaid !== null && eachSchedule.feePaid > 0) ? `₦${numberWithCommas(eachSchedule.feePaid, true)}` : "-"}</td>
@@ -592,7 +592,7 @@ placeholderText="End  date"
                                                                 <td className="borderdright">{(eachSchedule.totalPaid !== null && eachSchedule.totalPaid > 0) ? `₦${numberWithCommas(eachSchedule.totalPaid, true)}` : "-"}</td>
                                                             }
                                                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                                                             {/* {this.state.showAmountDue &&

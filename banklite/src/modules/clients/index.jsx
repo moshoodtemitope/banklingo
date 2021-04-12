@@ -335,7 +335,7 @@ class ClientsManagement extends React.Component {
                                         <th>Customer Type</th>
                                         <th>Date Created</th>
                                         {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
-                                            <th></th>
+                                            <th>Action</th>
                                         }
                                     </tr>
                                 </thead>
@@ -485,7 +485,7 @@ class ClientsManagement extends React.Component {
                                             <th>Customer Type</th>
                                             <th>Date Created</th>
                                             {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
-                                                <th></th>
+                                                <th>Action</th>
                                             }
                                         </tr>
                                     </thead>
