@@ -10,8 +10,8 @@ import  CustomerHeading from './customerheader'
 // import Button from 'react-bootstrap/Button'
 // import Dropdown from 'react-bootstrap/Dropdown'
 // import DropdownButton from 'react-bootstrap/DropdownButton'
-// import  TableComponent from '../../shared/elements/table'
-// import "./administration.scss"; 
+// import  TableComponent from '../../shared/elements/Table'
+// import "./administration.scss";
 class ViewCustomerLoanAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -19,7 +19,7 @@ class ViewCustomerLoanAccount extends React.Component {
             user:''
         }
 
-       
+
     }
 
     render() {
@@ -31,10 +31,10 @@ class ViewCustomerLoanAccount extends React.Component {
                         <div className="module-content">
                             <div className="content-container">
                                 <div className="row">
-                                    
+
                                     <div className="col-sm-12">
                                         <div className="middle-content">
-                                            
+
                                         </div>
                                     </div>
                                 </div>

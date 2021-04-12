@@ -29,7 +29,7 @@ import { platformConstants } from '../../redux/actiontypes/platform/platform.con
 import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
 import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 import Alert from 'react-bootstrap/Alert'
-// import "./clients.scss"; 
+// import "./clients.scss";
 
 class ManageBankInfo extends React.Component {
     constructor(props) {
@@ -118,7 +118,7 @@ class ManageBankInfo extends React.Component {
 
     }
 
-    
+
 
 
     loadNextPage = (nextPage, tempData) => {
@@ -223,7 +223,7 @@ class ManageBankInfo extends React.Component {
 
         this.setState({ startDate }, () => {
             if (this.state.endDate !== "") {
-               
+
             }
         });
     }
@@ -233,7 +233,7 @@ class ManageBankInfo extends React.Component {
 
         this.setState({ endDate }, () => {
             if (this.state.startDate !== "") {
-                
+
             }
         });
     }
@@ -270,7 +270,7 @@ class ManageBankInfo extends React.Component {
                 })
     }
 
-    
+
 
 
     getSearchedCustomerResults = async (inputValue)=> {
@@ -279,11 +279,11 @@ class ManageBankInfo extends React.Component {
         if (!inputValue || inputValue.length===0) {
           return null;
         }
-       
+
 
          await dispatch(dashboardActions.searchForCustomer(inputValue));
 
-        
+
     }
     handleSearchCustomerChange =(inputValue)=>{
         const customerSearchText = inputValue.replace(/\W/g, '');
@@ -293,10 +293,10 @@ class ManageBankInfo extends React.Component {
     }
 
     handleSelectedCustomer =(inputValue)=>{
-        
+
 
         this.setState({selectedCustomer: inputValue})
-        
+
     }
 
     createNewRecordPopUp = () => {
@@ -343,7 +343,7 @@ class ManageBankInfo extends React.Component {
                         validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
-                            
+
                             if(selectedCustomer !==""){
                                 let requestPayload = {
                                     accountName: values.accountName,
@@ -366,7 +366,7 @@ class ManageBankInfo extends React.Component {
 
 
 
-                            
+
 
 
 
@@ -446,14 +446,14 @@ class ManageBankInfo extends React.Component {
                                                 options={allBanksList}
                                                 className={errors.bankCode && touched.bankCode ? "is-invalid" : null}
                                                 onChange={(selectedBank) => {
-                                                    setFieldValue('bankCode', selectedBank.value); 
+                                                    setFieldValue('bankCode', selectedBank.value);
                                                     this.setState({selectedBank})
                                                 }}
                                                 onBlur={() => setFieldTouched('bankCode', true)}
                                                 name="bankCode"
                                                 required
                                             />
-                                            
+
 
                                             {errors.bankCode && touched.bankCode ? (
                                                 <span className="invalid-feedback">{errors.bankCode}</span>
@@ -480,7 +480,7 @@ class ManageBankInfo extends React.Component {
                                             ) : null}
                                         </Col>
 
-                                        
+
 
 
 
@@ -647,7 +647,7 @@ class ManageBankInfo extends React.Component {
                                                 <span className="invalid-feedback">{errors.companyName}</span>
                                             ) : null}
 
-                                           
+
                                         </Col>
                                         <Col>
                                             <Form.Label className="block-level">Company category</Form.Label>
@@ -1266,20 +1266,18 @@ class ManageBankInfo extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <ul className="nav">
-
                                         <li>
-                                            <NavLink to={'/platform/company-info'}>Company Information</NavLink>
+                                            <NavLink to={'/platform/company-info'} activeClassName="activeNavLink">Company Information</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink exact to={'/platform/customer-whitelist'}>Customer Whitelist</NavLink>
+                                            <NavLink exact to={'/platform/customer-whitelist'} activeClassName="activeNavLink">Customer Whitelist</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/platform/payroll-info'}>Payroll Information</NavLink>
+                                            <NavLink to={'/platform/payroll-info'} activeClassName="activeNavLink">Payroll Information</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/platform/bank-info'}>Bank Information</NavLink>
+                                            <NavLink to={'/platform/bank-info'} activeClassName="activeNavLink">Bank Information</NavLink>
                                         </li>
-
                                     </ul>
                                 </div>
                             </div>
@@ -1294,7 +1292,7 @@ class ManageBankInfo extends React.Component {
                                                 <div className="heading-with-cta">
                                                     {/* <h3 className="section-title">Journal Entries</h3> */}
                                                     {/* <Form className="one-liner">
-                                                        <Form.Group className="table-filters">
+                                                        <Form.Group className="Table-filters">
                                                             <Form.Label>Account Officer</Form.Label>
                                                                 <Form.Control type="text" size="sm" />
                                                         </Form.Group>
@@ -1326,7 +1324,7 @@ class ManageBankInfo extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        
+
         fetchAllBankInfoReducer: state.platformReducers.fetchAllBankInfoReducer,
         fetchSingleBankInfoReducer: state.platformReducers.fetchSingleBankInfoReducer,
         createBankInfoReducer: state.platformReducers.createBankInfoReducer,

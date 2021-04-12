@@ -51,7 +51,7 @@ class ManageEmployeeInfo extends React.Component {
             SearchText: ""
         }
 
-        
+
     }
 
     componentDidMount() {
@@ -63,7 +63,7 @@ class ManageEmployeeInfo extends React.Component {
         let { PageSize, CurrentPage, ShowDeactivated } = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&ShowDeactivated=${ShowDeactivated}`;
 
-        
+
         this.fetchAllRecords(params);
         // this.clearAllData()
     }
@@ -76,9 +76,9 @@ class ManageEmployeeInfo extends React.Component {
     fetchAllRecords = (paramters) => {
         const { dispatch } = this.props;
 
-        
+
         dispatch(platformActions.fetchAllEmployeeInfo(paramters));
-        
+
     }
 
     clearAllData = () => {
@@ -142,10 +142,10 @@ class ManageEmployeeInfo extends React.Component {
     handleCloseNewRecord = () => {
         if (this.props.createEmployeeInfo.is_request_processing === false) {
             this.setState({ showCreateNewRecord: false })
-            
+
         }
         if (this.props.createEmployeeInfo.request_status === platformConstants.ADD_A_PAYROLLINFO_SUCCESS) {
-            
+
             this.loadInitialData();
         }
     }
@@ -161,7 +161,7 @@ class ManageEmployeeInfo extends React.Component {
         }
 
         if (this.props.updateEmployeeInfo.request_status === platformConstants.UPDATE_A_PAYROLLINFO_SUCCESS) {
-            
+
             this.loadInitialData();
         }
     }
@@ -178,8 +178,8 @@ class ManageEmployeeInfo extends React.Component {
         let createEmployeeInfoRequest = this.props.createEmployeeInfo;
         let fetchAllEmployeeInfoRequest = this.props.fetchAllEmployeeInfo,
             allPayGroups = fetchAllEmployeeInfoRequest.request_data.response2.data.result;
-        
-        
+
+
         let allPayGroupList =[];
         allPayGroups.map((eachData, index)=>{
             allPayGroupList.push({value:eachData.groupCode, label:eachData.groupName})
@@ -212,10 +212,10 @@ class ManageEmployeeInfo extends React.Component {
             lastName: Yup.string()
                 .required('Required'),
             // middleName: Yup.string(),
-                
+
         });
 
-        
+
         return (
             <Modal show={showCreateNewRecord} onHide={this.handleCloseNewRecord} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
                 <Modal.Header>
@@ -251,7 +251,7 @@ class ManageEmployeeInfo extends React.Component {
                                     lastName: values.lastName,
                                     middleName: values.middleName,
                                 }
-                                
+
                             };
 
 
@@ -283,7 +283,7 @@ class ManageEmployeeInfo extends React.Component {
                             touched,
                             isValid,
                             errors, }) => {
-                            
+
                             return (
                                 <Form noValidate
                                     onSubmit={handleSubmit}>
@@ -380,14 +380,14 @@ class ManageEmployeeInfo extends React.Component {
                                                 options={allBanksList}
                                                 className={errors.bankName && touched.bankName ? "is-invalid" : null}
                                                 onChange={(selectedBank) => {
-                                                    setFieldValue('bankName', selectedBank.value); 
+                                                    setFieldValue('bankName', selectedBank.value);
                                                     this.setState({selectedBank})
                                                 }}
                                                 onBlur={() => setFieldTouched('bankName', true)}
                                                 name="bankName"
                                                 required
                                             />
-                                            
+
 
                                             {errors.bankName && touched.bankName ? (
                                                 <span className="invalid-feedback">{errors.bankName}</span>
@@ -509,7 +509,7 @@ class ManageEmployeeInfo extends React.Component {
         let updateEmployeeInfoRequest = this.props.updateEmployeeInfo;
         let fetchAllEmployeeInfoRequest = this.props.fetchAllEmployeeInfo,
             allPayGroups = fetchAllEmployeeInfoRequest.request_data.response2.data.result;
-        
+
         // let getAllCurrencies =  this.props.adminGetAllCurrencies;
         let allPayGroupList =[],
             filteredData;
@@ -585,11 +585,11 @@ class ManageEmployeeInfo extends React.Component {
                                         lastName: values.lastName,
                                         middleName: values.middleName,
                                     }
-                                    
+
                                 };
                             }
 
-                           
+
 
 
 
@@ -719,7 +719,7 @@ class ManageEmployeeInfo extends React.Component {
                                             <Select
                                                 options={allBanksList}
                                                 className={errors.bankName && touched.bankName ? "is-invalid" : null}
-                                                defaultValue ={{label:recordToUpdate!==null?recordToUpdate.bankName:null, 
+                                                defaultValue ={{label:recordToUpdate!==null?recordToUpdate.bankName:null,
                                                     value:recordToUpdate!==null? recordToUpdate.bankCode:null}}
                                                 onChange={(selectedBank) => {
                                                     setFieldValue('bankName', selectedBank.value);
@@ -835,7 +835,7 @@ class ManageEmployeeInfo extends React.Component {
     renderContentWrap = () => {
         let fetchAllEmployeeInfoRequest = this.props.fetchAllEmployeeInfo;
 
-        
+
         let saveRequestData = fetchAllEmployeeInfoRequest.request_data !== undefined ? fetchAllEmployeeInfoRequest.request_data.tempData : null;
 
         switch (fetchAllEmployeeInfoRequest.request_status) {
@@ -1355,20 +1355,18 @@ class ManageEmployeeInfo extends React.Component {
                             <div className="module-submenu">
                                 <div className="content-container">
                                     <ul className="nav">
-
                                         <li>
-                                            <NavLink to={'/platform/company-info'}>Company Information</NavLink>
+                                            <NavLink to={'/platform/company-info'} activeClassName="activeNavLink">Company Information</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink exact to={'/platform/customer-whitelist'}>Customer Whitelist</NavLink>
+                                            <NavLink exact to={'/platform/customer-whitelist'} activeClassName="activeNavLink">Customer Whitelist</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/platform/payroll-info'}>Payroll Information</NavLink>
+                                            <NavLink to={'/platform/payroll-info'} activeClassName="activeNavLink">Payroll Information</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to={'/platform/bank-info'}>Bank Information</NavLink>
+                                            <NavLink to={'/platform/bank-info'} activeClassName="activeNavLink">Bank Information</NavLink>
                                         </li>
-
                                     </ul>
                                 </div>
                             </div>
@@ -1401,7 +1399,7 @@ function mapStateToProps(state) {
 
 
         fetchAllChannelServicesReducer: state.administrationReducers.fetchAllChannelServices,
-        
+
         createAChannelServices : state.administrationReducers.createAChannelServices,
         updateAChannelServices : state.administrationReducers.updateAChannelServices,
     };
