@@ -609,10 +609,10 @@ button.accordion-headingLink.btn.btn-link {
         margin-right: 25px;
     }
 }
-.table-bordered td.borderdleft, .table-bordered th.borderdleft{
+.table-bordered, .table-bordered {
     border-left: 2px solid #AEB6BF;
 }
-.table-bordered td.borderdright, .table-bordered th.borderdright{
+.table-bordered, .table-bordered {
     border-right: 2px solid #AEB6BF;
 }
 .table-bordered td.bolden{
