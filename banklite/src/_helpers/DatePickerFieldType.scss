@@ -1,0 +1,41 @@
+.date-picker {
+  background-color: #ffffff;
+  border: 6px;
+  white-space: nowrap;
+  color: #25213b;
+  font-size: 12px;
+  border: 1px solid #e8e8f0;
+  min-width: 120px;
+  height: 30px;
+  display: flex;
+  padding: 0;
+  &:hover,
+  &:focus {
+    .icon {
+      svg {
+        path {
+          transition: fill ease-in 300ms;
+          stroke: #01216c;
+        }
+      }
+    }
+  }
+  .icon,
+  .text {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  .text {
+    border-right: 1px solid #e8e8f0;
+    width: calc(100% - 35px);
+  }
+  .icon {
+    width: 35px;
+    path {
+      transition: fill ease-out 300ms;
+      stroke: #718596;
+    }
+  }
+}
