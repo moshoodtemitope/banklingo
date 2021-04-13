@@ -3727,7 +3727,6 @@ class ViewSavingsAccount extends React.Component {
 
                                         <Nav variant="pills" >
                                             <Nav.Item>
-                                                {/*<NavLink activeClassName="activeNavLink" to={''}>Details</NavLink>*/}
                                                 <Nav.Link bsPrefix="disable" className="navLink" eventKey="details">Details</Nav.Link>
                                             </Nav.Item>
                                             {allUSerPermissions.indexOf("bnk_view_deposit_transactions") >-1 &&
