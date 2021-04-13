@@ -1333,7 +1333,7 @@ class ViewLoanAccount extends React.Component {
 
                             </div>
                         </div>
-                        <TableComponent classnames="striped bordered hover">
+                        <TableComponent classnames="striped hover">
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
@@ -1377,7 +1377,7 @@ class ViewLoanAccount extends React.Component {
 
                             </div>
                         </div>
-                        <TableComponent classnames="striped bordered hover">
+                        <TableComponent classnames="striped hover">
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
@@ -1664,7 +1664,7 @@ class ViewLoanAccount extends React.Component {
                     </div>
                     <div className="each-overview">
                         <h6>Details</h6>
-                        <TableComponent classnames="striped bordered hover">
+                        <TableComponent classnames="striped hover">
 
                             <tbody>
                                 <tr>
@@ -2538,7 +2538,7 @@ class ViewLoanAccount extends React.Component {
     payOffLoanBox = (loanDetails) => {
         const { showPayOffLoan  } = this.state;
         let payOffALoanRequest = this.props.payOffALoanReducer,
-        
+
             adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
             allChannels = [],
             channelsList,
@@ -2558,7 +2558,7 @@ class ViewLoanAccount extends React.Component {
         }
 
         let loanStateValidationSchema;
-       
+
             loanStateValidationSchema = Yup.object().shape({
                 txtChannelEncodedKey: Yup.string()
                     .required('Required'),
@@ -2566,7 +2566,7 @@ class ViewLoanAccount extends React.Component {
                     .min(2, 'Valid notes required'),
 
             });
-        
+
 
 
         return (
@@ -2586,7 +2586,7 @@ class ViewLoanAccount extends React.Component {
                             channelEncodedKey:values.txtChannelEncodedKey,
                             notes:values.notes
                         };
-                       
+
 
 
 
@@ -2681,7 +2681,7 @@ class ViewLoanAccount extends React.Component {
                                             {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
                                                 <div className="errormsg"> Unable to load channels</div>
                                             }
-                                           
+
 
                                         </Form.Group>
                                     </Col>
@@ -2702,8 +2702,8 @@ class ViewLoanAccount extends React.Component {
                                         <span className="invalid-feedback">{errors.notes}</span>
                                     ) : null}
                                 </Form.Group>
-                                
-                               
+
+
                             </Modal.Body>
                             <Modal.Footer>
 
@@ -2744,7 +2744,7 @@ class ViewLoanAccount extends React.Component {
     writeOffLoanBox = (loanDetails) => {
         const { showWriteOffLoan  } = this.state;
         let writeOffALoanRequest = this.props.writeOffALoanReducer,
-        
+
             adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
             allChannels = [],
             channelsList;
@@ -2766,20 +2766,20 @@ class ViewLoanAccount extends React.Component {
         }
 
         let loanStateValidationSchema;
-       
+
             loanStateValidationSchema = Yup.object().shape({
                 notes: Yup.string()
                     .min(2, 'Valid notes required'),
 
             });
-        
+
 
 
         return (
             <Modal show={showWriteOffLoan} onHide={this.handleShowWriteOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
                 <Formik
                     initialValues={{
-                       
+
                         notes: "",
                     }}
 
@@ -2791,7 +2791,7 @@ class ViewLoanAccount extends React.Component {
                             clientEncodedKey:this.props.match.params.id,
                             notes:values.notes
                         };
-                       
+
 
 
 
@@ -2853,24 +2853,24 @@ class ViewLoanAccount extends React.Component {
                                 <div>
                                     <div className="modal-notes grayed">Outstanding Balances</div>
                                     <div className="each-msg bolden">
-                                       <span>Total</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.totalExpected, true)}</span> 
+                                       <span>Total</span>
+                                       <span>&#8358;{numberWithCommas(loanDetails.totalExpected, true)}</span>
                                     </div>
                                     <div className="each-msg">
-                                       <span>Principal</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.interestExpected, true)}</span> 
+                                       <span>Principal</span>
+                                       <span>&#8358;{numberWithCommas(loanDetails.interestExpected, true)}</span>
                                     </div>
                                     <div className="each-msg">
-                                       <span>Interest</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.principalExpected, true)}</span> 
+                                       <span>Interest</span>
+                                       <span>&#8358;{numberWithCommas(loanDetails.principalExpected, true)}</span>
                                     </div>
                                     <div className="each-msg">
-                                       <span>Fees</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.feesExpected, true)}</span> 
+                                       <span>Fees</span>
+                                       <span>&#8358;{numberWithCommas(loanDetails.feesExpected, true)}</span>
                                     </div>
                                     <div className="each-msg">
-                                       <span>Penalty</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.penaltyExpected, true)}</span> 
+                                       <span>Penalty</span>
+                                       <span>&#8358;{numberWithCommas(loanDetails.penaltyExpected, true)}</span>
                                     </div>
 
                                     <Form.Group className="mt-20">
@@ -2879,8 +2879,8 @@ class ViewLoanAccount extends React.Component {
                                         <h4>&#8358;{numberWithCommas(loanDetails.totalExpected, true)}</h4>
                                     </Form.Group>
                                 </div>
-                                
-                                
+
+
                                 <Form.Group>
                                     <Form.Label className="block-level">Notes</Form.Label>
                                     <Form.Control as="textarea"
@@ -2894,8 +2894,8 @@ class ViewLoanAccount extends React.Component {
                                         <span className="invalid-feedback">{errors.notes}</span>
                                     ) : null}
                                 </Form.Group>
-                                
-                               
+
+
                             </Modal.Body>
                             <Modal.Footer>
 
@@ -3661,7 +3661,7 @@ class ViewLoanAccount extends React.Component {
         if (getAClientLoanAccountRequest.request_status === loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_SUCCESS) {
             return (
                 <div className="row">
-                    
+
                     {this.payOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)}
                     {this.writeOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)}
                     {this.changeLoanStateBox(getAClientLoanAccountRequest.request_data.response.data)}
@@ -3672,14 +3672,14 @@ class ViewLoanAccount extends React.Component {
 
                                     <Nav variant="pills" >
                                         <Nav.Item>
-                                            <Nav.Link eventKey="details">Details</Nav.Link>
+                                            <Nav.Link bsPrefix="disable" className="navLink" eventKey="details">Details</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link eventKey="schedule" onSelect={this.getCustomerLoanSchedule} >Schedule</Nav.Link>
+                                            <Nav.Link bsPrefix="disable" className="navLink" eventKey="schedule" onSelect={this.getCustomerLoanSchedule} >Schedule</Nav.Link>
                                         </Nav.Item>
                                         {allUSerPermissions.indexOf("bnk_manage_loan_transactions") > -1 &&
                                             <Nav.Item>
-                                                <Nav.Link eventKey="transactions" onSelect={this.getCustomerLoanTransactions} >Transactions</Nav.Link>
+                                                <Nav.Link bsPrefix="disable" className="navLink" eventKey="transactions" onSelect={this.getCustomerLoanTransactions} >Transactions</Nav.Link>
                                             </Nav.Item>
                                         }
                                         {/* <Nav.Item>
@@ -3687,23 +3687,23 @@ class ViewLoanAccount extends React.Component {
                                             </Nav.Item> */}
                                         {allUSerPermissions.indexOf("bnk_view_loan_activities") > -1 &&
                                             <Nav.Item>
-                                                <Nav.Link eventKey="activity" onSelect={this.getALoanActivities}>Activity</Nav.Link>
+                                                <Nav.Link bsPrefix="disable" className="navLink" eventKey="activity" onSelect={this.getALoanActivities}>Activity</Nav.Link>
                                             </Nav.Item>
                                         }
                                         {allUSerPermissions.indexOf("bnk_view_loan_attachments") > -1 &&
                                             <Nav.Item>
-                                                <Nav.Link eventKey="attachments" onSelect={this.getACustomerLoanAttachments}>Attachments</Nav.Link>
+                                                <Nav.Link bsPrefix="disable" className="navLink" eventKey="attachments" onSelect={this.getACustomerLoanAttachments}>Attachments</Nav.Link>
                                             </Nav.Item>
                                         }
 
                                         {allUSerPermissions.indexOf("bnk_view_loan_comments") > -1 &&
                                             <Nav.Item>
-                                                <Nav.Link eventKey="comments" onSelect={this.getALoanComments}>Comments</Nav.Link>
+                                                <Nav.Link bsPrefix="disable" className="navLink" eventKey="comments" onSelect={this.getALoanComments}>Comments</Nav.Link>
                                             </Nav.Item>
                                         }
                                         {allUSerPermissions.indexOf("bnk_view_loan_communications") > -1 &&
                                             <Nav.Item>
-                                                <Nav.Link eventKey="communications" onSelect={this.getALoanCommunications}>Communications</Nav.Link>
+                                                <Nav.Link bsPrefix="disable" className="navLink" eventKey="communications" onSelect={this.getALoanCommunications}>Communications</Nav.Link>
                                             </Nav.Item>
                                         }
                                     </Nav>
