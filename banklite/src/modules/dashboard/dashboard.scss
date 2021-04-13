@@ -42,6 +42,12 @@
         }
     }
 }
+.select-drop .is-invalid>div{
+    border-color: #dc3545 !important;
+}
+.is-invalid.custom >div{
+    border-color: #dc3545 !important;
+}
 .each-card{
     background: #FFFFFF;
     border: 1px solid #EDF2F7;
@@ -210,6 +216,9 @@
                 outline: none;
                 box-shadow: none;
             }
+        }
+        input.form-control.is-invalid, textarea.form-control.is-invalid, .was-validated .form-control:invalid{
+            border-color: #dc3545 !important;
         }
         .txtn-wrap{
             display: flex;
@@ -387,9 +396,10 @@
     font-size: 12px;
     align-items: center;
     flex-basis: 34%;
-    justify-content: space-between;
+    justify-content: flex-start;
     .selected-id {
         font-weight: 500;
+        margin-right: 10px;
     }
     select#tildId {
         font-size: 12px;

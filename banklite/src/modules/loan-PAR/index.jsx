@@ -333,7 +333,7 @@ class LoanPAR extends React.Component {
                               : '-'}
                           </td>
                           {this.state.showAmountExpected === true && (
-                            <td className='borderdleft'>
+                            <td>
                               {eachData.principalExpected !== null &&
                               eachData.principalExpected > 0
                                 ? `${numberWithCommas(
@@ -388,7 +388,7 @@ class LoanPAR extends React.Component {
                             </td>
                           )}
                           {this.state.showAmountPaid && (
-                            <td className='borderdleft'>
+                            <td>
                               {eachData.principalPaid !== null &&
                               eachData.principalPaid > 0
                                 ? `${numberWithCommas(
@@ -439,7 +439,7 @@ class LoanPAR extends React.Component {
                             </td>
                           )}
                           {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                           {/* {this.state.showAmountDue &&
@@ -640,7 +640,7 @@ class LoanPAR extends React.Component {
                       <th>Maturity Date</th>
                       <th>DPD</th>
                       {this.state.showAmountExpected === true && (
-                        <th className='borderdleft'>Expected Principal</th>
+                        <th>Expected Principal</th>
                       )}
                       {this.state.showAmountExpected === true && (
                         <th>Expected Interest</th>
@@ -654,9 +654,7 @@ class LoanPAR extends React.Component {
                       {this.state.showAmountExpected === true && (
                         <th className='borderdright'>Total Expected</th>
                       )}
-                      {this.state.showAmountPaid && (
-                        <th className='borderdleft'>Principal Paid</th>
-                      )}
+                      {this.state.showAmountPaid && <th>Principal Paid</th>}
                       {this.state.showAmountPaid && <th>Fees Paid</th>}
                       {this.state.showAmountPaid && <th>Interest Paid</th>}
                       {this.state.showAmountPaid && (
@@ -666,7 +664,7 @@ class LoanPAR extends React.Component {
                         <th className='borderdright'>Total Paid</th>
                       )}
                       {/* {this.state.showAmountDue &&
-                                                <th className="borderdleft">Principal Due</th>
+                                                <th>Principal Due</th>
                                             } */}
                       {/* {this.state.showAmountDue &&
                                                 <th>Interest Due</th>
@@ -742,7 +740,7 @@ class LoanPAR extends React.Component {
                             {eachData.daysPassDue === null && <td>-</td>}
 
                             {this.state.showAmountExpected === true && (
-                              <td className='borderdleft'>
+                              <td>
                                 {eachData.principalExpected !== null &&
                                 eachData.principalExpected > 0
                                   ? `${numberWithCommas(
@@ -797,7 +795,7 @@ class LoanPAR extends React.Component {
                               </td>
                             )}
                             {this.state.showAmountPaid && (
-                              <td className='borderdleft'>
+                              <td>
                                 {eachData.principalPaid !== null &&
                                 eachData.principalPaid > 0
                                   ? `${numberWithCommas(
@@ -852,7 +850,7 @@ class LoanPAR extends React.Component {
                               </td>
                             )}
                             {/* {this.state.showAmountDue &&
-                                                                <td className="borderdleft">{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
+                                                                <td>{(eachData.principalDue !== null && eachData.principalDue > 0) ? `${numberWithCommas(eachData.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                             {/* {this.state.showAmountDue &&

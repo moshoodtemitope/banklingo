@@ -212,5 +212,7 @@ export const routes = {
     HIT_COMPANY_INFO: BASEURL + '/api/CompanyInformation',
 
     
+
+    
     
 }

@@ -381,6 +381,7 @@ class ClientsManagement extends React.Component {
                     {/* {errors.startDate && touched.startDate ? (
                                             <span className="invalid-feedback">{errors.startDate}</span>
                                         ) : null} */}
+<<<<<<< HEAD
                   </Form.Group>
                   <Button
                     className='no-margins'
@@ -461,6 +462,63 @@ class ClientsManagement extends React.Component {
                                   Edit
                                 </NavLink>
                                 {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+=======
+                                    </Form.Group>
+                                    <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                </Form>
+                                <div className="pagination-wrap">
+                                    <label htmlFor="toshow">Show</label>
+                                    <select id="toshow"
+                                        onChange={(e) => this.setPagesize(e, saveRequestData)}
+                                        value={this.state.PageSize}
+                                        className="countdropdown form-control form-control-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="200">200</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="loading-text">Please wait... </div>
+                            <TableComponent classnames="striped bordered hover">
+                                <thead>
+                                    <tr>
+                                        <th>Customer Name</th>
+                                        <th>Customer ID</th>
+                                        <th>Customer Status</th>
+                                        <th>Account Officer</th>
+                                        <th>Branch</th>
+                                        <th>Customer Type</th>
+                                        <th>Date Created</th>
+                                        {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
+                                            <th>Action</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        saveRequestData.map((eachClient, index) => {
+                                            return (
+                                                <Fragment key={index}>
+                                                    <tr>
+                                                        <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
+                                                        <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.clientCode}</NavLink></td>
+                                                        <td>{eachClient.clientStateDescription}</td>
+                                                        <td>{eachClient.accountOfficer}</td>
+                                                        <td>{eachClient.currency}</td>
+                                                        <td>{eachClient.totalBalance}</td>
+                                                        <td>{eachClient.lastUpdated}</td>
+                                                        {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
+                                                            <td>
+                                                                <DropdownButton
+                                                                    size="sm"
+                                                                    title="Actions"
+                                                                    key="activeCurrency"
+                                                                    className="customone"
+                                                                >
+                                                                    <NavLink className="dropdown-item" to={`/clients/edit/${eachClient.clientEncodedKey}`}>Edit</NavLink>
+                                                                    {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+>>>>>>> 1b2ca5ebb28cf47a88763006e1a19250c3e667f4
                                                                         <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                               </DropdownButton>
                             </td>
@@ -560,6 +618,7 @@ class ClientsManagement extends React.Component {
                       {/* {errors.startDate && touched.startDate ? (
 <span className="invalid-feedback">{errors.startDate}</span>
 ) : null} */}
+<<<<<<< HEAD
                     </Form.Group>
 
                     <Button
@@ -666,6 +725,77 @@ class ClientsManagement extends React.Component {
                                     Edit
                                   </NavLink>
                                   {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+=======
+                                        </Form.Group>
+
+                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                        <div className="actions-wrap">
+                                            <Button onClick={this.exportClients} className="action-icon" variant="outline-secondary" type="button">
+                                                <img alt="download excel" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg==" width="16" height="16" />
+                                            </Button>
+                                        </div>
+                                    </Form>
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow"
+                                            onChange={(e) => this.setPagesize(e, allClientsData.result)}
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+                                        <TablePagination
+                                            totalPages={allClientsData.totalPages}
+                                            currPage={allClientsData.currentPage}
+                                            currRecordsCount={allClientsData.result.length}
+                                            totalRows={allClientsData.totalRows}
+                                            tempData={allClientsData.result}
+                                            pagesCountToshow={4}
+                                            refreshFunc={this.loadNextPage}
+                                        />
+                                    </div>
+                                </div>
+                                <TableComponent classnames="striped bordered hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Name</th>
+                                            <th>Customer ID</th>
+                                            <th>Customer Status</th>
+                                            <th>Account Officer</th>
+                                            <th>Branch</th>
+                                            <th>Customer Type</th>
+                                            <th>Date Created</th>
+                                            {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
+                                                <th>Action</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            allClientsData.result.map((eachClient, index) => {
+                                                return (
+                                                    <Fragment key={index}>
+                                                        <tr>
+                                                            <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.firstName} {eachClient.lastName}</NavLink></td>
+                                                            <td><NavLink to={`/customer/${eachClient.clientEncodedKey}`}>{eachClient.clientCode}</NavLink></td>
+                                                            <td>{eachClient.clientStateDescription}</td>
+                                                            <td>{eachClient.accountOfficer}</td>
+                                                            <td>{eachClient.clientBranch}</td>
+                                                            <td>{eachClient. clientType}</td>
+                                                            <td>{eachClient.lastUpdated}</td>
+                                                            {allUSerPermissions.indexOf("bnk_edit_client") > -1 &&
+                                                                <td>
+                                                                    <DropdownButton
+                                                                        size="sm"
+                                                                        title="Actions"
+                                                                        key="activeCurrency"
+                                                                        className="customone"
+                                                                    >
+                                                                        <NavLink className="dropdown-item" to={`/clients/edit/${eachClient.clientEncodedKey}`}>Edit</NavLink>
+                                                                        {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
+>>>>>>> 1b2ca5ebb28cf47a88763006e1a19250c3e667f4
                                                                         <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                 </DropdownButton>
                               </td>
@@ -752,6 +882,7 @@ class ClientsManagement extends React.Component {
                       {/* {errors.startDate && touched.startDate ? (
 <span className="invalid-feedback">{errors.startDate}</span>
 ) : null} */}
+<<<<<<< HEAD
                     </Form.Group>
                     <Button
                       className='no-margins'
@@ -805,6 +936,66 @@ class ClientsManagement extends React.Component {
           }
         } else {
           return null;
+=======
+                                        </Form.Group>
+                                        <Button className="no-margins" variant="primary" type="submit" >Filter</Button>
+                                    </Form>
+                                    <div className="pagination-wrap">
+                                        <label htmlFor="toshow">Show</label>
+                                        <select id="toshow"
+
+                                            value={this.state.PageSize}
+                                            className="countdropdown form-control form-control-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="200">200</option>
+                                        </select>
+
+
+                                    </div>
+                                </div>
+                                <TableComponent classnames="striped hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Name</th>
+                                            <th>Customer ID</th>
+                                            <th>Customer Status</th>
+                                            <th>Account Officer</th>
+                                            <th>Branch</th>
+                                            <th>Customer Type</th>
+                                            <th>Date Created</th>
+                                            {/* <th></th> */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </TableComponent>
+                            </div>
+                        )
+                    }
+                }else{
+                    return null;
+                }
+
+            case (clientsConstants.GET_CLIENTS_FAILURE):
+                return (
+                    <div className="loading-content errormsg">
+                        <div>{getClientsRequest.request_data.error}</div>
+                    </div>
+                )
+            default :
+            return null;
+>>>>>>> 1b2ca5ebb28cf47a88763006e1a19250c3e667f4
         }
 
       case clientsConstants.GET_CLIENTS_FAILURE:

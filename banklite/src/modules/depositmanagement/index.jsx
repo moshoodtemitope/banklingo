@@ -85,7 +85,25 @@ class DepositManagement extends React.Component {
 
     this.setState({ PageSize: sizeOfPage });
 
-    let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}`;
+    let {
+      PageSize,
+      CurrentPage,
+      FullDetails,
+      BranchId,
+      SearchText,
+      endDate,
+      startDate,
+    } = this.state;
+
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
+
+    let paramters = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+    const { dispatch } = this.props;
 
     if (tempData) {
       dispatch(depositActions.getDeposits(params, tempData));

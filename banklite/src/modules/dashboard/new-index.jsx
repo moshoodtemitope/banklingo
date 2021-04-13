@@ -11,13 +11,14 @@ import AddIco from '../../assets/img/addnew.svg';
 import InfoIco from '../../assets/img/info.svg';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import ActivitiesBox from '../../shared/elements/activities';
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-
+import PictureIco from '../../assets/img/picture.svg';
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants';
 
@@ -32,7 +33,7 @@ class DashboardLanding extends React.Component {
     super(props);
     this.state = {
       user: '',
-      PageSize: 20,
+      PageSize: 5,
       CurrentPage: 1,
       defaultOptions: null,
       selectedOption: null,
@@ -40,9 +41,16 @@ class DashboardLanding extends React.Component {
       showNewTill: false,
       addCashToTill: false,
       selectedTill: '',
+      selectedTillData: false,
+      preloadedTillData: false,
+      selectedTxtn: null,
     };
-  }
 
+    this.selectRef = null;
+    this.selectRef2 = null;
+    this.selectRef3 = null;
+    this.selectRef4 = null;
+  }
   componentDidMount() {
     this.loadInitialData();
   }
@@ -1484,8 +1492,8 @@ class DashboardLanding extends React.Component {
                 (eachResult.state === 3 || eachResult.state === 5)) ||
               (eachResult.searchItemType === 2 &&
                 (eachResult.state === 6 || eachResult.state === 5))
-              // && eachResult.searchKey !==getAClientDepositAccountRequest.accountNumber
-              // && eachResult.clientEncodedKey !==getAClientDepositAccountRequest.clientEncodedKey
+            // && eachResult.searchKey !==getAClientDepositAccountRequest.accountNumber
+            // && eachResult.clientEncodedKey !==getAClientDepositAccountRequest.clientEncodedKey
           );
 
           this.setState({

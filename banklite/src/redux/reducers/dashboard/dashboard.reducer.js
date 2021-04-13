@@ -401,3 +401,35 @@ export function fetchAllTillsReducer(state=[], action) {
 }
 
 
+export function fetchManadateReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.FETCH_MANDATE_PENDING:
+            return {
+                request_status: dashboardConstants.FETCH_MANDATE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.FETCH_MANDATE_SUCCESS:
+            return {
+                request_status: dashboardConstants.FETCH_MANDATE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.FETCH_MANDATE_FAILURE:
+            return {
+                request_status: dashboardConstants.FETCH_MANDATE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.FETCH_MANDATE_RESET:
+            return {
+                request_status: dashboardConstants.FETCH_MANDATE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+

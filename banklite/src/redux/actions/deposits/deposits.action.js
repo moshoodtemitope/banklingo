@@ -585,7 +585,8 @@ function searchAccountNumbers(params) {
     if(params!=="CLEAR"){
         return dispatch => {
 
-            let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/depositandloanitems?AccountNumberSubString=${params}`, "GET", null);
+            let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/items?SearchText=${params}`, "GET", null);
+            // let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/depositandloanitems?AccountNumberSubString=${params}`, "GET", null);
             dispatch(request(consume));
             return consume
                 .then(response => {
