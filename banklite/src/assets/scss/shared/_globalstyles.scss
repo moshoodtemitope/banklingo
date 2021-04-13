@@ -254,17 +254,16 @@ select, select.form-control{
         background-color: white;
         padding-left: 5px;
         >li{
-            //margin-right: 10px;
-            //margin-bottom: 10px;
             >a{
                 display: block;
                 font-size: 12px;
                 padding: 10px;
                 background-color: white;
                 color: #6E7297;
-                &:hover{
-                    text-decoration: none;
-                    border-color: #5D6D7E;
+                text-decoration: none;
+
+                &:not(.activeNavLink):hover {
+                    border-bottom: 2px solid #5D6D7E;
                 }
             }
         }

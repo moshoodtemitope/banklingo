@@ -605,7 +605,7 @@ class ClientsManagement extends React.Component {
 
                                     </div>
                                 </div>
-                                <TableComponent classnames="striped bordered hover">
+                                <TableComponent classnames="striped hover">
                                     <thead>
                                         <tr>
                                             <th>Customer Name</th>

@@ -52,14 +52,14 @@ class DepositManagement extends React.Component {
     exportAllDeposits = () => {
 
         let {PageSize,CurrentPage,FullDetails, BranchId, SearchText, endDate, startDate} = this.state;
-        
+
         if(endDate!==""){
             endDate = endDate.toISOString()
         }
         if(startDate!==""){
             startDate = startDate.toISOString()
         }
-        
+
         let paramters= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
         const { dispatch } = this.props;
 
@@ -73,8 +73,8 @@ class DepositManagement extends React.Component {
 
         this.setState({ PageSize: sizeOfPage });
 
-        
-        
+
+
         let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}`;
 
         if(tempData){
@@ -89,7 +89,7 @@ class DepositManagement extends React.Component {
     }
     handleStartDatePicker = (startDate) => {
         startDate.setHours(startDate.getHours() + 1);
-        
+
         this.setState({ startDate }, ()=>{
             if(this.state.endDate!==""){
                 //this.getHistory();
@@ -97,11 +97,11 @@ class DepositManagement extends React.Component {
         });
     }
 
-    
+
 
     handleEndDatePicker = (endDate) => {
         endDate.setHours(endDate.getHours() + 1);
-       
+
         this.setState({ endDate }, ()=>{
                 if(this.state.startDate!==""){
                     //this.getHistory();
@@ -110,7 +110,7 @@ class DepositManagement extends React.Component {
     }
 
     loadNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
         let {PageSize,CurrentPage,FullDetails, endDate, startDate} = this.state;
 
@@ -134,8 +134,8 @@ class DepositManagement extends React.Component {
 
         this.setState({ FullDetails: showDetails });
 
-        
-        
+
+
         let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
 
         if(tempData){
@@ -201,7 +201,7 @@ class DepositManagement extends React.Component {
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    
+
                                 </div>
                             </div>
                             <TableComponent classnames="striped bordered hover">
@@ -248,7 +248,7 @@ class DepositManagement extends React.Component {
                                     </Form.Group>
 
                                     <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                             onChange={this.handleStartDatePicker}
@@ -265,7 +265,7 @@ class DepositManagement extends React.Component {
                                             className="form-control form-control-sm "
 
                                         />
-                                         <DatePicker autoComplete="new-off" 
+                                         <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                             onChangeRaw={this.handleDateChangeRaw}
@@ -299,20 +299,20 @@ placeholderText="End  date"
                                     <label htmlFor="toshow">Show</label>
                                     <select id="toshow"
                                         className="countdropdown form-control form-control-sm"
-                                        
+
                                         value={this.state.PageSize}>
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="200">200</option>
                                     </select>
-                                    
-                                    
+
+
                                 </div>
                             </div>
                             <div className="table-helper">
                                 <input type="checkbox" name=""
-                                    
+
                                     checked={this.state.FullDetails}
                                     id="showFullDetails" />
                                 <label htmlFor="showFullDetails">Show full details</label>
@@ -339,11 +339,11 @@ placeholderText="End  date"
                                                 <Fragment key={index}>
                                                     <tr>
                                                         <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink> </td>
-                                                        {(eachDeposit.loanState===4  || eachDeposit.accountState===7 || eachDeposit.accountState===8 || eachDeposit.accountState===9 ) && 
+                                                        {(eachDeposit.loanState===4  || eachDeposit.accountState===7 || eachDeposit.accountState===8 || eachDeposit.accountState===9 ) &&
                                                                 <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/closedaccounts/savings/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>
-                                                            } 
-                                                            {(eachDeposit.accountState!==4  && eachDeposit.accountState!==7 && eachDeposit.accountState!==8 && eachDeposit.accountState!==9 ) &&   
-                                                                <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>            
+                                                            }
+                                                            {(eachDeposit.accountState!==4  && eachDeposit.accountState!==7 && eachDeposit.accountState!==8 && eachDeposit.accountState!==9 ) &&
+                                                                <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>
                                                             }
                                                         <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                         <td>{eachDeposit.productName}</td>
@@ -384,7 +384,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -401,7 +401,7 @@ placeholderText="End  date"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                             <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -439,7 +439,7 @@ placeholderText="End  date"
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" 
+                                        <select id="toshow"
                                             className="countdropdown form-control form-control-sm"
                                             onChange={(e)=>this.setPagesize(e,allDeposits.result)}
                                             value={this.state.PageSize}>
@@ -466,7 +466,7 @@ placeholderText="End  date"
                                         id="showFullDetails" />
                                     <label htmlFor="showFullDetails">Show full details</label>
                                 </div>
-                                
+
 
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
@@ -488,12 +488,9 @@ placeholderText="End  date"
                                                     <Fragment key={index}>
                                                         <tr>
                                                             {/* <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber} </NavLink></td> */}
-
-                                                            {(eachDeposit.loanState===4  || eachDeposit.accountState===7 || eachDeposit.accountState===8 || eachDeposit.accountState===9 ) && 
+                                                            {(eachDeposit.accountState!==4  && eachDeposit.accountState!==7 && eachDeposit.accountState!==8 && eachDeposit.accountState!==9 ) ?
+                                                                <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td> :
                                                                 <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/closedaccounts/savings/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>
-                                                            } 
-                                                            {(eachDeposit.accountState!==4  && eachDeposit.accountState!==7 && eachDeposit.accountState!==8 && eachDeposit.accountState!==9 ) &&   
-                                                                <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}/savingsaccount/${eachDeposit.encodedKey}`}> {eachDeposit.accountNumber}</NavLink></td>            
                                                             }
                                                             <td><NavLink to={`/customer/${eachDeposit.clientEncodedKey}`}>{eachDeposit.accountHolderName}</NavLink>  </td>
                                                             <td>{eachDeposit.productName}</td>
@@ -509,7 +506,7 @@ placeholderText="End  date"
                                         }
                                     </tbody>
                                 </TableComponent>
-                               
+
                             </div>
                         )
                     }else{
@@ -527,7 +524,7 @@ placeholderText="End  date"
                                         </Form.Group>
 
                                         <Form.Group className="table-filters">
-                                                
+
              <DatePicker autoComplete="new-off"
                                         onChangeRaw={this.handleDateChangeRaw}
                                                 onChange={this.handleStartDatePicker}
@@ -544,7 +541,7 @@ placeholderText="End  date"
                                                 className="form-control form-control-sm "
 
                                             />
-                                             <DatePicker autoComplete="new-off" 
+                                             <DatePicker autoComplete="new-off"
 
 placeholderText="End  date"
                                                 onChangeRaw={this.handleDateChangeRaw}
@@ -588,7 +585,7 @@ placeholderText="End  date"
                                             <option value="50">50</option>
                                             <option value="200">200</option>
                                         </select>
-                                        
+
                                     </div>
                                 </div>
                                 <TableComponent classnames="striped bordered hover">
