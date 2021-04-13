@@ -1605,15 +1605,15 @@ class ViewLoanAccount extends React.Component {
                 <div className="amounts-wrap w-65">
                     <div className="eachamount">
                         <h6>Total Balance</h6>
-                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.totalBalance, true)}</div>
+                        <div className="amounttext">{numberWithCommas(loanAccountData.totalBalance, true)} {loanAccountData.currencyCode}</div>
                     </div>
                     <div className="eachamount">
                         <h6>Total Due</h6>
-                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.totalDue, true)}</div>
+                        <div className="amounttext">{numberWithCommas(loanAccountData.totalDue, true)} {loanAccountData.currencyCode}</div>
                     </div>
                     <div className="eachamount">
                         <h6>Total Paid</h6>
-                        <div className="amounttext">&#8358;{numberWithCommas(loanAccountData.totalPaid, true)}</div>
+                        <div className="amounttext">{numberWithCommas(loanAccountData.totalPaid, true)} {loanAccountData.currencyCode}</div>
                     </div>
                     <div className="eachamount">
                         <h6>Installments</h6>
@@ -1648,7 +1648,7 @@ class ViewLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Currency</td>
-                                    <td> NGN</td>
+                                    <td> {loanAccountData.currencyCode}</td>
                                 </tr>
                                 <tr>
                                     <td>First repayment Date</td>
@@ -1669,39 +1669,44 @@ class ViewLoanAccount extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>Principal Paid</td>
-                                    <td>{numberWithCommas(loanAccountData.principalPaid, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.principalPaid, true, true)} {loanAccountData.currencyCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Principal Due</td>
-                                    <td>{numberWithCommas(loanAccountData.duePrincipal, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.duePrincipal, true, true)} {loanAccountData.currencyCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Rate</td>
-                                    <td>{numberWithCommas(loanAccountData.interestRate, true, true)}%</td>
+                                    {loanAccountData.interestRate &&
+                                        <td>{numberWithCommas(loanAccountData.interestRate, true, true)}%</td>
+                                    } 
+                                    {!loanAccountData.interestRate &&
+                                        <td>N/A</td>
+                                    }           
                                 </tr>
                                 <tr>
                                     <td>Interest Paid</td>
-                                    <td>{numberWithCommas(loanAccountData.interestPaid, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.interestPaid, true, true)} {loanAccountData.currencyCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Interest Due</td>
-                                    <td>{numberWithCommas(loanAccountData.dueInterest, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.dueInterest, true, true)} {loanAccountData.currencyCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Due</td>
-                                    <td>{numberWithCommas(loanAccountData.duePenalty, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.duePenalty, true, true)} {loanAccountData.currencyCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Penalty Paid</td>
-                                    <td>{numberWithCommas(loanAccountData.penaltyPaid, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.penaltyPaid, true, true)} {loanAccountData.currencyCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Fee Due</td>
-                                    <td>{numberWithCommas(loanAccountData.dueFees, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.dueFees, true, true)} {loanAccountData.currencyCode}</td>
                                 </tr>
                                 <tr>
                                     <td>Fee Paid</td>
-                                    <td>{numberWithCommas(loanAccountData.feePaid, true, true)}</td>
+                                    <td>{numberWithCommas(loanAccountData.feePaid, true, true)} {loanAccountData.currencyCode}</td>
                                 </tr>
                             </tbody>
                         </TableComponent>
@@ -2638,20 +2643,20 @@ class ViewLoanAccount extends React.Component {
                                 <Form.Row>
                                     <Col>
                                         <Form.Label className="block-level">Principal Balance</Form.Label>
-                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
-                                        <h5>&#8358;{numberWithCommas(loanDetails.principalExpected,true)}</h5>
+                                        
+                                        <h5> {numberWithCommas(loanDetails.principalExpected,true)} {loanDetails.currencyCode} </h5>
                                     </Col>
                                     <Col>
                                         <Form.Label className="block-level">Interest Balance</Form.Label>
-                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
-                                        <h5>&#8358;{numberWithCommas(loanDetails.interestExpected,true)}</h5>
+                                        
+                                        <h5>{numberWithCommas(loanDetails.interestExpected,true)} {loanDetails.currencyCode}</h5>
                                     </Col>
                                 </Form.Row>
                                 <Form.Row>
                                     <Col>
                                         <Form.Label className="block-level">Pay Off Amount</Form.Label>
-                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
-                                        <h5>&#8358;{numberWithCommas(payoffAmount,true)}</h5>
+                                        
+                                        <h5>{numberWithCommas(payoffAmount,true)} {loanDetails.currencyCode}</h5>
                                     </Col>
                                     <Col>
 
@@ -2840,13 +2845,13 @@ class ViewLoanAccount extends React.Component {
                                 <div className="modal-section">
                                     <Form.Group>
                                         <Form.Label className="block-level">Account Recipient</Form.Label>
-                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
+                                        
                                         <h5>{loanDetails.clientName}</h5>
                                     </Form.Group>
 
                                     <Form.Group>
                                         <Form.Label className="block-level">Loan Account</Form.Label>
-                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
+                                        
                                         <h5>{loanDetails.productName}</h5>
                                     </Form.Group>
                                 </div>
@@ -2854,29 +2859,29 @@ class ViewLoanAccount extends React.Component {
                                     <div className="modal-notes grayed">Outstanding Balances</div>
                                     <div className="each-msg bolden">
                                        <span>Total</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.totalExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.totalExpected, true)} {loanDetails.currencyCode}</span> 
                                     </div>
                                     <div className="each-msg">
                                        <span>Principal</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.interestExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.interestExpected, true)} {loanDetails.currencyCode}</span> 
                                     </div>
                                     <div className="each-msg">
                                        <span>Interest</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.principalExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.principalExpected, true)} {loanDetails.currencyCode}</span> 
                                     </div>
                                     <div className="each-msg">
                                        <span>Fees</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.feesExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.feesExpected, true)} {loanDetails.currencyCode}</span> 
                                     </div>
                                     <div className="each-msg">
                                        <span>Penalty</span> 
-                                       <span>&#8358;{numberWithCommas(loanDetails.penaltyExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.penaltyExpected, true)} {loanDetails.currencyCode}</span> 
                                     </div>
 
                                     <Form.Group className="mt-20">
                                         <Form.Label className="block-level">Write Off Amount</Form.Label>
-                                        {/* <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5> */}
-                                        <h4>&#8358;{numberWithCommas(loanDetails.totalExpected, true)}</h4>
+                                        
+                                        <h4>{numberWithCommas(loanDetails.totalExpected, true)} {loanDetails.currencyCode}</h4>
                                     </Form.Group>
                                 </div>
                                 
@@ -3158,7 +3163,7 @@ class ViewLoanAccount extends React.Component {
                                         <Form.Row>
                                             <Col>
                                                 <Form.Label className="block-level">Amount</Form.Label>
-                                                <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5>
+                                                <h5>{getAClientLoanAccountRequest.request_data.response.data.loanAmount} {getAClientLoanAccountRequest.request_data.response.data.currencyCode}</h5>
                                             </Col>
                                             <Col>
 
@@ -3209,6 +3214,7 @@ class ViewLoanAccount extends React.Component {
                                                 </Form.Group>
                                                 {values.showFirstRepayment === true &&
                                                     <Form.Group className="mb-0 date-wrap">
+                                                        <DatePicker
                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                             dateFormat={window.dateformat}
@@ -3243,6 +3249,7 @@ class ViewLoanAccount extends React.Component {
                                                 </Form.Group>
                                                 {values.allowBackDate === true &&
                                                     <Form.Group className="mb-0 date-wrap">
+                                                        <DatePicker
                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                             dateFormat={window.dateformat}
@@ -3275,6 +3282,7 @@ class ViewLoanAccount extends React.Component {
                                                 </Form.Group>
                                                 {values.showBookingDate === true &&
                                                     <Form.Group className="mb-0 date-wrap">
+                                                        <DatePicker
                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                             dateFormat={window.dateformat}
@@ -3318,7 +3326,7 @@ class ViewLoanAccount extends React.Component {
                                     <div>
                                         <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">Amount to repay (&#8358;)</Form.Label>
+                                                <Form.Label className="block-level">Amount to repay ({getAClientLoanAccountRequest.request_data.response.data.currencyCode})</Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     autoComplete="off"

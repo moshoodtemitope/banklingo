@@ -459,7 +459,7 @@ class ViewCustomer extends React.Component {
                                                                             </td>
                                                                             <td>Loan</td>
                                                                             <td>{eachAccount.loanStateDescription}</td>
-                                                                            <td>₦{numberWithCommas(eachAccount.loanAmount, true, true)}</td>
+                                                                            <td>{numberWithCommas(eachAccount.loanAmount, true, true)} {eachAccount.currencyCode} </td>
                                                                         </tr>
                                                                     )
                                                                 }
@@ -481,7 +481,7 @@ class ViewCustomer extends React.Component {
                                                                             </td>
                                                                             <td>Deposit</td>
                                                                             <td>{eachAccount.accountStateDescription}</td>
-                                                                            <td>₦{numberWithCommas(eachAccount.depositBalance, true, true)}</td>
+                                                                            <td>{numberWithCommas(eachAccount.depositBalance, true, true)} {eachAccount.currencyCode}</td>
                                                                         </tr>
                                                                     )
                                                                 }
@@ -660,9 +660,7 @@ class ViewCustomer extends React.Component {
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="leftside-items">
-                                                {passport!==null &&
-                                                    <div style={passportStyle} className="passport-photo"></div>
-                                                }
+                                                
                                                 
                                                     <div className="each-card mb-20">
                                                         <div className="each-card-content">
@@ -697,6 +695,22 @@ class ViewCustomer extends React.Component {
                                                                     >
                                                                        {!manadateData.isSignatureAvailable ? "Upload Signature": "Update Signature"} 
                                                                     </Button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="each-card mb-20">
+                                                        <div className="each-card-content">
+                                                            <div className="mandate-imgs">
+                                                                <div className="each-mandate">
+                                                                    {passport &&
+                                                                        <img src={`data:image/png;base64,${passport}`} alt=""/>
+                                                                    }
+                                                                    {!passport &&
+                                                                        <img className="no-mandate" src={PictureIco} alt=""/>
+                                                                    }
+                                                                    <div className="mandate-title">Customer BVN Photo</div>
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>

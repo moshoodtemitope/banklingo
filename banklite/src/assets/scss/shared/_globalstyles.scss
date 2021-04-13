@@ -376,6 +376,11 @@ label.upload-photo>div{
     font-weight: 600;
     width: 70%;
 }
+.select-drop{
+    .is-invalid:not(.form-control) > div, .was-validated .form-control:invalid > div {
+        border-color: #dc3545 !important;
+    }
+}
 .mandate-imgs {
     display: flex;
     justify-content: space-between;
