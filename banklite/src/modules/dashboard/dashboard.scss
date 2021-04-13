@@ -396,9 +396,10 @@
     font-size: 12px;
     align-items: center;
     flex-basis: 34%;
-    justify-content: space-between;
+    justify-content: flex-start;
     .selected-id {
         font-weight: 500;
+        margin-right: 10px;
     }
     select#tildId {
         font-size: 12px;
