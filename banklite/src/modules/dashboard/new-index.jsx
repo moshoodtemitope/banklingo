@@ -42,8 +42,14 @@ class DashboardLanding extends React.Component {
             addCashToTill:false,
             selectedTill: "",
             selectedTillData: false,
-            preloadedTillData: false
+            preloadedTillData: false,
+            selectedTxtn: null
         }
+
+        this.selectRef = null;
+        this.selectRef2 = null;
+        this.selectRef3 = null;
+        this.selectRef4 = null;
 
         
     }
@@ -326,18 +332,18 @@ class DashboardLanding extends React.Component {
         this.setState({closeViewCustomer: false})
     }
 
-    showViewCustomer = (customerToView)=> {
-        console.log("mandate nfo", this.state.mandateInfo)        
-        this.setState({ closeViewCustomer: true, customerToView })
+    showViewCustomer = ()=> {
+            
+        this.setState({ closeViewCustomer: true, })
     }
 
     hideViewAccount = ()=> {
         this.setState({closeViewAccount: false})
     }
 
-    showViewAccount = (customerToView)=> {
+    showViewAccount = ()=> {
         
-        // console.log("akds dsds", customerToView)
+        
         this.setState({ closeViewAccount: true })
     }
 
@@ -367,13 +373,17 @@ class DashboardLanding extends React.Component {
         if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_SUCCESS){
             let 
                 validationSchema = Yup.object().shape({
-                    // tillId: Yup.string()
+                    userEncodedKey: Yup.string()
+                        .required('Required'),
+                    currencyCode: Yup.string()
+                        .required('Required'),
+                    // mimimumbalance: Yup.string()
                     //     .required('Required'),
-                    mimimumbalance: Yup.string()
-                        .required('Required'),
-                    maximumBalance: Yup.string()
-                        .required('Required'),
+                    // maximumBalance: Yup.string()
+                    //     .required('Required'),
                     openingAmount: Yup.string()
+                        .required('Required'),
+                    tillBalanceConstraintType: Yup.string()
                         .required('Required'),
                 });
                 let tellersData =  this.props.fetchAllTillsReducer.request_data.response4.data,
@@ -434,6 +444,7 @@ class DashboardLanding extends React.Component {
                                     mimimumbalance:"",
                                     tillBalanceConstraintType:"",
                                     currencyCode:"",
+                                    userEncodedKey:"",
                                 }}
                                 validationSchema={validationSchema}
                                 onSubmit={(values, { resetForm }) => {
@@ -450,8 +461,8 @@ class DashboardLanding extends React.Component {
                                     
                                     let requestPayload = {
                                         userEncodedKey: values.userEncodedKey,
-                                        maximumBalance: parseFloat(values.maximumBalance.replace(/,/g, '')),
-                                        mimimumbalance: parseFloat(values.mimimumbalance.replace(/,/g, '')),
+                                        maximumBalance: values.maximumBalance!==""? parseFloat(values.maximumBalance.replace(/,/g, '')): null,
+                                        mimimumbalance: values.mimimumbalance!==""? parseFloat(values.mimimumbalance.replace(/,/g, '')) : null,
                                         openingBalance: parseFloat(values.openingAmount.replace(/,/g, '')),
                                         tillBalanceConstraintType: values.tillBalanceConstraintType,
                                         currencyCode: values.currencyCode
@@ -463,6 +474,10 @@ class DashboardLanding extends React.Component {
                                     this.handleOpenTill(requestPayload)
                                         .then(()=>{
                                             if(this.props.openATillReducer.request_status ===dashboardConstants.OPEN_A_TILL_SUCCESS){
+                                                this.selectRef2.select.clearValue();
+                                                this.selectRef3.select.clearValue();
+                                                this.selectRef4.select.clearValue();
+                                                resetForm()
                                                 this.getDashboardData();
                                             }
                                         })
@@ -505,11 +520,15 @@ class DashboardLanding extends React.Component {
                                             <div className="select-drop">
                                                 <Select
                                                     options={allTellers}
-
+                                                    ref={ref => {
+                                                        this.selectRef2 = ref;
+                                                    }}
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
-                                                        errors.userEncodedKey = null
-                                                        values.userEncodedKey = selectedOption.value
+                                                        if(selectedOption){
+                                                            errors.userEncodedKey = null
+                                                            values.userEncodedKey = selectedOption.value
+                                                        }
                                                     }}
                                                     className={errors.userEncodedKey && touched.userEncodedKey ? "is-invalid" : null}
                                                     name="userEncodedKey"
@@ -526,11 +545,15 @@ class DashboardLanding extends React.Component {
                                             <div className="select-drop">
                                                 <Select
                                                     options={allCurrencies}
-
+                                                    ref={ref => {
+                                                        this.selectRef3 = ref;
+                                                    }}
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
-                                                        errors.currencyCode = null
-                                                        values.currencyCode = selectedOption.value
+                                                        if(selectedOption){
+                                                            errors.currencyCode = null
+                                                            values.currencyCode = selectedOption.value
+                                                        }
                                                     }}
                                                     className={errors.currencyCode && touched.currencyCode ? "is-invalid" : null}
                                                     name="currencyCode"
@@ -590,11 +613,15 @@ class DashboardLanding extends React.Component {
                                             <div className="select-drop">
                                                 <Select
                                                     options={allOptions}
-
+                                                    ref={ref => {
+                                                        this.selectRef4 = ref;
+                                                    }}
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
-                                                        errors.tillBalanceConstraintType = null
-                                                        values.tillBalanceConstraintType = selectedOption.value
+                                                        if(selectedOption){
+                                                            errors.tillBalanceConstraintType = null
+                                                            values.tillBalanceConstraintType = selectedOption.value
+                                                        }
                                                     }}
                                                     className={errors.tillBalanceConstraintType && touched.tillBalanceConstraintType ? "is-invalid" : null}
                                                     name="tillBalanceConstraintType"
@@ -1117,7 +1144,7 @@ class DashboardLanding extends React.Component {
         )
     }
 
-    renderViewCustomerWrap = (customerToView )=>{
+    renderViewCustomerWrap = ( )=>{
         let {mandateInfo} = this.state,
             customerDetails = mandateInfo.response.data,
             customerBvnPassport = mandateInfo.response3.data,
@@ -1521,9 +1548,11 @@ class DashboardLanding extends React.Component {
                             
                             searchResultsData = searchResultsData.filter(eachResult=>(
                                     (
-                                        (eachResult.searchItemType===3 && (eachResult.state===3 || eachResult.state===5))
+                                        (eachResult.searchItemType===3)
+                                        // (eachResult.searchItemType===3 && (eachResult.state===3 || eachResult.state===5))
                                         ||
-                                        (eachResult.searchItemType===2 && (eachResult.state===6 || eachResult.state===5))
+                                        (eachResult.searchItemType===2)
+                                        // (eachResult.searchItemType===2 && (eachResult.state===6 || eachResult.state===5))
                                     )
                                     // && eachResult.searchKey !==getAClientDepositAccountRequest.accountNumber
                                     // && eachResult.clientEncodedKey !==getAClientDepositAccountRequest.clientEncodedKey
@@ -1585,38 +1614,49 @@ class DashboardLanding extends React.Component {
 
     }
 
-    loadCustomerAccounts = (selectedClientEncodedKey)=>{
+    loadCustomerAccounts = (selectedClientEncodedKey, isCustomer)=>{
         let   searchForAccountsWithCustomerKeyRequest =  this.props.searchForAccountsWithCustomerKeyReducer;
-        this.getAccountsOfSelectedCustomer(selectedClientEncodedKey)
-            .then( 
-                ()=>{
-                    if(this.props.searchForAccountsWithCustomerKeyReducer.request_status === loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_SUCCESS){
-                        
-                        let loadedCustomerAccounts = this.props.searchForAccountsWithCustomerKeyReducer.request_data.response.data,
-                            customerAccounts =[];
+        if(isCustomer){
+            this.getAccountsOfSelectedCustomer(selectedClientEncodedKey)
+                .then( 
+                    ()=>{
+                        if(this.props.searchForAccountsWithCustomerKeyReducer.request_status === loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_SUCCESS){
+                            
+                            let loadedCustomerAccounts = this.props.searchForAccountsWithCustomerKeyReducer.request_data.response.data,
+                                customerAccounts =[];
 
-                        if(loadedCustomerAccounts.length>=1){
-                            loadedCustomerAccounts.map((eachAccount, index)=>{
-                                if(
-                                    (eachAccount.searchItemType===2 && (eachAccount.state===5 || eachAccount.state===6))
-                                    ||
-                                    (eachAccount.searchItemType===3 && (eachAccount.state===3 || eachAccount.state===5))
-                                )
-                                {
-                                    customerAccounts.push({label:eachAccount.searchText, value:eachAccount.searchItemEncodedKey})
-                                }
-                            })
-                            this.setState({defaultAccountOptions:loadedCustomerAccounts, isCustommerAccountsFetchedWithKey: true})
+                            if(loadedCustomerAccounts.length>=1){
+                                loadedCustomerAccounts.map((eachAccount, index)=>{
+                                    if(
+                                        (eachAccount.searchItemType===2 && (eachAccount.state===5 || eachAccount.state===6))
+                                        ||
+                                        (eachAccount.searchItemType===3 && (eachAccount.state===3 || eachAccount.state===5))
+                                    )
+                                    {
+                                        customerAccounts.push({label:eachAccount.searchText, value:eachAccount.searchItemEncodedKey})
+                                    }
+                                })
+                                this.setState({defaultAccountOptions:loadedCustomerAccounts, isCustommerAccountsFetchedWithKey: true})
+                            }
                         }
                     }
-                }
-            )
-        this.fetchMandateOfSelectedCustomer(selectedClientEncodedKey)
-                .then(()=>{
-                    if(this.props.fetchManadateReducer.request_status === dashboardConstants.FETCH_MANDATE_SUCCESS){
-                        this.setState({showMandateLink: true, mandateInfo:this.props.fetchManadateReducer.request_data})
-                    }
-                })
+                )
+        }
+        
+            this.fetchMandateOfSelectedCustomer(selectedClientEncodedKey)
+                    .then(()=>{
+                        if(this.props.fetchManadateReducer.request_status === dashboardConstants.FETCH_MANDATE_SUCCESS){
+                            this.setState({showMandateLink: true, 
+                                            mandateInfo:this.props.fetchManadateReducer.request_data,
+                                            selectedCustomer: {
+                                                                clientEncodedKey: this.props.fetchManadateReducer.request_data.response.data.clientEncodedKey,
+                                                                clientName: `${this.props.fetchManadateReducer.request_data.response.data.firstName} ${this.props.fetchManadateReducer.request_data.response.data.lastName}`
+                                                                
+                                                                }
+                                        })
+                        }
+                    })
+        
     }
 
     getAccountsOfSelectedCustomer = async (selectedClientEncodedKey)=>{
@@ -1640,13 +1680,22 @@ class DashboardLanding extends React.Component {
         
         
         // console.log("customer is", inputValue);
-        this.loadCustomerAccounts(inputValue.clientEncodedKey);
+        this.loadCustomerAccounts(inputValue.clientEncodedKey, true);
         this.setState({
             selectedCustomer: inputValue,
             selectACustomerAccount: inputValue,
             // firstChosenTransferCriteria:"customer",
             selectOtherCustomerAccount:""
         });
+        
+    }
+
+    handleSelectedAccount =(inputValue)=>{
+        
+        
+        // console.log("customer is", inputValue);
+        this.loadCustomerAccounts(inputValue.clientEncodedKey, false);
+        
         
     }
 
@@ -1708,7 +1757,7 @@ class DashboardLanding extends React.Component {
                                                 <th>Transaction</th>
                                                 <th>ID</th>
                                                 <th>Amount</th>
-                                                <th>Action</th>
+                                                
                                                 {/* <th></th> */}
                                             </tr>
                                         </thead>
@@ -1727,7 +1776,7 @@ class DashboardLanding extends React.Component {
                                                             <td>{eachData.typeDescription}</td>
                                                             <td>{eachData.tillId}</td>
                                                             <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
-                                                            <td>
+                                                            {/* <td>
                                                                 <div className="actions-drop">
                                                                     <DropdownButton
                                                                         size="sm"
@@ -1736,7 +1785,7 @@ class DashboardLanding extends React.Component {
 
                                                                         className="customone"
                                                                     >
-                                                                        {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                                       
 
                                                                         <Dropdown.Item eventKey="2"
                                                                             onClick={()=>{
@@ -1747,7 +1796,7 @@ class DashboardLanding extends React.Component {
 
                                                                     </DropdownButton>
                                                                 </div>
-                                                            </td>
+                                                            </td> */}
                                                         </tr>
                                                     )
                                                 })
@@ -1804,7 +1853,7 @@ class DashboardLanding extends React.Component {
                                                 <th>Transaction</th>
                                                 <th>ID</th>
                                                 <th>Amount</th>
-                                                <th>Action</th>
+                                                {/* <th>Action</th> */}
                                                 {/* <th></th> */}
                                             </tr>
                                             <tr>
@@ -1856,7 +1905,7 @@ class DashboardLanding extends React.Component {
                                                 <th>Transaction</th>
                                                 <th>ID</th>
                                                 <th>Amount</th>
-                                                <th>Action</th>
+                                                {/* <th>Action</th> */}
                                                 {/* <th></th> */}
                                             </tr>
                                         </thead>
@@ -1875,7 +1924,7 @@ class DashboardLanding extends React.Component {
                                                             <td>{eachData.typeDescription}</td>
                                                             <td>{eachData.tillId}</td>
                                                             <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
-                                                            <td>
+                                                            {/* <td>
                                                                 <div className="actions-drop">
                                                                     <DropdownButton
                                                                         size="sm"
@@ -1884,7 +1933,7 @@ class DashboardLanding extends React.Component {
 
                                                                         className="customone"
                                                                     >
-                                                                        {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+                                                                        
 
                                                                         <Dropdown.Item eventKey="2"
                                                                             onClick={()=>{
@@ -1895,7 +1944,7 @@ class DashboardLanding extends React.Component {
 
                                                                     </DropdownButton>
                                                                 </div>
-                                                            </td>
+                                                            </td> */}
                                                         </tr>
                                                     )
                                                 })
@@ -1957,6 +2006,7 @@ class DashboardLanding extends React.Component {
                 defaultAccountOptions,
                 showNewTill,
                 addCashToTill,
+                selectedTxtn,
                 closeUndoCloseTill,
                 selectedOption,
                 selectOtherCustomerAccount,
@@ -1991,6 +2041,8 @@ class DashboardLanding extends React.Component {
                             chosenAccountNum: '',
                             txtnType: '',
                             amount: '',
+                            remarks:'',
+                            referenceID:''
                         }}
                         validationSchema={validationSchema}
                         onSubmit={(values, { resetForm }) => {
@@ -2035,6 +2087,7 @@ class DashboardLanding extends React.Component {
                                 .then(() => {
                                     if (this.props.postATransactionReducer.request_status === dashboardConstants.POST_TRANSACTION_SUCCESS) {
                                         resetForm()
+                                        this.setState({selectOtherCustomerAccount:null, selectedCustomer: null, showMandateLink:false})
                                         this.fetchTillTransactions(this.state.selectedTillData.tillId)
                                     }
                                 })
@@ -2098,42 +2151,47 @@ class DashboardLanding extends React.Component {
                                     </div>
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label className="block-level">Account</Form.Label>
-                                    <div className="txtn-wrap">
-                                        <div className="select-drop foraccount">
-                                            <AsyncSelect
-                                                cacheOptions
-                                                value={selectOtherCustomerAccount}
-                                                noOptionsMessage={this.noOptionsForAccountMessage}
-                                                getOptionValue={this.getSearchForAccountOptionValue}
-                                                getOptionLabel={this.getSearchOptionForAccountLabel}
-                                                defaultOptions={defaultAccountOptions !== "" ? defaultAccountOptions : null}
-                                                loadOptions={this.initiateAccountSearch}
-                                                placeholder="Search Accounts"
-                                                name="chosenAccountNum"
-                                                className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
-                                                onChange={(selectedOption) => {
-                                                    setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
-                                                    console.log("calleded", selectedOption)
-                                                    this.getSearchOptionForCustomerLabel(selectedOption)
-                                                    this.getSearchForCustomerOptionValue(selectedOption)
-                                                    // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
+                                    <div className="withasync">
+                                        <Form.Label className="block-level">Account</Form.Label>
+                                        <div className="txtn-wrap">
+                                            <div className="select-drop foraccount">
+                                                <AsyncSelect
+                                                    cacheOptions
+                                                    value={selectOtherCustomerAccount}
+                                                    noOptionsMessage={this.noOptionsForAccountMessage}
+                                                    getOptionValue={this.getSearchForAccountOptionValue}
+                                                    getOptionLabel={this.getSearchOptionForAccountLabel}
+                                                    defaultOptions={defaultAccountOptions !== "" ? defaultAccountOptions : null}
+                                                    loadOptions={this.initiateAccountSearch}
+                                                    placeholder="Search Accounts"
+                                                    name="chosenAccountNum"
+                                                    className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+                                                    onChange={(selectedOption) => {
+                                                        setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
+                                                        // console.log("calleded", selectedOption)
+                                                        setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
+                                                        this.handleSelectedAccount(selectedOption)
+                                                        this.getSearchOptionForCustomerLabel(selectedOption)
+                                                        this.getSearchForCustomerOptionValue(selectedOption)
+                                                        // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
 
-                                                    
-                                                    this.setState({
-                                                        selectedOption,
-                                                        selectedCustomer: selectedOption,
-                                                        selectOtherCustomerAccount: selectedOption,
+                                                        
+                                                        this.setState({
+                                                            selectedOption,
+                                                            selectedCustomer: selectedOption,
+                                                            selectOtherCustomerAccount: selectedOption,
 
-                                                    });
+                                                        });
 
-                                                }} />
+                                                    }} />
 
-                                            {errors.chosenAccountNum && touched.chosenAccountNum ? (
-                                                <span className="invalid-feedback">{errors.chosenAccountNum}</span>
-                                            ) : null}
+                                                {errors.chosenAccountNum && touched.chosenAccountNum ? (
+                                                    <span className="invalid-feedback">{errors.chosenAccountNum}</span>
+                                                ) : null}
+                                            </div>
+                                            {this.state.showMandateLink && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
+                                            {/* {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>} */}
                                         </div>
-                                        {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>}
                                     </div>
 
                                 </Form.Group>
@@ -2144,11 +2202,16 @@ class DashboardLanding extends React.Component {
                                         <div className="select-drop pr-10">
                                             <Select
                                                 options={allTxtn}
-
+                                                ref={ref => {
+                                                    this.selectRef = ref;
+                                                }}
+                                                
                                                 onChange={(selectedTxtn) => {
                                                     this.setState({ selectedTxtn });
-                                                    errors.txtnType = null
-                                                    values.txtnType = selectedTxtn.value
+                                                    if(selectedTxtn){
+                                                        errors.txtnType = null
+                                                        values.txtnType = selectedTxtn.value
+                                                    }
                                                 }}
                                                 className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
                                                 name="txtnType"
@@ -2213,7 +2276,13 @@ class DashboardLanding extends React.Component {
                                         </Button>
                                         <Button variant="secondary"
                                             disabled={postATransactionRequest.is_request_processing}
-                                            onClick={()=>resetForm()}>Clear</Button>
+                                            onClick={()=>{
+                                                this.selectRef.select.clearValue();
+                                                this.setState({selectOtherCustomerAccount:null,selectedTxtn:  null, selectedCustomer: null, showMandateLink:false})
+                                                resetForm()
+                                            }}>
+                                                Clear
+                                        </Button>
                                     </div>
                                 </div>
                                 {postATransactionRequest.request_status === dashboardConstants.POST_TRANSACTION_SUCCESS &&
@@ -2507,7 +2576,7 @@ class DashboardLanding extends React.Component {
                                     <div className="tellerid-wrap">
                                         {this.state.selectedTill && 
                                             <div className="selected-id">
-                                                Till ID: {this.state.selectedTill}
+                                                {this.state.selectedTill}
                                             </div>
                                         }
                                         <div className="select-tillid">
@@ -2527,7 +2596,7 @@ class DashboardLanding extends React.Component {
                                                 //                 allMyTills.length>=1 ? allMyTills[0] : null }
                                                 
                                                 className="countdropdown form-control form-control-sm">
-                                                    <option value="">Select Till</option>
+                                                    {/* <option value="">Select Till</option> */}
                                                     {allMyTills.map((eachTill, index)=>{
                                                         // console.log("index is", index);
                                                         return(
