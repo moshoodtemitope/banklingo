@@ -27,7 +27,7 @@ import { productActions } from '../../redux/actions/products/products.action';
 import { productsConstants } from '../../redux/actiontypes/products/products.constants'
 
 import {noWhiteSpaces} from "../../shared/utils"
-import "./administration.scss"; 
+import "./administration.scss";
 class EditLoanProduct extends React.Component {
     constructor(props) {
         super(props);
@@ -53,16 +53,16 @@ class EditLoanProduct extends React.Component {
 
     getALoanProduct =  (encodedKey)=>{
         const {dispatch} = this.props;
-       
-        
+
+
          dispatch(productActions.getSingleLoanProduct(encodedKey));
     }
 
-    
+
 
     handleUpdateLoanProduct = async(updateLoanProductPayload)=>{
         const {dispatch} = this.props;
-       
+
         await dispatch(productActions.updateLoanProduct(updateLoanProductPayload, this.props.match.params.encodedKey));
 
     }
@@ -72,7 +72,7 @@ class EditLoanProduct extends React.Component {
 
     handleCreateNewLoanProduct = async(newLoanProductPayload)=>{
         const {dispatch} = this.props;
-       
+
         await dispatch(productActions.createLoanProduct(newLoanProductPayload));
 
     }
@@ -81,7 +81,7 @@ class EditLoanProduct extends React.Component {
     renderUpdateLoanProduct =()=>{
         // let createLoanProductRequest = this.props.createLoanProductReducer,
         //     getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
-        
+
         let updateLoanProductRequest = this.props.updateLoanProductReducer,
             getSingleLoanProductRequest = this.props.getSingleLoanProductsReducer,
             getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
@@ -129,24 +129,24 @@ class EditLoanProduct extends React.Component {
                 { value: 3, label: 'Weeks' },
                 { value: 4, label: 'Days' }
             ];
-        
-        
-            
+
+
+
             if (getAllGLAccountsRequest.request_status ===accountingConstants.GET_ALL_GLACCOUNTS_PENDING ||
                 getSingleLoanProductRequest.request_status ===productsConstants.GET_A_LOAN_PRODUCT_PENDING){
                 return (
-                    <div className="loading-content card"> 
+                    <div className="loading-content card">
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
             }
-            
+
             if (getAllGLAccountsRequest.request_status ===accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS &&
                     getSingleLoanProductRequest.request_status ===productsConstants.GET_A_LOAN_PRODUCT_SUCCESS){
                 let allGlAccounts = [],
                     glAccountsList,
-                    loanProductDetails = getSingleLoanProductRequest.request_data.response.data; 
-                    
+                    loanProductDetails = getSingleLoanProductRequest.request_data.response.data;
+
 
                 if(getAllGLAccountsRequest.request_data.response.data.length>=1){
                     glAccountsList= getAllGLAccountsRequest.request_data.response.data;
@@ -168,7 +168,7 @@ class EditLoanProduct extends React.Component {
                         penaltyIncomeAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===4);
 
 
-                        
+
                     let txtSrcReturned = transactionSourceAccount.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.transactionSourceAccountId)[0]||null;
                     let  portfolioControlAccountReturned = portfolioControlAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.portfolioControlAccountId)[0]||null;
                     let    writeOffExpenseAccountReturned = writeOffExpenseAccounts.filter(eachItem=>eachItem.value===loanProductDetails.loanProductAccountingRuleModel.writeOffExpenseAccountId)[0]||null;
@@ -185,12 +185,12 @@ class EditLoanProduct extends React.Component {
                     let interestBalanceCalculationReturned = interestBalanceCalculationOptions.filter(eachItem=>eachItem.value===loanProductDetails.loanProductInterestSetting.interestBalanceCalculation)[0]||null;
                     let repaymentPeriodReturned = repaymentPeriodOptions.filter(eachItem=>eachItem.value===loanProductDetails.repaymentReschedulingModel.repaymentPeriod)[0]||null;
                     let arrearsDaysCalculationReturned = arrearsDaysCalculation.filter(eachItem=>eachItem.value===loanProductDetails.arrearsSetting.arrearsDaysCalculatedFrom)[0]||null;
-                        
+
                         // console.log("+++++", transactionSourceAccount);
                         // methodologyReturned = methodologyList.filter(eachItem=>eachItem.value===loanProductDetails.methodology.toString())[0]||null;
-                        
+
                     return(
-                        
+
                             <Formik
                             initialValues={{
                                 key: (loanProductDetails.key!==undefined && loanProductDetails.key!==null)?loanProductDetails.key:'',
@@ -215,20 +215,20 @@ class EditLoanProduct extends React.Component {
                                                                 ?loanProductDetails.loanProductAccountingRuleModel.interestIncomeAccountId.toString():0,
                                 penaltyIncomeAccountId: (loanProductDetails.loanProductAccountingRuleModel!==undefined && loanProductDetails.loanProductAccountingRuleModel!==null && loanProductDetails.loanProductAccountingRuleModel.penaltyIncomeAccountId!==null)
                                                                 ?loanProductDetails.loanProductAccountingRuleModel.penaltyIncomeAccountId.toString():0,
-                                arearsTolerancePeriodInDaysDefault: (loanProductDetails.arrearsSetting!==undefined && loanProductDetails.arrearsSetting!==null && loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysDefault!==null)
-                                                                    ?loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysDefault.toString():0,
-                                arearsTolerancePeriodInDaysMin: (loanProductDetails.arrearsSetting!==undefined && loanProductDetails.arrearsSetting!==null && loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMin!==null)
-                                                                    ?loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMin.toString():0,
-                                arearsTolerancePeriodInDaysMax: (loanProductDetails.arrearsSetting!==undefined && loanProductDetails.arrearsSetting!==null && loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMax!==null)
-                                                                    ?loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMax.toString():0,
-                                arrearsDaysCalculationChosen: (loanProductDetails.arrearsSetting!==undefined && loanProductDetails.arrearsSetting!==null && loanProductDetails.arrearsSetting.arrearsDaysCalculatedFrom!==null)
-                                                                    ?loanProductDetails.arrearsSetting.arrearsDaysCalculatedFrom.toString():0,
-                                defaultLoanAmount: (loanProductDetails.loanAmountSetting!==undefined && loanProductDetails.loanAmountSetting!==null && loanProductDetails.loanAmountSetting.loanAmountDefault!==null)
-                                                        ?loanProductDetails.loanAmountSetting.loanAmountDefault.toString():0,
-                                minimumLoanAmount:(loanProductDetails.loanAmountSetting!==undefined && loanProductDetails.loanAmountSetting!==null && loanProductDetails.loanAmountSetting.loanAmountMinimun!==null)
-                                                    ?loanProductDetails.loanAmountSetting.loanAmountMinimun.toString():0,
-                                maximumLoanAmount: (loanProductDetails.loanAmountSetting!==undefined && loanProductDetails.loanAmountSetting!==null && loanProductDetails.loanAmountSetting.loanAmountMaximum!==null)
-                                                        ?loanProductDetails.loanAmountSetting.loanAmountMaximum.toString():0,
+                                arearsTolerancePeriodInDaysDefault: loanProductDetails.arrearsSetting && loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysDefault
+                                                                    ? loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysDefault.toString() : null,
+                                arearsTolerancePeriodInDaysMin: loanProductDetails.arrearsSetting && loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMin
+                                                                    ? loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMin.toString() : null,
+                                arearsTolerancePeriodInDaysMax: loanProductDetails.arrearsSetting && loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMax
+                                                                    ? loanProductDetails.arrearsSetting.arearsTolerancePeriodInDaysMax.toString() : null,
+                                arrearsDaysCalculationChosen: loanProductDetails.arrearsSetting && loanProductDetails.arrearsSetting.arrearsDaysCalculatedFrom
+                                                                    ? loanProductDetails.arrearsSetting.arrearsDaysCalculatedFrom.toString() : null,
+                                defaultLoanAmount: loanProductDetails.loanAmountSetting && loanProductDetails.loanAmountSetting.loanAmountDefault
+                                                        ? loanProductDetails.loanAmountSetting.loanAmountDefault.toString() : null,
+                                minimumLoanAmount: loanProductDetails.loanAmountSetting && loanProductDetails.loanAmountSetting.loanAmountMinimun
+                                                    ? loanProductDetails.loanAmountSetting.loanAmountMinimun.toString() : null,
+                                maximumLoanAmount: loanProductDetails.loanAmountSetting && loanProductDetails.loanAmountSetting.loanAmountMaximum
+                                                        ? loanProductDetails.loanAmountSetting.loanAmountMaximum.toString() : null,
                                 methodology: (loanProductDetails.methodology!==undefined && loanProductDetails.methodology!==null)?loanProductDetails.methodology.toString():'',
                                 isActive: (loanProductDetails.isActive!==undefined && loanProductDetails.isActive!==null)?loanProductDetails.isActive:'',
                                 interestPaid:(loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestPaid!==null)
@@ -237,30 +237,30 @@ class EditLoanProduct extends React.Component {
                                                         ?loanProductDetails.loanProductInterestSetting.interestRateTerms:0,
                                 interestBalanceCalculation: (loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestBalanceCalculation!==null)
                                                                 ?loanProductDetails.loanProductInterestSetting.interestBalanceCalculation:0,
-                                interestRateDefault: (loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestRateDefault!==null)
-                                                        ?loanProductDetails.loanProductInterestSetting.interestRateDefault:0,
-                                interestRateMin: (loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestRateMin!==null)
-                                                    ?loanProductDetails.loanProductInterestSetting.interestRateMin:0,
-                                interestRateMax: (loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestRateMax!==null)
-                                                    ?loanProductDetails.loanProductInterestSetting.interestRateMax:0,
-                                repaymentEvery: (loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.repaymentEvery!==null)
-                                                    ?loanProductDetails.repaymentReschedulingModel.repaymentEvery:0,
-                                repaymentPeriod: (loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.repaymentPeriod!==null)
-                                                    ?loanProductDetails.repaymentReschedulingModel.repaymentPeriod:0,
+                                interestRateDefault: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateDefault
+                                                        ? loanProductDetails.loanProductInterestSetting.interestRateDefault : null,
+                                interestRateMin: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateMin
+                                                    ? loanProductDetails.loanProductInterestSetting.interestRateMin : null,
+                                interestRateMax: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateMax
+                                                    ? loanProductDetails.loanProductInterestSetting.interestRateMax : null,
+                                repaymentEvery: loanProductDetails.repaymentReschedulingModel && loanProductDetails.repaymentReschedulingModel.repaymentEvery
+                                                    ? loanProductDetails.repaymentReschedulingModel.repaymentEvery : null,
+                                repaymentPeriod: loanProductDetails.repaymentReschedulingModel && loanProductDetails.repaymentReschedulingModel.repaymentPeriod
+                                                    ? loanProductDetails.repaymentReschedulingModel.repaymentPeriod : null,
                                 interestBalanceCalculationSelected: (loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.interestBalanceCalculation!==null)
                                                                         ?loanProductDetails.repaymentReschedulingModel.interestBalanceCalculation:0,
-                                firstDueDateOffsetConstraintDefault:(loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintDefault!==null)
-                                                                        ?loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintDefault:0,
-                                firstDueDateOffsetConstraintMin:(loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintMin!==null)
-                                                                    ?loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintMin:0,
-                                firstDueDateOffsetConstraintMax:(loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintMax!==null)
-                                                                    ?loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintMax:0,
-                                installmentsDefault:(loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.installmentsDefault!==null)
-                                                        ?loanProductDetails.repaymentReschedulingModel.installmentsDefault:0,
-                                installmentsMin:(loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.installmentsMin!==null)
-                                                    ?loanProductDetails.repaymentReschedulingModel.installmentsMin:0,
-                                installmentsMax:(loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.installmentsMax!==null)
-                                                    ?loanProductDetails.repaymentReschedulingModel.installmentsMax:0,
+                                firstDueDateOffsetConstraintDefault: loanProductDetails.repaymentReschedulingModel && loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintDefault
+                                                                        ? loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintDefault : null,
+                                firstDueDateOffsetConstraintMin: loanProductDetails.repaymentReschedulingModel && loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintMin
+                                                                    ? loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintMin : null,
+                                firstDueDateOffsetConstraintMax: loanProductDetails.repaymentReschedulingModel && loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintMax
+                                                                    ? loanProductDetails.repaymentReschedulingModel.firstDueDateOffsetConstraintMax : null,
+                                installmentsDefault: loanProductDetails.repaymentReschedulingModel && loanProductDetails.repaymentReschedulingModel.installmentsDefault
+                                                        ? loanProductDetails.repaymentReschedulingModel.installmentsDefault : null,
+                                installmentsMin: loanProductDetails.repaymentReschedulingModel && loanProductDetails.repaymentReschedulingModel.installmentsMin
+                                                    ? loanProductDetails.repaymentReschedulingModel.installmentsMin : null,
+                                installmentsMax: loanProductDetails.repaymentReschedulingModel && loanProductDetails.repaymentReschedulingModel.installmentsMax
+                                                    ? loanProductDetails.repaymentReschedulingModel.installmentsMax : null,
                                 collectPrincipalEveryRepayments:(loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.collectPrincipalEveryRepayments!==null)
                                                                     ?loanProductDetails.repaymentReschedulingModel.collectPrincipalEveryRepayments:0,
                             }}
@@ -321,7 +321,7 @@ class EditLoanProduct extends React.Component {
 
                                     methodology: parseInt(values.methodology),
                                     isActive: values.isActive
-                                    
+
                                 }
 
 
@@ -341,7 +341,7 @@ class EditLoanProduct extends React.Component {
                                                 // }, 3000);
                                             }
 
-                                        
+
 
                                         }
                                     )
@@ -358,8 +358,8 @@ class EditLoanProduct extends React.Component {
                                 setFieldTouched,
                                 isValid,
                                 errors, }) => (
-                            <Form 
-                                noValidate 
+                            <Form
+                                noValidate
                                 onSubmit={handleSubmit}
                                 className="form-content card">
                                 <div className="form-heading">
@@ -368,7 +368,7 @@ class EditLoanProduct extends React.Component {
                                 <Form.Row>
                                     <Col>
                                         <Form.Label className="block-level">Product Name</Form.Label>
-                                        <Form.Control 
+                                        <Form.Control
                                             type="text"
                                             onChange={handleChange}
                                             value={values.productName}
@@ -380,7 +380,7 @@ class EditLoanProduct extends React.Component {
                                     </Col>
                                     <Col>
                                         <Form.Label className="block-level">Product Key</Form.Label>
-                                        <Form.Control 
+                                        <Form.Control
                                             type="text"
                                             onChange={handleChange}
                                             value={noWhiteSpaces(values.key)}
@@ -394,10 +394,10 @@ class EditLoanProduct extends React.Component {
                                 <Form.Row>
                                     <Col>
                                         <Form.Label className="block-level">Product Type</Form.Label>
-                                        
+
                                         <Select
                                             options={allProductTypes}
-                                            defaultValue ={{label:productTypeReturned!==null?productTypeReturned.label:null, 
+                                            defaultValue ={{label:productTypeReturned!==null?productTypeReturned.label:null,
                                                 value:productTypeReturned!==null? productTypeReturned.value:null}}
                                             // onChange={(selectedProductType) => {
                                             //     this.setState({ selectedProductType });
@@ -407,10 +407,10 @@ class EditLoanProduct extends React.Component {
                                             onChange={(selected) => setFieldValue('loanProductType', selected.value)}
                                             onBlur={()=> setFieldTouched('loanProductType', true)}
                                             className={errors.loanProductType && touched.loanProductType ? "is-invalid" : null}
-                                            
-                                            
+
+
                                             name="loanProductType"
-                                            
+
                                             required
                                         />
                                         {errors.loanProductType && touched.loanProductType ? (
@@ -420,27 +420,27 @@ class EditLoanProduct extends React.Component {
                                     <Col>
                                     </Col>
                                 </Form.Row>
-                                
+
                                 <Form.Row>
                                     <Col>
-                                    
+
                                         <div className="checkbox-wrap">
-                                            <input type="checkbox" 
-                                                id="isActive" 
+                                            <input type="checkbox"
+                                                id="isActive"
                                                 checked={values.isActive? values.isActive:null}
                                                 name="isActive"
-                                                onChange={handleChange} 
+                                                onChange={handleChange}
                                                 value={values.isActive}  />
                                             <label htmlFor="isActive">Active state</label>
                                         </div>
                                     </Col>
                                     <Col>
-                                        
+
                                     </Col>
                                 </Form.Row>
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                        Loan Product Description 
+                                        Loan Product Description
                                     </Accordion.Toggle>
                                     <Accordion.Collapse eventKey="0">
                                         <div className="each-formsection">
@@ -556,10 +556,10 @@ class EditLoanProduct extends React.Component {
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Arrears Days Calculated From</Form.Label>
-                                        
+
                                                     <Select
                                                         options={arrearsDaysCalculation}
-                                                        defaultValue ={{label:arrearsDaysCalculationReturned!==null?arrearsDaysCalculationReturned.label:null, 
+                                                        defaultValue ={{label:arrearsDaysCalculationReturned!==null?arrearsDaysCalculationReturned.label:null,
                                                             value:arrearsDaysCalculationReturned!==null? arrearsDaysCalculationReturned.value:null}}
                                                         // onChange={(selectedArrearsDaysCalculation) => {
                                                         //     this.setState({ selectedArrearsDaysCalculation });
@@ -569,10 +569,10 @@ class EditLoanProduct extends React.Component {
                                                         onChange={(selected) => setFieldValue('arrearsDaysCalculationChosen', selected.value)}
                                                         onBlur={()=> setFieldTouched('arrearsDaysCalculationChosen', true)}
                                                         className={errors.arrearsDaysCalculationChosen && touched.arrearsDaysCalculationChosen ? "is-invalid" : null}
-                                                        
-                                                        
+
+
                                                         name="arrearsDaysCalculationChosen"
-                                                        
+
                                                         required
                                                     />
                                                     {errors.arrearsDaysCalculationChosen && touched.arrearsDaysCalculationChosen ? (
@@ -610,9 +610,9 @@ class EditLoanProduct extends React.Component {
                                                             <Form.Label className="block-level">Interest Calculation Method</Form.Label>
                                                             <Select
                                                                 options={interestBalanceCalculationOptions}
-                                                                defaultValue ={{label:interestBalanceCalculationReturned!==null?interestBalanceCalculationReturned.label:null, 
+                                                                defaultValue ={{label:interestBalanceCalculationReturned!==null?interestBalanceCalculationReturned.label:null,
                                                                     value:interestBalanceCalculationReturned!==null? interestBalanceCalculationReturned.value:null}}
-                                                                
+
                                                                 onChange={(selected) => setFieldValue('interestBalanceCalculation', selected.value)}
                                                                 onBlur={()=> setFieldTouched('interestBalanceCalculation', true)}
                                                                 className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
@@ -631,7 +631,7 @@ class EditLoanProduct extends React.Component {
 
                                                             <Select
                                                                 options={interestRateTermsOptions}
-                                                                defaultValue ={{label:interestRateTermReturned!==null?interestRateTermReturned.label:null, 
+                                                                defaultValue ={{label:interestRateTermReturned!==null?interestRateTermReturned.label:null,
                                                                     value:interestRateTermReturned!==null? interestRateTermReturned.value:null}}
                                                                 // onChange={(selectedInterestRateTermsOptions) => {
                                                                 //     this.setState({ selectedInterestRateTermsOptions });
@@ -723,7 +723,7 @@ class EditLoanProduct extends React.Component {
 
                                                     <Select
                                                         options={repaymentPeriodOptions}
-                                                        defaultValue ={{label:repaymentPeriodReturned!==null?repaymentPeriodReturned.label:null, 
+                                                        defaultValue ={{label:repaymentPeriodReturned!==null?repaymentPeriodReturned.label:null,
                                                             value:repaymentPeriodReturned!==null? repaymentPeriodReturned.value:null}}
                                                         // onChange={(selectedRepaymentPeriodOptions) => {
                                                         //     this.setState({ selectedRepaymentPeriodOptions });
@@ -749,7 +749,7 @@ class EditLoanProduct extends React.Component {
                                                     <Form.Label className="block-level">Interest Calculation Method</Form.Label>
                                                     <Select
                                                         options={interestBalanceCalculationOptions}
-                                                        defaultValue ={{label:interestBalanceCalculationReturned!==null?interestBalanceCalculationReturned.label:null, 
+                                                        defaultValue ={{label:interestBalanceCalculationReturned!==null?interestBalanceCalculationReturned.label:null,
                                                             value:interestBalanceCalculationReturned!==null? interestBalanceCalculationReturned.value:null}}
                                                         // onChange={(selectedInterestBalanceCalculation) => {
                                                         //     this.setState({ selectedInterestBalanceCalculation });
@@ -864,7 +864,7 @@ class EditLoanProduct extends React.Component {
                                         </div>
                                     </Accordion.Collapse>
                                 </Accordion>
-                                
+
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                         Loan Product Rules
@@ -874,8 +874,8 @@ class EditLoanProduct extends React.Component {
                                             <Form.Group as={Row} className="center-aligned">
                                                 <Form.Label column sm={4} className="block-level">Methodology</Form.Label>
                                                 <Col sm={6}>
-                                                    
-                                                <select id="toshow" 
+
+                                                <select id="toshow"
                                                         name="methodology"
                                                         onChange={handleChange}
                                                         value={values.methodology}
@@ -886,274 +886,304 @@ class EditLoanProduct extends React.Component {
                                                 </select>
                                                 </Col>
                                                 <Col sm={2}>
-                                                    
+
                                                 </Col>
                                             </Form.Group>
 
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Portfolio Control Account</Form.Label>
+                                          {values.methodology !== "0" && (
+                                            <>
+                                              <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Portfolio Control
+                                                  Account</Form.Label>
                                                 <Col sm={6}>
-                                                    
+
+                                                  <Select
+                                                    options={portfolioControlAccounts}
+                                                    defaultValue={{
+                                                      label: portfolioControlAccountReturned !== null ? portfolioControlAccountReturned.label : null,
+                                                      value: portfolioControlAccountReturned !== null ? portfolioControlAccountReturned.value : null
+                                                    }}
+                                                    // onChange={(selectedPortfolioAcct) => {
+                                                    //     this.setState({ selectedPortfolioAcct });
+                                                    //     errors.portfolioControlAccountId = null
+                                                    //     values.portfolioControlAccountId = selectedPortfolioAcct.value
+                                                    // }}
+                                                    onChange={(selected) => setFieldValue('portfolioControlAccountId', selected.value)}
+                                                    onBlur={() => setFieldTouched('portfolioControlAccountId', true)}
+                                                    className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : null}
+
+                                                    noOptionsMessage={() => "No accounts available"}
+                                                    name="portfolioControlAccountId"
+
+
+                                                  />
+                                                </Col>
+                                                <Col sm={2}>
+                                                  <span>Asset</span>
+                                                </Col>
+                                              </Form.Group>
+
+                                              <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Transaction Control
+                                                  Account</Form.Label>
+                                                <Col sm={6}>
+                                                  <Select
+                                                    options={transactionSourceAccount}
+                                                    defaultValue={{
+                                                      label: txtSrcReturned !== null ? txtSrcReturned.label : null,
+                                                      value: txtSrcReturned !== null ? txtSrcReturned.value : null
+                                                    }}
+                                                    // onChange={(selectedTxtSourceAcct) => {
+                                                    //     this.setState({ selectedTxtSourceAcct });
+                                                    //     errors.transactionSourceAccountId = null
+                                                    //     values.transactionSourceAccountId = selectedTxtSourceAcct.value
+                                                    // }}
+                                                    onChange={(selected) => setFieldValue('transactionSourceAccountId', selected.value)}
+                                                    onBlur={() => setFieldTouched('transactionSourceAccountId', true)}
+                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                    noOptionsMessage={() => "No accounts available"}
+
+                                                    name="transactionSourceAccountId"
+
+
+                                                  />
+                                                </Col>
+                                                <Col sm={2}>
+                                                  <span>Asset</span>
+                                                </Col>
+                                              </Form.Group>
+
+                                              <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Write-off Expense
+                                                  Account</Form.Label>
+                                                <Col sm={6}>
+                                                  <Select
+                                                    options={writeOffExpenseAccounts}
+                                                    defaultValue={{
+                                                      label: writeOffExpenseAccountReturned !== null ? writeOffExpenseAccountReturned.label : null,
+                                                      value: writeOffExpenseAccountReturned !== null ? writeOffExpenseAccountReturned.value : null
+                                                    }}
+                                                    // onChange={(selectedWriteOffExpenseAcct) => {
+                                                    //     this.setState({ selectedWriteOffExpenseAcct });
+                                                    //     errors.writeOffExpenseAccountId = null
+                                                    //     values.writeOffExpenseAccountId = selectedWriteOffExpenseAcct.value
+                                                    // }}
+                                                    onChange={(selected) => setFieldValue('writeOffExpenseAccountId', selected.value)}
+                                                    onBlur={() => setFieldTouched('writeOffExpenseAccountId', true)}
+                                                    className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : null}
+                                                    noOptionsMessage={() => "No accounts available"}
+
+                                                    name="writeOffExpenseAccountId"
+
+
+                                                  />
+                                                </Col>
+                                                <Col sm={2}>
+                                                  <span>Expense</span>
+                                                </Col>
+                                              </Form.Group>
+                                              {values.methodology !== "1" &&
+                                              <div>
+                                                <Form.Group as={Row} className="center-aligned">
+                                                  <Form.Label column sm={4} className="block-level">Interest Receivable
+                                                    Account</Form.Label>
+                                                  <Col sm={6}>
                                                     <Select
-                                                        options={portfolioControlAccounts}
-                                                        defaultValue ={{label:portfolioControlAccountReturned!==null?portfolioControlAccountReturned.label:null, 
-                                                            value:portfolioControlAccountReturned!==null? portfolioControlAccountReturned.value:null}}
-                                                        // onChange={(selectedPortfolioAcct) => {
-                                                        //     this.setState({ selectedPortfolioAcct });
-                                                        //     errors.portfolioControlAccountId = null
-                                                        //     values.portfolioControlAccountId = selectedPortfolioAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('portfolioControlAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('portfolioControlAccountId', true)}
-                                                        className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : null}
-                                                        
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        name="portfolioControlAccountId"
-                                                        
-                                                        
+                                                      options={interestReceivableAccounts}
+                                                      defaultValue={{
+                                                        label: interestReceivableAccountReturned !== null ? interestReceivableAccountReturned.label : null,
+                                                        value: interestReceivableAccountReturned !== null ? interestReceivableAccountReturned.value : null
+                                                      }}
+                                                      // onChange={(selectedInterestReceivableAcct) => {
+                                                      //     this.setState({ selectedInterestReceivableAcct });
+                                                      //     errors.interestReceivableAccountId = null
+                                                      //     values.interestReceivableAccountId = selectedInterestReceivableAcct.value
+                                                      // }}
+                                                      onChange={(selected) => setFieldValue('interestReceivableAccountId', selected.value)}
+                                                      onBlur={() => setFieldTouched('interestReceivableAccountId', true)}
+                                                      className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : null}
+                                                      noOptionsMessage={() => "No accounts available"}
+
+                                                      name="interestReceivableAccountId"
+
+
                                                     />
-                                                </Col>
-                                                <Col sm={2}>
+                                                  </Col>
+                                                  <Col sm={2}>
                                                     <span>Asset</span>
-                                                </Col>
-                                            </Form.Group>
+                                                  </Col>
+                                                </Form.Group>
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Transaction Control Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={transactionSourceAccount}
-                                                        defaultValue ={{label:txtSrcReturned!==null?txtSrcReturned.label:null, 
-                                                            value:txtSrcReturned!==null? txtSrcReturned.value:null}}
-                                                        // onChange={(selectedTxtSourceAcct) => {
-                                                        //     this.setState({ selectedTxtSourceAcct });
-                                                        //     errors.transactionSourceAccountId = null
-                                                        //     values.transactionSourceAccountId = selectedTxtSourceAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('transactionSourceAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('transactionSourceAccountId', true)}
-                                                        className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="transactionSourceAccountId"
-                                                        
-                                                        
+                                                <Form.Group as={Row} className="center-aligned">
+                                                  <Form.Label column sm={4} className="block-level">Fee Receivable
+                                                    Account</Form.Label>
+                                                  <Col sm={6}>
+                                                    <Select
+                                                      options={feeReceivableAccounts}
+                                                      defaultValue={{
+                                                        label: feeReceivableAccountReturned !== null ? feeReceivableAccountReturned.label : null,
+                                                        value: feeReceivableAccountReturned !== null ? feeReceivableAccountReturned.value : null
+                                                      }}
+                                                      // onChange={(selectedFeeReceivableAcct) => {
+                                                      //     this.setState({ selectedFeeReceivableAcct });
+                                                      //     errors.feeReceivableAccountId = null
+                                                      //     values.feeReceivableAccountId = selectedFeeReceivableAcct.value
+                                                      // }}
+                                                      onChange={(selected) => setFieldValue('feeReceivableAccountId', selected.value)}
+                                                      onBlur={() => setFieldTouched('feeReceivableAccountId', true)}
+                                                      className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : null}
+                                                      noOptionsMessage={() => "No accounts available"}
+
+                                                      name="feeReceivableAccountId"
+
+
                                                     />
-                                                </Col>
-                                                <Col sm={2}>
+                                                  </Col>
+                                                  <Col sm={2}>
                                                     <span>Asset</span>
-                                                </Col>
-                                            </Form.Group>
+                                                  </Col>
+                                                </Form.Group>
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Write-off Expense Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={writeOffExpenseAccounts}
-                                                        defaultValue ={{label:writeOffExpenseAccountReturned!==null?writeOffExpenseAccountReturned.label:null, 
-                                                            value:writeOffExpenseAccountReturned!==null? writeOffExpenseAccountReturned.value:null}}
-                                                        // onChange={(selectedWriteOffExpenseAcct) => {
-                                                        //     this.setState({ selectedWriteOffExpenseAcct });
-                                                        //     errors.writeOffExpenseAccountId = null
-                                                        //     values.writeOffExpenseAccountId = selectedWriteOffExpenseAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('writeOffExpenseAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('writeOffExpenseAccountId', true)}
-                                                        className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="writeOffExpenseAccountId"
-                                                        
-                                                        
+                                                <Form.Group as={Row} className="center-aligned">
+                                                  <Form.Label column sm={4} className="block-level">Penalty Receivable
+                                                    Account</Form.Label>
+                                                  <Col sm={6}>
+                                                    <Select
+                                                      options={penaltyReceivableAccounts}
+                                                      defaultValue={{
+                                                        label: penaltyReceivableAccountReturned !== null ? penaltyReceivableAccountReturned.label : null,
+                                                        value: penaltyReceivableAccountReturned !== null ? penaltyReceivableAccountReturned.value : null
+                                                      }}
+                                                      // onChange={(selectedPenaltyReceivableAcct) => {
+                                                      //     this.setState({ selectedPenaltyReceivableAcct });
+                                                      //     errors.penaltyReceivableAccountId = null
+                                                      //     values.penaltyReceivableAccountId = selectedPenaltyReceivableAcct.value
+                                                      // }}
+                                                      onChange={(selected) => setFieldValue('penaltyReceivableAccountId', selected.value)}
+                                                      onBlur={() => setFieldTouched('penaltyReceivableAccountId', true)}
+                                                      className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : null}
+                                                      noOptionsMessage={() => "No accounts available"}
+
+                                                      name="penaltyReceivableAccountId"
+
+
                                                     />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Expense</span>
-                                                </Col>
-                                            </Form.Group>
-                                            { values.methodology!=="1" && 
-                                            <div>
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Interest Receivable Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={interestReceivableAccounts}
-                                                        defaultValue ={{label:interestReceivableAccountReturned!==null?interestReceivableAccountReturned.label:null, 
-                                                            value:interestReceivableAccountReturned!==null? interestReceivableAccountReturned.value:null}}
-                                                        // onChange={(selectedInterestReceivableAcct) => {
-                                                        //     this.setState({ selectedInterestReceivableAcct });
-                                                        //     errors.interestReceivableAccountId = null
-                                                        //     values.interestReceivableAccountId = selectedInterestReceivableAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('interestReceivableAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('interestReceivableAccountId', true)}
-                                                        className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="interestReceivableAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
+                                                  </Col>
+                                                  <Col sm={2}>
                                                     <span>Asset</span>
-                                                </Col>
-                                            </Form.Group>
+                                                  </Col>
+                                                </Form.Group>
+                                              </div>
+                                              }
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Fee Receivable Account</Form.Label>
+                                              <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Fee Income
+                                                  Account</Form.Label>
                                                 <Col sm={6}>
-                                                <Select
-                                                        options={feeReceivableAccounts}
-                                                        defaultValue ={{label:feeReceivableAccountReturned!==null?feeReceivableAccountReturned.label:null, 
-                                                            value:feeReceivableAccountReturned!==null? feeReceivableAccountReturned.value:null}}
-                                                        // onChange={(selectedFeeReceivableAcct) => {
-                                                        //     this.setState({ selectedFeeReceivableAcct });
-                                                        //     errors.feeReceivableAccountId = null
-                                                        //     values.feeReceivableAccountId = selectedFeeReceivableAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('feeReceivableAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('feeReceivableAccountId', true)}
-                                                        className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="feeReceivableAccountId"
-                                                        
-                                                        
-                                                    />
+                                                  <Select
+                                                    options={allGlAccounts}
+                                                    defaultValue={{
+                                                      label: feeIncomeAccReturned !== null ? feeIncomeAccReturned.label : null,
+                                                      value: feeIncomeAccReturned !== null ? feeIncomeAccReturned.value : null
+                                                    }}
+                                                    // onChange={(selectedFeeIncomeAcct) => {
+                                                    //     this.setState({ selectedFeeIncomeAcct });
+                                                    //     errors.feeIncomeAccountId = null
+                                                    //     values.feeIncomeAccountId = selectedFeeIncomeAcct.value
+                                                    // }}
+                                                    onChange={(selected) => setFieldValue('feeIncomeAccountId', selected.value)}
+                                                    onBlur={() => setFieldTouched('feeIncomeAccountId', true)}
+                                                    className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                    noOptionsMessage={() => "No accounts available"}
+
+                                                    name="feeIncomeAccountId"
+
+
+                                                  />
                                                 </Col>
                                                 <Col sm={2}>
-                                                    <span>Asset</span>
+                                                  <span>Any GL Account</span>
                                                 </Col>
-                                            </Form.Group>
+                                              </Form.Group>
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Penalty Receivable Account</Form.Label>
+                                              <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Interest Income
+                                                  Account</Form.Label>
                                                 <Col sm={6}>
-                                                <Select
-                                                        options={penaltyReceivableAccounts}
-                                                        defaultValue ={{label:penaltyReceivableAccountReturned!==null?penaltyReceivableAccountReturned.label:null, 
-                                                            value:penaltyReceivableAccountReturned!==null? penaltyReceivableAccountReturned.value:null}}
-                                                        // onChange={(selectedPenaltyReceivableAcct) => {
-                                                        //     this.setState({ selectedPenaltyReceivableAcct });
-                                                        //     errors.penaltyReceivableAccountId = null
-                                                        //     values.penaltyReceivableAccountId = selectedPenaltyReceivableAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('penaltyReceivableAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('penaltyReceivableAccountId', true)}
-                                                        className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="penaltyReceivableAccountId"
-                                                        
-                                                        
-                                                    />
+                                                  <Select
+                                                    options={interestIncomeAccounts}
+                                                    defaultValue={{
+                                                      label: interestIncomeAccountReturned !== null ? interestIncomeAccountReturned.label : null,
+                                                      value: interestIncomeAccountReturned !== null ? interestIncomeAccountReturned.value : null
+                                                    }}
+                                                    // onChange={(selectedInterestIncomeAcct) => {
+                                                    //     this.setState({ selectedInterestIncomeAcct });
+                                                    //     errors.interestIncomeAccountId = null
+                                                    //     values.interestIncomeAccountId = selectedInterestIncomeAcct.value
+                                                    // }}
+                                                    onChange={(selected) => setFieldValue('interestIncomeAccountId', selected.value)}
+                                                    onBlur={() => setFieldTouched('interestIncomeAccountId', true)}
+                                                    className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : null}
+                                                    noOptionsMessage={() => "No accounts available"}
+
+                                                    name="interestIncomeAccountId"
+
+
+                                                  />
                                                 </Col>
                                                 <Col sm={2}>
-                                                    <span>Asset</span>
+                                                  <span>Income</span>
                                                 </Col>
-                                            </Form.Group>
-                                            </div>
-                                            }
+                                              </Form.Group>
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Fee Income Account</Form.Label>
+                                              <Form.Group as={Row} className="center-aligned">
+                                                <Form.Label column sm={4} className="block-level">Penalty Income
+                                                  Account</Form.Label>
                                                 <Col sm={6}>
-                                                <Select
-                                                        options={allGlAccounts}
-                                                        defaultValue ={{label:feeIncomeAccReturned!==null?feeIncomeAccReturned.label:null, 
-                                                            value:feeIncomeAccReturned!==null? feeIncomeAccReturned.value:null}}
-                                                        // onChange={(selectedFeeIncomeAcct) => {
-                                                        //     this.setState({ selectedFeeIncomeAcct });
-                                                        //     errors.feeIncomeAccountId = null
-                                                        //     values.feeIncomeAccountId = selectedFeeIncomeAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('feeIncomeAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('feeIncomeAccountId', true)}
-                                                        className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="feeIncomeAccountId"
-                                                        
-                                                        
-                                                    />
+                                                  <Select
+                                                    options={penaltyIncomeAccounts}
+                                                    defaultValue={{
+                                                      label: penaltyIncomeAccountReturned !== null ? penaltyIncomeAccountReturned.label : null,
+                                                      value: penaltyIncomeAccountReturned !== null ? penaltyIncomeAccountReturned.value : null
+                                                    }}
+                                                    // onChange={(selectedPenaltyIncomeAcct) => {
+                                                    //     this.setState({ selectedPenaltyIncomeAcct });
+                                                    //     errors.penaltyIncomeAccountId = null
+                                                    //     values.penaltyIncomeAccountId = selectedPenaltyIncomeAcct.value
+                                                    // }}
+                                                    onChange={(selected) => setFieldValue('penaltyIncomeAccountId', selected.value)}
+                                                    onBlur={() => setFieldTouched('penaltyIncomeAccountId', true)}
+                                                    className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : null}
+                                                    noOptionsMessage={() => "No accounts available"}
+
+                                                    name="penaltyIncomeAccountId"
+
+
+                                                  />
                                                 </Col>
                                                 <Col sm={2}>
-                                                    <span>Any GL Account</span>
+                                                  <span>Income</span>
                                                 </Col>
-                                            </Form.Group>
+                                              </Form.Group>
+                                            </>
+                                          )}
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Interest Income Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={interestIncomeAccounts}
-                                                        defaultValue ={{label:interestIncomeAccountReturned!==null?interestIncomeAccountReturned.label:null, 
-                                                            value:interestIncomeAccountReturned!==null? interestIncomeAccountReturned.value:null}}
-                                                        // onChange={(selectedInterestIncomeAcct) => {
-                                                        //     this.setState({ selectedInterestIncomeAcct });
-                                                        //     errors.interestIncomeAccountId = null
-                                                        //     values.interestIncomeAccountId = selectedInterestIncomeAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('interestIncomeAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('interestIncomeAccountId', true)}
-                                                        className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="interestIncomeAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Income</span>
-                                                </Col>
-                                            </Form.Group>
 
-                                            <Form.Group as={Row} className="center-aligned">
-                                                <Form.Label column sm={4} className="block-level">Penalty Income Account</Form.Label>
-                                                <Col sm={6}>
-                                                <Select
-                                                        options={penaltyIncomeAccounts}
-                                                        defaultValue ={{label:penaltyIncomeAccountReturned!==null?penaltyIncomeAccountReturned.label:null, 
-                                                            value:penaltyIncomeAccountReturned!==null? penaltyIncomeAccountReturned.value:null}}
-                                                        // onChange={(selectedPenaltyIncomeAcct) => {
-                                                        //     this.setState({ selectedPenaltyIncomeAcct });
-                                                        //     errors.penaltyIncomeAccountId = null
-                                                        //     values.penaltyIncomeAccountId = selectedPenaltyIncomeAcct.value
-                                                        // }}
-                                                        onChange={(selected) => setFieldValue('penaltyIncomeAccountId', selected.value)}
-                                                        onBlur={()=> setFieldTouched('penaltyIncomeAccountId', true)}
-                                                        className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : null}
-                                                        noOptionsMessage ={() => "No accounts available"}
-                                                        
-                                                        name="penaltyIncomeAccountId"
-                                                        
-                                                        
-                                                    />
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span>Income</span>
-                                                </Col>
-                                            </Form.Group>
-                                        
-                                           
-                                            
                                         </div>
                                     </Accordion.Collapse>
                                 </Accordion>
 
-                            
+
 
 
 
 
 
                                 <div className="footer-with-cta toleft">
-                                
+
                                     {/* <NavLink to={'/administration/products'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
-                                    <Button variant="light" 
+                                    <Button variant="light"
                                         className="btn btn-secondary grayed-out"
                                         onClick={()=>this.props.history.goBack()}
                                 >
@@ -1164,26 +1194,26 @@ class EditLoanProduct extends React.Component {
                                         {updateLoanProductRequest.is_request_processing?"Please wait...": "Save Product"}
                                     </Button>
                                 </div>
-                                {updateLoanProductRequest.request_status === productsConstants.EDIT_A_LOAN_PRODUCT_SUCCESS && 
+                                {updateLoanProductRequest.request_status === productsConstants.EDIT_A_LOAN_PRODUCT_SUCCESS &&
                                     <Alert variant="success">
                                         {updateLoanProductRequest.request_data.response.data.message}
                                     </Alert>
                                 }
-                                {updateLoanProductRequest.request_status === productsConstants.EDIT_A_LOAN_PRODUCT_FAILURE && 
+                                {updateLoanProductRequest.request_status === productsConstants.EDIT_A_LOAN_PRODUCT_FAILURE &&
                                     <Alert variant="danger">
                                         {updateLoanProductRequest.request_data.error}
                                     </Alert>
                                 }
                             </Form>
-                        
-                        
+
+
                         )}
                         </Formik>
-                        
+
                     )
                 }else{
                     return(
-                        <div className="loading-content card"> 
+                        <div className="loading-content card">
                             <div>No GL Account found</div>
                         </div>
                     )
@@ -1193,7 +1223,7 @@ class EditLoanProduct extends React.Component {
 
             if (getAllGLAccountsRequest.request_status === accountingConstants.GET_ALL_GLACCOUNTS_FAILURE){
                 return (
-                    <div className="loading-content card"> 
+                    <div className="loading-content card">
                         <div>{getAllGLAccountsRequest.request_data.error}</div>
                     </div>
                 )
@@ -1201,16 +1231,16 @@ class EditLoanProduct extends React.Component {
 
             if (getSingleLoanProductRequest.request_status === productsConstants.GET_A_LOAN_PRODUCT_FAILURE){
                 return (
-                    <div className="loading-content card"> 
+                    <div className="loading-content card">
                         <div>{getSingleLoanProductRequest.request_data.error}</div>
                     </div>
                 )
             }
-        
+
     }
 
     render() {
-        
+
         return (
             <Fragment>
                 <InnerPageContainer {...this.props}>
@@ -1218,7 +1248,7 @@ class EditLoanProduct extends React.Component {
                         <div className="module-content">
                             <div className="content-container">
                                 <div className="row">
-                                    
+
                                     <div className="col-sm-12">
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
