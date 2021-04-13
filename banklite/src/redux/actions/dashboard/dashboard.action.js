@@ -17,7 +17,8 @@ export const dashboardActions = {
     closeUndoCloseToTill,
     fetchTillTransactions,
     fetchLoggedonTills,
-    fetchAllTills
+    fetchAllTills,
+    fetchManadate
 }
 
 
@@ -178,6 +179,55 @@ function searchForCustomer(params) {
     function success(response) { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_SUCCESS, response } }
     function failure(error) { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_FAILURE, error } }
     function clear() { return { type: dashboardConstants.SEARCH_FOR_CUSTOMER_RESET, clear_data:""} }
+
+}
+
+function fetchManadate(params) {
+    if(params!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(routes.HIT_CLIENTS+`/${params}`, "GET", null);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    // dispatch(success(response));
+                    let consume2 = ApiService.request(routes.HIT_CLIENTS+`/fetchmandate/${params}`, "GET", null);
+                    dispatch(request(consume2));
+                    return consume2
+                        .then(response2 => {
+                            let consume3 = ApiService.request(routes.HIT_CLIENTS+`/passport/${params}`, "GET", null);
+                            dispatch(request(consume3));
+                            return consume3
+                                .then(response3 => {
+                                    dispatch(success(response,response2,response3));
+                                }).catch(error => {
+
+                                    dispatch(failure(handleRequestErrors(error)));
+                                });
+                        }).catch(error => {
+
+                            dispatch(failure(handleRequestErrors(error)));
+                        });
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+
+
+    function request(user) { return { type: dashboardConstants.FETCH_MANDATE_PENDING, user } }
+    function success(response,response2,response3) { return { type: dashboardConstants.FETCH_MANDATE_SUCCESS, response,response2,response3 } }
+    function failure(error) { return { type: dashboardConstants.FETCH_MANDATE_FAILURE, error } }
+    function clear() { return { type: dashboardConstants.FETCH_MANDATE_RESET, clear_data:""} }
 
 }
 
@@ -385,9 +435,22 @@ function fetchLoggedonTills(params) {
             dispatch(request(consume));
             return consume
                 .then(response => {
-                    dispatch(success(response));
+                    // dispatch(success(response));
+                    if(response.data.result.length>=1){
+                        let consume2 = ApiService.request(`${routes.TELLER_MANAGEMENT}/transactions/${response.data.result[0].tillId}`, "GET", null);
+                        dispatch(request(consume2));
+                        return consume2
+                            .then(response2 => {
+                                dispatch(success(response, response2));
+                            }).catch(error => {
+                                dispatch(success(response, null));
+                            });
+                    }
+                    else{
+                        dispatch(success(response, null));
+                    }
                 }).catch(error => {
-
+                    
                     dispatch(failure(handleRequestErrors(error)));
                 });
 
@@ -403,7 +466,7 @@ function fetchLoggedonTills(params) {
 
 
     function request(user) { return { type: dashboardConstants.GET_LOGGEDON_TILLS_PENDING, user } }
-    function success(response) { return { type: dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS, response } }
+    function success(response, response2) { return { type: dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS, response, response2 } }
     function failure(error) { return { type: dashboardConstants.GET_LOGGEDON_TILLS_FAILURE, error } }
     function clear() { return { type: dashboardConstants.GET_LOGGEDON_TILLS_RESET, clear_data:""} }
 
