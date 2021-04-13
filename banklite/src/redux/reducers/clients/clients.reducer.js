@@ -431,3 +431,67 @@ export function getAClientTasksReducer(state=[], action) {
             return { ...state }
     }
 }
+
+export function addAClientPassportReducer(state=[], action) {
+    switch (action.type) {
+        case clientsConstants.ADD_A_CLIENT_PASSPORT_PENDING:
+            return {
+                request_status: clientsConstants.ADD_A_CLIENT_PASSPORT_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case clientsConstants.ADD_A_CLIENT_PASSPORT_SUCCESS:
+            return {
+                request_status: clientsConstants.ADD_A_CLIENT_PASSPORT_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case clientsConstants.ADD_A_CLIENT_PASSPORT_FAILURE:
+            return {
+                request_status: clientsConstants.ADD_A_CLIENT_PASSPORT_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case clientsConstants.ADD_A_CLIENT_PASSPORT_RESET:
+            return {
+                request_status: clientsConstants.ADD_A_CLIENT_PASSPORT_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function addAClientSignatureReducer(state=[], action) {
+    switch (action.type) {
+        case clientsConstants.ADD_A_CLIENT_SIGNATURE_PENDING:
+            return {
+                request_status: clientsConstants.ADD_A_CLIENT_SIGNATURE_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case clientsConstants.ADD_A_CLIENT_SIGNATURE_SUCCESS:
+            return {
+                request_status: clientsConstants.ADD_A_CLIENT_SIGNATURE_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case clientsConstants.ADD_A_CLIENT_SIGNATURE_FAILURE:
+            return {
+                request_status: clientsConstants.ADD_A_CLIENT_SIGNATURE_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case clientsConstants.ADD_A_CLIENT_SIGNATURE_RESET:
+            return {
+                request_status: clientsConstants.ADD_A_CLIENT_SIGNATURE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}

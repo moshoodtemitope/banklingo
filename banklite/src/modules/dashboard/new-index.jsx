@@ -11,13 +11,14 @@ import AddIco from '../../assets/img/addnew.svg';
 import InfoIco from '../../assets/img/info.svg';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import  ActivitiesBox from '../../shared/elements/activities'
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
-
+import PictureIco from '../../assets/img/picture.svg';
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 
@@ -32,14 +33,16 @@ class DashboardLanding extends React.Component {
         super(props);
         this.state={
             user:'',
-            PageSize: 20,
+            PageSize: 5,
             CurrentPage: 1,
             defaultOptions:null,
             selectedOption:null,
             selectedCustomer:"",
             showNewTill:false,
             addCashToTill:false,
-            selectedTill: ""
+            selectedTill: "",
+            selectedTillData: false,
+            preloadedTillData: false
         }
 
         
@@ -52,7 +55,15 @@ class DashboardLanding extends React.Component {
     loadInitialData = () => {
         this.getDashboardData();
         this.getDashboardActivities();
-        this.getLoggedTills();
+        this.getLoggedTills()
+                .then(()=>{
+                    if(this.props.fetchLoggedonTillsReducer.request_status===dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS){
+                        let allLoggedOnTills = this.props.fetchLoggedonTillsReducer.request_data.response.data.result;
+                        if(allLoggedOnTills.length>=1){
+                            this.setState({selectedTillData:allLoggedOnTills[0], preloadedTillData:true, selectedTill:allLoggedOnTills[0].tillId })
+                        }
+                    }
+                })
         this.fetchAllTills();
     }
 
@@ -64,12 +75,12 @@ class DashboardLanding extends React.Component {
         dispatch(dashboardActions.getDashboardData());
     }
 
-    getLoggedTills = () => {
+    getLoggedTills = async() => {
         const { dispatch } = this.props;
         
        
         dispatch(dashboardActions.postATransaction("CLEAR"));
-        dispatch(dashboardActions.fetchLoggedonTills());
+        await dispatch(dashboardActions.fetchLoggedonTills());
     }
 
     fetchAllTills = () => {
@@ -316,8 +327,7 @@ class DashboardLanding extends React.Component {
     }
 
     showViewCustomer = (customerToView)=> {
-        
-        
+        console.log("mandate nfo", this.state.mandateInfo)        
         this.setState({ closeViewCustomer: true, customerToView })
     }
 
@@ -1108,7 +1118,11 @@ class DashboardLanding extends React.Component {
     }
 
     renderViewCustomerWrap = (customerToView )=>{
-        
+        let {mandateInfo} = this.state,
+            customerDetails = mandateInfo.response.data,
+            customerBvnPassport = mandateInfo.response3.data,
+            manadateData = mandateInfo.response2.data;
+
                 
         return(
             <div className="slidein-wrap">
@@ -1116,7 +1130,7 @@ class DashboardLanding extends React.Component {
                 <div className="slidein-form" ref={this.setWrapperRef}>
                     <div className="slide-in-heading">
                         
-                            <h3>{customerToView.clientName}</h3> 
+                            <h3>Customer Information</h3> 
                         
                         
                         
@@ -1124,9 +1138,66 @@ class DashboardLanding extends React.Component {
                     </div>
                     
                     <div className="formdetails">
+                        <div className="mandate-imgs">
+                            <div className="each-mandate">
+                                {manadateData.isPassportAvailable &&
+                                    <img src={manadateData.passport} alt="" />
+                                }
+                                {!manadateData.isPassportAvailable &&
+                                    <img className="no-mandate" src={PictureIco} alt="" />
+                                }
+                                <div className="mandate-title">Customer Photo</div>
+                                {/* <Button
+                                    variant="success btn-sm"
+                                    onClick={this.displayAddPhoto}
+                                >
+                                    {!manadateData.isPassportAvailable ? "Upload Photo" : "Update Photo"}
+
+                                </Button> */}
+                            </div>
+                            <div className="each-mandate">
+                                {manadateData.isSignatureAvailable &&
+                                    <img src={manadateData.signature} alt="" />
+                                }
+                                {!manadateData.isSignatureAvailable &&
+                                    <img className="no-mandate" src={PictureIco} alt="" />
+                                }
+                                <div className="mandate-title">Customer Signature</div>
+                                {/* <Button
+                                    variant="success btn-sm"
+                                    onClick={this.displayAddSignature}
+                                >
+                                    {!manadateData.isSignatureAvailable ? "Upload Signature" : "Update Signature"}
+                                </Button> */}
+                            </div>
+                        </div>
+                        <div className="each-detail">
+                            <div className="detail-title">First name</div>
+                            <div className="detail-value">{customerDetails.firstName}</div>
+                        </div>
+                        <div className="each-detail">
+                            <div className="detail-title">Last name</div>
+                            <div className="detail-value">{customerDetails.lastName}</div>
+                        </div>
                         <div className="each-detail">
                             <div className="detail-title">Account Number</div>
-                            <div className="detail-value">{customerToView.clientCode}</div>
+                            <div className="detail-value">{customerDetails.clientCode}</div>
+                        </div>
+                        <div className="each-detail">
+                            <div className="detail-title">Account Balance</div>
+                            <div className="detail-value">{numberWithCommas(customerDetails.totalBalance,true)}</div>
+                        </div>
+                        <div className="each-detail">
+                            <div className="detail-title">Date Registered</div>
+                            <div className="detail-value">{customerDetails.createdDate}</div>
+                        </div>
+                        <div className="each-detail">
+                            <div className="detail-title">Phone number</div>
+                            <div className="detail-value">{customerDetails.contact.contactMobile}</div>
+                        </div>
+                        <div className="each-detail">
+                            <div className="detail-title">BVN</div>
+                            <div className="detail-value">{customerDetails.bvn}</div>
                         </div>
                         {/* <div className="each-detail">
                             <div className="detail-title">Account Status</div>
@@ -1339,9 +1410,11 @@ class DashboardLanding extends React.Component {
                         <h4>Indicators</h4>
                     </div>
                     <div className="each-card-content">
-                        <Alert variant="danger">
-                            {this.props.getDashboardStatsRequest.request_data.error}
-                        </Alert>
+                        {(this.props.getDashboardStatsRequest && this.props.getDashboardStatsRequest.request_data) &&
+                            <Alert variant="danger">
+                                {this.props.getDashboardStatsRequest.request_data.error}
+                            </Alert>
+                        }
                     </div>
                 </div>
             )
@@ -1538,11 +1611,22 @@ class DashboardLanding extends React.Component {
                     }
                 }
             )
+        this.fetchMandateOfSelectedCustomer(selectedClientEncodedKey)
+                .then(()=>{
+                    if(this.props.fetchManadateReducer.request_status === dashboardConstants.FETCH_MANDATE_SUCCESS){
+                        this.setState({showMandateLink: true, mandateInfo:this.props.fetchManadateReducer.request_data})
+                    }
+                })
     }
 
     getAccountsOfSelectedCustomer = async (selectedClientEncodedKey)=>{
         const {dispatch} = this.props;
       return  await dispatch(depositActions.searchForAccountsWithCustomerKey(selectedClientEncodedKey));
+    }
+
+    fetchMandateOfSelectedCustomer = async (selectedClientEncodedKey)=>{
+        const {dispatch} = this.props;
+      return  await dispatch(dashboardActions.fetchManadate(selectedClientEncodedKey));
     }
 
     fetchTillTransactions = async (tillId)=>{
@@ -1555,7 +1639,7 @@ class DashboardLanding extends React.Component {
     handleSelectedCustomer =(inputValue)=>{
         
         
-        console.log("customer is", inputValue);
+        // console.log("customer is", inputValue);
         this.loadCustomerAccounts(inputValue.clientEncodedKey);
         this.setState({
             selectedCustomer: inputValue,
@@ -1582,173 +1666,274 @@ class DashboardLanding extends React.Component {
 
     renderTillTransactions = ()=>{
         let fetchTillTransactionsRequest =  this.props.fetchTillTransactionsReducer
-        if(fetchTillTransactionsRequest.request_status ===dashboardConstants.GET_TILL_TRANSACTIONS_PENDING){
-            return (
-                <div className="tellering-section">
-                    <div className="txtn-logs">
-                        <div className="each-card mt-20">
-                            <div className="each-card-heading">
-                                <h4>Transaction Log</h4>
-                            </div>
-                            
-                            <div className="log-info">
+
+        if(this.state.selectedTillData && !this.state.preloadedTillData){
+             console.log("heere");
+            if(fetchTillTransactionsRequest.request_status ===dashboardConstants.GET_TILL_TRANSACTIONS_PENDING){
+                return (
+                    <div className="tellering-section">
+                        <div className="txtn-logs">
+                            <div className="each-card mt-20">
+                                <div className="each-card-heading">
+                                    <h4>Transaction Log</h4>
+                                </div>
                                 
-                                <div className="loading-text">Please wait...</div>
-                            
+                                <div className="log-info">
+                                    
+                                    <div className="loading-text">Please wait...</div>
+                                
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )
-        }
-
-        if(fetchTillTransactionsRequest.request_status ===dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS){
-            let fetchTillTransactionsData = fetchTillTransactionsRequest.request_data.response.data;
-            return (
-                <div className="tellering-section">
-                    <div className="txtn-logs">
-                        <div className="each-card mt-20">
-                            <div className="each-card-heading">
-                                <h4>Transaction Log</h4>
-                            </div>
-                            <div className="each-card-heading for-logs">
-                                <table className="table txtn-log">
-                                    <thead>
-                                        <tr>
-                                            <th>Time</th>
-                                            <th>User</th>
-                                            <th>Transaction</th>
-                                            <th>ID</th>
-                                            <th>Amount</th>
-                                            <th>Action</th>
-                                            {/* <th></th> */}
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <div className="log-info">
-                                <table className="table txtn-log">
-    
-                                    <tbody>
-                                        {
-                                            fetchTillTransactionsData.result.map((eachData, index) => {
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>{eachData.dateCreated}</td>
-                                                        <td>{eachData.userName}</td>
-                                                        <td>{eachData.typeDescription}</td>
-                                                        <td>{eachData.tillId}</td>
-                                                        <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
-                                                        <td>
-                                                            <div className="actions-drop">
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="actionDrop"
-
-                                                                    className="customone"
-                                                                >
-                                                                    {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
-
-                                                                    <Dropdown.Item eventKey="2"
-                                                                        onClick={()=>{
-                                                                            this.showViewTill(eachData.tillId, this.state.selectedTillData)
-                                                                        }}
-                                                                    > <span>View Till</span> </Dropdown.Item>
+                )
+            }
 
 
-                                                                </DropdownButton>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
-                                        }
-                                        
-                                        
-                                        {/* <tr>
-                                            <td>15-03-2021 18:14:23</td>
-                                            <td>11090282022</td>
-                                            <td>Deposit</td>
-                                            <td>9698494</td>
-                                            <td>5,000.00</td>
-                                            <td>
-                                                <div className="actions-drop">
-                                                    <DropdownButton
-                                                        size="sm"
-                                                        title="Actions"
-                                                        key="actionDrop"
-    
-                                                        className="customone"
-                                                    >
-                                                        
-    
-                                                        <Dropdown.Item eventKey="2"> <span>View Till</span> </Dropdown.Item>
-    
-    
-                                                    </DropdownButton>
-                                                </div>
-                                            </td>
-                                        </tr> */}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )
-        }
-
-        if(fetchTillTransactionsRequest.request_status ===dashboardConstants.GET_TILL_TRANSACTIONS_FAILURE){
-            return(
-                <div className="tellering-section">
-                    <div className="txtn-logs">
-                        <div className="each-card mt-20">
-                            <div className="each-card-heading">
-                                <h4>Transaction Log</h4>
-                            </div>
-                            <div className="each-card-heading for-logs">
-                                <table className="table txtn-log">
-                                    <thead>
-                                        <tr>
-                                            <th>Time</th>
-                                            <th>Account</th>
-                                            <th>Transaction</th>
-                                            <th>ID</th>
-                                            <th>Amount</th>
-                                            <th>Action</th>
-                                            {/* <th></th> */}
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                               
-                                            </td>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <div className="log-info">
-                                <table className="table txtn-log">
-    
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <Alert variant="danger">
-                                                    {fetchTillTransactionsRequest.request_data.error}
-                                                </Alert></td>
-                                        </tr>
-                                        
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            )
-        }
+            if(fetchTillTransactionsRequest.request_status ===dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS){
+                let fetchTillTransactionsData = fetchTillTransactionsRequest.request_data.response.data;
+                return (
+                    <div className="tellering-section">
+                        <div className="txtn-logs">
+                            <div className="each-card mt-20">
+                                <div className="each-card-heading">
+                                    <h4>Transaction Log</h4>
+                                </div>
+                                <div className="each-card-heading for-logs">
+                                    <table className="table txtn-log">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>User</th>
+                                                <th>Transaction</th>
+                                                <th>ID</th>
+                                                <th>Amount</th>
+                                                <th>Action</th>
+                                                {/* <th></th> */}
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div className="log-info">
+                                    <table className="table txtn-log">
         
+                                        <tbody>
+                                            {
+                                                fetchTillTransactionsData.result.map((eachData, index) => {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{eachData.dateCreated}</td>
+                                                            <td>{eachData.userName}</td>
+                                                            <td>{eachData.typeDescription}</td>
+                                                            <td>{eachData.tillId}</td>
+                                                            <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
+                                                            <td>
+                                                                <div className="actions-drop">
+                                                                    <DropdownButton
+                                                                        size="sm"
+                                                                        title="Actions"
+                                                                        key="actionDrop"
+
+                                                                        className="customone"
+                                                                    >
+                                                                        {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+
+                                                                        <Dropdown.Item eventKey="2"
+                                                                            onClick={()=>{
+                                                                                this.showViewTill(eachData.tillId, this.state.selectedTillData)
+                                                                            }}
+                                                                        > <span>View Till</span> </Dropdown.Item>
+
+
+                                                                    </DropdownButton>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                            
+                                            
+                                            {/* <tr>
+                                                <td>15-03-2021 18:14:23</td>
+                                                <td>11090282022</td>
+                                                <td>Deposit</td>
+                                                <td>9698494</td>
+                                                <td>5,000.00</td>
+                                                <td>
+                                                    <div className="actions-drop">
+                                                        <DropdownButton
+                                                            size="sm"
+                                                            title="Actions"
+                                                            key="actionDrop"
+        
+                                                            className="customone"
+                                                        >
+                                                            
+        
+                                                            <Dropdown.Item eventKey="2"> <span>View Till</span> </Dropdown.Item>
+        
+        
+                                                        </DropdownButton>
+                                                    </div>
+                                                </td>
+                                            </tr> */}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            if(fetchTillTransactionsRequest.request_status ===dashboardConstants.GET_TILL_TRANSACTIONS_FAILURE){
+                return(
+                    <div className="tellering-section">
+                        <div className="txtn-logs">
+                            <div className="each-card mt-20">
+                                <div className="each-card-heading">
+                                    <h4>Transaction Log</h4>
+                                </div>
+                                <div className="each-card-heading for-logs">
+                                    <table className="table txtn-log">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>Account</th>
+                                                <th>Transaction</th>
+                                                <th>ID</th>
+                                                <th>Amount</th>
+                                                <th>Action</th>
+                                                {/* <th></th> */}
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div className="log-info">
+                                    <table className="table txtn-log">
+        
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <Alert variant="danger">
+                                                        {fetchTillTransactionsRequest.request_data.error}
+                                                    </Alert></td>
+                                            </tr>
+                                            
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                )
+            }
+        }
+
+        if(this.state.preloadedTillData && (this.props.fetchLoggedonTillsReducer.request_status===dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS && this.props.fetchLoggedonTillsReducer.request_data.response2)){
+            let fetchTillTransactionsData = this.props.fetchLoggedonTillsReducer.request_data.response2.data;
+                return (
+                    <div className="tellering-section">
+                        <div className="txtn-logs">
+                            <div className="each-card mt-20">
+                                <div className="each-card-heading">
+                                    <h4>Transaction Log</h4>
+                                </div>
+                                <div className="each-card-heading for-logs">
+                                    <table className="table txtn-log">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>User</th>
+                                                <th>Transaction</th>
+                                                <th>ID</th>
+                                                <th>Amount</th>
+                                                <th>Action</th>
+                                                {/* <th></th> */}
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div className="log-info">
+                                    <table className="table txtn-log">
+        
+                                        <tbody>
+                                            {
+                                                fetchTillTransactionsData.result.map((eachData, index) => {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{eachData.dateCreated}</td>
+                                                            <td>{eachData.userName}</td>
+                                                            <td>{eachData.typeDescription}</td>
+                                                            <td>{eachData.tillId}</td>
+                                                            <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
+                                                            <td>
+                                                                <div className="actions-drop">
+                                                                    <DropdownButton
+                                                                        size="sm"
+                                                                        title="Actions"
+                                                                        key="actionDrop"
+
+                                                                        className="customone"
+                                                                    >
+                                                                        {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
+
+                                                                        <Dropdown.Item eventKey="2"
+                                                                            onClick={()=>{
+                                                                                this.showViewTill(eachData.tillId, this.state.selectedTillData)
+                                                                            }}
+                                                                        > <span>View Till</span> </Dropdown.Item>
+
+
+                                                                    </DropdownButton>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                            
+                                            
+                                            {/* <tr>
+                                                <td>15-03-2021 18:14:23</td>
+                                                <td>11090282022</td>
+                                                <td>Deposit</td>
+                                                <td>9698494</td>
+                                                <td>5,000.00</td>
+                                                <td>
+                                                    <div className="actions-drop">
+                                                        <DropdownButton
+                                                            size="sm"
+                                                            title="Actions"
+                                                            key="actionDrop"
+        
+                                                            className="customone"
+                                                        >
+                                                            
+        
+                                                            <Dropdown.Item eventKey="2"> <span>View Till</span> </Dropdown.Item>
+        
+        
+                                                        </DropdownButton>
+                                                    </div>
+                                                </td>
+                                            </tr> */}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+        }
     }
 
     renderPostTransaction = ()=>{
@@ -1758,7 +1943,7 @@ class DashboardLanding extends React.Component {
                 validationSchema = Yup.object().shape({
                     // tillId: Yup.string()
                     //     .required('Required'),
-                    accountNumber: Yup.string()
+                    chosenAccountNum: Yup.string()
                         .required('Required'),
                     txtnType: Yup.string()
                         .required('Required'),
@@ -1803,7 +1988,7 @@ class DashboardLanding extends React.Component {
                     <Formik
                         initialValues={{
                             clientEncodedKey: '',
-                            accountNumber: '',
+                            chosenAccountNum: '',
                             txtnType: '',
                             amount: '',
                         }}
@@ -1886,13 +2071,14 @@ class DashboardLanding extends React.Component {
                                                     defaultOptions={defaultOptions}
                                                     name="clientEncodedKey"
                                                     placeholder="Search customer name"
-                                                    className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
-                                                    // onChange={(e)=> {
-                                                    //     setFieldValue("clientEncodedKey", )
-                                                    //     this.handleSelectedCustomer(e.target.value)
+                                                    className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
+                                                    onChange={(e)=> {
+                                                        
+                                                        setFieldValue("clientEncodedKey", e.clientEncodedKey)
+                                                        this.handleSelectedCustomer(e)
 
-                                                    // }}
-                                                    onChange={this.handleSelectedCustomer}
+                                                    }}
+                                                    // onChange={this.handleSelectedCustomer}
                                                     // onChange={(selectedCustomer) => {
                                                     //     this.setState({ selectedCustomer });
                                                     //     errors.clientEncodedKey = null
@@ -1907,7 +2093,7 @@ class DashboardLanding extends React.Component {
                                                     <span className="invalid-feedback">{errors.clientEncodedKey}</span>
                                                 ) : null}
                                             </div>
-                                            {this.state.selectedCustomer && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Customer</span>}
+                                            {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Customer</span>}
                                         </div>
                                     </div>
                                 </Form.Group>
@@ -1933,7 +2119,7 @@ class DashboardLanding extends React.Component {
                                                     this.getSearchForCustomerOptionValue(selectedOption)
                                                     // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
 
-                                                    console.log("customer is", selectedOption);
+                                                    
                                                     this.setState({
                                                         selectedOption,
                                                         selectedCustomer: selectedOption,
@@ -2027,7 +2213,7 @@ class DashboardLanding extends React.Component {
                                         </Button>
                                         <Button variant="secondary"
                                             disabled={postATransactionRequest.is_request_processing}
-                                            onClick={this.handleClose}>Clear</Button>
+                                            onClick={()=>resetForm()}>Clear</Button>
                                     </div>
                                 </div>
                                 {postATransactionRequest.request_status === dashboardConstants.POST_TRANSACTION_SUCCESS &&
@@ -2052,7 +2238,7 @@ class DashboardLanding extends React.Component {
     renderSelectedTillDetails = ()=>{
         return(
             <div>
-                {(this.state.selectedTillData && this.props.fetchTillTransactionsReducer.request_status === dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS) &&
+                {(this.state.selectedTillData  && !this.state.preloadedTillData && this.props.fetchTillTransactionsReducer.request_status === dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS) &&
                     <div className="tellering-section">
                         <div className="till-details">
                             <div className="each-card mt-20">
@@ -2085,7 +2271,47 @@ class DashboardLanding extends React.Component {
                         </div>
                     </div>
                 }
-                {this.state.selectedTillData && this.renderTillTransactions()}
+                {(this.state.selectedTillData  && this.state.preloadedTillData) &&
+                    <div className="tellering-section">
+                        <div className="till-details">
+                            <div className="each-card mt-20">
+                                <div className="each-card-heading">
+                                    <h4>Till Details</h4>
+                                </div>
+                                <div className="each-card-content">
+                                    <div className="all-indicators">
+                                        <div className="each-indicator">
+                                            <div>
+                                                <h4>{this.state.selectedTillData.tillId}</h4>
+                                                <div className="indicator-txt">Till ID</div>
+                                            </div>
+                                        </div>
+                                        <div className="each-indicator">
+                                            <div>
+                                                <h4>{this.props.fetchLoggedonTillsReducer.request_data.response2.data.result.length}</h4>
+                                                <div className="indicator-txt">Transactions</div>
+                                            </div>
+                                        </div>
+                                        <div className="each-indicator">
+                                            <div>
+                                                <h4>{numberWithCommas(this.state.selectedTillData.balance, true)}</h4>
+                                                <div className="indicator-txt">Expected cash till</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {(this.state.selectedTillData && !this.state.preloadedTillData)  && 
+                    this.renderTillTransactions()
+                }
+
+                {(this.state.preloadedTillData && (this.props.fetchLoggedonTillsReducer.request_status===dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS && this.props.fetchLoggedonTillsReducer.request_data.response2) ) && 
+                    this.renderTillTransactions()
+                }
 
             </div>
         )
@@ -2180,12 +2406,16 @@ class DashboardLanding extends React.Component {
                                                                     this.showViewTill(eachData.tillId, eachData)
                                                                 }}
                                                             > <span className="hasborder">View Till</span> </Dropdown.Item>
-                                                            <Dropdown.Item eventKey="2" onClick={() => {
-                                                                this.showAddRemoveCashToTill("add", eachData)
-                                                            }}> <span>Add Cash</span> </Dropdown.Item>
-                                                            <Dropdown.Item eventKey="3" onClick={() => {
-                                                                this.showAddRemoveCashToTill("remove", eachData)
-                                                            }}> <span className="hasborder">Remove Cash</span> </Dropdown.Item>
+                                                            {eachData.tillAccountState === 1 &&
+                                                                <Dropdown.Item eventKey="2" onClick={() => {
+                                                                    this.showAddRemoveCashToTill("add", eachData)
+                                                                }}> <span>Add Cash</span> </Dropdown.Item>
+                                                            }
+                                                            {eachData.tillAccountState === 1 &&
+                                                                <Dropdown.Item eventKey="3" onClick={() => {
+                                                                    this.showAddRemoveCashToTill("remove", eachData)
+                                                                }}> <span className="hasborder">Remove Cash</span> </Dropdown.Item>
+                                                            }
                                                             {eachData.tillAccountState === 2 &&
                                                                 <Dropdown.Item eventKey="4" onClick={() => {
                                                                     this.showCloseTill("undoCloseTill", eachData)
@@ -2264,6 +2494,9 @@ class DashboardLanding extends React.Component {
                         allMyTills.push(eachtill.tillId)
                     })
 
+                    
+                   
+
                  
                     return (
                         <div >
@@ -2283,15 +2516,22 @@ class DashboardLanding extends React.Component {
                                                     let selectedTillData = allLoggedOnTills.filter(eachTill=>eachTill.tillId===e.target.value)[0];
                                                     // console.log("zelect is", selectedTillData)
                                                     this.fetchTillTransactions(e.target.value);
-                                                    this.setState({selectedTill: e.target.value, selectedTillData})
+                                                    this.setState({selectedTill: e.target.value, selectedTillData, preloadedTillData: false})
                                                 }}
                                                 name="selectedTill"
+                                                defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
                                                 value={this.state.selectedTill}
+                                                // value={this.state.selectedTill? 
+                                                //                 this.state.selectedTill 
+                                                //                 :
+                                                //                 allMyTills.length>=1 ? allMyTills[0] : null }
+                                                
                                                 className="countdropdown form-control form-control-sm">
                                                     <option value="">Select Till</option>
                                                     {allMyTills.map((eachTill, index)=>{
+                                                        // console.log("index is", index);
                                                         return(
-                                                                <option key={index} value={eachTill}>{eachTill}</option>
+                                                                <option  key={index} value={eachTill}>{eachTill}</option>
                                                             )
                                                         })
                                                     }
@@ -2338,508 +2578,6 @@ class DashboardLanding extends React.Component {
                 {this.renderManageTellers()}
             </div>
         )
-        // if(this.props.getDashboardStats.request_status===dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS){
-        //     let allTxtn;
-        //     let postATransactionRequest =this.props.postATransactionReducer;
-        //     let getDashboardStatsRequest = this.props.getDashboardStats;
-        //     let {
-        //         selectedCustomer,
-        //         defaultAccountOptions,
-        //         showNewTill,
-        //         addCashToTill,
-        //         closeUndoCloseTill,
-        //         selectedOption,
-        //         selectOtherCustomerAccount,
-        //         defaultOptions} = this.state;
-
-        //         let allLoggedOnTills = this.props.getDashboardStats.request_data.response3.data.result,
-        //             allMyTills = [];
-
-        //             allLoggedOnTills.map(eachtill=>{
-        //                 allMyTills.push(eachtill.tillId)
-        //             })
-
-                
-
-        //         if(this.state.selectedOption && this.state.selectedOption.searchItemType===2){
-        //             allTxtn =[
-        //                 {label: "Repayment", value:1},
-        //                 // {label: "Deposit", value:2},
-                        
-        //             ];
-        //         }
-        //         if(this.state.selectedOption && this.state.selectedOption.searchItemType===3){
-        //             allTxtn =[
-        //                 {label: "Deposit", value:2},
-        //                 {label: "Withdrawal", value:3}
-        //             ];
-        //         }
-        //     return (
-        //         <div className="dashboard-section">
-                    
-        //             <div className="each-card">
-        //                 <div className="each-card-heading">
-        //                     <h4>Tellering</h4>
-        //                     <div className="tellerid-wrap">
-        //                         {this.state.selectedTill && 
-        //                             <div className="selected-id">
-        //                                 Till ID: {this.state.selectedTill}
-        //                             </div>
-        //                         }
-        //                         <div className="select-tillid">
-        //                             <select id="tildId"
-        //                                 onChange={(e)=>{
-        //                                     let selectedTillData = allLoggedOnTills.filter(eachTill=>eachTill.tillId===e.target.value)[0];
-        //                                     // console.log("zelect is", selectedTillData)
-        //                                     this.fetchTillTransactions(e.target.value);
-        //                                     this.setState({selectedTill: e.target.value, selectedTillData})
-        //                                 }}
-        //                                 name="selectedTill"
-        //                                 value={this.state.selectedTill}
-        //                                 className="countdropdown form-control form-control-sm">
-        //                                     <option value="">Select Till</option>
-        //                                     {allMyTills.map((eachTill, index)=>{
-        //                                         return(
-        //                                                 <option key={index} value={eachTill}>{eachTill}</option>
-        //                                             )
-        //                                         })
-        //                                     }
-                                        
-        //                             </select>
-        //                         </div>
-        //                     </div>
-                            
-        //                 </div>
-        //                 {this.state.selectedTill && 
-        //                     <div className="each-card-content">
-        //                         <div className="tellering-section">
-        //                             <div className="tiller-record-form">
-        //                                 <Formik
-        //                                     initialValues={{
-        //                                         clientEncodedKey: '',
-        //                                         accountNumber: '',
-        //                                         txtnType: '',
-        //                                         amount: '',
-        //                                     }}
-        //                                     // validationSchema={currencyValidationSchema}
-        //                                     onSubmit={(values, { resetForm }) => {
-        //                                         // same shape as initial values
-        //                                         console.log("txtnType", values.txtnType)
-        //                                         let transactionAction;
-        //                                         if(values.txtnType===1){
-        //                                             transactionAction="loanrepaymentwithteller"
-        //                                         }
-        //                                         if(values.txtnType===2){
-        //                                             transactionAction="accountdepositwithteller"
-        //                                         }
-        //                                         if(values.txtnType===3){
-        //                                             transactionAction="accountwithdrawalwithteller"
-        //                                         }
-
-        //                                         let requestPayload ={
-        //                                             tillId: this.state.selectedTillData.tillId,
-        //                                             accountEncodedKey: values.chosenAccountNum,
-        //                                             amount: parseFloat(values.amount.replace(/,/g, '')),
-        //                                             clientEncodedKey: selectedCustomer.clientEncodedKey,
-        //                                         }
-
-        //                                         if(values.txtnType ===1){
-        //                                             requestPayload.transactionReference = values.referenceID
-        //                                             requestPayload.referenceID = values.referenceID
-        //                                             requestPayload.remarks = values.remarks
-        //                                         }
-
-        //                                         if(values.txtnType ===2){
-        //                                             requestPayload.referenceID = values.referenceID
-        //                                             requestPayload.remarks = values.remarks
-        //                                         }
-
-        //                                         if(values.txtnType ===3){
-        //                                             requestPayload.transactionReference = values.referenceID
-        //                                             requestPayload.referenceID = values.referenceID
-        //                                             requestPayload.notes = values.remarks
-        //                                         }
-
-        //                                         this.postNewTransaction(requestPayload, transactionAction)
-        //                                                 .then(()=>{
-        //                                                     if(this.props.postATransactionReducer.request_status ===dashboardConstants.POST_TRANSACTION_SUCCESS){
-        //                                                         resetForm()
-        //                                                     }
-        //                                                 })
-
-        //                                         // console.log("lalala", requestPayload);
-
-        //                                     }}
-        //                                 >
-        //                                     {({ handleSubmit,
-        //                                         handleChange,
-        //                                         setFieldValue,
-        //                                         handleBlur,
-        //                                         resetForm,
-        //                                         values,
-        //                                         touched,
-        //                                         isValid,
-        //                                         errors, }) => (
-        //                                         <Form noValidate
-        //                                             onSubmit={handleSubmit}>
-        //                                             <Form.Group>
-        //                                                 <div className="withasync">
-        //                                                     <Form.Label className="block-level">Customer</Form.Label>
-        //                                                     <div>
-        //                                                         <div>
-        //                                                             <AsyncSelect
-        //                                                                 cacheOptions
-        //                                                                 value={selectedCustomer}
-        //                                                                 // getOptionLabel={e => e.clientName}
-        //                                                                 getOptionLabel={this.getSearchOptionForCustomerLabel}
-        //                                                                 getOptionValue={this.getSearchForCustomerOptionValue}
-        //                                                                 // getOptionValue={e => e.clientEncodedKey}
-        //                                                                 noOptionsMessage={this.noOptionsForCustomerMessage}
-        //                                                                 loadOptions={this.loadSearchResults}
-        //                                                                 defaultOptions={defaultOptions}
-        //                                                                 name="clientEncodedKey"
-        //                                                                 placeholder="Search customer name"
-        //                                                                 className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
-        //                                                                 // onChange={(e)=> {
-        //                                                                 //     setFieldValue("clientEncodedKey", )
-        //                                                                 //     this.handleSelectedCustomer(e.target.value)
-
-        //                                                                 // }}
-        //                                                                 onChange={this.handleSelectedCustomer}
-        //                                                                 // onChange={(selectedCustomer) => {
-        //                                                                 //     this.setState({ selectedCustomer });
-        //                                                                 //     errors.clientEncodedKey = null
-        //                                                                 //     values.clientEncodedKey = selectedCustomer.value
-        //                                                                 //     setFieldValue('clientEncodedKey', selectedCustomer.value);
-        //                                                                 // }}
-        //                                                                 onInputChange={this.handleSearchCustomerChange}
-        //                                                             />
-
-
-        //                                                             {errors.clientEncodedKey && touched.clientEncodedKey ? (
-        //                                                                 <span className="invalid-feedback">{errors.clientEncodedKey}</span>
-        //                                                             ) : null}
-        //                                                         </div>
-        //                                                         {this.state.selectedCustomer && <span onClick={()=>this.showViewCustomer(this.selectedCustomer)}>View Customer</span>}
-        //                                                     </div>
-        //                                                 </div>
-        //                                             </Form.Group>
-        //                                             <Form.Group>
-        //                                                 <Form.Label className="block-level">Account</Form.Label>
-        //                                                 <div className="txtn-wrap">
-        //                                                     <div className="select-drop foraccount">
-        //                                                         <AsyncSelect
-        //                                                             cacheOptions
-        //                                                             value={selectOtherCustomerAccount}
-        //                                                             noOptionsMessage={this.noOptionsForAccountMessage}
-        //                                                             getOptionValue={this.getSearchForAccountOptionValue}
-        //                                                             getOptionLabel={this.getSearchOptionForAccountLabel}
-        //                                                             defaultOptions={defaultAccountOptions !== "" ? defaultAccountOptions : null}
-        //                                                             loadOptions={this.initiateAccountSearch}
-        //                                                             placeholder="Search Accounts"
-        //                                                             name="chosenAccountNum"
-        //                                                             className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
-        //                                                             onChange={(selectedOption) => {
-        //                                                                 setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
-        //                                                                 console.log("calleded", selectedOption)
-        //                                                                 this.getSearchOptionForCustomerLabel(selectedOption)
-        //                                                                 this.getSearchForCustomerOptionValue(selectedOption)
-        //                                                                 // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
-
-        //                                                                 console.log("customer is", selectedOption);
-        //                                                                 this.setState({
-        //                                                                     selectedOption,
-        //                                                                     selectedCustomer: selectedOption,
-        //                                                                     selectOtherCustomerAccount: selectedOption,
-                                                                            
-        //                                                                 });
-        //                                                                 // } else {
-        //                                                                 //     this.setState({
-        //                                                                 //         selectOtherCustomerAccount: selectedOption,
-        //                                                                 //         // firstChosenTransferCriteria: "customer",
-        //                                                                 //     });
-        //                                                                 // }
-
-        //                                                             }} />
-        //                                                         {/* <Select
-        //                                                                 options={allTxtn}
-
-        //                                                                 onChange={(selectedTxtn) => {
-        //                                                                     this.setState({ selectedTxtn });
-        //                                                                     errors.txtnType = null
-        //                                                                     values.txtnType = selectedTxtn.value
-        //                                                                 }}
-        //                                                                 className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
-        //                                                                 name="txtnType"
-        //                                                                 required
-        //                                                             /> */}
-
-        //                                                         {errors.chosenAccountNum && touched.chosenAccountNum ? (
-        //                                                             <span className="invalid-feedback">{errors.chosenAccountNum}</span>
-        //                                                         ) : null}
-        //                                                     </div>
-        //                                                    {this.state.selectedOption && <span onClick={()=>{this.showViewAccount(this.state.selectedCustomer)}}>View Account</span>}
-        //                                                 </div>
-
-        //                                             </Form.Group>
-        //                                             {this.state.selectedOption  &&
-        //                                                 <Form.Group>
-        //                                                     <Form.Label className="block-level">Transaction</Form.Label>
-
-        //                                                     <div className="select-drop pr-10">
-        //                                                         <Select
-        //                                                             options={allTxtn}
-
-        //                                                             onChange={(selectedTxtn) => {
-        //                                                                 this.setState({ selectedTxtn });
-        //                                                                 errors.txtnType = null
-        //                                                                 values.txtnType = selectedTxtn.value
-        //                                                             }}
-        //                                                             className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
-        //                                                             name="txtnType"
-        //                                                             required
-        //                                                         />
-
-        //                                                         {errors.txtnType && touched.txtnType ? (
-        //                                                             <span className="invalid-feedback">{errors.txtnType}</span>
-        //                                                         ) : null}
-        //                                                     </div>
-
-        //                                                 </Form.Group>
-        //                                             }
-        //                                             <Form.Group className="mr-10">
-        //                                                 <Form.Label className="block-level">Amount</Form.Label>
-        //                                                 <Form.Control type="text"
-        //                                                     name="amount"
-        //                                                     value={numberWithCommas(values.amount)}
-        //                                                     onChange={handleChange}
-        //                                                     className={errors.amount && touched.amount ? "is-invalid" : null}
-        //                                                     required />
-
-        //                                                 {errors.amount && touched.amount ? (
-        //                                                     <span className="invalid-feedback">{errors.amount}</span>
-        //                                                 ) : null}
-        //                                             </Form.Group>
-        //                                             <Form.Group className="mr-10">
-        //                                                 <Form.Label className="block-level">Reference ID</Form.Label>
-        //                                                 <Form.Control type="text"
-        //                                                     name="referenceID"
-        //                                                     value={values.referenceID}
-        //                                                     onChange={handleChange}
-        //                                                     className={errors.referenceID && touched.referenceID ? "is-invalid" : null}
-        //                                                     required />
-
-        //                                                 {errors.referenceID && touched.referenceID ? (
-        //                                                     <span className="invalid-feedback">{errors.referenceID}</span>
-        //                                                 ) : null}
-        //                                             </Form.Group>
-        //                                             <Form.Group>
-        //                                                 <Form.Label className="block-level">Remarks</Form.Label>
-        //                                                 <Form.Control as="textarea"
-        //                                                     rows="3"
-        //                                                     onChange={handleChange}
-        //                                                     name="remarks"
-        //                                                     value={values.remarks}
-        //                                                     className={errors.remarks && touched.remarks ? "is-invalid form-control form-control-sm" : null}
-        //                                                 />
-        //                                                 {errors.remarks && touched.remarks ? (
-        //                                                     <span className="invalid-feedback">{errors.remarks}</span>
-        //                                                 ) : null}
-        //                                             </Form.Group>
-
-        //                                             <div className="mr-10">
-        //                                                 <div className="footer-with-cta">
-        //                                                     <Button
-        //                                                         type="submit"
-        //                                                         disabled={postATransactionRequest.is_request_processing}
-        //                                                     >
-                                                                
-        //                                                         {postATransactionRequest.is_request_processing ? "Please wait..." : "Post transaction"}
-        //                                                     </Button>
-        //                                                     <Button variant="secondary" 
-        //                                                         disabled={postATransactionRequest.is_request_processing}
-        //                                                         onClick={this.handleClose}>Clear</Button>
-        //                                                 </div>
-        //                                             </div>
-        //                                             {postATransactionRequest.request_status === dashboardConstants.POST_TRANSACTION_SUCCESS && 
-        //                                                 <Alert variant="success">
-        //                                                     {postATransactionRequest.request_data.response.data.message && postATransactionRequest.request_data.response.data.message}
-        //                                                     {!postATransactionRequest.request_data.response.data.message && `Transaction was posted`}
-        //                                                 </Alert>
-        //                                             }
-        //                                             {postATransactionRequest.request_status === dashboardConstants.POST_TRANSACTION_FAILURE && 
-        //                                                 <Alert variant="danger">
-        //                                                     {postATransactionRequest.request_data.error}
-        //                                                 </Alert>
-        //                                 }
-        //                                         </Form>
-        //                                     )}
-        //                                 </Formik>
-        //                             </div>
-        //                         </div>
-        //                         {(this.state.selectedTillData && this.props.fetchTillTransactionsReducer.request_status ===dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS) &&
-        //                         <div className="tellering-section">
-        //                             <div className="till-details">
-        //                                 <div className="each-card mt-20">
-        //                                     <div className="each-card-heading">
-        //                                         <h4>Till Details</h4>
-        //                                     </div>
-        //                                     <div className="each-card-content">
-        //                                         <div className="all-indicators">
-        //                                             <div className="each-indicator">
-        //                                                 <div>
-        //                                                     <h4>{this.state.selectedTillData.tillId}</h4>
-        //                                                     <div className="indicator-txt">Till ID</div>
-        //                                                 </div>
-        //                                             </div>
-        //                                             <div className="each-indicator">
-        //                                                 <div>
-        //                                                     <h4>{this.props.fetchTillTransactionsReducer.request_data.response.data.result.length}</h4>
-        //                                                     <div className="indicator-txt">Transactions</div>
-        //                                                 </div>
-        //                                             </div>
-        //                                             <div className="each-indicator">
-        //                                                 <div>
-        //                                                     <h4>{numberWithCommas(this.state.selectedTillData.balance, true)}</h4>
-        //                                                     <div className="indicator-txt">Expected cash till</div>
-        //                                                 </div>
-        //                                             </div>
-        //                                         </div>
-        //                                     </div>
-        //                                 </div>
-        //                             </div>
-        //                         </div>
-        //                         }
-        //                         {this.state.selectedTillData && this.renderTillTransactions()}
-                                
-        //                     </div>
-        //                 }
-        //             </div>
-        //             {this.props.getDashboardStats.request_status ===dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS &&
-        //                 <div className="each-card mt-20">
-        //                     <div className="each-card-heading">
-        //                         <h4>Teller Management</h4>
-        //                         <div className="card-actions at-end">
-        //                             <div className="each-cardaction" onClick={this.showOpenTill}>
-        //                                 <div className="cardaction-ico">
-        //                                     <img src={AddIco} alt="" />
-        //                                 </div>
-        //                                 <div className="cardaction-txt">Open Till</div>
-        //                             </div>
-        //                         </div>
-        //                     </div>
-        //                     <div className="each-card-content">
-        //                         <div className="all-indicators forteller">
-        //                             <div className="each-indicator">
-        //                                 <div>
-        //                                     <h4>{this.props.getDashboardStats.request_data.response2.data.openedTills}</h4>
-        //                                     <div className="indicator-txt">Open Tills</div>
-        //                                 </div>
-        //                             </div>
-        //                             <div className="each-indicator">
-        //                                 <div>
-        //                                 <h4>{numberWithCommas(this.props.getDashboardStats.request_data.response2.data.openedBalance, true)}</h4>
-        //                                     <div className="indicator-txt">Opening Balance</div>
-        //                                 </div>
-        //                             </div>
-        //                             <div className="each-indicator">
-        //                                 <div>
-        //                                     <h4>{numberWithCommas(this.props.getDashboardStats.request_data.response2.data.totalBalance, true)}</h4>
-        //                                     <div className="indicator-txt">Expected Cash in Tills</div>
-        //                                 </div>
-        //                             </div>
-        //                             {
-        //                                 this.props.getDashboardStats.request_data.response2.data.result.map((eachData, index)=>{
-        //                                     return(
-        //                                         <div className="each-indicator with-actions" key={index}>
-        //                                             <div>
-        //                                                 <h4><span>{eachData.tillUser}</span> <span>{eachData.currencyCode} {numberWithCommas(eachData.balance, true)}</span> </h4>
-        //                                                 <div className="indicator-txt">
-                                                            
-        //                                                     {eachData.tillAccountState===1 &&
-        //                                                         <div>
-        //                                                         Opened:{getDateFromISO(eachData.dateOpened)}
-        //                                                                     <div>ID: {eachData.tillId}</div>
-        //                                                         </div>
-        //                                                     }
-        //                                                     {eachData.tillAccountState===2 &&
-        //                                                         <div>
-        //                                                         Closed:{getDateFromISO(eachData.dateClosed)}
-        //                                                                     <div>ID: {eachData.tillId}</div>
-        //                                                         </div>
-        //                                                     }
-        //                                                     <div className="actions-drop">
-        //                                                         <DropdownButton
-        //                                                             size="sm"
-        //                                                             title="Actions"
-        //                                                             key="actionDrop"
-
-        //                                                             className="customone"
-        //                                                         >
-        //                                                             {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
-        //                                                             <Dropdown.Item eventKey="1"
-        //                                                                 onClick={()=>{
-        //                                                                     this.showViewTill(eachData.tillId, eachData)
-        //                                                                 }}
-        //                                                             > <span className="hasborder">View Till</span> </Dropdown.Item>
-        //                                                             <Dropdown.Item eventKey="2" onClick={() => {
-        //                                                                 this.showAddRemoveCashToTill("add", eachData)
-        //                                                             }}> <span>Add Cash</span> </Dropdown.Item>
-        //                                                             <Dropdown.Item eventKey="3" onClick={() => {
-        //                                                                 this.showAddRemoveCashToTill("remove", eachData)
-        //                                                             }}> <span className="hasborder">Remove Cash</span> </Dropdown.Item>
-        //                                                             {eachData.tillAccountState===2 &&
-        //                                                                 <Dropdown.Item eventKey="4" onClick={() => {
-        //                                                                     this.showCloseTill("undoCloseTill", eachData)
-        //                                                                 }}> <span>Undo Cose Till</span> </Dropdown.Item>
-        //                                                             }
-        //                                                             {eachData.tillAccountState===1 && 
-        //                                                                 <Dropdown.Item eventKey="5" onClick={() => {
-        //                                                                     this.showCloseTill("closeTill", eachData)
-        //                                                                 }}> <span>Close Till</span> </Dropdown.Item>
-        //                                                             }
-
-        //                                                         </DropdownButton>
-        //                                                     </div>
-        //                                                 </div>
-
-        //                                             </div>
-        //                                         </div>
-        //                                     )
-        //                                 })
-        //                             }
-                                    
-                                    
-
-        //                         </div>
-        //                     </div>
-
-        //                 </div>
-        //             }
-        //         </div>
-        //     )
-        // }
-        // if(this.props.getDashboardStats.request_status===dashboardConstants.GET_DASHOBOARD_DATA_PENDING){
-        //     return(
-        //         <div className="dashboard-section ">
-        //             <div className="each-card centered-item">
-        //                 <div className="loading-text">Please wait...</div>
-        //             </div>
-        //         </div>
-        //     )
-        // }
-
-        // if(this.props.getDashboardStats.request_status===dashboardConstants.GET_DASHOBOARD_DATA_FAILURE){
-        //     return(
-        //         <div className="dashboard-section">
-        //             <div className="each-card">
-        //                 <Alert variant="danger">
-        //                     {this.props.getDashboardStats.request_data.error}
-        //                 </Alert>
-        //             </div>
-        //         </div>
-        //     )
-        // }
     }
 
 
@@ -2885,12 +2623,15 @@ class DashboardLanding extends React.Component {
                         </div>
                     </div>
                     {this.renderIndicators()}
-                    <div className="each-card mt-20">
+                    {/* <div className="each-card mt-20">
                         <div className="each-card-heading">
                             <h4>Latest Activity</h4>
                         </div>
                         {this.renderAllActivies()}
-                    </div>
+                    </div> */}
+                    <ActivitiesBox
+                        activityType = "logged"
+                    />
                 </div>
                 <div className="dashboard-section">
                     {this.renderTellerManagement()}
@@ -2981,6 +2722,8 @@ function mapStateToProps(state) {
         fetchTillTransactionsReducer: state.dashboardReducers.fetchTillTransactionsReducer,
         addRemoveCashToTillReducer: state.dashboardReducers.addRemoveCashToTillReducer,
         closeUndoCloseToTillReducer: state.dashboardReducers.closeUndoCloseToTillReducer,
+        
+        fetchManadateReducer: state.dashboardReducers.fetchManadateReducer,
     };
 }
 

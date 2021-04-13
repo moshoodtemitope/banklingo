@@ -208,7 +208,8 @@ import{
     closeUndoCloseToTillReducer,
     fetchTillTransactionsReducer,
     fetchLoggedonTillsReducer,
-    fetchAllTillsReducer
+    fetchAllTillsReducer,
+    fetchManadateReducer
     
 } from './dashboard/dashboard.reducer'
 
@@ -250,7 +251,9 @@ import{
     changeClientStateReducer,
     getAClientActivitiesReducer,
     createAClientTaskReducer,
-    getAClientTasksReducer
+    getAClientTasksReducer,
+    addAClientPassportReducer,
+    addAClientSignatureReducer
     
 } from './clients/clients.reducer'
 
@@ -387,7 +390,8 @@ export const dashboard = {
     closeUndoCloseToTillReducer,
     fetchTillTransactionsReducer,
     fetchLoggedonTillsReducer,
-    fetchAllTillsReducer
+    fetchAllTillsReducer,
+    fetchManadateReducer
 }
 
 export const platform = {
@@ -453,7 +457,9 @@ export const clients ={
     changeClientStateReducer,
     getAClientActivitiesReducer,
     createAClientTaskReducer,
-    getAClientTasksReducer
+    getAClientTasksReducer,
+    addAClientPassportReducer,
+    addAClientSignatureReducer
 }
 
 export const disbursment ={

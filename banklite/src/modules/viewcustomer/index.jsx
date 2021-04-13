@@ -7,19 +7,22 @@ import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import  CustomerHeading from './customerheader'
 // import Form from 'react-bootstrap/Form'
-// import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button'
 // import Dropdown from 'react-bootstrap/Dropdown'
 // import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
+import  ActivitiesBox from '../../shared/elements/activities'
+import PictureIco from '../../assets/img/picture.svg';
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./customerprofile.scss"; 
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 
-
+import Alert from 'react-bootstrap/Alert'
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
+
 class ViewCustomer extends React.Component {
     constructor(props) {
         super(props);
@@ -29,6 +32,9 @@ class ViewCustomer extends React.Component {
             FullDetails:true,
             PageSize: 100,
             CurrentPage: 1,
+            showAddSignature:false,
+            invalidImageUpload:false,
+            // previewSignatureStyles:""
         }
         // console.log('props are', this.props.match.params)
     }
@@ -57,6 +63,280 @@ class ViewCustomer extends React.Component {
         const {dispatch} = this.props;
 
         dispatch(clientsActions.getAClientActivities(clientEncodedKey, params));
+    }
+
+    closeAddSignature = ()=> {
+        this.props.dispatch(clientsActions.addAClientSignature(null,"CLEAR"))
+        this.setState({showAddSignature: false, previewSignatureStyles:null})
+    }
+
+    displayAddSignature = ()=> {
+        this.setState({showAddSignature: true})
+    }
+
+    closeAddPhoto = ()=> {
+        this.props.dispatch(clientsActions.addAClientSignature(null,"CLEAR"))
+        this.setState({showAddPhoto: false, previewPhotoStyles:null})
+    }
+
+    displayAddPhoto = ()=> {
+        this.setState({showAddPhoto: true})
+    }
+
+    uploadSignatureRequest = ()=>{
+        const {dispatch} = this.props;
+        let params = {
+            base64String: this.state.imageData
+        }
+        dispatch(clientsActions.addAClientSignature(this.clientEncodedKey, params));
+    }
+
+    uploadPhotoRequest = ()=>{
+        const {dispatch} = this.props;
+        let params = {
+            base64String: this.state.imageData
+        }
+        dispatch(clientsActions.addAClientPassport(this.clientEncodedKey, params));
+    }
+
+    isFileImage=(file)=> {
+        const acceptedImageTypes = ['image/jpeg', 'image/png'];
+     
+        return file && acceptedImageTypes.includes(file['type'])
+    }
+
+    HandleSignatureUpLoad = (event) => {
+        const file = document.getElementById('photo-upload').files[0];
+        // this.setState({previewStyles: ""})
+        if(this.isFileImage(file)){
+            this.setState({docuploaded: event.target.files[0]});
+        
+        
+        
+            this.setState({invalidImageUpload:false})
+            const reader = new FileReader();
+            
+            let preViewStyle;
+            reader.addEventListener("load",  ()=> {
+                
+
+                preViewStyle = {
+                    background: `url(${reader.result})`,
+                    height:'150px',
+                    width:'150px',
+                    backgroundSize: `100% 100%`,
+                    backgroundPosition: `center center`,
+                    backgroundRepeat: `no-repeat`
+                }
+                
+                this.setState({previewSignatureStyles:preViewStyle, imageData: reader.result})
+            }, false);
+
+            
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }else{
+            this.setState({invalidImageUpload:true})
+        }
+        
+    }
+
+    HandlePhotoUpLoad = (event) => {
+        const file = document.getElementById('photo-upload').files[0];
+        // this.setState({previewStyles: ""})
+        if(this.isFileImage(file)){
+            this.setState({docuploaded: event.target.files[0]});
+        
+        
+        
+            this.setState({invalidImageUpload:false})
+            const reader = new FileReader();
+            
+            let preViewStyle;
+            reader.addEventListener("load",  ()=> {
+                
+
+                preViewStyle = {
+                    background: `url(${reader.result})`,
+                    height:'150px',
+                    width:'150px',
+                    backgroundSize: `100% 100%`,
+                    backgroundPosition: `center center`,
+                    backgroundRepeat: `no-repeat`
+                }
+                
+                this.setState({previewPhotoStyles:preViewStyle, imageData: reader.result})
+            }, false);
+
+            
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }else{
+            this.setState({invalidImageUpload:true})
+        }
+        
+    }
+
+    renderUploadSignature = ()=>{
+        
+        let addAClientSignatureReducer =  this.props.addAClientSignatureReducer;
+                
+                
+        let {previewSignatureStyles, invalidImageUpload} = this.state;
+                
+                    
+            return(
+                <div className="slidein-wrap">
+                    <div className="slide-wrap-overlay"></div>
+                    <div className="slidein-form" ref={this.setWrapperRef}>
+                        <div className="slide-in-heading">
+                            <h3>Upload Signature</h3> 
+                            <div className="close-slidein" onClick={this.closeAddSignature}>X</div>
+                        </div>
+                        
+                        <div className="slidein-formwrap">
+                            
+                            <div className="upload-wrap">
+                                
+                                <label htmlFor="photo-upload" className="upload-photo" style={previewSignatureStyles}>
+                                    {!previewSignatureStyles &&
+                                        <div>
+                                            Upload Passport Photo
+                                            </div>
+                                    }
+
+                                </label>
+                                {previewSignatureStyles && <small>Click the photo to upload another one</small>}
+                                <input type="file" name="" accept="image/*" id="photo-upload" onChange={this.HandleSignatureUpLoad} />
+                                
+                                {invalidImageUpload &&
+                                    <Alert variant="danger">
+                                        Please upload a valid image
+                                    </Alert>
+                                }
+                            </div>
+                       
+                            <div className="footer-with-cta mb-20">
+                                {addAClientSignatureReducer.request_status !== clientsConstants.ADD_A_CLIENT_SIGNATURE_SUCCESS && 
+                                    <Button
+                                        type="submit"
+                                        disabled={addAClientSignatureReducer.is_request_processing}
+                                        onClick = {()=>{
+                                            if(previewSignatureStyles && !invalidImageUpload){
+                                                this.uploadSignatureRequest()
+                                            }
+                                        }}
+                                    >
+                                        
+                                        {addAClientSignatureReducer.is_request_processing ? "Please wait..." : "Upload"}
+                                    </Button>
+                                }
+                                <Button variant="secondary" 
+                                    disabled={addAClientSignatureReducer.is_request_processing}
+                                    onClick={this.closeAddSignature}>
+                                    Cancel
+                                </Button>
+                            </div>
+                                    
+                            {addAClientSignatureReducer.request_status === clientsConstants.ADD_A_CLIENT_SIGNATURE_SUCCESS && 
+                                <Alert variant="success">
+                                    {addAClientSignatureReducer.request_data.response.data.message && addAClientSignatureReducer.request_data.response.data.message}
+                                    {!addAClientSignatureReducer.request_data.response.data.message && "Signature was uploaded"}
+                                </Alert>
+                            }
+                            {addAClientSignatureReducer.request_status === clientsConstants.ADD_A_CLIENT_SIGNATURE_FAILURE && 
+                                <Alert variant="danger">
+                                    {addAClientSignatureReducer.request_data.error}
+                                </Alert>
+                            }
+                                        
+                        </div>
+                    </div>
+                </div>
+            )
+        
+    }
+
+    renderUploadPhoto = ()=>{
+        
+        let addAClientPassportReducer =  this.props.addAClientPassportReducer;
+                
+                
+        let {previewPhotoStyles, invalidImageUpload} = this.state;
+                
+                    
+            return(
+                <div className="slidein-wrap">
+                    <div className="slide-wrap-overlay"></div>
+                    <div className="slidein-form" ref={this.setWrapperRef}>
+                        <div className="slide-in-heading">
+                            <h3>Upload Photo</h3> 
+                            <div className="close-slidein" onClick={this.closeAddPhoto}>X</div>
+                        </div>
+                        
+                        <div className="slidein-formwrap">
+                            
+                            <div className="upload-wrap">
+                                
+                                <label htmlFor="photo-upload" className="upload-photo" style={previewPhotoStyles}>
+                                    {!previewPhotoStyles &&
+                                        <div>
+                                            Upload Photo
+                                            </div>
+                                    }
+
+                                </label>
+                                {previewPhotoStyles && <small>Click the photo to upload another one</small>}
+                                <input type="file" name="" accept="image/*" id="photo-upload" onChange={this.HandlePhotoUpLoad} />
+                                
+                                {invalidImageUpload &&
+                                    <Alert variant="danger">
+                                        Please upload a valid image
+                                    </Alert>
+                                }
+                            </div>
+                       
+                            <div className="footer-with-cta mb-20">
+                                {addAClientPassportReducer.request_status !== clientsConstants.ADD_A_CLIENT_PASSPORT_SUCCESS && 
+                                    <Button
+                                        type="submit"
+                                        disabled={addAClientPassportReducer.is_request_processing}
+                                        onClick = {()=>{
+                                            if(previewPhotoStyles && !invalidImageUpload){
+                                                this.uploadPhotoRequest()
+                                            }
+                                        }}
+                                    >
+                                        
+                                        {addAClientPassportReducer.is_request_processing ? "Please wait..." : "Upload"}
+                                    </Button>
+                                }
+                                <Button variant="secondary" 
+                                    disabled={addAClientPassportReducer.is_request_processing}
+                                    onClick={this.closeAddPhoto}>
+                                    Cancel
+                                </Button>
+                            </div>
+                                    
+                            {addAClientPassportReducer.request_status === clientsConstants.ADD_A_CLIENT_PASSPORT_SUCCESS && 
+                                <Alert variant="success">
+                                    {addAClientPassportReducer.request_data.response.data.message && addAClientPassportReducer.request_data.response.data.message}
+                                    {!addAClientPassportReducer.request_data.response.data.message && "Photo was uploaded"}
+                                </Alert>
+                            }
+                            {addAClientPassportReducer.request_status === clientsConstants.ADD_A_CLIENT_PASSPORT_FAILURE && 
+                                <Alert variant="danger">
+                                    {addAClientPassportReducer.request_data.error}
+                                </Alert>
+                            }
+                                        
+                        </div>
+                    </div>
+                </div>
+            )
+        
     }
 
     renderCustomerActivities =()=>{
@@ -130,6 +410,7 @@ class ViewCustomer extends React.Component {
                     let getAClientRequest = this.props.getAClientReducer;
                     let customerDetails = getAClientRequest.request_data.response.data;
                     let passport = getAClientRequest.request_data.response.base64Image,
+                        manadateData = getAClientRequest.request_data.response.mandate,
                         passportStyle="";
 
                         if(passport!==null){
@@ -142,10 +423,11 @@ class ViewCustomer extends React.Component {
                             }
                         }
                     let customerTypeVal = this.state.user.custTypes.filter(eachType=>eachType.id===customerDetails.clientTypeId)[0];
-                    // console.log("dsdsdsdsd", getAClientRequest.request_data.response);
+                    
                     return(
                         <div className="row">
-
+                            {this.state.showAddSignature && this.renderUploadSignature()}
+                            {this.state.showAddPhoto && this.renderUploadPhoto()}
                             <div className="col-sm-12">
                                 <div className="middle-content">
                                     <div className="row">
@@ -378,11 +660,56 @@ class ViewCustomer extends React.Component {
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="leftside-items">
-                                            {passport!==null &&
-                                                <div style={passportStyle} className="passport-photo"></div>
-                                            }
-                                                <h6>Latest Activity </h6>
-                                                {this.renderCustomerActivities()}
+                                                {passport!==null &&
+                                                    <div style={passportStyle} className="passport-photo"></div>
+                                                }
+                                                
+                                                    <div className="each-card mb-20">
+                                                        <div className="each-card-content">
+                                                            <div className="mandate-imgs">
+                                                                <div className="each-mandate">
+                                                                    {manadateData.isPassportAvailable &&
+                                                                        <img src={manadateData.passport} alt=""/>
+                                                                    }
+                                                                    {!manadateData.isPassportAvailable &&
+                                                                        <img className="no-mandate" src={PictureIco} alt=""/>
+                                                                    }
+                                                                    <div className="mandate-title">Customer Photo</div>
+                                                                    <Button
+                                                                        variant="success btn-sm"
+                                                                        onClick={this.displayAddPhoto}
+                                                                    >
+                                                                        {!manadateData.isPassportAvailable ? "Upload Photo": "Update Photo"} 
+                                                                        
+                                                                    </Button>
+                                                                </div>
+                                                                <div className="each-mandate">
+                                                                    {manadateData.isSignatureAvailable &&
+                                                                        <img src={manadateData.signature} alt=""/>
+                                                                    }
+                                                                    {!manadateData.isSignatureAvailable &&
+                                                                        <img className="no-mandate" src={PictureIco} alt=""/>
+                                                                    }
+                                                                    <div className="mandate-title">Customer Signature</div>
+                                                                    <Button
+                                                                        variant="success btn-sm"
+                                                                        onClick={this.displayAddSignature}
+                                                                    >
+                                                                       {!manadateData.isSignatureAvailable ? "Upload Signature": "Update Signature"} 
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                
+                                                
+
+                                                <ActivitiesBox
+                                                    activityType = "client"
+                                                    clientEncodedKey={this.clientEncodedKey}
+                                                />
+                                                {/* <h6>Latest Activity </h6>
+                                                {this.renderCustomerActivities()} */}
                                             </div>
                                         </div>
                                     </div>
@@ -420,6 +747,9 @@ function mapStateToProps(state) {
         getAClientActivitiesReducer: state.clientsReducers.getAClientActivitiesReducer,
         getClientDepositsReducer: state.depositsReducers.getClientDepositsReducer,
         getClientLoansReducer: state.loansReducers.getClientLoansReducer,
+        
+        addAClientSignatureReducer: state.clientsReducers.addAClientSignatureReducer,
+        addAClientPassportReducer: state.clientsReducers.addAClientPassportReducer,
     };
 }
 

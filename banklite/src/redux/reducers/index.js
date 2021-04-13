@@ -182,6 +182,7 @@ const dashboardReducers = combineReducers({
     fetchTillTransactionsReducer: dashboard.fetchTillTransactionsReducer, 
     fetchLoggedonTillsReducer: dashboard.fetchLoggedonTillsReducer, 
     fetchAllTillsReducer: dashboard.fetchAllTillsReducer, 
+    fetchManadateReducer: dashboard.fetchManadateReducer, 
    
 })
 
@@ -231,6 +232,8 @@ const clientsReducers = combineReducers({
     getAClientActivitiesReducer: clients.getAClientActivitiesReducer, 
     createAClientTaskReducer: clients.createAClientTaskReducer, 
     getAClientTasksReducer: clients.getAClientTasksReducer, 
+    addAClientSignatureReducer: clients.addAClientSignatureReducer, 
+    addAClientPassportReducer: clients.addAClientPassportReducer, 
    
 })
 

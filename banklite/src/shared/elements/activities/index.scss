@@ -1,0 +1,97 @@
+@import "../../../assets/scss/shared/colors";
+@import "../../../assets/scss/shared/globalstyles";
+
+.each-card{
+    background: #FFFFFF;
+    border: 1px solid #EDF2F7;
+    box-sizing: border-box;
+    border-radius: 4px;
+    .each-card-heading{
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #EDF2F7;
+        &.for-logs{
+            padding: 10px 24px;
+        }
+        h4{
+            font-size: 14px;
+            flex-basis: 70%;
+            margin-bottom: 0;
+        }
+        .card-actions{
+            flex-basis: 30%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            &.at-end{
+                justify-content: flex-end;
+            }
+        }
+        
+    }
+    
+    .each-cardaction{
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        .cardaction-txt{
+            color: $brand-green;
+            font-size: 12px;
+            margin-left: 4px;
+        }
+    }
+    .each-card-content{
+        padding: 16px 24px;
+    }
+  
+  
+    
+    .each-activity-item {
+        display: flex;
+        align-items: end;
+        margin-bottom: 32px;
+        .action-info {
+            font-size: 14px;
+            font-weight: 500;
+            span.username{
+                color: $txt-blue;
+                margin-right: 6px;
+            }
+            
+        }
+        .timing {
+            font-size: 12px;
+            color: #718596;
+        }
+        .activity-wrap {
+            margin-left: 8px;
+        }
+        .activity-icon img {
+            width: 32px;
+            height: 32px;
+        }        
+    }
+   
+   
+  
+    
+}
+span.each-pagenum {
+    background: #fff !important;
+    border: 1px solid #DFE3E8 !important;
+    padding: 8px 14px !important;
+    font-size: 11px;
+    margin: 0 3px;
+    border-radius: 4px;
+    &.active{
+        border: 1px solid $brand-green !important;
+        color: $brand-green !important;
+    }
+    &:hover{
+        cursor: pointer;
+        border: 1px solid $brand-green !important;
+        color: $brand-green !important;
+    }
+}

@@ -20,7 +20,9 @@ export const clientsActions = {
     getAClientActivities,
     getAClientTask,
     createClientTask,
-    getDownload
+    getDownload,
+    addAClientSignature,
+    addAClientPassport
 }
 
 function getClients  (params, tempData){
@@ -150,8 +152,19 @@ function getAClient  (encodedKey){
                     dispatch(request(consume2));
                     return consume2
                         .then(response2 => {
+                            let consume3 = ApiService.request(routes.HIT_CLIENTS + `/fetchmandate/${encodedKey}`, "GET", null);
+                            dispatch(request(consume3));
+                            return consume3
+                                .then(response3 => {
+                                    
+                                    dispatch(success({...response,...response2.data, mandate:response3.data }));
+                                }).catch(error => {
+                                    dispatch(success({...response,...response2.data }));
+
+                                    // dispatch(failure(handleRequestErrors(error)));
+                                });
                             
-                            dispatch(success({...response,...response2.data }));
+                            // dispatch(success({...response,...response2.data }));
                         }).catch(error => {
 
                             dispatch(failure(handleRequestErrors(error)));
@@ -211,6 +224,68 @@ function createClient   (createClientPayload){
     function success(response) { return { type: clientsConstants.CREATE_A_CLIENT_SUCCESS, response } }
     function failure(error) { return { type: clientsConstants.CREATE_A_CLIENT_FAILURE, error } }
     function clear() { return { type: clientsConstants.CREATE_A_CLIENT_RESET, clear_data:""} }
+
+}
+
+function addAClientSignature   (clientKey, payload){
+    if(payload!=="CLEAR"){
+        return dispatch =>{
+            let url = `${routes.HIT_CLIENTS}/mandate/signature/${clientKey}`;
+            let consume = ApiService.request(url, "POST", payload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: clientsConstants.ADD_A_CLIENT_SIGNATURE_PENDING, user } }
+    function success(response) { return { type: clientsConstants.ADD_A_CLIENT_SIGNATURE_SUCCESS, response } }
+    function failure(error) { return { type: clientsConstants.ADD_A_CLIENT_SIGNATURE_FAILURE, error } }
+    function clear() { return { type: clientsConstants.ADD_A_CLIENT_SIGNATURE_RESET, clear_data:""} }
+
+}
+
+function addAClientPassport   (clientKey, payload){
+    if(payload!=="CLEAR"){
+        return dispatch =>{
+            let url = `${routes.HIT_CLIENTS}/mandate/passport/${clientKey}`;
+            let consume = ApiService.request(url, "POST", payload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: clientsConstants.ADD_A_CLIENT_PASSPORT_PENDING, user } }
+    function success(response) { return { type: clientsConstants.ADD_A_CLIENT_PASSPORT_SUCCESS, response } }
+    function failure(error) { return { type: clientsConstants.ADD_A_CLIENT_PASSPORT_FAILURE, error } }
+    function clear() { return { type: clientsConstants.ADD_A_CLIENT_PASSPORT_RESET, clear_data:""} }
 
 }
 
