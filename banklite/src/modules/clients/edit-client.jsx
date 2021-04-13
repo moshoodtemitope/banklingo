@@ -28,7 +28,7 @@ import Alert from 'react-bootstrap/Alert'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import "./clients.scss"; 
+import "./clients.scss";
 class EditAClient extends React.Component {
     constructor(props) {
         super(props);
@@ -36,7 +36,7 @@ class EditAClient extends React.Component {
             user:JSON.parse(localStorage.getItem('lingoAuth')),
         }
 
-        
+
     }
 
     componentDidMount(){
@@ -47,28 +47,28 @@ class EditAClient extends React.Component {
 
     getAClient = ()=>{
         const {dispatch} = this.props;
-       
+
         dispatch(clientsActions.getAClient(this.props.match.params.encodedkey));
     }
 
     getAllUsers = ()=>{
         const {dispatch} = this.props;
-        
+
         dispatch(administrationActions.getAllUsers(1));
     }
 
     getBranch =  (encodedKey)=>{
         const {dispatch} = this.props;
-       
-        
+
+
          dispatch(administrationActions.getABranch(encodedKey));
     }
 
     handleUpdateCustomer = async (updateCustomerpayload)=>{
         const {dispatch} = this.props;
-       
+
         await dispatch(clientsActions.updateAClient(updateCustomerpayload));
-    }                                   
+    }
 
 
     updateCustomerValidationSchema = Yup.object().shape({
@@ -194,11 +194,11 @@ class EditAClient extends React.Component {
             userAllowedBraches.map((branch, id)=>{
                 selecBranchList.push({label: branch.name, value:branch.encodedKey});
             })
-            
+
             if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_PENDING
                 || getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_PENDING){
                 return (
-                    <div className="loading-content card"> 
+                    <div className="loading-content card">
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
@@ -206,9 +206,9 @@ class EditAClient extends React.Component {
 
             if (getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_SUCCESS
                 && getAClientRequest.request_status=== clientsConstants.GET_A_CLIENT_SUCCESS){
-                
+
                 let allCustomerData = getAClientRequest.request_data.response.data;
-                let 
+                let
                     allUsersData = getAllUsersRequest.request_data.response.data,
                     allUserDataList=[],
                     allCustomerTypesList;
@@ -226,18 +226,17 @@ class EditAClient extends React.Component {
                         for(var i = 1; i <= 31; i++){
                             daysWrap.push(<option key={i} value={i}>{i}</option>)
                         }
-                
+
                 let custTypes = this.props.adminGetCustomerTypes.request_data.response,
                     selectedCustype  = custTypes.filter(type=>type.id===allCustomerData.clientTypeId)[0];
                     if(Object.keys(allCustomerData).length>=1){
-                        
+
                         return (
                             <Formik
                                 initialValues={{
                                     FName: allCustomerData.firstName,
                                     LName: allCustomerData.lastName,
                                     MName: allCustomerData.middleName?allCustomerData.middleName:"",
-                                    custType: allCustomerData.clientTypeEncodedKey,
                                     BVN: allCustomerData.bvn?allCustomerData.bvn:"",
                                     addressLine1: allCustomerData.address.addressLine1?allCustomerData.address.addressLine1:"",
                                     addressLine2: allCustomerData.address.addressLine2?allCustomerData.address.addressLine2:"",
@@ -251,10 +250,9 @@ class EditAClient extends React.Component {
                                     nextOfKinAddress: allCustomerData.nextOfKin.nextofKinHomeAddress!==null?allCustomerData.nextOfKin.nextofKinHomeAddress:"",
                                     nextOfKinMobile: allCustomerData.nextOfKin.nextOfKinMobileNumber!==null?allCustomerData.nextOfKin.nextOfKinMobileNumber:"",
                                     nextOfKinRelationship: allCustomerData.nextOfKin.relationship!==null?allCustomerData.nextOfKin.relationship:"",
-                                    gender:(allCustomerData.gender!==undefined && allCustomerData.gender!==null && allCustomerData.gender!=='') ?allCustomerData.gender:"",
-                                    // dateOfBirth: (allCustomerData.dateOfBirth!==null && allCustomerData.dateOfBirth!==undefined && allCustomerData.dateOfBirth!=='')? getDateFromISO(allCustomerData.dateOfBirth):null,
-                                    dateOfBirth: null,
-                                    custType:allCustomerData.clientTypeId,
+                                    gender: (allCustomerData.gender!==undefined && allCustomerData.gender!==null && allCustomerData.gender!=='') ?allCustomerData.gender:"",
+                                    dateOfBirth: allCustomerData.dateOfBirth && allCustomerData.dateOfBirth !== '' ? new Date(allCustomerData.dateOfBirth) : null,
+                                    custType: allCustomerData.clientTypeId,
                                     notes:allCustomerData.notes.notes?allCustomerData.notes.notes:"",
                                     clientBranchEncodedKey:allCustomerData.branchEncodedKey?allCustomerData.branchEncodedKey:null,
                                     accountOfficerEncodedKey:allCustomerData.accountOfficerEncodedKey?allCustomerData.accountOfficerEncodedKey:null,
@@ -272,11 +270,11 @@ class EditAClient extends React.Component {
                                     employerAddressCity: allCustomerData.employeeInfo.employerAddressCity!==null? allCustomerData.employeeInfo.employerAddressCity:"",
                                     workStatus: allCustomerData.employeeInfo.workStatus!==null? allCustomerData.employeeInfo.workStatus:"",
                                 }}
-                
+
                                 validationSchema={updateACustomerValidationSchema}
                                 // validationSchema={this.updateCustomerValidationSchema}
                                 onSubmit={(values, { resetForm }) => {
-                
+
                                     let updateCustomerPayload = {
                                         clientTypeId:values.custType,
                                         // clientTypeId:values.custType,
@@ -309,24 +307,24 @@ class EditAClient extends React.Component {
                                         clientBranchEncodedKey:values.clientBranchEncodedKey,
                                         accountOfficerEncodedKey: values.accountOfficerEncodedKey
                                     }
-                
-                
-                
+
+
+
                                     this.handleUpdateCustomer(updateCustomerPayload)
                                         .then(
                                             () => {
-                
+
                                                 // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
                                                 //     resetForm();
                                                 // }
-                
+
                                                 // setTimeout(() => {
                                                 //     this.props.dispatch(clientsActions.updateAClient("CLEAR"))
                                                 // }, 3000);
-                
+
                                             }
                                         )
-                
+
                                 }}
                             >
                                 {({ handleSubmit,
@@ -338,8 +336,8 @@ class EditAClient extends React.Component {
                                     touched,
                                     isValid,
                                     errors, }) => (
-                                        <Form 
-                                            noValidate 
+                                        <Form
+                                            noValidate
                                             onSubmit={handleSubmit}
                                             className="form-content card">
                                             <div className="form-heading">
@@ -350,7 +348,7 @@ class EditAClient extends React.Component {
                                                     <Form.Label className="block-level">First Name</Form.Label>
                                                     <Form.Control type="text"
                                                         name="FName"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         value={values.FName}
                                                         className={errors.FName && touched.FName ? "is-invalid": null}
                                                         required  />
@@ -362,7 +360,7 @@ class EditAClient extends React.Component {
                                                     <Form.Label className="block-level">Last Name</Form.Label>
                                                     <Form.Control type="text"
                                                          name="LName"
-                                                         onChange={handleChange} 
+                                                         onChange={handleChange}
                                                          value={values.LName}
                                                          className={errors.LName && touched.LName ? "is-invalid": null}
                                                          required />
@@ -370,14 +368,14 @@ class EditAClient extends React.Component {
                                                         <span className="invalid-feedback">{errors.LName}</span>
                                                     ) : null}
                                                 </Col>
-                                                
+
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">Middle Name</Form.Label>
                                                     <Form.Control type="text"
                                                          name="MName"
-                                                         onChange={handleChange} 
+                                                         onChange={handleChange}
                                                          value={values.MName}
                                                          className={errors.MName && touched.MName ? "is-invalid h-38px": "h-38px"}
                                                          required />
@@ -411,7 +409,7 @@ class EditAClient extends React.Component {
                                                     <Form.Label className="block-level">BVN</Form.Label>
                                                     <Form.Control type="text"
                                                          name="BVN"
-                                                         onChange={handleChange} 
+                                                         onChange={handleChange}
                                                          value={allowNumbersOnly(values.BVN, 11)}
                                                          className={errors.BVN && touched.BVN ? "is-invalid": null}
                                                          required />
@@ -436,14 +434,14 @@ class EditAClient extends React.Component {
 
                                                     {/* <Form.Check type="radio"
                                                         name="gender"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         label="Female"
                                                         id="choose-female"
                                                         value={values.gender}
                                                           />
                                                     <Form.Check type="radio"
                                                         name="gender"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         label="Male"
                                                         id="choose-male"
                                                         value={values.gender}
@@ -479,7 +477,7 @@ class EditAClient extends React.Component {
                                                         ) : null}
                                                     </Form.Group>
                                                 </Col>
-                                                
+
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
@@ -498,7 +496,7 @@ class EditAClient extends React.Component {
                                                         // value={values.currencyCode}
                                                         required
                                                     />
-                                                    
+
                                                     {errors.clientBranchEncodedKey && touched.clientBranchEncodedKey ? (
                                                         <span className="invalid-feedback">{errors.clientBranchEncodedKey}</span>
                                                     ) : null}
@@ -536,7 +534,7 @@ class EditAClient extends React.Component {
                                                                 <Form.Label className="block-level">Street Address - Line 1</Form.Label>
                                                                 <Form.Control type="text"
                                                                     name="addressLine1"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.addressLine1}
                                                                     className={errors.addressLine1 && touched.addressLine1 ? "is-invalid": null} />
                                                                 {errors.addressLine1 && touched.addressLine1 ? (
@@ -547,7 +545,7 @@ class EditAClient extends React.Component {
                                                                 <Form.Label className="block-level">Street Address - Line 2</Form.Label>
                                                                 <Form.Control type="text"
                                                                     name="addressLine2"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.addressLine2}
                                                                     className={errors.addressLine2 && touched.addressLine2 ? "is-invalid": null} />
                                                                 {errors.addressLine2 && touched.addressLine2 ? (
@@ -560,7 +558,7 @@ class EditAClient extends React.Component {
                                                                 <Form.Label className="block-level">City</Form.Label>
                                                                 <Form.Control type="text"
                                                                     name="addressCity"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.addressCity}
                                                                     className={errors.addressCity && touched.addressCity ? "is-invalid": null} />
                                                                 {errors.addressCity && touched.addressCity ? (
@@ -569,9 +567,9 @@ class EditAClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">State/Province/Region</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                      name="addressState"
-                                                                     onChange={handleChange} 
+                                                                     onChange={handleChange}
                                                                      value={values.addressState}
                                                                      className={errors.addressState && touched.addressState ? "is-invalid": null} />
                                                                  {errors.addressState && touched.addressState ? (
@@ -582,9 +580,9 @@ class EditAClient extends React.Component {
                                                         <Form.Row>
                                                             <Col>
                                                                 <Form.Label className="block-level">Zip Postal Code</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="zipCode"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.zipCode}
                                                                     className={errors.zipCode && touched.zipCode ? "is-invalid": null} />
                                                                 {errors.zipCode && touched.zipCode ? (
@@ -593,9 +591,9 @@ class EditAClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">Country</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="addressCountry"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.addressCountry}
                                                                     className={errors.addressCountry && touched.addressCountry ? "is-invalid": null} />
                                                                 {errors.addressCountry && touched.addressCountry ? (
@@ -615,7 +613,7 @@ class EditAClient extends React.Component {
                                                         <Form.Row>
                                                                 <Col>
                                                                     <Form.Label className="block-level">Are you employed</Form.Label>
-                                                                    <select 
+                                                                    <select
                                                                         onChange={handleChange}
                                                                         name="workStatus"
                                                                         value={values.workStatus}
@@ -630,7 +628,7 @@ class EditAClient extends React.Component {
                                                             </Col>
                                                             <Col></Col>
                                                         </Form.Row>
-                                                        {(values.workStatus==="1" || values.workStatus===1) && 
+                                                        {(values.workStatus==="1" || values.workStatus===1) &&
                                                             <div>
                                                                 <Form.Row>
                                                                     <Col>
@@ -785,9 +783,9 @@ class EditAClient extends React.Component {
                                                         <Form.Row>
                                                             <Col>
                                                                 <Form.Label className="block-level">Phone Number</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="contactMobile"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.contactMobile}
                                                                     className={errors.contactMobile && touched.contactMobile ? "is-invalid": null} />
                                                                 {errors.contactMobile && touched.contactMobile ? (
@@ -796,9 +794,9 @@ class EditAClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">Email Address</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="contactEmail"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.contactEmail}
                                                                     className={errors.contactEmail && touched.contactEmail ? "is-invalid": null} />
                                                                 {errors.contactEmail && touched.contactEmail ? (
@@ -818,9 +816,9 @@ class EditAClient extends React.Component {
                                                         <Form.Row>
                                                             <Col>
                                                                 <Form.Label className="block-level">Next of Kin Fullname</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="nextOfKinFullName"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.nextOfKinFullName}
                                                                     className={errors.nextOfKinFullName && touched.nextOfKinFullName ? "is-invalid": null} />
                                                                 {errors.nextOfKinFullName && touched.nextOfKinFullName ? (
@@ -829,9 +827,9 @@ class EditAClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">Next of Kin Home Address</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="nextOfKinAddress"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.nextOfKinAddress}
                                                                     className={errors.nextOfKinAddress && touched.nextOfKinAddress ? "is-invalid": null} />
                                                                 {errors.nextOfKinAddress && touched.nextOfKinAddress ? (
@@ -842,9 +840,9 @@ class EditAClient extends React.Component {
                                                         <Form.Row>
                                                             <Col>
                                                                 <Form.Label className="block-level">Next of Kin Phone Number</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="nextOfKinMobile"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.nextOfKinMobile}
                                                                     className={errors.nextOfKinMobile && touched.nextOfKinMobile ? "is-invalid": null} />
                                                                 {errors.nextOfKinMobile && touched.nextOfKinMobile ? (
@@ -853,9 +851,9 @@ class EditAClient extends React.Component {
                                                             </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level">Next of Kin Relationship</Form.Label>
-                                                                <Form.Control type="text" 
+                                                                <Form.Control type="text"
                                                                     name="nextOfKinRelationship"
-                                                                    onChange={handleChange} 
+                                                                    onChange={handleChange}
                                                                     value={values.nextOfKinRelationship}
                                                                     className={errors.nextOfKinRelationship && touched.nextOfKinRelationship ? "is-invalid": null} />
                                                                 {errors.nextOfKinRelationship && touched.nextOfKinRelationship ? (
@@ -880,7 +878,7 @@ class EditAClient extends React.Component {
                                                                     name="notes"
                                                                     value={values.notes}
                                                                     className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}/>
-                                                                
+
                                                                 {errors.notes && touched.notes ? (
                                                                     <span className="invalid-feedback">{errors.notes}</span>
                                                                 ) : null}
@@ -888,38 +886,38 @@ class EditAClient extends React.Component {
                                                 </div>
                                             </Accordion.Collapse>
                                         </Accordion>
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
                                             <div className="footer-with-cta toleft">
-                                                <Button variant="light" 
+                                                <Button variant="light"
                                                         className="btn btn-secondary grayed-out"
                                                         onClick={()=>this.props.history.goBack()}
                                                 >
                                                     Cancel</Button>
-                                                
+
                                                 {/* <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
                                                 <Button variant="success" type="submit"
-                                                    disabled={updateAClientRequest.is_request_processing} 
-                                                    className="ml-20"   
-                                                    > 
+                                                    disabled={updateAClientRequest.is_request_processing}
+                                                    className="ml-20"
+                                                    >
                                                         {updateAClientRequest.is_request_processing?"Please wait...": "Update Customer"}
                                                 </Button>
-                
-                                                
+
+
                                             </div>
-                                            {updateAClientRequest.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS && 
+                                            {updateAClientRequest.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS &&
                                                 <Alert variant="success">
                                                     {updateAClientRequest.request_data.response.data.message}
                                                 </Alert>
                                             }
-                                            {updateAClientRequest.request_status === clientsConstants.UPDATE_A_CLIENT_FAILURE && 
+                                            {updateAClientRequest.request_status === clientsConstants.UPDATE_A_CLIENT_FAILURE &&
                                                 <Alert variant="danger">
                                                     {updateAClientRequest.request_data.error}
-                                            
+
                                                 </Alert>
                                             }
                                         </Form>
@@ -928,23 +926,23 @@ class EditAClient extends React.Component {
                         )
                     }else{
                         return(
-                            <div className="loading-content card"> 
+                            <div className="loading-content card">
                                 <div>The requsted Customer could not be found</div>
                             </div>
                         )
                     }
             }
-                    
+
             if (getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_FAILURE){
                 return (
-                    <div className="loading-content card"> 
+                    <div className="loading-content card">
                         <div>{getAClientRequest.request_data.error}</div>
                     </div>
                 )
             }
-            
-        
-        
+
+
+
     }
 
     render() {
@@ -955,11 +953,11 @@ class EditAClient extends React.Component {
                         <div className="module-content">
                             <div className="content-container">
                                 <div className="row">
-                                    
+
                                     <div className="col-sm-12">
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
-                                                
+
                                                 {/* <div className="footer-with-cta toleft">
                                                     <Button variant="secondary" className="grayed-out">Rearrange</Button>
                                                     <Button >Add Channel</Button>
