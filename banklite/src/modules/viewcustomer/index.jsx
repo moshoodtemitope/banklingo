@@ -12,7 +12,7 @@ import  CustomerHeading from './customerheader'
 // import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 // import  SidebarElement from '../../shared/elements/sidebar'
-import "./customerprofile.scss"; 
+import "./customerprofile.scss";
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 
 
@@ -39,7 +39,7 @@ class ViewCustomer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.match.params.id !== this.props.match.params.id) {
-        
+
             this.clientEncodedKey = nextProps.match.params.id;
         }
 
@@ -61,8 +61,8 @@ class ViewCustomer extends React.Component {
 
     renderCustomerActivities =()=>{
         let getAClientActivitiesRequest = this.props.getAClientActivitiesReducer;
-        
-       
+
+
         if(getAClientActivitiesRequest.request_status===clientsConstants.GET_A_CLIENT_ACTIVITIES_PENDING){
             return(
                 <div className="loading-text">Please wait... </div>
@@ -75,7 +75,7 @@ class ViewCustomer extends React.Component {
             if(customerActivitiesData.result.length>=1){
                 return(
                     <div className="activities-wrap">
-                        
+
                         {
                             customerActivitiesData.result.map((eachActivity,  index)=>{
                                 return(
@@ -86,7 +86,7 @@ class ViewCustomer extends React.Component {
                                         <span className="activity-action">{eachActivity.action}</span>
                                         <div>
                                             <span className="action-date">{eachActivity.creationDate}</span>
-                                            
+
                                         </div>
                                     </div>
                                 )
@@ -108,7 +108,7 @@ class ViewCustomer extends React.Component {
         if(getAClientActivitiesRequest.request_status===clientsConstants.GET_A_CLIENT_ACTIVITIES_FAILURE){
 
             return(
-                <div className="loading-content errormsg"> 
+                <div className="loading-content errormsg">
                 <div>{getAClientActivitiesRequest.request_data.error}</div>
             </div>
             )
@@ -124,7 +124,7 @@ class ViewCustomer extends React.Component {
                 &&  getClientLoansRequest.request_status ===loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
                 && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS){
 
-                   
+
                     let   customerLoanAccounts = getClientLoansRequest.request_data.response.data;
                     let   customerDepositAccounts = getClientDepositsRequest.request_data.response.data;
                     let getAClientRequest = this.props.getAClientReducer;
@@ -172,14 +172,14 @@ class ViewCustomer extends React.Component {
                                                                             <td>{eachAccount.dateCreated}</td>
                                                                             <td>
                                                                             {(eachAccount.productName!==null && eachAccount.productName!=="")?
-                                                                                    `${eachAccount.productName} - `:""} 
+                                                                                    `${eachAccount.productName} - `:""}
                                                                             {eachAccount.accountNumber}
                                                                             </td>
                                                                             <td>Loan</td>
                                                                             <td>{eachAccount.loanStateDescription}</td>
                                                                             <td>₦{numberWithCommas(eachAccount.loanAmount, true, true)}</td>
                                                                         </tr>
-                                                                    ) 
+                                                                    )
                                                                 }
                                                             })
                                                         }
@@ -194,18 +194,18 @@ class ViewCustomer extends React.Component {
                                                                             <td>{eachAccount.dateCreated}</td>
                                                                             <td>
                                                                             {(eachAccount.productName!==null && eachAccount.productName!=="")?
-                                                                                    `${eachAccount.productName} - `:""} 
+                                                                                    `${eachAccount.productName} - `:""}
                                                                             {eachAccount.accountNumber}
                                                                             </td>
                                                                             <td>Deposit</td>
                                                                             <td>{eachAccount.accountStateDescription}</td>
                                                                             <td>₦{numberWithCommas(eachAccount.depositBalance, true, true)}</td>
                                                                         </tr>
-                                                                    ) 
+                                                                    )
                                                                 }
                                                             })
                                                         }
-                                                   
+
                                                         {/* <tr>
                                                             <td>Payroll- Private 348046272</td>
                                                             <td>Loan</td>
@@ -230,7 +230,7 @@ class ViewCustomer extends React.Component {
                                                     <div className="each-profile-column">
                                                         <div className="each-overview">
                                                             <h6>General Information</h6>
-                                                            <TableComponent classnames="striped bordered hover">
+                                                            <TableComponent classnames="striped hover">
 
                                                                 <tbody>
                                                                     <tr>
@@ -393,10 +393,10 @@ class ViewCustomer extends React.Component {
                     )
             }
     }
-    
+
 
     render() {
-        
+
         return (
             <Fragment>
                 {/* <InnerPageContainer {...this.props}> */}

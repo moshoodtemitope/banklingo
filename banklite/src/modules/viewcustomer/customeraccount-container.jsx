@@ -16,7 +16,7 @@ import Col from 'react-bootstrap/Col'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Button from 'react-bootstrap/Button'
 import  TableComponent from '../../shared/elements/table'
-import "./customerprofile.scss"; 
+import "./customerprofile.scss";
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 
 import Form from 'react-bootstrap/Form'
@@ -65,7 +65,7 @@ class CustomerAccountContainer extends React.Component {
                 tasks: `/customer/${this.clientEncodedKey}/tasks`,
                 communications: `/customer/${this.clientEncodedKey}/communications`,
                 comments: `/customer/${this.clientEncodedKey}/comments`,
-                
+
                 allclosedaccounts: `/customer/${this.clientEncodedKey}/closedaccounts`,
             },
             showNewTask:false,
@@ -76,14 +76,14 @@ class CustomerAccountContainer extends React.Component {
             PageSize: 100,
             CurrentPage: 1,
             changeCustomerState:false,
-           
+
 
         }
 
         this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
-        
-        
-        
+
+
+
     }
 
 
@@ -107,13 +107,13 @@ class CustomerAccountContainer extends React.Component {
         const { dispatch } = this.props;
 
         dispatch(depositActions.getClientDeposits(clientEncodedKey,params));
-    } 
+    }
 
     getCustomerLoanAccounts = (clientEncodedKey , params)=>{
         const { dispatch } = this.props;
 
         dispatch(loanActions.getClientLoans(clientEncodedKey,params));
-    } 
+    }
 
     getClientInfo = (clientEncodedKey)=>{
         const {dispatch} = this.props;
@@ -124,7 +124,7 @@ class CustomerAccountContainer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.match.params.id !== this.props.match.params.id) {
-        
+
         this.clientEncodedKey = nextProps.match.params.id;
 
         this.setState({
@@ -135,7 +135,7 @@ class CustomerAccountContainer extends React.Component {
                 tasks: `/customer/${this.clientEncodedKey}/tasks`,
                 communications: `/customer/${this.clientEncodedKey}/communications`,
                 comments: `/customer/${this.clientEncodedKey}/comments`,
-               
+
                 allclosedaccounts: `/customer/${this.clientEncodedKey}/closedaccounts`,
             }
         })
@@ -147,23 +147,23 @@ class CustomerAccountContainer extends React.Component {
 
 
     handleTaskClose = () => this.setState({showNewTask:false});
-    
+
     handleTaskShow = () => this.setState({showNewTask:true});
 
     handleChangeStateClose = () => this.setState({changeCustomerState:false});
-    
+
     handleChangeStateShow = () => this.setState({changeCustomerState:true});
 
     handleAddFieldClose = () => this.setState({showAddField:false});
-    
+
     handleAddFieldShow = () => this.setState({showAddField:true});
 
     handleSetNotificationClose = () => this.setState({showSetNotification:false});
-    
+
     handleSetNotificationShow = () => this.setState({showSetNotification:true});
 
     handleChangeHistoryClose = () => this.setState({showChangeHistory:false});
-    
+
     handleChangeHistoryShow = () => this.setState({showChangeHistory:true});
 
     newTask = ()=>{
@@ -193,7 +193,7 @@ class CustomerAccountContainer extends React.Component {
                             <Col className="date-wrap">
                                 <Form.Label className="block-level">Due Date</Form.Label>
                                  <DatePicker
-                                 placeholderText="Choose entry date" selected={this.state.dob} 
+                                 placeholderText="Choose entry date" selected={this.state.dob}
                                     onChange={this.handleDatePicker}
                                     onChangeRaw={(e)=>this.handleChange(e)}
                                     dateFormat={window.dateformat}
@@ -213,26 +213,26 @@ class CustomerAccountContainer extends React.Component {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    
+
                     <Button variant="light" onClick={this.handleTaskClose}>
                         Cancel
                     </Button>
                     <Button variant="secondary">
                         Save Task
                     </Button>
-                
+
                 </Modal.Footer>
             </Modal>
         )
     }
 
-    
+
 
     handleNewCustomerState = async (changeCustomerStatePayload, newStateUpdate)=>{
         const {dispatch} = this.props;
-       
+
         await dispatch(clientsActions.changeClientState(changeCustomerStatePayload, newStateUpdate));
-    } 
+    }
 
     changeCustomerStateBox = (customerDetails)=>{
         const {changeCustomerState, newState,ctaText, newStateUpdate} = this.state;
@@ -241,7 +241,7 @@ class CustomerAccountContainer extends React.Component {
         let changeCustomerStateValidationSchema = Yup.object().shape({
             Comment:  Yup.string()
                 .min(2, 'Valid comments required')
-        
+
        });
         return(
             <Modal show={changeCustomerState} onHide={this.handleChangeStateClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
@@ -278,7 +278,7 @@ class CustomerAccountContainer extends React.Component {
                                         }, 3000);
                                     }
 
-                                    
+
 
                                 }
                             )
@@ -316,7 +316,7 @@ class CustomerAccountContainer extends React.Component {
                                             onChange={handleChange}
                                             name="Comment"
                                         value={values.Comment}
-                                        className={errors.Comment && touched.Comment ? "is-invalid form-control form-control-sm" : null} 
+                                        className={errors.Comment && touched.Comment ? "is-invalid form-control form-control-sm" : null}
                                         />
                                         {errors.Comment && touched.Comment ? (
                                             <span className="invalid-feedback">{errors.Comment}</span>
@@ -328,23 +328,23 @@ class CustomerAccountContainer extends React.Component {
                                     <Button variant="light" onClick={this.handleChangeStateClose}>
                                         Cancel
                                     </Button>
-                                    <Button 
+                                    <Button
                                         variant="success"
                                         type="submit"
                                         disabled={changeClientStateRequest.is_request_processing}
                                     >
                                         {changeClientStateRequest.is_request_processing?"Please wait...":`${ctaText}`}
-                                        
+
                                     </Button>
 
                                 </Modal.Footer>
                                 <div className="footer-alert">
-                                    {changeClientStateRequest.request_status === clientsConstants.CHANGE_CLIENT_STATE_SUCCESS && 
+                                    {changeClientStateRequest.request_status === clientsConstants.CHANGE_CLIENT_STATE_SUCCESS &&
                                         <Alert variant="success" className="w-65 mlr-auto">
                                             {changeClientStateRequest.request_data.response.data.message}
                                         </Alert>
                                     }
-                                    {changeClientStateRequest.request_status === clientsConstants.CHANGE_CLIENT_STATE_FAILURE && 
+                                    {changeClientStateRequest.request_status === clientsConstants.CHANGE_CLIENT_STATE_FAILURE &&
                                         <Alert variant="danger" className="w-65 mlr-auto">
                                             {changeClientStateRequest.request_data.error}
                                         </Alert>
@@ -393,14 +393,14 @@ class CustomerAccountContainer extends React.Component {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    
+
                     <Button variant="light" onClick={this.handleSetNotificationClose}>
                         Cancel
                     </Button>
                     <Button variant="secondary">
                         Save Changes
                     </Button>
-                
+
                 </Modal.Footer>
             </Modal>
         )
@@ -421,7 +421,7 @@ class CustomerAccountContainer extends React.Component {
                                 <option value="">All</option>
                             </select>
                         </div>
-                        
+
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
@@ -454,14 +454,14 @@ class CustomerAccountContainer extends React.Component {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    
+
                     <Button variant="light" onClick={this.handleChangeHistoryClose}>
                         Cancel
                     </Button>
                     <Button variant="secondary">
                         Save Changes
                     </Button>
-                
+
                 </Modal.Footer>
             </Modal>
         )
@@ -480,7 +480,7 @@ class CustomerAccountContainer extends React.Component {
                             <Button size="sm" onClick={this.handleTaskShow}>New Task</Button>
                         </li>
                     }
-                    {   ((customerDetails.clientState===4 || customerDetails.clientState===1) && 
+                    {   ((customerDetails.clientState===4 || customerDetails.clientState===1) &&
                         (allUSerPermissions.indexOf("bnk_create_loan") >-1 || allUSerPermissions.indexOf("bnk_create_deposit") >-1  )) &&
                         <li>
                             <DropdownButton
@@ -504,7 +504,7 @@ class CustomerAccountContainer extends React.Component {
                     {allUSerPermissions.indexOf("bnk_edit_client") >-1 &&
                         <li>
                             <Button size="sm">
-                                <NavLink to={`/clients/edit/${customerDetails.clientEncodedKey}`} >Edit</NavLink>
+                                <NavLink style={{color: '#34495E'}} to={`/clients/edit/${customerDetails.clientEncodedKey}`} >Edit</NavLink>
                             </Button>
                         </li>
                     }
@@ -536,7 +536,7 @@ class CustomerAccountContainer extends React.Component {
                                 className="customone"
                                 alignRight
                             >
-                                
+
                                 <Dropdown.Item eventKey="1" onClick={()=>{
                                     this.setState({newState: "Approved", newStateUpdate: "undoblacklist", ctaText:"Undo Blacklist Customer"})
                                     this.handleChangeStateShow()
@@ -544,7 +544,7 @@ class CustomerAccountContainer extends React.Component {
                             </DropdownButton>
                         </li>
                     }
-                    {(customerDetails.clientState===3 
+                    {(customerDetails.clientState===3
                         && (allUSerPermissions.indexOf("bnk_blacklist_customer") >-1 || allUSerPermissions.indexOf("bnk_approve_client") >-1)) &&
                         <li>
                             <DropdownButton
@@ -580,13 +580,13 @@ class CustomerAccountContainer extends React.Component {
         )
     }
     renderLoanAccountsNav = (loanAccounts)=>{
-        
+
         return(
             loanAccounts.map((eachLoanAccount,  index)=>{
-                
+
                     return(
                         <li key={index}>
-                            <NavLink to={`/customer/${this.clientEncodedKey}/loanaccount/${eachLoanAccount.encodedKey}`}>
+                            <NavLink activeClassName="activeNavLink" to={`/customer/${this.clientEncodedKey}/loanaccount/${eachLoanAccount.encodedKey}`}>
                             {(eachLoanAccount.productName!==null && eachLoanAccount.productName!=="")?
                                         `${eachLoanAccount.productName} - `:""}
                                 {eachLoanAccount.accountNumber}
@@ -600,12 +600,12 @@ class CustomerAccountContainer extends React.Component {
                             </NavLink>
                         </li>
                     )
-                
+
             })
         )
     }
 
-    
+
 
     renderDepositAccountsNav = (savingsAccounts)=>{
         // if(savingsAccounts.result!==null){
@@ -614,19 +614,19 @@ class CustomerAccountContainer extends React.Component {
                     if(eachDepositAccount.accountNumber!=="" && eachDepositAccount.accountNumber!==null){
                         return(
                             <li key={index}>
-                                <NavLink to={`/customer/${this.clientEncodedKey}/savingsaccount/${eachDepositAccount.encodedKey}`}>
+                                <NavLink activeClassName="activeNavLink" to={`/customer/${this.clientEncodedKey}/savingsaccount/${eachDepositAccount.encodedKey}`}>
                                 {(eachDepositAccount.productName!==null && eachDepositAccount.productName!=="")?
                                             `${eachDepositAccount.productName} - `:""}
                                     {eachDepositAccount.accountNumber}
 
                                 {eachDepositAccount.accountStateDescription==="Active" &&
-                                    <span className={eachDepositAccount.accountStateDescription==="Active"? "stateindicator active-state": ""}></span>
+                                    <span className={eachDepositAccount.accountStateDescription === 'Active' ? 'stateindicator active-state' : ''}/>
                                 }
                                 {eachDepositAccount.accountStateDescription==="Approved" &&
-                                    <span className={eachDepositAccount.accountStateDescription==="Approved"? "stateindicator mid-state": ""}></span>
+                                    <span className={eachDepositAccount.accountStateDescription === 'Approved' ? 'stateindicator mid-state' : ''}/>
                                 }
                                 {(eachDepositAccount.accountStateDescription==="Rejected" || eachDepositAccount.accountStateDescription==="Closed Withdrawn" || eachDepositAccount.accountStateDescription==="Closed") &&
-                                    <span className="stateindicator closed-state"></span>
+                                    <span className="stateindicator closed-state"/>
                                 }
                                 </NavLink>
                             </li>
@@ -664,45 +664,45 @@ class CustomerAccountContainer extends React.Component {
                 <div className="content-container">
                     <ul className="nav">
                         <li>
-                            <NavLink exact to={generatedRoutes.customer}>Overview</NavLink>
+                            <NavLink exact activeClassName="activeNavLink" to={generatedRoutes.customer}>Overview</NavLink>
                         </li>
                         {this.renderLoanAccountsNav(unClosedLoans)}
                         {this.renderDepositAccountsNav(unClosedSavings)}
                         {totalClosed>=1 &&
                             <li>
-                                <NavLink  to={generatedRoutes.allclosedaccounts}>
+                                <NavLink activeClassName="activeNavLink" to={generatedRoutes.allclosedaccounts}>
                                     Closed Accounts ({totalClosed})
                                     <span className="stateindicator closed-state"></span>
                                 </NavLink>
                             </li>
                         }
                         <li>
-                            <NavLink to={generatedRoutes.activities}>Activities</NavLink>
+                            <NavLink activeClassName="activeNavLink" to={generatedRoutes.activities}>Activities</NavLink>
                         </li>
                         {allUSerPermissions.indexOf("bnk_view_customer_documents") >-1 &&
-                        
+
                             <li>
-                                <NavLink to={generatedRoutes.attachments}>Attachments</NavLink>
+                                <NavLink activeClassName="activeNavLink" to={generatedRoutes.attachments}>Attachments</NavLink>
                             </li>
                         }
                         {allUSerPermissions.indexOf("bnk_manage_clients_task") >-1 &&
                             <li>
-                                <NavLink to={generatedRoutes.tasks}>Tasks</NavLink>
+                                <NavLink activeClassName="activeNavLink" to={generatedRoutes.tasks}>Tasks</NavLink>
                             </li>
                         }
 
                         {allUSerPermissions.indexOf("bnk_view_client_communications") >-1 &&
                             <li>
-                                <NavLink to={generatedRoutes.communications}>Communications</NavLink>
+                                <NavLink activeClassName="activeNavLink" to={generatedRoutes.communications}>Communications</NavLink>
                             </li>
                         }
                         {allUSerPermissions.indexOf("bnk_view_customer_comments") >-1 &&
                             <li>
-                                <NavLink to={generatedRoutes.comments}>Comments</NavLink>
+                                <NavLink activeClassName="activeNavLink" to={generatedRoutes.comments}>Comments</NavLink>
                             </li>
                         }
                     </ul>
-                    
+
                 </div>
             </div>
         )
@@ -711,7 +711,7 @@ class CustomerAccountContainer extends React.Component {
     renderCustomerName =(customerDetails)=>{
         return(
             <div className="content-container">
-                                    
+
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="">
@@ -722,7 +722,7 @@ class CustomerAccountContainer extends React.Component {
                                 customerDetails.lastName:""}&nbsp;
                                 {(customerDetails.middleName!==null && customerDetails.middleName!=="")?
                                 customerDetails.middleName:""}
-                                
+
                             </h2>
                         </div>
                     </div>
@@ -749,8 +749,8 @@ class CustomerAccountContainer extends React.Component {
         if(getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_SUCCESS
             &&  getClientLoansRequest.request_status ===loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
             && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS){
-                
-                
+
+
                 let customerDetails = getAClientRequest.request_data.response.data;
                 let   customerLoanAccounts = getClientLoansRequest.request_data.response.data;
                 let    customerDepositAccounts = getClientDepositsRequest.request_data.response.data;
@@ -759,7 +759,7 @@ class CustomerAccountContainer extends React.Component {
             return(
                 <div>
                     {this.newTask()}
-                    
+
                     {this.changeCustomerStateBox(customerDetails)}
                     {this.setNotificationBox()}
                     {this.changeHistoryBox()}
@@ -775,20 +775,20 @@ class CustomerAccountContainer extends React.Component {
         }
 
     }
-    
+
 
     render() {
-        
+
         let {generatedRoutes} = this.state;
         return (
              <Fragment>
                 <InnerPageContainer {...this.props}>
                     <div className="content-wrapper">
-                        {this.renderCustomerHeading()} 
-                        
+                        {this.renderCustomerHeading()}
+
                         {this.props.children}
-                        <Route exact to='/customer/:id'  component={AccountContainer} /> 
-                        
+                        <Route exact to='/customer/:id'  component={AccountContainer} />
+
                     </div>
                 </InnerPageContainer>
              </Fragment>
