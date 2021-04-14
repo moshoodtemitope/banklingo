@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import { NavLink} from 'react-router-dom';
+import { history } from '../../_helpers/history';
 import ListIco from '../../assets/img/list.svg';
 import AddIco from '../../assets/img/addnew.svg';
 import InfoIco from '../../assets/img/info.svg';
@@ -2666,7 +2667,7 @@ class DashboardLanding extends React.Component {
                                 </div>
                                 <div className="cardaction-txt">New Task</div>
                             </div>
-                            <div className="each-cardaction">
+                            <div className="each-cardaction" onClick={()=>history.push("/my-profile/tasks")}>
                                 <div className="cardaction-ico">
                                     <img src={ListIco} alt="" />
                                 </div>
@@ -2694,7 +2695,7 @@ class DashboardLanding extends React.Component {
                                     </div>
                                     <div className="cardaction-txt">New Task</div>
                                 </div>
-                                <div className="each-cardaction">
+                                <div className="each-cardaction" onClick={()=>history.push("/my-profile/tasks")}>
                                     <div className="cardaction-ico">
                                         <img src={ListIco} alt="" />
                                     </div>

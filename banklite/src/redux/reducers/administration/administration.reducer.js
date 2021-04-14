@@ -1608,3 +1608,28 @@ export function updateARiskLevel(state=[], action) {
 }
 
 
+export function fetchAllTasksReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ALL_TASKS_PENDING:
+            return {
+                request_status: administrationConstants.GET_ALL_TASKS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_TASKS_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ALL_TASKS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_TASKS_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ALL_TASKS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}

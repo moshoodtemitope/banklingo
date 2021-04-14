@@ -21,6 +21,8 @@ import ClientsBlacklisted from './clients/blacklisted'
 import NewClient from './clients/new-client'
 import EditAClient from './clients/edit-client'
 
+import ViewAllTasks from './all-tasks'
+
 import LoansManagement from './loanmanagement'
 import ActiveLoans from './loanmanagement/active'
 import ApprovedLoans from './loanmanagement/approved'
@@ -137,7 +139,7 @@ import CustomerAccountContainer from './viewcustomer/customeraccount-container'
 // import ViewCustomerAttachments from './viewcustomer/attachments'
 // import ViewCustomerComments from './viewcustomer/comments'
 // import ViewCustomerCommunications from './viewcustomer/communications'
-// import ViewCustomerTasks from './viewcustomer/tasks'
+import ViewUserTasks from './viewuser/my-tasks'
 // import NewCustomerAccount from './viewcustomer/newcustomer'
 // import EditCustomerAccount from './viewcustomer/editcustomer'
 // import NewInvestmentCustomerAccount from './viewcustomer/new-investmentcustomer'
@@ -423,12 +425,14 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_manage_products" path='/loanproduct/:productid' {...this.props} authed={this.props.user} component={LoanProductInfoContainer} /> 
                         <PrivateRoute  exact path='/forbidden-access' {...this.props} authed={this.props.user} component={ForbiddenPage} />
                         <PrivateRoute  exact path='/not-found' {...this.props} authed={this.props.user} component={unAuthedPage} />
+                        <PrivateRoute exact path='/my-profile/tasks' {...this.props} authed={this.props.user} component={ViewUserTasks} /> 
+                        <PrivateRoute exact path='/all-tasks' {...this.props} authed={this.props.user} component={ViewAllTasks} /> 
                         {/* <PrivateRoute exact path='/customer/:id' {...this.props} authed={this.props.user} component={ViewCustomer} />  */}
                         {/* <PrivateRoute exact path='/createnewcustomer' {...this.props} authed={this.props.user} component={NewCustomerAccount} /> 
                         <PrivateRoute exact path='/create-investmentcustomer' {...this.props} authed={this.props.user} component={NewInvestmentCustomerAccount} /> 
                         <PrivateRoute exact path='/editcustomer' {...this.props} authed={this.props.user} component={EditCustomerAccount} /> 
                         <PrivateRoute exact path='/customer/:id/attachments' {...this.props} authed={this.props.user} component={ViewCustomerAttachments} /> 
-                        <PrivateRoute exact path='/customer/:id/tasks' {...this.props} authed={this.props.user} component={ViewCustomerTasks} /> 
+                        
                         <PrivateRoute exact path='/customer/:id/communications' {...this.props} authed={this.props.user} component={ViewCustomerCommunications} /> 
                         <PrivateRoute exact path='/customer/:id/comments' {...this.props} authed={this.props.user} component={ViewCustomerComments} /> 
                         <PrivateRoute exact path='/customer/:id/closedaccounts' {...this.props} authed={this.props.user} component={ViewClosedAccounts} /> 

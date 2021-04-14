@@ -52,7 +52,8 @@ import{
     fetchAllRiskLevel,
     getARiskLevel,
     createARiskLevel,
-    updateARiskLevel
+    updateARiskLevel,
+    fetchAllTasksReducer
 }
  from './administration/administration.reducer'
 
@@ -313,7 +314,8 @@ export const administration ={
     fetchAllRiskLevel,
     getARiskLevel,
     createARiskLevel,
-    updateARiskLevel
+    updateARiskLevel,
+    fetchAllTasksReducer
     
     
 }

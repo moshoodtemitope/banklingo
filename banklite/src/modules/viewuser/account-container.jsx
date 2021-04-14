@@ -17,7 +17,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Button from 'react-bootstrap/Button'
 import  TableComponent from '../../shared/elements/table'
 import "./styles.scss"; 
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+
 
 
 

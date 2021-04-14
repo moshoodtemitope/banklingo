@@ -14,7 +14,7 @@ import  TableComponent from '../../shared/elements/table'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./styles.scss"; 
 import { numberWithCommas , getDateFromISO} from '../../shared/utils';
-
+import  ActivitiesBox from '../../shared/elements/activities'
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
@@ -230,8 +230,9 @@ class MyProfile extends React.Component {
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="leftside-items">
-                                                <h6>Latest Activity </h6>
-                                                {this.renderUserActivities()}
+                                            <ActivitiesBox
+                                                activityType = "logged"
+                                            />
                                             </div>
                                         </div>
                                     </div>

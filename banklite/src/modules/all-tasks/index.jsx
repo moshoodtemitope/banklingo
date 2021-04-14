@@ -2,34 +2,29 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-import { connect } from 'react-redux';
 
-import DatePicker from '../../_helpers/datepickerfield'
-import "react-datepicker/dist/react-datepicker.css";
+import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-import Button from 'react-bootstrap/Button'
-import Modal from 'react-bootstrap/Modal'
-import Form from 'react-bootstrap/Form'
+// import Form from 'react-bootstrap/Form'
+import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
-import CreateNewTask from '../../shared/components/new-task'
-
+// import Select from 'react-select';
+import Form from 'react-bootstrap/Form'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
-
-import { getDateFromISO} from '../../shared/utils';
-import {clientsActions} from '../../redux/actions/clients/clients.action';
+// import Row from 'react-bootstrap/Row'
+import Button from 'react-bootstrap/Button'
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import CreateNewTask from '../../shared/components/new-task'
 import Alert from 'react-bootstrap/Alert'
 
+import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
-
-import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
-
-
-
-
-class ViewUserTasks extends React.Component {
+class ViewAllTasks extends React.Component {
     constructor(props) {
         super(props);
         this.clientEncodedKey = this.props.match.params.id;
@@ -49,26 +44,18 @@ class ViewUserTasks extends React.Component {
 
 
     loadInitialCustomerData = ()=>{
-        
-
-        this.getMyTasks();
-        // this.getAllUsers();
+        this.getAllTasks();
     }
 
-    // getUserInfo = async(userEncodedKey)=>{
-    //     const {dispatch} = this.props;
-
-    //    await dispatch(administrationActions.getAUser(userEncodedKey, true));
-    // }
 
 
-    getMyTasks = (clientEncodedKey)=>{
+    getAllTasks = ()=>{
         const {dispatch} = this.props;
 
         let { PageSize, CurrentPage } = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
 
-        dispatch(clientsActions.getAUserTask(params));
+        dispatch(administrationActions.fetchAllTasks(params));
     }
 
     
@@ -77,11 +64,7 @@ class ViewUserTasks extends React.Component {
     
     handleTaskShow = () => this.setState({showNewTask:true});
 
-    handleClientTasks = async (addCommentsPayload)=>{
-        const {dispatch} = this.props;
-       
-        await dispatch(clientsActions.createClientTask(addCommentsPayload));
-    } 
+    
 
     setPagesize = (PageSize, tempData)=>{
         // console.log('----here', PageSize.target.value);
@@ -99,10 +82,10 @@ class ViewUserTasks extends React.Component {
         
 
         if(tempData){
-            dispatch(clientsActions.getAClientTask(this.clientEncodedKey, params, tempData))
+            dispatch(administrationActions.fetchAllTasks(params, tempData))
             
         }else{
-            dispatch(clientsActions.getAClientTask(this.clientEncodedKey, params));
+            dispatch(administrationActions.fetchAllTasks(params));
         }
         
     }
@@ -116,14 +99,14 @@ class ViewUserTasks extends React.Component {
         let params= `PageSize=${PageSize}&CurrentPage=${nextPage}`;
 
         if(tempData){
-            dispatch(clientsActions.getAClientTask(this.clientEncodedKey, params,tempData));
+            dispatch(administrationActions.fetchAllTasks(params,tempData));
         }else{
-            dispatch(clientsActions.getAClientTask(this.clientEncodedKey, params));
+            dispatch(administrationActions.fetchAllTasks(params));
         }
     }
 
-    renderUserDetailsHeading = ()=>{
-        let {user}= this.state;
+    renderHeading = ()=>{
+        
         return(
             <div>
                 <div className="module-heading">
@@ -135,41 +118,20 @@ class ViewUserTasks extends React.Component {
                                 <div className="col-sm-12">
                                     <div className="">
                                         <h2>
-                                           {user.displayName}
-                                            
+                                           Application Tasks
                                         </h2>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {this.renderSubMenu()}
+                    
                 </div>
             </div>
         )
     }
 
-    renderSubMenu = ()=>{
-        
-        return(
-            <div className="module-submenu">
-                <div className="content-container">
-                    
-                    
-                    <ul className="nav">
-                        <li>
-                            <NavLink exact to='/my-profile'>Overview</NavLink>
-                        </li>
-                        <li>
-                            <NavLink exact to='/my-profile/tasks'>My Tasks</NavLink>
-                        </li>
-                    </ul>
-                    
-                    
-                </div>
-            </div>
-        )
-    }
+   
   
 
     renderTaskWrap =()=>{
@@ -182,9 +144,9 @@ class ViewUserTasks extends React.Component {
     }
 
     renderAUserTasks =()=>{
-        let getAUserTasksRequest =  this.props.getAUserTasksReducer;
-        let saveRequestData= getAUserTasksRequest.request_data!==undefined?getAUserTasksRequest.request_data.tempData:null;
-        if(getAUserTasksRequest.request_status===clientsConstants.GET_MY_TASKS_PENDING){
+        let fetchAllTasksRequest =  this.props.fetchAllTasksReducer;
+        let saveRequestData= fetchAllTasksRequest.request_data!==undefined?fetchAllTasksRequest.request_data.tempData:null;
+        if(fetchAllTasksRequest.request_status===administrationConstants.GET_ALL_TASKS_PENDING){
             if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                 return(
                     <div className=""> 
@@ -279,10 +241,10 @@ class ViewUserTasks extends React.Component {
             }
         }
 
-        if(getAUserTasksRequest.request_status===clientsConstants.GET_MY_TASKS_SUCCESS){
-            let getAUserTasksRequestData = getAUserTasksRequest.request_data.response.data.result;
+        if(fetchAllTasksRequest.request_status===administrationConstants.GET_ALL_TASKS_SUCCESS){
+            let fetchAllTasksRequestData = fetchAllTasksRequest.request_data.response.data.result;
             
-            if(getAUserTasksRequestData.length>=1){
+            if(fetchAllTasksRequestData.length>=1){
                 return(
                     <div className=""> 
                         <div className="heading-with-cta ">
@@ -292,7 +254,7 @@ class ViewUserTasks extends React.Component {
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow" 
-                                    onChange={(e)=>this.setPagesize(e, getAUserTasksRequestData)}
+                                    onChange={(e)=>this.setPagesize(e, fetchAllTasksRequestData)}
                                     value={this.state.PageSize}
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
@@ -301,11 +263,11 @@ class ViewUserTasks extends React.Component {
                                     <option value="200">200</option>
                                 </select>
                                 <TablePagination
-                                    totalPages={getAUserTasksRequestData.totalPages}
-                                    currPage={getAUserTasksRequestData.currentPage}
-                                    currRecordsCount={getAUserTasksRequestData.length}
-                                    totalRows={getAUserTasksRequestData.totalRows}
-                                    tempData={getAUserTasksRequestData}
+                                    totalPages={fetchAllTasksRequestData.totalPages}
+                                    currPage={fetchAllTasksRequestData.currentPage}
+                                    currRecordsCount={fetchAllTasksRequestData.length}
+                                    totalRows={fetchAllTasksRequestData.totalRows}
+                                    tempData={fetchAllTasksRequestData}
                                     pagesCountToshow={4}
                                     refreshFunc={this.loadNextPage}
                                 />
@@ -324,7 +286,7 @@ class ViewUserTasks extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                    getAUserTasksRequestData.map((eachTask, index)=>{
+                                    fetchAllTasksRequestData.map((eachTask, index)=>{
                                         return(
                                             <tr key={index}>
                                                 <td>{eachTask.summary}</td>
@@ -396,11 +358,11 @@ class ViewUserTasks extends React.Component {
             }
         }
 
-        if(getAUserTasksRequest.request_status===clientsConstants.GET_MY_TASKS_FAILURE){
+        if(fetchAllTasksRequest.request_status===administrationConstants.GET_ALL_TASKS_FAILURE){
 
             return(
                 <div className="loading-content errormsg"> 
-                <div>{getAUserTasksRequest.request_data.error}</div>
+                <div>{fetchAllTasksRequest.request_data.error}</div>
             </div>
             )
         }
@@ -423,8 +385,8 @@ class ViewUserTasks extends React.Component {
                 <InnerPageContainer {...this.props}>
                     
                     <div className="content-wrapper">
-                        {this.renderUserDetailsHeading()}
-                        <CreateNewTask source="client"  clientEncodedKey={this.clientEncodedKey} closeNewTask={this.handleCloseNewTask} showNewTask={this.state.displayNewTask} />
+                        {this.renderHeading()}
+                        <CreateNewTask source="client"   closeNewTask={this.handleCloseNewTask} showNewTask={this.state.displayNewTask} />
                         {/* <CreateNewTask clientName={`${customerDetails.firstName} ${customerDetails.lastName}`} clientEncodedKey={this.clientEncodedKey} closeNewTask={this.handleCloseNewTask} showNewTask={this.state.displayNewTask} /> */}
                         <div className="module-content">
                             <div className="content-container">
@@ -446,11 +408,9 @@ class ViewUserTasks extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        
-        createAClientTaskReducer: state.clientsReducers.createAClientTaskReducer,
-        getAUserTasksReducer: state.clientsReducers.getAUserTasksReducer,
+        fetchAllTasksReducer: state.administrationReducers.fetchAllTasksReducer,
         
     };
 }
 
-export default connect(mapStateToProps)(ViewUserTasks);
+export default connect(mapStateToProps)(ViewAllTasks);
