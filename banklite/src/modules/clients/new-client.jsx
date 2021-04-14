@@ -55,6 +55,7 @@ class NewClient extends React.Component {
     await dispatch(clientsActions.createClient(createNewCustomerpayload));
   };
 
+
   createCustomerValidationSchema = Yup.object().shape({
     FName: Yup.string()
       .min(1, 'Valid Response required')
@@ -96,7 +97,58 @@ class NewClient extends React.Component {
     zipCode: Yup.string()
       .min(2, 'Valid response required')
       .max(10, 'Max limit reached'),
-    workStatus: Yup.string().required('Required'),
+
+    employerName: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required('Required'),
+      }),
+    employmentDate: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required("Required"),
+      }),
+    officialEmail: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required('Required'),
+      }),
+    monthlySalary: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required('Required'),
+      }),
+    employeeSector: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required('Required'),
+      }),
+    employeeSubSector: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required('Required'),
+      }),
+    payDay: Yup.number()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.number().required('Required'),
+      }),
+    employerAddress: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required('Required'),
+      }),
+    employerAddressState: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required('Required'),
+      }),
+    employerAddressCity: Yup.string()
+      .when('workStatus', {
+        is: '1',
+        then: Yup.string().required('Required'),
+      }),
+
     contactMobile: Yup.string()
       .required()
       .matches(/^[0-9]+$/, 'Must be only digits')
@@ -827,8 +879,13 @@ class NewClient extends React.Component {
                               id='toshow'
                               onChange={handleChange}
                               name='payDay'
-                              value={values.gender}
-                              className='countdropdown form-control form-control-sm'
+                              value={values.payDay}
+                              className={
+                                errors.payDay &&
+                                touched.payDay
+                                  ? 'is-invalid form-control form-control-sm'
+                                  : 'countdropdown form-control form-control-sm'
+                              }
                             >
                               <option value=''>Select</option>
                               {daysWrap}

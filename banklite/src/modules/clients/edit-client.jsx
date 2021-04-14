@@ -72,58 +72,6 @@ class EditAClient extends React.Component {
     await dispatch(clientsActions.updateAClient(updateCustomerpayload));
   };
 
-  updateCustomerValidationSchema = Yup.object().shape({
-    FName: Yup.string()
-      .min(1, 'Valid Response required')
-      .max(50, 'Max limit reached')
-      .required('Required'),
-    LName: Yup.string()
-      .min(1, 'Valid response required')
-      .max(50, 'Max limit reached')
-      .required('Required'),
-    MName: Yup.string()
-      .min(1, 'Valid response required')
-      .max(50, 'Max limit reached'),
-    custType: Yup.string().min(1, 'Valid response required'),
-    clientBranchEncodedKey: Yup.string().required('Required'),
-    accountOfficerEncodedKey: Yup.string().required('Required'),
-    BVN: Yup.string().required('Required'),
-    addressLine1: Yup.string()
-      .min(2, 'Valid response required')
-      .max(70, 'Max limit reached'),
-    addressLine2: Yup.string()
-      .min(2, 'Valid response required')
-      .max(70, 'Max limit reached'),
-    addressCity: Yup.string()
-      .min(2, 'Valid response required')
-      .max(40, 'Max limit reached'),
-    addressState: Yup.string()
-      .min(2, 'Valid response required')
-      .max(40, 'Max limit reached'),
-    addressCountry: Yup.string()
-      .min(2, 'Valid response required')
-      .max(35, 'Max limit reached'),
-    zipCode: Yup.string()
-      .min(2, 'Valid response required')
-      .max(10, 'Max limit reached'),
-    contactMobile: Yup.string()
-      .min(8, 'Valid response required')
-      .max(17, 'Max limit reached'),
-    contactEmail: Yup.string()
-      .min(8, 'Valid response required')
-      .max(50, 'Max limit reached'),
-    nextOfKinFullName: Yup.string()
-      .min(2, 'Valid response required')
-      .max(50, 'Max limit reached'),
-    nextOfKinAddress: Yup.string()
-      .min(2, 'Valid response required')
-      .max(50, 'Max limit reached'),
-    nextOfKinMobile: Yup.string()
-      .min(11, 'Valid response required')
-      .max(16, 'Max limit reached'),
-    notes: Yup.string().min(3, 'Valid response required'),
-  });
-
   renderUpdateCustomer = () => {
     let updateAClientRequest = this.props.updateAClient,
       getAClientRequest = this.props.getAClient,
@@ -165,6 +113,58 @@ class EditAClient extends React.Component {
       zipCode: Yup.string()
         .min(2, 'Valid response required')
         .max(10, 'Max limit reached'),
+
+      employerName: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required('Required'),
+        }),
+      employmentDate: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required("Required"),
+        }),
+      officialEmail: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required('Required'),
+        }),
+      monthlySalary: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required('Required'),
+        }),
+      employeeSector: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required('Required'),
+        }),
+      employeeSubSector: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required('Required'),
+        }),
+      payDay: Yup.number()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.number().required('Required'),
+        }),
+      employerAddress: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required('Required'),
+        }),
+      employerAddressState: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required('Required'),
+        }),
+      employerAddressCity: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().required('Required'),
+        }),
+
       contactMobile: Yup.string()
         .min(8, 'Valid response required')
         .max(17, 'Max limit reached'),
@@ -308,8 +308,7 @@ class EditAClient extends React.Component {
                 allCustomerData.employeeInfo.employerName !== null
                   ? allCustomerData.employeeInfo.employerName
                   : '',
-              // employmentDate: allCustomerData.employeeInfo.employerName!==null?allCustomerData.employeeInfo.employerName:"",
-              employmentDate: null,
+              employmentDate: (allCustomerData.employeeInfo && allCustomerData.employeeInfo.employerName) || undefined,
               officialEmail:
                 allCustomerData.employeeInfo.officialEmail !== null
                   ? allCustomerData.employeeInfo.officialEmail
@@ -351,7 +350,6 @@ class EditAClient extends React.Component {
                   : '',
             }}
             validationSchema={updateACustomerValidationSchema}
-            // validationSchema={this.updateCustomerValidationSchema}
             onSubmit={(values, { resetForm }) => {
               let updateCustomerPayload = {
                 clientTypeId: values.custType,
@@ -841,7 +839,7 @@ class EditAClient extends React.Component {
                           </select>
                           {errors.workStatus && touched.workStatus ? (
                             <span className='invalid-feedback'>
-                              {errors.payDay}
+                              {errors.workStatus}
                             </span>
                           ) : null}
                         </Col>
@@ -883,16 +881,11 @@ class EditAClient extends React.Component {
                                 }
                               >
                                 <Form.Label className='block-level'>
-                                  Date of Birth
+                                  Employment Date
                                 </Form.Label>
                                 <DatePicker
-                                  placeholderText='Choose  date'
-                                  autoComplete='new-password'
-                                  autoComplete='new-password'
-                                  // onChange={this.handleDatePicker}
-                                  // onChangeRaw={(e) => this.handleDateChange(e)}
+                                  placeholderText='Choose date'
                                   dateFormat={window.dateformat}
-                                  className='form-control form-control-sm'
                                   peekNextMonth
                                   showMonthDropdown
                                   showYearDropdown
@@ -904,7 +897,7 @@ class EditAClient extends React.Component {
                                   className={
                                     errors.employmentDate &&
                                     touched.employmentDate
-                                      ? 'is-invalid form-control form-control-sm h-38px'
+                                      ? 'form-control is-invalid'
                                       : 'form-control form-control-sm h-38px'
                                   }
                                   customInput={
@@ -1024,10 +1017,15 @@ class EditAClient extends React.Component {
                                 id='toshow'
                                 onChange={handleChange}
                                 name='payDay'
-                                value={values.gender}
-                                className='countdropdown form-control form-control-sm'
+                                value={values.payDay}
+                                className={
+                                  errors.payDay &&
+                                  touched.payDay
+                                    ? 'is-invalid form-control form-control-sm'
+                                    : 'countdropdown form-control form-control-sm'
+                                }
                               >
-                                <option value=''>Select</option>
+                                <option>Select</option>
                                 {daysWrap}
                               </select>
                               {errors.payDay && touched.payDay ? (
