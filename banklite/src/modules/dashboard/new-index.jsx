@@ -1214,7 +1214,7 @@ class DashboardLanding extends React.Component {
                         <div className="each-detail">
                             <div className="detail-title">Account Balance</div>
                             <div className="detail-value">{numberWithCommas(customerDetails.totalBalance,true)}</div>
-                        </div>
+                        </div> 
                         <div className="each-detail">
                             <div className="detail-title">Date Registered</div>
                             <div className="detail-value">{customerDetails.createdDate}</div>
