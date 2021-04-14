@@ -40,7 +40,9 @@ class EditAClient extends React.Component {
     this.state = {
       user: JSON.parse(localStorage.getItem('lingoAuth')),
     };
-  }
+
+
+    }
 
   componentDidMount() {
     this.getAClient();
@@ -60,17 +62,19 @@ class EditAClient extends React.Component {
     dispatch(administrationActions.getAllUsers(1));
   };
 
-  getBranch = (encodedKey) => {
-    const { dispatch } = this.props;
+    getBranch =  (encodedKey)=>{
+        const {dispatch} = this.props;
 
-    dispatch(administrationActions.getABranch(encodedKey));
-  };
 
-  handleUpdateCustomer = async (updateCustomerpayload) => {
-    const { dispatch } = this.props;
+         dispatch(administrationActions.getABranch(encodedKey));
+    };
 
-    await dispatch(clientsActions.updateAClient(updateCustomerpayload));
-  };
+    handleUpdateCustomer = async (updateCustomerpayload)=>{
+        const {dispatch} = this.props;
+
+        await dispatch(clientsActions.updateAClient(updateCustomerpayload));
+    }
+;
 
   updateCustomerValidationSchema = Yup.object().shape({
     FName: Yup.string()
@@ -203,12 +207,13 @@ class EditAClient extends React.Component {
       getAllUsersRequest.request_status ===
         administrationConstants.GET_ALL_USERS_SUCCESS &&
       getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_SUCCESS
-    ) {
-      let allCustomerData = getAClientRequest.request_data.response.data;
-      let allUsersData = getAllUsersRequest.request_data.response.data,
-        allUserDataList = [],
-        allCustomerTypesList;
-      let defaultAccountOfficer;
+) {
+                let allCustomerData = getAClientRequest.request_data.response.data;
+                let
+                    allUsersData = getAllUsersRequest.request_data.response.data,
+                    allUserDataList=[],
+                    allCustomerTypesList;
+                let defaultAccountOfficer;
 
       if (allUsersData.length >= 1) {
         allUsersData.map((eachUser, id) => {
@@ -228,23 +233,19 @@ class EditAClient extends React.Component {
             {i}
           </option>
         );
-      }
+                        }
 
-      let custTypes = this.props.adminGetCustomerTypes.request_data.response,
-        selectedCustype = custTypes.filter(
-          (type) => type.id === allCustomerData.clientTypeId
-        )[0];
-      if (Object.keys(allCustomerData).length >= 1) {
-        return (
-          <Formik
-            initialValues={{
-              FName: allCustomerData.firstName,
-              LName: allCustomerData.lastName,
-              MName: allCustomerData.middleName
-                ? allCustomerData.middleName
-                : '',
-              custType: allCustomerData.clientTypeEncodedKey,
-              BVN: allCustomerData.bvn ? allCustomerData.bvn : '',
+                let custTypes = this.props.adminGetCustomerTypes.request_data.response,
+                    selectedCustype  = custTypes.filter((type)=>type.id===allCustomerData.clientTypeId)[0];
+                    if(Object.keys(allCustomerData).length>=1){
+
+                        return (
+                            <Formik
+                                initialValues={{
+                                    FName: allCustomerData.firstName,
+                                    LName: allCustomerData.lastName,
+                                    MName: allCustomerData.middleName?allCustomerData.middleName:'',
+                                    BVN: allCustomerData.bvn?allCustomerData.bvn:'',
               addressLine1: allCustomerData.address.addressLine1
                 ? allCustomerData.address.addressLine1
                 : '',
@@ -285,17 +286,14 @@ class EditAClient extends React.Component {
                 allCustomerData.nextOfKin.relationship !== null
                   ? allCustomerData.nextOfKin.relationship
                   : '',
-              gender:
-                allCustomerData.gender !== undefined &&
+                                    gender: allCustomerData.gender !== undefined &&
                 allCustomerData.gender !== null &&
                 allCustomerData.gender !== ''
                   ? allCustomerData.gender
                   : '',
-              // dateOfBirth: (allCustomerData.dateOfBirth!==null && allCustomerData.dateOfBirth!==undefined && allCustomerData.dateOfBirth!=='')? getDateFromISO(allCustomerData.dateOfBirth):null,
-              dateOfBirth: null,
-              custType: allCustomerData.clientTypeId,
-              notes: allCustomerData.notes.notes
-                ? allCustomerData.notes.notes
+                                    dateOfBirth: allCustomerData.dateOfBirth && allCustomerData.dateOfBirth !== '' ? new Date(allCustomerData.dateOfBirth) : null,
+                                    custType: allCustomerData.clientTypeId,
+                                    notes:allCustomerData.notes.notes?allCustomerData.notes.notes
                 : '',
               clientBranchEncodedKey: allCustomerData.branchEncodedKey
                 ? allCustomerData.branchEncodedKey
@@ -349,27 +347,28 @@ class EditAClient extends React.Component {
                 allCustomerData.employeeInfo.workStatus !== null
                   ? allCustomerData.employeeInfo.workStatus
                   : '',
-            }}
-            validationSchema={updateACustomerValidationSchema}
-            // validationSchema={this.updateCustomerValidationSchema}
-            onSubmit={(values, { resetForm }) => {
-              let updateCustomerPayload = {
-                clientTypeId: values.custType,
-                // clientTypeId:values.custType,
-                firstName: values.FName,
-                middleName: values.MName,
-                lastName: values.LName,
-                address: {
-                  addressLine1: values.addressLine1,
-                  addressLine2: values.addressLine2,
-                  addressCity: values.addressCity,
-                  addressState: values.addressState,
-                  addressCountry: values.addressCountry,
-                  zipCode: values.zipCode,
-                },
-                contact: {
-                  contactMobile: values.contactMobile,
-                  contactEmail: values.contactEmail,
+}}
+                                validationSchema={updateACustomerValidationSchema}
+                                // validationSchema={this.updateCustomerValidationSchema}
+                                onSubmit={(values, { resetForm }) => {
+
+                                    let updateCustomerPayload = {
+                                        clientTypeId:values.custType,
+                                        // clientTypeId:values.custType,
+                                        firstName:values.FName,
+                                        middleName:values.MName,
+                                        lastName:values.LName,
+                                        address :{
+                                            addressLine1: values.addressLine1,
+                                            addressLine2: values.addressLine2,
+                                            addressCity: values.addressCity,
+                                            addressState: values.addressState,
+                                            addressCountry: values.addressCountry,
+                                            zipCode: values.zipCode,
+                                        },
+                                        contact: {
+                                            contactMobile: values.contactMobile,
+                                            contactEmail: values.contactEmail,
                 },
                 nexOfKin: {
                   nextOfKinFullName: values.nextOfKinFullName,
@@ -379,40 +378,46 @@ class EditAClient extends React.Component {
                 },
                 bvn: values.BVN,
                 gender: values.gender ? values.gender : '',
-                dateOfBirth: values.dateOfBirth
-                  ? values.dateOfBirth.toISOString()
+                dateOfBirth: allCustomerData.dateOfBirth && allCustomerData.dateOfBirth !== ''
+                  ? new Date(allCustomerData.dateOfBirth)
                   : null,
                 notes: values.notes || null,
                 encodedKey: this.props.match.params.encodedkey,
                 clientBranchEncodedKey: values.clientBranchEncodedKey,
                 accountOfficerEncodedKey: values.accountOfficerEncodedKey,
-              };
 
-              this.handleUpdateCustomer(updateCustomerPayload).then(() => {
-                // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
-                //     resetForm();
-                // }
-                // setTimeout(() => {
-                //     this.props.dispatch(clientsActions.updateAClient("CLEAR"))
-                // }, 3000);
+};
+
+                                    this.handleUpdateCustomer(updateCustomerPayload)
+                                        .then(
+                                            () => {
+
+                                                // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
+                                                //     resetForm();
+
+// }
+                                                // setTimeout(() => {
+                                                //     this.props.dispatch(clientsActions.updateAClient("CLEAR"))
+                                                // }, 3000);
+
+
               });
-            }}
+}}
           >
             {({
-              handleSubmit,
-              handleChange,
-              handleBlur,
-              resetForm,
-              values,
-              setFieldValue,
-              touched,
-              isValid,
-              errors,
-            }) => (
-              <Form
-                noValidate
-                onSubmit={handleSubmit}
-                className='form-content card'
+               handleSubmit,
+                                    handleChange,
+                                    handleBlur,
+                                    resetForm,
+                                    values,
+                                    setFieldValue,
+                                    touched,
+                                    isValid,
+                                    errors, }) => (
+                                        <Form
+                                            noValidate
+                                            onSubmit={handleSubmit}
+                                            className='form-content card'
               >
                 <div className='form-heading'>
                   <h3>
@@ -426,10 +431,9 @@ class EditAClient extends React.Component {
                     <Form.Control
                       type='text'
                       name='FName'
-                      onChange={handleChange}
-                      value={values.FName}
-                      className={
-                        errors.FName && touched.FName ? 'is-invalid' : null
+                                                        onChange={handleChange}
+                                                        value={values.FName}
+                                                        className={errors.FName && touched.FName ? 'is-invalid' : null
                       }
                       required
                     />
@@ -442,29 +446,27 @@ class EditAClient extends React.Component {
                     <Form.Control
                       type='text'
                       name='LName'
-                      onChange={handleChange}
-                      value={values.LName}
-                      className={
-                        errors.LName && touched.LName ? 'is-invalid' : null
+                                                         onChange={handleChange}
+                                                         value={values.LName}
+                                                         className={errors.LName && touched.LName ? 'is-invalid' : null
                       }
                       required
                     />
                     {errors.LName && touched.LName ? (
                       <span className='invalid-feedback'>{errors.LName}</span>
-                    ) : null}
-                  </Col>
-                </Form.Row>
-                <Form.Row>
-                  <Col>
-                    <Form.Label className='block-level'>Middle Name</Form.Label>
+                                                    ) : null}
+                                                </Col>
+
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className='block-level'>Middle Name</Form.Label>
                     <Form.Control
                       type='text'
                       name='MName'
-                      onChange={handleChange}
-                      value={values.MName}
-                      className={
-                        errors.MName && touched.MName
-                          ? 'is-invalid h-38px'
+                                                         onChange={handleChange}
+                                                         value={values.MName}
+                                                         className={errors.MName && touched.MName ? 'is-invalid h-38px'
                           : 'h-38px'
                       }
                       required
@@ -534,14 +536,14 @@ class EditAClient extends React.Component {
 
                     {/* <Form.Check type="radio"
                                                         name="gender"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         label="Female"
                                                         id="choose-female"
                                                         value={values.gender}
                                                           />
                                                     <Form.Check type="radio"
                                                         name="gender"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         label="Male"
                                                         id="choose-male"
                                                         value={values.gender}
@@ -588,16 +590,15 @@ class EditAClient extends React.Component {
                         }
                       />
                       {errors.dateOfBirth && touched.dateOfBirth ? (
-                        <span className='invalid-feedback'>
-                          {errors.dateOfBirth}
-                        </span>
-                      ) : null}
-                    </Form.Group>
-                  </Col>
-                </Form.Row>
-                <Form.Row>
-                  <Col>
-                    <Form.Label className='block-level'>
+                        <span className='invalid-feedback'>{errors.dateOfBirth}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                </Col>
+
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Col>
+                                                    <Form.Label className='block-level'>
                       Customer branch
                     </Form.Label>
                     <Select
@@ -619,13 +620,12 @@ class EditAClient extends React.Component {
                       }
                       // value={values.accountUsage}
                       name='clientBranchEncodedKey'
-                      // value={values.currencyCode}
-                      required
-                    />
+                                                        // value={values.currencyCode}
+                                                        required
+                                                    />
 
-                    {errors.clientBranchEncodedKey &&
-                    touched.clientBranchEncodedKey ? (
-                      <span className='invalid-feedback'>
+                                                    {errors.clientBranchEncodedKey && touched.clientBranchEncodedKey ? (
+                                                        <span className='invalid-feedback'>
                         {errors.clientBranchEncodedKey}
                       </span>
                     ) : null}
@@ -688,11 +688,9 @@ class EditAClient extends React.Component {
                           <Form.Control
                             type='text'
                             name='addressLine1'
-                            onChange={handleChange}
-                            value={values.addressLine1}
-                            className={
-                              errors.addressLine1 && touched.addressLine1
-                                ? 'is-invalid'
+                                                                    onChange={handleChange}
+                                                                    value={values.addressLine1}
+                                                                    className={errors.addressLine1 && touched.addressLine1 ? 'is-invalid'
                                 : null
                             }
                           />
@@ -709,11 +707,9 @@ class EditAClient extends React.Component {
                           <Form.Control
                             type='text'
                             name='addressLine2'
-                            onChange={handleChange}
-                            value={values.addressLine2}
-                            className={
-                              errors.addressLine2 && touched.addressLine2
-                                ? 'is-invalid'
+                                                                    onChange={handleChange}
+                                                                    value={values.addressLine2}
+                                                                    className={errors.addressLine2 && touched.addressLine2 ? 'is-invalid'
                                 : null
                             }
                           />
@@ -730,11 +726,9 @@ class EditAClient extends React.Component {
                           <Form.Control
                             type='text'
                             name='addressCity'
-                            onChange={handleChange}
-                            value={values.addressCity}
-                            className={
-                              errors.addressCity && touched.addressCity
-                                ? 'is-invalid'
+                                                                    onChange={handleChange}
+                                                                    value={values.addressCity}
+                                                                    className={errors.addressCity && touched.addressCity ? 'is-invalid'
                                 : null
                             }
                           />
@@ -750,12 +744,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='addressState'
-                            onChange={handleChange}
-                            value={values.addressState}
-                            className={
-                              errors.addressState && touched.addressState
-                                ? 'is-invalid'
+                                                                     name='addressState'
+                                                                     onChange={handleChange}
+                                                                     value={values.addressState}
+                                                                     className={errors.addressState && touched.addressState ? 'is-invalid'
                                 : null
                             }
                           />
@@ -773,12 +765,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='zipCode'
-                            onChange={handleChange}
-                            value={values.zipCode}
-                            className={
-                              errors.zipCode && touched.zipCode
-                                ? 'is-invalid'
+                                                                    name='zipCode'
+                                                                    onChange={handleChange}
+                                                                    value={values.zipCode}
+                                                                    className={errors.zipCode && touched.zipCode ? 'is-invalid'
                                 : null
                             }
                           />
@@ -794,12 +784,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='addressCountry'
-                            onChange={handleChange}
-                            value={values.addressCountry}
-                            className={
-                              errors.addressCountry && touched.addressCountry
-                                ? 'is-invalid'
+                                                                    name='addressCountry'
+                                                                    onChange={handleChange}
+                                                                    value={values.addressCountry}
+                                                                    className={errors.addressCountry && touched.addressCountry ? 'is-invalid'
                                 : null
                             }
                           />
@@ -826,12 +814,10 @@ class EditAClient extends React.Component {
                     <div className='each-formsection'>
                       <Form.Row>
                         <Col>
-                          <Form.Label className='block-level'>
-                            Are you employed
-                          </Form.Label>
-                          <select
-                            onChange={handleChange}
-                            name='workStatus'
+                          <Form.Label className='block-level'>Are you employed</Form.Label>
+                                                                    <select
+                                                                        onChange={handleChange}
+                                                                        name='workStatus'
                             value={values.workStatus}
                             className='countdropdown form-control form-control-sm'
                           >
@@ -847,8 +833,7 @@ class EditAClient extends React.Component {
                         </Col>
                         <Col></Col>
                       </Form.Row>
-                      {(values.workStatus === '1' ||
-                        values.workStatus === 1) && (
+                      {(values.workStatus === '1' || values.workStatus===1) &&(
                         <div>
                           <Form.Row>
                             <Col>
@@ -1131,12 +1116,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='contactMobile'
-                            onChange={handleChange}
-                            value={values.contactMobile}
-                            className={
-                              errors.contactMobile && touched.contactMobile
-                                ? 'is-invalid'
+                                                                    name='contactMobile'
+                                                                    onChange={handleChange}
+                                                                    value={values.contactMobile}
+                                                                    className={errors.contactMobile && touched.contactMobile ? 'is-invalid'
                                 : null
                             }
                           />
@@ -1152,12 +1135,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='contactEmail'
-                            onChange={handleChange}
-                            value={values.contactEmail}
-                            className={
-                              errors.contactEmail && touched.contactEmail
-                                ? 'is-invalid'
+                                                                    name='contactEmail'
+                                                                    onChange={handleChange}
+                                                                    value={values.contactEmail}
+                                                                    className={errors.contactEmail && touched.contactEmail ? 'is-invalid'
                                 : null
                             }
                           />
@@ -1189,13 +1170,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='nextOfKinFullName'
-                            onChange={handleChange}
-                            value={values.nextOfKinFullName}
-                            className={
-                              errors.nextOfKinFullName &&
-                              touched.nextOfKinFullName
-                                ? 'is-invalid'
+                                                                    name='nextOfKinFullName'
+                                                                    onChange={handleChange}
+                                                                    value={values.nextOfKinFullName}
+                                                                    className={errors.nextOfKinFullName && touched.nextOfKinFullName ? 'is-invalid'
                                 : null
                             }
                           />
@@ -1212,13 +1190,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='nextOfKinAddress'
-                            onChange={handleChange}
-                            value={values.nextOfKinAddress}
-                            className={
-                              errors.nextOfKinAddress &&
-                              touched.nextOfKinAddress
-                                ? 'is-invalid'
+                                                                    name='nextOfKinAddress'
+                                                                    onChange={handleChange}
+                                                                    value={values.nextOfKinAddress}
+                                                                    className={errors.nextOfKinAddress && touched.nextOfKinAddress ? 'is-invalid'
                                 : null
                             }
                           />
@@ -1237,12 +1212,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='nextOfKinMobile'
-                            onChange={handleChange}
-                            value={values.nextOfKinMobile}
-                            className={
-                              errors.nextOfKinMobile && touched.nextOfKinMobile
-                                ? 'is-invalid'
+                                                                    name='nextOfKinMobile'
+                                                                    onChange={handleChange}
+                                                                    value={values.nextOfKinMobile}
+                                                                    className={errors.nextOfKinMobile && touched.nextOfKinMobile ? 'is-invalid'
                                 : null
                             }
                           />
@@ -1258,13 +1231,10 @@ class EditAClient extends React.Component {
                           </Form.Label>
                           <Form.Control
                             type='text'
-                            name='nextOfKinRelationship'
-                            onChange={handleChange}
-                            value={values.nextOfKinRelationship}
-                            className={
-                              errors.nextOfKinRelationship &&
-                              touched.nextOfKinRelationship
-                                ? 'is-invalid'
+                                                                    name='nextOfKinRelationship'
+                                                                    onChange={handleChange}
+                                                                    value={values.nextOfKinRelationship}
+                                                                    className={errors.nextOfKinRelationship && touched.nextOfKinRelationship ? 'is-invalid'
                                 : null
                             }
                           />
@@ -1302,52 +1272,53 @@ class EditAClient extends React.Component {
                             errors.notes && touched.notes
                               ? 'is-invalid form-control form-control-sm'
                               : null
-                          }
+}
                         />
 
                         {errors.notes && touched.notes ? (
-                          <span className='invalid-feedback'>
-                            {errors.notes}
-                          </span>
-                        ) : null}
-                      </Form.Group>
-                    </div>
-                  </Accordion.Collapse>
-                </Accordion>
+                          <span className='invalid-feedback'>{errors.notes}</span>
+                                                                ) : null}
+                                                   </Form.Group>
+                                                </div>
+                                            </Accordion.Collapse>
+                                        </Accordion>
 
-                <div className='footer-with-cta toleft'>
+
+
+
+
+
+                                            <div className='footer-with-cta toleft'>
                   <Button
                     variant='light'
-                    className='btn btn-secondary grayed-out'
-                    onClick={() => this.props.history.goBack()}
-                  >
-                    Cancel
-                  </Button>
+                                                        className='btn btn-secondary grayed-out'
+                                                        onClick={()=>this.props.history.goBack()}
+                                                >
+                                                    Cancel</Button>
 
-                  {/* <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
-                  <Button
-                    variant='success'
+                                                {/* <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                                <Button variant='success'
                     type='submit'
-                    disabled={updateAClientRequest.is_request_processing}
-                    className='ml-20'
-                  >
-                    {updateAClientRequest.is_request_processing
-                      ? 'Please wait...'
+                                                    disabled={updateAClientRequest.is_request_processing}
+                                                    className='ml-20'
+                                                    >
+                                                        {updateAClientRequest.is_request_processing?'Please wait...'
                       : 'Update Customer'}
-                  </Button>
-                </div>
-                {updateAClientRequest.request_status ===
-                  clientsConstants.UPDATE_A_CLIENT_SUCCESS && (
+                                                </Button>
+
+
+                                            </div>
+                                            {updateAClientRequest.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS &&(
                   <Alert variant='success'>
                     {updateAClientRequest.request_data.response.data.message}
                   </Alert>
                 )}
-                {updateAClientRequest.request_status ===
-                  clientsConstants.UPDATE_A_CLIENT_FAILURE && (
+                                            {updateAClientRequest.request_status === clientsConstants.UPDATE_A_CLIENT_FAILURE &&(
                   <Alert variant='danger'>
-                    {updateAClientRequest.request_data.error}
-                  </Alert>
-                )}
+                                                    {updateAClientRequest.request_data.error}
+
+                                                </Alert>
+                                            )}
               </Form>
             )}
           </Formik>
@@ -1355,20 +1326,22 @@ class EditAClient extends React.Component {
       } else {
         return (
           <div className='loading-content card'>
-            <div>The requsted Customer could not be found</div>
-          </div>
-        );
-      }
-    }
+                                <div>The requsted Customer could not be found</div>
+                            </div>
+                        );
+                    }
+            }
 
-    if (
-      getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_FAILURE
+            if (getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_FAILURE
     ) {
       return (
         <div className='loading-content card'>
-          <div>{getAClientRequest.request_data.error}</div>
-        </div>
-      );
+                        <div>{getAClientRequest.request_data.error}</div>
+                    </div>
+                )
+            ;
+
+
     }
   };
 
@@ -1380,10 +1353,12 @@ class EditAClient extends React.Component {
             <div className='module-content'>
               <div className='content-container'>
                 <div className='row'>
-                  <div className='col-sm-12'>
+
+                                    <div className='col-sm-12'>
                     <div className='middle-content'>
                       <div className='full-pageforms w-60'>
-                        {/* <div className="footer-with-cta toleft">
+
+                                                {/* <div className="footer-with-cta toleft">
                                                     <Button variant="secondary" className="grayed-out">Rearrange</Button>
                                                     <Button >Add Channel</Button>
                                                 </div> */}
