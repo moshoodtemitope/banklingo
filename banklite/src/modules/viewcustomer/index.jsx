@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/Button'
 // import Dropdown from 'react-bootstrap/Dropdown'
 // import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
+
 import  ActivitiesBox from '../../shared/elements/activities'
 import PictureIco from '../../assets/img/picture.svg';
 // import  SidebarElement from '../../shared/elements/sidebar'
@@ -742,6 +743,7 @@ class ViewCustomer extends React.Component {
             <Fragment>
                 {/* <InnerPageContainer {...this.props}> */}
                     <div className="content-wrapper">
+                        
                         {/* <CustomerHeading {...this.props}/> */}
                         <div className="module-content">
                             <div className="content-container">

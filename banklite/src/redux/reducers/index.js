@@ -79,8 +79,8 @@ const administrationReducers = combineReducers({
     fetchAllRiskLevel: administration.fetchAllRiskLevel,
     getARiskLevel: administration.getARiskLevel,
     createARiskLevel: administration.createARiskLevel,
-    updateARiskLevel: administration.updateARiskLevel
-    
+    updateARiskLevel: administration.updateARiskLevel,
+    fetchAllTasksReducer: administration.fetchAllTasksReducer
 })
 
 const accountingReducers = combineReducers({
@@ -234,6 +234,7 @@ const clientsReducers = combineReducers({
     getAClientTasksReducer: clients.getAClientTasksReducer, 
     addAClientSignatureReducer: clients.addAClientSignatureReducer, 
     addAClientPassportReducer: clients.addAClientPassportReducer, 
+    getAUserTasksReducer: clients.getAUserTasksReducer, 
    
 })
 

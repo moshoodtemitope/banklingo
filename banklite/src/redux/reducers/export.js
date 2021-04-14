@@ -52,7 +52,8 @@ import{
     fetchAllRiskLevel,
     getARiskLevel,
     createARiskLevel,
-    updateARiskLevel
+    updateARiskLevel,
+    fetchAllTasksReducer
 }
  from './administration/administration.reducer'
 
@@ -253,7 +254,8 @@ import{
     createAClientTaskReducer,
     getAClientTasksReducer,
     addAClientPassportReducer,
-    addAClientSignatureReducer
+    addAClientSignatureReducer,
+    getAUserTasksReducer
     
 } from './clients/clients.reducer'
 
@@ -312,7 +314,8 @@ export const administration ={
     fetchAllRiskLevel,
     getARiskLevel,
     createARiskLevel,
-    updateARiskLevel
+    updateARiskLevel,
+    fetchAllTasksReducer
     
     
 }
@@ -459,7 +462,8 @@ export const clients ={
     createAClientTaskReducer,
     getAClientTasksReducer,
     addAClientPassportReducer,
-    addAClientSignatureReducer
+    addAClientSignatureReducer,
+    getAUserTasksReducer
 }
 
 export const disbursment ={

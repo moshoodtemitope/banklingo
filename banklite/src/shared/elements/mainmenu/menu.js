@@ -211,6 +211,13 @@ export const menuList = [
             }
         ]
     },
+    {
+        menuGroup: "Administration",
+        mainMenu: "All Tasks",
+        menuRoute: "/all-tasks",
+        permissionCode:"bnk_manage_organisation",
+        hasSubMenu: false
+    },
 
     {
         menuGroup: "Activities",

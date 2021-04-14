@@ -11,6 +11,7 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 // import Dropdown from 'react-bootstrap/Dropdown'
 // import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
+import  ActivitiesBox from '../../shared/elements/activities'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./styles.scss"; 
 import { numberWithCommas , getDateFromISO} from '../../shared/utils';
@@ -48,7 +49,7 @@ class ViewUser extends React.Component {
         let { PageSize, CurrentPage} = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
 
-        this.getUserActivities(this.userEncodedKey, params);
+        // this.getUserActivities(this.userEncodedKey, params);
     }
 
     getUserActivities = (userEncodedKey, params)=>{
@@ -59,59 +60,59 @@ class ViewUser extends React.Component {
 
 
 
-    renderUserActivities =()=>{
-        let getAUserActivitiesRequest = this.props.getAUserActivitiesReducer;
+    // renderUserActivities =()=>{
+    //     let getAUserActivitiesRequest = this.props.getAUserActivitiesReducer;
 
-        if(getAUserActivitiesRequest.request_status===administrationConstants.GET_A_USER_ACTIVITIES_PENDING){
-            return(
-                <div className="loading-text">Please wait... </div>
-            )
-        }
-
-
-        if(getAUserActivitiesRequest.request_status===administrationConstants.GET_A_USER_ACTIVITIES_SUCCESS){
-            let customerActivitiesData = getAUserActivitiesRequest.request_data.response.data;
-            if(customerActivitiesData.result.length>=1){
-                return(
-                    <div className="activities-wrap">
-                        {
-                            customerActivitiesData.result.map((eachActivity,  index)=>{
-                                return(
-                                    <div className="each-activity" key={index}>
-                                        {/* <span>
-                                            <NavLink to='/customer/20/savingsaccount/77339322'>Payroll - Private 2073458499</NavLink>
-                                        </span> */}
-                                        <span className="activity-action">{eachActivity.action}</span>
-                                        <div>
-                                            <span className="action-date">{eachActivity.creationDate}</span>
-                                            <span className="action-by"> <NavLink to={`/user/${eachActivity.affectedUserNameEncodedKey}`}>{eachActivity.affectedUserName}</NavLink></span>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                )
-            }else{
-                return(
-                    <div className="activities-wrap">
-                        <div>No activities to display</div>
-                    </div>
-                )
-            }
-        }
+    //     if(getAUserActivitiesRequest.request_status===administrationConstants.GET_A_USER_ACTIVITIES_PENDING){
+    //         return(
+    //             <div className="loading-text">Please wait... </div>
+    //         )
+    //     }
 
 
+    //     if(getAUserActivitiesRequest.request_status===administrationConstants.GET_A_USER_ACTIVITIES_SUCCESS){
+    //         let customerActivitiesData = getAUserActivitiesRequest.request_data.response.data;
+    //         if(customerActivitiesData.result.length>=1){
+    //             return(
+    //                 <div className="activities-wrap">
+    //                     {
+    //                         customerActivitiesData.result.map((eachActivity,  index)=>{
+    //                             return(
+    //                                 <div className="each-activity" key={index}>
+    //                                     {/* <span>
+    //                                         <NavLink to='/customer/20/savingsaccount/77339322'>Payroll - Private 2073458499</NavLink>
+    //                                     </span> */}
+    //                                     <span className="activity-action">{eachActivity.action}</span>
+    //                                     <div>
+    //                                         <span className="action-date">{eachActivity.creationDate}</span>
+    //                                         <span className="action-by"> <NavLink to={`/user/${eachActivity.affectedUserNameEncodedKey}`}>{eachActivity.affectedUserName}</NavLink></span>
+    //                                     </div>
+    //                                 </div>
+    //                             )
+    //                         })
+    //                     }
+    //                 </div>
+    //             )
+    //         }else{
+    //             return(
+    //                 <div className="activities-wrap">
+    //                     <div>No activities to display</div>
+    //                 </div>
+    //             )
+    //         }
+    //     }
 
-        if(getAUserActivitiesRequest.request_status===administrationConstants.GET_A_USER_ACTIVITIES_FAILURE){
 
-            return(
-                <div className="loading-content errormsg"> 
-                <div>{getAUserActivitiesRequest.request_data.error}</div>
-            </div>
-            )
-        }
-    }
+
+    //     if(getAUserActivitiesRequest.request_status===administrationConstants.GET_A_USER_ACTIVITIES_FAILURE){
+
+    //         return(
+    //             <div className="loading-content errormsg"> 
+    //             <div>{getAUserActivitiesRequest.request_data.error}</div>
+    //         </div>
+    //         )
+    //     }
+    // }
 
     
     renderPage = ()=>{
@@ -219,8 +220,12 @@ class ViewUser extends React.Component {
                                         </div>
                                         <div className="col-sm-4">
                                             <div className="leftside-items">
-                                                <h6>Latest Activity </h6>
-                                                {this.renderUserActivities()}
+                                                {/* <h6>Latest Activity </h6>
+                                                {this.renderUserActivities()} */}
+                                                <ActivitiesBox
+                                                    activityType = "user"
+                                                    userEncodedKey={this.userEncodedKey}
+                                                />
                                             </div>
                                         </div>
                                     </div>

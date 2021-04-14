@@ -22,7 +22,8 @@ export const clientsActions = {
     createClientTask,
     getDownload,
     addAClientSignature,
-    addAClientPassport
+    addAClientPassport,
+    getAUserTask
 }
 
 function getClients  (params, tempData){
@@ -574,7 +575,7 @@ function getAClientTask  (ClientEncodedKey,params, tempData){
     
     return dispatch =>{
         
-        let consume = ApiService.request(routes.HIT_TASKS+`?ClientEncodedKey=${ClientEncodedKey}&${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_TASKS+`/client?ClientEncodedKey=${ClientEncodedKey}&${params}`, "GET", null);
         dispatch(request(consume,tempData));
         return consume
             .then(response =>{
@@ -634,6 +635,38 @@ function createClientTask   (newClientTaskParams){
     function success(response) { return { type: clientsConstants.CREATE_A_CLIENT_TASK_SUCCESS, response } }
     function failure(error) { return { type: clientsConstants.CREATE_A_CLIENT_TASK_FAILURE, error } }
     function clear() { return { type: clientsConstants.CREATE_A_CLIENT_TASK_RESET, clear_data:""} }
+
+}
+
+function getAUserTask  (params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_TASKS+`/mytasks?${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: clientsConstants.GET_MY_TASKS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: clientsConstants.GET_MY_TASKS_PENDING, user, tempData } 
+        }
+    }
+        
+
+    // function request(user) { return { type: clientsConstants.GET_MY_TASKS_PENDING, user } }
+    function success(response) { return { type: clientsConstants.GET_MY_TASKS_SUCCESS, response } }
+    function failure(error) { return { type: clientsConstants.GET_MY_TASKS_FAILURE, error } }
 
 }
 

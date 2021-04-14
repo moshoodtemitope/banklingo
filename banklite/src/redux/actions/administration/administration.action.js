@@ -61,7 +61,8 @@ export const administrationActions = {
     fetchAllRiskLevel,
     getARiskLevel,
     createARiskLevel,
-    updateARiskLevel
+    updateARiskLevel,
+    fetchAllTasks
 }
 
 function getUsers  (params, tempData){
@@ -1864,4 +1865,36 @@ function updateARiskLevel  (requestPayload, encodedKey){
     function failure(error) { return { type: administrationConstants.UPDATE_A_RISK_LEVEL_FAILURE, error } }
     function clear() { return { type: administrationConstants.UPDATE_A_RISK_LEVEL_RESET, clear_data:""} }
 
+}
+
+function fetchAllTasks  (params,tempData){
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_TASKS+`?${params}`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+                
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+    
+    
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_ALL_TASKS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_ALL_TASKS_PENDING, user, tempData } 
+        }
+    }
+
+    
+    function success(response) { return { type: administrationConstants.GET_ALL_TASKS_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_ALL_TASKS_FAILURE, error } }
+    
 }

@@ -3243,14 +3243,15 @@ class ViewLoanAccount extends React.Component {
                                                         name="allowBackDate"
                                                         onChange={handleChange}
                                                         checked={values.allowBackDate ? values.allowBackDate : null}
-                                                        value={values.allowBackDate}
-                                                        id="allowBackDate" />
+                                                        // value={values.allowBackDate}
+                                                        id="allowBackDate" 
+                                                        />
                                                     <label htmlFor="allowBackDate">Backdate</label>
                                                 </Form.Group>
                                                 {values.allowBackDate === true &&
                                                     <Form.Group className="mb-0 date-wrap">
                                                         <DatePicker
-                                                         placeholderText="Choose  date"
+                                                            placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                             dateFormat={window.dateformat}
                                                             className="form-control form-control-sm"
@@ -3389,6 +3390,7 @@ class ViewLoanAccount extends React.Component {
                                                 </Form.Group>
                                                 {values.allowBackDate === true &&
                                                     <Form.Group className="mb-0 date-wrap">
+                                                        <DatePicker
                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                             dateFormat={window.dateformat}
@@ -3421,6 +3423,7 @@ class ViewLoanAccount extends React.Component {
                                                 </Form.Group>
                                                 {values.showBookingDate === true &&
                                                     <Form.Group className="mb-0 date-wrap">
+                                                        <DatePicker
                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                             dateFormat={window.dateformat}
