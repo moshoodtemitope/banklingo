@@ -1,14 +1,7 @@
-import * as React from 'react';
-// import {Router} from "react-router";
-
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-
-import { NavLink } from 'react-router-dom';
-
 import Modal from 'react-bootstrap/Modal';
 
-// import DatePicker from "react-datepicker";
 import DatePicker from '../../_helpers/datepickerfield';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -26,7 +19,7 @@ import Select from 'react-select';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import { getDateFromISO, numberWithCommas } from '../../shared/utils';
+import { numberWithCommas } from '../../shared/utils';
 import { acoountingActions } from '../../redux/actions/accounting/accounting.action';
 import { accountingConstants } from '../../redux/actiontypes/accounting/accounting.constants';
 import Alert from 'react-bootstrap/Alert';
@@ -55,14 +48,9 @@ class JournalEntries extends React.Component {
 
   getJournalEntries = (tempData) => {
     const { dispatch } = this.props;
-    let payload = {
-        PageSize: this.state.PageSize,
-        CurrentPage: this.state.CurrentPage,
-      },
-      {
+    let {
         CurrentPage,
         PageSize,
-        BranchId,
         startDate,
         endDate,
         SearchText,
@@ -71,10 +59,8 @@ class JournalEntries extends React.Component {
     let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     if (tempData) {
       dispatch(acoountingActions.getJournalEntries(params, tempData));
-      // dispatch(acoountingActions.getJournalEntries(payload, tempData));
     } else {
       dispatch(acoountingActions.getJournalEntries(params));
-      // dispatch(acoountingActions.getJournalEntries(payload));
     }
   };
 
@@ -98,100 +84,49 @@ class JournalEntries extends React.Component {
     await dispatch(acoountingActions.createJournalEntry(journalPayload));
   };
 
-  // handleDatePicker=(dateofEntry)=>{
-  //     // dateofEntry.setHours( dateofEntry.getHours() + 1 );
-  //     console.log('entry date, ',dateofEntry, typeof dateofEntry)
-  //     this.setState ({dateofEntry : dateofEntry});
-  //     // this.props.onChange(this.props.id, dateofEntry);
-  // }
-
   handleDateChange(e) {
     e.preventDefault();
-
-    // const name = e.target.name;
-    // console.log('entry date, ',e.target.value)
-    // if(name === 'bvn'){
-    //     this.setState({bvn: e.target.value.replace(/\D/,'')})
-    //     if(this.state.bvn.length === 10)
-    //     console.log('entry date, ',e.target.value)
-    // }
   }
 
   handleDateChangeRaw = (e) => {
     e.preventDefault();
   };
+
   handleStartDatePicker = (startDate) => {
     startDate.setHours(startDate.getHours() + 1);
-
-    this.setState({ startDate }, () => {
-      if (this.state.endDate !== '') {
-        //this.getHistory();
-      }
-    });
+    this.setState({ startDate });
   };
 
   handleEndDatePicker = (endDate) => {
     endDate.setHours(endDate.getHours() + 1);
-
-    this.setState({ endDate }, () => {
-      if (this.state.startDate !== '') {
-        //this.getHistory();
-      }
-    });
+    this.setState({ endDate });
   };
 
   setPagesize = (PageSize, tempData) => {
-    // console.log('----here', PageSize.target.value);
     let sizeOfPage = PageSize.target.value,
-      { CurrentPage, BranchId, startDate, endDate, SearchText } = this.state;
-
+      { CurrentPage, startDate, endDate, SearchText } = this.state;
     this.setState({ PageSize: sizeOfPage });
 
     let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
-    // this.getJournalEntries(params);
-    let getJournalEntriesRequest = this.props.getJournalEntries;
-    let saveRequestData =
-      getJournalEntriesRequest.request_data !== undefined
-        ? getJournalEntriesRequest.request_data.tempData
-        : null;
-    // this.getJournalEntries(saveRequestData);
 
     const { dispatch } = this.props;
-    // let params= `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}`;
-    //  let payload ={
-    //      PageSize: sizeOfPage,
-    //      CurrentPage:this.state.CurrentPage
-    //  }
     if (tempData) {
       dispatch(acoountingActions.getJournalEntries(params, tempData));
-      // dispatch(acoountingActions.getJournalEntries(payload, tempData));
     } else {
       dispatch(acoountingActions.getJournalEntries(params));
-      // dispatch(acoountingActions.getJournalEntries(payload));
     }
   };
 
   loadNextPage = (nextPage, tempData) => {
-    // console.log("dsdsd", nextPage);
     const { dispatch } = this.props;
-    let { PageSize, startDate, endDate, SearchText } = this.state;
-
-    // this.setState({PageSize: sizeOfPage});
+    let { startDate, endDate, SearchText } = this.state;
 
     let params = `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
-    // this.getTransactionChannels(params);
-
-    let payload = {
-      PageSize: this.state.PageSize,
-      CurrentPage: nextPage,
-    };
 
     if (tempData) {
       dispatch(acoountingActions.getJournalEntries(params, tempData));
-      // dispatch(acoountingActions.getJournalEntries(payload,tempData));
     } else {
       dispatch(acoountingActions.getJournalEntries(params));
-      // dispatch(acoountingActions.getJournalEntries(payload));
     }
   };
 
@@ -200,10 +135,6 @@ class JournalEntries extends React.Component {
     const { dispatch } = this.props;
     let { PageSize, CurrentPage, SearchText, endDate, startDate } = this.state;
 
-    // this.setState({PageSize: sizeOfPage});
-
-    // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
-    // this.getTransactionChannels(params);
     if (SearchText !== '' || endDate !== '' || startDate !== '') {
       if (endDate !== '') {
         endDate = endDate.toISOString();
@@ -221,6 +152,7 @@ class JournalEntries extends React.Component {
     }
   };
 
+  // TODO 4/14/21 8:38 PM The two methods below can be merged into one
   handleClose = () => this.setState({ show: false });
 
   handleShow = () => this.setState({ show: true });
@@ -254,8 +186,6 @@ class JournalEntries extends React.Component {
       errors.entryNotes = 'Please provide detail notes';
     }
 
-    //...
-    // console.log('dsdsds', values.entryNotes.length);
     return errors;
   };
 
@@ -330,27 +260,23 @@ class JournalEntries extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Formik
-            // validate={this.validate}
             initialValues={{
               entryDate: '',
               entryNotes: '',
               jornalEntries,
             }}
             validationSchema={createJournalEntrySchema}
-            onSubmit={(values, { resetForm }, errors) => {
+            onSubmit={(values, { resetForm }, errors) => { // todo replace this handler with a named function
               // same shape as initial values
-
               let debitTotal = 0,
                 creditTotal = 0,
                 jornalEntryModel = [];
               values.jornalEntries.forEach((eachEntry) => {
                 if (eachEntry.entryTypeId === 1) {
-                  // console.log("each credit value",eachEntry.entryAmount);
                   creditTotal += parseFloat(
                     eachEntry.entryAmount.replace(/,/g, '')
                   );
                 } else {
-                  // console.log("each debit value",eachEntry.entryAmount);
                   debitTotal += parseFloat(
                     eachEntry.entryAmount.replace(/,/g, '')
                   );
@@ -364,8 +290,6 @@ class JournalEntries extends React.Component {
               });
 
               if (creditTotal !== debitTotal) {
-                // console.log("Credit total",creditTotal);
-                // console.log("Debit total",debitTotal);
                 this.setState({ totalComparison: false });
               } else {
                 this.setState({ totalComparison: true });
@@ -375,12 +299,6 @@ class JournalEntries extends React.Component {
               if (checkTotals) {
                 let newJournalEntryPayload = {
                   jornalEntryModel: [
-                    // {
-                    //     glAccountId: values.glAcountlId,
-                    //     amount: parseFloat(values.entryAmount),
-                    //     journalEntryType: parseInt(values.entryTypeId),
-                    //     branchId: values.branchId,
-                    // }
                     ...jornalEntryModel,
                   ],
                   notes: values.entryNotes,
@@ -402,7 +320,6 @@ class JournalEntries extends React.Component {
                     }, 2000);
                   } else {
                     setTimeout(() => {
-                      // this.props.dispatch(acoountingActions.createJournalEntry("CLEAR"))
                     }, 2000);
                   }
                 });
@@ -427,7 +344,6 @@ class JournalEntries extends React.Component {
                     <div>
                       {values.jornalEntries.length > 0 &&
                         values.jornalEntries.map((entry, index) => (
-                          // <div className="row" key={index}>
                           <Form.Row key={index}>
                             <Col>
                               <Form.Label
@@ -549,7 +465,6 @@ class JournalEntries extends React.Component {
                                       delete errors.jornalEntries[index]
                                         .glAcountlId;
                                     }
-                                    // errors.jornalEntries[index].glAcountlId  = null
                                   }
 
                                   if (
@@ -561,7 +476,6 @@ class JournalEntries extends React.Component {
                                     ].glAcountlId = null;
                                   }
                                 }}
-                                // className={errors.glAcountlId && touched.glAcountlId ? "is-invalid" : null}
 
                                 name={`jornalEntries.${index}.glAcountlId`}
                               />
@@ -573,9 +487,6 @@ class JournalEntries extends React.Component {
                                   <span className='invalid-feedback'>
                                     {errors.jornalEntries[index].glAcountlId}
                                   </span>
-                                  // <div className="field-error">
-                                  //     {errors.jornalEntries[index].glAccountId}
-                                  // </div>
                                 )}
                             </Col>
                             <Col>
@@ -609,7 +520,6 @@ class JournalEntries extends React.Component {
                                       delete errors.jornalEntries[index]
                                         .entryTypeId;
                                     }
-                                    // errors.jornalEntries[index].entryTypeId  = null
                                   }
 
                                   if (
@@ -621,18 +531,12 @@ class JournalEntries extends React.Component {
                                     ].entryTypeId = null;
                                   }
 
-                                  // console.log("type is",selectedType.value, typeof selectedType.value);
-
-                                  // values.jornalEntries[index].entryTypeId = selectedType.value
                                   values.jornalEntries[
                                     index
                                   ].entryTypeId = parseInt(selectedType.value);
                                 }}
                                 name={`jornalEntries.${index}.entryTypeId`}
                               />
-                              {/* {errors.entryTypeId && touched.entryTypeId ? (
-                                                                    <span className="invalid-feedback">{errors.entryTypeId}</span>
-                                                                ) : null} */}
 
                               {errors.jornalEntries &&
                                 errors.jornalEntries[index] &&
@@ -642,9 +546,6 @@ class JournalEntries extends React.Component {
                                   <span className='invalid-feedback'>
                                     {errors.jornalEntries[index].entryTypeId}
                                   </span>
-                                  // <div className="field-error">
-                                  //     {errors.jornalEntries[index].glAccountId}
-                                  // </div>
                                 )}
                             </Col>
                             <Col>
@@ -656,7 +557,6 @@ class JournalEntries extends React.Component {
                               </Form.Label>
                               <Form.Control
                                 type='text'
-                                // onBlur={handleBlur}
                                 onChange={handleChange}
                                 value={numberWithCommas(
                                   values.jornalEntries[index].entryAmount
@@ -695,7 +595,6 @@ class JournalEntries extends React.Component {
                               </Button>
                             )}
                           </Form.Row>
-                          /* </div> */
                         ))}
 
                       <div className='footer-with-cta toleft'>
@@ -735,10 +634,7 @@ class JournalEntries extends React.Component {
                       </Form.Label>
                       <DatePicker
                         placeholderText='Choose entry date'
-                        // onChange={this.handleDatePicker}
-                        // onChangeRaw={(e) => this.handleDateChange(e)}
                         dateFormat={window.dateformat}
-                        className='form-control form-control-sm'
                         peekNextMonth
                         showMonthDropdown
                         showYearDropdown
@@ -808,11 +704,6 @@ class JournalEntries extends React.Component {
               </Form>
             )}
           </Formik>
-          {/* {createJournalEntryRequest.request_status === accountingConstants.CREATE_JOURNAL_ENTRY_SUCCESS &&
-                        <Alert variant="success">
-                            {createJournalEntryRequest.request_data.response.data.message}
-                        </Alert>
-                    } */}
           {createJournalEntryRequest.request_status ===
             accountingConstants.CREATE_JOURNAL_ENTRY_FAILURE && (
             <Alert variant='danger'>
@@ -831,8 +722,7 @@ class JournalEntries extends React.Component {
 
   renderAllJournals = () => {
     let getJournalEntriesRequest = this.props.getJournalEntries,
-      createJournalEntryRequest = this.props.createJournalEntry,
-      { CurrentPage, PageSize } = this.state;
+      createJournalEntryRequest = this.props.createJournalEntry;
 
     let saveRequestData =
       getJournalEntriesRequest.request_data !== undefined
@@ -950,11 +840,10 @@ class JournalEntries extends React.Component {
                       placeholderText='Start date'
                       autoComplete='new-password'
                       maxDate={new Date()}
-                      // className="form-control form-control-sm h-38px"
                       className='form-control form-control-sm '
                     />
                     <DatePickerEx
-                      placeholderText='End  date'
+                      placeholderText='End date'
                       onChangeRaw={this.handleDateChangeRaw}
                       onChange={this.handleEndDatePicker}
                       selected={this.state.endDate}
@@ -964,7 +853,6 @@ class JournalEntries extends React.Component {
                       showYearDropdown
                       dropdownMode='select'
                       maxDate={new Date()}
-                      // className="form-control form-control-sm h-38px"
                       className='form-control form-control-sm'
                     />
                     <input
@@ -976,9 +864,6 @@ class JournalEntries extends React.Component {
                         this.setState({ SearchText: e.target.value.trim() });
                       }}
                     />
-                    {/* {errors.startDate && touched.startDate ? (
-<span className="invalid-feedback">{errors.startDate}</span>
-) : null} */}
                   </Form.Group>
                   <Button
                     className='no-margins'
@@ -1030,7 +915,6 @@ class JournalEntries extends React.Component {
                       >
                         <td>{eachJournal.id}</td>
                         <td>{eachJournal.transactionReference}</td>
-                        {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
                         <td>{eachJournal.bookingDate}</td>
                         <td>{eachJournal.accountName}</td>
                         <td>{eachJournal.glCode}</td>
@@ -1183,16 +1067,17 @@ class JournalEntries extends React.Component {
                   </div>
                 </div>
 
-                <TableComponent classnames='striped bordered hover'>
+                <TableComponent classnames='striped hover'>
                   <thead>
                     <tr>
                       <th>Entry Id</th>
                       <th>Transaction Id</th>
                       <th>Booking Date (Entry Date)</th>
                       <th>GL Account Name</th>
+                      <th>Currency Code</th>
                       <th>GL Code</th>
-                      <th>Debit Amount (&#8358;)</th>
-                      <th>Credit Amount (&#8358;)</th>
+                      <th>Debit Amount</th>
+                      <th>Credit Amount</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1210,8 +1095,8 @@ class JournalEntries extends React.Component {
                           <td>{eachJournal.id}</td>
                           <td>{eachJournal.transactionReference}</td>
                           <td>{eachJournal.bookingDate}</td>
-                          {/* <td>{getDateFromISO(eachJournal.bookingDate)}</td> */}
                           <td>{eachJournal.accountName}</td>
+                          <td>{eachJournal.currencyCode}</td>
                           <td>{eachJournal.glCode}</td>
                           <td>
                             {numberWithCommas(
@@ -1268,7 +1153,6 @@ class JournalEntries extends React.Component {
                         placeholderText='Start date'
                         autoComplete='new-password'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm '
                       />
                       <DatePickerEx
@@ -1282,7 +1166,6 @@ class JournalEntries extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm'
                       />
                       <input
@@ -1294,9 +1177,6 @@ class JournalEntries extends React.Component {
                           this.setState({ SearchText: e.target.value.trim() });
                         }}
                       />
-                      {/* {errors.startDate && touched.startDate ? (
-<span className="invalid-feedback">{errors.startDate}</span>
-) : null} */}
                     </Form.Group>
                     <Button
                       className='no-margins'
@@ -1395,31 +1275,11 @@ class JournalEntries extends React.Component {
               <div className='module-submenu'>
                 <div className='content-container'>
                   <AccountingNav />
-                  {/* <ul className="nav">
-                                        <li>
-                                            <NavLink to={'/balancesheet'}>Balance Sheet</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/profit-loss'}>Profit & Loss</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/trial-balance'}>Trial Balance</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/journals'}>Journal Entries</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/accounts'}>Charts of Accounts</NavLink>
-                                        </li>
-                                    </ul> */}
                 </div>
               </div>
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
-                    {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>
                         {this.renderAllJournals()}
