@@ -17,7 +17,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
-import "./customerprofile.scss"; 
+import "./customerprofile.scss";
 import { loanActions } from '../../redux/actions/loans/loans.action';
 
 
@@ -86,21 +86,21 @@ class ViewClosedLoanAccount extends React.Component {
 
             txtnEndDate: "",
             txtnStartDate: "",
-            
+
         }
         this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
 
-        
+
     }
 
     componentDidMount() {
-       
+
         this.loadInitialCustomerData();
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.match.params.loanid !== this.props.match.params.loanid) {
-        
+
         this.loanEncodedKey = nextProps.match.params.loanid;
             this.loadInitialCustomerData();
         }
@@ -157,8 +157,8 @@ class ViewClosedLoanAccount extends React.Component {
         let params = `PageSize=${CommunicationsPageSize}&CurrentPage=${CommunicationsCurrentPage}&NotificationType=${NotificationType}`;
         dispatch(loanActions.getALoanCommunications(this.loanEncodedKey,params));
     }
-    
-    
+
+
 
     getCustomerLoanTransactions = ()=>{
         const { dispatch } = this.props;
@@ -186,7 +186,7 @@ class ViewClosedLoanAccount extends React.Component {
     }
 
     setScheduleFilter = (filterState, filterItem)=>{
-        
+
         this.setState({[filterItem]:filterState.target.checked})
     }
 
@@ -195,12 +195,12 @@ class ViewClosedLoanAccount extends React.Component {
         const { dispatch } = this.props;
         let sizeOfPage = PageSize.target.value;
 
-        
+
 
         this.setState({ loanTransactionPageSize: sizeOfPage });
 
-        
-        
+
+
         let {loanTransactionCurrentPage } = this.state;
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${loanTransactionCurrentPage}&accountEncodedKey=${this.loanEncodedKey}`;
@@ -209,21 +209,21 @@ class ViewClosedLoanAccount extends React.Component {
 
         if(tempData){
             dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey,params, tempData));
-            
+
         }else{
             dispatch(loanActions.getAccountLoanTransaction(this.loanEncodedKey,params));
         }
     }
 
     setTransactionRequestNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
-        
 
-        
 
-        
-        
+
+
+
+
         let {loanTransactionPageSize} = this.state;
 
         let params = `PageSize=${loanTransactionPageSize}&CurrentPage=${nextPage}&accountEncodedKey=${this.loanEncodedKey}`;
@@ -242,44 +242,44 @@ class ViewClosedLoanAccount extends React.Component {
 
         this.setState({ AttachmentPageSize: sizeOfPage });
 
-        
-        
+
+
         let {AttachmentCurrentPage } = this.state;
 
-       
+
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${AttachmentCurrentPage}&AccountEncodedKey=${this.loanEncodedKey}`;
-        
+
 
         if(tempData){
             dispatch(loanActions.getAccountLoanAttachments(params, tempData));
-            
+
         }else{
             dispatch(loanActions.getAccountLoanAttachments(params));
         }
     }
 
     setAttachmentRequestNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
-        
+
 
         let {AttachmentPageSize } = this.state;
 
-       
+
 
         let params = `PageSize=${AttachmentPageSize}&CurrentPage=${nextPage}&AccountEncodedKey=${this.loanEncodedKey}`;
 
-        
 
-       
+
+
         if(tempData){
             dispatch(loanActions.getAccountLoanAttachments(params, tempData));
         }else{
             dispatch(loanActions.getAccountLoanAttachments(params));
         }
     }
-    
+
 
     setCommentsRequestPagesize = (PageSize, tempData) => {
         // console.log('----here', PageSize.target.value);
@@ -289,32 +289,32 @@ class ViewClosedLoanAccount extends React.Component {
 
         this.setState({ CommentsPageSize: sizeOfPage });
 
-        
-        
+
+
         let {CommentsCurrentPage } = this.state;
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${CommentsCurrentPage}&AccountEncodedKey=${this.loanEncodedKey}`;
-        
+
 
         if(tempData){
             dispatch(loanActions.getAccountLoansComments(params, tempData));
-            
+
         }else{
             dispatch(loanActions.getAccountLoansComments(params));
         }
     }
 
     setCommentsRequestNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
-        
+
 
         let {CommentsPageSize } = this.state;
 
         let params = `PageSize=${CommentsPageSize}&CurrentPage=${nextPage}&AccountEncodedKey=${this.loanEncodedKey}`;
 
-       
-       
+
+
         if(tempData){
             dispatch(loanActions.getAccountLoansComments(params, tempData));
         }else{
@@ -330,35 +330,35 @@ class ViewClosedLoanAccount extends React.Component {
 
         this.setState({ CommunicationsPageSize: sizeOfPage });
 
-        
-        
-        
-        
+
+
+
+
 
         let {CommunicationsCurrentPage,NotificationType } = this.state;
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${CommunicationsCurrentPage}&NotificationType=${NotificationType}`;
-        
+
 
         if(tempData){
             dispatch(loanActions.getALoanCommunications(this.loanEncodedKey, params, tempData));
-            
+
         }else{
             dispatch(loanActions.getALoanCommunications(this.loanEncodedKey, params));
         }
     }
 
     setCommunicationsRequestNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
-        
+
 
 
         let {CommunicationsPageSize,NotificationType } = this.state;
 
         let params = `PageSize=${CommunicationsPageSize}&CurrentPage=${nextPage}&NotificationType=${NotificationType}`;
-       
-       
+
+
         if(tempData){
             dispatch(loanActions.getALoanCommunications(this.loanEncodedKey, params, tempData));
         }else{
@@ -375,35 +375,35 @@ class ViewClosedLoanAccount extends React.Component {
 
         this.setState({ ActivitiesPageSize: sizeOfPage });
 
-       
 
-       
-        
-        
+
+
+
+
         let {ActivitiesCurrentPage } = this.state;
 
         let params = `PageSize=${sizeOfPage}&CurrentPage=${ActivitiesCurrentPage}`;
-        
+
 
         if(tempData){
             dispatch(loanActions.getALoanActivities(this.loanEncodedKey,params, tempData));
-            
+
         }else{
             dispatch(loanActions.getALoanActivities(this.loanEncodedKey,params));
         }
     }
 
     setActivitiesRequestNextPage = (nextPage, tempData)=>{
-        
+
         const {dispatch} = this.props;
-        
+
 
         let {ActivitiesPageSize } = this.state;
 
         let params = `PageSize=${ActivitiesPageSize}&CurrentPage=${nextPage}`;
 
-       
-       
+
+
         if(tempData){
             dispatch(loanActions.getALoanActivities(this.loanEncodedKey, params, tempData));
         }else{
@@ -416,7 +416,7 @@ class ViewClosedLoanAccount extends React.Component {
     }
     handleTxtnStartDatePicker = (txtnStartDate) => {
         txtnStartDate.setHours(txtnStartDate.getHours() + 1);
-        
+
         this.setState({ txtnStartDate }, ()=>{
             if(this.state.txtnEndDate!==""){
                 //this.getHistory();
@@ -426,7 +426,7 @@ class ViewClosedLoanAccount extends React.Component {
 
     handleTxtnEndDatePicker = (txtnEndDate) => {
         txtnEndDate.setHours(txtnEndDate.getHours() + 1);
-       
+
         this.setState({ txtnEndDate }, ()=>{
                 if(this.state.txtnStartDate!==""){
                     //this.getHistory();
@@ -467,7 +467,7 @@ class ViewClosedLoanAccount extends React.Component {
                                     <option value="50">50</option>
                                     <option value="200">200</option>
                                 </select>
-                                
+
                             </div>
                         </div>
                         <TableComponent classnames="striped bordered hover">
@@ -494,7 +494,7 @@ class ViewClosedLoanAccount extends React.Component {
                     </div>
                 )
             }else{
-                
+
                 return(
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
@@ -513,7 +513,7 @@ class ViewClosedLoanAccount extends React.Component {
 
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select id="toshow" 
+                                <select id="toshow"
                                         value={this.state.ActivitiesPageSize}
                                         className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
@@ -550,7 +550,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         )
                                     })
                                 }
-                                
+
                             </tbody>
                         </TableComponent>
 
@@ -562,7 +562,7 @@ class ViewClosedLoanAccount extends React.Component {
 
         if(getALoanAccountActivitiesRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_SUCCESS){
             let loanAccountActivitiesData = getALoanAccountActivitiesRequest.request_data.response.data;
-            
+
             if(loanAccountActivitiesData.result.length>=1){
                 return(
                     <div>
@@ -581,7 +581,7 @@ class ViewClosedLoanAccount extends React.Component {
 
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select id="toshow" 
+                                <select id="toshow"
                                         onChange={(e)=>this.setActivitiesRequestPagesize(e, loanAccountActivitiesData.result)}
                                         value={this.state.ActivitiesPageSize}
                                         className="countdropdown form-control form-control-sm">
@@ -628,7 +628,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         )
                                     })
                                 }
-                               
+
                             </tbody>
                         </TableComponent>
 
@@ -687,8 +687,8 @@ class ViewClosedLoanAccount extends React.Component {
                     </div>
                 )
             }
-            
-            
+
+
         }
 
 
@@ -696,7 +696,7 @@ class ViewClosedLoanAccount extends React.Component {
         if(getALoanAccountActivitiesRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ACTIVITIES_FAILURE){
 
             return(
-                <div className="loading-content errormsg"> 
+                <div className="loading-content errormsg">
                 <div>{getALoanAccountActivitiesRequest.request_data.error}</div>
             </div>
             )
@@ -751,7 +751,7 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                             </tbody>
                         </TableComponent>
-                        
+
                     </div>
                 )
             }else{
@@ -801,7 +801,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <td>{eachCommunication.failureReason} </td>
                                             </tr>
                                         )
-                                   }) 
+                                   })
                                 }
                             </tbody>
                         </TableComponent>
@@ -871,7 +871,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <td>{eachCommunication.failureReason} </td>
                                             </tr>
                                         )
-                                   }) 
+                                   })
                                 }
                             </tbody>
                         </TableComponent>
@@ -930,7 +930,7 @@ class ViewClosedLoanAccount extends React.Component {
         if(getALoanAccountCommunicationsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMUNICATIONS_FAILURE){
 
             return(
-                <div className="loading-content errormsg"> 
+                <div className="loading-content errormsg">
                 <div>{getALoanAccountCommunicationsRequest.request_data.error}</div>
             </div>
             )
@@ -1053,17 +1053,17 @@ class ViewClosedLoanAccount extends React.Component {
                             </div>
                         </div> */}
                         <div className="table-helper">
-                            <input type="checkbox" name="" 
+                            <input type="checkbox" name=""
                                 onChange={(e)=>this.setScheduleFilter(e, 'showAmountExpected')}
                                 checked={this.state.showAmountExpected}
                                 id="showAmountExpected" />
                             <label htmlFor="showAmountExpected">Amount Expected</label>
-                            <input type="checkbox" name="" 
+                            <input type="checkbox" name=""
                                 onChange={(e)=>this.setScheduleFilter(e, 'showAmountPaid')}
                                 checked={this.state.showAmountPaid}
                                 id="showAmountPaid" />
                             <label htmlFor="showAmountPaid">Amount Paid</label>
-                            <input type="checkbox" name="" 
+                            <input type="checkbox" name=""
                                 onChange={(e)=>this.setScheduleFilter(e, 'showAmountDue')}
                                 checked={this.state.showAmountDue}
                                 id="showAmountDue" />
@@ -1076,43 +1076,43 @@ class ViewClosedLoanAccount extends React.Component {
                                     <th>Due</th>
                                     <th>Payment Due</th>
                                     {/* <th>Interest Rate</th> */}
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected===true &&
                                         <th>Expected Principal</th>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected===true &&
                                         <th>Expected Interest</th>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected===true &&
                                         <th>Expected Fees</th>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected===true &&
                                         <th className="borderdright">Expected Penalty</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th>Principal Paid</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th>Fees Paid</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th>Interest Paid</th>
                                     }
-                                    {this.state.showAmountPaid && 
+                                    {this.state.showAmountPaid &&
                                         <th className="borderdright">Penalty Paid</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th>Principal Due</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th>Interest Due</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th>Fee Due</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th>Penalty Due</th>
                                     }
-                                    {this.state.showAmountDue && 
+                                    {this.state.showAmountDue &&
                                         <th className="borderdright">Total Due</th>
                                     }
                                     <th>Total Balance</th>
@@ -1127,43 +1127,43 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <td>{(eachSchedule.installmentDate!==null && eachSchedule.installmentDate!=="")? getDateFromISO(eachSchedule.installmentDate):"-"}</td>
                                                 <td>{(eachSchedule.paymentDue!==null && eachSchedule.paymentDue>0)? numberWithCommas(eachSchedule.paymentDue, true): "-"}</td>
                                                 {/* <td>{numberWithCommas(eachSchedule.interestRate)}</td> */}
-                                                {this.state.showAmountExpected===true && 
+                                                {this.state.showAmountExpected===true &&
                                                     <td>{( eachSchedule.loanScheduleExpected.expectedPrincipal!==null && eachSchedule.loanScheduleExpected.expectedPrincipal>0) ? numberWithCommas(eachSchedule.loanScheduleExpected.expectedPrincipal, true) : "-"}</td>
                                                 }
-                                                {this.state.showAmountExpected===true && 
+                                                {this.state.showAmountExpected===true &&
                                                     <td>{(eachSchedule.loanScheduleExpected.expectedInterest !==null && eachSchedule.loanScheduleExpected.expectedInterest>0) ? numberWithCommas(eachSchedule.loanScheduleExpected.expectedInterest, true) : "-"}</td>
                                                 }
-                                                {this.state.showAmountExpected===true && 
+                                                {this.state.showAmountExpected===true &&
                                                     <td>{(eachSchedule.loanScheduleExpected.expectedFees!==null && eachSchedule.loanScheduleExpected.expectedFees >0)? numberWithCommas(eachSchedule.loanScheduleExpected.expectedFees, true) : "-"}</td>
                                                 }
-                                                {this.state.showAmountExpected===true && 
+                                                {this.state.showAmountExpected===true &&
                                                     <td className="borderdright">{(eachSchedule.loanScheduleExpected.expectedPenalty!==null && eachSchedule.loanScheduleExpected.expectedPenalty>0)? numberWithCommas(eachSchedule.loanScheduleExpected.expectedPenalty, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
+                                                {this.state.showAmountPaid &&
                                                     <td>{(eachSchedule.loanSchedulePaid.principalPaid!==null && eachSchedule.loanSchedulePaid.principalPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.principalPaid, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
+                                                {this.state.showAmountPaid &&
                                                     <td>{(eachSchedule.loanSchedulePaid.feesPaid!==null && eachSchedule.loanSchedulePaid.feesPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.feesPaid, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
+                                                {this.state.showAmountPaid &&
                                                     <td>{(eachSchedule.loanSchedulePaid.interestPaid!==null && eachSchedule.loanSchedulePaid.interestPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.interestPaid, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountPaid && 
+                                                {this.state.showAmountPaid &&
                                                     <td className="borderdright">{(eachSchedule.loanSchedulePaid.penalyPaid!==null && eachSchedule.loanSchedulePaid.penalyPaid >0)? numberWithCommas(eachSchedule.loanSchedulePaid.penalyPaid, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
+                                                {this.state.showAmountDue &&
                                                     <td>{(eachSchedule.loanScheduleDue.principalDue!==null && eachSchedule.loanScheduleDue.principalDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.principalDue, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
+                                                {this.state.showAmountDue &&
                                                     <td>{(eachSchedule.loanScheduleDue.interestDue!==null && eachSchedule.loanScheduleDue.interestDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.interestDue, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
+                                                {this.state.showAmountDue &&
                                                     <td>{(eachSchedule.loanScheduleDue.feesDue!==null && eachSchedule.loanScheduleDue.feesDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.feesDue, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
+                                                {this.state.showAmountDue &&
                                                     <td>{(eachSchedule.loanScheduleDue.penalyDue!==null && eachSchedule.loanScheduleDue.penalyDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.penalyDue, true):"-"}</td>
                                                 }
-                                                {this.state.showAmountDue && 
+                                                {this.state.showAmountDue &&
                                                     <td className="borderdright">{(eachSchedule.loanScheduleDue.totalDue!==null && eachSchedule.loanScheduleDue.totalDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.totalDue):"-"}</td>
                                                 }
                                                 <td>{(eachSchedule.totalBalance !==null && eachSchedule.totalBalance>0) ? numberWithCommas(eachSchedule.totalBalance, true) : "-"}</td>
@@ -1174,48 +1174,48 @@ class ViewClosedLoanAccount extends React.Component {
 
                                 <tr>
                                     <td colSpan="3" className="bolden borderdright">Totals</td>
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPrincipal, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedInterest, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedFees, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountExpected===true && 
+                                    {this.state.showAmountExpected===true &&
                                         <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty!==null && getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleExpected.expectedPenalty, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
+                                    {this.state.showAmountPaid===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.principalPaid, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
+                                    {this.state.showAmountPaid===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.feesPaid, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
+                                    {this.state.showAmountPaid===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.interestPaid, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountPaid===true && 
+                                    {this.state.showAmountPaid===true &&
                                         <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid!==null && getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanSchedulePaid.penalyPaid, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
+                                    {this.state.showAmountDue===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.principalDue, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
+                                    {this.state.showAmountDue===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.interestDue, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
+                                    {this.state.showAmountDue===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.feesDue, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
+                                    {this.state.showAmountDue===true &&
                                         <td className="">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.penalyDue, true) : "-"} </td>
                                     }
-                                    {this.state.showAmountDue===true && 
+                                    {this.state.showAmountDue===true &&
                                         <td className="borderdright">{(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue!==null && getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue>0)? numberWithCommas(getAClientLoanAccountScheduleInfo.loanScheduleDue.totalDue, true) : "-"} </td>
                                     }
                                     <td className="">-</td>
                                 </tr>
-                                
+
                             </tbody>
                         </TableComponent>
                     </div>
@@ -1273,13 +1273,13 @@ class ViewClosedLoanAccount extends React.Component {
         if(getAClientLoanAccountScheduleRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_SCHEDULE_FAILURE){
 
             return(
-                <div className="loading-content errormsg"> 
+                <div className="loading-content errormsg">
                 <div>{getAClientLoanAccountScheduleRequest.request_data.error}</div>
             </div>
             )
         }
 
-        
+
     }
 
     renderLoanTransaction = ()=>{
@@ -1429,12 +1429,12 @@ class ViewClosedLoanAccount extends React.Component {
                             </Form>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select 
-                                    id="toshow" 
+                                <select
+                                    id="toshow"
                                     className="countdropdown form-control form-control-sm"
                                     onChange={(e)=>this.setTransactionRequestPagesize(e, getAccountLoanTransactionData)}
                                     value={this.state.loanTransactionPageSize}>
-                                    
+
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -1486,8 +1486,8 @@ class ViewClosedLoanAccount extends React.Component {
                             <div></div>
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
-                                <select 
-                                    id="toshow" 
+                                <select
+                                    id="toshow"
                                     className="countdropdown form-control form-control-sm"
                                     onChange={(e)=>this.setTransactionRequestPagesize(e, getAccountLoanTransactionData)}
                                     value={this.state.loanTransactionPageSize}>
@@ -1521,10 +1521,10 @@ class ViewClosedLoanAccount extends React.Component {
                         </TableComponent>
                     </div>
                 )
-            }   
+            }
         }
     }
-    
+
     renderLoanAccountDetails = (loanAccountData)=>{
 
 
@@ -1586,7 +1586,7 @@ class ViewClosedLoanAccount extends React.Component {
                                     <td>Date Created</td>
                                     <td>{loanAccountData.dateCreated}</td>
                                 </tr>
-                                
+
                             </tbody>
                         </TableComponent>
                     </div>
@@ -1647,16 +1647,16 @@ class ViewClosedLoanAccount extends React.Component {
 
     handleAddLoanComments = async (addLoanCommentsPayload)=>{
         const {dispatch} = this.props;
-       
+
         await dispatch(loanActions.creatALoanComment(addLoanCommentsPayload));
-    } 
+    }
     addNewCommentBox = ()=>{
         const {showAddComment} = this.state;
         let  createALoanCommentRequest = this.props.createALoanCommentReducer;
         let addLoanCommentsValidationSchema = Yup.object().shape({
                 comment:  Yup.string()
                     .required('Required'),
-            
+
            });
         return(
             <Modal show={showAddComment} onHide={this.handleCommentsBoxClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
@@ -1691,7 +1691,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         }, 3000);
                                     }
 
-                                    
+
 
                                 }
                             )
@@ -1734,23 +1734,23 @@ class ViewClosedLoanAccount extends React.Component {
                                     <Button variant="light" onClick={this.handleCommentsBoxClose}>
                                         Cancel
                                     </Button>
-                                    <Button 
+                                    <Button
                                         variant="success"
                                         type="submit"
                                         disabled={createALoanCommentRequest.is_request_processing}
                                     >
                                         {createALoanCommentRequest.is_request_processing?"Please wait...":"Save Comment"}
-                                        
+
                                     </Button>
 
                                 </Modal.Footer>
 
-                                {createALoanCommentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_SUCCESS && 
+                                {createALoanCommentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_SUCCESS &&
                                     <Alert variant="success" className="w-65 mlr-auto">
                                         {createALoanCommentRequest.request_data.response.data.message}
                                     </Alert>
                                 }
-                                {createALoanCommentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_FAILURE && 
+                                {createALoanCommentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_COMMENT_FAILURE &&
                                     <Alert variant="danger" className="w-65 mlr-auto">
                                         {createALoanCommentRequest.request_data.error}
                                     </Alert>
@@ -1759,27 +1759,27 @@ class ViewClosedLoanAccount extends React.Component {
                         )}
                 </Formik>
 
-                
+
             </Modal>
         )
     }
-    
+
     HandleFileUpLoad = (event) => {
         let filename = event.target.files[0].name,
             ext = event.target.files[0].type;
-        
 
-       
-     
- 
+
+
+
+
         this.setState({docuploaded: event.target.files[0], filename,isDocAdded:true});
     }
 
     handleAddAttachment = async (addAttachmentPayload)=>{
         const {dispatch} = this.props;
-       
+
         await dispatch(loanActions.creatALoanAttachment(addAttachmentPayload));
-    } 
+    }
 
     addNewAttachmentBox = ()=>{
         const {showAddAttachment, docuploaded,isDocAdded} = this.state;
@@ -1791,7 +1791,7 @@ class ViewClosedLoanAccount extends React.Component {
             Description: Yup.string()
                     .required('Required')
                     .min(3, 'Valid response required'),
-            
+
            });
         return(
             <Modal show={showAddAttachment} onHide={this.handleAttachmentBoxClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
@@ -1837,7 +1837,7 @@ class ViewClosedLoanAccount extends React.Component {
                                             }, 3000);
                                         }
 
-                                        
+
 
                                     }
                                 )
@@ -1866,13 +1866,13 @@ class ViewClosedLoanAccount extends React.Component {
                                 <Modal.Body>
                                     <Form.Group>
                                         <Form.Label className="block-level">Title</Form.Label>
-                                        <Form.Control 
+                                        <Form.Control
                                             type="text"
                                             onChange={handleChange}
                                             name="Title"
                                             value={values.Title}
                                             className={errors.Title && touched.Title ? "is-invalid form-control form-control-sm" : null} />
-                                            
+
                                             {errors.Title && touched.Title ? (
                                             <span className="invalid-feedback">{errors.Title}</span>
                                             ) : null}
@@ -1894,10 +1894,10 @@ class ViewClosedLoanAccount extends React.Component {
                                             <input name="docuploaded"  type="file" id="file-upload3"  onChange={this.HandleFileUpLoad}/>
                                         </div>
 
-                                        {this.state.filename!==null && 
-                                
+                                        {this.state.filename!==null &&
+
                                             <div className="filename">
-                                              File: <span>{this.state.filename}</span>  
+                                              File: <span>{this.state.filename}</span>
                                             </div>
                                         }
                                     </Form.Group>
@@ -1912,23 +1912,23 @@ class ViewClosedLoanAccount extends React.Component {
                                     <Button variant="light" onClick={this.handleAttachmentBoxClose}>
                                         Cancel
                                     </Button>
-                                    <Button 
+                                    <Button
                                         variant="success"
                                         type="submit"
                                         disabled={createALoanAttachmentRequest.is_request_processing}
                                     >
                                         {createALoanAttachmentRequest.is_request_processing?"Please wait...":"Upload attachment"}
-                                        
+
                                     </Button>
 
                                 </Modal.Footer>
 
-                                {createALoanAttachmentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_SUCCESS && 
+                                {createALoanAttachmentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_SUCCESS &&
                                     <Alert variant="success" className="w-65 mlr-auto">
                                         {createALoanAttachmentRequest.request_data.response.data.message}
                                     </Alert>
                                 }
-                                {createALoanAttachmentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_FAILURE && 
+                                {createALoanAttachmentRequest.request_status === loanAndDepositsConstants.CREATE_A_LOAN_ATTACHMENT_FAILURE &&
                                     <Alert variant="danger" className="w-65 mlr-auto">
                                         {createALoanAttachmentRequest.request_data.error}
                                     </Alert>
@@ -1937,7 +1937,7 @@ class ViewClosedLoanAccount extends React.Component {
                         )}
                 </Formik>
 
-                
+
             </Modal>
         )
     }
@@ -2035,7 +2035,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachAttachment.timeStamp)} </td>
                                             </tr>
                                         )
-                                   }) 
+                                   })
                                 }
                             </tbody>
                         </TableComponent>
@@ -2104,7 +2104,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachAttachment.timeStamp)} </td>
                                             </tr>
                                         )
-                                   }) 
+                                   })
                                 }
                             </tbody>
                         </TableComponent>
@@ -2165,13 +2165,13 @@ class ViewClosedLoanAccount extends React.Component {
                 )
             }
 
-           
+
         }
 
         if(getALoanAccountAttachmentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_ATTACHMENTS_FAILURE){
 
             return(
-                <div className="loading-content errormsg"> 
+                <div className="loading-content errormsg">
                 <div>{getALoanAccountAttachmentsRequest.request_data.error}</div>
             </div>
             )
@@ -2199,7 +2199,7 @@ class ViewClosedLoanAccount extends React.Component {
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow"
-                                    
+
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
@@ -2231,7 +2231,7 @@ class ViewClosedLoanAccount extends React.Component {
                                 <Button onClick={this.handleCommentsBoxShow}>New Comment</Button>
                             </div>
                         }
-                        
+
                     </div>
                 )
             }else{
@@ -2276,7 +2276,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <td><NavLink to={`/user/${eachComments.userEncodedKey}`}>{eachComments.userName} </NavLink> </td>
                                             </tr>
                                         )
-                                   }) 
+                                   })
                                 }
                             </tbody>
                         </TableComponent>
@@ -2346,7 +2346,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <td><NavLink to={`/user/${eachComments.userEncodedKey}`}>{eachComments.userName} </NavLink> </td>
                                             </tr>
                                         )
-                                   }) 
+                                   })
                                 }
                             </tbody>
                         </TableComponent>
@@ -2412,7 +2412,7 @@ class ViewClosedLoanAccount extends React.Component {
         if(getAClientLoanAccountCommentsRequest.request_status===loanAndDepositsConstants.GET_A_LOAN_COMMENTS_FAILURE){
 
             return(
-                <div className="loading-content errormsg"> 
+                <div className="loading-content errormsg">
                 <div>{getAClientLoanAccountCommentsRequest.request_data.error}</div>
             </div>
             )
@@ -2421,21 +2421,21 @@ class ViewClosedLoanAccount extends React.Component {
 
 
     handleLoanChangeStateClose = () => this.setState({changeLoanState:false, showDisburseLoanForm:false});
-    
+
     handleLoanChangeStateShow = () => this.setState({changeLoanState:true});
 
     handleNewLoanState = async (changeLoanStatePayload, newStateUpdate)=>{
         const {dispatch} = this.props;
-       
+
         await dispatch(loanActions.changeLoanState(changeLoanStatePayload, newStateUpdate));
-    } 
+    }
 
     changeLoanStateBox = (loanDetails)=>{
         const {changeLoanState, newState,ctaText, newStateUpdate, showDisburseLoanForm} = this.state;
         let  changeLoanStateRequest = this.props.changeLoanStateReducer;
         let getAClientLoanAccountRequest = this.props.getAClientLoanAccountReducer,
             adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
-            allChannels =[], 
+            allChannels =[],
             channelsList;
         // this.props.dispatch(loanActions.changeLoanState("CLEAR"));
 
@@ -2455,7 +2455,7 @@ class ViewClosedLoanAccount extends React.Component {
                     .min(2, 'Valid comments required'),
                 notes:  Yup.string()
                     .min(2, 'Valid notes required'),
-            
+
             });
         }
 
@@ -2483,7 +2483,7 @@ class ViewClosedLoanAccount extends React.Component {
                             then: Yup.string()
                                 .required('Required')
                         }),
-                
+
             });
         }
 
@@ -2513,7 +2513,7 @@ class ViewClosedLoanAccount extends React.Component {
                             then: Yup.string()
                                 .required('Required')
                         }),
-                
+
             });
         }
 
@@ -2563,12 +2563,12 @@ class ViewClosedLoanAccount extends React.Component {
                                 delete changeLoanStatePayload.amount;
                             }
                         }
-                        
+
 
                         // let changeLoanStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
 
 
-                        
+
 
                         this.handleNewLoanState(changeLoanStatePayload,newStateUpdate )
                             .then(
@@ -2594,7 +2594,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         }, 3000);
                                     }
 
-                                    
+
 
                                 }
                             )
@@ -2617,7 +2617,7 @@ class ViewClosedLoanAccount extends React.Component {
                                 className="">
                                 <Modal.Header>
                                     <Modal.Title>
-                                        {newState !== "repayloan"? "Change Loan State" : "Apply A Repayment"} 
+                                        {newState !== "repayloan"? "Change Loan State" : "Apply A Repayment"}
                                     </Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
@@ -2643,7 +2643,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                 onChange={handleChange}
                                                 name="comment"
                                             value={values.comment}
-                                            className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null} 
+                                            className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null}
                                             />
                                             {errors.comment && touched.comment ? (
                                                 <span className="invalid-feedback">{errors.comment}</span>
@@ -2658,7 +2658,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5>
                                                 </Col>
                                                 <Col>
-                                                    
+
                                                 </Col>
                                             </Form.Row>
                                             <Form.Row className="mb-10">
@@ -2669,7 +2669,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                             <div>
                                                                 <Select
                                                                     options={allChannels}
-                                                                    
+
                                                                     onChange={(selected) => {
                                                                         setFieldValue('txtChannelEncodedKey', selected.value)
                                                                     }}
@@ -2691,14 +2691,14 @@ class ViewClosedLoanAccount extends React.Component {
                                                             value={numberWithCommas(values.collectPrincipalEveryRepayments)}
                                                             className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid h-38px" : "h-38px"}
                                                             name="collectPrincipalEveryRepayments" required /> */}
-                                                        
+
                                                     </Form.Group>
                                                 </Col>
                                                 <Col className="date-wrap">
                                                     <Form.Group className="table-helper m-b-5">
                                                         <input type="checkbox"
-                                                        name="showFirstRepayment" 
-                                                        onChange={handleChange} 
+                                                        name="showFirstRepayment"
+                                                        onChange={handleChange}
                                                         checked={values.showFirstRepayment? values.showFirstRepayment:null}
                                                         value={values.showFirstRepayment}
                                                         id="firstRepaymentDate"/>
@@ -2707,7 +2707,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     {values.showFirstRepayment===true &&
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
-                                                            autoComplete="new-password" 
+                                                            autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm h-38px"
                                                                 peekNextMonth
@@ -2731,8 +2731,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <Col className="date-wrap">
                                                     <Form.Group className="table-helper m-b-5">
                                                         <input type="checkbox"
-                                                        name="allowBackDate" 
-                                                        onChange={handleChange} 
+                                                        name="allowBackDate"
+                                                        onChange={handleChange}
                                                         checked={values.allowBackDate? values.allowBackDate:null}
                                                         value={values.allowBackDate}
                                                         id="allowBackDate"/>
@@ -2741,7 +2741,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     {values.allowBackDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
-                                                            autoComplete="new-password" 
+                                                            autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -2763,8 +2763,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <Col className="date-wrap">
                                                     <Form.Group className="table-helper m-b-5">
                                                         <input type="checkbox"
-                                                        name="showBookingDate" 
-                                                        onChange={handleChange} 
+                                                        name="showBookingDate"
+                                                        onChange={handleChange}
                                                         checked={values.showBookingDate? values.showBookingDate:null}
                                                         value={values.showBookingDate}
                                                         id="showBookingDate"/>
@@ -2773,7 +2773,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     {values.showBookingDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
-                                                            autoComplete="new-password" 
+                                                            autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -2793,7 +2793,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     }
                                                 </Col>
                                             </Form.Row>
-                                            
+
                                             <Form.Group>
                                                 <Form.Label className="block-level">Notes</Form.Label>
                                                 <Form.Control as="textarea"
@@ -2801,7 +2801,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     onChange={handleChange}
                                                     name="notes"
                                                 value={values.notes}
-                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null} 
+                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
                                                 />
                                                 {errors.notes && touched.notes ? (
                                                     <span className="invalid-feedback">{errors.notes}</span>
@@ -2837,7 +2837,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                             <div>
                                                                 <Select
                                                                     options={allChannels}
-                                                                    
+
                                                                     onChange={(selected) => {
                                                                         setFieldValue('txtChannelEncodedKey', selected.value)
                                                                     }}
@@ -2859,7 +2859,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                             value={numberWithCommas(values.collectPrincipalEveryRepayments)}
                                                             className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid h-38px" : "h-38px"}
                                                             name="collectPrincipalEveryRepayments" required /> */}
-                                                        
+
                                                     </Form.Group>
                                                 </Col>
                                                 <Col className="date-wrap">
@@ -2869,8 +2869,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <Col className="date-wrap">
                                                     <Form.Group className="table-helper m-b-5">
                                                         <input type="checkbox"
-                                                        name="allowBackDate" 
-                                                        onChange={handleChange} 
+                                                        name="allowBackDate"
+                                                        onChange={handleChange}
                                                         checked={values.allowBackDate? values.allowBackDate:null}
                                                         value={values.allowBackDate}
                                                         id="allowBackDate"/>
@@ -2879,7 +2879,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     {values.allowBackDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
-                                                            autoComplete="new-password" 
+                                                            autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -2901,8 +2901,8 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <Col className="date-wrap">
                                                     <Form.Group className="table-helper m-b-5">
                                                         <input type="checkbox"
-                                                        name="showBookingDate" 
-                                                        onChange={handleChange} 
+                                                        name="showBookingDate"
+                                                        onChange={handleChange}
                                                         checked={values.showBookingDate? values.showBookingDate:null}
                                                         value={values.showBookingDate}
                                                         id="showBookingDate"/>
@@ -2911,7 +2911,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     {values.showBookingDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
-                                                            autoComplete="new-password" 
+                                                            autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
@@ -2938,7 +2938,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     onChange={handleChange}
                                                     name="notes"
                                                 value={values.notes}
-                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null} 
+                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
                                                 />
                                                 {errors.notes && touched.notes ? (
                                                     <span className="invalid-feedback">{errors.notes}</span>
@@ -2952,23 +2952,23 @@ class ViewClosedLoanAccount extends React.Component {
                                     <Button variant="light" onClick={this.handleLoanChangeStateClose}>
                                         Cancel
                                     </Button>
-                                    <Button 
+                                    <Button
                                         variant="success"
                                         type="submit"
                                         disabled={changeLoanStateRequest.is_request_processing}
                                     >
                                         {changeLoanStateRequest.is_request_processing?"Please wait...":`${ctaText}`}
-                                        
+
                                     </Button>
 
                                 </Modal.Footer>
                                 <div className="footer-alert">
-                                    {changeLoanStateRequest.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_SUCCESS && 
+                                    {changeLoanStateRequest.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_SUCCESS &&
                                         <Alert variant="success" className="w-65 mlr-auto">
                                             {changeLoanStateRequest.request_data.response.data.message}
                                         </Alert>
                                     }
-                                    {(changeLoanStateRequest.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_FAILURE && changeLoanStateRequest.request_data.error )&& 
+                                    {(changeLoanStateRequest.request_status === loanAndDepositsConstants.CHANGE_LOANSTATE_FAILURE && changeLoanStateRequest.request_data.error )&&
                                         <Alert variant="danger" className="w-65 mlr-auto">
                                             {changeLoanStateRequest.request_data.error}
                                         </Alert>
@@ -3022,7 +3022,7 @@ class ViewClosedLoanAccount extends React.Component {
                     }
                     {(loanDetails.loanState ===2) &&
                         <li>
-                            <Button size="sm" 
+                            <Button size="sm"
                                 onClick={()=>{
                                     this.setState({newState: "Set Incomplete", newStateUpdate: "settopartialapplication", ctaText:"Set Incomplete"})
                                     this.handleLoanChangeStateShow()
@@ -3032,7 +3032,7 @@ class ViewClosedLoanAccount extends React.Component {
                     }
                     {(loanDetails.loanState ===5) &&
                         <li>
-                            <Button size="sm" 
+                            <Button size="sm"
                                 onClick={()=>{
                                     this.setState({newState: "repayloan", newStateUpdate: "repayloan", ctaText:"Apply Repayment", showDisburseLoanForm:false})
                                     this.handleLoanChangeStateShow()
@@ -3042,7 +3042,7 @@ class ViewClosedLoanAccount extends React.Component {
                     }
                     {(loanDetails.loanState ===1 && allUSerPermissions.indexOf("bnk_request_loan_approval") >-1) &&
                         <li>
-                            <Button size="sm" 
+                            <Button size="sm"
                                 onClick={()=>{
                                     this.setState({newState: "Request Approval", newStateUpdate: "requestapproval", ctaText:"Request Approval"})
                                     this.handleLoanChangeStateShow()
@@ -3095,8 +3095,8 @@ class ViewClosedLoanAccount extends React.Component {
                             </DropdownButton>
                         </li>
                     }
-                   
-                    
+
+
                 </ul>
             </div>
         )
@@ -3124,37 +3124,34 @@ class ViewClosedLoanAccount extends React.Component {
 
                                         <Nav variant="pills" >
                                             <Nav.Item>
-                                                <Nav.Link eventKey="details">Details</Nav.Link>
+                                                <Nav.Link bsPrefix="disable" className="navLink" eventKey="details">Details</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="schedule" onSelect={this.getCustomerLoanSchedule} >Schedule</Nav.Link>
+                                                <Nav.Link bsPrefix="disable" className="navLink" eventKey="schedule" onSelect={this.getCustomerLoanSchedule} >Schedule</Nav.Link>
                                             </Nav.Item>
                                             {allUSerPermissions.indexOf("bnk_manage_loan_transactions") >-1 &&
                                                 <Nav.Item>
-                                                    <Nav.Link eventKey="transactions" onSelect={this.getCustomerLoanTransactions} >Transactions</Nav.Link>
+                                                    <Nav.Link bsPrefix="disable" className="navLink" eventKey="transactions" onSelect={this.getCustomerLoanTransactions} >Transactions</Nav.Link>
                                                 </Nav.Item>
                                             }
-                                            {/* <Nav.Item>
-                                                <Nav.Link eventKey="securities">Securities</Nav.Link>
-                                            </Nav.Item> */}
                                             {allUSerPermissions.indexOf("bnk_view_loan_activities") >-1 &&
                                                 <Nav.Item>
-                                                    <Nav.Link eventKey="activity" onSelect={this.getALoanActivities}>Activity</Nav.Link>
+                                                    <Nav.Link bsPrefix="disable" className="navLink" eventKey="activity" onSelect={this.getALoanActivities}>Activity</Nav.Link>
                                                 </Nav.Item>
                                             }
                                             {allUSerPermissions.indexOf("bnk_view_loan_attachments") >-1 &&
                                                 <Nav.Item>
-                                                    <Nav.Link eventKey="attachments" onSelect={this.getACustomerLoanAttachments}>Attachments</Nav.Link>
+                                                    <Nav.Link bsPrefix="disable" className="navLink" eventKey="attachments" onSelect={this.getACustomerLoanAttachments}>Attachments</Nav.Link>
                                                 </Nav.Item>
                                             }
                                             {allUSerPermissions.indexOf("bnk_view_loan_comments") >-1 &&
                                                 <Nav.Item>
-                                                    <Nav.Link eventKey="comments" onSelect={this.getALoanComments}>Comments</Nav.Link>
+                                                    <Nav.Link bsPrefix="disable" className="navLink" eventKey="comments" onSelect={this.getALoanComments}>Comments</Nav.Link>
                                                 </Nav.Item>
                                             }
                                             {allUSerPermissions.indexOf("bnk_view_loan_communications") >-1 &&
                                                 <Nav.Item>
-                                                    <Nav.Link eventKey="communications" onSelect={this.getALoanCommunications}>Communications</Nav.Link>
+                                                    <Nav.Link bsPrefix="disable" className="navLink" eventKey="communications" onSelect={this.getALoanCommunications}>Communications</Nav.Link>
                                                 </Nav.Item>
                                             }
                                         </Nav>
@@ -3164,13 +3161,13 @@ class ViewClosedLoanAccount extends React.Component {
                                                 {this.renderLoanAccountDetails(getAClientLoanAccountRequest.request_data.response.data)}
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="schedule" mountOnEnter={true}>
-                                                
+
                                                 {this.renderLoanSchedule()}
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="transactions">
                                                 {this.renderLoanTransaction()}
                                             </Tab.Pane>
-                                            
+
                                             <Tab.Pane eventKey="activity">
                                                 {this.renderLoanActivities()}
                                             </Tab.Pane>
@@ -3199,7 +3196,7 @@ class ViewClosedLoanAccount extends React.Component {
                 && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS)
                 &&
                 getAClientLoanAccountRequest.request_status ===loanAndDepositsConstants.GET_A_LOAN_ACCOUNT_DETAILS_PENDING){
-    
+
                 return(
                     <div className="loading-text mt-30">Please wait... </div>
                 )
@@ -3221,23 +3218,19 @@ class ViewClosedLoanAccount extends React.Component {
             }
 
     }
-    
+
 
     render() {
-        
         return (
-            <Fragment>
-                {/* <InnerPageContainer {...this.props}> */}
-                    <div className="content-wrapper">
-                        {/* <CustomerHeading {...this.props}/> */}
-                        <div className="module-content">
-                                <div className="content-container">
-                                    {this.renderPage()}
-                                </div>
-                            </div>
-                    </div>
-                {/* </InnerPageContainer> */}
-            </Fragment>
+          <Fragment>
+              <div className="content-wrapper">
+                  <div className="module-content">
+                      <div className="content-container">
+                          {this.renderPage()}
+                      </div>
+                  </div>
+              </div>
+          </Fragment>
         );
     }
 }
