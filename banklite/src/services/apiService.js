@@ -4,14 +4,12 @@ import {history} from "../_helpers/history";
 import {saveRouteForRedirect} from "../shared/utils";
 
 import { routes } from "./urls";
-
-
-
 const axios = require('axios');
 
 
 
 const instance = axios.create({
+    
     validateStatus: function (status)
     {
         // return (status >= 200 && status <210);

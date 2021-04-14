@@ -139,7 +139,7 @@ class CustomerHeading extends React.Component {
                                  placeholderText="Choose entry date" selected={this.state.dob} 
                                     onChange={this.handleDatePicker}
                                     onChangeRaw={(e)=>this.handleChange(e)}
-                                    dateFormat="d MMMM, yyyy"
+                                    dateFormat={window.dateformat}
                                     className="form-control form-control-sm"
                                     peekNextMonth
                                     showMonthDropdown

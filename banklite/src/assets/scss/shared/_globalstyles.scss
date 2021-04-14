@@ -9,6 +9,10 @@
         max-width: initial;
     }
 }
+
+.content-wrapper {
+    padding: 0 20px;
+}
 .tablecomponent-container > .container > .row{
     overflow-x: auto !important;
 }
@@ -67,9 +71,17 @@
         // border-radius: 15px;
         text-align: center;
     }
-    
-    
+
+    input {
+        padding-left: 16px;
+    }
 }
+
+select.tableFilterInput {
+    padding-left: 16px;
+    width: 116px;
+}
+
 select, select.form-control{
     &:not(.react-datepicker__month-select) :not(.react-datepicker__year-select){
         -webkit-appearance: none;
@@ -154,7 +166,7 @@ select, select.form-control{
             border-color: #CB4335;
         }
     }
-   
+
     .btn-secondary{
         font-size: 13px;
         padding-bottom: 4px;
@@ -236,29 +248,29 @@ select, select.form-control{
         }
     }
 }
+
+.activeNavLink {
+    color: black;
+    font-weight: bold;
+    border-bottom: 2px solid #25e577;
+}
+
 .module-submenu{
     margin-top: 10px;
     .nav{
+        background-color: white;
+        padding-left: 5px;
         >li{
-            margin-right: 10px;
-            margin-bottom: 10px;
             >a{
                 display: block;
-                background: #F8F9F9;
-                color: #1A5276;
                 font-size: 12px;
-                padding: 5px 8px;
-                border: 1px solid#7FB3D5;
-                border-radius: 3px;
-                &:hover{
-                    text-decoration: none;
-                    border-color: #5D6D7E;
-                }
-                &.active{
-                    border-color: #5D6D7E;
-                    background: #5D6D7E;
-                    color: #ffffff;
-                    font-weight: 600;
+                padding: 10px;
+                background-color: white;
+                color: #6E7297;
+                text-decoration: none;
+
+                &:not(.activeNavLink):hover {
+                    border-bottom: 2px solid #5D6D7E;
                 }
             }
         }
@@ -296,7 +308,7 @@ select, select.form-control{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+
     .btn{
         margin-right: 10px;
     }
@@ -308,7 +320,7 @@ select, select.form-control{
         padding-top: 4px;
         font-size: 13px;
         margin-top: 8px;
-        
+
     }
     .btn-secondary, .btn-secondary:hover{
         // color: #fff;
@@ -343,7 +355,7 @@ select, select.form-control{
 .form-content {
     margin: 0 auto;
     margin-top: 30px;
-    
+
 }
 .grayed-out{
     opacity: 0.5;
@@ -460,9 +472,19 @@ label.upload-photo>div{
                 pointer-events: none;
                 cursor:not-allowed;
             }
-            
+
         }
     }
+
+    .each-page-action, {
+        background-color: #fff;
+        padding: 8px 7px;
+
+        &.unaallowed {
+            background-color: #919EAB;
+        }
+    }
+
     .each-page-action,.page-count {
         margin-right: 5px;
         cursor: pointer;
@@ -473,10 +495,10 @@ label.upload-photo>div{
                 pointer-events: none;
                 cursor:not-allowed;
             }
-            
+
         }
     }
-    
+
 }
 //Slide in
 .slidein-wrap {
@@ -749,6 +771,11 @@ mr-
 .w-65{
     width: 65%!important;
 }
+
+.table {
+    background-color: white;
+}
+
 .table-title {
     font-size: 21px;
     font-weight: 600;
@@ -802,8 +829,10 @@ button.accordion-headingLink.btn.btn-link {
     }
     .btn-primary,
     .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle{
-        background-color: #34495E!important;
-        border-color: #34495E!important;
+        background-color: #fff !important;
+        border: 1px solid #A0B1C0 !important;
+        //border-color: #34495E !important;
+        color: #34495E !important;
         font-size: 11px;
         a{
             color: #ffffff;
@@ -840,10 +869,10 @@ button.accordion-headingLink.btn.btn-link {
         margin-right: 25px;
     }
 }
-.table-bordered td.borderdleft, .table-bordered th.borderdleft{
+.table-bordered, .table-bordered {
     border-left: 2px solid #AEB6BF;
 }
-.table-bordered td.borderdright, .table-bordered th.borderdright{
+.table-bordered, .table-bordered {
     border-right: 2px solid #AEB6BF;
 }
 .table-bordered td.bolden{
@@ -876,7 +905,7 @@ span.hinttext {
         &:not(:first-of-type){
             margin-left: 5px;
         }
-        
+
     }
 }
 
@@ -914,7 +943,7 @@ span.hinttext {
         label{
             font-size: 13px;
         }
-        
+
     }
     .collapse {
         margin: 0;
@@ -1005,7 +1034,7 @@ button.togglestyle{
             margin-right: 2px;
         }
     }
-    
+
 }
 
 .alert{

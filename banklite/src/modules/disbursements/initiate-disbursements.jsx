@@ -190,9 +190,9 @@ class InitiateDisbursement extends React.Component {
         // clearInterval(refreshIntervalId);
 
         let checkIfLoaded = setInterval(() => {
-            if (document.querySelector('.table-wrap')) {
+            if (document.querySelector('.Table-wrap')) {
                 window.scrollTo({
-                    top: document.querySelector('.table-wrap').offsetTop,
+                    top: document.querySelector('.Table-wrap').offsetTop,
                     behavior: 'smooth'
                 });
                 clearInterval(checkIfLoaded)
@@ -392,15 +392,15 @@ class InitiateDisbursement extends React.Component {
                 batchDescription: Yup.string()
                     .required('required'),
             }),
-            
+
             transactionSourceList = [
                 { label: "BankOne", value: 1 },
                 { label: "Mini-CoreBanking", value: 2 }
             ],
-            
+
             allBatchData = [];
             // batchDataFromFile.splice(0,1);
-           
+
             batchDataFromFile.map((eachRow, rowIndex)=>{
                 let dataTemp = {}
                 if(rowIndex >=1 ){
@@ -418,19 +418,19 @@ class InitiateDisbursement extends React.Component {
                         if (dataIndex === 3) {
                             dataTemp.narration = eachData
                         }
-                        
+
                     })
                     allBatchData.push(dataTemp)
                 }
 
-               
+
 
             })
 
-            
 
 
-       
+
+
         return (
             <Modal show={showPostData} onHide={this.handleClosePostData} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
                 <Modal.Header>
@@ -445,27 +445,27 @@ class InitiateDisbursement extends React.Component {
                         }}
                         validationSchema={processDisburmentValidationSchema}
                         onSubmit={(values, { resetForm }) => {
-                            
+
                             let batchPayload = {
                                 batchDescription: values.batchDescription,
                                 disbursementItemModels:allBatchData,
                                 transactionSource: values.transactionSource,
                                 sourceAccount:values.sourceAccount
                             }
-                            
+
                             this.postNewDisbursement(batchPayload)
                                 .then(()=>{
-                                    
+
                                     if(this.props.postNewDisbursementBatchReducer.request_status === disbursmentConstants.NEW_DISBURSMENT_BATCH_SUCCESS){
                                         // console.log("data gotten", this.props.postNewDisbursementBatchReducer.request_data);
                                         setTimeout(() => {
                                             this.setState({batchDataFromFile:"",showPostData:false, renderUploaded:false, disburmentOption:null})
                                         }, 4000);
-                                        
+
                                     }
                                 })
 
-                            
+
                             // resetForm()
 
 
@@ -519,8 +519,8 @@ class InitiateDisbursement extends React.Component {
                                     </Form.Row>
 
                                     <Form.Group>
-                                        
-                                       
+
+
                                             <Form.Label className="block-level">Batch Description</Form.Label>
                                             <Form.Control
                                                 as="textarea"
@@ -533,7 +533,7 @@ class InitiateDisbursement extends React.Component {
                                             {errors.batchDescription && touched.batchDescription ? (
                                                 <span className="invalid-feedback">{errors.batchDescription}</span>
                                             ) : null}
-                                        
+
                                     </Form.Group>
 
 
@@ -548,7 +548,7 @@ class InitiateDisbursement extends React.Component {
                                             disabled={postDisbursementRequest.is_request_processing}
                                             >
                                             {postDisbursementRequest.is_request_processing? "Please wait...": "Initiate Disbursment"}
-                                            
+
                                         </Button>
                                     </div>
                                     }
@@ -566,8 +566,8 @@ class InitiateDisbursement extends React.Component {
                                                 Total Fee : {this.props.postNewDisbursementBatchReducer.request_data.response.data.totalFees}
                                                 {/* Total Fee : {postDisbursementRequest.request_data.response.data.totalFees} */}
                                             </div>
-                                           
-                                            
+
+
                                         </Alert>
                                     }
 
@@ -723,13 +723,13 @@ class InitiateDisbursement extends React.Component {
 
                                         this.postNewDisbursement(initiationPayload)
                                             .then(()=>{
-                                                
+
                                                 if(this.props.postNewDisbursementBatchReducer.request_status === disbursmentConstants.NEW_DISBURSMENT_BATCH_SUCCESS){
                                                     // console.log("data gotten", this.props.postNewDisbursementBatchReducer.request_data);
                                                     setTimeout(() => {
                                                         this.setState({batchDataFromFile:"",showPostData:false, renderUploaded:false, disburmentOption:null})
                                                     }, 4000);
-                                                    
+
                                                 }
                                             })
 
@@ -823,7 +823,7 @@ class InitiateDisbursement extends React.Component {
                                                                                     options={transactionSourceList}
                                                                                     className={errors.transactionSource && touched.transactionSource ? "is-invalid" : null}
                                                                                     onBlur={handleBlur}
-                                                                                    
+
                                                                                     onChange={(selectedTxtSource) => {
                                                                                         this.setState({ selectedTxtSource });
                                                                                         errors.transactionSource = null
@@ -991,7 +991,7 @@ class InitiateDisbursement extends React.Component {
                                                     </Button>
                                                     {/* <Button variant="light" type="button"> Cancel</Button> */}
                                                 </div>
-                                                
+
                                                 {/* {postDisbursementRequest.request_status === disbursmentConstants.POST_DISBURSMENT_FAILURE &&
                                                     <Alert variant="danger">
                                                         {postDisbursementRequest.request_data.error}
@@ -1296,7 +1296,7 @@ class InitiateDisbursement extends React.Component {
                                         </li>
                                         <li>
                                             <NavLink to={'/disbursements/nip-requests'}>NIP Requests</NavLink>
-                                            
+
                                         </li>
                                     </ul> */}
                                 </div>

@@ -1077,7 +1077,7 @@ class ViewClosedLoanAccount extends React.Component {
                                     <th>Payment Due</th>
                                     {/* <th>Interest Rate</th> */}
                                     {this.state.showAmountExpected===true && 
-                                        <th className="borderdleft">Expected Principal</th>
+                                        <th>Expected Principal</th>
                                     }
                                     {this.state.showAmountExpected===true && 
                                         <th>Expected Interest</th>
@@ -1089,7 +1089,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         <th className="borderdright">Expected Penalty</th>
                                     }
                                     {this.state.showAmountPaid && 
-                                        <th className="borderdleft">Principal Paid</th>
+                                        <th>Principal Paid</th>
                                     }
                                     {this.state.showAmountPaid && 
                                         <th>Fees Paid</th>
@@ -1101,7 +1101,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         <th className="borderdright">Penalty Paid</th>
                                     }
                                     {this.state.showAmountDue && 
-                                        <th className="borderdleft">Principal Due</th>
+                                        <th>Principal Due</th>
                                     }
                                     {this.state.showAmountDue && 
                                         <th>Interest Due</th>
@@ -1128,7 +1128,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                 <td>{(eachSchedule.paymentDue!==null && eachSchedule.paymentDue>0)? numberWithCommas(eachSchedule.paymentDue, true): "-"}</td>
                                                 {/* <td>{numberWithCommas(eachSchedule.interestRate)}</td> */}
                                                 {this.state.showAmountExpected===true && 
-                                                    <td className="borderdleft">{( eachSchedule.loanScheduleExpected.expectedPrincipal!==null && eachSchedule.loanScheduleExpected.expectedPrincipal>0) ? numberWithCommas(eachSchedule.loanScheduleExpected.expectedPrincipal, true) : "-"}</td>
+                                                    <td>{( eachSchedule.loanScheduleExpected.expectedPrincipal!==null && eachSchedule.loanScheduleExpected.expectedPrincipal>0) ? numberWithCommas(eachSchedule.loanScheduleExpected.expectedPrincipal, true) : "-"}</td>
                                                 }
                                                 {this.state.showAmountExpected===true && 
                                                     <td>{(eachSchedule.loanScheduleExpected.expectedInterest !==null && eachSchedule.loanScheduleExpected.expectedInterest>0) ? numberWithCommas(eachSchedule.loanScheduleExpected.expectedInterest, true) : "-"}</td>
@@ -1140,7 +1140,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     <td className="borderdright">{(eachSchedule.loanScheduleExpected.expectedPenalty!==null && eachSchedule.loanScheduleExpected.expectedPenalty>0)? numberWithCommas(eachSchedule.loanScheduleExpected.expectedPenalty, true):"-"}</td>
                                                 }
                                                 {this.state.showAmountPaid && 
-                                                    <td className="borderdleft">{(eachSchedule.loanSchedulePaid.principalPaid!==null && eachSchedule.loanSchedulePaid.principalPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.principalPaid, true):"-"}</td>
+                                                    <td>{(eachSchedule.loanSchedulePaid.principalPaid!==null && eachSchedule.loanSchedulePaid.principalPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.principalPaid, true):"-"}</td>
                                                 }
                                                 {this.state.showAmountPaid && 
                                                     <td>{(eachSchedule.loanSchedulePaid.feesPaid!==null && eachSchedule.loanSchedulePaid.feesPaid>0)? numberWithCommas(eachSchedule.loanSchedulePaid.feesPaid, true):"-"}</td>
@@ -1152,7 +1152,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     <td className="borderdright">{(eachSchedule.loanSchedulePaid.penalyPaid!==null && eachSchedule.loanSchedulePaid.penalyPaid >0)? numberWithCommas(eachSchedule.loanSchedulePaid.penalyPaid, true):"-"}</td>
                                                 }
                                                 {this.state.showAmountDue && 
-                                                    <td className="borderdleft">{(eachSchedule.loanScheduleDue.principalDue!==null && eachSchedule.loanScheduleDue.principalDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.principalDue, true):"-"}</td>
+                                                    <td>{(eachSchedule.loanScheduleDue.principalDue!==null && eachSchedule.loanScheduleDue.principalDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.principalDue, true):"-"}</td>
                                                 }
                                                 {this.state.showAmountDue && 
                                                     <td>{(eachSchedule.loanScheduleDue.interestDue!==null && eachSchedule.loanScheduleDue.interestDue>0)? numberWithCommas(eachSchedule.loanScheduleDue.interestDue, true):"-"}</td>
@@ -1391,7 +1391,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         onChangeRaw={this.handleTxtnDateChangeRaw}
                                         onChange={this.handleTxtnStartDatePicker}
                                         selected={this.state.txtnStartDate}
-                                        dateFormat="d MMMM, yyyy"
+                                        dateFormat={window.dateformat}
                                         peekNextMonth
                                         showMonthDropdown
                                         showYearDropdown
@@ -1407,7 +1407,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         onChangeRaw={this.handleTxtnDateChangeRaw}
                                         onChange={this.handleTxtnEndDatePicker}
                                         selected={this.state.txtnEndDate}
-                                        dateFormat="d MMMM, yyyy"
+                                        dateFormat={window.dateformat}
                                         peekNextMonth
                                         showMonthDropdown
                                         showYearDropdown
@@ -2708,7 +2708,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                dateFormat="d MMMM, yyyy"
+                                                                dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm h-38px"
                                                                 peekNextMonth
                                                                 showMonthDropdown
@@ -2742,7 +2742,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                dateFormat="d MMMM, yyyy"
+                                                                dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
                                                                 showMonthDropdown
@@ -2774,7 +2774,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                dateFormat="d MMMM, yyyy"
+                                                                dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
                                                                 showMonthDropdown
@@ -2880,7 +2880,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                dateFormat="d MMMM, yyyy"
+                                                                dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
                                                                 showMonthDropdown
@@ -2912,7 +2912,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                         <Form.Group className="mb-0 date-wrap">
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password" 
-                                                                dateFormat="d MMMM, yyyy"
+                                                                dateFormat={window.dateformat}
                                                                 className="form-control form-control-sm"
                                                                 peekNextMonth
                                                                 showMonthDropdown

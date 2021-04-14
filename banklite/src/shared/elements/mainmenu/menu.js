@@ -94,7 +94,7 @@ export const menuList = [
             },
         ]
     },
-    
+
     {
         menuGroup: "Disburments",
         mainMenu: "Disbursement",
@@ -267,7 +267,7 @@ export const menuList = [
                 subMenuLabel: "All Communications",
                 subMmenuRoute: "/communications/all"
             },
-            {   
+            {
                 permissionCode: "bnk_view_email_communications",
                 subMenuLabel: "Email",
                 subMmenuRoute: "/communications/emails"
@@ -333,8 +333,8 @@ export const menuList = [
                 permissionCode: "bnk_view_charts_of_accounts",
                 subMmenuRoute: "/accounts",
             },
-        
-            
+
+
         ]
     },
     {
@@ -364,7 +364,7 @@ export const menuList = [
                 permissionCode: "bnk_manage_organisation",
                 subMmenuRoute: "/administration/organization",
             },
-        
+
             {
                 // permissionName: "Access Universal",
                 subMenuLabel: "Access",
@@ -376,7 +376,7 @@ export const menuList = [
                 ],
                 subMmenuRoute: "/administration/access",
             },
-            
+
             {
                 // permissionName: "Manage Products",
                 subMenuLabel: "Products",
@@ -403,7 +403,7 @@ export const menuList = [
             },
         ]
     },
-    
+
 ]
 
 export const quickMenuList = [
@@ -497,7 +497,7 @@ export const administrationModuleMenuList = [
         permissionCode: "bnk_manage_organisation",
         menuRoute: "/administration/general",
     },
-    
+
     {
         permissionName: "Manage Organisation",
         mainMenu: "Organization",
@@ -511,7 +511,7 @@ export const administrationModuleMenuList = [
         permissionCode: "universal",
         menuRoute: "/administration/access",
     },
-    
+
     {
         permissionName: "Manage Products",
         mainMenu: "Products",
@@ -578,7 +578,7 @@ export const adminGeneralMenuList = [
         permissionCode: "bnk_manage_organisation",
         menuRoute: "/administration/general/transaction",
     },
-    
+
     {
         permissionName: "Manage Transaction Channels",
         mainMenu: "Transaction Channels",
@@ -613,7 +613,7 @@ export const adminAccessMenuList = [
         permissionCode: "bnk_manage_users",
         menuRoute: "/administration/access/users",
     },
-    
+
     {
         permissionName: "Manage Organisation",
         mainMenu: "Preferences",
@@ -652,7 +652,7 @@ export const communicationsMenuList = [
         permissionCode: "bnk_view_email_communications",
         menuRoute: "/communications/emails",
     },
-    
+
     {
         permissionName: "View SMS Communications",
         mainMenu: "SMS",
@@ -681,7 +681,7 @@ export const accountsMenuList = [
         permissionCode: "bnk_view_profit_and_loss",
         menuRoute: "/profit-loss",
     },
-    
+
     {
         permissionName: "View Trial Balance",
         mainMenu: "Trial Balance",
@@ -731,7 +731,7 @@ export const disbursementMenuList = [
         permissionCode: "bnk_initiate_disbursements",
         menuRoute: "/disbursements/initiate",
     },
-    
+
     {
         permissionName: "View Disbursements",
         mainMenu: "Partial Applications",

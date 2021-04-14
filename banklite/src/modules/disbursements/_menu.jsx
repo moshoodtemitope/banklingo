@@ -2,13 +2,13 @@ import * as React from 'react';
 
 import {Fragment} from "react";
 
-// import "../administration.scss"; 
+// import "../administration.scss";
 import { NavLink} from 'react-router-dom';
 
 
 import {disbursementMenuList} from '../../shared/elements/mainmenu/menu'
 class DisbursementNav extends React.Component{
-    
+
     render() {
         let userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
         let allMenu = disbursementMenuList,
@@ -21,7 +21,7 @@ class DisbursementNav extends React.Component{
                 if(allMenuGroups.indexOf(eachMenu.permissionName)===-1){
                     allMenuGroups.push(eachMenu.permissionName)
                 }
-                
+
             })
 
             userPermissions.map(eachPermission=>{
@@ -32,18 +32,18 @@ class DisbursementNav extends React.Component{
             })
 
         return (
-           
+
                 <ul className="nav">
                     {
                         allMenu.map((eachGroup, menuIdx) =>{
                             if(allUSerPermissionNames.indexOf(eachGroup.permissionName)> -1 ){
                                 return(
                                     <li key={menuIdx}>
-                                        <NavLink exact  to={eachGroup.menuRoute}>{eachGroup.mainMenu}</NavLink>
+                                        <NavLink exact to={eachGroup.menuRoute} activeClassName="activeNavLink">{eachGroup.mainMenu}</NavLink>
                                     </li>
                                 )
                             }
-                            
+
 
                         })
                     }
@@ -58,7 +58,7 @@ class DisbursementNav extends React.Component{
                     </li>
                     <li>
                         <NavLink to={'/administration/products'}>Products</NavLink>
-                    </li> 
+                    </li>
                     <li>
                         <NavLink to={'/administration/sms'}>SMS</NavLink>
                     </li>
@@ -69,7 +69,7 @@ class DisbursementNav extends React.Component{
                         <NavLink to={'/administration/uploaddata'}>Upload Data</NavLink>
                     </li> */}
                 </ul>
-            
+
         );
     }
 }

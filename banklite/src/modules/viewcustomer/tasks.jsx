@@ -283,7 +283,7 @@ class ViewCustomerTasks extends React.Component {
                                                     <Form.Label className="block-level">Due Date</Form.Label>
                                                     <DatePicker
                                                      placeholderText="Choose entry date"
-                                                        dateFormat="d MMMM, yyyy"
+                                                        dateFormat={window.dateformat}
                                                         className="form-control form-control-sm"
                                                         peekNextMonth
                                                         showMonthDropdown

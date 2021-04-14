@@ -13,7 +13,8 @@ import Button from 'react-bootstrap/Button'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import "./branches.scss"; 
-class BranchesManagement extends React.Component {
+class BranchesManagement extends React.Component 
+{
     constructor(props) {
         super(props);
         this.state={
@@ -100,6 +101,7 @@ class BranchesManagement extends React.Component {
         let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
 
         let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined?adminGetAllBranchesRequest.request_data.tempData:null;
+        
             switch (adminGetAllBranchesRequest.request_status){
                 case (administrationConstants.GET_ALL_BRANCHES_PENDING):
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
@@ -365,6 +367,11 @@ class BranchesManagement extends React.Component {
             }
     }
 
+
+
+
+
+
     render() {
         return (
             <Fragment>
@@ -403,6 +410,8 @@ class BranchesManagement extends React.Component {
         );
     }
 }
+
+
 function mapStateToProps(state) {
     return {
         adminGetAllBranches : state.administrationReducers.adminGetAllBranchesReducer,

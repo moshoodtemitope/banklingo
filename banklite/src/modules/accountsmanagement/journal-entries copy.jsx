@@ -576,7 +576,7 @@ class JournalEntries extends React.Component {
                                                     
                                                     // onChange={this.handleDatePicker}
                                                     // onChangeRaw={(e) => this.handleDateChange(e)}
-                                                    dateFormat="d MMMM, yyyy"
+                                                    dateFormat={window.dateformat}
                                                     className="form-control form-control-sm"
                                                     peekNextMonth
                                                     showMonthDropdown
