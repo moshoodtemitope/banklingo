@@ -432,6 +432,32 @@ export function getAClientTasksReducer(state=[], action) {
     }
 }
 
+export function getAUserTasksReducer(state=[], action) {
+    switch (action.type) {
+        case clientsConstants.GET_MY_TASKS_PENDING:
+            return {
+                request_status: clientsConstants.GET_MY_TASKS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case clientsConstants.GET_MY_TASKS_SUCCESS:
+            return {
+                request_status: clientsConstants.GET_MY_TASKS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case clientsConstants.GET_MY_TASKS_FAILURE:
+            return {
+                request_status: clientsConstants.GET_MY_TASKS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function addAClientPassportReducer(state=[], action) {
     switch (action.type) {
         case clientsConstants.ADD_A_CLIENT_PASSPORT_PENDING:

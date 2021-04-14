@@ -24,6 +24,7 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 
 import ViewUser from '.'
 import MyProfile from './myprofile'
+import ViewUserTasks from './my-tasks'
 
 
 
@@ -52,9 +53,10 @@ class AccountContainer extends React.Component {
                     <div className="content-wrapper">
                         
                         {this.props.children}
-                        <Route  exact path='/user/:userid'  component={ViewUser} /> 
-                        <Route  path='/my-profile'  component={MyProfile} /> 
-                        <Route exact path='/user/:userid/tasks'  component={AccountContainer} /> 
+                        <Route  path='/user/:userid' render={(props) => <ViewUser {...props} />} /> 
+                        <Route  exact path='/my-profile'  render={(props) => <MyProfile {...props} />} /> 
+                        <Route   path='/my-profile/tasks'  render={(props) => <ViewUserTasks {...props} />} /> 
+                        {/* <Route exact path='/user/:userid/tasks'  component={AccountContainer} />  */}
                         
                         
                         

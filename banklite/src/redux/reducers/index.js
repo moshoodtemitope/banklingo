@@ -234,6 +234,7 @@ const clientsReducers = combineReducers({
     getAClientTasksReducer: clients.getAClientTasksReducer, 
     addAClientSignatureReducer: clients.addAClientSignatureReducer, 
     addAClientPassportReducer: clients.addAClientPassportReducer, 
+    getAUserTasksReducer: clients.getAUserTasksReducer, 
    
 })
 

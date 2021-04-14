@@ -253,7 +253,8 @@ import{
     createAClientTaskReducer,
     getAClientTasksReducer,
     addAClientPassportReducer,
-    addAClientSignatureReducer
+    addAClientSignatureReducer,
+    getAUserTasksReducer
     
 } from './clients/clients.reducer'
 
@@ -459,7 +460,8 @@ export const clients ={
     createAClientTaskReducer,
     getAClientTasksReducer,
     addAClientPassportReducer,
-    addAClientSignatureReducer
+    addAClientSignatureReducer,
+    getAUserTasksReducer
 }
 
 export const disbursment ={

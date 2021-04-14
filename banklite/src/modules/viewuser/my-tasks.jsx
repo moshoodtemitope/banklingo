@@ -8,8 +8,7 @@ import DatePicker from '../../_helpers/datepickerfield'
 import "react-datepicker/dist/react-datepicker.css";
 
 // import { NavLink} from 'react-router-dom';
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-import  CustomerHeading from './customerheader'
+
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
@@ -24,17 +23,14 @@ import { getDateFromISO} from '../../shared/utils';
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 import Alert from 'react-bootstrap/Alert'
 
-import Select from 'react-select';
 
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 
-import {administrationActions} from '../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
-class ViewCustomerTasks extends React.Component {
+
+
+class ViewUserTasks extends React.Component {
     constructor(props) {
         super(props);
         this.clientEncodedKey = this.props.match.params.id;
@@ -56,25 +52,21 @@ class ViewCustomerTasks extends React.Component {
     loadInitialCustomerData = ()=>{
         
 
-        this.getClientTasks(this.clientEncodedKey);
-        this.getAllUsers();
+        this.getMyTasks();
+        // this.getAllUsers();
     }
 
 
-    getClientTasks = (clientEncodedKey)=>{
+    getMyTasks = (clientEncodedKey)=>{
         const {dispatch} = this.props;
 
         let { PageSize, CurrentPage } = this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
 
-        dispatch(clientsActions.getAClientTask(clientEncodedKey, params));
+        dispatch(clientsActions.getAUserTask(params));
     }
 
-    getAllUsers = ()=>{
-        const {dispatch} = this.props;
-        
-        dispatch(administrationActions.getAllUsers(0));
-    }
+    
 
     handleTaskClose = () => this.setState({showNewTask:false});
     
@@ -125,295 +117,21 @@ class ViewCustomerTasks extends React.Component {
         }
     }
 
-    newTask = ()=>{
-        const {showNewTask} = this.state;
-        let getAllUsersRequest = this.props.getAllUsers;
-        let createAClientTaskRequest =  this.props.createAClientTaskReducer;
-        let getAClientRequest = this.props.getAClientReducer.request_data.response.data;
-
-        let addClientTaskValidationSchema = Yup.object().shape({
-            Notes:  Yup.string()
-                .min(3, 'Valid response required'),
-            dueDate: Yup.string()
-                .required('Required'),
-            assignedToUserName: Yup.string()
-                .required('Required'),
-            summary: Yup.string()
-                .min(3, 'Valid response required')
-                .required('Required'),
-        
-       });
-      
-       if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_SUCCESS){
-            let usersList = getAllUsersRequest.request_data.response.data,
-                allUserDataList=[];
-
-            if(usersList.length>=1){
-                usersList.map((eachUser, id)=>{
-                    allUserDataList.push({label: eachUser.name, value:eachUser.key});
-                })
-                return(
-                    <Modal show={showNewTask} onHide={this.handleTaskClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
-                
-                        
-                        <Formik
-                            initialValues={{
-                                summary:"",
-                                dueDate:"",
-                                Notes:"",
-                                assignedToEncodedKey:"",
-                                assignedToUserName:"",
-                                clientEncodedKey:this.clientEncodedKey,
-                                CustomerName:`${getAClientRequest.firstName} ${getAClientRequest.lastName} ${getAClientRequest.middleName}`
-                            }}
-
-                            validationSchema={addClientTaskValidationSchema}
-                            onSubmit={(values, { resetForm }) => {
-
-                                let addCustomerCommentsPayload = {
-                                    assignedToEncodedKey:values.assignedToEncodedKey,
-                                    assignedToUserName:values.assignedToUserName,
-                                    clientEncodedKey:values.clientEncodedKey,
-                                    dueDate:values.dueDate.toISOString(),
-                                    summary:values.summary,
-                                    Notes:values.Notes
-                                }
-
-
-
-
-                                this.handleClientTasks(addCustomerCommentsPayload)
-                                    .then(
-                                        () => {
-
-                                            if (this.props.createAClientTaskReducer.request_status === clientsConstants.CREATE_A_CLIENT_TASK_SUCCESS) {
-                                                resetForm();
-                                                // value = {null}
-
-                                                setTimeout(() => {
-                                                    this.props.dispatch(clientsActions.createClientTask("CLEAR"))
-                                                    this.getClientTasks(this.clientEncodedKey);
-                                                    this.handleTaskClose();
-                                                }, 3000);
-                                            }
-
-                                            
-
-                                        }
-                                    )
-
-                            }}
-                        >
-                            {({ handleSubmit,
-                                handleChange,
-                                handleBlur,
-                                resetForm,
-                                values,
-                                setFieldValue,
-                                setFieldTouched,
-                                touched,
-                                isValid,
-                                errors, }) => (
-                                    <Form
-                                        noValidate
-                                        onSubmit={handleSubmit}
-                                        className="">
-                                        <Modal.Header>
-                                            <Modal.Title>Create Task</Modal.Title>
-                                        </Modal.Header>
-                                        <Modal.Body>
-                                            <Form.Group>
-                                                <Form.Label className="block-level">Summary</Form.Label>
-                                                <Form.Control 
-                                                    type="text"
-                                                    onChange={handleChange}
-                                                    name="summary"
-                                                    value={values.summary}
-                                                    className={errors.summary && touched.summary ? "is-invalid form-control form-control-sm" : null} />
-                                                    
-                                                    {errors.summary && touched.summary ? (
-                                                    <span className="invalid-feedback">{errors.summary}</span>
-                                                    ) : null}
-                                            </Form.Group>
-                                            <Form.Group>
-                                                <Form.Label className="block-level">Linked To</Form.Label>
-                                                {/* Search dropdown of staff list */}
-                                                <Form.Control 
-                                                    type="text"
-                                                    onChange={handleChange}
-                                                    name="CustomerName"
-                                                    value={values.CustomerName}
-                                                    disabled
-                                                    readOnly
-                                                    className={errors.CustomerName && touched.CustomerName ? "is-invalid form-control form-control-sm" : null}
-                                                />
-                                                {errors.CustomerName && touched.CustomerName ? (
-                                                    <span className="invalid-feedback">{errors.CustomerName}</span>
-                                                ) : null}
-                                            </Form.Group>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Assigned To</Form.Label>
-                                                    <Select
-                                                        options={allUserDataList}
-                                                        onChange={(selected) => {
-                                                            this.setState({ selected });
-                                                            errors.assignedToUserName = null
-                                                            values.assignedToUserName = selected.label
-                                                            setFieldValue('assignedToEncodedKey',selected.value )
-                                                            setFieldValue('assignedToUserName', selected.label)
-                                                        }}
-                                                        onBlur={()=> 
-                                                            {
-                                                                setFieldTouched('assignedToUserName', true)
-                                                            }
-                                                        }
-                                                        className={errors.assignedToUserName && touched.assignedToUserName ? "is-invalid" : null}
-                                                        // value={values.accountUsage}
-                                                        name="assignedToUserName"
-                                                        // value={values.currencyCode}
-                                                        required
-                                                    />
-
-                                                    {errors.assignedToUserName && touched.assignedToUserName ? (
-                                                        <span className="invalid-feedback">{errors.assignedToUserName}</span>
-                                                    ) : null}
-                                                </Col>
-                                                <Col className="date-wrap">
-                                                    <Form.Label className="block-level">Due Date</Form.Label>
-                                                    <DatePicker
-                                                     placeholderText="Choose entry date"
-                                                        dateFormat="d MMMM, yyyy"
-                                                        className="form-control form-control-sm"
-                                                        peekNextMonth
-                                                        showMonthDropdown
-                                                        showYearDropdown
-                                                        dropdownMode="select"
-                                                        minDate={new Date()}
-                                                        name="dueDate"
-                                                        value={values.dueDate}
-                                                        onChange={setFieldValue}
-                                                        className={errors.dueDate && touched.dueDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}
-                                                    />
-                                                    {errors.dueDate && touched.dueDate ? (
-                                                        <span className="invalid-feedback">{errors.dueDate}</span>
-                                                    ) : null}
-                                                </Col>
-                                            </Form.Row>
-                                            <Form.Group controlId="debitLocation">
-                                                <Form.Label className="block-level">Notes</Form.Label>
-                                                <Form.Control 
-                                                    as="textarea" rows="3"
-                                                    onChange={handleChange}
-                                                    value={values.Notes}
-                                                    className={errors.Notes && touched.Notes ? "is-invalid" : null}
-                                                    name="Notes" 
-                                                    required  />
-                                                    {errors.Notes && touched.Notes ? (
-                                                            <span className="invalid-feedback">{errors.Notes}</span>
-                                                    ) : null}
-                                            </Form.Group>
-                                        </Modal.Body>
-                                        <Modal.Footer>
-
-                                            <Button variant="light" onClick={this.handleTaskClose}>
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                variant="success"
-                                                type="submit"
-                                                disabled={createAClientTaskRequest.is_request_processing}
-                                            >
-                                                {createAClientTaskRequest.is_request_processing ? "Please wait..." : "Save Task"}
-
-                                            </Button>
-
-                                        </Modal.Footer>
-
-                                        {createAClientTaskRequest.request_status === clientsConstants.CREATE_A_CLIENT_TASK_SUCCESS &&
-                                            <Alert variant="success" className="w-65 mlr-auto">
-                                                {createAClientTaskRequest.request_data.response.data.message}
-                                            </Alert>
-                                        }
-                                        {createAClientTaskRequest.request_status === clientsConstants.CREATE_A_CLIENT_TASK_FAILURE &&
-                                            <Alert variant="danger" className="w-65 mlr-auto">
-                                                {createAClientTaskRequest.request_data.error}
-                                            </Alert>
-                                        }
-                                    </Form>
-                                )}
-                        </Formik>
-                    </Modal>
-                )   
-            }else{
-                return(
-                    <Modal show={showNewTask} onHide={this.handleTaskClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
-                        <Modal.Header>
-                            <Modal.Title>Contact Admin</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div className="loading-content">No user to assign tasks. Please contact Admin</div>
-                        </Modal.Body>
-                    </Modal>
-                )
-            }
-
-       }
-
-        if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_PENDING){
-            return(
-                <Modal show={showNewTask} onHide={this.handleTaskClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
-                    <Modal.Header>
-                        <Modal.Title>Loading</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="loading-content">Please wait...</div>
-                    </Modal.Body>
-                        
-                </Modal>
-            )
-        }
-
-        if(getAllUsersRequest.request_status ===administrationConstants.GET_ALL_USERS_FAILURE){
-            return(
-                <Modal show={showNewTask} onHide={this.handleTaskClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
-                    <Modal.Header>
-                        <Modal.Title>Contact Admin</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="loading-content">{getAllUsersRequest.request_data.error}</div>
-                    </Modal.Body>
-                        
-                </Modal>
-            )
-        }
-        
-        
-    }
+  
 
     renderTaskWrap =()=>{
-        let getAClientRequest = this.props.getAClientReducer,
-            getClientLoansRequest = this.props.getClientLoansReducer,
-            getClientDepositsRequest = this.props.getClientDepositsReducer;
-
-            if(getAClientRequest.request_status===clientsConstants.GET_A_CLIENT_SUCCESS
-                &&  getClientLoansRequest.request_status ===loanAndDepositsConstants.GET_CLIENTLOANS_SUCCESS
-                && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS){
-
-                    return(
-                        <div>
-                            {this.newTask()}
-                            {this.renderAClientTasks()}
-                        </div>
-                    )
-                    
-                }
+        return(
+            <div>
+                
+                {this.renderAUserTasks()}
+            </div>
+        )
     }
 
-    renderAClientTasks =()=>{
-        let getAClientTasksRequest =  this.props.getAClientTasksReducer;
-        let saveRequestData= getAClientTasksRequest.request_data!==undefined?getAClientTasksRequest.request_data.tempData:null;
-        if(getAClientTasksRequest.request_status===clientsConstants.GET_A_CLIENT_TASKS_PENDING){
+    renderAUserTasks =()=>{
+        let getAUserTasksRequest =  this.props.getAUserTasksReducer;
+        let saveRequestData= getAUserTasksRequest.request_data!==undefined?getAUserTasksRequest.request_data.tempData:null;
+        if(getAUserTasksRequest.request_status===clientsConstants.GET_MY_TASKS_PENDING){
             if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                 return(
                     <div className=""> 
@@ -508,10 +226,10 @@ class ViewCustomerTasks extends React.Component {
             }
         }
 
-        if(getAClientTasksRequest.request_status===clientsConstants.GET_A_CLIENT_TASKS_SUCCESS){
-            let getAClientTasksRequestData = getAClientTasksRequest.request_data.response.data.result;
+        if(getAUserTasksRequest.request_status===clientsConstants.GET_MY_TASKS_SUCCESS){
+            let getAUserTasksRequestData = getAUserTasksRequest.request_data.response.data.result;
             
-            if(getAClientTasksRequestData.length>=1){
+            if(getAUserTasksRequestData.length>=1){
                 return(
                     <div className=""> 
                         <div className="heading-with-cta ">
@@ -521,7 +239,7 @@ class ViewCustomerTasks extends React.Component {
                             <div className="pagination-wrap">
                                 <label htmlFor="toshow">Show</label>
                                 <select id="toshow" 
-                                    onChange={(e)=>this.setPagesize(e, getAClientTasksRequestData)}
+                                    onChange={(e)=>this.setPagesize(e, getAUserTasksRequestData)}
                                     value={this.state.PageSize}
                                     className="countdropdown form-control form-control-sm">
                                     <option value="10">10</option>
@@ -530,11 +248,11 @@ class ViewCustomerTasks extends React.Component {
                                     <option value="200">200</option>
                                 </select>
                                 <TablePagination
-                                    totalPages={getAClientTasksRequestData.totalPages}
-                                    currPage={getAClientTasksRequestData.currentPage}
-                                    currRecordsCount={getAClientTasksRequestData.length}
-                                    totalRows={getAClientTasksRequestData.totalRows}
-                                    tempData={getAClientTasksRequestData}
+                                    totalPages={getAUserTasksRequestData.totalPages}
+                                    currPage={getAUserTasksRequestData.currentPage}
+                                    currRecordsCount={getAUserTasksRequestData.length}
+                                    totalRows={getAUserTasksRequestData.totalRows}
+                                    tempData={getAUserTasksRequestData}
                                     pagesCountToshow={4}
                                     refreshFunc={this.loadNextPage}
                                 />
@@ -553,7 +271,7 @@ class ViewCustomerTasks extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                    getAClientTasksRequestData.map((eachTask, index)=>{
+                                    getAUserTasksRequestData.map((eachTask, index)=>{
                                         return(
                                             <tr key={index}>
                                                 <td>{eachTask.summary}</td>
@@ -625,11 +343,11 @@ class ViewCustomerTasks extends React.Component {
             }
         }
 
-        if(getAClientTasksRequest.request_status===clientsConstants.GET_A_CLIENT_TASKS_FAILURE){
+        if(getAUserTasksRequest.request_status===clientsConstants.GET_MY_TASKS_FAILURE){
 
             return(
                 <div className="loading-content errormsg"> 
-                <div>{getAClientTasksRequest.request_data.error}</div>
+                <div>{getAUserTasksRequest.request_data.error}</div>
             </div>
             )
         }
@@ -677,9 +395,9 @@ function mapStateToProps(state) {
     return {
         
         createAClientTaskReducer: state.clientsReducers.createAClientTaskReducer,
-        getAClientTasksReducer: state.clientsReducers.getAClientTasksReducer,
+        getAUserTasksReducer: state.clientsReducers.getAUserTasksReducer,
         
     };
 }
 
-export default connect(mapStateToProps)(ViewCustomerTasks);
+export default connect(mapStateToProps)(ViewUserTasks);

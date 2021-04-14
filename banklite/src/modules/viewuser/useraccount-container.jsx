@@ -44,7 +44,7 @@ class UserAccountContainer extends React.Component {
         this.userEncodedKey = this.props.match.params.userid!==undefined?this.props.match.params.userid:null;
         this.state={
             user:'',
-            PageSize: 100,
+            PageSize: 5,
             CurrentPage: 1,
             generatedRoutes :{
                 user: `/user/${this.userEncodedKey}`,
@@ -120,8 +120,15 @@ class UserAccountContainer extends React.Component {
                             <li>
                                 <NavLink exact to={generatedRoutes.user}>Overview</NavLink>
                             </li>
+                        </ul>
+                    }
+                    {!this.userEncodedKey &&
+                        <ul className="nav">
                             <li>
-                                <NavLink exact to={generatedRoutes.tasks}>Tasks</NavLink>
+                                <NavLink exact to='/my-profile'>Overview</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to='/my-profile/tasks'>My Tasks</NavLink>
                             </li>
                         </ul>
                     }
@@ -206,8 +213,8 @@ class UserAccountContainer extends React.Component {
                         
                         {this.props.children}
                         <Route exact to='/user/:id'  component={AccountContainer} /> 
-                        <Route exact to='/user/:id/tasks'  component={AccountContainer} /> 
-                        <Route  to='/my-profile/tasks'  component={AccountContainer} /> 
+                        {/* <Route exact to='/user/:id/tasks'  component={AccountContainer} />  */}
+                        {/* <Route  exact to='/my-profile'  component={AccountContainer} />  */}
                         
                     </div>
                 </InnerPageContainer>

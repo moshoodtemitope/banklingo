@@ -25,7 +25,7 @@ class MyProfile extends React.Component {
         this.userEncodedKey = this.props.match.params.userid||null;
         this.state={
             user:JSON.parse(localStorage.getItem('lingoAuth')),
-            PageSize: 100,
+            PageSize: 5,
             CurrentPage: 1,
         }
         // console.log('props are', this.props.match.params)
@@ -242,6 +242,8 @@ class MyProfile extends React.Component {
                     )
             }
     }
+
+    
     
 
     render() {
