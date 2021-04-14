@@ -14,6 +14,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import CreateNewTask from '../../shared/components/new-task'
 // import Dropdown from 'react-bootstrap/Dropdown'
 // import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
@@ -280,6 +281,7 @@ class ViewCustomerTasks extends React.Component {
                                                 </Col>
                                                 <Col className="date-wrap">
                                                     <Form.Label className="block-level">Due Date</Form.Label>
+                                                    <DatePicker
                                                      placeholderText="Choose entry date"
                                                         dateFormat="d MMMM, yyyy"
                                                         className="form-control form-control-sm"
@@ -444,7 +446,7 @@ class ViewCustomerTasks extends React.Component {
                             </tbody>
                         </TableComponent>
                         <div className="footer-with-cta toright">
-                            <Button onClick={this.handleTaskShow}>New Task</Button>
+                            <Button onClick={this.handleShowNewTask}>New Task</Button>
                         </div>
                         
                     </div>
@@ -488,7 +490,7 @@ class ViewCustomerTasks extends React.Component {
                                                 <td>{eachTask.summary}</td>
                                                 <td>{eachTask.communicationStateDescription}</td>
                                                 <td>{eachTask.assignedToUserName}</td>
-                                                <td>{getDateFromISO(eachTask.dueDate)}</td>
+                                                <td>{eachTask.dueDate}</td>
                                                 <td>{eachTask.createdByUserName}</td>
                                                 <td>{eachTask.notes}</td>
                                             </tr>
@@ -498,7 +500,7 @@ class ViewCustomerTasks extends React.Component {
                             </tbody>
                         </TableComponent>
                         <div className="footer-with-cta toright">
-                            <Button onClick={this.handleTaskShow}>New Task</Button>
+                            <Button onClick={this.handleShowNewTask}>New Task</Button>
                         </div>
                         
                     </div>
@@ -557,7 +559,7 @@ class ViewCustomerTasks extends React.Component {
                                                 <td>{eachTask.summary}</td>
                                                 <td>{eachTask.communicationStateDescription}</td>
                                                 <td>{eachTask.assignedToUserName}</td>
-                                                <td>{getDateFromISO(eachTask.dueDate)}</td>
+                                                <td>{eachTask.dueDate}</td>
                                                 <td>{eachTask.createdByUserName}</td>
                                                 <td>{eachTask.notes}</td>
                                             </tr>
@@ -567,7 +569,7 @@ class ViewCustomerTasks extends React.Component {
                             </tbody>
                         </TableComponent>
                         <div className="footer-with-cta toright">
-                            <Button onClick={this.handleTaskShow}>New Task</Button>
+                            <Button onClick={this.handleShowNewTask}>New Task</Button>
                         </div>
                     </div>
                 )
@@ -616,7 +618,7 @@ class ViewCustomerTasks extends React.Component {
                             </tbody>
                         </TableComponent>
                         <div className="footer-with-cta toright">
-                            <Button onClick={this.handleTaskShow}>New Task</Button>
+                            <Button onClick={this.handleShowNewTask}>New Task</Button>
                         </div>
                     </div>
                 )
@@ -633,6 +635,17 @@ class ViewCustomerTasks extends React.Component {
         }
     }
 
+    handleShowNewTask = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ displayNewTask: true })
+        // }
+    };
+    handleCloseNewTask = () => {
+        // this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ displayNewTask: false  })
+    };
+
     render() {
         return (
             <Fragment>
@@ -640,6 +653,8 @@ class ViewCustomerTasks extends React.Component {
                     
                     <div className="content-wrapper">
                         {/* <CustomerHeading {...this.props}/> */}
+                        <CreateNewTask source="client"  clientEncodedKey={this.clientEncodedKey} closeNewTask={this.handleCloseNewTask} showNewTask={this.state.displayNewTask} />
+                        {/* <CreateNewTask clientName={`${customerDetails.firstName} ${customerDetails.lastName}`} clientEncodedKey={this.clientEncodedKey} closeNewTask={this.handleCloseNewTask} showNewTask={this.state.displayNewTask} /> */}
                         <div className="module-content">
                             <div className="content-container">
                                 <div className="row">

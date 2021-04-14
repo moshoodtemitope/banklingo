@@ -574,7 +574,7 @@ function getAClientTask  (ClientEncodedKey,params, tempData){
     
     return dispatch =>{
         
-        let consume = ApiService.request(routes.HIT_TASKS+`?ClientEncodedKey=${ClientEncodedKey}&${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_TASKS+`/client?ClientEncodedKey=${ClientEncodedKey}&${params}`, "GET", null);
         dispatch(request(consume,tempData));
         return consume
             .then(response =>{

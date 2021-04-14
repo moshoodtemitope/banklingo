@@ -14,6 +14,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import  ActivitiesBox from '../../shared/elements/activities'
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
+import CreateNewTask from '../../shared/components/new-task'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button'
@@ -324,7 +325,7 @@ class DashboardLanding extends React.Component {
 
     showViewTill = (tillToView, allTills)=> {
         let tillsFiltered;
-        console.log("akds dsds", allTills)
+        
         this.setState({ closeViewTill: true, tillToView, allTills })
     }
 
@@ -1357,96 +1358,7 @@ class DashboardLanding extends React.Component {
         }
     }
 
-    renderIndicators = ()=>{
-        let getDashboardStatsRequest = this.props.getDashboardStats;
-        if(getDashboardStatsRequest.request_status===dashboardConstants.GET_DASHOBOARD_DATA_PENDING){
-            return(
-                <div className="each-card mt-20">
-                    <div className="each-card-heading">
-                        <h4>Indicators</h4>
-                    </div>
-                    <div className="each-card-content centered-item">
-                        <div className="loading-text">Please wait... </div>
-                    </div>
-                </div>
-            )
-        }
-        if(getDashboardStatsRequest.request_status===dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS){
-            let dashboardData =  this.props.getDashboardStats.request_data.response.data;
-            return (
-                <div className="each-card mt-20">
-                    <div className="each-card-heading">
-                        <h4>Indicators</h4>
-                    </div>
-                    <div className="each-card-content">
-                        <div className="all-indicators">
-                            <div className="each-indicator">
-                                <div>
-                                    <h4>{numberWithCommas(dashboardData.activeCustomers)} </h4>
-                                    <div className="indicator-txt">Active Customers</div>
-                                </div>
-                            </div>
-                            <div className="each-indicator">
-                                <div>
-                                    <h4>{numberWithCommas(dashboardData.users)}</h4>
-                                    <div className="indicator-txt">Number of Users</div>
-                                </div>
-                            </div>
-                            <div className="each-indicator">
-                                <div>
-                                    <h4>{numberWithCommas(dashboardData.loansAwaitingApproval)}</h4>
-                                    <div className="indicator-txt">Loans Awaiting Approval</div>
-                                </div>
-                            </div>
-                            <div className="each-indicator">
-                                <div>
-                                    <h4>{numberWithCommas(dashboardData.totalDeposits, true)}</h4>
-                                    <div className="indicator-txt">Total deposit</div>
-                                </div>
-                            </div>
-
-                            <div className="each-indicator">
-                                <div>
-                                    <h4>{numberWithCommas(dashboardData.totalLoanPortfolio, true)}</h4>
-                                    <div className="indicator-txt">Gross loan portfolio</div>
-                                </div>
-                            </div>
-                            <div className="each-indicator">
-                                <div>
-                                    <h4>{numberWithCommas(dashboardData.activeSavings, true)}</h4>
-                                    <div className="indicator-txt">Active Savings</div>
-                                </div>
-                            </div>
-                            <div className="each-indicator">
-                                <div>
-                                    <h4>{numberWithCommas(dashboardData.parAbove30Days)}</h4>
-                                    <div className="indicator-txt">PAR &gt; 30 Days</div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            )
-        }
-
-        if(getDashboardStatsRequest.request_status===dashboardConstants.GET_DASHOBOARD_DATA_FAILURE){
-            return (
-                <div className="each-card mt-20">
-                    <div className="each-card-heading">
-                        <h4>Indicators</h4>
-                    </div>
-                    <div className="each-card-content">
-                        {(this.props.getDashboardStatsRequest && this.props.getDashboardStatsRequest.request_data) &&
-                            <Alert variant="danger">
-                                {this.props.getDashboardStatsRequest.request_data.error}
-                            </Alert>
-                        }
-                    </div>
-                </div>
-            )
-        }
-    }
+    
 
     renderViewAccountWrap = (accountToView )=>{
         
@@ -1710,7 +1622,7 @@ class DashboardLanding extends React.Component {
     }
     noOptionsForCustomerMessage(inputValue) {
         
-        return ""
+        return "No Customers found"
     }
 
     renderTillTransactions = ()=>{
@@ -2649,17 +2561,134 @@ class DashboardLanding extends React.Component {
         )
     }
 
+    renderIndicators = ()=>{
+        let getDashboardStatsRequest = this.props.getDashboardStats;
+        if(getDashboardStatsRequest.request_status===dashboardConstants.GET_DASHOBOARD_DATA_PENDING){
+            return(
+                <div className="each-card mt-20">
+                    <div className="each-card-heading">
+                        <h4>Indicators</h4>
+                    </div>
+                    <div className="each-card-content centered-item">
+                        <div className="loading-text">Please wait... </div>
+                    </div>
+                </div>
+            )
+        }
+        if(getDashboardStatsRequest.request_status===dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS){
+            let dashboardData =  this.props.getDashboardStats.request_data.response.data;
+            return (
+                <div className="each-card mt-20">
+                    <div className="each-card-heading">
+                        <h4>Indicators</h4>
+                    </div>
+                    <div className="each-card-content">
+                        <div className="all-indicators">
+                            <div className="each-indicator">
+                                <div>
+                                    <h4>{numberWithCommas(dashboardData.activeCustomers)} </h4>
+                                    <div className="indicator-txt">Active Customers</div>
+                                </div>
+                            </div>
+                            <div className="each-indicator">
+                                <div>
+                                    <h4>{numberWithCommas(dashboardData.users)}</h4>
+                                    <div className="indicator-txt">Number of Users</div>
+                                </div>
+                            </div>
+                            <div className="each-indicator">
+                                <div>
+                                    <h4>{numberWithCommas(dashboardData.loansAwaitingApproval)}</h4>
+                                    <div className="indicator-txt">Loans Awaiting Approval</div>
+                                </div>
+                            </div>
+                            <div className="each-indicator">
+                                <div>
+                                    <h4>{numberWithCommas(dashboardData.totalDeposits, true)}</h4>
+                                    <div className="indicator-txt">Total deposit</div>
+                                </div>
+                            </div>
 
-    renderDashboardWrap = () => {
-        
-        return (
-            <div className="dashboard-container">
-                <div className="dashboard-section">
+                            <div className="each-indicator">
+                                <div>
+                                    <h4>{numberWithCommas(dashboardData.totalLoanPortfolio, true)}</h4>
+                                    <div className="indicator-txt">Gross loan portfolio</div>
+                                </div>
+                            </div>
+                            <div className="each-indicator">
+                                <div>
+                                    <h4>{numberWithCommas(dashboardData.activeSavings, true)}</h4>
+                                    <div className="indicator-txt">Active Savings</div>
+                                </div>
+                            </div>
+                            <div className="each-indicator">
+                                <div>
+                                    <h4>{numberWithCommas(dashboardData.parAbove30Days)}</h4>
+                                    <div className="indicator-txt">PAR &gt; 30 Days</div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+
+        if(getDashboardStatsRequest.request_status===dashboardConstants.GET_DASHOBOARD_DATA_FAILURE){
+            return (
+                <div className="each-card mt-20">
+                    <div className="each-card-heading">
+                        <h4>Indicators</h4>
+                    </div>
+                    <div className="each-card-content">
+                        {(this.props.getDashboardStatsRequest && this.props.getDashboardStatsRequest.request_data) &&
+                            <Alert variant="danger">
+                                {this.props.getDashboardStatsRequest.request_data.error}
+                            </Alert>
+                        }
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    renderTaskSummary = ()=>{
+        let getDashboardStatsRequest = this.props.getDashboardStats;
+        if(getDashboardStatsRequest.request_status===dashboardConstants.GET_DASHOBOARD_DATA_PENDING){
+            return (
+                <div className="each-card">
+                    <div className="each-card-heading">
+                        <h4>Your Task</h4>
+                        <div className="card-actions">
+                            <div className="each-cardaction" onClick={this.handleShowNewTask}>
+                                <div className="cardaction-ico">
+                                    <img src={AddIco} alt="" />
+                                </div>
+                                <div className="cardaction-txt">New Task</div>
+                            </div>
+                            <div className="each-cardaction">
+                                <div className="cardaction-ico">
+                                    <img src={ListIco} alt="" />
+                                </div>
+                                <div className="cardaction-txt">All Tasks</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="each-card-content centered-item">
+                        <div className="loading-text">Please wait... </div>
+                    </div>
+                </div>
+            )
+        }
+        if(getDashboardStatsRequest.request_status===dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS){
+            let dashboardData =  this.props.getDashboardStats.request_data.response2;
+            if(dashboardData){
+                return (
                     <div className="each-card">
                         <div className="each-card-heading">
                             <h4>Your Task</h4>
                             <div className="card-actions">
-                                <div className="each-cardaction">
+                                <div className="each-cardaction" onClick={this.handleShowNewTask}>
                                     <div className="cardaction-ico">
                                         <img src={AddIco} alt="" />
                                     </div>
@@ -2676,21 +2705,60 @@ class DashboardLanding extends React.Component {
                         <div className="each-card-content">
                             <div className="task-stats">
                                 <div className="each-task-stat">
-                                    <h4>0</h4>
+                                    <h4>{numberWithCommas(dashboardData.data.overdue)}</h4>
                                     <div className="stat-xtxt">OVERDUE</div>
                                 </div>
                                 <div className="each-task-stat">
-                                    <h4>0</h4>
+                                    <h4>{numberWithCommas(dashboardData.data.dueToday)}</h4>
                                     <div className="stat-xtxt">DUE TODAY</div>
                                 </div>
                                 <div className="each-task-stat">
-                                    <h4>0</h4>
+                                    <h4>{numberWithCommas(dashboardData.data.upcoming)}</h4>
                                     <div className="stat-xtxt">UPCOMING</div>
                                 </div>
+                                <div className="each-task-stat">
+                                    <h4>{numberWithCommas(dashboardData.data.closed)}</h4>
+                                    <div className="stat-xtxt">CLOSED</div>
+                                </div>
                             </div>
-                            <div className="task-stat-msg">You don't have any tasks due at the moment</div>
+                            {dashboardData.data.dueToday===0 &&
+                                <div className="task-stat-msg">You don't have any tasks due at the moment</div>
+                            }   
+                            
                         </div>
                     </div>
+                )
+                
+            } else {
+                return (
+                    <div className="each-card">
+                        <div className="each-card-heading">
+                            <h4>Your Task</h4>
+                            <div className="card-actions">
+                                <div className="each-cardaction" onClick={this.handleShowNewTask}>
+                                    <div className="cardaction-ico">
+                                        <img src={AddIco} alt="" />
+                                    </div>
+                                    <div className="cardaction-txt">New Task</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="each-card-content">
+                            <div className="task-stat-msg">Unable to load tasks at the moment</div>
+                        </div>
+                    </div>
+                )
+            }
+        }
+    }
+
+
+    renderDashboardWrap = () => {
+        
+        return (
+            <div className="dashboard-container">
+                <div className="dashboard-section">
+                    {this.renderTaskSummary()}
                     {this.renderIndicators()}
                     {/* <div className="each-card mt-20">
                         <div className="each-card-heading">
@@ -2713,6 +2781,17 @@ class DashboardLanding extends React.Component {
         )
     }
 
+    handleShowNewTask = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ displayNewTask: true })
+        // }
+    };
+    handleCloseNewTask = () => {
+        // this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ displayNewTask: false  })
+    };
+
     render() {
         return (
             <Fragment>
@@ -2734,6 +2813,7 @@ class DashboardLanding extends React.Component {
                         </div>
                         {/* <div className="module-content "> */}
                         <div className="module-content grayed-bg">
+                        <CreateNewTask source="dashboard"   closeNewTask={this.handleCloseNewTask} showNewTask={this.state.displayNewTask} />
                         {this.state.showNewTill && this.renderOpenTillWrap()}
                         {this.state.addCashToTill && this.renderAddRemoveCashToTillWrap(this.state.tillActionData,this.state.tillAction)}
                         {this.state.closeUndoCloseTill && this.renderCloseUndoCloseTillWrap(this.state.tillActionData,this.state.tillAction)}

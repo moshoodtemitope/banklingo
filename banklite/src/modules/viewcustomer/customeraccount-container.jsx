@@ -14,6 +14,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 
 import Col from 'react-bootstrap/Col'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import CreateNewTask from '../../shared/components/new-task'
 import Button from 'react-bootstrap/Button'
 import  TableComponent from '../../shared/elements/table'
 import "./customerprofile.scss"; 
@@ -477,7 +478,8 @@ class CustomerAccountContainer extends React.Component {
                 <ul className="nav">
                     {allUSerPermissions.indexOf("bnk_manage_clients_task") >-1 &&
                         <li>
-                            <Button size="sm" onClick={this.handleTaskShow}>New Task</Button>
+                            <Button size="sm" onClick={this.handleShowNewTask}>New Task</Button>
+                            {/* <Button size="sm" onClick={this.handleTaskShow}>New Task</Button> */}
                         </li>
                     }
                     {   ((customerDetails.clientState===4 || customerDetails.clientState===1) && 
@@ -758,6 +760,7 @@ class CustomerAccountContainer extends React.Component {
                 //    console.log("dsdsdsdsd", getAClientRequest.request_data.response);
             return(
                 <div>
+                    <CreateNewTask clientName={`${customerDetails.firstName} ${customerDetails.lastName}`} clientEncodedKey={this.clientEncodedKey} closeNewTask={this.handleCloseNewTask} showNewTask={this.state.displayNewTask} />
                     {this.newTask()}
                     
                     {this.changeCustomerStateBox(customerDetails)}
@@ -775,15 +778,26 @@ class CustomerAccountContainer extends React.Component {
         }
 
     }
+
+    handleShowNewTask = () => {
+        // if(this.props.writeOffALoanReducer.is_request_processing===false){
+            // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+            this.setState({ displayNewTask: true })
+        // }
+    };
+    handleCloseNewTask = () => {
+        // this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        this.setState({ displayNewTask: false  })
+    };
     
 
     render() {
-        
         let {generatedRoutes} = this.state;
         return (
              <Fragment>
                 <InnerPageContainer {...this.props}>
                     <div className="content-wrapper">
+                        
                         {this.renderCustomerHeading()} 
                         
                         {this.props.children}

@@ -36,8 +36,17 @@ function getDashboardData() {
         dispatch(request(consume));
         return consume
             .then(response => {
-                dispatch(success(response));
-                
+                // dispatch(success(response));
+                let consume2 = ApiService.request(`${routes.HIT_TASKS}/mytasksummary`, "GET", null);
+                dispatch(request(consume2));
+                return consume2
+                    .then(response2 => {
+                        dispatch(success(response, response2));
+                        
+                    }).catch(error => {
+                        dispatch(success(response, null));
+                        // dispatch(failure(handleRequestErrors(error)));
+                    });
                 
                 
             }).catch(error => {
@@ -49,7 +58,7 @@ function getDashboardData() {
 
 
     function request(user) { return { type: dashboardConstants.GET_DASHOBOARD_DATA_PENDING, user } }
-    function success(response) { return { type: dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS, response } }
+    function success(response, response2) { return { type: dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS, response, response2 } }
     function failure(error) { return { type: dashboardConstants.GET_DASHOBOARD_DATA_FAILURE, error } }
 
 }
