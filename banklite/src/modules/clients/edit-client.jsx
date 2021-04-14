@@ -243,7 +243,6 @@ class EditAClient extends React.Component {
               MName: allCustomerData.middleName
                 ? allCustomerData.middleName
                 : '',
-              custType: allCustomerData.clientTypeEncodedKey,
               BVN: allCustomerData.bvn ? allCustomerData.bvn : '',
               addressLine1: allCustomerData.address.addressLine1
                 ? allCustomerData.address.addressLine1
@@ -353,7 +352,6 @@ class EditAClient extends React.Component {
             onSubmit={(values, { resetForm }) => {
               let updateCustomerPayload = {
                 clientTypeId: values.custType,
-                // clientTypeId:values.custType,
                 firstName: values.FName,
                 middleName: values.MName,
                 lastName: values.LName,
@@ -377,8 +375,8 @@ class EditAClient extends React.Component {
                 },
                 bvn: values.BVN,
                 gender: values.gender ? values.gender : '',
-                dateOfBirth: values.dateOfBirth
-                  ? values.dateOfBirth.toISOString()
+                dateOfBirth: allCustomerData.dateOfBirth && allCustomerData.dateOfBirth !== ''
+                  ? new Date(allCustomerData.dateOfBirth)
                   : null,
                 notes: values.notes || null,
                 encodedKey: this.props.match.params.encodedkey,
@@ -532,14 +530,14 @@ class EditAClient extends React.Component {
 
                     {/* <Form.Check type="radio"
                                                         name="gender"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         label="Female"
                                                         id="choose-female"
                                                         value={values.gender}
                                                           />
                                                     <Form.Check type="radio"
                                                         name="gender"
-                                                        onChange={handleChange} 
+                                                        onChange={handleChange}
                                                         label="Male"
                                                         id="choose-male"
                                                         value={values.gender}
@@ -567,7 +565,6 @@ class EditAClient extends React.Component {
                         // onChangeRaw={(e) => this.handleDateChange(e)}
                         // defaultValue={dateOfBirth}
                         dateFormat={window.dateformat}
-                        className='form-control form-control-sm'
                         peekNextMonth
                         showMonthDropdown
                         showYearDropdown
@@ -1353,15 +1350,13 @@ class EditAClient extends React.Component {
       } else {
         return (
           <div className='loading-content card'>
-            <div>The requsted Customer could not be found</div>
+            <div>The requested Customer could not be found</div>
           </div>
         );
       }
     }
 
-    if (
-      getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_FAILURE
-    ) {
+    if (getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_FAILURE) {
       return (
         <div className='loading-content card'>
           <div>{getAClientRequest.request_data.error}</div>

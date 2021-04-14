@@ -280,15 +280,16 @@ class NipRequests extends React.Component {
                 <Form.Group className='table-filters'>
                   <div>
                     <Form.Label>Start Date</Form.Label>
-                    onChangeRaw={this.handleDateChangeRaw}
-                    onChange={this.handleStartDatePicker}
-                    selected={this.state.startDate}
-                    dateFormat={window.dateformat}
-                    peekNextMonth showMonthDropdown showYearDropdown
-                    dropdownMode="select" placeholderText="Start date"
-                    autoComplete="new-password" maxDate={new Date()}
-                    // className="form-control form-control-sm h-38px"
-                    className="form-control form-control-sm " />
+                    <DatePicker
+                      onChangeRaw={this.handleDateChangeRaw}
+                      onChange={this.handleStartDatePicker}
+                      selected={this.state.startDate}
+                      dateFormat={window.dateformat}
+                      peekNextMonth showMonthDropdown showYearDropdown
+                      dropdownMode="select" placeholderText="Start date"
+                      autoComplete="new-password" maxDate={new Date()}
+                      // className="form-control form-control-sm h-38px"
+                      className="form-control form-control-sm " />
                   </div>
                   <div>
                     <Form.Label>End Date</Form.Label>
@@ -429,6 +430,7 @@ class NipRequests extends React.Component {
                   <Form.Group className='table-filters'>
                     <div>
                       {/* <Form.Label>Start Date</Form.Label> */}
+                      <DatePicker
                       onChangeRaw={this.handleDateChangeRaw}
                       onChange={this.handleStartDatePicker}
                       selected={this.state.startDate}
@@ -601,6 +603,7 @@ class NipRequests extends React.Component {
                   <Form.Group className='table-filters'>
                     <div>
                       <Form.Label>Start Date</Form.Label>
+                      <DatePicker
                       onChangeRaw={this.handleDateChangeRaw}
                       onChange={this.handleStartDatePicker}
                       selected={this.state.startDate}
