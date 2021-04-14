@@ -74,19 +74,10 @@ class DepositManagement extends React.Component {
 
   setPagesize = (PageSize, tempData) => {
     const { dispatch } = this.props;
-    let sizeOfPage = PageSize.target.value,
-      {
-        FullDetails,
-        CurrentPage,
-        CurrentSelectedPage,
-        endDate,
-        startDate,
-      } = this.state;
-
+    let sizeOfPage = PageSize.target.value;
     this.setState({ PageSize: sizeOfPage });
 
     let {
-      PageSize,
       CurrentPage,
       FullDetails,
       BranchId,
@@ -103,12 +94,11 @@ class DepositManagement extends React.Component {
     }
 
     let paramters = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
-    const { dispatch } = this.props;
 
     if (tempData) {
-      dispatch(depositActions.getDeposits(params, tempData));
+      dispatch(depositActions.getDeposits(paramters, tempData));
     } else {
-      dispatch(depositActions.getDeposits(params));
+      dispatch(depositActions.getDeposits(paramters));
     }
   };
 
