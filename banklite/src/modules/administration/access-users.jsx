@@ -477,7 +477,7 @@ class AccessUsers extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {saveRequestData.map((eachUser, index) => {
+                  {saveRequestData.result.map((eachUser, index) => {
                     return (
                       <Fragment key={index}>
                         <tr>
