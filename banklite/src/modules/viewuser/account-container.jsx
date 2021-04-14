@@ -54,6 +54,7 @@ class AccountContainer extends React.Component {
                         {this.props.children}
                         <Route  exact path='/user/:userid'  component={ViewUser} /> 
                         <Route  path='/my-profile'  component={MyProfile} /> 
+                        <Route exact path='/user/:userid/tasks'  component={AccountContainer} /> 
                         
                         
                         

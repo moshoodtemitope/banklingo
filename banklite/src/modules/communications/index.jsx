@@ -196,23 +196,7 @@ class CommunicationsManagement extends React.Component {
                             return(
                                 <div>
                                         <div className="table-helper">
-                                            {/* <input type="checkbox" name="" 
-                                                onChange={this.setShowDetails}
-                                                checked={this.state.FullDetails}
-                                                id="showFullDetails" /> */}
-                                            {/* <label htmlFor="showFullDetails">Show full details</label> */}
-                                            {/* <Form className="one-liner">
-                                                        
-                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Label>Filter </Form.Label>
-                                                    <Form.Control as="select" size="sm">
-                                                        <option>No Filter</option>
-                                                        <option>Add New Filter</option>
-                                                        <option>Custom Filter</option>
-                                                    </Form.Control>
-                                                </Form.Group>
-                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                            </Form> */}
+                                           
                                         </div>
                                         <div className="loading-text">Please wait... </div>
                                         <div className="heading-with-cta">
@@ -302,8 +286,8 @@ placeholderText="End  date"
                                             </thead>
                                             <tbody>
                                                 {
-                                                    saveRequestData.map((eachNotification, index)=>{
-                                                        // saveRequestData.result.map((eachNotification, index)=>{
+                                                    // saveRequestData.map((eachNotification, index)=>{
+                                                        saveRequestData.result.map((eachNotification, index)=>{
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
@@ -338,23 +322,7 @@ placeholderText="End  date"
                                 return(
                                     <div>
                                         <div className="table-helper">
-                                            {/* <input type="checkbox" name="" 
-                                                onChange={this.setShowDetails}
-                                                checked={this.state.FullDetails}
-                                                id="showFullDetails" /> */}
-                                            {/* <label htmlFor="showFullDetails">Show full details</label> */}
-                                            {/* <Form className="one-liner">
-                                                        
-                                                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                                <Form.Label>Filter </Form.Label>
-                                                    <Form.Control as="select" size="sm">
-                                                        <option>No Filter</option>
-                                                        <option>Add New Filter</option>
-                                                        <option>Custom Filter</option>
-                                                    </Form.Control>
-                                                </Form.Group>
-                                                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                            </Form> */}
+                                            
                                         </div>
                                         <div className="heading-with-cta">
                                             <Form className="one-liner" onSubmit={(e) => this.searchTxtn(e, allNotificationsData.result)} >

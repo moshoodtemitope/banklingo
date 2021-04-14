@@ -48,6 +48,7 @@ class UserAccountContainer extends React.Component {
             CurrentPage: 1,
             generatedRoutes :{
                 user: `/user/${this.userEncodedKey}`,
+                tasks: `/user/${this.userEncodedKey}/tasks`,
                 PageSize: 100,
                 CurrentPage: 1,
             },
@@ -102,6 +103,7 @@ class UserAccountContainer extends React.Component {
         this.setState({
             generatedRoutes :{
                 user: `/user/${this.userEncodedKey}`,
+                tasks: `/user/${this.userEncodedKey}/tasks`,
             }
         })
             this.loadInitialCustomerData();
@@ -117,6 +119,9 @@ class UserAccountContainer extends React.Component {
                         <ul className="nav">
                             <li>
                                 <NavLink exact to={generatedRoutes.user}>Overview</NavLink>
+                            </li>
+                            <li>
+                                <NavLink exact to={generatedRoutes.tasks}>Tasks</NavLink>
                             </li>
                         </ul>
                     }
@@ -201,7 +206,8 @@ class UserAccountContainer extends React.Component {
                         
                         {this.props.children}
                         <Route exact to='/user/:id'  component={AccountContainer} /> 
-                        <Route  to='/my-profile'  component={AccountContainer} /> 
+                        <Route exact to='/user/:id/tasks'  component={AccountContainer} /> 
+                        <Route  to='/my-profile/tasks'  component={AccountContainer} /> 
                         
                     </div>
                 </InnerPageContainer>

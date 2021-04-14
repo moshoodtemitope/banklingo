@@ -303,8 +303,8 @@ placeholderText="End  date"
                                             </thead>
                                             <tbody>
                                                 {
-                                                    saveRequestData.map((eachNotification, index)=>{
-                                                        // saveRequestData.result.map((eachNotification, index)=>{
+                                                    // saveRequestData.map((eachNotification, index)=>{
+                                                        saveRequestData.result.map((eachNotification, index)=>{
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
