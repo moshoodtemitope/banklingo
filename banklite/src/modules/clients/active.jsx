@@ -1,7 +1,4 @@
-import * as React from 'react';
-// import {Router} from "react-router";
-
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import InnerPageContainer from '../../shared/templates/authed-pagecontainer';
@@ -10,13 +7,14 @@ import TablePagination from '../../shared/elements/table/pagination';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-// import DatePicker from '../../_helpers/datepickerfield'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { clientsActions } from '../../redux/actions/clients/clients.action';
 import { clientsConstants } from '../../redux/actiontypes/clients/clients.constants';
 import './clients.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import { CLIENTS_MODULE_MENU_LINKS } from '../../shared/config';
+import SubMenu from '../../shared/components/SubMenu';
 
 class ActiveClients extends React.Component {
   constructor(props) {
@@ -835,58 +833,7 @@ class ActiveClients extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className='module-submenu'>
-                <div className='content-container'>
-                  <ul className='nav'>
-                    <li>
-                      <NavLink to={'/clients'} activeClassName='activeNavLink'>
-                        All
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        exact
-                        to={'/active-clients'}
-                        activeClassName='activeNavLink'
-                      >
-                        Active
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/inactive-clients'}
-                        activeClassName='activeNavLink'
-                      >
-                        Inactive
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-pending-approval'}
-                        activeClassName='activeNavLink'
-                      >
-                        Pending Approval
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-exited'}
-                        activeClassName='activeNavLink'
-                      >
-                        Exited
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-blacklisted'}
-                        activeClassName='activeNavLink'
-                      >
-                        Blacklisted
-                      </NavLink>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <SubMenu links={CLIENTS_MODULE_MENU_LINKS}/>
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
