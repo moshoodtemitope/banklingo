@@ -1,10 +1,7 @@
-import * as React from 'react';
-// import {Router} from "react-router";
-
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-
 import { NavLink } from 'react-router-dom';
+
 import InnerPageContainer from '../../shared/templates/authed-pagecontainer';
 import TableComponent from '../../shared/elements/table';
 import TablePagination from '../../shared/elements/table/pagination';
@@ -19,6 +16,8 @@ import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposit
 
 import './loanmanagement.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import { LOAN_MODULE_MENU_LINKS } from '../../shared/config';
+import SubMenu from '../../shared/components/SubMenu';
 class RejectedLoans extends React.Component {
   constructor(props) {
     super(props);
@@ -836,12 +835,10 @@ class RejectedLoans extends React.Component {
                   </div>
                 </div>
               </div>
+              <SubMenu links={LOAN_MODULE_MENU_LINKS} />
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
-                    {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>{this.renderLoans()}</div>
                     </div>
