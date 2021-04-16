@@ -78,3 +78,24 @@ export const LOAN_MODULE_MENU_LINKS = [
     exact: false,
   },
 ];
+
+export const REPORTS_MENU_LINKS = [
+  {
+    label: 'Loans',
+    url: '/reports/loans/',
+    exact: false,
+  },
+];
+
+export const LOAN_REPORTS_MENU_LINKS = [
+  {
+    label: 'Loan Schedules',
+    url: '/reports/loans/',
+    exact: true,
+  },
+  {
+    label: 'Loan PAR',
+    url: '/reports/loans/loans-par',
+    exact: false,
+  },
+];

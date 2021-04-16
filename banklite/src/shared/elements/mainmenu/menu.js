@@ -14,27 +14,27 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "Active",
-                subMmenuRoute: "/active-clients"
+                subMenuRoute: "/active-clients"
             },
             {
                 subMenuLabel: "Inactive",
-                subMmenuRoute: "/inactive-clients"
+                subMenuRoute: "/inactive-clients"
             },
             {
                 subMenuLabel: "Pending approval",
-                subMmenuRoute: "/clients-pending-approval"
+                subMenuRoute: "/clients-pending-approval"
             },
             {
                 subMenuLabel: "Exited",
-                subMmenuRoute: "/clients-exited"
+                subMenuRoute: "/clients-exited"
             },
             {
                 subMenuLabel: "Blacklisted",
-                subMmenuRoute: "/clients-blacklisted"
+                subMenuRoute: "/clients-blacklisted"
             },
             {
                 subMenuLabel: "All customers",
-                subMmenuRoute: "/clients"
+                subMenuRoute: "/clients"
             },
         ]
     },
@@ -46,39 +46,39 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "Pending Approval",
-                subMmenuRoute: "/all-loans/pending"
+                subMenuRoute: "/all-loans/pending"
             },
             {
                 subMenuLabel: "Approved",
-                subMmenuRoute: "/all-loans/approved"
+                subMenuRoute: "/all-loans/approved"
             },
             {
                 subMenuLabel: "Rejected",
-                subMmenuRoute: "/all-loans/rejected"
+                subMenuRoute: "/all-loans/rejected"
             },
             {
                 subMenuLabel: "Active",
-                subMmenuRoute: "/all-loans/active"
+                subMenuRoute: "/all-loans/active"
             },
             {
                 subMenuLabel: "In Arears",
-                subMmenuRoute: "/all-loans/arrears"
+                subMenuRoute: "/all-loans/arrears"
             },
             {
                 subMenuLabel: "Closed",
-                subMmenuRoute: "/all-loans/closed"
+                subMenuRoute: "/all-loans/closed"
             },
             {
                 subMenuLabel: "Closed Written Off",
-                subMmenuRoute: "/all-loans/closed-off"
+                subMenuRoute: "/all-loans/closed-off"
             },
             {
                 subMenuLabel: "Closed Withdrawn",
-                subMmenuRoute: "/all-loans/closed-withdrawn"
+                subMenuRoute: "/all-loans/closed-withdrawn"
             },
             {
                 subMenuLabel: "All Loans",
-                subMmenuRoute: "/all-loans/all"
+                subMenuRoute: "/all-loans/all"
             }
         ]
     },
@@ -90,7 +90,7 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "All Deposits",
-                subMmenuRoute: "/deposits"
+                subMenuRoute: "/deposits"
             },
         ]
     },
@@ -111,37 +111,37 @@ export const menuList = [
             {
                 subMenuLabel: "All Disbursements",
                 permissionCode: "bnk_view_disbursements",
-                subMmenuRoute: "/disbursements/all-items",
+                subMenuRoute: "/disbursements/all-items",
             },
             {
                 subMenuLabel: "All Batches",
                 permissionCode: "bnk_view_disbursements",
-                subMmenuRoute: "/disbursements/all"
+                subMenuRoute: "/disbursements/all"
             },
             {
                 subMenuLabel: "Partial Applications",
                 permissionCode: "bnk_view_disbursements",
-                subMmenuRoute: "/disbursements/partial"
+                subMenuRoute: "/disbursements/partial"
             },
             {
                 subMenuLabel: "Initiate Disbursements",
                 permissionCode: "bnk_initiate_disbursements",
-                subMmenuRoute: "/disbursements/initiate"
+                subMenuRoute: "/disbursements/initiate"
             },
             {
                 subMenuLabel: "Pending Review",
                 permissionCode: "bnk_view_disbursements",
-                subMmenuRoute: "/disbursements/pending-review"
+                subMenuRoute: "/disbursements/pending-review"
             },
             {
                 subMenuLabel: "Pending Approval",
                 permissionCode: "bnk_view_disbursements",
-                subMmenuRoute: "/disbursements/pending-approval"
+                subMenuRoute: "/disbursements/pending-approval"
             },
             {
                 subMenuLabel: "NIP Request",
                 permissionCode: "bnk_view_nip_requests",
-                subMmenuRoute: "/disbursements/nip-requests"
+                subMenuRoute: "/disbursements/nip-requests"
             }
         ]
     },
@@ -153,24 +153,20 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "All Loan Transactions",
-                subMmenuRoute: "/loan-transactions"
+                subMenuRoute: "/loan-transactions"
             }
         ]
     },
     {
-        menuGroup: "Loan Reports",
-        mainMenu: "Loan Reports",
+        menuGroup: "Reports",
+        mainMenu: "Reports",
         permissionCode: "bnk_view_all_loan_schedules",
         hasSubMenu: true,
         subMenus: [
             {
-                subMenuLabel: "All Loan Schedules",
-                subMmenuRoute: "/all-loan-schedules"
+                subMenuLabel: "Loans",
+                subMenuRoute: "/reports/loans/"
             },
-            {
-                subMenuLabel: "Loan PAR",
-                subMmenuRoute: "/loans-par"
-            }
         ]
     },
 
@@ -182,7 +178,7 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "All Deposit Transactions",
-                subMmenuRoute: "/deposit-transactions"
+                subMenuRoute: "/deposit-transactions"
             }
         ]
     },
@@ -195,19 +191,19 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "Company Information",
-                subMmenuRoute: "/platform/company-info"
+                subMenuRoute: "/platform/company-info"
             },
             {
                 subMenuLabel: "Customer Whitelist",
-                subMmenuRoute: "/platform/customer-whitelist"
+                subMenuRoute: "/platform/customer-whitelist"
             },
             {
                 subMenuLabel: "Payroll Information",
-                subMmenuRoute: "/platform/payroll-info"
+                subMenuRoute: "/platform/payroll-info"
             },
             {
                 subMenuLabel: "Bank Information",
-                subMmenuRoute: "/platform/bank-info"
+                subMenuRoute: "/platform/bank-info"
             }
         ]
     },
@@ -227,7 +223,7 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "All Activities",
-                subMmenuRoute: "/activities"
+                subMenuRoute: "/activities"
             }
         ]
     },
@@ -240,7 +236,7 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "All Branches",
-                subMmenuRoute: "/branches"
+                subMenuRoute: "/branches"
             }
         ]
     },
@@ -252,7 +248,7 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "All Users",
-                subMmenuRoute: "/user-management"
+                subMenuRoute: "/user-management"
             }
         ]
     },
@@ -265,22 +261,22 @@ export const menuList = [
             {
                 permissionCode: "bnk_view_all_communications",
                 subMenuLabel: "All Communications",
-                subMmenuRoute: "/communications/all"
+                subMenuRoute: "/communications/all"
             },
             {
                 permissionCode: "bnk_view_email_communications",
                 subMenuLabel: "Email",
-                subMmenuRoute: "/communications/emails"
+                subMenuRoute: "/communications/emails"
             },
             {
                 permissionCode: "bnk_view_sms_communications",
                 subMenuLabel: "SMS",
-                subMmenuRoute: "/communications/sms"
+                subMenuRoute: "/communications/sms"
             },
             {
                 permissionCode: "bnk_view_web_hooks",
                 subMenuLabel: "Web Hooks",
-                subMmenuRoute: "/communications/webhooks"
+                subMenuRoute: "/communications/webhooks"
             }
         ]
     },
@@ -301,37 +297,37 @@ export const menuList = [
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "Balance Sheet",
                 permissionCode: "bnk_view_balance_sheet",
-                subMmenuRoute: "/balancesheet",
+                subMenuRoute: "/balancesheet",
             },
             {
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "Profit & Loss",
                 permissionCode: "bnk_view_profit_and_loss",
-                subMmenuRoute: "/profit-loss",
+                subMenuRoute: "/profit-loss",
             },
             {
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "Trial Balance(Basic)",
                 permissionCode: "bnk_view_trial_balance",
-                subMmenuRoute: "/trial-balance-basic",
+                subMenuRoute: "/trial-balance-basic",
             },
             {
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "Trial Balance",
                 permissionCode: "bnk_view_trial_balance",
-                subMmenuRoute: "/trial-balance",
+                subMenuRoute: "/trial-balance",
             },
             {
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "Journal Entries",
                 permissionCode: "bnk_view_journal_entries",
-                subMmenuRoute: "/journals",
+                subMenuRoute: "/journals",
             },
             {
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "Charts of Accounts",
                 permissionCode: "bnk_view_charts_of_accounts",
-                subMmenuRoute: "/accounts",
+                subMenuRoute: "/accounts",
             },
 
 
@@ -356,13 +352,13 @@ export const menuList = [
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "General",
                 permissionCode: "bnk_manage_organisation",
-                subMmenuRoute: "/administration/general",
+                subMenuRoute: "/administration/general",
             },
             {
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "Organization",
                 permissionCode: "bnk_manage_organisation",
-                subMmenuRoute: "/administration/organization",
+                subMenuRoute: "/administration/organization",
             },
 
             {
@@ -374,32 +370,32 @@ export const menuList = [
                     "bnk_manage_users",
                     "bnk_manage_organisation",
                 ],
-                subMmenuRoute: "/administration/access",
+                subMenuRoute: "/administration/access",
             },
 
             {
                 // permissionName: "Manage Products",
                 subMenuLabel: "Products",
                 permissionCode: "bnk_manage_products",
-                subMmenuRoute: "/administration/products"
+                subMenuRoute: "/administration/products"
             },
             {
                 // permissionName: "Manage SMS Provider",
                 subMenuLabel: "SMS",
                 permissionCode: "bnk_manage_sms_provider",
-                subMmenuRoute: "/administration/sms",
+                subMenuRoute: "/administration/sms",
             },
             {
                 // permissionName: "Manage Email Provider",
                 subMenuLabel: "Email",
                 permissionCode: "bnk_manage_email_provider",
-                subMmenuRoute: "/administration/email",
+                subMenuRoute: "/administration/email",
             },
             {
                 // permissionName: "Manage Organisation",
                 subMenuLabel: "Plaform",
                 permissionCode: "bnk_manage_organisation",
-                subMmenuRoute: "/administration/platform",
+                subMenuRoute: "/administration/platform",
             },
         ]
     },
