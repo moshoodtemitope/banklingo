@@ -355,7 +355,7 @@ class SMSCommunications extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {saveRequestData.result.map((eachNotification, index) => {
+                  {saveRequestData.map((eachNotification, index) => {
                     return (
                       <Fragment key={index}>
                         <tr>

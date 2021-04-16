@@ -1400,7 +1400,7 @@ class ViewLoanAccount extends React.Component {
                                                 <td>{getDateFromISO(eachTxt.transactionDate, true)}</td>
                                                 <td>{getDateFromISO(eachTxt.entryDate, true)}</td>
                                                 <td>{eachTxt.typeDescription}</td>
-                                                <td>₦{numberWithCommas(eachTxt.transactionAmount, true, true)}</td>
+                                                <td>{numberWithCommas(eachTxt.transactionAmount, true, true)} {eachTxt.currencyCode} </td>
                                                 <td>{eachTxt.remarks}</td>
                                                 <td>
                                                     <DropdownButton
@@ -3524,7 +3524,7 @@ class ViewLoanAccount extends React.Component {
         return (
             <div className="heading-ctas">
                 <ul className="nav">
-                {(loanDetails.loanState === 5 || loanDetails.loanState === 6) &&
+                {((loanDetails.loanState === 5 || loanDetails.loanState === 6) && allUSerPermissions.indexOf("bnk_edit_loan_account") > -1) &&
                     <li>
                         <NavLink className="btn btn-primary btn-sm" to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/edit`}>Edit Loan</NavLink>
                     </li>
@@ -3606,17 +3606,24 @@ class ViewLoanAccount extends React.Component {
                                         }}
                                     >Withdraw</Dropdown.Item>
                                 }
-                                {(loanDetails.loanState === 5) &&
+                                {(loanDetails.loanState === 5 && allUSerPermissions.indexOf("bnk_payoff_loan_account") > -1) &&
                                     <Dropdown.Item eventKey="3">Pay Off</Dropdown.Item>
                                 }
-                                {(loanDetails.loanState === 5) &&
+                                {(loanDetails.loanState === 5 && allUSerPermissions.indexOf("bnk_writeoff_loan_account") > -1) &&
                                     <Dropdown.Item eventKey="4">Write Off</Dropdown.Item>
                                 }
                             </DropdownButton>
                         </li>
                     }
 
-                    {(loanDetails.loanState === 5 || loanDetails.loanState === 6) &&
+                    {(loanDetails.loanState === 5 || loanDetails.loanState === 6 && 
+                        (
+                            allUSerPermissions.indexOf("bnk_writeoff_loan_account") > -1 ||
+                            allUSerPermissions.indexOf("bnk_refinance_loan_account") > -1 ||
+                            allUSerPermissions.indexOf("bnk_reschedule_loan_account") > -1 ||
+                            allUSerPermissions.indexOf("bnk_payoff_loan_account") > -1
+                        )
+                    ) &&
                         <li>
                             <DropdownButton
                                 size="sm"
@@ -3635,19 +3642,27 @@ class ViewLoanAccount extends React.Component {
                                 //     this.handleLoanChangeStateShow()
                                 // }}
                                 >Write off Loan</Dropdown.Item> */}
-                                <div className="dropdown-item with-botom"
-                                    onClick={()=>this.handleShowWriteOffShow()}
-                                >Write off Loan</div>
+                                {allUSerPermissions.indexOf("bnk_writeoff_loan_account") > -1 &&
+                                    <div className="dropdown-item with-botom"
+                                        onClick={()=>this.handleShowWriteOffShow()}
+                                    >Write off Loan</div>
+                                }
                                 {/* <Dropdown.Item eventKey="1"> */}
+                                {allUSerPermissions.indexOf("bnk_refinance_loan_account") > -1 &&
                                     <NavLink className="dropdown-item" to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/refinance`}>Refinance loan</NavLink>
+                                }
                                 {/* </Dropdown.Item> */}
                                 {/* <Dropdown.Item eventKey="1"> */}
+                                {allUSerPermissions.indexOf("bnk_reschedule_loan_account") > -1 &&
                                     <NavLink className="dropdown-item" to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/reschedule`}>Reschedule loan</NavLink>
+                                }
                                 {/* </Dropdown.Item> */}
                                 {/* <Dropdown.Item eventKey="1" onClick={()=>this.handleShowPayOffShow()} >Pay-off Loan</Dropdown.Item> */}
-                                <div className="dropdown-item with-top"
-                                    onClick={()=>this.handleShowPayOffShow()}
-                                >Pay-off Loan</div>
+                                {allUSerPermissions.indexOf("bnk_payoff_loan_account") > -1 &&
+                                    <div className="dropdown-item with-top"
+                                        onClick={()=>this.handleShowPayOffShow()}
+                                    >Pay-off Loan</div>
+                                }
                             </DropdownButton>
                         </li>
                     }
