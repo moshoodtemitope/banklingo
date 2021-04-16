@@ -500,7 +500,7 @@ class EmailCommunications extends React.Component {
                     <select
                       id='toshow'
                       onChange={(e) =>
-                        this.setPagesize(e, allNotificationsData)
+                        this.setPagesize(e, allNotificationsData.result)
                       }
                       value={this.state.PageSize}
                       className='countdropdown form-control form-control-sm'
