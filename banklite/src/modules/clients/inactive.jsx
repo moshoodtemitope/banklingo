@@ -659,8 +659,12 @@ class InactiveClients extends React.Component {
                                   >
                                     Edit
                                   </NavLink>
-                                  {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                  <NavLink
+                                    className='dropdown-item'
+                                    to={`/customer/${eachClient.clientEncodedKey}`}
+                                  >
+                                    View
+                                  </NavLink>
                                 </DropdownButton>
                               </td>
                             )}
@@ -696,7 +700,6 @@ class InactiveClients extends React.Component {
 
                     <Form.Group className='table-filters'>
                       <DatePicker
-                        autoComplete='new-off'
                         onChangeRaw={this.handleDateChangeRaw}
                         onChange={this.handleStartDatePicker}
                         selected={this.state.startDate}
@@ -706,9 +709,7 @@ class InactiveClients extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         placeholderText='Start date'
-                        autoComplete='new-password'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm '
                         customInput={
                           <DatePickerFieldType placeHolder='Start date' />
@@ -726,7 +727,6 @@ class InactiveClients extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm'
                         customInput={
                           <DatePickerFieldType placeHolder='End date' />
@@ -743,9 +743,6 @@ class InactiveClients extends React.Component {
                           });
                         }}
                       />
-                      {/* {errors.startDate && touched.startDate ? (
-<span className="invalid-feedback">{errors.startDate}</span>
-) : null} */}
                     </Form.Group>
                     <Button
                       className='no-margins'
@@ -779,7 +776,6 @@ class InactiveClients extends React.Component {
                       <th>Branch</th>
                       <th>Customer Type</th>
                       <th>Date Created</th>
-                      {/* <th></th> */}
                     </tr>
                   </thead>
                   <tbody>

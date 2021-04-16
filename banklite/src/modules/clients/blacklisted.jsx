@@ -659,6 +659,12 @@ class ClientsBlacklisted extends React.Component {
                                   >
                                     Edit
                                   </NavLink>
+                                  <NavLink
+                                    className='dropdown-item'
+                                    to={`/customer/${eachClient.clientEncodedKey}`}
+                                  >
+                                    View
+                                  </NavLink>
                                   {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
                                                                         <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                 </DropdownButton>
