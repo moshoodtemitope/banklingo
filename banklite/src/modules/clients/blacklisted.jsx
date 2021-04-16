@@ -665,8 +665,6 @@ class ClientsBlacklisted extends React.Component {
                                   >
                                     View
                                   </NavLink>
-                                  {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                                 </DropdownButton>
                               </td>
                             )}
@@ -676,9 +674,6 @@ class ClientsBlacklisted extends React.Component {
                     })}
                   </tbody>
                 </TableComponent>
-                {/* <div className="footer-with-cta toleft">
-                                    <NavLink to={'/clients/new'} className="btn btn-primary">New Customer</NavLink>
-                                </div> */}
               </div>
             );
           } else {
