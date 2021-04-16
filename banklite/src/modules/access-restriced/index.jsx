@@ -5,7 +5,7 @@ import {Fragment} from "react";
 
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import "./pagenotfound.scss"; 
-class ForbiddenPage extends React.Component {
+class AccessRestricted extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -22,7 +22,7 @@ class ForbiddenPage extends React.Component {
                     <div className="notfound-wrap">
                         <div className="container">
                             <div className="notfound-msg">
-                                <h2> You are not authorized to access this resource</h2>
+                                <h2>You do not have access to this feature</h2>
                             </div>
                             
                         </div>
@@ -34,4 +34,4 @@ class ForbiddenPage extends React.Component {
     }
 }
 
-export default ForbiddenPage;
+export default AccessRestricted;

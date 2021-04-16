@@ -53,7 +53,12 @@ class DashboardLanding extends React.Component {
         this.selectRef3 = null;
         this.selectRef4 = null;
 
-        
+        this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
+
+        this.allUSerPermissions = [];
+        this.userPermissions.map(eachPermission => {
+            this.allUSerPermissions.push(eachPermission.permissionCode)
+        })
     }
 
     componentDidMount() {
@@ -72,7 +77,13 @@ class DashboardLanding extends React.Component {
                         }
                     }
                 })
-        this.fetchAllTills();
+        if(
+            this.allUSerPermissions.indexOf("bnk_till_supervisor_add_cash") > -1 ||
+            this.allUSerPermissions.indexOf("bnk_till_supervisor_view") > -1 ||
+            this.allUSerPermissions.indexOf("bnk_till_supervisor_remove_cash") > -1 ||
+            this.allUSerPermissions.indexOf("bnk_till_supervisor_undo_close") > -1){
+            this.fetchAllTills();
+        }
     }
 
     getDashboardData = () => {
@@ -2383,22 +2394,24 @@ class DashboardLanding extends React.Component {
                                                             className="customone"
                                                         >
                                                             {/* <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink> */}
-                                                            <Dropdown.Item eventKey="1"
-                                                                onClick={() => {
-                                                                    this.showViewTill(eachData.tillId, eachData)
-                                                                }}
-                                                            > <span className="hasborder">View Till</span> </Dropdown.Item>
-                                                            {eachData.tillAccountState === 1 &&
+                                                            {this.allUSerPermissions.indexOf("bnk_till_supervisor_view") > -1 &&
+                                                                <Dropdown.Item eventKey="1"
+                                                                    onClick={() => {
+                                                                        this.showViewTill(eachData.tillId, eachData)
+                                                                    }}
+                                                                > <span className="hasborder">View Till</span> </Dropdown.Item>
+                                                            }
+                                                            {(eachData.tillAccountState === 1 && this.allUSerPermissions.indexOf("bnk_till_supervisor_add_cash") > -1) &&
                                                                 <Dropdown.Item eventKey="2" onClick={() => {
                                                                     this.showAddRemoveCashToTill("add", eachData)
                                                                 }}> <span>Add Cash</span> </Dropdown.Item>
                                                             }
-                                                            {eachData.tillAccountState === 1 &&
+                                                            {(eachData.tillAccountState === 1 && this.allUSerPermissions.indexOf("bnk_till_supervisor_remove_cash") > -1) &&
                                                                 <Dropdown.Item eventKey="3" onClick={() => {
                                                                     this.showAddRemoveCashToTill("remove", eachData)
                                                                 }}> <span className="hasborder">Remove Cash</span> </Dropdown.Item>
                                                             }
-                                                            {eachData.tillAccountState === 2 &&
+                                                            {(eachData.tillAccountState === 2 && this.allUSerPermissions.indexOf("bnk_till_supervisor_undo_close") > -1) &&
                                                                 <Dropdown.Item eventKey="4" onClick={() => {
                                                                     this.showCloseTill("undoCloseTill", eachData)
                                                                 }}> <span>Undo Cose Till</span> </Dropdown.Item>
@@ -2482,56 +2495,56 @@ class DashboardLanding extends React.Component {
                  
                     return (
                         <div >
-                            
-                            <div className="each-card">
-                                <div className="each-card-heading">
-                                    <h4>Tellering</h4>
-                                    <div className="tellerid-wrap">
-                                        {this.state.selectedTill && 
-                                            <div className="selected-id">
-                                                {this.state.selectedTill}
-                                            </div>
-                                        }
-                                        <div className="select-tillid">
-                                            <select id="tildId"
-                                                onChange={(e)=>{
-                                                    let selectedTillData = allLoggedOnTills.filter(eachTill=>eachTill.tillId===e.target.value)[0];
-                                                    // console.log("zelect is", selectedTillData)
-                                                    this.fetchTillTransactions(e.target.value);
-                                                    this.setState({selectedTill: e.target.value, selectedTillData, preloadedTillData: false})
-                                                }}
-                                                name="selectedTill"
-                                                defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
-                                                value={this.state.selectedTill}
-                                                // value={this.state.selectedTill? 
-                                                //                 this.state.selectedTill 
-                                                //                 :
-                                                //                 allMyTills.length>=1 ? allMyTills[0] : null }
-                                                
-                                                className="countdropdown form-control form-control-sm">
-                                                    {/* <option value="">Select Till</option> */}
-                                                    {allMyTills.map((eachTill, index)=>{
-                                                        // console.log("index is", index);
-                                                        return(
-                                                                <option  key={index} value={eachTill}>{eachTill}</option>
-                                                            )
-                                                        })
-                                                    }
-                                                
-                                            </select>
+                            {allMyTills.length>=1 && 
+                                <div className="each-card">
+                                    <div className="each-card-heading">
+                                        <h4>Tellering</h4>
+                                        <div className="tellerid-wrap">
+                                            {this.state.selectedTill && 
+                                                <div className="selected-id">
+                                                    {this.state.selectedTill}
+                                                </div>
+                                            }
+                                            {allMyTills.length>=1 &&
+                                                <div className="select-tillid">
+                                                    <select id="tildId"
+                                                        onChange={(e)=>{
+                                                            let selectedTillData = allLoggedOnTills.filter(eachTill=>eachTill.tillId===e.target.value)[0];
+                                                            // console.log("zelect is", selectedTillData)
+                                                            this.fetchTillTransactions(e.target.value);
+                                                            this.setState({selectedTill: e.target.value, selectedTillData, preloadedTillData: false})
+                                                        }}
+                                                        name="selectedTill"
+                                                        defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
+                                                        value={this.state.selectedTill}
+                                                    
+                                                        
+                                                        className="countdropdown form-control form-control-sm">
+                                                            
+                                                            {allMyTills.map((eachTill, index)=>{
+                                                                
+                                                                return(
+                                                                        <option  key={index} value={eachTill}>{eachTill}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        
+                                                    </select>
+                                                </div>
+                                            }
                                         </div>
+                                        
                                     </div>
-                                    
+                                    {this.state.selectedTill && 
+                                        <div className="each-card-content">
+                                            {this.renderPostTransaction()}
+                                            
+                                            {this.renderSelectedTillDetails()}
+                                            
+                                        </div>
+                                    }
                                 </div>
-                                {this.state.selectedTill && 
-                                    <div className="each-card-content">
-                                        {this.renderPostTransaction()}
-                                        
-                                        {this.renderSelectedTillDetails()}
-                                        
-                                    </div>
-                                }
-                            </div>
+                            }
                             {/* {this.props.getDashboardStats.request_status ===dashboardConstants.GET_DASHOBOARD_DATA_SUCCESS &&
                                 this.renderManageTellers()
                             } */}
@@ -2557,7 +2570,12 @@ class DashboardLanding extends React.Component {
         return(
             <div>
                 {this.renderLoggedOnTillsAndTxtn()}
-                {this.renderManageTellers()}
+                {(this.allUSerPermissions.indexOf("bnk_till_supervisor_add_cash") > -1 ||
+                    this.allUSerPermissions.indexOf("bnk_till_supervisor_view") > -1 ||
+                    this.allUSerPermissions.indexOf("bnk_till_supervisor_remove_cash") > -1 ||
+                    this.allUSerPermissions.indexOf("bnk_till_supervisor_undo_close") > -1) &&
+                    this.renderManageTellers()
+                }
             </div>
         )
     }

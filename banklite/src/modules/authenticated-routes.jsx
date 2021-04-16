@@ -157,6 +157,7 @@ import DepositProductInfoContainer from './view-depositproduct/product-container
 import LoanProductInfoContainer from './view-loanproduct/product-container'
 
 import PageNotFound from './pagenot-found'
+// import AccessRestricted from './access-restriced'
 import ForbiddenPage from './unauthed-page'
 import unAuthedPage from './unauthed-page/un-authed'
 import {authActions} from '../redux/actions/auth/auth.action';
@@ -193,7 +194,7 @@ function PrivateRoute({ component: Component, authed,accessRequired, ...rest }) 
                     <Route
                         {...rest}
                         render={
-                            (props) => <Redirect to={{ pathname: '/not-found', state: { from: props.location } }} />}
+                            (props) => <Redirect to={{ pathname: '/forbidden-access', state: { from: props.location } }} />}
                     />
                 )
             }
@@ -301,9 +302,9 @@ class AuthenticatedRoutes extends React.Component {
 
                         <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
                         <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account/:clientId' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
-                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/:clientId/:loanId/edit' {...this.props} authed={this.props.user} component={EditALoanAccount} />  
-                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/:clientId/:loanId/refinance' {...this.props} authed={this.props.user} component={RefinanceALoanAccount} />  
-                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/:clientId/:loanId/reschedule' {...this.props} authed={this.props.user} component={RescheduleALoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_edit_loan_account" exact path='/all-loans/:clientId/:loanId/edit' {...this.props} authed={this.props.user} component={EditALoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_refinance_loan_account" exact path='/all-loans/:clientId/:loanId/refinance' {...this.props} authed={this.props.user} component={RefinanceALoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_reschedule_loan_account" exact path='/all-loans/:clientId/:loanId/reschedule' {...this.props} authed={this.props.user} component={RescheduleALoanAccount} />  
                         
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/all-loans/:clientId' {...this.props} authed={this.props.user} component={LoanClient} />  
                         {/* <Route exact path='/all-loans/:clientId' render={(props) => <LoanClient clientId={props.match.params.clientId} {...this.props} />} /> */}
@@ -425,6 +426,7 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_manage_products" path='/loanproduct/:productid' {...this.props} authed={this.props.user} component={LoanProductInfoContainer} /> 
                         <PrivateRoute  exact path='/forbidden-access' {...this.props} authed={this.props.user} component={ForbiddenPage} />
                         <PrivateRoute  exact path='/not-found' {...this.props} authed={this.props.user} component={unAuthedPage} />
+                        <PrivateRoute  exact path='/access-restricted' {...this.props} authed={this.props.user} component={unAuthedPage} />
                         <PrivateRoute exact path='/my-profile/tasks' {...this.props} authed={this.props.user} component={ViewUserTasks} /> 
                         <PrivateRoute exact path='/all-tasks' {...this.props} authed={this.props.user} component={ViewAllTasks} /> 
                         {/* <PrivateRoute exact path='/customer/:id' {...this.props} authed={this.props.user} component={ViewCustomer} />  */}
