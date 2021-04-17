@@ -17,6 +17,8 @@ import { loanActions } from '../../redux/actions/loans/loans.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants';
 import './styles.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import SubMenu from '../../shared/components/SubMenu';
+import { LOAN_REPORTS_MENU_LINKS, REPORTS_MENU_LINKS } from '../../shared/config';
 class LoanPAR extends React.Component {
   constructor(props) {
     super(props);
@@ -1040,12 +1042,13 @@ class LoanPAR extends React.Component {
                   </div>
                 </div>
               </div>
+              <SubMenu links={REPORTS_MENU_LINKS} />
+              <div className='secondLevelMenu'>
+                <SubMenu links={LOAN_REPORTS_MENU_LINKS} />
+              </div>
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
-                    {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>
                         {this.renderLoansPAR()}
