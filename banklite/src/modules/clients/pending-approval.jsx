@@ -453,8 +453,6 @@ class ClientsPendingApproval extends React.Component {
                                 >
                                   Edit
                                 </NavLink>
-                                {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                               </DropdownButton>
                             </td>
                           )}
@@ -504,7 +502,6 @@ class ClientsPendingApproval extends React.Component {
 
                     <Form.Group className='table-filters'>
                       <DatePicker
-                        autoComplete='new-off'
                         onChangeRaw={this.handleDateChangeRaw}
                         onChange={this.handleStartDatePicker}
                         selected={this.state.startDate}
@@ -514,9 +511,7 @@ class ClientsPendingApproval extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         placeholderText='Start date'
-                        autoComplete='new-password'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm '
                         customInput={
                           <DatePickerFieldType placeHolder='Start date' />
@@ -534,7 +529,6 @@ class ClientsPendingApproval extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm'
                         customInput={
                           <DatePickerFieldType placeHolder='End date' />
@@ -551,9 +545,6 @@ class ClientsPendingApproval extends React.Component {
                           });
                         }}
                       />
-                      {/* {errors.startDate && touched.startDate ? (
-<span className="invalid-feedback">{errors.startDate}</span>
-) : null} */}
                     </Form.Group>
 
                     <Button
@@ -659,8 +650,12 @@ class ClientsPendingApproval extends React.Component {
                                   >
                                     Edit
                                   </NavLink>
-                                  {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                  <NavLink
+                                    className='dropdown-item'
+                                    to={`/customer/${eachClient.clientEncodedKey}`}
+                                  >
+                                    View
+                                  </NavLink>
                                 </DropdownButton>
                               </td>
                             )}

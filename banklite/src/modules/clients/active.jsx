@@ -663,8 +663,12 @@ class ActiveClients extends React.Component {
                                   >
                                     Edit
                                   </NavLink>
-                                  {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                            <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                  <NavLink
+                                    className='dropdown-item'
+                                    to={`/customer/${eachClient.clientEncodedKey}`}
+                                  >
+                                    View
+                                  </NavLink>
                                 </DropdownButton>
                               </td>
                             )}
@@ -674,9 +678,6 @@ class ActiveClients extends React.Component {
                     })}
                   </tbody>
                 </TableComponent>
-                {/* <div className="footer-with-cta toleft">
-                                        <NavLink to={'/clients/new'} className="btn btn-primary">New Customer</NavLink>
-                                    </div> */}
               </div>
             );
           } else {
@@ -712,7 +713,6 @@ class ActiveClients extends React.Component {
                         placeholderText='Start date'
                         autoComplete='new-password'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm '
                         customInput={
                           <DatePickerFieldType placeHolder='Start date' />
@@ -730,7 +730,6 @@ class ActiveClients extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm'
                         customInput={
                           <DatePickerFieldType placeHolder='End date' />
@@ -747,9 +746,6 @@ class ActiveClients extends React.Component {
                           });
                         }}
                       />
-                      {/* {errors.startDate && touched.startDate ? (
-<span className="invalid-feedback">{errors.startDate}</span>
-) : null} */}
                     </Form.Group>
                     <Button
                       className='no-margins'
@@ -837,29 +833,9 @@ class ActiveClients extends React.Component {
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
-                    {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>
                         <div className='heading-with-cta'>
-                          {/* <h3 className="section-title">Journal Entries</h3> */}
-                          {/* <Form className="one-liner">
-                                                        <Form.Group className="Table-filters">
-                                                            <Form.Label>Account Officer</Form.Label>
-                                                                <Form.Control type="text" size="sm" />
-                                                        </Form.Group>
-                                                        <Form.Group controlId="filterDropdown">
-                                                        <Form.Label> </Form.Label>
-                                                            <Form.Control as="select" size="sm">
-                                                                <option>No Filter</option>
-                                                                <option>Add New Filter</option>
-                                                                <option>Custom Filter</option>
-                                                            </Form.Control>
-                                                        </Form.Group>
-                                                        <Button variant="primary" type="submit">Filter</Button>
-                                                    </Form> */}
-                          {/* <Button>Edit Columns</Button> */}
                         </div>
                         {this.renderClients()}
                       </div>
