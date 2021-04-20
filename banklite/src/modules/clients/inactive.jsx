@@ -1,8 +1,4 @@
-import * as React from 'react';
-// import {Router} from "react-router";
-
-import { Fragment } from 'react';
-
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import InnerPageContainer from '../../shared/templates/authed-pagecontainer';
@@ -18,6 +14,8 @@ import { clientsConstants } from '../../redux/actiontypes/clients/clients.consta
 
 import './clients.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import { CLIENTS_MODULE_MENU_LINKS } from '../../shared/config';
+import SubMenu from '../../shared/components/SubMenu';
 
 class InactiveClients extends React.Component {
   constructor(props) {
@@ -661,8 +659,12 @@ class InactiveClients extends React.Component {
                                   >
                                     Edit
                                   </NavLink>
-                                  {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                  <NavLink
+                                    className='dropdown-item'
+                                    to={`/customer/${eachClient.clientEncodedKey}`}
+                                  >
+                                    View
+                                  </NavLink>
                                 </DropdownButton>
                               </td>
                             )}
@@ -698,7 +700,6 @@ class InactiveClients extends React.Component {
 
                     <Form.Group className='table-filters'>
                       <DatePicker
-                        autoComplete='new-off'
                         onChangeRaw={this.handleDateChangeRaw}
                         onChange={this.handleStartDatePicker}
                         selected={this.state.startDate}
@@ -708,9 +709,7 @@ class InactiveClients extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         placeholderText='Start date'
-                        autoComplete='new-password'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm '
                         customInput={
                           <DatePickerFieldType placeHolder='Start date' />
@@ -728,7 +727,6 @@ class InactiveClients extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm'
                         customInput={
                           <DatePickerFieldType placeHolder='End date' />
@@ -745,9 +743,6 @@ class InactiveClients extends React.Component {
                           });
                         }}
                       />
-                      {/* {errors.startDate && touched.startDate ? (
-<span className="invalid-feedback">{errors.startDate}</span>
-) : null} */}
                     </Form.Group>
                     <Button
                       className='no-margins'
@@ -781,7 +776,6 @@ class InactiveClients extends React.Component {
                       <th>Branch</th>
                       <th>Customer Type</th>
                       <th>Date Created</th>
-                      {/* <th></th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -831,85 +825,12 @@ class InactiveClients extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className='module-submenu'>
-                <div className='content-container'>
-                  <ul className='nav'>
-                    <li>
-                      <NavLink to={'/clients'} activeClassName='activeNavLink'>
-                        All
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        exact
-                        to={'/active-clients'}
-                        activeClassName='activeNavLink'
-                      >
-                        Active
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/inactive-clients'}
-                        activeClassName='activeNavLink'
-                      >
-                        Inactive
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-pending-approval'}
-                        activeClassName='activeNavLink'
-                      >
-                        Pending Approval
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-exited'}
-                        activeClassName='activeNavLink'
-                      >
-                        Exited
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-blacklisted'}
-                        activeClassName='activeNavLink'
-                      >
-                        Blacklisted
-                      </NavLink>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <SubMenu links={CLIENTS_MODULE_MENU_LINKS}/>
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
-                    {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>
-                        <div className='heading-with-cta'>
-                          {/* <h3 className="section-title">Journal Entries</h3> */}
-                          {/* <Form className="one-liner">
-                                                        <Form.Group controlId="periodOptionChosen">
-                                                            <Form.Label>Account Officer</Form.Label>
-                                                                <Form.Control type="text" size="sm" />
-                                                        </Form.Group>
-                                                        <Form.Group controlId="filterDropdown">
-                                                        <Form.Label> </Form.Label>
-                                                            <Form.Control as="select" size="sm">
-                                                                <option>No Filter</option>
-                                                                <option>Add New Filter</option>
-                                                                <option>Custom Filter</option>
-                                                            </Form.Control>
-                                                        </Form.Group>
-                                                        <Button variant="primary" type="submit">Filter</Button>
-                                                    </Form> */}
-                          {/* <Button>Edit Columns</Button> */}
-                        </div>
                         {this.renderClients()}
                       </div>
                     </div>

@@ -1,7 +1,4 @@
-import * as React from 'react';
-// import {Router} from "react-router";
-
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import InnerPageContainer from '../../shared/templates/authed-pagecontainer';
@@ -660,8 +657,12 @@ class ClientsExited extends React.Component {
                                   >
                                     Edit
                                   </NavLink>
-                                  {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                  <NavLink
+                                    className='dropdown-item'
+                                    to={`/customer/${eachClient.clientEncodedKey}`}
+                                  >
+                                    View
+                                  </NavLink>
                                 </DropdownButton>
                               </td>
                             )}
@@ -671,9 +672,6 @@ class ClientsExited extends React.Component {
                     })}
                   </tbody>
                 </TableComponent>
-                {/* <div className="footer-with-cta toleft">
-                                    <NavLink to={'/clients/new'} className="btn btn-primary">New Customer</NavLink>
-                                </div> */}
               </div>
             );
           } else {
@@ -709,7 +707,6 @@ class ClientsExited extends React.Component {
                         placeholderText='Start date'
                         autoComplete='new-password'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm '
                         customInput={
                           <DatePickerFieldType placeHolder='Start date' />
@@ -727,7 +724,6 @@ class ClientsExited extends React.Component {
                         showYearDropdown
                         dropdownMode='select'
                         maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm'
                         customInput={
                           <DatePickerFieldType placeHolder='End date' />
@@ -744,9 +740,6 @@ class ClientsExited extends React.Component {
                           });
                         }}
                       />
-                      {/* {errors.startDate && touched.startDate ? (
-<span className="invalid-feedback">{errors.startDate}</span>
-) : null} */}
                     </Form.Group>
                     <Button
                       className='no-margins'
@@ -780,7 +773,6 @@ class ClientsExited extends React.Component {
                       <th>Branch</th>
                       <th>Customer Type</th>
                       <th>Date Created</th>
-                      {/* <th></th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -885,29 +877,9 @@ class ClientsExited extends React.Component {
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
-                    {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>
                         <div className='heading-with-cta'>
-                          {/* <h3 className="section-title">Journal Entries</h3> */}
-                          {/* <Form className="one-liner">
-                                                        <Form.Group controlId="periodOptionChosen">
-                                                            <Form.Label>Account Officer</Form.Label>
-                                                                <Form.Control type="text" size="sm" />
-                                                        </Form.Group>
-                                                        <Form.Group controlId="filterDropdown">
-                                                        <Form.Label> </Form.Label>
-                                                            <Form.Control as="select" size="sm">
-                                                                <option>No Filter</option>
-                                                                <option>Add New Filter</option>
-                                                                <option>Custom Filter</option>
-                                                            </Form.Control>
-                                                        </Form.Group>
-                                                        <Button variant="primary" type="submit">Filter</Button>
-                                                    </Form> */}
-                          {/* <Button>Edit Columns</Button> */}
                         </div>
                         {this.renderClients()}
                       </div>

@@ -255,6 +255,7 @@ select, select.form-control{
     border-bottom: 2px solid #25e577;
 }
 
+// Deprecated. Use the SubMenu component.
 .module-submenu{
     margin-top: 10px;
     .nav{
@@ -420,7 +421,7 @@ label.upload-photo>div{
             margin-top: 10px !important;
         }
     }
-    
+
 }
 //Pagination
 .pagination-wrap{
@@ -447,7 +448,7 @@ label.upload-photo>div{
             }
         }
     }
-    
+
     label{
         margin-bottom: 0;
         margin-right: 7px;
@@ -624,9 +625,9 @@ label.upload-photo>div{
     .uploadlabel{
         display: block !important;
     }
-    .footer-with-cta .btn-primary, 
-        .footer-with-cta .btn-primary:hover, 
-        .footer-with-cta .btn-primary:active, 
+    .footer-with-cta .btn-primary,
+        .footer-with-cta .btn-primary:hover,
+        .footer-with-cta .btn-primary:active,
         .footer-with-cta .btn-primary:not(:disabled):not(.disabled):active{
             background: $brand-color !important;
             border-radius: 2px !important;
@@ -639,9 +640,9 @@ label.upload-photo>div{
             // font-weight: 700;
         }
 
-        .footer-with-cta .btn-secondary, 
-        .footer-with-cta .btn-secondary:hover, 
-        .footer-with-cta .btn-secondary:active, 
+        .footer-with-cta .btn-secondary,
+        .footer-with-cta .btn-secondary:hover,
+        .footer-with-cta .btn-secondary:active,
         .footer-with-cta .btn-secondary:not(:disabled):not(.disabled):active{
             border: 1px solid $brand-color !important;
             background: #FFFFFF;
@@ -1195,4 +1196,9 @@ button.togglestyle{
     align-items: center;
     display: flex;
     justify-content: center;
+}
+
+.secondLevelMenu {
+    width: 97%;
+    margin: auto;
 }

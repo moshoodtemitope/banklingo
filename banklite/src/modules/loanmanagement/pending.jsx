@@ -1,7 +1,4 @@
-import * as React from 'react';
-// import {Router} from "react-router";
-
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { NavLink } from 'react-router-dom';
@@ -19,6 +16,9 @@ import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposit
 
 import './loanmanagement.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import { LOAN_MODULE_MENU_LINKS } from '../../shared/config';
+import SubMenu from '../../shared/components/SubMenu';
+
 class PendingLoans extends React.Component {
   constructor(props) {
     super(props);
@@ -54,28 +54,19 @@ class PendingLoans extends React.Component {
   handleDateChangeRaw = (e) => {
     e.preventDefault();
   };
+
+  // TODO 4/15/21 the two methods below can be merged
   handleStartDatePicker = (startDate) => {
     startDate.setHours(startDate.getHours() + 1);
-
-    this.setState({ startDate }, () => {
-      if (this.state.endDate !== '') {
-        //this.getHistory();
-      }
-    });
+    this.setState({ startDate });
   };
 
   handleEndDatePicker = (endDate) => {
     endDate.setHours(endDate.getHours() + 1);
-
-    this.setState({ endDate }, () => {
-      if (this.state.startDate !== '') {
-        //this.getHistory();
-      }
-    });
+    this.setState({ endDate });
   };
 
   setPagesize = (PageSize, tempData) => {
-    // console.log('----here', PageSize.target.value);
     const { dispatch } = this.props;
     let sizeOfPage = PageSize.target.value,
       {
@@ -89,8 +80,6 @@ class PendingLoans extends React.Component {
     this.setState({ PageSize: sizeOfPage });
 
     let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}`;
-    // this.getLoans(params);
-
     if (tempData) {
       dispatch(loanActions.getPendingLoans(params, tempData));
     } else {
@@ -99,7 +88,6 @@ class PendingLoans extends React.Component {
   };
 
   setShowDetails = (FullDetails, tempData) => {
-    // console.log('----here', PageSize.target.value);
     const { dispatch } = this.props;
     let showDetails = FullDetails.target.checked,
       {
@@ -113,8 +101,6 @@ class PendingLoans extends React.Component {
     this.setState({ FullDetails: showDetails });
 
     let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}`;
-    // this.getLoans(params);
-
     if (tempData) {
       dispatch(loanActions.getPendingLoans(params, tempData));
     } else {
@@ -124,13 +110,7 @@ class PendingLoans extends React.Component {
 
   loadNextPage = (nextPage, tempData) => {
     const { dispatch } = this.props;
-    let { PageSize, CurrentPage, FullDetails, endDate, startDate } = this.state;
-
-    // this.setState({PageSize: sizeOfPage});
-
-    // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
-    // this.getTransactionChannels(params);
-    // let params= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
+    let { PageSize, FullDetails, endDate, startDate } = this.state;
 
     let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}`;
     if (tempData) {
@@ -154,10 +134,6 @@ class PendingLoans extends React.Component {
       startDate,
     } = this.state;
 
-    // this.setState({PageSize: sizeOfPage});
-
-    // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
-    // this.getTransactionChannels(params);
     if (SearchText !== '' || endDate !== '' || startDate !== '') {
       if (endDate !== '') {
         endDate = endDate.toISOString();
@@ -177,14 +153,9 @@ class PendingLoans extends React.Component {
 
   exportLoansAccounts = () => {
     const { dispatch } = this.props;
-    // let { PageSize, CurrentPage } = this.state;
-
     let {
       PageSize,
       CurrentPage,
-      FullDetails,
-      BranchId,
-      ClientState,
       SearchText,
       endDate,
       startDate,
@@ -197,7 +168,6 @@ class PendingLoans extends React.Component {
       if (startDate !== '') {
         startDate = startDate.toISOString();
       }
-      // let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     }
     let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}&LoanState=2`;
     dispatch(loanActions.exportLoansAccounts(params));
@@ -875,9 +845,6 @@ class PendingLoans extends React.Component {
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
-                    {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>{this.renderLoans()}</div>
                     </div>

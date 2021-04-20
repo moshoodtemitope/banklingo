@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
@@ -17,6 +16,8 @@ import { clientsActions } from '../../redux/actions/clients/clients.action';
 import { clientsConstants } from '../../redux/actiontypes/clients/clients.constants';
 import './clients.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import SubMenu from '../../shared/components/SubMenu';
+import { CLIENTS_MODULE_MENU_LINKS } from '../../shared/config';
 
 class ClientsManagement extends React.Component {
   constructor(props) {
@@ -665,8 +666,12 @@ class ClientsManagement extends React.Component {
                                   >
                                     Edit
                                   </NavLink>
-                                  {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                  <NavLink
+                                    className='dropdown-item'
+                                    to={`/customer/${eachClient.clientEncodedKey}`}
+                                  >
+                                    View
+                                  </NavLink>
                                 </DropdownButton>
                               </td>
                             )}
@@ -835,85 +840,12 @@ class ClientsManagement extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className='module-submenu'>
-                <div className='content-container'>
-                  <ul className='nav'>
-                    <li>
-                      <NavLink to={'/clients'} activeClassName='activeNavLink'>
-                        All
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        exact
-                        to={'/active-clients'}
-                        activeClassName='activeNavLink'
-                      >
-                        Active
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/inactive-clients'}
-                        activeClassName='activeNavLink'
-                      >
-                        Inactive
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-pending-approval'}
-                        activeClassName='activeNavLink'
-                      >
-                        Pending Approval
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-exited'}
-                        activeClassName='activeNavLink'
-                      >
-                        Exited
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={'/clients-blacklisted'}
-                        activeClassName='activeNavLink'
-                      >
-                        Blacklisted
-                      </NavLink>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <SubMenu links={CLIENTS_MODULE_MENU_LINKS}/>
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
-                    {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>
-                        <div className='heading-with-cta'>
-                          {/* <h3 className="section-title">Journal Entries</h3> */}
-                          {/* <Form className="one-liner">
-                                                        <Form.Group controlId="periodOptionChosen">
-                                                            <Form.Label>Account Officer</Form.Label>
-                                                                <Form.Control type="text" size="sm" />
-                                                        </Form.Group>
-                                                        <Form.Group controlId="filterDropdown">
-                                                        <Form.Label> </Form.Label>
-                                                            <Form.Control as="select" size="sm">
-                                                                <option>No Filter</option>
-                                                                <option>Add New Filter</option>
-                                                                <option>Custom Filter</option>
-                                                            </Form.Control>
-                                                        </Form.Group>
-                                                        <Button variant="primary" type="submit">Filter</Button>
-                                                    </Form> */}
-                          {/* <Button>Edit Columns</Button> */}
-                        </div>
                         {this.renderClients()}
                       </div>
                     </div>
