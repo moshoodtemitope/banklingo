@@ -104,6 +104,32 @@ export function getPendingApprovalMgtLoansReducer(state=[], action) {
     }
 }
 
+export function getPendingAcceptanceLoansReducer(state=[], action) {
+    switch (action.type) {
+        case loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_PENDING:
+            return {
+                request_status: loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_SUCCESS:
+            return {
+                request_status: loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_FAILURE:
+            return {
+                request_status: loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
 export function getAllLoanSchedulesReducer(state=[], action) {
     switch (action.type) {
         case loanAndDepositsConstants.GET_ALL_LOAN_SCHEDULES_PENDING:

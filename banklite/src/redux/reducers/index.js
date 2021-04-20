@@ -127,6 +127,7 @@ const loansReducers = combineReducers({
     getPendingApprovalMgtLoansReducer: loans.getPendingApprovalMgtLoansReducer, 
     getApprovedLoansReducer: loans.getApprovedLoansReducer, 
     getRejectedLoansReducer: loans.getRejectedLoansReducer, 
+    getPendingAcceptanceLoansReducer: loans.getPendingAcceptanceLoansReducer, 
     getActiveLoansReducer: loans.getActiveLoansReducer, 
     getLoansInArrearsReducer: loans.getLoansInArrearsReducer, 
     getClosedLoansReducer: loans.getClosedLoansReducer, 
