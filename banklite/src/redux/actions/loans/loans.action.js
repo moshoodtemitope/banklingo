@@ -8,6 +8,8 @@ export const loanActions = {
     getLoans,
     getClientLoans,
     getPendingLoans,
+    getPendingApprovalLoans,
+    getPendingApprovalMgtLoans,
     getApprovedLoans,
     getRejectedLoans,
     getActiveLoans,
@@ -77,7 +79,7 @@ function getPendingLoans(params,tempData) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=2`, "GET", null);
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=2&LoanSubState=-1`, "GET", null);
         dispatch(request(consume,tempData));
         return consume
             .then(response => {
@@ -102,6 +104,70 @@ function getPendingLoans(params,tempData) {
     // function request(user) { return { type: loanAndDepositsConstants.GET__PENDING_LOANS_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.GET__PENDING_LOANS_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.GET__PENDING_LOANS_FAILURE, error } }
+
+}
+
+function getPendingApprovalLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=2&LoanSubState=3`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_FAILURE, error } }
+
+}
+
+function getPendingApprovalMgtLoans(params,tempData) {
+
+    return dispatch => {
+
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=2&LoanSubState=4`, "GET", null);
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response => {
+                dispatch(success(response));
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: loanAndDepositsConstants.GET__PENDING_LEVEL2_LOANS_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: loanAndDepositsConstants.GET__PENDING_LEVEL2_LOANS_PENDING, user, tempData } 
+        }
+    }
+
+
+    // function request(user) { return { type: loanAndDepositsConstants.GET__PENDING_LEVEL2_LOANS_PENDING, user } }
+    function success(response) { return { type: loanAndDepositsConstants.GET__PENDING_LEVEL2_LOANS_SUCCESS, response } }
+    function failure(error) { return { type: loanAndDepositsConstants.GET__PENDING_LEVEL2_LOANS_FAILURE, error } }
 
 }
 

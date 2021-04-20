@@ -30,7 +30,11 @@ import LoansInArrears from './loanmanagement/arrears'
 import ClosedLoans from './loanmanagement/closed'
 import ClosedWithDrawnLoans from './loanmanagement/closed-withdrawn'
 import ClosedWrittenOffLoans from './loanmanagement/closed-writtenoff'
+
 import PendingLoans from './loanmanagement/pending'
+import PendingLoansApproval from './loanmanagement/pending-approval/pending'
+import PendingLoansApprovalMgt from './loanmanagement/pending-approval/pending-management'
+
 import RejectedLoans from './loanmanagement/rejected'
 import LoanClient from './loanmanagement/loan-client'
 import NewLoanAccount from './loanmanagement/newloanaccount'
@@ -292,6 +296,8 @@ class AuthenticatedRoutes extends React.Component {
 
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/all' {...this.props} authed={this.props.user} component={LoansManagement} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/pending' {...this.props} authed={this.props.user} component={PendingLoans} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/pending/pending-approval' {...this.props} authed={this.props.user} component={PendingLoansApproval} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/pending/pending-management' {...this.props} authed={this.props.user} component={PendingLoansApprovalMgt} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/approved' {...this.props} authed={this.props.user} component={ApprovedLoans} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/rejected' {...this.props} authed={this.props.user} component={RejectedLoans} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/active' {...this.props} authed={this.props.user} component={ActiveLoans} />  

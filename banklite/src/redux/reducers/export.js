@@ -79,6 +79,8 @@ import{
 import{
     getLoansReducer,
     getPendingLoansReducer,
+    getPendingApprovalLoansReducer,
+    getPendingApprovalMgtLoansReducer,
     getApprovedLoansReducer,
     getRejectedLoansReducer,
     getActiveLoansReducer,
@@ -337,6 +339,8 @@ export const accounting = {
 export const loans = {
     getLoansReducer,
     getPendingLoansReducer,
+    getPendingApprovalLoansReducer,
+    getPendingApprovalMgtLoansReducer,
     getApprovedLoansReducer,
     getRejectedLoansReducer,
     getActiveLoansReducer,
