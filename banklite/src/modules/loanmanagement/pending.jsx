@@ -814,6 +814,7 @@ class PendingLoans extends React.Component {
                   </div>
                 </div>
               </div>
+              <SubMenu links={LOAN_MODULE_MENU_LINKS} />
               <div className='module-submenu'>
                 <div className='content-container'>
                   <ul className='nav'>
@@ -837,6 +838,14 @@ class PendingLoans extends React.Component {
                         activeClassName='activeNavLink'
                       >
                         Pending Approval(Management)
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to={'/all-loans/pending/pending-acceptance'}
+                        activeClassName='activeNavLink'
+                      >
+                        Pending(Acceptance)
                       </NavLink>
                     </li>
                   </ul>

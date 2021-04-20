@@ -19,6 +19,8 @@ import { loanAndDepositsConstants } from '../../../redux/actiontypes/LoanAndDepo
 
 import '../loanmanagement.scss';
 import DatePickerFieldType from '../../../_helpers/DatePickerFieldType';
+import { LOAN_MODULE_MENU_LINKS } from '../../../shared/config';
+import SubMenu from '../../../shared/components/SubMenu';
 class PendingLoansApprovalMgt extends React.Component {
   constructor(props) {
     super(props);
@@ -838,12 +840,13 @@ class PendingLoansApprovalMgt extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className=''>
-                        <h2>Loans Pending Management Approval</h2>
+                        <h2>Pending Approval(Management) </h2>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <SubMenu links={LOAN_MODULE_MENU_LINKS} />
               <div className='module-submenu'>
                 <div className='content-container'>
                   <ul className='nav'>
@@ -867,6 +870,14 @@ class PendingLoansApprovalMgt extends React.Component {
                         activeClassName='activeNavLink'
                       >
                         Pending Approval(Management)
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to={'/all-loans/pending/pending-acceptance'}
+                        activeClassName='activeNavLink'
+                      >
+                        Pending(Acceptance)
                       </NavLink>
                     </li>
                   </ul>

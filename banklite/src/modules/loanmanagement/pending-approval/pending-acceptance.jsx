@@ -21,7 +21,7 @@ import '../loanmanagement.scss';
 import DatePickerFieldType from '../../../_helpers/DatePickerFieldType';
 import { LOAN_MODULE_MENU_LINKS } from '../../../shared/config';
 import SubMenu from '../../../shared/components/SubMenu';
-class PendingLoansApproval extends React.Component {
+class LoansPendingAcceptance extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,7 +50,7 @@ class PendingLoansApproval extends React.Component {
   getLoans = (paramters) => {
     const { dispatch } = this.props;
 
-    dispatch(loanActions.getPendingApprovalLoans(paramters));
+    dispatch(loanActions.getPendingAcceptance(paramters));
   };
 
   handleDateChangeRaw = (e) => {
@@ -94,9 +94,9 @@ class PendingLoansApproval extends React.Component {
     // this.getLoans(params);
 
     if (tempData) {
-      dispatch(loanActions.getPendingApprovalLoans(params, tempData));
+      dispatch(loanActions.getPendingAcceptance(params, tempData));
     } else {
-      dispatch(loanActions.getPendingApprovalLoans(params));
+      dispatch(loanActions.getPendingAcceptance(params));
     }
   };
 
@@ -118,9 +118,9 @@ class PendingLoansApproval extends React.Component {
     // this.getLoans(params);
 
     if (tempData) {
-      dispatch(loanActions.getPendingApprovalLoans(params, tempData));
+      dispatch(loanActions.getPendingAcceptance(params, tempData));
     } else {
-      dispatch(loanActions.getPendingApprovalLoans(params));
+      dispatch(loanActions.getPendingAcceptance(params));
     }
   };
 
@@ -136,9 +136,9 @@ class PendingLoansApproval extends React.Component {
 
     let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}`;
     if (tempData) {
-      dispatch(loanActions.getPendingApprovalLoans(params, tempData));
+      dispatch(loanActions.getPendingAcceptance(params, tempData));
     } else {
-      dispatch(loanActions.getPendingApprovalLoans(params));
+      dispatch(loanActions.getPendingAcceptance(params));
     }
   };
 
@@ -170,9 +170,9 @@ class PendingLoansApproval extends React.Component {
       let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
       if (tempData) {
-        dispatch(loanActions.getPendingApprovalLoans(params, tempData));
+        dispatch(loanActions.getPendingAcceptance(params, tempData));
       } else {
-        dispatch(loanActions.getPendingApprovalLoans(params));
+        dispatch(loanActions.getPendingAcceptance(params));
       }
     }
   };
@@ -213,7 +213,7 @@ class PendingLoansApproval extends React.Component {
         ? getLoansRequest.request_data.tempData
         : null;
     switch (getLoansRequest.request_status) {
-      case loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_PENDING:
+      case loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_PENDING:
         if (
           saveRequestData === undefined ||
           (saveRequestData !== undefined && saveRequestData.length < 1)
@@ -469,7 +469,7 @@ class PendingLoansApproval extends React.Component {
           );
         }
 
-      case loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_SUCCESS:
+      case loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_SUCCESS:
         let allLoans = getLoansRequest.request_data.response.data;
         if (allLoans !== undefined) {
           if (allLoans.result.length >= 1) {
@@ -818,7 +818,7 @@ class PendingLoansApproval extends React.Component {
         } else {
           return null;
         }
-      case loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_FAILURE:
+      case loanAndDepositsConstants.GET__PENDING_ACCEPTANCE_LOANS_FAILURE:
         return (
           <div className='loading-content errormsg'>
             <div>{getLoansRequest.request_data.error}</div>
@@ -840,7 +840,7 @@ class PendingLoansApproval extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className=''>
-                        <h2>Pending Approval(Underwritten) </h2>
+                        <h2>Pending(Customer Acceptance) </h2>
                       </div>
                     </div>
                   </div>
@@ -904,8 +904,8 @@ class PendingLoansApproval extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    getLoansRequest: state.loansReducers.getPendingApprovalLoansReducer,
+    getLoansRequest: state.loansReducers.getPendingAcceptanceLoansReducer,
   };
 }
 
-export default connect(mapStateToProps)(PendingLoansApproval);
+export default connect(mapStateToProps)(LoansPendingAcceptance);
