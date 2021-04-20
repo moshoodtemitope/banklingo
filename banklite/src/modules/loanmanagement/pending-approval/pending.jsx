@@ -1,24 +1,25 @@
-import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import * as React from 'react';
+// import {Router} from "react-router";
 
-import InnerPageContainer from '../../shared/templates/authed-pagecontainer';
-import TableComponent from '../../shared/elements/table';
-import TablePagination from '../../shared/elements/table/pagination';
+import { Fragment } from 'react';
+import { connect } from 'react-redux';
+
+import { NavLink } from 'react-router-dom';
+import InnerPageContainer from '../../../shared/templates/authed-pagecontainer';
+import TableComponent from '../../../shared/elements/table';
+import TablePagination from '../../../shared/elements/table/pagination';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { numberWithCommas } from '../../shared/utils';
+import { numberWithCommas } from '../../../shared/utils';
 
-import { loanActions } from '../../redux/actions/loans/loans.action';
-import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants';
+import { loanActions } from '../../../redux/actions/loans/loans.action';
+import { loanAndDepositsConstants } from '../../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants';
 
-import './loanmanagement.scss';
-import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
-import { LOAN_MODULE_MENU_LINKS } from '../../shared/config';
-import SubMenu from '../../shared/components/SubMenu';
-class RejectedLoans extends React.Component {
+import '../loanmanagement.scss';
+import DatePickerFieldType from '../../../_helpers/DatePickerFieldType';
+class PendingLoansApproval extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +30,7 @@ class RejectedLoans extends React.Component {
       CurrentSelectedPage: 1,
       endDate: '',
       startDate: '',
-      LoanState: 4,
+      LoanState: 2,
       SearchText: '',
     };
   }
@@ -47,7 +48,7 @@ class RejectedLoans extends React.Component {
   getLoans = (paramters) => {
     const { dispatch } = this.props;
 
-    dispatch(loanActions.getRejectedLoans(paramters));
+    dispatch(loanActions.getPendingApprovalLoans(paramters));
   };
 
   handleDateChangeRaw = (e) => {
@@ -91,9 +92,9 @@ class RejectedLoans extends React.Component {
     // this.getLoans(params);
 
     if (tempData) {
-      dispatch(loanActions.getRejectedLoans(params, tempData));
+      dispatch(loanActions.getPendingApprovalLoans(params, tempData));
     } else {
-      dispatch(loanActions.getRejectedLoans(params));
+      dispatch(loanActions.getPendingApprovalLoans(params));
     }
   };
 
@@ -115,9 +116,9 @@ class RejectedLoans extends React.Component {
     // this.getLoans(params);
 
     if (tempData) {
-      dispatch(loanActions.getRejectedLoans(params, tempData));
+      dispatch(loanActions.getPendingApprovalLoans(params, tempData));
     } else {
-      dispatch(loanActions.getRejectedLoans(params));
+      dispatch(loanActions.getPendingApprovalLoans(params));
     }
   };
 
@@ -133,9 +134,9 @@ class RejectedLoans extends React.Component {
 
     let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${nextPage}&CurrentSelectedPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}`;
     if (tempData) {
-      dispatch(loanActions.getRejectedLoans(params, tempData));
+      dispatch(loanActions.getPendingApprovalLoans(params, tempData));
     } else {
-      dispatch(loanActions.getRejectedLoans(params));
+      dispatch(loanActions.getPendingApprovalLoans(params));
     }
   };
 
@@ -167,9 +168,9 @@ class RejectedLoans extends React.Component {
       let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
       if (tempData) {
-        dispatch(loanActions.getRejectedLoans(params, tempData));
+        dispatch(loanActions.getPendingApprovalLoans(params, tempData));
       } else {
-        dispatch(loanActions.getRejectedLoans(params));
+        dispatch(loanActions.getPendingApprovalLoans(params));
       }
     }
   };
@@ -198,7 +199,7 @@ class RejectedLoans extends React.Component {
       }
       // let params= `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     }
-    let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}&LoanState=4`;
+    let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}&LoanState=2`;
     dispatch(loanActions.exportLoansAccounts(params));
   };
 
@@ -210,7 +211,7 @@ class RejectedLoans extends React.Component {
         ? getLoansRequest.request_data.tempData
         : null;
     switch (getLoansRequest.request_status) {
-      case loanAndDepositsConstants.GET__REJECTED_LOANS_PENDING:
+      case loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_PENDING:
         if (
           saveRequestData === undefined ||
           (saveRequestData !== undefined && saveRequestData.length < 1)
@@ -325,7 +326,7 @@ class RejectedLoans extends React.Component {
                     />
                     <DatePicker
                       autoComplete='new-off'
-                      placeholderText='End  date'
+                      placeholderText='End date'
                       onChangeRaw={this.handleDateChangeRaw}
                       onChange={this.handleEndDatePicker}
                       selected={this.state.endDate}
@@ -466,7 +467,7 @@ class RejectedLoans extends React.Component {
           );
         }
 
-      case loanAndDepositsConstants.GET__REJECTED_LOANS_SUCCESS:
+      case loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_SUCCESS:
         let allLoans = getLoansRequest.request_data.response.data;
         if (allLoans !== undefined) {
           if (allLoans.result.length >= 1) {
@@ -719,7 +720,7 @@ class RejectedLoans extends React.Component {
                         // className="form-control form-control-sm h-38px"
                         className='form-control form-control-sm '
                         customInput={
-                          <DatePickerFieldType placeHolder='End date' />
+                          <DatePickerFieldType placeHolder='Start date' />
                         }
                       />
                       <DatePicker
@@ -815,7 +816,7 @@ class RejectedLoans extends React.Component {
         } else {
           return null;
         }
-      case loanAndDepositsConstants.GET__REJECTED_LOANS_FAILURE:
+      case loanAndDepositsConstants.GET__PENDING_LEVEL1_LOANS_FAILURE:
         return (
           <div className='loading-content errormsg'>
             <div>{getLoansRequest.request_data.error}</div>
@@ -837,16 +838,46 @@ class RejectedLoans extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className=''>
-                        <h2>Rejected Loans</h2>
+                        <h2>Loans Pending Level-1 Approval</h2>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <SubMenu links={LOAN_MODULE_MENU_LINKS} />
+              <div className='module-submenu'>
+                <div className='content-container'>
+                  <ul className='nav'>
+                    <li>
+                      <NavLink exact to={'/all-loans/pending/'} activeClassName='activeNavLink'>
+                        All
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        exact
+                        to={'/all-loans/pending/pending-approval'}
+                        activeClassName='activeNavLink'
+                      >
+                        Pending approval
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to={'/all-loans/pending/pending-management'}
+                        activeClassName='activeNavLink'
+                      >
+                        Pending Approval(Management)
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+              </div>
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
+                    {/* <div className="col-sm-3">
+                                            <AccountsSidebar/>
+                                        </div> */}
                     <div className='col-sm-12'>
                       <div className='middle-content'>{this.renderLoans()}</div>
                     </div>
@@ -862,8 +893,8 @@ class RejectedLoans extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    getLoansRequest: state.loansReducers.getRejectedLoansReducer,
+    getLoansRequest: state.loansReducers.getPendingApprovalLoansReducer,
   };
 }
 
-export default connect(mapStateToProps)(RejectedLoans);
+export default connect(mapStateToProps)(PendingLoansApproval);

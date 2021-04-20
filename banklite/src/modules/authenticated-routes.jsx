@@ -30,7 +30,11 @@ import LoansInArrears from './loanmanagement/arrears'
 import ClosedLoans from './loanmanagement/closed'
 import ClosedWithDrawnLoans from './loanmanagement/closed-withdrawn'
 import ClosedWrittenOffLoans from './loanmanagement/closed-writtenoff'
+
 import PendingLoans from './loanmanagement/pending'
+import PendingLoansApproval from './loanmanagement/pending-approval/pending'
+import PendingLoansApprovalMgt from './loanmanagement/pending-approval/pending-management'
+
 import RejectedLoans from './loanmanagement/rejected'
 import LoanClient from './loanmanagement/loan-client'
 import NewLoanAccount from './loanmanagement/newloanaccount'
@@ -290,23 +294,25 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/clients-blacklisted' {...this.props} authed={this.props.user} component={ClientsBlacklisted} />
                         {/* <Route exact path='/clients-blacklisted' render={(props) => <ClientsBlacklisted {...this.props} />} /> */}
 
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/all' {...this.props} authed={this.props.user} component={LoansManagement} />
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/pending' {...this.props} authed={this.props.user} component={PendingLoans} />
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/approved' {...this.props} authed={this.props.user} component={ApprovedLoans} />
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/rejected' {...this.props} authed={this.props.user} component={RejectedLoans} />
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/active' {...this.props} authed={this.props.user} component={ActiveLoans} />
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/arrears' {...this.props} authed={this.props.user} component={LoansInArrears} />
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed' {...this.props} authed={this.props.user} component={ClosedLoans} />
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-off' {...this.props} authed={this.props.user} component={ClosedWrittenOffLoans} />
-                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-withdrawn' {...this.props} authed={this.props.user} component={ClosedWithDrawnLoans} />
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/all' {...this.props} authed={this.props.user} component={LoansManagement} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/pending' {...this.props} authed={this.props.user} component={PendingLoans} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/pending/pending-approval' {...this.props} authed={this.props.user} component={PendingLoansApproval} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/pending/pending-management' {...this.props} authed={this.props.user} component={PendingLoansApprovalMgt} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/approved' {...this.props} authed={this.props.user} component={ApprovedLoans} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/rejected' {...this.props} authed={this.props.user} component={RejectedLoans} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/active' {...this.props} authed={this.props.user} component={ActiveLoans} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/arrears' {...this.props} authed={this.props.user} component={LoansInArrears} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed' {...this.props} authed={this.props.user} component={ClosedLoans} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-off' {...this.props} authed={this.props.user} component={ClosedWrittenOffLoans} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-withdrawn' {...this.props} authed={this.props.user} component={ClosedWithDrawnLoans} />  
 
-                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />
-                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account/:clientId' {...this.props} authed={this.props.user} component={NewLoanAccount} />
-                        <PrivateRoute accessRequired="bnk_edit_loan_account" exact path='/all-loans/:clientId/:loanId/edit' {...this.props} authed={this.props.user} component={EditALoanAccount} />
-                        <PrivateRoute accessRequired="bnk_refinance_loan_account" exact path='/all-loans/:clientId/:loanId/refinance' {...this.props} authed={this.props.user} component={RefinanceALoanAccount} />
-                        <PrivateRoute accessRequired="bnk_reschedule_loan_account" exact path='/all-loans/:clientId/:loanId/reschedule' {...this.props} authed={this.props.user} component={RescheduleALoanAccount} />
-
-                        <PrivateRoute accessRequired="bnk_view_clients" exact path='/all-loans/:clientId' {...this.props} authed={this.props.user} component={LoanClient} />
+                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account/:clientId' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_edit_loan_account" exact path='/all-loans/:clientId/:loanId/edit' {...this.props} authed={this.props.user} component={EditALoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_refinance_loan_account" exact path='/all-loans/:clientId/:loanId/refinance' {...this.props} authed={this.props.user} component={RefinanceALoanAccount} />  
+                        <PrivateRoute accessRequired="bnk_reschedule_loan_account" exact path='/all-loans/:clientId/:loanId/reschedule' {...this.props} authed={this.props.user} component={RescheduleALoanAccount} />  
+                        
+                        <PrivateRoute accessRequired="bnk_view_clients" exact path='/all-loans/:clientId' {...this.props} authed={this.props.user} component={LoanClient} />  
                         {/* <Route exact path='/all-loans/:clientId' render={(props) => <LoanClient clientId={props.match.params.clientId} {...this.props} />} /> */}
 
                         {/* <Route exact path='/all-loans/newloan-account' render={(props) => <NewLoanAccount {...this.props} />} /> */}

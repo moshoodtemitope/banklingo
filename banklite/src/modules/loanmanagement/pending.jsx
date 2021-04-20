@@ -231,6 +231,7 @@ class PendingLoans extends React.Component {
                     <th>Loan Amount</th>
                     <th>Currency</th>
                     <th>Loan State</th>
+                    <th>Loan Sub-State</th>
                     <th>Principal Due</th>
                     <th>Total Paid</th>
                     <th>Total Due</th>
@@ -238,6 +239,7 @@ class PendingLoans extends React.Component {
                 </thead>
                 <tbody>
                   <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -359,6 +361,7 @@ class PendingLoans extends React.Component {
                     <th>Loan Amount</th>
                     <th>Currency</th>
                     <th>Loan State</th>
+                    <th>Loan Sub-State</th>
                     <th>Principal Due</th>
                     <th>Total Paid</th>
                     <th>Total Due</th>
@@ -407,6 +410,7 @@ class PendingLoans extends React.Component {
                           </td>
                           <td>{eachLoan.currencyCode}</td>
                           <td>{eachLoan.loanStateDescription}</td>
+                          <td>{eachLoan.loanSubStateDescription}</td>
                           <td>
                             {numberWithCommas(
                               eachLoan.principalDue,
@@ -575,6 +579,7 @@ class PendingLoans extends React.Component {
                       <th>Loan Amount</th>
                       <th>Currency</th>
                       <th>Loan State</th>
+                      <th>Loan Sub-State</th>
                       <th>Principal Due</th>
                       <th>Total Paid</th>
                       <th>Total Due</th>
@@ -627,6 +632,7 @@ class PendingLoans extends React.Component {
                             </td>
                             <td>{eachLoan.currencyCode}</td>
                             <td>{eachLoan.loanStateDescription}</td>
+                            <td>{eachLoan.loanSubStateDescription}</td>
                             <td>
                               {numberWithCommas(
                                 eachLoan.principalDue,
@@ -750,6 +756,7 @@ class PendingLoans extends React.Component {
                       <th>Loan Amount</th>
                       <th>Currency</th>
                       <th>Loan State</th>
+                      <th>Loan Sub-State</th>
                       <th>Principal Due</th>
                       <th>Total Paid</th>
                       <th>Total Due</th>
@@ -757,6 +764,7 @@ class PendingLoans extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -806,7 +814,34 @@ class PendingLoans extends React.Component {
                   </div>
                 </div>
               </div>
-              <SubMenu links={LOAN_MODULE_MENU_LINKS} />
+              <div className='module-submenu'>
+                <div className='content-container'>
+                  <ul className='nav'>
+                    <li>
+                      <NavLink to={'/all-loans/pending/'} activeClassName='activeNavLink'>
+                        All
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        exact
+                        to={'/all-loans/pending/pending-approval'}
+                        activeClassName='activeNavLink'
+                      >
+                        Pending approval
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to={'/all-loans/pending/pending-management'}
+                        activeClassName='activeNavLink'
+                      >
+                        Pending Approval(Management)
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+              </div>
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>

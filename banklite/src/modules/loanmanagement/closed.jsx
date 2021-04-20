@@ -260,6 +260,7 @@ class ClosedLoans extends React.Component {
                     <th>Loan Amount</th>
                     <th>Currency</th>
                     <th>Loan State</th>
+                    <th>Loan Sub-State</th>
                     <th>Principal Due</th>
                     <th>Total Paid</th>
                     <th>Total Due</th>
@@ -267,6 +268,7 @@ class ClosedLoans extends React.Component {
                 </thead>
                 <tbody>
                   <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -388,6 +390,7 @@ class ClosedLoans extends React.Component {
                     <th>Loan Amount</th>
                     <th>Currency</th>
                     <th>Loan State</th>
+                    <th>Loan Sub-State</th>
                     <th>Principal Due</th>
                     <th>Total Paid</th>
                     <th>Total Due</th>
@@ -436,6 +439,7 @@ class ClosedLoans extends React.Component {
                           </td>
                           <td>{eachLoan.currencyCode}</td>
                           <td>{eachLoan.loanStateDescription}</td>
+                          <td>{eachLoan.loanSubStateDescription}</td>
                           <td>
                             {numberWithCommas(
                               eachLoan.principalDue,
@@ -604,6 +608,7 @@ class ClosedLoans extends React.Component {
                       <th>Loan Amount</th>
                       <th>Currency</th>
                       <th>Loan State</th>
+                      <th>Loan Sub-State</th>
                       <th>Principal Due</th>
                       <th>Total Paid</th>
                       <th>Total Due</th>
@@ -656,6 +661,7 @@ class ClosedLoans extends React.Component {
                             </td>
                             <td>{eachLoan.currencyCode}</td>
                             <td>{eachLoan.loanStateDescription}</td>
+                            <td>{eachLoan.loanSubStateDescription}</td>
                             <td>
                               {numberWithCommas(
                                 eachLoan.principalDue,
@@ -779,6 +785,7 @@ class ClosedLoans extends React.Component {
                       <th>Loan Amount</th>
                       <th>Currency</th>
                       <th>Loan State</th>
+                      <th>Loan Sub-State</th>
                       <th>Principal Due</th>
                       <th>Total Paid</th>
                       <th>Total Due</th>
@@ -786,6 +793,7 @@ class ClosedLoans extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>

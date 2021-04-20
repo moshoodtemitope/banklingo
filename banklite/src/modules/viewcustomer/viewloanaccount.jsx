@@ -3529,7 +3529,7 @@ class ViewLoanAccount extends React.Component {
                         <NavLink className="btn btn-primary btn-sm" to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/edit`}>Edit Loan</NavLink>
                     </li>
                 }
-                    {(loanDetails.loanState === 2 && allUSerPermissions.indexOf("bnk_approve_loan_account") > -1) &&
+                    {((loanDetails.loanState === 2 && loanDetails.loanSubState === 0) && allUSerPermissions.indexOf("bnk_approve_loan_account") > -1) &&
                         <li>
                             <Button size="sm"
                                 onClick={() => {
@@ -3557,6 +3557,46 @@ class ViewLoanAccount extends React.Component {
                                     this.handleLoanChangeStateShow()
                                 }}
                             >Enter Repayment</Button>
+                        </li>
+                    }
+                    {(loanDetails.loanState === 2 && loanDetails.loanSubState === 3 && allUSerPermissions.indexOf("bnk_approve_loan_account") > -1) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Approve (Level 1)", newStateUpdate: "approve", ctaText: "Approve (Level 1)", showDisburseLoanForm: false })
+                                    this.handleLoanChangeStateShow()
+                                }}
+                            >Approve (Level 1)</Button>
+                        </li>
+                    }
+                    {(loanDetails.loanState === 2 && loanDetails.loanSubState === 6 && allUSerPermissions.indexOf("bnk_client_accept_loan_offer") > -1) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Accept Offer(Customer)", newStateUpdate: "acceptoffer", ctaText: "Accept Offer(Customer)", showDisburseLoanForm: false })
+                                    this.handleLoanChangeStateShow()
+                                }}
+                            >Accept Offer(Customer)</Button>
+                        </li>
+                    }
+                    {(loanDetails.loanState === 2 && loanDetails.loanSubState === 6 && allUSerPermissions.indexOf("bnk_client_reject_loan_offer") > -1) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Accept Offer(Customer)", newStateUpdate: "reject", ctaText: "Reject Offer(Customer)", showDisburseLoanForm: false })
+                                    this.handleLoanChangeStateShow()
+                                }}
+                            >Reject Offer(Customer)</Button>
+                        </li>
+                    }
+                    {(loanDetails.loanState === 2 && loanDetails.loanSubState === 4 && allUSerPermissions.indexOf("bnk_approve_loan_2ndlevel_account") > -1) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Approve (Management)", newStateUpdate: "approvelevelsecondlevel", ctaText: "Approve (Management)", showDisburseLoanForm: false })
+                                    this.handleLoanChangeStateShow()
+                                }}
+                            >Approve (Management)</Button>
                         </li>
                     }
                     {(loanDetails.loanState === 1 && allUSerPermissions.indexOf("bnk_request_loan_approval") > -1) &&
