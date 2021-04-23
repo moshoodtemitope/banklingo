@@ -24,8 +24,8 @@ import {administrationConstants} from '../../../redux/actiontypes/administration
 import {dashboardActions} from '../../../redux/actions/dashboard/dashboard.action';
 import {dashboardConstants} from '../../../redux/actiontypes/dashboard/dashboard.constants'
 
-import {quickMenuList} from '../mainmenu/menu'
-import {quickCreateMenuList} from '../mainmenu/menu'
+import {quickMenuList} from '../mainmenu/menu_structures/menu'
+import {quickCreateMenuList} from '../mainmenu/menu_structures/menu'
 import "./mainheader.scss"; 
 class MainHeader extends React.Component{
     constructor(props) {
@@ -61,7 +61,8 @@ class MainHeader extends React.Component{
     //     document.addEventListener("mousedown",this.handleBodyClick, false);
     // }
     componentWillUnmount(){
-        document.removeEventListener("mousedown",this.handleBodyClick, false);
+        //TODO
+     //   document.removeEventListener("mousedown",this.handleBodyClick, false);
     }
 
 

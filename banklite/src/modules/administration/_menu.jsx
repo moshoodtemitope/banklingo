@@ -6,11 +6,12 @@ import "./administration.scss";
 import { NavLink} from 'react-router-dom';
 
 import warning from '../../assets/img/alert.svg'
-import {administrationModuleMenuList} from '../../shared/elements/mainmenu/menu'
+import {administrationModuleMenuList} from '../../shared/elements/mainmenu/menu_structures/menu'
 class AdminNav extends React.Component{
 
     render() {
         let userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
+
         let allMenu = administrationModuleMenuList,
             allMenuGroups = [],
             allUSerPermissionNames = [],

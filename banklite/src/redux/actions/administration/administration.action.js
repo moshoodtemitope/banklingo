@@ -1144,6 +1144,10 @@ function updateInternalControlSettings  (internalControlSettingsPayload){
 
 }
 
+
+
+
+
 function getAllBranches  (params, tempData){
     
     return dispatch =>{

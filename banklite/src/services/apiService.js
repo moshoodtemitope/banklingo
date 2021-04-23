@@ -98,7 +98,7 @@ export class ApiService {
     }
 
 
-    static request(url, type, data, headers = undefined, noStringify=false, responseType){
+    static request(url, http_method, data, headers = undefined, noStringify=false, responseType){
         let bodyData;
         let service,
             lastRefreshTime,
@@ -151,7 +151,7 @@ export class ApiService {
 
         let lingoAuth = JSON.parse(localStorage.getItem('lingoAuth'));
 
-        if (type.toLowerCase() === 'get') {
+        if (http_method.toLowerCase() === 'get') {
             
             
             if(headers === undefined){
@@ -436,7 +436,7 @@ export class ApiService {
 
         }  
         
-        if (type.toLowerCase() === 'post'){
+        if (http_method.toLowerCase() === 'post'){
             //check for header
             if (binaryUploadUrls.indexOf(serviceToTest) === -1) {
                

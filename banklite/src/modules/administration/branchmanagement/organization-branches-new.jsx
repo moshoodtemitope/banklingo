@@ -2,10 +2,10 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-import AdminNav from './_menu'
+import AdminNav from '../_menu'
 import { connect } from 'react-redux';
 import { NavLink} from 'react-router-dom';
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import  InnerPageContainer from '../../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
@@ -13,14 +13,14 @@ import Col from 'react-bootstrap/Col'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import {administrationActions} from '../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import {administrationActions} from '../../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import {noWhiteSpaces} from "../../shared/utils"
-import "./administration.scss"; 
+import {noWhiteSpaces} from "../../../shared/utils"
+import "../administration.scss"; 
 class NewBranch extends React.Component {
     constructor(props) {
         super(props);
@@ -350,6 +350,9 @@ class NewBranch extends React.Component {
         )
     }
 
+
+
+    ///
     render() {
         return (
             <Fragment>

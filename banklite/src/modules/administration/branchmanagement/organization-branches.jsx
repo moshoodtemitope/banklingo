@@ -139,6 +139,9 @@ class OrganizationBranches extends React.Component {
                                         
                                     </div>
                                 </div>
+
+
+                                
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>

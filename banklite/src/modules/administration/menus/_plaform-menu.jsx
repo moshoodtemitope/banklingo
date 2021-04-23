@@ -6,12 +6,15 @@ import "../administration.scss";
 import { NavLink} from 'react-router-dom';
 
 
-import {adminPlatformMenuList} from '../../../shared/elements/mainmenu/menu'
+import {admin_platform_tab_list} from '../../../shared/elements/mainmenu/menu_structures/admin_platform_tab_list'
 class PlaformNav extends React.Component{
     
     render() {
         let userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
-        let allMenu = adminPlatformMenuList,
+
+
+
+        let allMenu = admin_platform_tab_list,
             allMenuGroups = [],
             allUSerPermissionNames = [],
             allQuickMenus=[],

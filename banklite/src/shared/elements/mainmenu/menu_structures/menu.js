@@ -6,6 +6,8 @@ export const menuList = [
         permissionCode:"universal",
         hasSubMenu: false
     },
+
+
     {
         menuGroup: "Clients Management",
         mainMenu: "Clients",
@@ -38,6 +40,9 @@ export const menuList = [
             },
         ]
     },
+
+
+    
     {
         menuGroup: "Loans Management",
         mainMenu: "Loans",

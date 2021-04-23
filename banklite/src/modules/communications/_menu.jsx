@@ -6,7 +6,7 @@ import {Fragment} from "react";
 import { NavLink} from 'react-router-dom';
 
 
-import {communicationsMenuList} from '../../shared/elements/mainmenu/menu'
+import {communicationsMenuList} from '../../shared/elements/mainmenu/menu_structures/communications_tab_list'
 class CommunicationsNav extends React.Component{
 
     render() {

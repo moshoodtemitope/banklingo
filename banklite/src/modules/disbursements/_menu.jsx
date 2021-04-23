@@ -6,12 +6,12 @@ import {Fragment} from "react";
 import { NavLink} from 'react-router-dom';
 
 
-import {disbursementMenuList} from '../../shared/elements/mainmenu/menu'
+import {disbursement_tab_list} from '../../shared/elements/mainmenu/menu_structures/disbursement_tab_list'
 class DisbursementNav extends React.Component{
 
     render() {
         let userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
-        let allMenu = disbursementMenuList,
+        let allMenu = disbursement_tab_list,
             allMenuGroups = [],
             allUSerPermissionNames = [],
             allQuickMenus=[],

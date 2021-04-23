@@ -103,12 +103,13 @@ import ManageBankInfo from './platform/bank-info'
 import GeneralCurrency from './administration/general-currency'
 import GeneralTxtChannels from './administration/general-txtchannels'
 import NewTxtChannels from './administration/general-txtchannels-new'
-import GeneralCustomerTypes from './administration/general-customertypes'
+//import GeneralCustomerTypes from './administration/customertypes/general-customertypes'
+import CustomerTypesAdministration from './administration/customertypes/customertypes-management-list'
 import GeneralInternalControl from './administration/general-internalcontrol'
 import GeneralBranding from './administration/general-branding'
 
-import OrganizationBranches from './administration/organization-branches'
-import NewBranch from './administration/organization-branches-new'
+import BranchListManagement from './administration/branchmanagement/branch-management-list'
+import NewBranch from './administration/branchmanagement/organization-branches-new'
 import EditBranch from './administration/organization-edit-branch'
 import OrganizationCenters from './administration/organization-centers'
 import NewCenter from './administration/organization-centers-new'
@@ -389,12 +390,14 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/currency' {...this.props} authed={this.props.user} component={GeneralCurrency} />
                         <PrivateRoute accessRequired="bnk_manage_transaction_channels" exact path='/administration/general/txt-channels' {...this.props} authed={this.props.user} component={GeneralTxtChannels} />
                         <PrivateRoute accessRequired="bnk_manage_transaction_channels" exact path='/administration/general/new-txt-channels' {...this.props} authed={this.props.user} component={NewTxtChannels} />
-                        <PrivateRoute accessRequired="bnk_manage_customer_types" exact path='/administration/general/customer-types' {...this.props} authed={this.props.user} component={GeneralCustomerTypes} />
+                        <PrivateRoute accessRequired="bnk_manage_customer_types" exact path='/administration/general/customer-types' {...this.props} authed={this.props.user} component={CustomerTypesAdministration} />
                         <PrivateRoute accessRequired="bnk_manage_internal_control" exact path='/administration/general/control' {...this.props} authed={this.props.user} component={GeneralInternalControl} />
                         {/* <PrivateRoute accessRequired="bnk_view_branches" exact path='/administration/general/branding' {...this.props} authed={this.props.user} component={GeneralBranding} />  */}
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/uploaddata' {...this.props} authed={this.props.user} component={UploadData} />
 
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization' {...this.props} authed={this.props.user} component={OrganizationBranches} />
+                        {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization' {...this.props} authed={this.props.user} component={OrganizationBranches} /> */}
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization' {...this.props} authed={this.props.user} component={BranchListManagement} />
+                       
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/newbranch' {...this.props} authed={this.props.user} component={NewBranch} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/editbranch/:encodedkey' {...this.props} authed={this.props.user} component={EditBranch} />
                         {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/centers' {...this.props} authed={this.props.user} component={OrganizationCenters} />

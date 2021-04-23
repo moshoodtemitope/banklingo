@@ -56,6 +56,7 @@ class LoansPendingAcceptance extends React.Component {
   handleDateChangeRaw = (e) => {
     e.preventDefault();
   };
+
   handleStartDatePicker = (startDate) => {
     startDate.setHours(startDate.getHours() + 1);
 
@@ -76,6 +77,7 @@ class LoansPendingAcceptance extends React.Component {
     });
   };
 
+  
   setPagesize = (PageSize, tempData) => {
     // console.log('----here', PageSize.target.value);
     const { dispatch } = this.props;

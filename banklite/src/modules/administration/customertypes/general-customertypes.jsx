@@ -2,11 +2,11 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-import AdminNav from './_menu'
+import AdminNav from '../_menu'
 
 import { NavLink} from 'react-router-dom';
 import { connect } from 'react-redux';
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import  InnerPageContainer from '../../../shared/templates/authed-pagecontainer'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -14,14 +14,14 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import  TableComponent from '../../shared/elements/table'
-import  TablePagination from '../../shared/elements/table/pagination'
-import {administrationActions} from '../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+import  TableComponent from '../../../shared/elements/table'
+import  TablePagination from '../../../shared/elements/table/pagination'
+import {administrationActions} from '../../../redux/actions/administration/administration.action';
+import {administrationConstants} from '../../../redux/actiontypes/administration/administration.constants'
 import Alert from 'react-bootstrap/Alert'
 
-import GeneralNav from './menus/_general-menu'
-import "./administration.scss"; 
+import GeneralNav from '../menus/_general-menu'
+import "../administration.scss"; 
 import { setTimeout } from "timers";
 class GeneralCustomerTypes extends React.Component {
     constructor(props) {
@@ -37,9 +37,6 @@ class GeneralCustomerTypes extends React.Component {
             PageSize: 25,
             CurrentPage:1
         }
-
-        
-
         
     }
 
@@ -761,26 +758,7 @@ class GeneralCustomerTypes extends React.Component {
                                 <div className="content-container">
                                     <AdminNav />
                                     <GeneralNav />
-                                    {/* <div className="lowerlevel-menu">
-                                        <ul className="nav">
-                                            <li>
-                                                <NavLink exact to={'/administration/general'}>Organization</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/currency'}>Currency</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/txt-channels'}>Transaction Channels</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/customer-types'}>Customer Types</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/control'}>Internal Control</NavLink>
-                                            </li>
-                                           
-                                        </ul>
-                                    </div> */}
+                            
                                     
                                 </div>
                             </div>
