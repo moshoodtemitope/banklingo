@@ -15,8 +15,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import  TableComponent from '../../../shared/elements/table'
 import  TablePagination from '../../../shared/elements/table/pagination'
-import {administrationActions} from '../../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../../redux/actiontypes/administration/administration.constants'
+import {administrationActions,administrationConstants} from '../../../redux/actions/administration/customer-types-management.actions';
 import Alert from 'react-bootstrap/Alert'
 
 import GeneralNav from '../menus/_general-menu'
@@ -160,9 +159,8 @@ fetchErrorState(){
 
         switch(adminGetCustomerTypesRequest.request_status){
         case(administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS):
-        // let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
                        
-         let saveRequestData= adminGetCustomerTypesRequest.request_data!==undefined?adminGetCustomerTypesRequest.request_data.tempData:null;
+         let saveRequestData= adminGetCustomerTypesRequest.request_data!==undefined? adminGetCustomerTypesRequest.request_data.response.data:null;
 
             return (     <tbody>{
                 saveRequestData.result.map((eachCustomerype, index)=>{
@@ -302,9 +300,9 @@ fetchErrorState(){
 
     handleCreateNewType = async (typePayload) =>{
         
-        const {dispatch} = this.props;
-       
+        const {dispatch} = this.props;       
         await dispatch(administrationActions.addCustomerType(typePayload));
+
 
         
     }

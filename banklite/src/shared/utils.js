@@ -26,7 +26,8 @@ export const handleRequestErrors = (error)=>{
                     if(error.response.data.message!==null && error.response.data.message!==undefined && error.response.data.message!==""){
                         return error.response.data.message;
                     }else{
-                        return "Sorry an error occured";
+                        console.log(error)
+                        return "The service is presently unreachable. Please try again later";
                         // if(error.response && error.response.data.traceMessages!==null && error.response.data.traceMessages!==undefined){
                     
                         //     return error.response.data.traceMessages;

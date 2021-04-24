@@ -1,7 +1,5 @@
 import { ApiService } from "../../../services/apiService";
 import { routes } from "../../../services/urls";
-// import { history } from './../../../_helpers/history';
-import {administrationConstants} from '../../actiontypes/administration/administration.constants'
 import { handleRequestErrors } from "../../../shared/utils";
 
 
@@ -9,6 +7,35 @@ import { handleRequestErrors } from "../../../shared/utils";
 export const administrationActions = {
   
     getAllBranches
+}
+
+
+export const administrationConstants = {
+  
+
+  GET_ALL_BRANCHES_SUCCESS : 'GET_ALL_BRANCHES_SUCCESS',
+  GET_ALL_BRANCHES_PENDING : 'GET_ALL_BRANCHES_PENDING',
+  GET_ALL_BRANCHES_FAILURE : 'GET_ALL_BRANCHES_FAILURE',
+
+  FETCH_BRANCHES_LIST_SUCCESS : 'FETCH_BRANCHES_LIST_SUCCESS',
+  FETCH_BRANCHES_LIST_PENDING : 'FETCH_BRANCHES_LIST_PENDING',
+  FETCH_BRANCHES_LIST_FAILURE : 'FETCH_BRANCHES_LIST_FAILURE',
+
+  GET_A_BRANCH_SUCCESS : 'GET_A_BRANCH_SUCCESS',
+  GET_A_BRANCH_PENDING : 'GET_A_BRANCH_PENDING',
+  GET_A_BRANCH_FAILURE : 'GET_A_BRANCH_FAILURE',
+
+  UPDATE_A_BRANCH_SUCCESS : 'UPDATE_A_BRANCH_SUCCESS',
+  UPDATE_A_BRANCH_PENDING : 'UPDATE_A_BRANCH_PENDING',
+  UPDATE_A_BRANCH_FAILURE : 'UPDATE_A_BRANCH_FAILURE',
+  UPDATE_A_BRANCH_RESET : 'UPDATE_A_BRANCH_RESET',
+
+  CREATE_NEW_BRANCH_SUCCESS : 'CREATE_NEW_BRANCH_SUCCESS',
+  CREATE_NEW_BRANCH_PENDING : 'CREATE_NEW_BRANCH_PENDING',
+  CREATE_NEW_BRANCH_FAILURE : 'CREATE_NEW_BRANCH_FAILURE',
+  CREATE_NEW_BRANCH_RESET :   'CREATE_NEW_BRANCH__RESET',
+
+  
 }
 
 function getAllBranches(params, tempData) {

@@ -7,8 +7,7 @@ import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../../shared/templates/authed-pagecontainer'
-// import Form from 'react-bootstrap/Form'
-// import Button from 'react-bootstrap/Button'
+
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../../shared/elements/table'
@@ -16,12 +15,8 @@ import  TablePagination from '../../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-import {administrationActions} from '../../../redux/actions/administration/branch-management.actions';
-//import {administrationActions} from '../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../../redux/actiontypes/administration/administration.constants'
+import {administrationActions,administrationConstants} from '../../../redux/actions/administration/branch-management.actions';
 
-// import Alert from 'react-bootstrap/Alert'
-// import  SidebarElement from '../../shared/elements/sidebar'
 import "../administration.scss"; 
 class BranchListManagement extends React.Component {
     constructor(props) {
@@ -84,6 +79,9 @@ class BranchListManagement extends React.Component {
 
     }
 
+
+
+    
 fetchForEmptyState=()=>{
     //This function returns the biew for empty list                                                                                                                                   
     let adminGetAllBranchesRequest = this.props.adminGetAllBranches;

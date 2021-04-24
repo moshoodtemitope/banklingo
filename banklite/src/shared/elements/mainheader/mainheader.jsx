@@ -18,8 +18,10 @@ import AsyncSelect from 'react-select/async';
 import {saveRouteForRedirect} from "../../utils";
 // import {Nav, NavDropdown, Navbar, Form, Button, FormControl} from 'react-bootstrap'
 
-import {administrationActions} from '../../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../../redux/actiontypes/administration/administration.constants'
+// import {administrationActions} from '../../../redux/actions/administration/administration.action';
+
+
+import {administrationActions,administrationConstants} from '../../../redux/actions/administration/customer-types-management.actions';
 
 import {dashboardActions} from '../../../redux/actions/dashboard/dashboard.action';
 import {dashboardConstants} from '../../../redux/actiontypes/dashboard/dashboard.constants'
