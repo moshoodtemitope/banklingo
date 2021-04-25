@@ -95,7 +95,7 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "All Deposits",
-                subMenuRoute: "/deposits"
+                subMenuRoute: "/deposits/all"
             },
         ]
     },

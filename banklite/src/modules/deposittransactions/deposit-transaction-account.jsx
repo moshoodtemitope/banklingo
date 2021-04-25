@@ -17,374 +17,295 @@ import "./deposittransactions.scss";
 class DepositTransactionAccount extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            user: '',
-            PageSize: '10',
-            FullDetails: false,
-            CurrentPage: 1,
-            CurrentSelectedPage: 1
-        }
-
-
+        this.initializeState();
     }
 
-    componentDidMount() {
-        this.loadInitialData();
+    ////////
+
+    
+  initializeState=()=>{
+    this.state = {
+        user: '',
+        PageSize: '10',
+        FullDetails: false,
+        SearchText:'',
+        CurrentPage: 1,
+        CurrentSelectedPage: 1
+    };
+    return this.state;
+  }
+
+  componentDidMount(){
+    this.retrieveFromApi();
+}
+// componentDidUpdate(prevProps) {
+//   // Typical usage (don't forget to compare props):
+//   if (this.props.clientState !== prevProps.clientState) {
+//     this.setState(this.initializeState(), function() {
+//       this.retrieveFromApi();
+//     });
+//   }
+// }
+
+setPagesize = (event, tempData)=>{
+   
+    this.setState({PageSize: event.target.value}, function() {
+      this.retrieveFromApi(tempData);
+    });
+    
+  
+  }
+
+
+  
+loadNextPage = (nextPage, tempData)=>{
+  //next Page and tempData are properties of the TablePagination
+
+  this.setState({CurrentPage: nextPage}, function() {
+    this.retrieveFromApi(tempData);
+  });
+ 
+}
+
+
+// setShowDetails = (event,tempData)=>{
+
+//   let showDetails = event.target.checked;
+//   this.setState({FullDetails: showDetails}, function() {
+//     this.retrieveFromApi(tempData);
+//   });
+// }
+
+retrieveFromApi = (tempData)=>{
+
+    const {dispatch} = this.props;        
+  
+    let {
+      PageSize,
+      CurrentPage,
+      startDate,
+      endDate,
+      FullDetails,
+      SearchText,
+      CurrentSelectedPage
+    } = this.state;
+    
+    let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+    
+    if(this.props.match.params.accountEncodedKey===undefined)
+    {
+        if (tempData) {
+            dispatch(depositActions.getDepositTransaction(params, tempData));
+          } else {
+            dispatch(depositActions.getDepositTransaction(params));
+          }
     }
-
-    loadInitialData = () => {
-        let { PageSize, CurrentPage } = this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getAccountDepositTransaction(params);
-    }
-
-    getAccountDepositTransaction = (paramters) => {
-        const { dispatch } = this.props;
-
-        dispatch(depositActions.getAccountDepositTransaction(this.props.match.params.accountEncodedKey,paramters));
-    }
-
-    setPagesize = (PageSize, tempData) => {
-        const { dispatch } = this.props;
-        let sizeOfPage = PageSize.target.value,
-            { FullDetails, CurrentPage, CurrentSelectedPage, endDate, startDate } = this.state;
-
-        this.setState({ PageSize: sizeOfPage });
-
-        let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}`;
-        
+    else{
         if(tempData){
             dispatch(depositActions.getAccountDepositTransaction(this.props.match.params.accountEncodedKey,params,tempData));
         }else{
             dispatch(depositActions.getAccountDepositTransaction(this.props.match.params.accountEncodedKey,params));
         }
-        // this.getAccountDepositTransaction(params);
     }
+   
+}
 
-    loadNextPage = (nextPage, tempData)=>{
-        
-        const {dispatch} = this.props;
-        let {PageSize,CurrentPage,FullDetails, endDate, startDate} = this.state;
+exportDepositTransactions = () => {
+    let {
+        PageSize,
+        CurrentPage,
+        startDate,
+        endDate,
+        SearchText,
+        FullDetails,
+        CurrentSelectedPage
+      } = this.state;
 
-        // this.setState({PageSize: sizeOfPage});
-
-        // let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
-        // this.getTransactionChannels(params);
-        let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
-
-        if(tempData){
-            dispatch(depositActions.getAccountDepositTransaction(this.props.match.params.accountEncodedKey,params,tempData));
-        }else{
-            dispatch(depositActions.getAccountDepositTransaction(this.props.match.params.accountEncodedKey,params));
-        }
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
     }
-
-    setShowDetails = (FullDetails,tempData) => {
-        const { dispatch } = this.props;
-        let showDetails = FullDetails.target.checked,
-            { CurrentPage, CurrentSelectedPage, PageSize, endDate, startDate } = this.state;
-
-        this.setState({ FullDetails: showDetails });
-
-        let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        if(tempData){
-            dispatch(depositActions.getAccountDepositTransaction(this.props.match.params.accountEncodedKey,params,tempData));
-        }else{
-            dispatch(depositActions.getAccountDepositTransaction(this.props.match.params.accountEncodedKey,params));
-        }
-        
-        // this.getAccountDepositTransaction(this.props.match.params.accountEncodedKey,params);
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
     }
+    let paramters = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+    const { dispatch } = this.props;
 
-    renderDeposits = () => {
-        let getAccountDepositTransactionRequest = this.props.getAccountDepositTransactionRequest;
-
-        let saveRequestData= getAccountDepositTransactionRequest.request_data!==undefined?getAccountDepositTransactionRequest.request_data.tempData:null;
-        switch (getAccountDepositTransactionRequest.request_status) {
-            case (loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING):
-                if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
-                    return (
-                        <div className="loading-content">
-                            <div className="heading-with-cta">
-                                <Form className="one-liner">
-
-                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                        <Form.Control as="select" size="sm">
-                                            <option>No Filter</option>
-                                            <option>Add New Filter</option>
-                                            <option>Custom Filter</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                </Form>
-
-                                <div className="pagination-wrap">
-                                    <label htmlFor="toshow">Show</label>
-                                    <select id="toshow" 
-                                        className="countdropdown form-control form-control-sm"
-                                        value={this.state.PageSize}>
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="200">200</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        <th>Account Number</th>
-                                        <th>Account Holder Name</th>
-                                        <th>Product</th>
-                                        <th>Deposit Balance</th>
-                                        <th>Account State</th>
-                                        <th>Date Created</th>
-                                        <th>Deposit Available Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </TableComponent>
-                            <div className="loading-text">Please wait... </div>
-                        </div>
-                    )
-                }else{
-                    return(
-                        <div>
-                            <div className="heading-with-cta">
-                                <Form className="one-liner">
-
-                                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                        <Form.Control as="select" size="sm">
-                                            <option>No Filter</option>
-                                            <option>Add New Filter</option>
-                                            <option>Custom Filter</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                </Form>
-
-                                <div className="pagination-wrap">
-                                    <label htmlFor="toshow">Show</label>
-                                    <select id="toshow"
-                                        value={this.state.PageSize}
-                                        className="countdropdown form-control form-control-sm">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="200">200</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="table-helper">
-                                <input type="checkbox" name=""
-                                    checked={this.state.FullDetails}
-                                    id="showFullDetails" />
-                                <label htmlFor="showFullDetails">Show full details</label>
-                            </div>
+    dispatch(depositActions.exportDepositTransaction(paramters));
+  };
 
 
-                            <TableComponent classnames="striped bordered hover">
-                                <thead>
-                                    <tr>
-                                        <th>Account Number</th>
-                                        <th>Account Holder Name</th>
-                                        <th>Product</th>
-                                        <th>Deposit Balance</th>
-                                        <th>Account State</th>
-                                        <th>Date Created</th>
-                                        <th>Deposit Available Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        saveRequestData.result.map((eachDeposit, index) => {
-                                            return (
-                                                <Fragment key={index}>
-                                                    <tr>
-                                                        <td>{eachDeposit.accountNumber}</td>
-                                                        <td>{eachDeposit.accountHolderName}</td>
-                                                        <td>{eachDeposit.productName}</td>
-                                                        <td>{eachDeposit.depositBalance}</td>
-                                                        <td>{eachDeposit.accountStateDescription}</td>
-                                                        <td>{eachDeposit.dateCreated}</td>
-                                                        <td>{eachDeposit.depositAvailableBalance}</td>
-                                                    </tr>
-                                                </Fragment>
-                                            )
-                                        })
-                                    }
-                                </tbody>
-                            </TableComponent>
+fetchForEmptyState=()=>{
+    //This function returns the biew for empty list                                                                                                                                   
+     let getAccountDepositTransactionRequest = this.props.getAccountDepositTransactionRequest;
 
-                        </div>
-                    )
-                }
+    switch (getAccountDepositTransactionRequest.request_status){
+        case (loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING):
+            
+    return (<tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>);
+    default: return null;
+    }
+}
 
-            case (loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_SUCCESS):
-                let allDeposits = getAccountDepositTransactionRequest.request_data.response.data;
-                if (allDeposits !== undefined) {
-                    if (allDeposits.result.length >= 1) {
-                        return (
-                            <div>
-                                <div className="heading-with-cta">
-                                    <Form className="one-liner">
+fetchErrorState(){
+    let getAccountDepositTransactionRequest = this.props.getAccountDepositTransactionRequest;
+    
+    switch(getAccountDepositTransactionRequest.request_status){
+        case ( loanAndDepositsConstants.GET_CLIENTS_FAILURE):
+            return (
+                <div className="loading-content errormsg"> 
+                    <div>{getAccountDepositTransactionRequest.request_data.error}</div>
+                </div>
+            );
+            default: return null;
 
-                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <Form.Control as="select" size="sm">
-                                                <option>No Filter</option>
-                                                <option>Add New Filter</option>
-                                                <option>Custom Filter</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                    </Form>
+    };
+    
+}
 
-                                    <div className="pagination-wrap">
-                                        <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" 
-                                            onChange={(e)=>this.setPagesize(e, allDeposits)}
-                                            value={this.state.PageSize}
-                                            className="countdropdown form-control form-control-sm">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="200">200</option>
-                                        </select>
-                                        <TablePagination
-                                            totalPages={allDeposits.totalPages}
-                                            currPage={allDeposits.currentPage}
-                                            currRecordsCount={allDeposits.result.length}
-                                            totalRows={allDeposits.totalRows}
-                                            tempData={allDeposits.result}
-                                            pagesCountToshow={4}
-                                            refreshFunc={this.loadNextPage}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="table-helper">
-                                    <input type="checkbox" name=""
-                                        onChange={(e)=>this.setShowDetails(e, allDeposits)}
-                                        checked={this.state.FullDetails}
-                                        id="showFullDetails" />
-                                    <label htmlFor="showFullDetails">Show full details</label>
-                                </div>
-                                
 
-                                <TableComponent classnames="striped bordered hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Account Number</th>
-                                            <th>Account Holder Name</th>
-                                            <th>Product</th>
-                                            <th>Deposit Balance</th>
-                                            <th>Account State</th>
-                                            <th>Date Created</th>
-                                            <th>Deposit Available Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            allDeposits.result.map((eachDeposit, index) => {
-                                                return (
-                                                    <Fragment key={index}>
-                                                        <tr>
-                                                            <td>{eachDeposit.accountNumber}</td>
-                                                            <td>{eachDeposit.accountHolderName}</td>
-                                                            <td>{eachDeposit.productName}</td>
-                                                            <td>{eachDeposit.depositBalance}</td>
-                                                            <td>{eachDeposit.accountStateDescription}</td>
-                                                            <td>{eachDeposit.dateCreated}</td>
-                                                            <td>{eachDeposit.depositAvailableBalance}</td>
-                                                        </tr>
-                                                    </Fragment>
-                                                )
-                                            })
-                                        }
-                                    </tbody>
-                                </TableComponent>
-                                
-                            </div>
-                        )
-                    }else{
-                        return(
-                            <div className="no-records">
-                                <div className="heading-with-cta">
-                                    <Form className="one-liner">
+fetchForBusyState(){
+   let getAccountDepositTransactionRequest = this.props.getAccountDepositTransactionRequest;
+  switch (getAccountDepositTransactionRequest.request_status){
+      case (loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_PENDING):
 
-                                        <Form.Group controlId="filterDropdown" className="no-margins pr-10">
-                                            <Form.Control as="select" size="sm">
-                                                <option>No Filter</option>
-                                                <option>Add New Filter</option>
-                                                <option>Custom Filter</option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                        <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                    </Form>
+          return (  <div className="loading-content">
+               <div className="loading-text">Please wait...</div></div>);
+  default: return null;
+  }
+}
 
-                                    <div className="pagination-wrap">
-                                        <label htmlFor="toshow">Show</label>
-                                        <select id="toshow" className="countdropdown form-control form-control-sm">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="200">200</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <TableComponent classnames="striped bordered hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Account Number</th>
-                                            <th>Account Holder Name</th>
-                                            <th>Product</th>
-                                            <th>Deposit Balance</th>
-                                            <th>Account State</th>
-                                            <th>Date Created</th>
-                                            <th>Deposit Available Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </TableComponent>
-                                {/* <div className="footer-with-cta centered">
-                                    <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
-                                </div> */}
-                            </div>
-                        )
-                    }
-                } else {
-                    return null;
-                }
-            case (loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_FAILURE):
+    fetchForDataState=()=> {
+     let getAccountDepositTransactionRequest = this.props.getAccountDepositTransactionRequest;
+   let allUSerPermissions = [];
+   this.userPermissions.map((eachPermission) => {
+     allUSerPermissions.push(eachPermission.permissionCode);
+   });
+
+    switch(getAccountDepositTransactionRequest.request_status){
+    case(loanAndDepositsConstants.GET_ACCOUNTDEPOSIT_TRANSACTION_SUCCESS):
+
+      let allDeposits = getAccountDepositTransactionRequest.request_data.response.data;
+        return (<tbody>{
+
+            allDeposits.result.map((eachDeposit, index) => {
                 return (
-                    <div className="loading-content errormsg">
-                        <div>{getAccountDepositTransactionRequest.request_data.error}</div>
-                    </div>
+                    <Fragment key={index}>
+                        <tr>
+                            <td>{eachDeposit.accountNumber}</td>
+                            <td>{eachDeposit.accountHolderName}</td>
+                            <td>{eachDeposit.productName}</td>
+                            <td>{eachDeposit.depositBalance}</td>
+                            <td>{eachDeposit.accountStateDescription}</td>
+                            <td>{eachDeposit.dateCreated}</td>
+                            <td>{eachDeposit.depositAvailableBalance}</td>
+                        </tr>
+                    </Fragment>
                 )
-            default:
-                return null;
-        }
+            })
+        }</tbody>);
+
+  
+    default: return null;
+}
+}
+
+
+
+fetchPageList() {
+   
+    let allUSerPermissions = [];
+    this.userPermissions.map((eachPermission) => {
+      allUSerPermissions.push(eachPermission.permissionCode);
+    });
+
+    let getAccountDepositTransactionRequest = this.props.getAccountDepositTransactionRequest;
+    let allDeposits = getAccountDepositTransactionRequest.request_data.response.data;
+
+    return(
+        <div>
+        <div className="heading-with-cta">
+            <Form className="one-liner">
+
+                <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                    <Form.Control as="select" size="sm">
+                        <option>No Filter</option>
+                        <option>Add New Filter</option>
+                        <option>Custom Filter</option>
+                    </Form.Control>
+                </Form.Group>
+                <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+            </Form>
+
+            <div className="pagination-wrap">
+                <label htmlFor="toshow">Show</label>
+                <select id="toshow" 
+                    onChange={(e)=>this.setPagesize(e, allDeposits)}
+                    value={this.state.PageSize}
+                    className="countdropdown form-control form-control-sm">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="200">200</option>
+                </select>
+               
+
+<TablePagination
+                            totalPages={allDeposits?.totalPages??0}
+                            currPage={allDeposits?.currentPage??0}
+                            currRecordsCount={allDeposits?.result.length??0}
+                            totalRows={allDeposits?.totalRows??0}
+                            tempData={allDeposits?.result??0}
+                            pagesCountToshow={4}
+                            refreshFunc={this.loadNextPage}
+                        />
+            </div>
+        </div>
+        {/* <div className="table-helper">
+            <input type="checkbox" name=""
+                onChange={(e)=>this.setShowDetails(e, allDeposits)}
+                checked={this.state.FullDetails}
+                id="showFullDetails" />
+            <label htmlFor="showFullDetails">Show full details</label>
+        </div> */}
+        
+
+        <TableComponent classnames="striped bordered hover">
+            <thead>
+                <tr>
+                    <th>Account Number</th>
+                    <th>Account Holder Name</th>
+                    <th>Product</th>
+                    <th>Deposit Balance</th>
+                    <th>Account State</th>
+                    <th>Date Created</th>
+                    <th>Deposit Available Balance</th>
+                </tr>
+            </thead>
+       
+
+          {this.fetchForEmptyState()}  
+          {this.fetchErrorState()}
+          {this.fetchForDataState()}
+         
+
+            
+        </TableComponent>
+        {this.fetchForBusyState()}
+    </div>
+);
     }
 
+  
 
 
 
@@ -408,12 +329,9 @@ class DepositTransactionAccount extends React.Component {
                             <div className="module-content">
                                 <div className="content-container">
                                     <div className="row">
-                                        {/* <div className="col-sm-3">
-                                            <AccountsSidebar/>
-                                        </div> */}
                                         <div className="col-sm-12">
                                             <div className="middle-content">
-                                                {this.renderDeposits()}
+                                                {this.fetchPageList()}
                                             </div>
                                         </div>
                                     </div>

@@ -18,12 +18,18 @@ import './loanmanagement.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
 import { LOAN_MODULE_MENU_LINKS } from '../../shared/config';
 import SubMenu from '../../shared/components/SubMenu';
-import { LoanStateConstants } from '../../redux/actions/clients/client-states-constants';
+import { LoanStateConstants,LoanSubStateConstants } from '../../redux/actions/clients/client-states-constants';
 
 
 class LoanListDisplay extends React.Component {
   constructor(props) {
     super(props);
+    this.initializeState();
+
+    this.userPermissions = JSON.parse(localStorage.getItem('x-u-perm'));
+  }
+
+  initializeState=()=>{
     this.state = {
       user: '',
       PageSize: 25,
@@ -35,38 +41,41 @@ class LoanListDisplay extends React.Component {
       startDate: '',
       SearchText: '',
     };
-
-    this.userPermissions = JSON.parse(localStorage.getItem('x-u-perm'));
+    return this.state;
   }
-
-  
 
   /////
 
-  componentDidMount(){
+componentDidMount(){
     this.retrieveFromApi();
 }
 componentDidUpdate(prevProps) {
   // Typical usage (don't forget to compare props):
-  if (this.props.loanState !== prevProps.loanState) {
-    
-    this.setState({LoanState: this.props.loanState});
-    this.retrieveFromApi();
+  console.log(prevProps);
+  if (this.props.loanState !== prevProps.loanState || this.props.loanSubState !== prevProps.loanSubState) {
+    this.setState(this.initializeState(), function() {
+      this.retrieveFromApi();
+    });
   }
 }
-// componentWillReceiveProps(nextProps) {
-//   if (nextProps.location.pathname !== this.props.location.pathname) {
-//     console.log("here");
-//     this.retrieveFromApi();
-//     //take action here
-//   }
-// }
+
+
+setPagesize = (event, tempData)=>{
+   
+  this.setState({PageSize: event.target.value}, function() {
+    this.retrieveFromApi(tempData);
+  });
+  
+
+}
 
 
 loadNextPage = (nextPage, tempData)=>{
   //next Page and tempData are properties of the TablePagination
-  this.setState({CurrentPage: nextPage});
-  this.retrieveFromApi(tempData);
+ 
+  this.setState({CurrentPage: nextPage}, function() {
+    this.retrieveFromApi(tempData);
+  });
  
 }
 
@@ -75,20 +84,11 @@ loadNextPage = (nextPage, tempData)=>{
 setShowDetails = (event,tempData)=>{
   const {dispatch} = this.props;
   let showDetails = event.target.checked;
-  this.setState({FullDetails: showDetails});
-     this.retrieveFromApi(tempData);
-
-}
-
-
-
-
-setPagesize = (event, tempData)=>{
-    const {dispatch} = this.props;
-   
-    this.setState({PageSize: event.target.value});
+  this.setState({FullDetails: showDetails}, function() {
     this.retrieveFromApi(tempData);
-  
+  });
+     
+
 }
 
 retrieveFromApi = (tempData)=>{
@@ -105,8 +105,10 @@ retrieveFromApi = (tempData)=>{
       startDate,
       FullDetails,
     } = this.state;
-    let params = `FullDetails=${FullDetails}&SearchText=${SearchText}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&LoanState=${this.props.loanState}`;
-     
+    let params = `FullDetails=${FullDetails}&SearchText=${SearchText}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&LoanState=${this.props.loanState}&LoanSubState=${this.props.loanSubState??LoanSubStateConstants.All}`;
+
+    
+    // &LoanSubState=All:-1, Pending_1stLevel_Approval:3,Pending_2ndLevel_Approval:4,Pending_Client_Acceptance:6
     if(tempData){
         dispatch(loanActions.getApprovedLoans(params, tempData));
     }else{
@@ -181,10 +183,10 @@ default:             return  (<div>Loan Accounts (All)</div>);
         startDate = startDate.toISOString();
         
       }
-      this.setState({SearchText:SearchText});
-      this.setState({endDate: endDate});
-      this.setState({startDate: startDate});
-      this.retrieveFromApi();
+      this.setState({SearchText:SearchText,endDate: endDate,startDate: startDate}
+        , () => {
+          this.retrieveFromApi();
+        });
      
     }
   };
@@ -248,6 +250,35 @@ default:             return  (<div>Loan Accounts (All)</div>);
 }
 
 
+fetchErrorState(){
+  let getLoansRequest = this.props.getLoansRequest;
+
+  switch(getLoansRequest.request_status){
+      case ( loanAndDepositsConstants.GET__APPROVED_LOANS_FAILURE):
+          return (
+              <div className="loading-content errormsg"> 
+                  <div>{getLoansRequest.request_data.error}</div>
+              </div>
+          );
+          default: return null;
+
+  };
+  
+}
+
+fetchForBusyState(){
+      
+
+let getLoansRequest = this.props.getLoansRequest;
+
+switch (getLoansRequest.request_status){
+    case (loanAndDepositsConstants.GET__APPROVED_LOANS_PENDING):
+
+        return (  <div className="loading-content">
+             <div className="loading-text">Please wait...</div></div>);
+default: return null;
+}
+}
 
 
 
@@ -338,36 +369,54 @@ fetchForDataState=()=> {
   }
 
 
-fetchErrorState(){
-    let getLoansRequest = this.props.getLoansRequest;
 
-    switch(getLoansRequest.request_status){
-        case ( loanAndDepositsConstants.GET__APPROVED_LOANS_FAILURE):
-            return (
-                <div className="loading-content errormsg"> 
-                    <div>{getLoansRequest.request_data.error}</div>
-                </div>
-            );
-            default: return null;
+fetchPendingApprovalSubmenuList=()=> {
+console.log('fetchPendingApprovalSubmenuList '+this.props.loanState+'   '+LoanStateConstants.PENDING_APPROVAL);
+  
+  switch(this.props.loanState)
+  {
+    case (LoanStateConstants.PENDING_APPROVAL):
+      return (<div className='module-submenu'>
+      <div className='content-container'>
+        <ul className='nav'>
+          <li>
+            <NavLink exact to={'/all-loans/pending/'} activeClassName='activeNavLink'>
+              All
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              exact
+              to={'/all-loans/pending/pending-approval'}
+              activeClassName='activeNavLink'
+            >
+              Pending approval
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={'/all-loans/pending/pending-management'}
+              activeClassName='activeNavLink'
+            >
+              Pending Approval(Management)
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={'/all-loans/pending/pending-acceptance'}
+              activeClassName='activeNavLink'
+            >
+              Pending(Acceptance)
+            </NavLink>
+          </li>
+        </ul>
+      </div>
+    </div>);
 
-    };
-    
-}
-
-fetchForBusyState(){
-        
-
-  let getLoansRequest = this.props.getLoansRequest;
-
-  switch (getLoansRequest.request_status){
-      case (loanAndDepositsConstants.GET__APPROVED_LOANS_PENDING):
-
-          return (  <div className="loading-content">
-               <div className="loading-text">Please wait...</div></div>);
-  default: return null;
+    default: return null;
   }
+ 
 }
-
 
 
 
@@ -567,6 +616,9 @@ fetchPageList() {
                 </div>
               </div>
               <SubMenu links={LOAN_MODULE_MENU_LINKS} key={this.props.loanState}/>
+              
+              {this.fetchPendingApprovalSubmenuList()}
+              
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>

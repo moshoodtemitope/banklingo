@@ -96,7 +96,7 @@ export const main_menu_and_sub_menu_list
         subMenus: [
             {
                 subMenuLabel: "All Deposits",
-                subMenuRoute: "/deposits"
+                subMenuRoute: "/deposits/all"
             },
         ]
     },

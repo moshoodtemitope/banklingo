@@ -21,51 +21,67 @@ import SubMenu from '../../shared/components/SubMenu';
 class ClientsListDisplay extends React.Component {
   constructor(props) {
     super(props);
+    this.initializeState();
+    this.userPermissions = JSON.parse(localStorage.getItem('x-u-perm'));
+  }
+
+  initializeState=()=>{
     this.state = {
       user: '',
       PageSize: '10',
       FullDetails: false,
       CurrentPage: 1,
       BranchId: JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
-      ClientState: props.clientState, //PENDING_APPROVAL=3 ACTIVE=1, INACTIVE=4, BLACKLISTED=6, EXITED=7, 
+      ClientState: this.props.clientState, 
       endDate: '',
       startDate: '',
       SearchText: '',
     };
-    this.userPermissions = JSON.parse(localStorage.getItem('x-u-perm'));
+    return this.state;
   }
 
-
-  componentDidMount() {
+  componentDidMount(){
     this.retrieveFromApi();
+}
+componentDidUpdate(prevProps) {
+  // Typical usage (don't forget to compare props):
+  if (this.props.clientState !== prevProps.clientState) {
+    this.setState(this.initializeState(), function() {
+      this.retrieveFromApi();
+    });
   }
+}
 
-  componentDidUpdate(prevProps) {
-    console.log('route updated '+this.props.clientState + ' '+ prevProps.clientState);
-    if (this.props.ClientState !== prevProps.clientState) {
-      // fetch or other component tasks necessary for rendering
-     // this.setState({ClientState: this.props.clientState});
-    //  this.retrieveFromApi();
-    }
-  }
-
-// componentDidMount(){
-//     this.retrieveFromApi();
-// }
-
-
-// componentDidUpdate(prevProps) {
-//   // Typical usage (don't forget to compare props):
-//   if (this.props.clientState !== prevProps.clientState) {
-//     this.retrieveFromApi();
-//   }
-// }
 setPagesize = (event, tempData)=>{
-    const {dispatch} = this.props;
    
-    this.setState({PageSize: event.target.value});
-    this.retrieveFromApi(tempData);
+    this.setState({PageSize: event.target.value}, function() {
+      this.retrieveFromApi(tempData);
+    });
+    
   
+  }
+
+
+  
+loadNextPage = (nextPage, tempData)=>{
+  //next Page and tempData are properties of the TablePagination
+  const {dispatch} = this.props;
+  this.setState({CurrentPage: nextPage}, function() {
+    this.retrieveFromApi(tempData);
+  });
+ 
+}
+
+
+
+setShowDetails = (event,tempData)=>{
+  const {dispatch} = this.props;
+  let showDetails = event.target.checked;
+  this.setState({FullDetails: showDetails}, function() {
+    this.retrieveFromApi(tempData);
+  });
+     
+
 }
 
 retrieveFromApi = (tempData)=>{
@@ -77,10 +93,10 @@ retrieveFromApi = (tempData)=>{
       PageSize,
       CurrentPage,
       BranchId,
-      ClientState,
       FullDetails,
     } = this.state;
-    let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}`;
+    
+    let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${this.props.clientState}`;
 
     //let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
     
@@ -111,32 +127,12 @@ exportClients = () => {
   if (startDate !== '') {
     startDate = startDate.toISOString();
   }
-  let paramters = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+  let paramters = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${this.props.clientState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
   const { dispatch } = this.props;
 
   dispatch(clientsActions.exportClients(paramters));
 };
-
-loadNextPage = (nextPage, tempData)=>{
-    //next Page and tempData are properties of the TablePagination
-    const {dispatch} = this.props;
-    
-    this.setState({CurrentPage: nextPage});
-    this.retrieveFromApi(tempData);
-   
-}
-
-
-
-setShowDetails = (event,tempData)=>{
-    const {dispatch} = this.props;
-    // console.log('----here', PageSize.target.value);
-    let showDetails = event.target.checked;
-    this.setState({FullDetails: showDetails});
-       this.retrieveFromApi(tempData);
-
-}
 
 
 
@@ -202,7 +198,7 @@ setShowDetails = (event,tempData)=>{
         <td></td>
       </tr>
     </tbody>);
-    default: return  (<tbody></tbody>);
+    default: return null;
     }
 }
 
@@ -224,6 +220,17 @@ fetchErrorState(){
 }
 
 
+fetchForBusyState(){
+  let getClientsRequest = this.props.getClientsReducer;
+  switch (getClientsRequest.request_status){
+      case (clientsConstants.GET_CLIENTS_PENDING):
+
+          return (  <div className="loading-content">
+               <div className="loading-text">Please wait...</div></div>);
+  default: return null;
+  }
+}
+
     fetchForDataState=()=> {
     let getClientsRequest = this.props.getClientsReducer;
    let allUSerPermissions = [];
@@ -239,21 +246,6 @@ fetchErrorState(){
   //  let allClientsData= getClientsRequest.request_data!==undefined?getClientsRequest.request_data.tempData:null;
 
    let allClientsData= getClientsRequest.request_data!==undefined?getClientsRequest?.request_data?.response?.data:null;
-
-      // if(allClientsData === null || allClientsData === undefined || allClientsData.result?.length<=0)  {
-      //   return (<tbody>
-      //        <Fragment key={-1}>
-      //     <tr>
-      //       <td></td>
-      //       <td></td>
-      //       <td></td>
-      //       <td></td>
-      //       <td></td>
-      //       <td></td>
-      //       <td></td>
-      //     </tr></Fragment>
-      //   </tbody>);
-      // }
 
         return (<tbody>{ allClientsData.result.map((eachClient, index) => {
           return (
@@ -311,19 +303,6 @@ fetchErrorState(){
 }
     }
 
-    fetchForBusyState(){
-        
-
-        let getClientsRequest = this.props.getClientsReducer;
-
-        switch (getClientsRequest.request_status){
-            case (clientsConstants.GET_CLIENTS_PENDING):
-
-                return (  <div className="loading-content">
-                     <div className="loading-text">Please wait...</div></div>);
-        default: return null;
-        }
-    }
   searchTxtn = (e, tempData) => {
     e.preventDefault();
     const { dispatch } = this.props;
@@ -537,9 +516,9 @@ fetchErrorState(){
         </TableComponent>
         {this.fetchForBusyState()}
         
-        <div className="footer-with-cta toleft">
+        {/* <div className="footer-with-cta toleft">
             <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
-        </div>
+        </div> */}
     </div>
 );
     }
@@ -567,8 +546,8 @@ fetchErrorState(){
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className='middle-content'>
-                        <div className='heading-with-cta'>
-                        </div>
+                        {/* <div className='heading-with-cta'>
+                        </div> */}
                         {this.fetchPageList()}
                       </div>
                     </div>
