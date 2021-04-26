@@ -935,7 +935,7 @@ class CustomerAccountContainer extends React.Component {
   };
 
   render() {
-    let { generatedRoutes } = this.state;
+  // 
     return (
       <Fragment>
         <InnerPageContainer {...this.props}>
@@ -949,6 +949,7 @@ class CustomerAccountContainer extends React.Component {
       </Fragment>
     );
   }
+
 }
 
 function mapStateToProps(state) {

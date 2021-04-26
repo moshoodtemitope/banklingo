@@ -472,30 +472,7 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute  exact path='/access-restricted' {...this.props} authed={this.props.user} component={unAuthedPage} />
                         <PrivateRoute exact path='/my-profile/tasks' {...this.props} authed={this.props.user} component={ViewUserTasks} />
                         <PrivateRoute exact path='/all-tasks' {...this.props} authed={this.props.user} component={ViewAllTasks} />
-                        {/* <PrivateRoute exact path='/customer/:id' {...this.props} authed={this.props.user} component={ViewCustomer} />  */}
-                        {/* <PrivateRoute exact path='/createnewcustomer' {...this.props} authed={this.props.user} component={NewCustomerAccount} />
-                        <PrivateRoute exact path='/create-investmentcustomer' {...this.props} authed={this.props.user} component={NewInvestmentCustomerAccount} />
-                        <PrivateRoute exact path='/editcustomer' {...this.props} authed={this.props.user} component={EditCustomerAccount} />
-                        <PrivateRoute exact path='/customer/:id/attachments' {...this.props} authed={this.props.user} component={ViewCustomerAttachments} />
-
-                        <PrivateRoute exact path='/customer/:id/communications' {...this.props} authed={this.props.user} component={ViewCustomerCommunications} />
-                        <PrivateRoute exact path='/customer/:id/comments' {...this.props} authed={this.props.user} component={ViewCustomerComments} />
-                        <PrivateRoute exact path='/customer/:id/closedaccounts' {...this.props} authed={this.props.user} component={ViewClosedAccounts} />
-                        <PrivateRoute exact path='/customer/:id/loanaccount/:loanid' {...this.props} authed={this.props.user} component={ViewLoanAccount} />
-                        <PrivateRoute exact path='/customer/:id/savingsaccount/:accountid' {...this.props} authed={this.props.user} component={ViewSavingsAccount} />
-
-                        <PrivateRoute exact path='/customer/:id/closedaccounts/:accountid' {...this.props} authed={this.props.user} component={ViewClosedAccount} />  */}
-
-
-
-
-                        {/* <Route exact path='/administration/organization/editbranch/:encodedkey'  render={(props) => <EditBranch encodedKey={props.match.params.encodedkey} {...this.props} />} /> */}
-                        {/* <Route exact path='/administration/access/edit-user/:encodedKey'  render={(props) => <EditUser encodedKey={props.match.params.encodedKey} {...this.props} />} /> */}
-
-
-
-                        {/* <Route exact path='/administration/administration-generalcurrency'  render={(props) => <GeneralCurrency {...this.props} />} /> */}
-
+                      
                         <Route  render={(props) => <PageNotFound {...this.props} />} />
 
                     </Switch>
