@@ -53,7 +53,12 @@ import{
     getARiskLevel,
     createARiskLevel,
     updateARiskLevel,
-    fetchAllTasksReducer
+    fetchAllTasksReducer,
+    getBranchClosuresReducer,
+    getBranchesOpenReducer,
+    getBranchesClosedReducer,
+    openABranchReducer,
+    closeABranchReducer
 }
  from './administration/administration.reducer'
 
@@ -318,7 +323,12 @@ export const administration ={
     getARiskLevel,
     createARiskLevel,
     updateARiskLevel,
-    fetchAllTasksReducer
+    fetchAllTasksReducer,
+    getBranchClosuresReducer,
+    getBranchesOpenReducer,
+    getBranchesClosedReducer,
+    openABranchReducer,
+    closeABranchReducer
     
     
 }

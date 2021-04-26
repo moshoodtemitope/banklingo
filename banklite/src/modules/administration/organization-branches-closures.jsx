@@ -3,6 +3,7 @@ import * as React from "react";
 
 import {Fragment} from "react";
 import AdminNav from './_menu'
+import BranchClosureMenu from './menus/_branch_closure_menu'
 import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
@@ -21,7 +22,8 @@ import {administrationConstants} from '../../redux/actiontypes/administration/ad
 // import Alert from 'react-bootstrap/Alert'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
-class OrganizationBranches  extends React.Component {
+import { getDateFromISO } from "../../shared/utils";
+class OrganizationBranchesClosures extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -29,7 +31,8 @@ class OrganizationBranches  extends React.Component {
             PageSize:25,
             FullDetails: false,
             CurrentPage:1,
-            CurrentSelectedPage:1
+            CurrentSelectedPage:1,
+            BranchClosureStatus:0
         }
 
         
@@ -40,49 +43,49 @@ class OrganizationBranches  extends React.Component {
     }
 
     loadInitialData=()=>{
-        let {PageSize, CurrentPage}= this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getAllBranches(params);
+        let {PageSize, CurrentPage, BranchClosureStatus}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchClosureStatus=${BranchClosureStatus}`;
+        this.getClosures(params);
     }
 
-    getAllBranches = (paramters)=>{
+    getClosures = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(administrationActions.getAllBranches(paramters));
+        dispatch(administrationActions.getBranchesClosures(paramters));
     }
 
     setPagesize = (PageSize, tempData)=>{
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
-            {FullDetails, CurrentPage, CurrentSelectedPage} = this.state;
+            {FullDetails, CurrentPage, CurrentSelectedPage, BranchClosureStatus} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
-        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        // this.getAllBranches(params);
+        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&BranchClosureStatus=${BranchClosureStatus}`;
+        
 
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params, tempData));
+            dispatch(administrationActions.getBranchesClosures(params, tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(administrationActions.getBranchesClosures(params));
         }
     }
 
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize} = this.state;
+        let {PageSize, BranchClosureStatus} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
-        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}&BranchClosureStatus=${BranchClosureStatus}`;
         // this.getTransactionChannels(params);
 
 
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params,tempData));
+            dispatch(administrationActions.getBranchesClosures(params,tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(administrationActions.getBranchesClosures(params));
         }
     }
 
@@ -90,27 +93,27 @@ class OrganizationBranches  extends React.Component {
         const {dispatch} = this.props;
         // console.log('----here', PageSize.target.value);
         let showDetails = FullDetails.target.checked,
-            {CurrentPage, CurrentSelectedPage, PageSize} = this.state;
+            {CurrentPage, CurrentSelectedPage, PageSize, BranchClosureStatus} = this.state;
 
         this.setState({FullDetails: showDetails});
 
-        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        // this.getAllBranches(params);
+        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&BranchClosureStatus=${BranchClosureStatus}`;
+        
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params, tempData));
+            dispatch(administrationActions.getBranchesClosures(params, tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(administrationActions.getBranchesClosures(params));
         }
         
     }
 
     renderAllBranches =()=>{
-        let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
+        let getBranchClosuresRequest = this.props.getBranchClosuresReducer;
 
-        let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined?adminGetAllBranchesRequest.request_data.tempData:null;
+        let saveRequestData= getBranchClosuresRequest.request_data!==undefined?getBranchClosuresRequest.request_data.tempData:null;
 
-            switch (adminGetAllBranchesRequest.request_status){
-                case (administrationConstants.GET_ALL_BRANCHES_PENDING):
+            switch (getBranchClosuresRequest.request_status){
+                case (administrationConstants.GET_BRANCH_CLOSURES_PENDING):
                     
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                         return (
@@ -143,9 +146,8 @@ class OrganizationBranches  extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Branch Name</th>
-                                            <th>Branch State</th>
-                                            <th>Created</th>
-                                            <th>Last Modified</th>
+                                            <th>Branch ID</th>
+                                            <th>Date Opened</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -197,11 +199,8 @@ class OrganizationBranches  extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Branch Name</th>
-                                            <th>Branch State</th>
-                                            {this.state.FullDetails && <th>Address</th> }
-                                            {this.state.FullDetails && <th>Contact</th> }
-                                            <th>Created</th>
-                                            <th>Last Modified</th>
+                                            <th>Branch ID</th>
+                                            <th>Date Opened</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -211,12 +210,9 @@ class OrganizationBranches  extends React.Component {
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachBranch.name}</td>
-                                                            <td>{eachBranch.objectStateDescription}</td>
-                                                            {this.state.FullDetails && <th>{eachBranch.address}</th> }
-                                                            {this.state.FullDetails && <th>{eachBranch.contact}</th> }
-                                                            <td>{eachBranch.dateCreated}</td>
-                                                            <td>{eachBranch.lastUpdated}</td>
+                                                            <td>{eachBranch.branchName}</td>
+                                                            <td>{eachBranch.branchId}</td>
+                                                            <td>{getDateFromISO(eachBranch.dateOpenedFor)}</td>
                                                             <td>
                                                                 <DropdownButton
                                                                     size="sm"
@@ -240,8 +236,8 @@ class OrganizationBranches  extends React.Component {
                         )
                     }
                 
-                case(administrationConstants.GET_ALL_BRANCHES_SUCCESS):
-                    let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
+                case(administrationConstants.GET_BRANCH_CLOSURES_SUCCESS):
+                    let allBranchesData = getBranchClosuresRequest.request_data.response.data;
                     if(allBranchesData!==undefined){
                         if(allBranchesData.result.length>=1){
                             return(
@@ -294,11 +290,8 @@ class OrganizationBranches  extends React.Component {
                                         <thead>
                                             <tr>
                                                 <th>Branch Name</th>
-                                                <th>Branch State</th>
-                                                {this.state.FullDetails && <th>Address</th> }
-                                                {this.state.FullDetails && <th>Contact</th> }
-                                                <th>Created</th>
-                                                <th>Last Modified</th>
+                                                <th>Branch ID</th>
+                                                <th>Date Opened</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -308,12 +301,9 @@ class OrganizationBranches  extends React.Component {
                                                     return(
                                                         <Fragment key={index}>
                                                             <tr>
-                                                                <td>{eachBranch.name}</td>
-                                                                <td>{eachBranch.objectStateDescription}</td>
-                                                                {this.state.FullDetails && <th>{eachBranch.address}</th> }
-                                                                {this.state.FullDetails && <th>{eachBranch.contact}</th> }
-                                                                <td>{eachBranch.dateCreated}</td>
-                                                                <td>{eachBranch.lastUpdated}</td>
+                                                            <td>{eachBranch.branchName}</td>
+                                                            <td>{eachBranch.branchId}</td>
+                                                            <td>{getDateFromISO(eachBranch.dateOpenedFor)}</td>
                                                                 <td>
                                                                     <DropdownButton
                                                                         size="sm"
@@ -369,15 +359,13 @@ class OrganizationBranches  extends React.Component {
                                         <thead>
                                             <tr>
                                                 <th>Branch Name</th>
-                                                <th>Branch State</th>
-                                                <th>Created</th>
-                                                <th>Last Modified</th>
+                                                <th>Branch ID</th>
+                                                <th>Date Opened</th>
                                                 {/* <th></th> */}
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -394,10 +382,10 @@ class OrganizationBranches  extends React.Component {
                         return null;
                     }
 
-                case (administrationConstants.GET_ALL_BRANCHES_FAILURE):
+                case (administrationConstants.GET_BRANCH_CLOSURES_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
-                            <div>{adminGetAllBranchesRequest.request_data.error}</div>
+                            <div>{getBranchClosuresRequest.request_data.error}</div>
                         </div>
                     )
                 default :
@@ -420,7 +408,7 @@ class OrganizationBranches  extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Administration</h2>
+                                                <h2>All Branch Closures</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -445,6 +433,7 @@ class OrganizationBranches  extends React.Component {
                                             </li> */}
                                         </ul>
                                     </div>
+                                    <BranchClosureMenu />
                                 </div>
                             </div>
                             <div className="module-content">
@@ -471,8 +460,8 @@ class OrganizationBranches  extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        adminGetAllBranches : state.administrationReducers.adminGetAllBranchesReducer,
+        getBranchClosuresReducer : state.administrationReducers.getBranchClosuresReducer,
     };
 }
 
-export default connect(mapStateToProps)(OrganizationBranches);
+export default connect(mapStateToProps)(OrganizationBranchesClosures);
