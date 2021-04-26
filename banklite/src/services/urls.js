@@ -131,6 +131,8 @@ export const routes = {
     
     TELLER_MANAGEMENT: BASEURL + '/api/TellerManagement',
 
+    CHEQUE_MANAGEMENT: BASEURL + '/api/ChequeTransaction',
+
     //Task Endpoints
     HIT_TASKS: BASEURL + '/api/ApplicationTasks',
 

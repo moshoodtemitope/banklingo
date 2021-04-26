@@ -3511,7 +3511,7 @@ class ViewSavingsAccount extends React.Component {
         )
     }
 
-    renderDepositCtas =(depositDetails)=>{
+    renderDepositCtas = (depositDetails) => {
         //     public enum depositStateEnum
         // {
         //     [Description("Partial Application")]
@@ -3532,164 +3532,167 @@ class ViewSavingsAccount extends React.Component {
         //     Closed_Written_Off = 8,
         //     Closed_Withdrawn = 9
         // }
-        let allUSerPermissions =[];
-        this.userPermissions.map(eachPermission=>{
+        let allUSerPermissions = [];
+        this.userPermissions.map(eachPermission => {
             allUSerPermissions.push(eachPermission.permissionCode)
         })
 
-            return(
-                <div className="heading-ctas">
-                    <ul className="nav">
-                        {(depositDetails.accountState ===2 && allUSerPermissions.indexOf("bnk_approve_deposit_account") >-1) &&
-                            <li>
-                                <Button size="sm"
-                                    onClick={()=>{
-                                        this.setState({newState: "Approved", newStateUpdate: "approve", newStateHeading :"Change Deposit State", ctaText:"Approve Deposit"})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Approve</Button>
-                            </li>
-                        }
-                        {(depositDetails.accountState ===2) &&
-                            <li>
-                                <Button size="sm"
-                                    onClick={()=>{
-                                        this.setState({newState: "Set Incomplete", newStateHeading :"Change Deposit State", newStateUpdate: "settopartialapplication", ctaText:"Set Incomplete"})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Set Incomplete</Button>
-                            </li>
-                        }
+        return (
+            <div className="heading-ctas">
+                <ul className="nav">
+                    {(depositDetails.accountState === 2 && allUSerPermissions.indexOf("bnk_approve_deposit_account") > -1) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Approved", newStateUpdate: "approve", newStateHeading: "Change Deposit State", ctaText: "Approve Deposit" })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Approve</Button>
+                        </li>
+                    }
+                    {(depositDetails.accountState === 2) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Set Incomplete", newStateHeading: "Change Deposit State", newStateUpdate: "settopartialapplication", ctaText: "Set Incomplete" })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Set Incomplete</Button>
+                        </li>
+                    }
 
-                        {(depositDetails.accountState ===5 && depositDetails.isMaturityDateSet===false && depositDetails.productType===2) &&
-                            <li>
-                                <Button size="sm"
-                                    onClick={()=>{
-                                        this.setState({newState: "Begin Maturity Period", newStateHeading :"Begin Maturity Period", newStateUpdate: "beginmaturity", ctaText:"Begin Maturity"})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Begin Maturity</Button>
-                            </li>
-                        }
+                    {(depositDetails.accountState === 5 && depositDetails.isMaturityDateSet === false && depositDetails.productType === 2) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Begin Maturity Period", newStateHeading: "Begin Maturity Period", newStateUpdate: "beginmaturity", ctaText: "Begin Maturity" })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Begin Maturity</Button>
+                        </li>
+                    }
 
-                        {(depositDetails.accountState ===5  &&  depositDetails.depositAvailableBalance >=1) &&
-                            <li>
-                                <Button size="sm"
-                                    onClick={()=>{
-                                        this.setState({newState: "Make Withdrawal", newStateHeading :"Make Withdrawal", newStateUpdate: "makewithdrawal", ctaText:"Make Withdrawal"})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Withdrawal</Button>
-                            </li>
-                        }
+                    {(depositDetails.accountState === 5 && depositDetails.depositAvailableBalance >= 1) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Make Withdrawal", newStateHeading: "Make Withdrawal", newStateUpdate: "makewithdrawal", ctaText: "Make Withdrawal" })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Withdrawal</Button>
+                        </li>
+                    }
 
-                        {((depositDetails.accountState ===5 || depositDetails.accountState ===3)  && (depositDetails.productType===2 || depositDetails.productType===1 || depositDetails.productType===4) && depositDetails.depositAvailableBalance >=1) &&
-                            <li>
-                                <Button size="sm"
-                                    onClick={()=>{
-                                        this.setState({typeOfTransfer: "currentcustomer",
-                                                            selectOtherCustomerAccount:"",
-                                                            selectACustomerAccount:"",
-                                                            newState: "Make Transfer",
-                                                            newStateHeading :"Make Transfer",
-                                                            newStateUpdate: "transfer",
-                                                            ctaText:"Make Transfer"})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Transfer</Button>
-                            </li>
-                        }
+                    {((depositDetails.accountState === 5 || depositDetails.accountState === 3) && (depositDetails.productType === 2 || depositDetails.productType === 1 || depositDetails.productType === 4) && depositDetails.depositAvailableBalance >= 1) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({
+                                        typeOfTransfer: "currentcustomer",
+                                        selectOtherCustomerAccount: "",
+                                        selectACustomerAccount: "",
+                                        newState: "Make Transfer",
+                                        newStateHeading: "Make Transfer",
+                                        newStateUpdate: "transfer",
+                                        ctaText: "Make Transfer"
+                                    })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Transfer</Button>
+                        </li>
+                    }
 
-                        {/* {(depositDetails.accountState ===5) &&
+                    {/* {(depositDetails.accountState ===5) &&
                             <li>
                                 <Button size="sm" >Enter Repayment</Button>
                             </li>
                         } */}
 
-                        {(depositDetails.accountState ===1 && allUSerPermissions.indexOf("bnk_request_deposit_approval") >- 1) &&
-                            <li>
-                                <Button size="sm"
-                                    onClick={()=>{
-                                        this.setState({newState: "Request Approval",newStateHeading :"Change Deposit State", newStateUpdate: "requestapproval", ctaText:"Request Approval"})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Request Approval</Button>
-                            </li>
-                        }
+                    {(depositDetails.accountState === 1 && allUSerPermissions.indexOf("bnk_request_deposit_approval") > - 1) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({ newState: "Request Approval", newStateHeading: "Change Deposit State", newStateUpdate: "requestapproval", ctaText: "Request Approval" })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Request Approval</Button>
+                        </li>
+                    }
 
-                        {(depositDetails.accountState ===3 || depositDetails.accountState ===5) &&
-                            <li>
-                                <Button size="sm"
-                                     onClick={()=>{
-                                        this.setState({newStateUpdate: "deposit",newStateHeading :"Change Deposit State", ctaText:"Make Deposit", showDepositFundsForm:true})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Make Deposit</Button>
-                            </li>
-                        }
-                        {(depositDetails.accountState ===1 || depositDetails.accountState ===2 || depositDetails.accountState ===3) &&
-                            <li>
-                                <DropdownButton
-                                    size="sm"
-                                    title="Close"
-                                    key="inActiveCurrency"
-                                    className="customone"
-                                    alignRight
-                                >
-                                    {((depositDetails.accountState ===1 || depositDetails.accountState ===2) && allUSerPermissions.indexOf("bnk_reject_deposit_account") >- 1) &&
-                                        <Dropdown.Item eventKey="1"
-                                            onClick={()=>{
-                                                this.setState({newState: "Rejected", newStateUpdate: "reject", newStateHeading :"Change Deposit State", ctaText:"Reject"})
-                                                this.handleDepositChangeStateShow()
-                                            }}
-                                        >Reject</Dropdown.Item>
-                                    }
-                                    {(depositDetails.accountState ===1 || depositDetails.accountState ===2 || depositDetails.accountState ===3) &&
-                                        <Dropdown.Item eventKey="1"
-                                            onClick={()=>{
-                                                this.setState({newState: "Closed(Withdrawn)",newStateHeading :"Change Deposit State", newStateUpdate: "withdraw", ctaText:"Withdraw"})
-                                                this.handleDepositChangeStateShow()
-                                            }}
-                                        >Withdraw</Dropdown.Item>
-                                    }
-                                    {(depositDetails.accountState ===5) &&
-                                        <Dropdown.Item eventKey="1">Pay Off</Dropdown.Item>
-                                    }
-                                    {(depositDetails.accountState ===5) &&
-                                        <Dropdown.Item eventKey="1">Write Off</Dropdown.Item>
-                                    }
-                                </DropdownButton>
-                            </li>
-                        }
+                    {(depositDetails.accountState === 3 || depositDetails.accountState === 5) &&
+                        <li>
+                            <Button size="sm"
+                                onClick={() => {
+                                    this.setState({  newStateUpdate: "deposit", newStateHeading: "Change Deposit State", ctaText: "Make Deposit", showDepositFundsForm: true })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Make Deposit</Button>
+                        </li>
+                    }
+                    {(depositDetails.accountState === 1 || depositDetails.accountState === 2 || depositDetails.accountState === 3) &&
                         <li>
                             <DropdownButton
                                 size="sm"
-                                title="More"
+                                title="Close"
                                 key="inActiveCurrency"
                                 className="customone"
                                 alignRight
                             >
-                                <Dropdown.Item eventKey="1"
-                                    onClick={()=>{
-                                        this.setState({ newStateUpdate: "setmaximumwithdrawalamount", newStateHeading:"Maximum Withdrawal Amount", ctaText:"Update"})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Set Max Withdrawal Amount</Dropdown.Item>
-                                <Dropdown.Item eventKey="1"
-                                    onClick={()=>{
-                                        this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading:"Recommended Deposit Amount", ctaText:"Update"})
-                                        this.handleDepositChangeStateShow()
-                                    }}
-                                >Set Recommended Deposit</Dropdown.Item>
-
+                                {((depositDetails.accountState === 1 || depositDetails.accountState === 2) && allUSerPermissions.indexOf("bnk_reject_deposit_account") > - 1) &&
+                                    <Dropdown.Item eventKey="1"
+                                        onClick={() => {
+                                            this.setState({ newState: "Rejected", newStateUpdate: "reject", newStateHeading: "Change Deposit State", ctaText: "Reject" })
+                                            this.handleDepositChangeStateShow()
+                                        }}
+                                    >Reject</Dropdown.Item>
+                                }
+                                {(depositDetails.accountState === 1 || depositDetails.accountState === 2 || depositDetails.accountState === 3) &&
+                                    <Dropdown.Item 
+                                        eventKey="2"
+                                        onClick={() => {
+                                            this.setState({ newState: "Closed(Withdrawn)", newStateHeading: "Change Deposit State", newStateUpdate: "withdraw", ctaText: "Withdraw" })
+                                            this.handleDepositChangeStateShow()
+                                        }}
+                                    >Withdraw</Dropdown.Item>
+                                }
+                                {(depositDetails.accountState === 5) &&
+                                    <Dropdown.Item eventKey="3">Pay Off</Dropdown.Item>
+                                }
+                                {(depositDetails.accountState === 5) &&
+                                    <Dropdown.Item eventKey="4">Write Off</Dropdown.Item>
+                                }
                             </DropdownButton>
                         </li>
+                    }
+                    <li>
+                        <DropdownButton
+                            size="sm"
+                            title="More"
+                            key="inActiveCurrency"
+                            className="customone"
+                            alignRight
+                        >
+                            <Dropdown.Item eventKey="5"
+                                onClick={() => {
+                                    this.setState({ newStateUpdate: "setmaximumwithdrawalamount", newStateHeading: "Maximum Withdrawal Amount", ctaText: "Update" })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Set Max Withdrawal Amount</Dropdown.Item>
+                            <Dropdown.Item eventKey="6"
+                                onClick={() => {
+                                    this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading: "Recommended Deposit Amount", ctaText: "Update" })
+                                    this.handleDepositChangeStateShow()
+                                }}
+                            >Set Recommended Deposit</Dropdown.Item>
+
+                        </DropdownButton>
+                    </li>
 
 
-                    </ul>
-                </div>
-            )
-        }
+                </ul>
+            </div>
+        )
+    }
 
     renderPage=()=>{
         let getAClientRequest = this.props.getAClientReducer,
@@ -3805,11 +3808,11 @@ class ViewSavingsAccount extends React.Component {
                         {this.setMaxWithdrawalBox()}
                         {this.changeHistoryBox()}
                         {/* <CustomerHeading {...this.props}/> */}
-                        <div className="module-content">
-                                <div className="content-container">
-                                    {this.renderPage()}
-                                </div>
-                            </div>
+                    <div className="module-content">
+                        <div className="content-container">
+                            {this.renderPage()}
+                        </div>
+                    </div>
                     </div>
                 {/* </InnerPageContainer> */}
             </Fragment>

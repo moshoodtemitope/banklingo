@@ -405,4 +405,25 @@
         font-size: 12px;
     }
 }
+.transaction-options{
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    .eachtxtn-option{
+        cursor: pointer;
+        margin-right: 6px;
+        >div{
+            padding: 10px 5px;
+            font-size: 13px;
+            padding-bottom: 4px;
+            &:first-of-type{
+                padding-left: 0;
+            }
+        }
+        &.active-txtn>div, &:hover>div{
+            border-bottom: 5px solid $brand-green;
+            color: $brand-green;
+        }
+    }
+}
 

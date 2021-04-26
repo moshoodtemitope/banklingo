@@ -1633,3 +1633,153 @@ export function fetchAllTasksReducer(state=[], action) {
             return { ...state }
     }
 }
+
+export function getBranchClosuresReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_BRANCH_CLOSURES_PENDING:
+            return {
+                request_status: administrationConstants.GET_BRANCH_CLOSURES_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_BRANCH_CLOSURES_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_BRANCH_CLOSURES_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_BRANCH_CLOSURES_FAILURE:
+            return {
+                request_status: administrationConstants.GET_BRANCH_CLOSURES_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+       
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function getBranchesOpenReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_BRANCHES_OPEN_PENDING:
+            return {
+                request_status: administrationConstants.GET_BRANCHES_OPEN_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_BRANCHES_OPEN_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_BRANCHES_OPEN_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_BRANCHES_OPEN_FAILURE:
+            return {
+                request_status: administrationConstants.GET_BRANCHES_OPEN_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+       
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function getBranchesClosedReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_BRANCHES_CLOSED_PENDING:
+            return {
+                request_status: administrationConstants.GET_BRANCHES_CLOSED_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_BRANCHES_CLOSED_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_BRANCHES_CLOSED_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_BRANCHES_CLOSED_FAILURE:
+            return {
+                request_status: administrationConstants.GET_BRANCHES_CLOSED_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+       
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function openABranchReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.OPEN_A_BRANCH_PENDING:
+            return {
+                request_status: administrationConstants.OPEN_A_BRANCH_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.OPEN_A_BRANCH_SUCCESS:
+            return {
+                request_status: administrationConstants.OPEN_A_BRANCH_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.OPEN_A_BRANCH_FAILURE:
+            return {
+                request_status: administrationConstants.OPEN_A_BRANCH_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.OPEN_A_BRANCH_RESET:
+            return {
+                request_status: administrationConstants.OPEN_A_BRANCH_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
+
+export function closeABranchReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.CLOSE_A_BRANCH_PENDING:
+            return {
+                request_status: administrationConstants.CLOSE_A_BRANCH_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.CLOSE_A_BRANCH_SUCCESS:
+            return {
+                request_status: administrationConstants.CLOSE_A_BRANCH_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.CLOSE_A_BRANCH_FAILURE:
+            return {
+                request_status: administrationConstants.CLOSE_A_BRANCH_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.CLOSE_A_BRANCH_RESET:
+            return {
+                request_status: administrationConstants.CLOSE_A_BRANCH_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}

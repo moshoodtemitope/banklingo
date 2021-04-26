@@ -3,12 +3,12 @@ import * as React from "react";
 
 import {Fragment} from "react";
 import AdminNav from './_menu'
+import BranchClosureMenu from './menus/_branch_closure_menu'
 import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
 import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-// import Form from 'react-bootstrap/Form'
-// import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
@@ -16,12 +16,19 @@ import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
+import DatePicker from '../../_helpers/datepickerfield';
+import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
-// import Alert from 'react-bootstrap/Alert'
+import Alert from 'react-bootstrap/Alert'
 // import  SidebarElement from '../../shared/elements/sidebar'
 import "./administration.scss"; 
-class OrganizationBranches  extends React.Component {
+import { getDateFromISO } from "../../shared/utils";
+class OrganizationBranchesClosed extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -29,7 +36,10 @@ class OrganizationBranches  extends React.Component {
             PageSize:25,
             FullDetails: false,
             CurrentPage:1,
-            CurrentSelectedPage:1
+            CurrentSelectedPage:1,
+            BranchClosureStatus:2,
+            showUpdatePop: false,
+            branchToUpdate: null
         }
 
         
@@ -40,49 +50,49 @@ class OrganizationBranches  extends React.Component {
     }
 
     loadInitialData=()=>{
-        let {PageSize, CurrentPage}= this.state;
-        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-        this.getAllBranches(params);
+        let {PageSize, CurrentPage, BranchClosureStatus}= this.state;
+        let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchClosureStatus=${BranchClosureStatus}`;
+        this.getClosures(params);
     }
 
-    getAllBranches = (paramters)=>{
+    getClosures = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(administrationActions.getAllBranches(paramters));
+        dispatch(administrationActions.getBranchesClosed(paramters));
     }
 
     setPagesize = (PageSize, tempData)=>{
         const {dispatch} = this.props;
         let sizeOfPage = PageSize.target.value,
-            {FullDetails, CurrentPage, CurrentSelectedPage} = this.state;
+            {FullDetails, CurrentPage, CurrentSelectedPage, BranchClosureStatus} = this.state;
 
         this.setState({PageSize: sizeOfPage});
 
-        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        // this.getAllBranches(params);
+        let params= `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&BranchClosureStatus=${BranchClosureStatus}`;
+        
 
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params, tempData));
+            dispatch(administrationActions.getBranchesClosed(params, tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(administrationActions.getBranchesClosed(params));
         }
     }
 
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
-        let {PageSize} = this.state;
+        let {PageSize, BranchClosureStatus} = this.state;
 
         // this.setState({PageSize: sizeOfPage});
 
-        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
+        let params= `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}&BranchClosureStatus=${BranchClosureStatus}`;
         // this.getTransactionChannels(params);
 
 
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params,tempData));
+            dispatch(administrationActions.getBranchesClosed(params,tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(administrationActions.getBranchesClosed(params));
         }
     }
 
@@ -90,27 +100,27 @@ class OrganizationBranches  extends React.Component {
         const {dispatch} = this.props;
         // console.log('----here', PageSize.target.value);
         let showDetails = FullDetails.target.checked,
-            {CurrentPage, CurrentSelectedPage, PageSize} = this.state;
+            {CurrentPage, CurrentSelectedPage, PageSize, BranchClosureStatus} = this.state;
 
         this.setState({FullDetails: showDetails});
 
-        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
-        // this.getAllBranches(params);
+        let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&BranchClosureStatus=${BranchClosureStatus}`;
+        
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params, tempData));
+            dispatch(administrationActions.getBranchesClosed(params, tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(administrationActions.getBranchesClosed(params));
         }
         
     }
 
     renderAllBranches =()=>{
-        let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
+        let getBranchClosuresRequest = this.props.getBranchClosuresReducer;
 
-        let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined?adminGetAllBranchesRequest.request_data.tempData:null;
+        let saveRequestData= getBranchClosuresRequest.request_data!==undefined?getBranchClosuresRequest.request_data.tempData:null;
 
-            switch (adminGetAllBranchesRequest.request_status){
-                case (administrationConstants.GET_ALL_BRANCHES_PENDING):
+            switch (getBranchClosuresRequest.request_status){
+                case (administrationConstants.GET_BRANCHES_CLOSED_PENDING):
                     
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                         return (
@@ -143,9 +153,8 @@ class OrganizationBranches  extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Branch Name</th>
-                                            <th>Branch State</th>
-                                            <th>Created</th>
-                                            <th>Last Modified</th>
+                                            <th>Branch ID</th>
+                                            <th>Date Closed</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -197,11 +206,8 @@ class OrganizationBranches  extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Branch Name</th>
-                                            <th>Branch State</th>
-                                            {this.state.FullDetails && <th>Address</th> }
-                                            {this.state.FullDetails && <th>Contact</th> }
-                                            <th>Created</th>
-                                            <th>Last Modified</th>
+                                            <th>Branch ID</th>
+                                            <th>Date Closed</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -211,12 +217,9 @@ class OrganizationBranches  extends React.Component {
                                                 return(
                                                     <Fragment key={index}>
                                                         <tr>
-                                                            <td>{eachBranch.name}</td>
-                                                            <td>{eachBranch.objectStateDescription}</td>
-                                                            {this.state.FullDetails && <th>{eachBranch.address}</th> }
-                                                            {this.state.FullDetails && <th>{eachBranch.contact}</th> }
-                                                            <td>{eachBranch.dateCreated}</td>
-                                                            <td>{eachBranch.lastUpdated}</td>
+                                                            <td>{eachBranch.branchName}</td>
+                                                            <td>{eachBranch.branchId}</td>
+                                                            <td>{getDateFromISO(eachBranch.dateOpenedFor)}</td>
                                                             <td>
                                                                 <DropdownButton
                                                                     size="sm"
@@ -240,8 +243,8 @@ class OrganizationBranches  extends React.Component {
                         )
                     }
                 
-                case(administrationConstants.GET_ALL_BRANCHES_SUCCESS):
-                    let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
+                case(administrationConstants.GET_BRANCHES_CLOSED_SUCCESS):
+                    let allBranchesData = getBranchClosuresRequest.request_data.response.data;
                     if(allBranchesData!==undefined){
                         if(allBranchesData.result.length>=1){
                             return(
@@ -294,11 +297,8 @@ class OrganizationBranches  extends React.Component {
                                         <thead>
                                             <tr>
                                                 <th>Branch Name</th>
-                                                <th>Branch State</th>
-                                                {this.state.FullDetails && <th>Address</th> }
-                                                {this.state.FullDetails && <th>Contact</th> }
-                                                <th>Created</th>
-                                                <th>Last Modified</th>
+                                                <th>Branch ID</th>
+                                                <th>Date Closed</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -308,12 +308,9 @@ class OrganizationBranches  extends React.Component {
                                                     return(
                                                         <Fragment key={index}>
                                                             <tr>
-                                                                <td>{eachBranch.name}</td>
-                                                                <td>{eachBranch.objectStateDescription}</td>
-                                                                {this.state.FullDetails && <th>{eachBranch.address}</th> }
-                                                                {this.state.FullDetails && <th>{eachBranch.contact}</th> }
-                                                                <td>{eachBranch.dateCreated}</td>
-                                                                <td>{eachBranch.lastUpdated}</td>
+                                                            <td>{eachBranch.branchName}</td>
+                                                            <td>{eachBranch.branchId}</td>
+                                                            <td>{getDateFromISO(eachBranch.dateOpenedFor)}</td>
                                                                 <td>
                                                                     <DropdownButton
                                                                         size="sm"
@@ -321,9 +318,7 @@ class OrganizationBranches  extends React.Component {
                                                                         key="activeCurrency"
                                                                         className="customone"
                                                                     >
-                                                                        <NavLink className="dropdown-item" to={`/administration/organization/editbranch/${eachBranch.encodedKey}`}>Edit</NavLink>
-                                                                        {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                        <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
+                                                                        <Dropdown.Item eventKey="1" onClick={()=> this.handleShowUpdatePop(eachBranch)} >Open branch</Dropdown.Item>
                                                                     </DropdownButton>
                                                                 </td>
                                                             </tr>
@@ -333,9 +328,7 @@ class OrganizationBranches  extends React.Component {
                                             }
                                         </tbody>
                                     </TableComponent>
-                                    <div className="footer-with-cta toleft">
-                                        <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
-                                    </div>
+                                    
                                 </div>
                             )
                         }else{
@@ -369,9 +362,8 @@ class OrganizationBranches  extends React.Component {
                                         <thead>
                                             <tr>
                                                 <th>Branch Name</th>
-                                                <th>Branch State</th>
-                                                <th>Created</th>
-                                                <th>Last Modified</th>
+                                                <th>Branch ID</th>
+                                                <th>Date Closed</th>
                                                 {/* <th></th> */}
                                             </tr>
                                         </thead>
@@ -380,13 +372,10 @@ class OrganizationBranches  extends React.Component {
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
                                             </tr>
                                         </tbody>
                                     </TableComponent>
-                                    <div className="footer-with-cta toleft">
-                                        <NavLink to={'/administration/organization/newbranch'} className="btn btn-primary">New Branch</NavLink>
-                                    </div>
+                                    
                                 </div>
                             )
                         }
@@ -394,16 +383,179 @@ class OrganizationBranches  extends React.Component {
                         return null;
                     }
 
-                case (administrationConstants.GET_ALL_BRANCHES_FAILURE):
+                case (administrationConstants.GET_BRANCHES_CLOSED_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
-                            <div>{adminGetAllBranchesRequest.request_data.error}</div>
+                            <div>{getBranchClosuresRequest.request_data.error}</div>
                         </div>
                     )
                 default :
                 return null;
             }
     }
+
+    clearAllData = () => {
+        this.props.dispatch(administrationActions.openABranch('CLEAR'));
+    };
+
+    handleCloseUpdatePop = () => {
+        if (this.props.openABranchReducer.is_request_processing === false) {
+            this.setState({ showUpdatePop: false, branchToUpdate: null });
+        }
+    };
+
+    handleShowUpdatePop = (branchToUpdate) => {
+        this.clearAllData();
+        this.setState({ showUpdatePop: true, branchToUpdate });
+    };
+
+    updateABranchStatus = async (payload) => {
+        const { dispatch } = this.props;
+
+        await dispatch(administrationActions.openABranch(payload));
+    };
+
+    closeABranchPopUp = () => {
+        let { showUpdatePop, branchToUpdate } = this.state;
+        let updateABranchRequest = this.props.openABranchReducer;
+
+        
+
+        let checkValidationSchema = Yup.object().shape({
+            closureDate: Yup.string().required('Required'),
+        });
+        return (
+            <Modal
+                show={showUpdatePop}
+                onHide={this.handleCloseUpdatePop}
+                size='lg'
+                centered='true'
+                dialogClassName='modal-40w withcentered-heading'
+                animation={true}
+            >
+                <Modal.Header>
+                    <Modal.Title>Open {branchToUpdate.branchName} branch</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Formik
+                        initialValues={{
+                            closureDate: '',
+                        }}
+                        validationSchema={checkValidationSchema}
+                        onSubmit={(values, { resetForm }) => {
+                            // same shape as initial values
+
+                            let requestPayload = {
+                                branchEncodedKey: branchToUpdate.branchEncodedKey,
+                                closureDate: values.closureDate.toISOString(),
+                                note: values.note,
+                            };
+
+                            this.updateABranchStatus(requestPayload).then(() => {
+                                if (
+                                    this.props.openABranchReducer.request_status ===
+                                    administrationConstants.OPEN_A_BRANCH_SUCCESS
+                                ) {
+                                    resetForm();
+                                    this.loadInitialData();
+                                }
+                            });
+                        }}
+                    >
+                        {({
+                            handleSubmit,
+                            handleChange,
+                            handleBlur,
+                            setFieldValue,
+                            setFieldTouched,
+                            resetForm,
+                            values,
+                            touched,
+                            isValid,
+                            errors,
+                        }) => {
+                            return (
+                                <Form noValidate onSubmit={handleSubmit}>
+                                    <Form.Group
+                                        controlId='debitLocation'
+                                        className={
+                                            errors.closureDate && touched.closureDate
+                                                ? 'has-invaliderror fullwidthdate'
+                                                : 'fullwidthdate'
+                                        }
+                                    >
+                                        <Form.Label className='block-level'>
+                                            Closure Date
+                                        </Form.Label>
+                                        <DatePicker
+                                            placeholderText='Choose date'
+                                            autoComplete='new-date'
+                                            // onChange={this.handleDatePicker}
+                                            // onChangeRaw={(e) => this.handleDateChange(e)}
+                                            dateFormat={window.dateformat}
+                                            peekNextMonth
+                                            showMonthDropdown
+                                            showYearDropdown
+                                            dropdownMode='select'
+                                            name='closureDate'
+                                            value={values.closureDate}
+                                            onChange={setFieldValue}
+                                            maxDate={new Date()}
+                                            className={
+                                                errors.closureDate && touched.closureDate
+                                                    ? 'is-invalid form-control form-control-sm h-38px'
+                                                    : 'form-control form-control-sm h-38px'
+                                            }
+                                            customInput={
+                                                <DatePickerFieldType placeHolder='Choose date' />
+                                            }
+                                        />
+                                        {errors.closureDate && touched.closureDate ? (
+                                            <span className='invalid-feedback'>
+                                                {errors.closureDate}
+                                            </span>
+                                        ) : null}
+                                    </Form.Group>
+                                  
+
+                                    <div className='footer-with-cta toleft'>
+                                        <Button
+                                            disabled={updateABranchRequest.is_request_processing}
+                                            variant='secondary'
+                                            className='grayed-out'
+                                            onClick={this.handleCloseUpdatePop}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            type='submit'
+                                            disabled={updateABranchRequest.is_request_processing}
+                                        >
+                                            {updateABranchRequest.is_request_processing
+                                                ? 'Please wait...'
+                                                : 'Open Branch'}
+                                        </Button>
+                                    </div>
+                                </Form>
+                            );
+                        }}
+                    </Formik>
+                    {updateABranchRequest.request_status ===
+                        administrationConstants.OPEN_A_BRANCH_SUCCESS && (
+                            <Alert variant='success'>
+                                {updateABranchRequest.request_data.response.data.message}
+                            </Alert>
+                        )}
+                    {updateABranchRequest.request_status ===
+                        administrationConstants.OPEN_A_BRANCH_FAILURE && (
+                            <Alert variant='danger'>
+                                {updateABranchRequest.request_data.error}
+                            </Alert>
+                        )}
+                </Modal.Body>
+            </Modal>
+        );
+    };
 
     
 
@@ -420,7 +572,7 @@ class OrganizationBranches  extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12">
                                             <div className="">
-                                                <h2>Administration</h2>
+                                                <h2>Opened Branches</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -437,7 +589,7 @@ class OrganizationBranches  extends React.Component {
                                             </li>
                                             <li>
                                                 {/* <NavLink to={'/administration-generalorganization'}>Organization</NavLink> */}
-                                                <NavLink exact to={'/administration/organization/branch-closures'}>Branch Closures</NavLink>
+                                                <NavLink  to={'/administration/organization/branch-closures'}>Branch Closures</NavLink>
                                             </li>
                                             {/* <li>
                                                 <NavLink to={'/administration/organization/centers'}>Centers</NavLink>
@@ -445,6 +597,7 @@ class OrganizationBranches  extends React.Component {
                                             </li> */}
                                         </ul>
                                     </div>
+                                    <BranchClosureMenu />
                                 </div>
                             </div>
                             <div className="module-content">
@@ -471,8 +624,9 @@ class OrganizationBranches  extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        adminGetAllBranches : state.administrationReducers.adminGetAllBranchesReducer,
+        getBranchClosuresReducer : state.administrationReducers.getBranchesClosedReducer,
+        openABranchReducer : state.administrationReducers.openABranchReducer,
     };
 }
 
-export default connect(mapStateToProps)(OrganizationBranches);
+export default connect(mapStateToProps)(OrganizationBranchesClosed);
