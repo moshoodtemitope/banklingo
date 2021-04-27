@@ -15,7 +15,7 @@ import  TablePagination from '../../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-import {administrationActions,administrationConstants} from '../../../redux/actions/administration/branch-management.actions';
+import {branchActions,branchConstants} from '../../../redux/actions/administration/branch-management.actions';
 
 import "../administration.scss"; 
 class BranchListManagement extends React.Component {
@@ -53,9 +53,9 @@ class BranchListManagement extends React.Component {
         let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
         
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params, tempData));
+            dispatch(branchActions.getAllBranches(params, tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(branchActions.getAllBranches(params));
         }
         
     }
@@ -87,7 +87,7 @@ fetchForEmptyState=()=>{
     let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
     let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined? adminGetAllBranchesRequest.request_data.tempData: null;
     switch (adminGetAllBranchesRequest.request_status){
-        case (administrationConstants.GET_ALL_BRANCHES_PENDING):
+        case (branchConstants.GET_ALL_BRANCHES_PENDING):
             
     return (<tbody><tr>
         <td></td>
@@ -105,7 +105,7 @@ fetchErrorState(){
   //  let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined? adminGetAllBranchesRequest.request_data.tempData: null;
 
     switch(adminGetAllBranchesRequest.request_status){
-        case (administrationConstants.GET_ALL_BRANCHES_FAILURE):
+        case (branchConstants.GET_ALL_BRANCHES_FAILURE):
             return (
                 <div className="loading-content errormsg"> 
                     <div>{adminGetAllBranchesRequest.request_data.error}</div>
@@ -123,7 +123,7 @@ fetchErrorState(){
    // let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
     
     switch(adminGetAllBranchesRequest.request_status){
-    case(administrationConstants.GET_ALL_BRANCHES_SUCCESS):
+    case(branchConstants.GET_ALL_BRANCHES_SUCCESS):
      let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
                    
     
@@ -168,7 +168,7 @@ fetchErrorState(){
         let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
 
         switch (adminGetAllBranchesRequest.request_status){
-            case (administrationConstants.GET_ALL_BRANCHES_PENDING):
+            case (branchConstants.GET_ALL_BRANCHES_PENDING):
 
                 return (  <div className="loading-content">
                      <div className="loading-text">Please wait...</div></div>);

@@ -37,6 +37,11 @@ export const administrationActions = {
     getInternalControl,
     updateInternalControlSettings,
     getAllBranches,
+    getBranchesClosures,
+    getBranchesOpen,
+    getBranchesClosed,
+    openABranch,
+    closeABranch,
     fetchBranchesList,
     getABranch,
     createNewBranch,
@@ -1164,19 +1169,181 @@ function getAllBranches  (params, tempData){
         
     }
 
-function request(user, tempData) { 
-    if(tempData===undefined){
-        return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } 
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user, tempData } 
+        }
+        
     }
-    if(tempData!==undefined){
-        return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user, tempData } 
-    }
-    
+
+    // function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_ALL_BRANCHES_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_ALL_BRANCHES_FAILURE, error } }
+
 }
 
-// function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
-function success(response) { return { type: administrationConstants.GET_ALL_BRANCHES_SUCCESS, response } }
-function failure(error) { return { type: administrationConstants.GET_ALL_BRANCHES_FAILURE, error } }
+function getBranchesClosures  (params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(`${routes.GET_BRANCHES}/branchclosures?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_BRANCH_CLOSURES_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_BRANCH_CLOSURES_PENDING, user, tempData } 
+        }
+        
+    }
+
+    // function request(user) { return { type: administrationConstants.GET_BRANCH_CLOSURES_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_BRANCH_CLOSURES_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_BRANCH_CLOSURES_FAILURE, error } }
+
+}
+
+function getBranchesOpen  (params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(`${routes.GET_BRANCHES}/branchclosures?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_BRANCHES_OPEN_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_BRANCHES_OPEN_PENDING, user, tempData } 
+        }
+        
+    }
+
+    // function request(user) { return { type: administrationConstants.GET_BRANCHES_OPEN_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_BRANCHES_OPEN_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_BRANCHES_OPEN_FAILURE, error } }
+
+}
+
+function getBranchesClosed  (params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(`${routes.GET_BRANCHES}/branchclosures?${params}`, "GET", null);
+        dispatch(request(consume, tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: administrationConstants.GET_BRANCHES_CLOSED_PENDING, user } 
+        }
+        if(tempData!==undefined){
+            return { type: administrationConstants.GET_BRANCHES_CLOSED_PENDING, user, tempData } 
+        }
+        
+    }
+
+    // function request(user) { return { type: administrationConstants.GET_BRANCHES_CLOSED_PENDING, user } }
+    function success(response) { return { type: administrationConstants.GET_BRANCHES_CLOSED_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.GET_BRANCHES_CLOSED_FAILURE, error } }
+
+}
+
+function openABranch  (branchPayload){
+    if(branchPayload!=="CLEAR"){
+        return dispatch =>{
+            
+           
+            let consume = ApiService.request(`${routes.GET_BRANCHES}/branchclosure/open`, "POST", branchPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.OPEN_A_BRANCH_PENDING, user } }
+    function success(response) { return { type: administrationConstants.OPEN_A_BRANCH_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.OPEN_A_BRANCH_FAILURE, error } }
+    function clear() { return { type: administrationConstants.OPEN_A_BRANCH_RESET, clear_data:""} }
+
+}
+
+function closeABranch  (branchPayload){
+    if(branchPayload!=="CLEAR"){
+        return dispatch =>{
+            
+           
+            let consume = ApiService.request(`${routes.GET_BRANCHES}/branchclosure/close`, "POST", branchPayload);
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.CLOSE_A_BRANCH_PENDING, user } }
+    function success(response) { return { type: administrationConstants.CLOSE_A_BRANCH_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.CLOSE_A_BRANCH_FAILURE, error } }
+    function clear() { return { type: administrationConstants.CLOSE_A_BRANCH_RESET, clear_data:""} }
 
 }
 

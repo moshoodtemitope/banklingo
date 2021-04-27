@@ -273,7 +273,16 @@ function postATransaction  (txtnPayload, transactiontype){
     if(txtnPayload!=="CLEAR"){
 
         return dispatch =>{
-            let consume = ApiService.request(`${routes.TELLER_MANAGEMENT}/${transactiontype}`, "POST", txtnPayload);
+            let consume;
+
+                
+                if(transactiontype === "chequedepositwithteller" 
+                    || transactiontype === "chequewithdrawalwithteller"
+                    || transactiontype === "clearcheque"){
+                        consume = ApiService.request(`${routes.CHEQUE_MANAGEMENT}/${transactiontype}`, "POST", txtnPayload);
+                }else{
+                        consume = ApiService.request(`${routes.TELLER_MANAGEMENT}/${transactiontype}`, "POST", txtnPayload);
+                }
             dispatch(request(consume));
             return consume
                 .then(response =>{

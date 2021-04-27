@@ -110,6 +110,10 @@ import GeneralBranding from './administration/general-branding'
 import BranchListManagement from './administration/branchmanagement/branch-management-list'
 import NewBranch from './administration/branchmanagement/organization-branches-new'
 import EditBranch from './administration/organization-edit-branch'
+
+import OrganizationBranchesClosures from './administration/organization-branches-closures'
+import OrganizationBranchesOpen from './administration/organization-branches-opened'
+import OrganizationBranchesClosed from './administration/organization-branches-closed'
 import OrganizationCenters from './administration/organization-centers'
 import NewCenter from './administration/organization-centers-new'
 
@@ -432,6 +436,9 @@ class AuthenticatedRoutes extends React.Component {
                        
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/newbranch' {...this.props} authed={this.props.user} component={NewBranch} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/editbranch/:encodedkey' {...this.props} authed={this.props.user} component={EditBranch} />
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures' {...this.props} authed={this.props.user} component={OrganizationBranchesClosures} />
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures/open' {...this.props} authed={this.props.user} component={OrganizationBranchesOpen} />
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures/closed' {...this.props} authed={this.props.user} component={OrganizationBranchesClosed} />
                         {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/centers' {...this.props} authed={this.props.user} component={OrganizationCenters} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/new-centers' {...this.props} authed={this.props.user} component={NewCenter} />  */}
                         <PrivateRoute accessRequired="bnk_manage_sms_provider" exact path='/administration/sms' {...this.props} authed={this.props.user} component={SMSSettings} />

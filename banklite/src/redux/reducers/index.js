@@ -80,7 +80,12 @@ const administrationReducers = combineReducers({
     getARiskLevel: administration.getARiskLevel,
     createARiskLevel: administration.createARiskLevel,
     updateARiskLevel: administration.updateARiskLevel,
-    fetchAllTasksReducer: administration.fetchAllTasksReducer
+    fetchAllTasksReducer: administration.fetchAllTasksReducer,
+    getBranchClosuresReducer: administration.getBranchClosuresReducer,
+    getBranchesOpenReducer: administration.getBranchesOpenReducer,
+    getBranchesClosedReducer: administration.getBranchesClosedReducer,
+    openABranchReducer: administration.openABranchReducer,
+    closeABranchReducer: administration.closeABranchReducer,
 })
 
 const accountingReducers = combineReducers({

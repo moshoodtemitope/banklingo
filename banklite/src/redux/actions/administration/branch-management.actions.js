@@ -4,13 +4,13 @@ import { handleRequestErrors } from "../../../shared/utils";
 
 
 
-export const administrationActions = {
+export const branchActions = {
   
     getAllBranches
 }
 
 
-export const administrationConstants = {
+export const branchConstants = {
   
 
   GET_ALL_BRANCHES_SUCCESS : 'GET_ALL_BRANCHES_SUCCESS',
@@ -61,22 +61,22 @@ function getAllBranches(params, tempData) {
 
   function request(user, tempData) {
     if (tempData === undefined) {
-      return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user };
+      return { type: branchConstants.GET_ALL_BRANCHES_PENDING, user };
     }
     
     if (tempData !== undefined) {
       return {
-        type: administrationConstants.GET_ALL_BRANCHES_PENDING,
+        type: branchConstants.GET_ALL_BRANCHES_PENDING,
         user,
         tempData,
       };
     }
   }
-  // function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
+  // function request(user) { return { type: branchConstants.GET_ALL_BRANCHES_PENDING, user } }
   function success(response) {
-    return { type: administrationConstants.GET_ALL_BRANCHES_SUCCESS, response };
+    return { type: branchConstants.GET_ALL_BRANCHES_SUCCESS, response };
   }
   function failure(error) {
-    return { type: administrationConstants.GET_ALL_BRANCHES_FAILURE, error };
+    return { type: branchConstants.GET_ALL_BRANCHES_FAILURE, error };
   }
 }

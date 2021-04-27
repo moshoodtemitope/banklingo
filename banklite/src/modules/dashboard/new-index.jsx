@@ -45,7 +45,8 @@ class DashboardLanding extends React.Component {
             selectedTill: "",
             selectedTillData: false,
             preloadedTillData: false,
-            selectedTxtn: null
+            selectedTxtn: null,
+            txtOption:"cash"
         }
 
         this.selectRef = null;
@@ -1910,6 +1911,17 @@ class DashboardLanding extends React.Component {
     }
 
     renderPostTransaction = ()=>{
+        let {
+            selectedCustomer,
+            defaultAccountOptions,
+            showNewTill,
+            addCashToTill,
+            txtOption,
+            selectedTxtn,
+            closeUndoCloseTill,
+            selectedOption,
+            selectOtherCustomerAccount,
+            defaultOptions} = this.state;
         let allTxtn;
             let postATransactionRequest =this.props.postATransactionReducer;
             let 
@@ -1925,16 +1937,34 @@ class DashboardLanding extends React.Component {
                     amount: Yup.string()
                         .required('Required'),
                 });
-            let {
-                selectedCustomer,
-                defaultAccountOptions,
-                showNewTill,
-                addCashToTill,
-                selectedTxtn,
-                closeUndoCloseTill,
-                selectedOption,
-                selectOtherCustomerAccount,
-                defaultOptions} = this.state;
+
+                if(txtOption==="cheque"){
+                    validationSchema = Yup.object().shape({
+                        // tillId: Yup.string()
+                        //     .required('Required'),
+                        chosenAccountNum: Yup.string()
+                            .required('Required'),
+                        txtnType: Yup.string()
+                            .required('Required'),
+                        referenceID: Yup.string()
+                            .required('Required'),
+                    });
+                }
+                if(this.state.selectedTxtn && (this.state.selectedTxtn.value === 4 || this.state.selectedTxtn.value === 5)){
+                    validationSchema = Yup.object().shape({
+                        // tillId: Yup.string()
+                        //     .required('Required'),
+                        chosenAccountNum: Yup.string()
+                            .required('Required'),
+                        clientEncodedKey: Yup.string()
+                            .required('Required'),
+                        txtnType: Yup.string()
+                            .required('Required'),
+                        chequeNo: Yup.string()
+                            .required('Required'),
+                    });
+                }
+           
 
                 let allLoggedOnTills = this.props.fetchLoggedonTillsReducer.request_data.response.data.result,
                     allMyTills = [];
@@ -1956,6 +1986,14 @@ class DashboardLanding extends React.Component {
                             {label: "Withdrawal", value:3}
                         ];
                     }
+
+                    if(txtOption==="cheque"){
+                        allTxtn =[
+                            {label: "Deposit Cheque", value:4},
+                            {label: "Withdrawal with Cheque", value:5},
+                            {label: "Clear Cheque", value:6}
+                        ];
+                    }
         return (
             <div className="tellering-section">
                 <div className="tiller-record-form">
@@ -1966,7 +2004,8 @@ class DashboardLanding extends React.Component {
                             txtnType: '',
                             amount: '',
                             remarks:'',
-                            referenceID:''
+                            referenceID:'',
+                            chequeNo:''
                         }}
                         validationSchema={validationSchema}
                         onSubmit={(values, { resetForm }) => {
@@ -1981,6 +2020,16 @@ class DashboardLanding extends React.Component {
                             }
                             if (values.txtnType === 3) {
                                 transactionAction = "accountwithdrawalwithteller"
+                            }
+
+                            if (values.txtnType === 4) {
+                                transactionAction = "chequedepositwithteller"
+                            }
+                            if (values.txtnType === 5) {
+                                transactionAction = "chequewithdrawalwithteller"
+                            }
+                            if (values.txtnType === 6) {
+                                transactionAction = "clearcheque"
                             }
 
                             let requestPayload = {
@@ -2007,6 +2056,23 @@ class DashboardLanding extends React.Component {
                                 requestPayload.notes = values.remarks
                             }
 
+                            if (values.txtnType === 4 || values.txtnType === 5) {
+                                delete requestPayload.accountEncodedKey;
+                                requestPayload.chequeNo = values.referenceID
+                                requestPayload.accountNumber = selectOtherCustomerAccount.searchKey
+                                requestPayload.remarks = values.remarks
+                                requestPayload.referenceID = values.referenceID
+                            }
+
+                           
+
+                            if (values.txtnType === 6) {
+                                requestPayload  = {
+                                    accountNumber : selectOtherCustomerAccount.searchKey,
+                                    externalReferenceId : values.referenceID
+                                }
+                            }
+
                             this.postNewTransaction(requestPayload, transactionAction)
                                 .then(() => {
                                     if (this.props.postATransactionReducer.request_status === dashboardConstants.POST_TRANSACTION_SUCCESS) {
@@ -2025,190 +2091,417 @@ class DashboardLanding extends React.Component {
                             setFieldValue,
                             handleBlur,
                             resetForm,
+                            setErrors,
                             values,
                             touched,
                             isValid,
                             errors, }) => (
                             <Form noValidate
                                 onSubmit={handleSubmit}>
-                                <Form.Group>
-                                    <div className="withasync">
-                                        <Form.Label className="block-level">Customer</Form.Label>
-                                        <div>
-                                            <div>
-                                                <AsyncSelect
-                                                    cacheOptions
-                                                    value={selectedCustomer}
-                                                    // getOptionLabel={e => e.clientName}
-                                                    getOptionLabel={this.getSearchOptionForCustomerLabel}
-                                                    getOptionValue={this.getSearchForCustomerOptionValue}
-                                                    // getOptionValue={e => e.clientEncodedKey}
-                                                    noOptionsMessage={this.noOptionsForCustomerMessage}
-                                                    loadOptions={this.loadSearchResults}
-                                                    defaultOptions={defaultOptions}
-                                                    name="clientEncodedKey"
-                                                    placeholder="Search customer name"
-                                                    className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
-                                                    onChange={(e)=> {
-                                                        
-                                                        setFieldValue("clientEncodedKey", e.clientEncodedKey)
-                                                        this.handleSelectedCustomer(e)
-
-                                                    }}
-                                                    // onChange={this.handleSelectedCustomer}
-                                                    // onChange={(selectedCustomer) => {
-                                                    //     this.setState({ selectedCustomer });
-                                                    //     errors.clientEncodedKey = null
-                                                    //     values.clientEncodedKey = selectedCustomer.value
-                                                    //     setFieldValue('clientEncodedKey', selectedCustomer.value);
-                                                    // }}
-                                                    onInputChange={this.handleSearchCustomerChange}
-                                                />
-
-
-                                                {errors.clientEncodedKey && touched.clientEncodedKey ? (
-                                                    <span className="invalid-feedback">{errors.clientEncodedKey}</span>
-                                                ) : null}
-                                            </div>
-                                            {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Customer</span>}
-                                        </div>
+                                
+                                <div className="transaction-options">
+                                    <div className={txtOption==="cash" ?"eachtxtn-option active-txtn" :"eachtxtn-option"} 
+                                        onClick={()=>{
+                                            setErrors({})
+                                            this.setState({txtOption:"cash"})
+                                        }}
+                                    >
+                                        <div>Cash Transaction </div>
                                     </div>
-                                </Form.Group>
-                                <Form.Group>
-                                    <div className="withasync">
-                                        <Form.Label className="block-level">Account</Form.Label>
-                                        <div className="txtn-wrap">
-                                            <div className="select-drop foraccount">
-                                                <AsyncSelect
-                                                    cacheOptions
-                                                    value={selectOtherCustomerAccount}
-                                                    noOptionsMessage={this.noOptionsForAccountMessage}
-                                                    getOptionValue={this.getSearchForAccountOptionValue}
-                                                    getOptionLabel={this.getSearchOptionForAccountLabel}
-                                                    defaultOptions={defaultAccountOptions !== "" ? defaultAccountOptions : null}
-                                                    loadOptions={this.initiateAccountSearch}
-                                                    placeholder="Search Accounts"
-                                                    name="chosenAccountNum"
-                                                    className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
-                                                    onChange={(selectedOption) => {
-                                                        setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
-                                                        // console.log("calleded", selectedOption)
-                                                        setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
-                                                        this.handleSelectedAccount(selectedOption)
-                                                        this.getSearchOptionForCustomerLabel(selectedOption)
-                                                        this.getSearchForCustomerOptionValue(selectedOption)
-                                                        // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
-
-                                                        
-                                                        this.setState({
-                                                            selectedOption,
-                                                            selectedCustomer: selectedOption,
-                                                            selectOtherCustomerAccount: selectedOption,
-
-                                                        });
-
-                                                    }} />
-
-                                                {errors.chosenAccountNum && touched.chosenAccountNum ? (
-                                                    <span className="invalid-feedback">{errors.chosenAccountNum}</span>
-                                                ) : null}
-                                            </div>
-                                            {this.state.showMandateLink && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
-                                            {/* {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>} */}
-                                        </div>
-                                    </div>
-
-                                </Form.Group>
-                                {this.state.selectedOption &&
-                                    <Form.Group>
-                                        <Form.Label className="block-level">Transaction</Form.Label>
-
-                                        <div className="select-drop pr-10">
-                                            <Select
-                                                options={allTxtn}
-                                                ref={ref => {
-                                                    this.selectRef = ref;
-                                                }}
-                                                
-                                                onChange={(selectedTxtn) => {
-                                                    this.setState({ selectedTxtn });
-                                                    if(selectedTxtn){
-                                                        errors.txtnType = null
-                                                        values.txtnType = selectedTxtn.value
-                                                    }
-                                                }}
-                                                className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
-                                                name="txtnType"
-                                                required
-                                            />
-
-                                            {errors.txtnType && touched.txtnType ? (
-                                                <span className="invalid-feedback">{errors.txtnType}</span>
-                                            ) : null}
-                                        </div>
-
-                                    </Form.Group>
-                                }
-                                <Form.Group className="mr-10">
-                                    <Form.Label className="block-level">Amount</Form.Label>
-                                    <Form.Control type="text"
-                                        name="amount"
-                                        value={numberWithCommas(values.amount)}
-                                        onChange={handleChange}
-                                        className={errors.amount && touched.amount ? "is-invalid" : null}
-                                        required />
-
-                                    {errors.amount && touched.amount ? (
-                                        <span className="invalid-feedback">{errors.amount}</span>
-                                    ) : null}
-                                </Form.Group>
-                                <Form.Group className="mr-10">
-                                    <Form.Label className="block-level">Reference ID</Form.Label>
-                                    <Form.Control type="text"
-                                        name="referenceID"
-                                        value={values.referenceID}
-                                        onChange={handleChange}
-                                        className={errors.referenceID && touched.referenceID ? "is-invalid" : null}
-                                        required />
-
-                                    {errors.referenceID && touched.referenceID ? (
-                                        <span className="invalid-feedback">{errors.referenceID}</span>
-                                    ) : null}
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Label className="block-level">Remarks</Form.Label>
-                                    <Form.Control as="textarea"
-                                        rows="3"
-                                        onChange={handleChange}
-                                        name="remarks"
-                                        value={values.remarks}
-                                        className={errors.remarks && touched.remarks ? "is-invalid form-control form-control-sm" : null}
-                                    />
-                                    {errors.remarks && touched.remarks ? (
-                                        <span className="invalid-feedback">{errors.remarks}</span>
-                                    ) : null}
-                                </Form.Group>
-
-                                <div className="mr-10">
-                                    <div className="footer-with-cta">
-                                        <Button
-                                            type="submit"
-                                            disabled={postATransactionRequest.is_request_processing}
-                                        >
-
-                                            {postATransactionRequest.is_request_processing ? "Please wait..." : "Post transaction"}
-                                        </Button>
-                                        <Button variant="secondary"
-                                            disabled={postATransactionRequest.is_request_processing}
-                                            onClick={()=>{
-                                                this.selectRef.select.clearValue();
-                                                this.setState({selectOtherCustomerAccount:null,selectedTxtn:  null, selectedCustomer: null, showMandateLink:false})
-                                                resetForm()
-                                            }}>
-                                                Clear
-                                        </Button>
+                                    <div className={txtOption==="cheque" ?"eachtxtn-option active-txtn" :"eachtxtn-option"} 
+                                        onClick={()=>{
+                                            setErrors({})
+                                            this.setState({txtOption:"cheque"})
+                                        }}
+                                    >
+                                        <div>Cheque Transaction</div>
                                     </div>
                                 </div>
+                                {txtOption==="cash" &&
+                                    <div>
+                                        <Form.Group>
+                                            <div className="withasync">
+                                                <Form.Label className="block-level">Customer</Form.Label>
+                                                <div>
+                                                    <div>
+                                                        <AsyncSelect
+                                                            cacheOptions
+                                                            value={selectedCustomer}
+                                                            // getOptionLabel={e => e.clientName}
+                                                            getOptionLabel={this.getSearchOptionForCustomerLabel}
+                                                            getOptionValue={this.getSearchForCustomerOptionValue}
+                                                            // getOptionValue={e => e.clientEncodedKey}
+                                                            noOptionsMessage={this.noOptionsForCustomerMessage}
+                                                            loadOptions={this.loadSearchResults}
+                                                            defaultOptions={defaultOptions}
+                                                            name="clientEncodedKey"
+                                                            placeholder="Search customer name"
+                                                            className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
+                                                            onChange={(e) => {
+
+                                                                setFieldValue("clientEncodedKey", e.clientEncodedKey)
+                                                                this.handleSelectedCustomer(e)
+
+                                                            }}
+                                                            // onChange={this.handleSelectedCustomer}
+                                                            // onChange={(selectedCustomer) => {
+                                                            //     this.setState({ selectedCustomer });
+                                                            //     errors.clientEncodedKey = null
+                                                            //     values.clientEncodedKey = selectedCustomer.value
+                                                            //     setFieldValue('clientEncodedKey', selectedCustomer.value);
+                                                            // }}
+                                                            onInputChange={this.handleSearchCustomerChange}
+                                                        />
+
+
+                                                        {errors.clientEncodedKey && touched.clientEncodedKey ? (
+                                                            <span className="invalid-feedback">{errors.clientEncodedKey}</span>
+                                                        ) : null}
+                                                    </div>
+                                                    {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Customer</span>}
+                                                </div>
+                                            </div>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <div className="withasync">
+                                                <Form.Label className="block-level">Account</Form.Label>
+                                                <div className="txtn-wrap">
+                                                    <div className="select-drop foraccount">
+                                                        <AsyncSelect
+                                                            cacheOptions
+                                                            value={selectOtherCustomerAccount}
+                                                            noOptionsMessage={this.noOptionsForAccountMessage}
+                                                            getOptionValue={this.getSearchForAccountOptionValue}
+                                                            getOptionLabel={this.getSearchOptionForAccountLabel}
+                                                            defaultOptions={defaultAccountOptions !== "" ? defaultAccountOptions : null}
+                                                            loadOptions={this.initiateAccountSearch}
+                                                            placeholder="Search Accounts"
+                                                            name="chosenAccountNum"
+                                                            className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+                                                            onChange={(selectedOption) => {
+                                                                setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
+                                                                // console.log("calleded", selectedOption)
+                                                                setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
+                                                                this.handleSelectedAccount(selectedOption)
+                                                                this.getSearchOptionForCustomerLabel(selectedOption)
+                                                                this.getSearchForCustomerOptionValue(selectedOption)
+                                                                // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
+
+
+                                                                this.setState({
+                                                                    selectedOption,
+                                                                    selectedCustomer: selectedOption,
+                                                                    selectOtherCustomerAccount: selectedOption,
+
+                                                                });
+
+                                                            }} />
+
+                                                        {errors.chosenAccountNum && touched.chosenAccountNum ? (
+                                                            <span className="invalid-feedback">{errors.chosenAccountNum}</span>
+                                                        ) : null}
+                                                    </div>
+                                                    {this.state.showMandateLink && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
+                                                    {/* {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>} */}
+                                                </div>
+                                            </div>
+
+                                        </Form.Group>
+                                        {this.state.selectedOption &&
+                                            <Form.Group>
+                                                <Form.Label className="block-level">Transaction</Form.Label>
+
+                                                <div className="select-drop pr-10">
+                                                    <Select
+                                                        options={allTxtn}
+                                                        ref={ref => {
+                                                            this.selectRef = ref;
+                                                        }}
+
+                                                        onChange={(selectedTxtn) => {
+                                                            this.setState({ selectedTxtn });
+                                                            if (selectedTxtn) {
+                                                                errors.txtnType = null
+                                                                values.txtnType = selectedTxtn.value
+                                                            }
+                                                        }}
+                                                        className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
+                                                        name="txtnType"
+                                                        required
+                                                    />
+
+                                                    {errors.txtnType && touched.txtnType ? (
+                                                        <span className="invalid-feedback">{errors.txtnType}</span>
+                                                    ) : null}
+                                                </div>
+
+                                            </Form.Group>
+                                        }
+                                        <Form.Group className="mr-10">
+                                            <Form.Label className="block-level">Amount</Form.Label>
+                                            <Form.Control type="text"
+                                                name="amount"
+                                                value={numberWithCommas(values.amount)}
+                                                onChange={handleChange}
+                                                className={errors.amount && touched.amount ? "is-invalid" : null}
+                                                required />
+
+                                            {errors.amount && touched.amount ? (
+                                                <span className="invalid-feedback">{errors.amount}</span>
+                                            ) : null}
+                                        </Form.Group>
+                                        <Form.Group className="mr-10">
+                                            <Form.Label className="block-level">Reference ID</Form.Label>
+                                            <Form.Control type="text"
+                                                name="referenceID"
+                                                value={values.referenceID}
+                                                onChange={handleChange}
+                                                className={errors.referenceID && touched.referenceID ? "is-invalid" : null}
+                                                required />
+
+                                            {errors.referenceID && touched.referenceID ? (
+                                                <span className="invalid-feedback">{errors.referenceID}</span>
+                                            ) : null}
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label className="block-level">Remarks</Form.Label>
+                                            <Form.Control as="textarea"
+                                                rows="3"
+                                                onChange={handleChange}
+                                                name="remarks"
+                                                value={values.remarks}
+                                                className={errors.remarks && touched.remarks ? "is-invalid form-control form-control-sm" : null}
+                                            />
+                                            {errors.remarks && touched.remarks ? (
+                                                <span className="invalid-feedback">{errors.remarks}</span>
+                                            ) : null}
+                                        </Form.Group>
+
+                                        <div className="mr-10">
+                                            <div className="footer-with-cta">
+                                                <Button
+                                                    type="submit"
+                                                    disabled={postATransactionRequest.is_request_processing}
+                                                >
+
+                                                    {postATransactionRequest.is_request_processing ? "Please wait..." : "Post transaction"}
+                                                </Button>
+                                                <Button variant="secondary"
+                                                    disabled={postATransactionRequest.is_request_processing}
+                                                    onClick={() => {
+                                                        this.selectRef.select.clearValue();
+                                                        this.setState({ selectOtherCustomerAccount: null, selectedTxtn: null, selectedCustomer: null, showMandateLink: false })
+                                                        resetForm()
+                                                    }}>
+                                                    Clear
+                                            </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                {txtOption==="cheque" &&
+                                    <div>
+                                        <Form.Group>
+                                            <div className="withasync">
+                                                <Form.Label className="block-level">Customer</Form.Label>
+                                                <div>
+                                                    <div>
+                                                        <AsyncSelect
+                                                            cacheOptions
+                                                            value={selectedCustomer}
+                                                            // getOptionLabel={e => e.clientName}
+                                                            getOptionLabel={this.getSearchOptionForCustomerLabel}
+                                                            getOptionValue={this.getSearchForCustomerOptionValue}
+                                                            // getOptionValue={e => e.clientEncodedKey}
+                                                            noOptionsMessage={this.noOptionsForCustomerMessage}
+                                                            loadOptions={this.loadSearchResults}
+                                                            defaultOptions={defaultOptions}
+                                                            name="clientEncodedKey"
+                                                            placeholder="Search customer name"
+                                                            className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
+                                                            onChange={(e) => {
+
+                                                                setFieldValue("clientEncodedKey", e.clientEncodedKey)
+                                                                this.handleSelectedCustomer(e)
+
+                                                            }}
+                                                            // onChange={this.handleSelectedCustomer}
+                                                            // onChange={(selectedCustomer) => {
+                                                            //     this.setState({ selectedCustomer });
+                                                            //     errors.clientEncodedKey = null
+                                                            //     values.clientEncodedKey = selectedCustomer.value
+                                                            //     setFieldValue('clientEncodedKey', selectedCustomer.value);
+                                                            // }}
+                                                            onInputChange={this.handleSearchCustomerChange}
+                                                        />
+
+
+                                                        {errors.clientEncodedKey && touched.clientEncodedKey ? (
+                                                            <span className="invalid-feedback">{errors.clientEncodedKey}</span>
+                                                        ) : null}
+                                                    </div>
+                                                    {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Customer</span>}
+                                                </div>
+                                            </div>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <div className="withasync">
+                                                <Form.Label className="block-level">Account</Form.Label>
+                                                <div className="txtn-wrap">
+                                                    <div className="select-drop foraccount">
+                                                        <AsyncSelect
+                                                            cacheOptions
+                                                            value={selectOtherCustomerAccount}
+                                                            noOptionsMessage={this.noOptionsForAccountMessage}
+                                                            getOptionValue={this.getSearchForAccountOptionValue}
+                                                            getOptionLabel={this.getSearchOptionForAccountLabel}
+                                                            defaultOptions={defaultAccountOptions !== "" ? defaultAccountOptions : null}
+                                                            loadOptions={this.initiateAccountSearch}
+                                                            placeholder="Search Accounts"
+                                                            name="chosenAccountNum"
+                                                            className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+                                                            onChange={(selectedOption) => {
+                                                                setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
+                                                                // console.log("calleded", selectedOption)
+                                                                setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
+                                                                this.handleSelectedAccount(selectedOption)
+                                                                this.getSearchOptionForCustomerLabel(selectedOption)
+                                                                this.getSearchForCustomerOptionValue(selectedOption)
+                                                                // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
+
+
+                                                                this.setState({
+                                                                    selectedOption,
+                                                                    selectedCustomer: selectedOption,
+                                                                    selectOtherCustomerAccount: selectedOption,
+
+                                                                });
+
+                                                            }} />
+
+                                                        {errors.chosenAccountNum && touched.chosenAccountNum ? (
+                                                            <span className="invalid-feedback">{errors.chosenAccountNum}</span>
+                                                        ) : null}
+                                                    </div>
+                                                    {this.state.showMandateLink && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
+                                                    {/* {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>} */}
+                                                </div>
+                                            </div>
+
+                                        </Form.Group>
+                                        {this.state.selectedOption &&
+                                            <Form.Group>
+                                                <Form.Label className="block-level">Transaction</Form.Label>
+
+                                                <div className="select-drop pr-10">
+                                                    <Select
+                                                        options={allTxtn}
+                                                        ref={ref => {
+                                                            this.selectRef = ref;
+                                                        }}
+
+                                                        onChange={(selectedTxtn) => {
+                                                            this.setState({ selectedTxtn });
+                                                            if (selectedTxtn) {
+                                                                errors.txtnType = null
+                                                                values.txtnType = selectedTxtn.value
+                                                            }
+                                                        }}
+                                                        className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
+                                                        name="txtnType"
+                                                        required
+                                                    />
+
+                                                    {errors.txtnType && touched.txtnType ? (
+                                                        <span className="invalid-feedback">{errors.txtnType}</span>
+                                                    ) : null}
+                                                </div>
+
+                                            </Form.Group>
+                                        }
+                                        {(values.txtnType !== "" && values.txtnType !== 6  ) &&
+                                            <Form.Group className="mr-10">
+                                                <Form.Label className="block-level">Amount</Form.Label>
+                                                <Form.Control type="text"
+                                                    name="amount"
+                                                    value={numberWithCommas(values.amount)}
+                                                    onChange={handleChange}
+                                                    className={errors.amount && touched.amount ? "is-invalid" : null}
+                                                    required />
+
+                                                {errors.amount && touched.amount ? (
+                                                    <span className="invalid-feedback">{errors.amount}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                        }
+                                        {(values.txtnType !== "" && values.txtnType !== 6  )&&
+                                            <Form.Group className="mr-10">
+                                                <Form.Label className="block-level">Cheque Number</Form.Label>
+                                                <Form.Control type="text"
+                                                    name="chequeNo"
+                                                    value={values.chequeNo}
+                                                    onChange={handleChange}
+                                                    className={errors.chequeNo && touched.chequeNo ? "is-invalid" : null}
+                                                    required />
+
+                                                {errors.chequeNo && touched.chequeNo ? (
+                                                    <span className="invalid-feedback">{errors.chequeNo}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                        }
+                                        {values.txtnType !== "" &&
+                                            <Form.Group className="mr-10">
+                                                <Form.Label className="block-level">Reference ID</Form.Label>
+                                                <Form.Control type="text"
+                                                    name="referenceID"
+                                                    value={values.referenceID}
+                                                    onChange={handleChange}
+                                                    className={errors.referenceID && touched.referenceID ? "is-invalid" : null}
+                                                    required />
+
+                                                {errors.referenceID && touched.referenceID ? (
+                                                    <span className="invalid-feedback">{errors.referenceID}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                        }
+                                        {(values.txtnType !== "" && values.txtnType !== 6  ) &&
+                                            <Form.Group>
+                                                <Form.Label className="block-level">Remarks</Form.Label>
+                                                <Form.Control as="textarea"
+                                                    rows="3"
+                                                    onChange={handleChange}
+                                                    name="remarks"
+                                                    value={values.remarks}
+                                                    className={errors.remarks && touched.remarks ? "is-invalid form-control form-control-sm" : null}
+                                                />
+                                                {errors.remarks && touched.remarks ? (
+                                                    <span className="invalid-feedback">{errors.remarks}</span>
+                                                ) : null}
+                                            </Form.Group>
+                                        }
+
+                                        <div className="mr-10">
+                                            <div className="footer-with-cta">
+                                                <Button
+                                                    type="submit"
+                                                    disabled={postATransactionRequest.is_request_processing}
+                                                >
+
+                                                    {postATransactionRequest.is_request_processing ? "Please wait..." : "Post transaction"}
+                                                </Button>
+                                                <Button variant="secondary"
+                                                    disabled={postATransactionRequest.is_request_processing}
+                                                    onClick={() => {
+                                                        this.selectRef.select.clearValue();
+                                                        this.setState({ selectOtherCustomerAccount: null, selectedTxtn: null, selectedCustomer: null, showMandateLink: false })
+                                                        resetForm()
+                                                    }}>
+                                                    Clear
+                                            </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                                 {postATransactionRequest.request_status === dashboardConstants.POST_TRANSACTION_SUCCESS &&
                                     <Alert variant="success">
                                         {postATransactionRequest.request_data.response.data.message && postATransactionRequest.request_data.response.data.message}
@@ -2505,6 +2798,7 @@ class DashboardLanding extends React.Component {
                                                     {this.state.selectedTill}
                                                 </div>
                                             }
+
                                             {allMyTills.length>=1 &&
                                                 <div className="select-tillid">
                                                     <select id="tildId"

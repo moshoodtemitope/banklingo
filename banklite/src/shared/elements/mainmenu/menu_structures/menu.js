@@ -623,6 +623,29 @@ export const adminAccessMenuList = [
     },
 ]
 
+export const adminBranchClosureMenuList = [
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "All",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/organization/branch-closures",
+    },
+
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "Open",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/organization/branch-closures/open",
+    },
+
+    {
+        permissionName: "Manage Organisation",
+        mainMenu: "Closed",
+        permissionCode: "bnk_manage_organisation",
+        menuRoute: "/administration/organization/branch-closures/closed"
+    },
+]
+
 export const adminPlatformMenuList = [
     {
         permissionName: "Manage Organisation",
