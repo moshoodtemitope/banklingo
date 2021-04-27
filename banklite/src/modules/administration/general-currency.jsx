@@ -24,6 +24,9 @@ import Alert from 'react-bootstrap/Alert'
 import GeneralNav from './menus/_general-menu'
 import "./administration.scss"; 
 import { getDateFromISO, numberWithCommas } from "../../shared/utils";
+
+
+
 class GeneralCurrency extends React.Component {
     constructor(props) {
         super(props);
@@ -982,25 +985,7 @@ class GeneralCurrency extends React.Component {
                                 <div className="content-container">
                                     <AdminNav />
                                     <GeneralNav />
-                                    {/* <div className="lowerlevel-menu">
-                                        <ul className="nav">
-                                            <li>
-                                                <NavLink exact to={'/administration/general'}>Organization</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/currency'}>Currency</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/txt-channels'}>Transaction Channels</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/customer-types'}>Customer Types</NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to={'/administration/general/control'}>Internal Control</NavLink>
-                                            </li>
-                                        </ul>
-                                    </div> */}
+                                  
                                 </div>
                             </div>
                             <div className="module-content">

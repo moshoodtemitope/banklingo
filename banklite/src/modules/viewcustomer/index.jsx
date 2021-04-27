@@ -434,6 +434,8 @@ class ViewCustomer extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-8">
                                             <div className="main-details">
+
+                                                {/* This section loads the account details */}
                                                 <TableComponent classnames="striped bordered hover">
                                                     <thead>
                                                         <tr>

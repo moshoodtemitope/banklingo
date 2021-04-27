@@ -6,12 +6,12 @@ import "../administration.scss";
 import { NavLink} from 'react-router-dom';
 
 
-import {adminAccessMenuList} from '../../../shared/elements/mainmenu/menu'
+import {admin_access_tab_list} from  '../../../shared/elements/mainmenu/menu_structures/admin_access_tab_list'
 class AccessNav extends React.Component{
     
     render() {
         let userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
-        let allMenu = adminAccessMenuList,
+        let allMenu = admin_access_tab_list,
             allMenuGroups = [],
             allUSerPermissionNames = [],
             allQuickMenus=[],

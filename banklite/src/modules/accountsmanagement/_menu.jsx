@@ -6,7 +6,7 @@ import {Fragment} from "react";
 import { NavLink} from 'react-router-dom';
 
 
-import {accountsMenuList} from '../../shared/elements/mainmenu/menu'
+import {accountsMenuList} from '../../shared/elements/mainmenu/menu_structures/menu'
 class AccountingNav extends React.Component{
 
     render() {

@@ -2,10 +2,10 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-import AdminNav from './_menu'
+import AdminNav from '../_menu'
 import { connect } from 'react-redux';
 import { NavLink} from 'react-router-dom';
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import  InnerPageContainer from '../../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 import Accordion from 'react-bootstrap/Accordion'
 import Col from 'react-bootstrap/Col'
@@ -13,14 +13,16 @@ import Col from 'react-bootstrap/Col'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import {administrationActions} from '../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+// import {branchActions} from '../../redux/actions/administration/administration.action';
+// import {branchConstants} from '../../redux/actiontypes/administration/administration.constants'
+
+import {branchActions,branchConstants} from '../../../redux/actions/administration/branch-management.actions';
 import Alert from 'react-bootstrap/Alert'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import {noWhiteSpaces} from "../../shared/utils"
-import "./administration.scss"; 
+import {noWhiteSpaces} from "../../../shared/utils"
+import "../administration.scss"; 
 class EditBranch extends React.Component {
     constructor(props) {
         super(props);
@@ -41,14 +43,14 @@ class EditBranch extends React.Component {
         const {dispatch} = this.props;
        
         
-        await dispatch(administrationActions.updateABranch(updateBranchPayload));
+        await dispatch(branchActions.updateABranch(updateBranchPayload));
     } 
 
     getBranch =  (encodedKey)=>{
         const {dispatch} = this.props;
        
         
-         dispatch(administrationActions.getABranch(encodedKey));
+         dispatch(branchActions.getABranch(encodedKey));
     }
 
     updateBranchValidationSchema = Yup.object().shape({
@@ -95,14 +97,14 @@ class EditBranch extends React.Component {
             adminGetABranchRequest = this.props.adminGetABranch;
         
         switch (adminGetABranchRequest.request_status){
-            case (administrationConstants.GET_A_BRANCH_PENDING):
+            case (branchConstants.GET_A_BRANCH_PENDING):
                 return (
                     <div className="loading-content"> 
                         <div className="loading-text">Please wait... </div>
                     </div>
                 )
             
-            case (administrationConstants.GET_A_BRANCH_SUCCESS):
+            case (branchConstants.GET_A_BRANCH_SUCCESS):
                 let branchDetails = adminGetABranchRequest.request_data.response.data;
                 if(branchDetails!==undefined){
                     return (
@@ -147,12 +149,12 @@ class EditBranch extends React.Component {
                                     .then(
                                         () => {
             
-                                            // if (this.props.adminCreateNewBranch.request_status === administrationConstants.UPDATE_A_BRANCH_SUCCESS) {
+                                            // if (this.props.adminCreateNewBranch.request_status === branchConstants.UPDATE_A_BRANCH_SUCCESS) {
                                             //     resetForm();
                                             // }
             
                                             setTimeout(() => {
-                                                this.props.dispatch(administrationActions.updateABranch("CLEAR"))
+                                                this.props.dispatch(branchActions.updateABranch("CLEAR"))
                                             }, 3000);
             
                                         }
@@ -338,12 +340,12 @@ class EditBranch extends React.Component {
             
                                             
                                         </div>
-                                        {adminUpdateABranchRequest.request_status === administrationConstants.UPDATE_A_BRANCH_SUCCESS && 
+                                        {adminUpdateABranchRequest.request_status === branchConstants.UPDATE_A_BRANCH_SUCCESS && 
                                             <Alert variant="success">
                                                 {adminUpdateABranchRequest.request_data.response.data.message}
                                             </Alert>
                                         }
-                                        {adminUpdateABranchRequest.request_status === administrationConstants.UPDATE_A_BRANCH_FAILURE && 
+                                        {adminUpdateABranchRequest.request_status === branchConstants.UPDATE_A_BRANCH_FAILURE && 
                                             <Alert variant="danger">
                                                 {adminUpdateABranchRequest.request_data.error}
                                         
@@ -357,7 +359,7 @@ class EditBranch extends React.Component {
                     return null;
                 }
 
-            case (administrationConstants.GET_A_BRANCH_FAILURE):
+            case (branchConstants.GET_A_BRANCH_FAILURE):
                 return (
                     <div className="loading-content errormsg"> 
                         <div>{adminGetABranchRequest.request_data.error}</div>

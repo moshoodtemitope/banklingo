@@ -10,8 +10,10 @@ import  TablePagination from '../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-import {administrationActions} from '../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+// import {branchActions} from '../../redux/actions/administration/administration.action';
+// import {branchConstants} from '../../redux/actiontypes/administration/administration.constants'
+
+import {branchActions,branchConstants} from '../../redux/actions/administration/branch-management.actions';
 import "./branches.scss"; 
 class BranchesManagement extends React.Component 
 {
@@ -41,7 +43,7 @@ class BranchesManagement extends React.Component
     getAllBranches = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(administrationActions.getAllBranches(paramters));
+        dispatch(branchActions.getAllBranches(paramters));
     }
 
     setPagesize = (PageSize, tempData)=>{
@@ -56,9 +58,9 @@ class BranchesManagement extends React.Component
 
         if(tempData){
             
-            dispatch(administrationActions.getAllBranches(params,tempData));
+            dispatch(branchActions.getAllBranches(params,tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(branchActions.getAllBranches(params));
         }
     }
 
@@ -74,9 +76,9 @@ class BranchesManagement extends React.Component
         let params= `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${nextPage}`;
 
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params,tempData));
+            dispatch(branchActions.getAllBranches(params,tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(branchActions.getAllBranches(params));
         }
     }
 
@@ -89,9 +91,9 @@ class BranchesManagement extends React.Component
 
         let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
         if(tempData){
-            dispatch(administrationActions.getAllBranches(params,tempData));
+            dispatch(branchActions.getAllBranches(params,tempData));
         }else{
-            dispatch(administrationActions.getAllBranches(params));
+            dispatch(branchActions.getAllBranches(params));
         }
         
         // this.getAllBranches(params);
@@ -103,7 +105,7 @@ class BranchesManagement extends React.Component
         let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined?adminGetAllBranchesRequest.request_data.tempData:null;
         
             switch (adminGetAllBranchesRequest.request_status){
-                case (administrationConstants.GET_ALL_BRANCHES_PENDING):
+                case (branchConstants.GET_ALL_BRANCHES_PENDING):
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
                         return (
                             <div className="loading-content"> 
@@ -218,7 +220,7 @@ class BranchesManagement extends React.Component
                         )
                     }
                 
-                case(administrationConstants.GET_ALL_BRANCHES_SUCCESS):
+                case(branchConstants.GET_ALL_BRANCHES_SUCCESS):
                     let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
                     if(allBranchesData!==undefined){
                         if(allBranchesData.result.length>=1){
@@ -356,7 +358,7 @@ class BranchesManagement extends React.Component
                         return null;
                     }
 
-                case (administrationConstants.GET_ALL_USERS_FAILURE):
+                case (branchConstants.GET_ALL_BRANCHES_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
                             <div>{adminGetAllBranchesRequest.request_data.error}</div>

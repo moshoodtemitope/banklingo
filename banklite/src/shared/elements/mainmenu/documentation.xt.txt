@@ -1,0 +1,24 @@
+
+
+Documentation
+-------------------------------
+
+
+
+The menu structure is here
+-----------------------------------------------
+banklite\src\shared\elements\mainmenu\menu.js
+
+
+banklite\src\modules\administration\_menu.jsx
+
+
+
+Where is the route defined
+--------------------------------------------
+
+banklite\src\modules\authenticated-routes.jsx
+banklite\src\App.
+
+
+requeststatus(GET_ALL,SUCCESS,FAILED)

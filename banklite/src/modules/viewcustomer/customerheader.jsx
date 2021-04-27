@@ -111,6 +111,7 @@ class CustomerHeading extends React.Component {
     handleChangeHistoryShow = () => this.setState({showChangeHistory:true});
 
     newTask = ()=>{
+        ///This should be an add task component
         const {showNewTask} = this.state;
         return(
             <Modal show={showNewTask} onHide={this.handleTaskClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
@@ -146,7 +147,7 @@ class CustomerHeading extends React.Component {
                                     showYearDropdown
                                     dropdownMode="select"
                                     maxDate={new Date()}
-                                />
+                                {/* /> */}
                             </Col>
                         </Form.Row>
                         <Form.Group controlId="debitLocation">
@@ -497,7 +498,7 @@ class CustomerHeading extends React.Component {
 
     render() {
         
-        let {generatedRoutes} = this.state;
+        // let {generatedRoutes} = this.state;
         return (
             // <Fragment>
             //     {/* <InnerPageContainer {...this.props}> */}

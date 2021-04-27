@@ -539,8 +539,7 @@ class TrialBalance extends React.Component {
                                     <Button variant="success"
                                         className="mr-20px"
                                         onClick={()=>window.print()}
-                                        type="button"
-                                        >
+                                        type="button">
                                         Print
                                     </Button>
                                     

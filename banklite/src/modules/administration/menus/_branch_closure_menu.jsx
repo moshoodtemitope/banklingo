@@ -6,7 +6,7 @@ import "../administration.scss";
 import { NavLink} from 'react-router-dom';
 
 
-import {adminBranchClosureMenuList} from '../../../shared/elements/mainmenu/menu'
+import {adminBranchClosureMenuList} from '../../../shared/elements/mainmenu/menu_structures/menu'
 class BranchClosureMenu extends React.Component{
     
     render() {

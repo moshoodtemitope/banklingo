@@ -4,7 +4,7 @@ import {Fragment} from "react";
 import {NavLink} from 'react-router-dom';
 import "./mainmenu.scss"; 
 
-import {menuList} from './menu'
+import {menuList} from './menu_structures/menu'
 class MainMenu extends React.Component{
     constructor(props) {
         super(props);

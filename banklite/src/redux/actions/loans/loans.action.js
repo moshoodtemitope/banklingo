@@ -208,7 +208,7 @@ function getApprovedLoans(params,tempData) {
 
     return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_LOAN +`?${params}&LoanState=3`, "GET", null);
+        let consume = ApiService.request(routes.HIT_LOAN +`?${params}`, "GET", null);
         dispatch(request(consume,tempData));
         return consume
             .then(response => {

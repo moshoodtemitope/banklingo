@@ -6,7 +6,7 @@ import "../administration.scss";
 import { NavLink} from 'react-router-dom';
 
 
-import {adminGeneralMenuList} from '../../../shared/elements/mainmenu/menu'
+import {adminGeneralMenuList} from '../../../shared/elements/mainmenu/menu_structures/menu'
 class GeneralNav extends React.Component{
     
     render() {
@@ -44,30 +44,9 @@ class GeneralNav extends React.Component{
                                 )
                             }
                             
-
                         })
                     }
-                    {/* <li>
-                        <NavLink to={'/administration/general'}>General</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={'/administration/organization'}>Organization</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={'/administration/access'}>Access</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={'/administration/products'}>Products</NavLink>
-                    </li> 
-                    <li>
-                        <NavLink to={'/administration/sms'}>SMS</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={'/administration/email'}>Email</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={'/administration/uploaddata'}>Upload Data</NavLink>
-                    </li> */}
+                   
                 </ul>
             </div>
         );

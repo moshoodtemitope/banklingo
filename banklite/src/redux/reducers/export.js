@@ -34,11 +34,19 @@ import{
     accessPreferencesReducer,
     getInternalControlReducer,
     internalControlReducer,
+    ///BRANCH MANAGEMENT MODULE
     getAllBranchesReducer,
     fetchBranchesListReducer,
     getABranchReducer,
     createNewBranchReducer,
     updateABranchReducer,
+    getBranchClosuresReducer,
+    getBranchesOpenReducer,
+    getBranchesClosedReducer,
+    openABranchReducer,
+    closeABranchReducer,
+
+/////
     getNotificationsReducer,
     uploadDataReducer,
     fetchAllNotificationTemplate,
@@ -54,11 +62,7 @@ import{
     createARiskLevel,
     updateARiskLevel,
     fetchAllTasksReducer,
-    getBranchClosuresReducer,
-    getBranchesOpenReducer,
-    getBranchesClosedReducer,
-    openABranchReducer,
-    closeABranchReducer
+   
 }
  from './administration/administration.reducer'
 
@@ -304,11 +308,20 @@ export const administration ={
     accessPreferencesReducer,
     getInternalControlReducer,
     internalControlReducer,
+
+    ///BRANCH MANAGEMENT MODULE
     getAllBranchesReducer,
     fetchBranchesListReducer,
     getABranchReducer,
     createNewBranchReducer,
     updateABranchReducer,
+    getBranchClosuresReducer,
+    getBranchesOpenReducer,
+    getBranchesClosedReducer,
+    openABranchReducer,
+    closeABranchReducer,
+
+    /////
     getNotificationsReducer,
     uploadDataReducer,
     fetchAllNotificationTemplate,
@@ -324,11 +337,7 @@ export const administration ={
     createARiskLevel,
     updateARiskLevel,
     fetchAllTasksReducer,
-    getBranchClosuresReducer,
-    getBranchesOpenReducer,
-    getBranchesClosedReducer,
-    openABranchReducer,
-    closeABranchReducer
+   
     
     
 }

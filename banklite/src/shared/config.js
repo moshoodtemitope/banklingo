@@ -79,6 +79,52 @@ export const LOAN_MODULE_MENU_LINKS = [
   },
 ];
 
+
+
+
+export const DEPOSIT_MODULE_MENU_LINKS = [
+  {
+    label: 'All',
+    url: '/deposits/all',
+    exact: false,
+  },
+  {
+    label: 'Pending Approval',
+    url: '/deposits/pending-approval',
+    exact: false,
+  },
+  {
+    label: 'In Active',
+    url: '/deposits/approved',
+    exact: true,
+  },
+  {
+    label: 'Active',
+    url: '/deposits/active',
+    exact: false,
+  },
+  {
+    label: 'Rejected',
+    url: '/deposits/rejected',
+    exact: false,
+  },
+  {
+    label: 'Locked',
+    url: '/deposits/locked',
+    exact: false,
+  },
+  {
+    label: 'Matured',
+    url: '/deposits/matured',
+    exact: false,
+  },
+  {
+    label: 'Closed',
+    url: '/deposits/closed',
+    exact: false,
+  }
+];
+
 export const REPORTS_MENU_LINKS = [
   {
     label: 'Loans',
