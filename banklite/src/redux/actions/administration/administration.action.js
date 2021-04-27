@@ -36,7 +36,7 @@ export const administrationActions = {
     accessPreferences,
     getInternalControl,
     updateInternalControlSettings,
-    getAllBranches,
+    // getAllBranches,
     getBranchesClosures,
     getBranchesOpen,
     getBranchesClosed,
@@ -1153,37 +1153,37 @@ function updateInternalControlSettings  (internalControlSettingsPayload){
 
 
 
-function getAllBranches  (params, tempData){
+// function getAllBranches  (params, tempData){
     
-    return dispatch =>{
+//     return dispatch =>{
         
-        let consume = ApiService.request(routes.GET_BRANCHES+'?'+params, "GET", null);
-        dispatch(request(consume, tempData));
-        return consume
-            .then(response =>{
-                dispatch(success(response));
-            }).catch(error =>{
+//         let consume = ApiService.request(routes.GET_BRANCHES+'?'+params, "GET", null);
+//         dispatch(request(consume, tempData));
+//         return consume
+//             .then(response =>{
+//                 dispatch(success(response));
+//             }).catch(error =>{
                 
-                dispatch(failure(handleRequestErrors(error)));
-            });
+//                 dispatch(failure(handleRequestErrors(error)));
+//             });
         
-    }
+//     }
 
-    function request(user, tempData) { 
-        if(tempData===undefined){
-            return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } 
-        }
-        if(tempData!==undefined){
-            return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user, tempData } 
-        }
+//     function request(user, tempData) { 
+//         if(tempData===undefined){
+//             return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } 
+//         }
+//         if(tempData!==undefined){
+//             return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user, tempData } 
+//         }
         
-    }
+//     }
 
-    // function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
-    function success(response) { return { type: administrationConstants.GET_ALL_BRANCHES_SUCCESS, response } }
-    function failure(error) { return { type: administrationConstants.GET_ALL_BRANCHES_FAILURE, error } }
+//     // function request(user) { return { type: administrationConstants.GET_ALL_BRANCHES_PENDING, user } }
+//     function success(response) { return { type: administrationConstants.GET_ALL_BRANCHES_SUCCESS, response } }
+//     function failure(error) { return { type: administrationConstants.GET_ALL_BRANCHES_FAILURE, error } }
 
-}
+// }
 
 function getBranchesClosures  (params, tempData){
     

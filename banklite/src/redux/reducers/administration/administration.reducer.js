@@ -1,3 +1,4 @@
+import { branchConstants } from '../../actions/administration/branch-management.actions';
 import {administrationConstants} from '../../actiontypes/administration/administration.constants'
 
 export function getUsersReducer(state=[], action) {
@@ -986,29 +987,32 @@ export function internalControlReducer(state=[], action) {
 
 }
 
+
+
 export function getAllBranchesReducer(state=[], action) {
-    switch (action.type) {
-        case administrationConstants.GET_ALL_BRANCHES_PENDING:
+    switch (action.type) 
+    {
+        case branchConstants.GET_ALL_BRANCHES_PENDING:
             return {
-                request_status: administrationConstants.GET_ALL_BRANCHES_PENDING,
+                request_status: branchConstants.GET_ALL_BRANCHES_PENDING,
                 is_request_processing: true,
                 request_data: action
             };
-        case administrationConstants.GET_ALL_BRANCHES_SUCCESS:
+        case branchConstants.GET_ALL_BRANCHES_SUCCESS:
             return {
-                request_status: administrationConstants.GET_ALL_BRANCHES_SUCCESS,
+                request_status: branchConstants.GET_ALL_BRANCHES_SUCCESS,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.GET_ALL_BRANCHES_FAILURE:
+        case branchConstants.GET_ALL_BRANCHES_FAILURE:
             return {
-                request_status: administrationConstants.GET_ALL_BRANCHES_FAILURE,
+                request_status: branchConstants.GET_ALL_BRANCHES_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.GET_ALL_BRANCHES_RESET:
+        case branchConstants.GET_ALL_BRANCHES_RESET:
             return {
-                request_status: administrationConstants.GET_ALL_BRANCHES_RESET,
+                request_status: branchConstants.GET_ALL_BRANCHES_RESET,
                 is_request_processing: false,
                 request_data: {}
             };
@@ -1018,6 +1022,8 @@ export function getAllBranchesReducer(state=[], action) {
     }
 
 }
+
+
 
 export function fetchBranchesListReducer(state=[], action) {
     switch (action.type) {

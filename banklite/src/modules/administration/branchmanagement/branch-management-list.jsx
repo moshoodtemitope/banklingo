@@ -39,8 +39,7 @@ class BranchListManagement extends React.Component {
 
   
     setPagesize = (event, tempData)=>{
-        const {dispatch} = this.props;
-       
+        
         this.setState({PageSize: event.target.value});
         this.retrieveFromApi(tempData);
       
@@ -73,7 +72,7 @@ class BranchListManagement extends React.Component {
     setShowDetails = (event,tempData)=>{
         const {dispatch} = this.props;
         // console.log('----here', PageSize.target.value);
-        let showDetails = event.target.checked, {CurrentPage, CurrentSelectedPage, PageSize} = this.state;
+        let showDetails = event.target.checked;
         this.setState({FullDetails: showDetails});
            this.retrieveFromApi(tempData);
 
@@ -85,7 +84,8 @@ class BranchListManagement extends React.Component {
 fetchForEmptyState=()=>{
     //This function returns the biew for empty list                                                                                                                                   
     let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
-    let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined? adminGetAllBranchesRequest.request_data.tempData: null;
+   
+  console.log('fetchForEmptyState: '+adminGetAllBranchesRequest.request_status);
     switch (adminGetAllBranchesRequest.request_status){
         case (branchConstants.GET_ALL_BRANCHES_PENDING):
             
@@ -104,6 +104,7 @@ fetchErrorState(){
     let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
   //  let saveRequestData= adminGetAllBranchesRequest.request_data!==undefined? adminGetAllBranchesRequest.request_data.tempData: null;
 
+  console.log('fetchErrorState: '+adminGetAllBranchesRequest.request_status);
     switch(adminGetAllBranchesRequest.request_status){
         case (branchConstants.GET_ALL_BRANCHES_FAILURE):
             return (
@@ -119,9 +120,10 @@ fetchErrorState(){
 
 
     fetchForDataState=()=> {
+
     let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
    // let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
-    
+    console.log('fetchForDataState: '+adminGetAllBranchesRequest.request_status);
     switch(adminGetAllBranchesRequest.request_status){
     case(branchConstants.GET_ALL_BRANCHES_SUCCESS):
      let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
@@ -178,8 +180,7 @@ fetchErrorState(){
 
     fetchPageList() {
         
-        let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
-
+          let adminGetAllBranchesRequest = this.props.adminGetAllBranches;
 
         let responseData = adminGetAllBranchesRequest.request_data?.response?.data;
 

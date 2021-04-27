@@ -80,3 +80,5 @@ function getAllBranches(params, tempData) {
     return { type: branchConstants.GET_ALL_BRANCHES_FAILURE, error };
   }
 }
+
+
