@@ -1,4 +1,5 @@
 import { branchConstants } from '../../actions/administration/branch-management.actions';
+import { customerTypeConstants } from '../../actions/administration/customer-types-management.actions';
 import {administrationConstants} from '../../actiontypes/administration/administration.constants'
 
 export function getUsersReducer(state=[], action) {
@@ -397,21 +398,21 @@ export function updateOrganizationDetailsReducer(state=[], action) {
 
 export function getCustomerTypesReducer(state=[], action) {
     switch (action.type) {
-        case administrationConstants.GET_CUSTOMERTYPES_PENDING:
+        case customerTypeConstants.GET_CUSTOMERTYPES_PENDING:
             return {
-                request_status: administrationConstants.GET_CUSTOMERTYPES_PENDING,
+                request_status: customerTypeConstants.GET_CUSTOMERTYPES_PENDING,
                 is_request_processing: true,
                 request_data: action
             };
-        case administrationConstants.GET_CUSTOMERTYPES_SUCCESS:
+        case customerTypeConstants.GET_CUSTOMERTYPES_SUCCESS:
             return {
-                request_status: administrationConstants.GET_CUSTOMERTYPES_SUCCESS,
+                request_status: customerTypeConstants.GET_CUSTOMERTYPES_SUCCESS,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.GET_CUSTOMERTYPES_FAILURE:
+        case customerTypeConstants.GET_CUSTOMERTYPES_FAILURE:
             return {
-                request_status: administrationConstants.GET_CUSTOMERTYPES_FAILURE,
+                request_status: customerTypeConstants.GET_CUSTOMERTYPES_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };
@@ -423,21 +424,21 @@ export function getCustomerTypesReducer(state=[], action) {
 
 export function getAllCustomerTypesReducer(state=[], action) {
     switch (action.type) {
-        case administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING:
+        case customerTypeConstants.GET_ALL_CUSTOMERTYPES_PENDING:
             return {
-                request_status: administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING,
+                request_status: customerTypeConstants.GET_ALL_CUSTOMERTYPES_PENDING,
                 is_request_processing: true,
                 request_data: action
             };
-        case administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS:
+        case customerTypeConstants.GET_ALL_CUSTOMERTYPES_SUCCESS:
             return {
-                request_status: administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS,
+                request_status: customerTypeConstants.GET_ALL_CUSTOMERTYPES_SUCCESS,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE:
+        case customerTypeConstants.GET_ALL_CUSTOMERTYPES_FAILURE:
             return {
-                request_status: administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE,
+                request_status: customerTypeConstants.GET_ALL_CUSTOMERTYPES_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };
@@ -449,27 +450,27 @@ export function getAllCustomerTypesReducer(state=[], action) {
 
 export function createCustomerTypeReducer(state=[], action) {
     switch (action.type) {
-        case administrationConstants.CREATE_CUSTOMERTYPE_PENDING:
+        case customerTypeConstants.CREATE_CUSTOMERTYPE_PENDING:
             return {
-                request_status: administrationConstants.CREATE_CUSTOMERTYPE_PENDING,
+                request_status: customerTypeConstants.CREATE_CUSTOMERTYPE_PENDING,
                 is_request_processing: true,
                 request_data: action
             };
-        case administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS:
+        case customerTypeConstants.CREATE_CUSTOMERTYPE_SUCCESS:
             return {
-                request_status: administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS,
+                request_status: customerTypeConstants.CREATE_CUSTOMERTYPE_SUCCESS,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.CREATE_CUSTOMERTYPE_FAILURE:
+        case customerTypeConstants.CREATE_CUSTOMERTYPE_FAILURE:
             return {
-                request_status: administrationConstants.CREATE_CUSTOMERTYPE_FAILURE,
+                request_status: customerTypeConstants.CREATE_CUSTOMERTYPE_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.CREATE_CUSTOMERTYPE_RESET:
+        case customerTypeConstants.CREATE_CUSTOMERTYPE_RESET:
             return {
-                request_status: administrationConstants.CREATE_CUSTOMERTYPE_RESET,
+                request_status: customerTypeConstants.CREATE_CUSTOMERTYPE_RESET,
                 is_request_processing: false,
                 request_data: {}
             };
@@ -481,27 +482,27 @@ export function createCustomerTypeReducer(state=[], action) {
 
 export function updateCustomerTypeReducer(state=[], action) {
     switch (action.type) {
-        case administrationConstants.UPDATE_CUSTOMERTYPE_PENDING:
+        case customerTypeConstants.UPDATE_CUSTOMERTYPE_PENDING:
             return {
-                request_status: administrationConstants.UPDATE_CUSTOMERTYPE_PENDING,
+                request_status: customerTypeConstants.UPDATE_CUSTOMERTYPE_PENDING,
                 is_request_processing: true,
                 request_data: action
             };
-        case administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS:
+        case customerTypeConstants.UPDATE_CUSTOMERTYPE_SUCCESS:
             return {
-                request_status: administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS,
+                request_status: customerTypeConstants.UPDATE_CUSTOMERTYPE_SUCCESS,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.UPDATE_CUSTOMERTYPE_FAILURE:
+        case customerTypeConstants.UPDATE_CUSTOMERTYPE_FAILURE:
             return {
-                request_status: administrationConstants.UPDATE_CUSTOMERTYPE_FAILURE,
+                request_status: customerTypeConstants.UPDATE_CUSTOMERTYPE_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.UPDATE_CUSTOMERTYPE_RESET:
+        case customerTypeConstants.UPDATE_CUSTOMERTYPE_RESET:
             return {
-                request_status: administrationConstants.UPDATE_CUSTOMERTYPE_RESET,
+                request_status: customerTypeConstants.UPDATE_CUSTOMERTYPE_RESET,
                 is_request_processing: false,
                 request_data: {}
             };

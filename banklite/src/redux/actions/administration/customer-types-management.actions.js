@@ -4,15 +4,17 @@ import { handleRequestErrors } from "../../../shared/utils";
 
 
 
-export const administrationActions = {
+export const customerTypeActions = {
   
   getCustomerTypes,
-  getAllCustomerTypes
+  getAllCustomerTypes,
+  addCustomerType,
+  updateCustomerType,
 }
 
 
 
-export const administrationConstants = {
+export const customerTypeConstants = {
   
   CREATE_CUSTOMERTYPE_SUCCESS : 'CREATE_CUSTOMERTYPE_SUCCESS',
   CREATE_CUSTOMERTYPE_PENDING : 'CREATE_CUSTOMERTYPE_PENDING',
@@ -59,15 +61,15 @@ function getCustomerTypes  (customerTypesPayload, tempData){
 function request(user, tempData) {
  
   if(tempData===undefined){
-      return { type: administrationConstants.GET_CUSTOMERTYPES_PENDING, user } 
+      return { type: customerTypeConstants.GET_CUSTOMERTYPES_PENDING, user } 
   }
   if(tempData!==undefined){
-      return { type: administrationConstants.GET_CUSTOMERTYPES_PENDING, user, tempData } 
+      return { type: customerTypeConstants.GET_CUSTOMERTYPES_PENDING, user, tempData } 
   }
    
 }
-function success(response) { return { type: administrationConstants.GET_CUSTOMERTYPES_SUCCESS, response } }
-function failure(error) { return { type: administrationConstants.GET_CUSTOMERTYPES_FAILURE, error } }
+function success(response) { return { type: customerTypeConstants.GET_CUSTOMERTYPES_SUCCESS, response } }
+function failure(error) { return { type: customerTypeConstants.GET_CUSTOMERTYPES_FAILURE, error } }
 
 }
 
@@ -97,9 +99,9 @@ function getAllCustomerTypes(){
   
 
 
-function request(user) { return { type: administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING, user } }
-function success(response) { return { type: administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS, response } }
-function failure(error) { return { type: administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE, error } }
+function request(user) { return { type: customerTypeConstants.GET_ALL_CUSTOMERTYPES_PENDING, user } }
+function success(response) { return { type: customerTypeConstants.GET_ALL_CUSTOMERTYPES_SUCCESS, response } }
+function failure(error) { return { type: customerTypeConstants.GET_ALL_CUSTOMERTYPES_FAILURE, error } }
 
 }
 
@@ -127,10 +129,10 @@ return dispatch =>{
   
 }
 
-function request(user) { return { type: administrationConstants.CREATE_CUSTOMERTYPE_PENDING, user } }
-function success(response) { return { type: administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS, response } }
-function failure(error) { return { type: administrationConstants.CREATE_CUSTOMERTYPE_FAILURE, error } }
-function clear() { return { type: administrationConstants.CREATE_CUSTOMERTYPE_RESET, clear_data:""} }
+function request(user) { return { type: customerTypeConstants.CREATE_CUSTOMERTYPE_PENDING, user } }
+function success(response) { return { type: customerTypeConstants.CREATE_CUSTOMERTYPE_SUCCESS, response } }
+function failure(error) { return { type: customerTypeConstants.CREATE_CUSTOMERTYPE_FAILURE, error } }
+function clear() { return { type: customerTypeConstants.CREATE_CUSTOMERTYPE_RESET, clear_data:""} }
 
 }
 
@@ -160,9 +162,9 @@ return dispatch =>{
   
 }
 
-function request(user) { return { type: administrationConstants.UPDATE_CUSTOMERTYPE_PENDING, user } }
-function success(response) { return { type: administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS, response } }
-function failure(error) { return { type: administrationConstants.UPDATE_CUSTOMERTYPE_FAILURE, error } }
-function clear() { return { type: administrationConstants.UPDATE_CUSTOMERTYPE_RESET, clear_data:""} }
+function request(user) { return { type: customerTypeConstants.UPDATE_CUSTOMERTYPE_PENDING, user } }
+function success(response) { return { type: customerTypeConstants.UPDATE_CUSTOMERTYPE_SUCCESS, response } }
+function failure(error) { return { type: customerTypeConstants.UPDATE_CUSTOMERTYPE_FAILURE, error } }
+function clear() { return { type: customerTypeConstants.UPDATE_CUSTOMERTYPE_RESET, clear_data:""} }
 
 }

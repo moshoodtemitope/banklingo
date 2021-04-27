@@ -15,7 +15,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import  TableComponent from '../../../shared/elements/table'
 import  TablePagination from '../../../shared/elements/table/pagination'
-import {administrationActions,administrationConstants} from '../../../redux/actions/administration/customer-types-management.actions';
+import {customerTypeActions,customerTypeConstants} from '../../../redux/actions/administration/customer-types-management.actions';
 import Alert from 'react-bootstrap/Alert'
 
 import GeneralNav from '../menus/_general-menu'
@@ -56,9 +56,9 @@ class CustomerTypesAdministration extends React.Component {
         let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentPage}`;
         
         if(tempData){
-            dispatch(administrationActions.getCustomerTypes(params, tempData));
+            dispatch(customerTypeActions.getCustomerTypes(params, tempData));
         }else{
-            dispatch(administrationActions.getCustomerTypes(params));
+            dispatch(customerTypeActions.getCustomerTypes(params));
         }
         
     }
@@ -90,9 +90,9 @@ class CustomerTypesAdministration extends React.Component {
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
         
         if(tempData){
-            dispatch(administrationActions.getCustomerTypes(params, tempData));
+            dispatch(customerTypeActions.getCustomerTypes(params, tempData));
         }else{
-            dispatch(administrationActions.getCustomerTypes(params));
+            dispatch(customerTypeActions.getCustomerTypes(params));
         }
         
     }
@@ -105,10 +105,10 @@ fetchForEmptyState=()=>{
     //This function returns the biew for empty list                                                                                                                                   
     let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
 
-    
+    console.log('test_user_card: '+adminGetCustomerTypesRequest.request_status);
     
     switch (adminGetCustomerTypesRequest.request_status){
-        case (administrationConstants.GET_CUSTOMERTYPES_PENDING):
+        case (customerTypeConstants.GET_CUSTOMERTYPES_PENDING):
             
     return (<tbody> <tr>
         <td></td>
@@ -124,8 +124,11 @@ fetchForEmptyState=()=>{
 fetchErrorState(){
     let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
 
+    
+    console.log('test_user_card: '+adminGetCustomerTypesRequest.request_status);
+
     switch(adminGetCustomerTypesRequest.request_status){
-        case (administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE):
+        case (customerTypeConstants.GET_CUSTOMERTYPES_FAILURE):
             return (
                 <div className="loading-content errormsg"> 
                     <div>{adminGetCustomerTypesRequest.request_data.error}</div>
@@ -143,7 +146,7 @@ fetchErrorState(){
         let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
 
         switch (adminGetCustomerTypesRequest.request_status){
-            case (administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING):
+            case (customerTypeConstants.GET_CUSTOMERTYPES_PENDING):
 
                 return (  <div className="loading-content">
                      <div className="loading-text">Please wait...</div></div>);
@@ -158,7 +161,7 @@ fetchErrorState(){
         let adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes;
 
         switch(adminGetCustomerTypesRequest.request_status){
-        case(administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS):
+        case(customerTypeConstants.GET_CUSTOMERTYPES_SUCCESS):
                        
          let saveRequestData= adminGetCustomerTypesRequest.request_data!==undefined? adminGetCustomerTypesRequest.request_data.response.data:null;
 
@@ -251,15 +254,9 @@ fetchErrorState(){
                                         {/* <th></th> */}
                                     </tr>
                                 </thead>
-                               
-
-
               {this.fetchForEmptyState()}  
               {this.fetchErrorState()}
               {this.fetchForDataState()}
-             
-
-                
             </TableComponent>
             {this.fetchForBusyState()}
             
@@ -301,7 +298,7 @@ fetchErrorState(){
     handleCreateNewType = async (typePayload) =>{
         
         const {dispatch} = this.props;       
-        await dispatch(administrationActions.addCustomerType(typePayload));
+        await dispatch(customerTypeActions.addCustomerType(typePayload));
 
 
         
@@ -311,7 +308,7 @@ fetchErrorState(){
         
         const {dispatch} = this.props;
        
-        await dispatch(administrationActions.updateCustomerType(typePayload));
+        await dispatch(customerTypeActions.updateCustomerType(typePayload));
 
         
     }
@@ -355,7 +352,7 @@ fetchErrorState(){
                                     .then(
                                         ()=>{
                                             
-                                            if(this.props.adminUpdateCustomerType.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS){
+                                            if(this.props.adminUpdateCustomerType.request_status === customerTypeConstants.UPDATE_CUSTOMERTYPE_SUCCESS){
                                                 this.handleCloseEdit();
                                                 // this.getCustomerTypes(allCustomerTypesData);
                                                 let {PageSize, CurrentPage}= this.state;
@@ -363,13 +360,13 @@ fetchErrorState(){
                                                 setTimeout(() => {
                                                     this.getCustomerTypes(params,allCustomerTypesData);
                                                     
-                                                    this.props.dispatch(administrationActions.updateCustomerType("CLEAR"))
+                                                    this.props.dispatch(customerTypeActions.updateCustomerType("CLEAR"))
                                                     
                                                 }, 2000);
                                                  
                                             }else{
                                                 setTimeout(() => {
-                                                    this.props.dispatch(administrationActions.updateCustomerType("CLEAR"))
+                                                    this.props.dispatch(customerTypeActions.updateCustomerType("CLEAR"))
                                                 }, 2000);
                                             }
                                            
@@ -442,12 +439,12 @@ fetchErrorState(){
                             )}
                         </Formik>
                         
-                        {/* {adminUpdateCustomerTypeRequest.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_SUCCESS && 
+                        {/* {adminUpdateCustomerTypeRequest.request_status === customerTypeConstants.UPDATE_CUSTOMERTYPE_SUCCESS && 
                             <Alert variant="success">
                             {adminUpdateCustomerTypeRequest.request_data.response.data.message}
                             </Alert>
                         } */}
-                        {adminUpdateCustomerTypeRequest.request_status === administrationConstants.UPDATE_CUSTOMERTYPE_FAILURE && 
+                        {adminUpdateCustomerTypeRequest.request_status === customerTypeConstants.UPDATE_CUSTOMERTYPE_FAILURE && 
                             <Alert variant="danger">
                             {adminUpdateCustomerTypeRequest.request_data.error}
                             </Alert>
@@ -500,7 +497,7 @@ fetchErrorState(){
                                         // }, 2000);
 
 
-                                        if(this.props.adminCreateCustomerType.request_status === administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS){
+                                        if(this.props.adminCreateCustomerType.request_status === customerTypeConstants.CREATE_CUSTOMERTYPE_SUCCESS){
                                             resetForm();
                                             this.handleClose();
                                             setTimeout(() => {
@@ -508,13 +505,13 @@ fetchErrorState(){
                                                 let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
                                                 this.getCustomerTypes(params,allCustomerTypesData);
                                                 
-                                                this.props.dispatch(administrationActions.addCustomerType("CLEAR"))
+                                                this.props.dispatch(customerTypeActions.addCustomerType("CLEAR"))
                                                 
                                             }, 2000);
                                              
                                         }else{
                                             setTimeout(() => {
-                                                this.props.dispatch(administrationActions.addCustomerType("CLEAR"))
+                                                this.props.dispatch(customerTypeActions.addCustomerType("CLEAR"))
                                             }, 2000);
                                         }
                                         
@@ -586,12 +583,12 @@ fetchErrorState(){
                         )}
                     </Formik>
                     
-                    {/* {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_SUCCESS && 
+                    {/* {adminCreateCustomerTypeRequest.request_status === customerTypeConstants.CREATE_CUSTOMERTYPE_SUCCESS && 
                         <Alert variant="success">
                            {adminCreateCustomerTypeRequest.request_data.response.data.message}
                         </Alert>
                     } */}
-                    {adminCreateCustomerTypeRequest.request_status === administrationConstants.CREATE_CUSTOMERTYPE_FAILURE && 
+                    {adminCreateCustomerTypeRequest.request_status === customerTypeConstants.CREATE_CUSTOMERTYPE_FAILURE && 
                         <Alert variant="danger">
                           {adminCreateCustomerTypeRequest.request_data.error}
                         </Alert>
@@ -607,7 +604,7 @@ fetchErrorState(){
                 <InnerPageContainer {...this.props}>
                     {this.customerTypePopUp()}
                     {
-                        this.props.adminGetCustomerTypes.request_status ===administrationConstants.GET_CUSTOMERTYPES_SUCCESS
+                        this.props.adminGetCustomerTypes.request_status ===customerTypeConstants.GET_CUSTOMERTYPES_SUCCESS
                         && this.editCustomerType()
                     }
                     <div className="content-wrapper">

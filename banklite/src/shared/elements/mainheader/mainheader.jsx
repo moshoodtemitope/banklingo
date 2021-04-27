@@ -18,10 +18,10 @@ import AsyncSelect from 'react-select/async';
 import {saveRouteForRedirect} from "../../utils";
 // import {Nav, NavDropdown, Navbar, Form, Button, FormControl} from 'react-bootstrap'
 
-// import {administrationActions} from '../../../redux/actions/administration/administration.action';
+// import {customerTypeActions} from '../../../redux/actions/administration/administration.action';
 
 
-import {administrationActions,administrationConstants} from '../../../redux/actions/administration/customer-types-management.actions';
+import {customerTypeActions,customerTypeConstants} from '../../../redux/actions/administration/customer-types-management.actions';
 
 import {dashboardActions} from '../../../redux/actions/dashboard/dashboard.action';
 import {dashboardConstants} from '../../../redux/actiontypes/dashboard/dashboard.constants'
@@ -109,7 +109,7 @@ class MainHeader extends React.Component{
     getCustomerTypes = ()=>{
         const {dispatch} = this.props;
         
-        dispatch(administrationActions.getAllCustomerTypes());
+        dispatch(customerTypeActions.getAllCustomerTypes());
     }
 
     renderCreateMenu =()=>{
@@ -152,7 +152,7 @@ class MainHeader extends React.Component{
         
 
         switch(adminGetCustomerTypesRequest.request_status){
-            case (administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS):{
+            case (customerTypeConstants.GET_ALL_CUSTOMERTYPES_SUCCESS):{
                 let allCustomerTypesData = adminGetCustomerTypesRequest.request_data.response.data||adminGetCustomerTypesRequest.request_data.response,
                     allCustomerTypes=[];
                     // console.log("====", allCustomerTypesData);
@@ -660,6 +660,8 @@ class MainHeader extends React.Component{
         const {user} = this.state;
         let {AllowableBranches} = this.state.user;
         let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
+
+
         return(
             <div className="mainheader-wrap">
                 
@@ -686,6 +688,8 @@ class MainHeader extends React.Component{
                                     }
                             </div>
                         }
+
+
                         {AllowableBranches.length ===0 &&
                             <div className="user-branch">
                                 {this.state.showDropdown===false && 
@@ -694,6 +698,8 @@ class MainHeader extends React.Component{
                                 }
                             </div>
                         }
+
+                        
                         <div className="other-headingitems">
                             
                             {/* <DropdownButton
@@ -713,6 +719,7 @@ class MainHeader extends React.Component{
                                 <NavLink to={'/deposits/newaccount'}>Deposit Account</NavLink>
                                 <NavLink to={'/administration/access/new-user'}>User</NavLink>
                             </DropdownButton> */}
+
                             {this.renderQuickViewMenu()}
                             {this.renderCreateMenu()}
                             {this.renderGlobalSearch()}
