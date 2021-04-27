@@ -13,8 +13,11 @@ import Col from 'react-bootstrap/Col'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import {administrationActions} from '../../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../../redux/actiontypes/administration/administration.constants'
+// import {branchActions} from '../../../redux/actions/administration/administration.action';
+// import {branchConstants} from '../../../redux/actiontypes/administration/administration.constants'
+
+
+import {branchActions,branchConstants} from '../../../redux/actions/administration/branch-management.actions';
 import Alert from 'react-bootstrap/Alert'
 
 import Form from 'react-bootstrap/Form'
@@ -34,9 +37,8 @@ class NewBranch extends React.Component {
 
     handleCreateNewBranch = async (createNewBranchPayload)=>{
         const {dispatch} = this.props;
-       
         
-        await dispatch(administrationActions.createNewBranch(createNewBranchPayload));
+        await dispatch(branchActions.createNewBranch(createNewBranchPayload));
     } 
 
     createBranchValidationSchema = Yup.object().shape({
@@ -79,7 +81,9 @@ class NewBranch extends React.Component {
       });
 
     renderCreateNewBranch = ()=>{
-        let adminCreateNewBranchRequest = this.prop.adminCreateNewBranch;
+
+
+        let adminCreateNewBranchRequest = this.prop?.adminCreateNewBranch;
         return (
             <Formik
                 initialValues={{
@@ -120,15 +124,15 @@ class NewBranch extends React.Component {
                     this.handleCreateNewBranch(createNewBranchPayload)
                         .then(() => {
 
-                                if (this.props.adminCreateNewBranch.request_status === administrationConstants.CREATE_NEW_BRANCH_SUCCESS) {
+                                if (this.props?.adminCreateNewBranch.request_status === branchConstants.CREATE_NEW_BRANCH_SUCCESS) {
 
                                     setTimeout(() => {
-                                        this.props.dispatch(administrationActions.createNewBranch("CLEAR"))
+                                        this.props.dispatch(branchActions.createNewBranch("CLEAR"))
                                         resetForm();
                                     }, 3000);
                                 } else {
                                     setTimeout(() => {
-                                        this.props.dispatch(administrationActions.createNewBranch("CLEAR"))
+                                        this.props.dispatch(branchActions.createNewBranch("CLEAR"))
                                     }, 3000);
                                 }
                            
@@ -333,12 +337,12 @@ class NewBranch extends React.Component {
 
                                 
                             </div>
-                            {adminCreateNewBranchRequest.request_status === administrationConstants.CREATE_NEW_BRANCH_SUCCESS && 
+                            {adminCreateNewBranchRequest.request_status === branchConstants.CREATE_NEW_BRANCH_SUCCESS && 
                                 <Alert variant="success">
                                     {adminCreateNewBranchRequest.request_data.response.data.message}
                                 </Alert>
                             }
-                            {adminCreateNewBranchRequest.request_status === administrationConstants.CREATE_NEW_BRANCH_FAILURE && 
+                            {adminCreateNewBranchRequest.request_status === branchConstants.CREATE_NEW_BRANCH_FAILURE && 
                                 <Alert variant="danger">
                                     {adminCreateNewBranchRequest.request_data.error}
                             
@@ -387,3 +391,4 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(NewBranch);
+

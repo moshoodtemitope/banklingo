@@ -2,34 +2,35 @@ import * as React from "react";
 // import {Router} from "react-router";
 
 import {Fragment} from "react";
-import AdminNav from './_menu'
-import BranchClosureMenu from './menus/_branch_closure_menu'
+import AdminNav from '../_menu'
+import BranchClosureMenu from '../menus/_branch_closure_menu'
 import { connect } from 'react-redux';
 
 import { NavLink} from 'react-router-dom';
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
+import  InnerPageContainer from '../../../shared/templates/authed-pagecontainer'
 // import Form from 'react-bootstrap/Form'
 
 import Dropdown from 'react-bootstrap/Dropdown'
 import Modal from 'react-bootstrap/Modal';
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import  TableComponent from '../../shared/elements/table'
-import  TablePagination from '../../shared/elements/table/pagination'
+import  TableComponent from '../../../shared/elements/table'
+import  TablePagination from '../../../shared/elements/table/pagination'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import DatePicker from '../../_helpers/datepickerfield';
-import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import DatePicker from 'react-datepicker';
+// import DatePicker from '../../datepickerfield_helpers/datepickerfield';
+import DatePickerFieldType from '../../../_helpers/DatePickerFieldType';
 
-import {administrationActions} from '../../redux/actions/administration/administration.action';
-import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
+
+import {branchActions,branchConstants} from '../../../redux/actions/administration/branch-management.actions';
 import Alert from 'react-bootstrap/Alert'
 // import  SidebarElement from '../../shared/elements/sidebar'
-import "./administration.scss"; 
-import { getDateFromISO } from "../../shared/utils";
+import "../administration.scss"; 
+import { getDateFromISO } from "../../../shared/utils";
 class OrganizationBranchesOpen extends React.Component {
     constructor(props) {
         super(props);
@@ -60,7 +61,7 @@ class OrganizationBranchesOpen extends React.Component {
     getClosures = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(administrationActions.getBranchesOpen(paramters));
+        dispatch(branchConstants.getBranchesOpen(paramters));
     }
 
     setPagesize = (PageSize, tempData)=>{
@@ -74,9 +75,9 @@ class OrganizationBranchesOpen extends React.Component {
         
 
         if(tempData){
-            dispatch(administrationActions.getBranchesOpen(params, tempData));
+            dispatch(branchConstants.getBranchesOpen(params, tempData));
         }else{
-            dispatch(administrationActions.getBranchesOpen(params));
+            dispatch(branchConstants.getBranchesOpen(params));
         }
     }
 
@@ -92,9 +93,9 @@ class OrganizationBranchesOpen extends React.Component {
 
 
         if(tempData){
-            dispatch(administrationActions.getBranchesOpen(params,tempData));
+            dispatch(branchConstants.getBranchesOpen(params,tempData));
         }else{
-            dispatch(administrationActions.getBranchesOpen(params));
+            dispatch(branchConstants.getBranchesOpen(params));
         }
     }
 
@@ -109,9 +110,9 @@ class OrganizationBranchesOpen extends React.Component {
         let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&BranchClosureStatus=${BranchClosureStatus}`;
         
         if(tempData){
-            dispatch(administrationActions.getBranchesOpen(params, tempData));
+            dispatch(branchConstants.getBranchesOpen(params, tempData));
         }else{
-            dispatch(administrationActions.getBranchesOpen(params));
+            dispatch(branchConstants.getBranchesOpen(params));
         }
         
     }
@@ -122,7 +123,7 @@ class OrganizationBranchesOpen extends React.Component {
         let saveRequestData= getBranchClosuresRequest.request_data!==undefined?getBranchClosuresRequest.request_data.tempData:null;
 
             switch (getBranchClosuresRequest.request_status){
-                case (administrationConstants.GET_BRANCHES_OPEN_PENDING):
+                case (branchConstants.GET_BRANCHES_OPEN_PENDING):
                     
                     if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.length<1)){
                         return (
@@ -245,7 +246,7 @@ class OrganizationBranchesOpen extends React.Component {
                         )
                     }
                 
-                case(administrationConstants.GET_BRANCHES_OPEN_SUCCESS):
+                case(branchConstants.GET_BRANCHES_OPEN_SUCCESS):
                     let allBranchesData = getBranchClosuresRequest.request_data.response.data;
                     if(allBranchesData!==undefined){
                         if(allBranchesData.result.length>=1){
@@ -388,7 +389,7 @@ class OrganizationBranchesOpen extends React.Component {
                         return null;
                     }
 
-                case (administrationConstants.GET_BRANCHES_OPEN_FAILURE):
+                case (branchConstants.GET_BRANCHES_OPEN_FAILURE):
                     return (
                         <div className="loading-content errormsg"> 
                             <div>{getBranchClosuresRequest.request_data.error}</div>
@@ -400,7 +401,7 @@ class OrganizationBranchesOpen extends React.Component {
     }
 
     clearAllData = () => {
-        this.props.dispatch(administrationActions.closeABranch('CLEAR'));
+        this.props.dispatch(branchConstants.closeABranch('CLEAR'));
     };
 
     handleCloseUpdatePop = () => {
@@ -417,7 +418,7 @@ class OrganizationBranchesOpen extends React.Component {
     updateABranchStatus = async (payload) => {
         const { dispatch } = this.props;
 
-        await dispatch(administrationActions.closeABranch(payload));
+        await dispatch(branchConstants.closeABranch(payload));
     };
 
     closeABranchPopUp = () => {
@@ -459,7 +460,7 @@ class OrganizationBranchesOpen extends React.Component {
                             this.updateABranchStatus(requestPayload).then(() => {
                                 if (
                                     this.props.closeABranchReducer.request_status ===
-                                    administrationConstants.CLOSE_A_BRANCH_SUCCESS
+                                    branchConstants.CLOSE_A_BRANCH_SUCCESS
                                 ) {
                                     resetForm();
                                     this.loadInitialData();
@@ -546,13 +547,13 @@ class OrganizationBranchesOpen extends React.Component {
                         }}
                     </Formik>
                     {updateABranchRequest.request_status ===
-                        administrationConstants.CLOSE_A_BRANCH_SUCCESS && (
+                        branchConstants.CLOSE_A_BRANCH_SUCCESS && (
                             <Alert variant='success'>
                                 {updateABranchRequest.request_data.response.data.message}
                             </Alert>
                         )}
                     {updateABranchRequest.request_status ===
-                        administrationConstants.CLOSE_A_BRANCH_FAILURE && (
+                        branchConstants.CLOSE_A_BRANCH_FAILURE && (
                             <Alert variant='danger'>
                                 {updateABranchRequest.request_data.error}
                             </Alert>

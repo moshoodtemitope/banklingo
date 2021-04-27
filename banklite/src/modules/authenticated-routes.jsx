@@ -109,11 +109,11 @@ import GeneralBranding from './administration/general-branding'
 
 import BranchListManagement from './administration/branchmanagement/branch-management-list'
 import NewBranch from './administration/branchmanagement/organization-branches-new'
-import EditBranch from './administration/organization-edit-branch'
+import EditBranch from './administration/branchmanagement/organization-edit-branch'
 
-import OrganizationBranchesClosures from './administration/organization-branches-closures'
-import OrganizationBranchesOpen from './administration/organization-branches-opened'
-import OrganizationBranchesClosed from './administration/organization-branches-closed'
+import OrganizationBranchesClosures from './administration/branchmanagement/organization-branches-closures'
+import OrganizationBranchesOpen from './administration/branchmanagement/organization-branches-opened'
+import OrganizationBranchesClosed from './administration/branchmanagement/organization-branches-closed'
 import OrganizationCenters from './administration/organization-centers'
 import NewCenter from './administration/organization-centers-new'
 
