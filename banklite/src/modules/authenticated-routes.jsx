@@ -5,7 +5,6 @@ import {history} from "../_helpers/history";
 import { connect } from 'react-redux';
 import { Fragment } from "react";
 import DashboardLanding from './dashboard/new-index'
-import UserLogin from './onboarding/login'
 import LoginWrap from './onboarding/login/login'
 
 import ChangePassword from './profile/change-password'
@@ -128,7 +127,7 @@ import AccessRoles from './administration/access-roles'
 import CreateNewRole from './administration/access-newrole'
 import EditRole from './administration/access-editrole'
 
-import AccessUsers from './administration/access-users'
+// import AccessUsers from './administration/access-users/usermanagement'
 import CreateNewUser from './administration/access-newuser'
 import EditUser from './administration/access-edituser'
 
@@ -170,6 +169,7 @@ import {authActions} from '../redux/actions/auth/auth.action';
 import { clientsConstants } from '../redux/actions/clients/clients.action';
 import { ClientStateConstants, DepositStateConstants, LoanStateConstants, LoanSubStateConstants } from '../redux/actions/clients/client-states-constants';
 import LoanListDisplay from './loanmanagement/loan-list-display';
+import AccessUsers from './administration/usermanagement/access-users';
 
 
 // var permissionsList = JSON.parse(localStorage.getItem('x-u-perm'));

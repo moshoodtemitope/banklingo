@@ -25,12 +25,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { acoountingActions } from '../../redux/actions/accounting/accounting.action';
 import { accountingConstants } from '../../redux/actiontypes/accounting/accounting.constants';
 
-// import { administrationActions } from '../../redux/actions/administration/administration.action';
-// import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants';
-
-
-import {administrationActions,administrationConstants} from '../../redux/actions/administration/branch-management.actions';
-
+import { administrationActions } from '../../redux/actions/administration/administration.action';
+import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants';
 
 import Alert from 'react-bootstrap/Alert';
 import './accountsmanagement.scss';
