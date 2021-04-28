@@ -110,14 +110,14 @@ fetchForEmptyState=()=>{
     switch (adminGetCustomerTypesRequest.request_status){
         case (customerTypeConstants.GET_CUSTOMERTYPES_PENDING):
             
-    return (<tbody> <tr>
+    return (<tbody><tr>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
     </tr></tbody>);
-    default: return (<tbody></tbody>);
+    default: return null;
     }
 }
 
@@ -165,11 +165,10 @@ fetchErrorState(){
                        
          let saveRequestData= adminGetCustomerTypesRequest.request_data!==undefined? adminGetCustomerTypesRequest.request_data.response.data:null;
 
-            return (     <tbody>{
+            return (<tbody>{
                 saveRequestData.result.map((eachCustomerype, index)=>{
                     return(
-                        <Fragment key={index}>
-                            <tr>
+                        <Fragment key={index}><tr>
                                 <td>{eachCustomerype.name}</td>
                                 <td>{eachCustomerype.dateCreated}</td>
                                 <td>{eachCustomerype.createdBy}</td>
@@ -183,8 +182,7 @@ fetchErrorState(){
                                         <Dropdown.Item eventKey="1" onClick={()=>this.handleShowEdit(eachCustomerype.id)}>Edit</Dropdown.Item>
                                     </DropdownButton>
                                 </td>
-                            </tr>
-                        </Fragment>
+                            </tr></Fragment>
                     )
                 })
             }</tbody>);

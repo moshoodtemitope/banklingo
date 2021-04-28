@@ -23,11 +23,6 @@ class LoginWrap extends React.Component {
     constructor(props) {
         super(props);
         
-        this.state = {
-            
-        }
-
-
 
     }
 
@@ -45,17 +40,12 @@ class LoginWrap extends React.Component {
 
     checkTenancy = async ()=>{
         
-        let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
-        // if(getTenant===null){
+        
             localStorage.clear();
-            // let tenantPayload = {domain: "https://cititrustliberia.banklingo.app"};
             let tenantPayload = {domain: window.location.origin};
-            
-            
             const {dispatch} = this.props;
-       
             await dispatch(authActions.confirmTenant(tenantPayload));
-        // }
+        
     }
 
     renderPreloader = ()=>{
@@ -69,6 +59,23 @@ class LoginWrap extends React.Component {
         )
     }
 
+
+    renderTenantStatus = ()=>{
+        let loginRequest = this.props.loginRequest;
+        let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
+   
+        return(
+            <div>
+                <div className="form-heading">
+                    {/* <img src={CardIco} alt=""/> */}
+                    {getTenant && <h3>{getTenant.productName}</h3>}
+                    {!getTenant && <h3>BankLingo CBS</h3>}
+                </div>
+                
+
+            </div>
+        )
+    }
 
 
     renderFormWrap = ()=>{
@@ -225,16 +232,7 @@ class LoginWrap extends React.Component {
     }
 
     
-
-    
-
-
-
-
-
-
-
-    renderPageContent = () => {
+    renderLoginPageContent = () => {
         
         return (
             <div>
@@ -247,19 +245,18 @@ class LoginWrap extends React.Component {
     renderContentWrap = ()=>{
         let confirmTenantRequest = this.props.confirmTenantRequest;
         if(confirmTenantRequest.request_status===authConstants.GET_TENANCY_PENDING){
-            return(
-                this.renderPreloader()
-            )
+            return(this.renderPreloader())
         }
+        else
         if(confirmTenantRequest.request_status===authConstants.GET_TENANCY_SUCCESS){
             return(
                 <OnboardingContainer>
                     {
-                        this.renderPageContent()
+                        this.renderLoginPageContent()
                     }
                 </OnboardingContainer>
             )
-        }
+        }else
         if(confirmTenantRequest.request_status===authConstants.GET_TENANCY_FAILURE){
             return(
                 <div className="failed-tenancy">
@@ -272,6 +269,7 @@ class LoginWrap extends React.Component {
                 </div>
             )
         }
+        else return null;
     }
 
 
@@ -293,7 +291,7 @@ class LoginWrap extends React.Component {
                 } */}
                 <OnboardingContainer>
                     {
-                        this.renderPageContent()
+                        this.renderLoginPageContent()
                     }
                 </OnboardingContainer>
 

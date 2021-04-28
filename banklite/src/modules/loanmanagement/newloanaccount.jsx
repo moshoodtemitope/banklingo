@@ -39,6 +39,7 @@ import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposit
 import { administrationActions } from '../../redux/actions/administration/administration.action';
 import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants';
 
+import {branchActions,branchConstants} from '../../redux/actions/administration/branch-management.actions';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
@@ -133,7 +134,7 @@ class NewLoanAccount extends React.Component {
   getAllBranches = (paramters) => {
     const { dispatch } = this.props;
 
-    dispatch(administrationActions.getAllBranches(paramters));
+    dispatch(branchActions.getAllBranches(paramters));
   };
 
   getAllUsers = () => {
@@ -432,7 +433,7 @@ class NewLoanAccount extends React.Component {
       adminGetTransactionChannelsRequest.request_status ===
         administrationConstants.GET_TRANSACTION_CHANNELS_PENDING ||
       adminGetAllBranchesRequest.request_status ===
-        administrationConstants.GET_ALL_BRANCHES_PENDING ||
+        branchConstants.GET_ALL_BRANCHES_PENDING ||
       getAllUsersRequest.request_status ===
         administrationConstants.GET_ALL_USERS_PENDING ||
       getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_PENDING
@@ -458,7 +459,7 @@ class NewLoanAccount extends React.Component {
       getAllUsersRequest.request_status ===
         administrationConstants.GET_ALL_USERS_SUCCESS &&
       adminGetAllBranchesRequest.request_status ===
-        administrationConstants.GET_ALL_BRANCHES_SUCCESS &&
+      branchConstants.GET_ALL_BRANCHES_SUCCESS &&
       adminGetTransactionChannelsRequest.request_status ===
         administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
     ) {

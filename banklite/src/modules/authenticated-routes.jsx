@@ -60,9 +60,9 @@ import NewDepositAccount from './depositmanagement/newdepositaccount'
 import AllLoanSchedules from './all-loan-schedules'
 import LoanPAR from './loan-PAR'
 
-import LoanTransactions from './loantransactions'
-import LoanAccountTransactions from './loantransactions/loan-account-transactions'
-import DepositTransactions from './deposittransactions'
+import DepositTransactionsManagement from './deposittransactions/deposit-transaction-account'
+import LoanTransactionsManagement from './loantransactions/loan-account-transactions'
+// import DepositTransactions from './deposittransactions'
 import DepositTransactionAccount from './deposittransactions/deposit-transaction-account'
 import Activties from './activities'
 import BranchesManagement from './branches'
@@ -383,12 +383,12 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_view_all_loan_schedules" exact path='/reports/loans/' {...this.props} authed={this.props.user} component={AllLoanSchedules} />
                         <PrivateRoute accessRequired="bnk_view_all_loan_schedules" exact path='/reports/loans/loans-par' {...this.props} authed={this.props.user} component={LoanPAR} />
 
-                        <PrivateRoute accessRequired="bnk_view_all_loan_transactions" exact path='/loan-transactions' {...this.props} authed={this.props.user} component={LoanTransactions} />
-                        <PrivateRoute accessRequired="bnk_view_all_loan_transactions" exact path='/loan-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={LoanTransactions} />
+                        <PrivateRoute accessRequired="bnk_view_all_loan_transactions" exact path='/loan-transactions' {...this.props} authed={this.props.user} component={LoanTransactionsManagement} />
+                        <PrivateRoute accessRequired="bnk_view_all_loan_transactions" exact path='/loan-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={LoanTransactionsManagement} />
                         {/* <Route exact path='/loan-transactions/:accountEncodedKey' render={(props) => <LoanAccountTransactions accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} /> */}
 
-                        <PrivateRoute accessRequired="bnk_view_all_deposit_transactions" exact path='/deposit-transactions' {...this.props} authed={this.props.user} component={DepositTransactions} />
-                        <PrivateRoute accessRequired="bnk_view_all_deposit_transactions" exact path='/deposit-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={DepositTransactions} />
+                        <PrivateRoute accessRequired="bnk_view_all_deposit_transactions" exact path='/deposit-transactions' {...this.props} authed={this.props.user} component={DepositTransactionsManagement} />
+                        <PrivateRoute accessRequired="bnk_view_all_deposit_transactions" exact path='/deposit-transactions/:accountEncodedKey' {...this.props} authed={this.props.user} component={DepositTransactionsManagement} />
                         {/* <Route exact path='/deposit-transactions/:accountEncodedKey' render={(props) => <DepositTransactionAccount accountEncodedKey={props.match.params.accountEncodedKey} {...this.props} />} /> */}
 
                         <PrivateRoute accessRequired="bnk_view_activities" exact path='/activities' {...this.props} authed={this.props.user} component={Activties} />
