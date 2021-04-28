@@ -19,10 +19,15 @@ import { history } from '../../../_helpers/history';
 import Alert from 'react-bootstrap/Alert'
 import {authActions} from '../../../redux/actions/auth/auth.action';
 import {authConstants} from '../../../redux/actiontypes/auth/auth.constants';
+import '../onboarding.scss';
 class LoginWrap extends React.Component {
     constructor(props) {
         super(props);
-        
+        this.state={
+            pageData:{
+                isTenantLoaded:false
+            }
+        }
 
     }
 
@@ -39,8 +44,6 @@ class LoginWrap extends React.Component {
     }
 
     checkTenancy = async ()=>{
-        
-        
             localStorage.clear();
             let tenantPayload = {domain: window.location.origin};
             const {dispatch} = this.props;
@@ -60,29 +63,42 @@ class LoginWrap extends React.Component {
     }
 
 
-    renderTenantStatus = ()=>{
-        let loginRequest = this.props.loginRequest;
-        let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
+    // renderTenantStatus = ()=>{
+     
+    //     let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
    
-        return(
-            <div>
-                <div className="form-heading">
-                    {/* <img src={CardIco} alt=""/> */}
-                    {getTenant && <h3>{getTenant.productName}</h3>}
-                    {!getTenant && <h3>BankLingo CBS</h3>}
-                </div>
+    //     return(
+    //         <div>
+    //             <div className="form-heading">
+                   
+                   
+    //                 {getTenant && <h3>{getTenant.productName}</h3>}
+    //                 {!getTenant && <h3>BankLingo CBS</h3>}
+
+
+    //             </div>
                 
 
-            </div>
-        )
-    }
+    //         </div>
+    //     )
+    // }
 
 
-    renderFormWrap = ()=>{
+    // renderFormWrap = ()=>{
+       
+    //     return(
+            
+    //     )
+    // }
+
+
+
+    renderLoginPageContent =()=>{
+
         let loginRequest = this.props.loginRequest;
+        let confirmTenantRequest = this.props.confirmTenantRequest;
         let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
-        let 
-            validationSchema = Yup.object().shape({
+        let validationSchema = Yup.object().shape({
                 email: Yup.string()
                     // .email('Please provide valid email')
                     .required('Required'),
@@ -92,11 +108,70 @@ class LoginWrap extends React.Component {
 
         return(
             <div>
+            <div className="login-wrapper">
+           
+                <div className="login-img">
+                    <div className="cardicon">
+                        <img src={CardBg} alt=""/>
+                    </div>
+                </div>
+                <div className="login-form">
+                    <div className="form-wrap">
+                    <div>
                 <div className="form-heading">
-                    {/* <img src={CardIco} alt=""/> */}
                     {getTenant && <h3>{getTenant.productName}</h3>}
                     {!getTenant && <h3>BankLingo CBS</h3>}
                 </div>
+
+           
+           {(confirmTenantRequest.request_status===authConstants.GET_TENANCY_PENDING) ?
+           
+            <div className="preload-wrap">
+            <div className="preloading-ico">
+                <img src={Preload} alt=""/>
+            </div>
+          </div>:  null
+        }
+        
+       {(confirmTenantRequest.request_status===authConstants.GET_TENANCY_FAILURE) ?<div className="failed-tenancy">
+                    <div className="tenancy-error-wrap">
+                        <div className="heading-txt">Load Tenant</div>
+                        <div className="tenancy-error">
+        
+                            <Alert variant="danger">
+                                        {confirmTenantRequest?.request_data?.error}
+                                    </Alert>
+                        </div>
+
+                        <div className="form-cta   full-width">
+                        <Formik
+                    initialValues={{
+                        email: "",
+                        password: ""
+                    }}
+                    // validationSchema={validationSchema}
+                   onSubmit={(values, { resetForm }) => {}}
+                   >  
+                                <Button
+                                    type="submit"
+                                    onClick={this.checkTenancy}
+                                    disabled={confirmTenantRequest.is_request_processing}
+                                >
+                                    {confirmTenantRequest.is_request_processing ? "Please wait..." : "Confirm Tenant"}
+                                </Button>
+
+                                </Formik>
+
+                                <div className="copy-info">
+                                     &copy; 2021 Nidcom Solutions
+                                </div>
+                            </div>
+                    </div>
+                  
+                </div>: null
+
+               }
+               
                 <Formik
                     initialValues={{
                         email: "",
@@ -209,38 +284,23 @@ class LoginWrap extends React.Component {
                 </Formik>
 
             </div>
-        )
-    }
-
-
-
-    renderPageWrap =()=>{
-        return(
-            <div className="login-wrapper">
-                <div className="login-img">
-                    <div className="cardicon">
-                        <img src={CardBg} alt=""/>
                     </div>
                 </div>
-                <div className="login-form">
-                    <div className="form-wrap">
-                        {this.renderFormWrap()}
-                    </div>
-                </div>
+            </div>
             </div>
         )
     }
 
     
-    renderLoginPageContent = () => {
+    // renderLoginPageContent = () => {
         
-        return (
-            <div>
+    //     return (
+    //         <div>
 
-                {this.renderPageWrap()}
-            </div>
-        )
-    }
+    //             {this.renderPageWrap()}
+    //         </div>
+    //     )
+    // }
 
     renderContentWrap = ()=>{
         let confirmTenantRequest = this.props.confirmTenantRequest;
