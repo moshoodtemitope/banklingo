@@ -57,7 +57,7 @@ class OrganizationBranchesClosed extends React.Component {
     getClosures = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(branchConstants.getBranchesClosed(paramters));
+        dispatch(branchActions.getBranchesClosed(paramters));
     }
 
     setPagesize = (PageSize, tempData)=>{
@@ -71,9 +71,9 @@ class OrganizationBranchesClosed extends React.Component {
         
 
         if(tempData){
-            dispatch(branchConstants.getBranchesClosed(params, tempData));
+            dispatch(branchActions.getBranchesClosed(params, tempData));
         }else{
-            dispatch(branchConstants.getBranchesClosed(params));
+            dispatch(branchActions.getBranchesClosed(params));
         }
     }
 
@@ -89,9 +89,9 @@ class OrganizationBranchesClosed extends React.Component {
 
 
         if(tempData){
-            dispatch(branchConstants.getBranchesClosed(params,tempData));
+            dispatch(branchActions.getBranchesClosed(params,tempData));
         }else{
-            dispatch(branchConstants.getBranchesClosed(params));
+            dispatch(branchActions.getBranchesClosed(params));
         }
     }
 
@@ -106,9 +106,9 @@ class OrganizationBranchesClosed extends React.Component {
         let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&BranchClosureStatus=${BranchClosureStatus}`;
         
         if(tempData){
-            dispatch(branchConstants.getBranchesClosed(params, tempData));
+            dispatch(branchActions.getBranchesClosed(params, tempData));
         }else{
-            dispatch(branchConstants.getBranchesClosed(params));
+            dispatch(branchActions.getBranchesClosed(params));
         }
         
     }
@@ -394,7 +394,7 @@ class OrganizationBranchesClosed extends React.Component {
     }
 
     clearAllData = () => {
-        this.props.dispatch(branchConstants.openABranch('CLEAR'));
+        this.props.dispatch(branchActions.openABranch('CLEAR'));
     };
 
     handleCloseUpdatePop = () => {
@@ -411,7 +411,7 @@ class OrganizationBranchesClosed extends React.Component {
     updateABranchStatus = async (payload) => {
         const { dispatch } = this.props;
 
-        await dispatch(branchConstants.openABranch(payload));
+        await dispatch(branchActions.openABranch(payload));
     };
 
     closeABranchPopUp = () => {

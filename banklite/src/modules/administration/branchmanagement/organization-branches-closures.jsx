@@ -50,7 +50,7 @@ class OrganizationBranchesClosures extends React.Component {
     getClosures = (paramters)=>{
         const {dispatch} = this.props;
 
-        dispatch(branchConstants.getBranchesClosures(paramters));
+        dispatch(branchActions.getBranchesClosures(paramters));
     }
 
     setPagesize = (PageSize, tempData)=>{
@@ -64,9 +64,9 @@ class OrganizationBranchesClosures extends React.Component {
         
 
         if(tempData){
-            dispatch(branchConstants.getBranchesClosures(params, tempData));
+            dispatch(branchActions.getBranchesClosures(params, tempData));
         }else{
-            dispatch(branchConstants.getBranchesClosures(params));
+            dispatch(branchActions.getBranchesClosures(params));
         }
     }
 
@@ -82,9 +82,9 @@ class OrganizationBranchesClosures extends React.Component {
 
 
         if(tempData){
-            dispatch(branchConstants.getBranchesClosures(params,tempData));
+            dispatch(branchActions.getBranchesClosures(params,tempData));
         }else{
-            dispatch(branchConstants.getBranchesClosures(params));
+            dispatch(branchActions.getBranchesClosures(params));
         }
     }
 
@@ -99,9 +99,9 @@ class OrganizationBranchesClosures extends React.Component {
         let params= `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&BranchClosureStatus=${BranchClosureStatus}`;
         
         if(tempData){
-            dispatch(branchConstants.getBranchesClosures(params, tempData));
+            dispatch(branchActions.getBranchesClosures(params, tempData));
         }else{
-            dispatch(branchConstants.getBranchesClosures(params));
+            dispatch(branchActions.getBranchesClosures(params));
         }
         
     }
