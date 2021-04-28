@@ -1946,24 +1946,30 @@ class DashboardLanding extends React.Component {
                             .required('Required'),
                         txtnType: Yup.string()
                             .required('Required'),
+                        clientEncodedKey: Yup.string()
+                            .required('Required'),
+                        chequeNo: Yup.string()
+                            .required('Required'),
+                        amount: Yup.string()
+                            .required('Required'),
                         referenceID: Yup.string()
                             .required('Required'),
                     });
                 }
-                if(this.state.selectedTxtn && (this.state.selectedTxtn.value === 4 || this.state.selectedTxtn.value === 5)){
-                    validationSchema = Yup.object().shape({
-                        // tillId: Yup.string()
-                        //     .required('Required'),
-                        chosenAccountNum: Yup.string()
-                            .required('Required'),
-                        clientEncodedKey: Yup.string()
-                            .required('Required'),
-                        txtnType: Yup.string()
-                            .required('Required'),
-                        chequeNo: Yup.string()
-                            .required('Required'),
-                    });
-                }
+                // if(this.state.selectedTxtn && (this.state.selectedTxtn.value === 4 || this.state.selectedTxtn.value === 5)){
+                //     validationSchema = Yup.object().shape({
+                //         // tillId: Yup.string()
+                //         //     .required('Required'),
+                //         chosenAccountNum: Yup.string()
+                //             .required('Required'),
+                //         clientEncodedKey: Yup.string()
+                //             .required('Required'),
+                //         txtnType: Yup.string()
+                //             .required('Required'),
+                //         chequeNo: Yup.string()
+                //             .required('Required'),
+                //     });
+                // }
            
 
                 let allLoggedOnTills = this.props.fetchLoggedonTillsReducer.request_data.response.data.result,
@@ -1991,7 +1997,7 @@ class DashboardLanding extends React.Component {
                         allTxtn =[
                             {label: "Deposit Cheque", value:4},
                             {label: "Withdrawal with Cheque", value:5},
-                            {label: "Clear Cheque", value:6}
+                            // {label: "Clear Cheque", value:6}
                         ];
                     }
         return (
@@ -2361,8 +2367,11 @@ class DashboardLanding extends React.Component {
                                                             name="chosenAccountNum"
                                                             className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
                                                             onChange={(selectedOption) => {
+                                                               
                                                                 setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
-                                                                // console.log("calleded", selectedOption)
+                                                                errors.chosenAccountNum = null;
+                                                                touched.chosenAccountNum = null;
+                                                                console.log("calleded", selectedOption)
                                                                 setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
                                                                 this.handleSelectedAccount(selectedOption)
                                                                 this.getSearchOptionForCustomerLabel(selectedOption)
@@ -2389,7 +2398,7 @@ class DashboardLanding extends React.Component {
                                             </div>
 
                                         </Form.Group>
-                                        {this.state.selectedOption &&
+                                        {/* {this.state.selectedOption && */}
                                             <Form.Group>
                                                 <Form.Label className="block-level">Transaction</Form.Label>
 
@@ -2418,8 +2427,8 @@ class DashboardLanding extends React.Component {
                                                 </div>
 
                                             </Form.Group>
-                                        }
-                                        {(values.txtnType !== "" && values.txtnType !== 6  ) &&
+                                        {/* } */}
+                                        {/* {(values.txtnType !== "" && values.txtnType !== 6  ) && */}
                                             <Form.Group className="mr-10">
                                                 <Form.Label className="block-level">Amount</Form.Label>
                                                 <Form.Control type="text"
@@ -2433,8 +2442,8 @@ class DashboardLanding extends React.Component {
                                                     <span className="invalid-feedback">{errors.amount}</span>
                                                 ) : null}
                                             </Form.Group>
-                                        }
-                                        {(values.txtnType !== "" && values.txtnType !== 6  )&&
+                                        {/* } */}
+                                        
                                             <Form.Group className="mr-10">
                                                 <Form.Label className="block-level">Cheque Number</Form.Label>
                                                 <Form.Control type="text"
@@ -2448,8 +2457,8 @@ class DashboardLanding extends React.Component {
                                                     <span className="invalid-feedback">{errors.chequeNo}</span>
                                                 ) : null}
                                             </Form.Group>
-                                        }
-                                        {values.txtnType !== "" &&
+                                        
+                                        
                                             <Form.Group className="mr-10">
                                                 <Form.Label className="block-level">Reference ID</Form.Label>
                                                 <Form.Control type="text"
@@ -2463,8 +2472,8 @@ class DashboardLanding extends React.Component {
                                                     <span className="invalid-feedback">{errors.referenceID}</span>
                                                 ) : null}
                                             </Form.Group>
-                                        }
-                                        {(values.txtnType !== "" && values.txtnType !== 6  ) &&
+                                        
+                                        
                                             <Form.Group>
                                                 <Form.Label className="block-level">Remarks</Form.Label>
                                                 <Form.Control as="textarea"
@@ -2478,7 +2487,7 @@ class DashboardLanding extends React.Component {
                                                     <span className="invalid-feedback">{errors.remarks}</span>
                                                 ) : null}
                                             </Form.Group>
-                                        }
+                                        
 
                                         <div className="mr-10">
                                             <div className="footer-with-cta">
