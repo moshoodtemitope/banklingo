@@ -429,6 +429,8 @@ class ViewCustomer extends React.Component {
                         <div className="row">
                             {this.state.showAddSignature && this.renderUploadSignature()}
                             {this.state.showAddPhoto && this.renderUploadPhoto()}
+
+
                             <div className="col-sm-12">
                                 <div className="middle-content">
                                     <div className="row">
@@ -577,7 +579,7 @@ class ViewCustomer extends React.Component {
                                                                 <tbody>
                                                                     <tr>
                                                                         <td>Work Status</td>
-                                                                        <td>{customerDetails.employeeInfo.workStatus}</td>
+                                                                        <td>{customerDetails.employeeInfo.workStatusDescription}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Employer Name</td>

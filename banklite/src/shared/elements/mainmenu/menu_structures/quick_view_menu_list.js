@@ -22,7 +22,7 @@ export const quick_view_menu_list = [
         permissionName: "View Deposit Accounts",
         mainMenu: "Deposit Accounts",
         permissionCode: "bnk_view_deposit_accounts",
-        menuRoute: "/deposits",
+        menuRoute: "/deposits/all",
     },
     {
         permissionName: "View All Deposit Transactions",
