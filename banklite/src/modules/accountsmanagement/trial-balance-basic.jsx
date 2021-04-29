@@ -26,6 +26,7 @@ import {acoountingActions} from '../../redux/actions/accounting/accounting.actio
 import {accountingConstants} from '../../redux/actiontypes/accounting/accounting.constants'
 
 import {administrationActions} from '../../redux/actions/administration/administration.action';
+import {branchActions, branchConstants} from '../../redux/actions/administration/branch-management.actions';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
 import Alert from 'react-bootstrap/Alert'
@@ -56,7 +57,7 @@ class TrialBalanceBasic extends React.Component {
         const {dispatch} = this.props;
         
 
-        dispatch(administrationActions.fetchBranchesList());
+        dispatch(branchActions.fetchBranchesList());
 
         // dispatch(acoountingActions.getTrialBalance("CLEAR"));
         
@@ -153,13 +154,13 @@ class TrialBalanceBasic extends React.Component {
         
 
         switch (fetchBranchesListRequest.request_status){
-            case (administrationConstants.FETCH_BRANCHES_LIST_PENDING):
+            case (branchConstants.FETCH_BRANCHES_LIST_PENDING):
                 return(
                     <div className="loading-content"> 
                         <div className="loading-text mb-20">Please wait... </div>
                     </div>
                 )
-            case (administrationConstants.FETCH_BRANCHES_LIST_SUCCESS):
+            case (branchConstants.FETCH_BRANCHES_LIST_SUCCESS):
                 let  validationSchema = Yup.object().shape({
                     endDate: Yup.string()
                         .required('Please select end date').nullable(),
@@ -398,7 +399,7 @@ class TrialBalanceBasic extends React.Component {
                         </div>
                     )
                 }
-            case (administrationConstants.FETCH_BRANCHES_LIST_FAILURE):
+            case (branchConstants.FETCH_BRANCHES_LIST_FAILURE):
                 return (
                     <div className="loading-content errormsg"> 
                         <div>{fetchBranchesListRequest.request_data.error}</div>

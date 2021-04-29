@@ -947,99 +947,52 @@ class DashboardLanding extends React.Component {
                     }
                     
                     <div className="slidein-formwrap">
-                        <Formik
-                            initialValues={{
-                                // tillId: "",
-                                amount:""
-                            }}
-                            validationSchema={validationSchema}
-                            onSubmit={(values, { resetForm }) => {
-                                // if(uploadedData && invalidType===false){
-                                //     let savedData = {
-                                //         batchName: values.batchName,
-                                //         cardProgramBinEncodedKey: values.cardProgramBinEncodedKey,
-                                //         batchDescription: values.batchDescription,
-                                //         uploadedData
-                                //     }
-                                //     history.push("/batches/new/details", {savedData})
-                                // }
-
-                                
-                                let requestPayload = {
-                                    tillEncodedKey: tillData.encodedKey
-                                }
-
-                                // console.log("gakaka", this.state.tillAction)
-                                
-
-                                this.handlecloseUndoCloseToTill(requestPayload, this.state.tillAction)
-                                        .then(()=>{
-                                            if(this.props.closeUndoCloseToTillReducer.request_status === dashboardConstants.CLOSE_UNDOCLOSE_TILL_SUCCESS){
-                                                this.fetchAllTills()
+                        
+                        <div className="mt-50">
+                            <div className="footer-with-cta">
+                                {closeUndoCloseToTillRequest.request_status !== dashboardConstants.CLOSE_UNDOCLOSE_TILL_SUCCESS && 
+                                    <Button
+                                        type="button"
+                                        disabled={closeUndoCloseToTillRequest.is_request_processing}
+                                        onClick={()=>{
+                                            let requestPayload = {
+                                                tillEncodedKey: tillData.encodedKey
                                             }
-                                        })
-                                        
-
-
-
-                            }}
-                        >
-                            {({ handleSubmit,
-                                handleChange,
-                                handleBlur,
-                                resetForm,
-                                setFieldValue,
-                                setFieldTouched,
-                                values,
-                                touched,
-                                isValid,
-                                errors, }) => (
-                                <Form noValidate
-                                    onSubmit={handleSubmit}>
-
-                                    
-                                    
-                                       
-
-                                    <div className="mt-50">
-                                        <div className="footer-with-cta">
-                                            {closeUndoCloseToTillRequest.request_status !== dashboardConstants.CLOSE_UNDOCLOSE_TILL_SUCCESS && 
-                                                <Button
-                                                    type="submit"
-                                                    disabled={closeUndoCloseToTillRequest.is_request_processing}
-                                                >
-                                                    
-                                                    {(closeUndoCloseToTillRequest.is_request_processing) ? "Please wait..." : `${ctaText}`}
-                                                    
-                                                </Button>
-                                            }
-                                            <Button variant="secondary" 
-                                                disabled={closeUndoCloseToTillRequest.is_request_processing}
-                                                onClick={this.hideCloseTill}>
-                                                Cancel
-                                            </Button>
+            
+                                            // console.log("gakaka", this.state.tillAction)
                                             
-                                        </div>
-                                    </div>
-                                    {closeUndoCloseToTillRequest.request_status === dashboardConstants.CLOSE_UNDOCLOSE_TILL_SUCCESS && 
-                                        <Alert variant="success">
-                                            {closeUndoCloseToTillRequest.request_data.response.data.message}
-                                        </Alert>
-                                    }
-                                    {closeUndoCloseToTillRequest.request_status === dashboardConstants.CLOSE_UNDOCLOSE_TILL_FAILURE && 
-                                        <Alert variant="danger">
-                                            {closeUndoCloseToTillRequest.request_data.error}
-                                        </Alert>
-                                    }
-
-
-
-                                    
-
-
-                                </Form>
-                            )}
-                        </Formik>
+            
+                                            this.handlecloseUndoCloseToTill(requestPayload, this.state.tillAction)
+                                                    .then(()=>{
+                                                        if(this.props.closeUndoCloseToTillReducer.request_status === dashboardConstants.CLOSE_UNDOCLOSE_TILL_SUCCESS){
+                                                            this.fetchAllTills()
+                                                        }
+                                                    })
+                                        }}
+                                    >
+                                        
+                                        {(closeUndoCloseToTillRequest.is_request_processing) ? "Please wait..." : `${ctaText}`}
+                                        
+                                    </Button>
+                                }
+                                <Button variant="secondary" 
+                                    disabled={closeUndoCloseToTillRequest.is_request_processing}
+                                    onClick={this.hideCloseTill}>
+                                    Cancel
+                                </Button>
+                                
+                            </div>
+                        </div>
+                        {closeUndoCloseToTillRequest.request_status === dashboardConstants.CLOSE_UNDOCLOSE_TILL_SUCCESS && 
+                            <Alert variant="success">
+                                {closeUndoCloseToTillRequest.request_data.response.data.message}
+                            </Alert>
+                        }
+                        {closeUndoCloseToTillRequest.request_status === dashboardConstants.CLOSE_UNDOCLOSE_TILL_FAILURE && 
+                            <Alert variant="danger">
+                                {closeUndoCloseToTillRequest.request_data.error}
+                            </Alert>
+                        }
                     </div>
                 </div>
             </div>
@@ -1642,7 +1595,7 @@ class DashboardLanding extends React.Component {
         let fetchTillTransactionsRequest =  this.props.fetchTillTransactionsReducer
 
         if(this.state.selectedTillData && !this.state.preloadedTillData){
-             console.log("heere");
+            //  console.log("heere");
             if(fetchTillTransactionsRequest.request_status ===dashboardConstants.GET_TILL_TRANSACTIONS_PENDING){
                 return (
                     <div className="tellering-section">

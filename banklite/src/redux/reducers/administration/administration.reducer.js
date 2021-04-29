@@ -1154,21 +1154,21 @@ export function updateABranchReducer(state=[], action) {
 
 export function getBranchClosuresReducer(state=[], action) {
     switch (action.type) {
-        case administrationConstants.GET_BRANCH_CLOSURES_PENDING:
+        case branchConstants.GET_BRANCH_CLOSURES_PENDING:
             return {
-                request_status: administrationConstants.GET_BRANCH_CLOSURES_PENDING,
+                request_status: branchConstants.GET_BRANCH_CLOSURES_PENDING,
                 is_request_processing: true,
                 request_data: action
             };
-        case administrationConstants.GET_BRANCH_CLOSURES_SUCCESS:
+        case branchConstants.GET_BRANCH_CLOSURES_SUCCESS:
             return {
-                request_status: administrationConstants.GET_BRANCH_CLOSURES_SUCCESS,
+                request_status: branchConstants.GET_BRANCH_CLOSURES_SUCCESS,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.GET_BRANCH_CLOSURES_FAILURE:
+        case branchConstants.GET_BRANCH_CLOSURES_FAILURE:
             return {
-                request_status: administrationConstants.GET_BRANCH_CLOSURES_FAILURE,
+                request_status: branchConstants.GET_BRANCH_CLOSURES_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };
@@ -1182,21 +1182,21 @@ export function getBranchClosuresReducer(state=[], action) {
 
 export function getBranchesOpenReducer(state=[], action) {
     switch (action.type) {
-        case administrationConstants.GET_BRANCHES_OPEN_PENDING:
+        case branchConstants.GET_BRANCHES_OPEN_PENDING:
             return {
-                request_status: administrationConstants.GET_BRANCHES_OPEN_PENDING,
+                request_status: branchConstants.GET_BRANCHES_OPEN_PENDING,
                 is_request_processing: true,
                 request_data: action
             };
-        case administrationConstants.GET_BRANCHES_OPEN_SUCCESS:
+        case branchConstants.GET_BRANCHES_OPEN_SUCCESS:
             return {
-                request_status: administrationConstants.GET_BRANCHES_OPEN_SUCCESS,
+                request_status: branchConstants.GET_BRANCHES_OPEN_SUCCESS,
                 is_request_processing: false,
                 request_data: action
             };
-        case administrationConstants.GET_BRANCHES_OPEN_FAILURE:
+        case branchConstants.GET_BRANCHES_OPEN_FAILURE:
             return {
-                request_status: administrationConstants.GET_BRANCHES_OPEN_FAILURE,
+                request_status: branchConstants.GET_BRANCHES_OPEN_FAILURE,
                 is_request_processing: false,
                 request_data: action
             };
