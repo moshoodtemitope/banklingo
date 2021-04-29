@@ -62,37 +62,6 @@ class LoginWrap extends React.Component {
         )
     }
 
-
-    // renderTenantStatus = ()=>{
-     
-    //     let getTenant = localStorage.getItem("lingoAuthTenant")? JSON.parse(localStorage.getItem("lingoAuthTenant")): null;
-   
-    //     return(
-    //         <div>
-    //             <div className="form-heading">
-                   
-                   
-    //                 {getTenant && <h3>{getTenant.productName}</h3>}
-    //                 {!getTenant && <h3>BankLingo CBS</h3>}
-
-
-    //             </div>
-                
-
-    //         </div>
-    //     )
-    // }
-
-
-    // renderFormWrap = ()=>{
-       
-    //     return(
-            
-    //     )
-    // }
-
-
-
     renderLoginPageContent =()=>{
 
         let loginRequest = this.props.loginRequest;

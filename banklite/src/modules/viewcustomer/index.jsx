@@ -18,6 +18,13 @@ import PictureIco from '../../assets/img/picture.svg';
 import "./customerprofile.scss";
 import { numberWithCommas, getDateFromISO} from '../../shared/utils';
 
+import {CustomerAccountSummarySection} from "./components/customer-account-summary-component";
+import {ContactInformationSection} from "./components/customer-contact-information-component";
+import {EmploymentInformationSection} from "./components/customer-employment-information-component";
+import {GeneralInfomationSection} from "./components/customer-general-information-component";
+import {NextOfKinInfomationSection} from "./components/customer-nextofkin-information-component";
+import {PersonalInformationSection} from "./components/customer-personal-information-component";
+
 import Alert from 'react-bootstrap/Alert'
 import {clientsActions} from '../../redux/actions/clients/clients.action';
 
@@ -435,9 +442,9 @@ class ViewCustomer extends React.Component {
                                 <div className="middle-content">
                                     <div className="row">
                                         <div className="col-sm-8">
-                                            <div className="main-details">
 
-                                                {/* This section loads the account details */}
+                                            <CustomerAccountSummarySection customerLoanAccounts={customerLoanAccounts} customerDepositAccounts={customerDepositAccounts}/>
+                                            {/* <div className="main-details">
                                                 <TableComponent classnames="striped bordered hover">
                                                     <thead>
                                                         <tr>
@@ -492,173 +499,22 @@ class ViewCustomer extends React.Component {
                                                                 }
                                                             })
                                                         }
-
-                                                        {/* <tr>
-                                                            <td>Payroll- Private 348046272</td>
-                                                            <td>Loan</td>
-                                                            <td>In Arrears</td>
-                                                            <td>₦1,336,928.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Settlement Account 77339322</td>
-                                                            <td>Deposit</td>
-                                                            <td>Approved</td>
-                                                            <td>-</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colSpan="3">Total</td>
-                                                            <td>₦1,336,928.00</td>
-                                                        </tr> */}
+                                                        
                                                     </tbody>
                                                 </TableComponent>
-                                            </div>
+                                            </div> */}
                                             <div className="main-details mt-20">
                                                 <div className="overview-wrap profile-overview">
                                                     <div className="each-profile-column">
-                                                        <div className="each-overview">
-                                                            <h6>General Information</h6>
-                                                            <TableComponent classnames="striped hover">
-
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>Customer ID</td>
-                                                                        <td>{customerDetails.clientCode}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Assigned Branch</td>
-                                                                        <td>{customerDetails.branchName}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Assigned Account Officer</td>
-                                                                        <td>{customerDetails.accountOfficer}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Customer Type</td>
-                                                                        <td>{customerTypeVal.name}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Created</td>
-                                                                        <td>{customerDetails.createdDate}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Last modified</td>
-                                                                        <td>{customerDetails.lastUpdated}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Customer State</td>
-                                                                        <td>{customerDetails.clientStateDescription}</td>
-                                                                    </tr>
-
-                                                                </tbody>
-                                                            </TableComponent>
-                                                        </div>
-                                                        <div className="each-overview">
-                                                            <h6>Personal Information</h6>
-                                                            <TableComponent classnames="striped bordered hover">
-
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>Gender</td>
-                                                                        <td>{customerDetails.gender}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Date Of Birth</td>
-                                                                        <td>{getDateFromISO(customerDetails.dateOfBirth)} </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>BVN</td>
-                                                                        <td>{customerDetails.bvn}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </TableComponent>
-                                                        </div>
-                                                        <div className="each-overview">
-                                                            <h6>Employment Information</h6>
-                                                            <TableComponent classnames="striped bordered hover">
-
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>Work Status</td>
-                                                                        <td>{customerDetails.employeeInfo.workStatusDescription}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Employer Name</td>
-                                                                        <td>{customerDetails.employeeInfo.employerName}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Employment Date</td>
-                                                                        <td>{customerDetails.employeeInfo.employmentDate ? getDateFromISO(customerDetails.employeeInfo.employmentDate) : ""}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Sector</td>
-                                                                        <td>{customerDetails.employeeInfo.employeeSector}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Monthly Salary</td>
-                                                                        <td>{numberWithCommas(customerDetails.employeeInfo.monthlySalary, true)}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Pay Day</td>
-                                                                        <td>{customerDetails.employeeInfo.payDay}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Official Email</td>
-                                                                        <td>{customerDetails.employeeInfo.officialEmail}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Employer Address</td>
-                                                                        <td>{customerDetails.employeeInfo.employerAddress}</td>
-                                                                    </tr>
-
-                                                                </tbody>
-                                                            </TableComponent>
-                                                        </div>
+                                                        <GeneralInfomationSection customerDetails={customerDetails}/>
+                                                        <PersonalInformationSection customerDetails={customerDetails}/>
+                                                        <EmploymentInformationSection customerDetails={customerDetails} />
+                                                      
                                                     </div>
                                                     <div className="each-profile-column">
-                                                        <div className="each-overview">
-                                                            <h6>Contact</h6>
-                                                            <TableComponent classnames="striped bordered hover">
-
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>Mobile</td>
-                                                                        <td>{customerDetails.contact.contactMobile}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Email</td>
-                                                                        <td>{customerDetails.contact.contactEmail}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Address</td>
-                                                                        <td>{customerDetails.address.addressLine1},{customerDetails.address.addressState},{customerDetails.address.addressCountry}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </TableComponent>
-                                                        </div>
-                                                        <div className="each-overview">
-                                                            <h6>Next of Kin</h6>
-                                                            <TableComponent classnames="striped bordered hover">
-
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>Name</td>
-                                                                        <td>{customerDetails.nextOfKin.nextOfKinFullName}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Phone number</td>
-                                                                        <td>{customerDetails.nextOfKin.nextOfKinMobileNumber}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Relationship</td>
-                                                                        <td>{customerDetails.nextOfKin.relationship}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Home address</td>
-                                                                        <td>{customerDetails.nextOfKin.nextofKinHomeAddress}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </TableComponent>
-                                                        </div>
+                                                        <ContactInformationSection customerDetails={customerDetails}/>
+                                                        <NextOfKinInfomationSection customerDetails={customerDetails}/>
+                                                       
                                                     </div>
                                                 </div>
                                             </div>
