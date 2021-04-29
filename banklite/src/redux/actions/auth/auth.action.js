@@ -68,8 +68,7 @@ function Login   (loginPayload){
                         let consume2 = ApiService.request(routes.ADD_BRANCH+'/allowedbranches', "GET", null);
                         dispatch(request(consume2));
 
-                        return consume2
-                        .then(response2 =>{
+                        return consume2.then(response2 =>{
                             // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                             let user = JSON.parse(localStorage.getItem('lingoAuth'));
                                 user.AllowableBranches = response2.data;
@@ -82,11 +81,9 @@ function Login   (loginPayload){
 
                                 let consume3 = ApiService.request(`${routes.ADD_BRANCH}/allowedbranches?ExcludeAllBranches=true`, "GET", null);
                                 dispatch(request(consume3));
-                                return consume3
-                                .then(response3 =>{
+                                return consume3.then(response3 =>{
 
                                     user.AllowedBranches = response3.data;
-                                    
                                     localStorage.setItem('lingoAuth', JSON.stringify(user));
                                     
                                         let consume4 = ApiService.request(routes.HIT_ROLE + '/mypermissions', "GET", null);
@@ -98,18 +95,7 @@ function Login   (loginPayload){
                                                 dispatch(success(response2.data));
 
                                                 history.push('/dashboard');
-                                                // if(window.location.href.indexOf('#')>-1){
-                                                //     // if(window.location.href.indexOf('retUrl=')>-1){
-                                                //     // let retUrl = window.location.href.split('retUrl=');
-                                                //     let retUrl = window.location.href.split('#');
-
-                                                //     if(retUrl.length===2){
-                                                //         history.push(retUrl[1]);
-                                                //         removeRouteForRedirect();
-                                                //     }
-                                                // }else{
-                                                //     history.push('/dashboard');
-                                                // }
+                                               
                                             })
                                             .catch(error => {
 
@@ -479,6 +465,7 @@ function ForbiddenAccess(retUrl) {
     // }
 }
 
+///
 function initStore() {
     // localStorage.clear();
     localStorage.removeItem("lingoAuth");

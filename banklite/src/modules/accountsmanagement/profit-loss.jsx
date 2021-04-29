@@ -29,6 +29,7 @@ import {administrationActions} from '../../redux/actions/administration/administ
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import {branchActions, branchConstants} from '../../redux/actions/administration/branch-management.actions';
 
+import {branchActions,branchConstants} from '../../redux/actions/administration/branch-management.actions';
 import Alert from 'react-bootstrap/Alert'
 import "./accountsmanagement.scss"; 
 import AccountingNav from './_menu'
