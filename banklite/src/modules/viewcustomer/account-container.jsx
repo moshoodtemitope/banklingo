@@ -44,7 +44,7 @@ import ViewClosedLoanAccount from './viewclosedloanaccount'
 import ViewClosedSavingsAccount from './viewclosedsavingsaccount'
 
 
-
+// This is the view for the container that shows the customer
 class AccountContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -81,7 +81,6 @@ class AccountContainer extends React.Component {
                         <Route exact  path='/customer/:id/closedaccounts'      render={(props) => <ViewClosedAccounts {...props} />} /> 
                         <Route  path='/customer/:id/loanaccount/:loanid'       render={(props) => <ViewLoanAccount {...props} />} /> 
                         <Route  path='/customer/:id/savingsaccount/:accountid' render={(props) => <ViewSavingsAccount {...props} />} /> 
-                        
                         {/* <Route  path='/customer/:id/closedaccounts/:accountid' render={(props) => <ViewClosedLoanAccount {...props} />} /> */}
                         <Route  path='/customer/:id/closedaccounts/loan/:accountid' render={(props) => <ViewClosedLoanAccount {...props} />} />
                         <Route  path='/customer/:id/closedaccounts/savings/:accountid' render={(props) => <ViewClosedSavingsAccount {...props} />} />

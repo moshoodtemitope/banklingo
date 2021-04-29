@@ -778,6 +778,8 @@ class CustomerAccountContainer extends React.Component {
         eachLoanAccount.loanState === 8 ||
         eachLoanAccount.loanState === 9
     ).length;
+
+
     let unClosedLoans = loanAccounts.result.filter(
       (eachLoanAccount) =>
         eachLoanAccount.loanState !== 4 &&
@@ -940,7 +942,10 @@ class CustomerAccountContainer extends React.Component {
       <Fragment>
         <InnerPageContainer {...this.props}>
           <div className='content-wrapper'>
+
+            
             {this.renderCustomerHeading()}
+
 
             {this.props.children}
             <Route exact to='/customer/:id' component={AccountContainer} />

@@ -49,6 +49,8 @@ import Alert from 'react-bootstrap/Alert'
 
 
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
+import { LoanPayOffModal } from "./components/loan/pay-off-component";
+import {WriteOffLoanModal} from "./components/loan/writeoff-loan-component";
 class ViewLoanAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -1808,7 +1810,7 @@ class ViewLoanAccount extends React.Component {
                             </Modal.Body>
                             <Modal.Footer>
 
-                                <Button variant="light" onClick={this.handleCommentsBoxClose}>
+                                <Button variant="light" onClick={this.props.handleCommentsBoxClose}>
                                     Cancel
                                     </Button>
                                 <Button
@@ -2540,403 +2542,415 @@ class ViewLoanAccount extends React.Component {
         this.setState({ showWriteOffLoan: true })
     };
 
-    payOffLoanBox = (loanDetails) => {
-        const { showPayOffLoan  } = this.state;
-        let payOffALoanRequest = this.props.payOffALoanReducer,
-
-            adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
-            allChannels = [],
-            channelsList,
-            payoffAmount = loanDetails.interestExpected + loanDetails.principalExpected;
-
-        // if(showPayOffLoan){
-        //     this.props.dispatch(loanActions.payOffALoan("CLEAR"));
-        // }
-
-        if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
-            && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
-            channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
-
-            channelsList.map((channel, id) => {
-                allChannels.push({ label: channel.name, value: channel.encodedKey });
-            })
-        }
-
-        let loanStateValidationSchema;
-
-            loanStateValidationSchema = Yup.object().shape({
-                txtChannelEncodedKey: Yup.string()
-                    .required('Required'),
-                notes: Yup.string()
-                    .min(2, 'Valid notes required'),
-
-            });
-
-
-
-        return (
-            <Modal show={showPayOffLoan} onHide={this.handleShowPayOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
-                <Formik
-                    initialValues={{
-                        txtChannelEncodedKey: "",
-                        notes: "",
-                    }}
-
-                    validationSchema={loanStateValidationSchema}
-                    onSubmit={(values, { resetForm }) => {
-
-                        let changeLoanStatePayload ={
-                            accountEncodedKey:loanDetails.encodedKey,
-                            clientEncodedKey:this.props.match.params.id,
-                            channelEncodedKey:values.txtChannelEncodedKey,
-                            notes:values.notes
-                        };
-
-
-
-
-
-                        this.handlePayOffLoan(changeLoanStatePayload)
-                            .then(
-                                () => {
-
-                                    if (this.props.payOffALoanReducer.request_status === loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS) {
-                                        resetForm();
-                                        // value = {null}
-
-                                        setTimeout(() => {
-                                            // this.props.dispatch(loanActions.payOffALoan("CLEAR"))
-                                            this.getCustomerLoanAccountDetails(this.loanEncodedKey);
-                                            this.handleShowPayOffClose();
-                                        }, 3000);
-                                    }
-
-
-                                }
-                            )
-
-                    }}
-                >
-                    {({ handleSubmit,
-                        handleChange,
-                        handleBlur,
-                        resetForm,
-                        values,
-                        setFieldValue,
-                        setFieldTouched,
-                        touched,
-                        isValid,
-                        errors, }) => (
-                        <Form
-                            noValidate
-                            onSubmit={handleSubmit}
-                            className="">
-                            <Modal.Header>
-                                <Modal.Title>
-                                    Pay Off Loan
-                                    </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <div className="modal-notes">
-                                    Remaining balance will be paid off and the account will be closed
-                                </div>
-                                <Form.Row>
-                                    <Col>
-                                        <Form.Label className="block-level">Principal Balance</Form.Label>
-
-                                        <h5> {numberWithCommas(loanDetails.principalExpected,true)} {loanDetails.currencyCode} </h5>
-                                    </Col>
-                                    <Col>
-                                        <Form.Label className="block-level">Interest Balance</Form.Label>
-
-                                        <h5>{numberWithCommas(loanDetails.interestExpected,true)} {loanDetails.currencyCode}</h5>
-                                    </Col>
-                                </Form.Row>
-                                <Form.Row>
-                                    <Col>
-                                        <Form.Label className="block-level">Pay Off Amount</Form.Label>
-
-                                        <h5>{numberWithCommas(payoffAmount,true)} {loanDetails.currencyCode}</h5>
-                                    </Col>
-                                    <Col>
-
-                                    </Col>
-                                </Form.Row>
-                                <Form.Row>
-                                    <Col>
-                                        <Form.Group className="mb-0">
-                                            <Form.Label className="block-level mb-10">Transaction Channel</Form.Label>
-                                            {allChannels.length >= 1 &&
-                                                <div>
-                                                    <Select
-                                                        options={allChannels}
-
-                                                        onChange={(selected) => {
-                                                            setFieldValue('txtChannelEncodedKey', selected.value)
-                                                        }}
-                                                        onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
-                                                        className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
-                                                        name="txtChannelEncodedKey"
-                                                    />
-                                                    {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
-                                                        <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
-                                                    ) : null}
-                                                </div>
-                                            }
-                                            {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
-                                                <div className="errormsg"> Unable to load channels</div>
-                                            }
-
-
-                                        </Form.Group>
-                                    </Col>
-                                    <Col>
-
-                                    </Col>
-                                </Form.Row>
-                                <Form.Group>
-                                    <Form.Label className="block-level">Notes</Form.Label>
-                                    <Form.Control as="textarea"
-                                        rows="3"
-                                        onChange={handleChange}
-                                        name="notes"
-                                        value={values.notes}
-                                        className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
-                                    />
-                                    {errors.notes && touched.notes ? (
-                                        <span className="invalid-feedback">{errors.notes}</span>
-                                    ) : null}
-                                </Form.Group>
-
-
-                            </Modal.Body>
-                            <Modal.Footer>
-
-                                <Button variant="light" onClick={this.handleShowPayOffClose}>
-                                    Cancel
-                                </Button>
-                                {payOffALoanRequest.request_status !== loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS &&
-                                    <Button
-                                        variant="success"
-                                        type="submit"
-                                        disabled={payOffALoanRequest.is_request_processing}
-                                    >
-                                        {payOffALoanRequest.is_request_processing ? "Please wait..." : "Pay Off"}
-
-                                    </Button>
-                                }
-
-                            </Modal.Footer>
-                            <div className="footer-alert">
-                                {payOffALoanRequest.request_status === loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS &&
-                                    <Alert variant="success" className="w-65 mlr-auto">
-                                        {payOffALoanRequest.request_data.response.data.message}
-                                    </Alert>
-                                }
-                                {(payOffALoanRequest.request_status === loanAndDepositsConstants.PAYOFF_LOAN_FAILURE && payOffALoanRequest.request_data.error) &&
-                                    <Alert variant="danger" className="w-65 mlr-auto">
-                                        {payOffALoanRequest.request_data.error}
-                                    </Alert>
-                                }
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
-            </Modal>
-        )
-    }
-
-    writeOffLoanBox = (loanDetails) => {
-        const { showWriteOffLoan  } = this.state;
-        let writeOffALoanRequest = this.props.writeOffALoanReducer,
-
-            adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
-            allChannels = [],
-            channelsList;
-
-        // if(showWriteOffLoan){
-        //     this.props.dispatch(loanActions.payOffALoan("CLEAR"));
-        // }
-
-        // console.log("props info", this.props.match.params);
-        // console.log("loanDetails", loanDetails);
-
-        if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
-            && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
-            channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
-
-            channelsList.map((channel, id) => {
-                allChannels.push({ label: channel.name, value: channel.encodedKey });
-            })
-        }
-
-        let loanStateValidationSchema;
-
-            loanStateValidationSchema = Yup.object().shape({
-                notes: Yup.string()
-                    .min(2, 'Valid notes required'),
-
-            });
-
-
-
-        return (
-            <Modal show={showWriteOffLoan} onHide={this.handleShowWriteOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
-                <Formik
-                    initialValues={{
-
-                        notes: "",
-                    }}
-
-                    validationSchema={loanStateValidationSchema}
-                    onSubmit={(values, { resetForm }) => {
-
-                        let changeLoanStatePayload ={
-                            accountEncodedKey:loanDetails.encodedKey,
-                            clientEncodedKey:this.props.match.params.id,
-                            notes:values.notes
-                        };
-
-
-
-
-
-                        this.handleWriteOffLoan(changeLoanStatePayload)
-                            .then(
-                                () => {
-
-                                    if (this.props.writeOffALoanReducer.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS) {
-                                        resetForm();
-                                        // value = {null}
-
-                                        setTimeout(() => {
-                                            // this.props.dispatch(loanActions.payOffALoan("CLEAR"))
-                                            this.getCustomerLoanAccountDetails(this.loanEncodedKey);
-                                            this.handleShowWriteOffClose()
-                                        }, 5000);
-                                    }
-
-
-                                }
-                            )
-
-                    }}
-                >
-                    {({ handleSubmit,
-                        handleChange,
-                        handleBlur,
-                        resetForm,
-                        values,
-                        setFieldValue,
-                        setFieldTouched,
-                        touched,
-                        isValid,
-                        errors, }) => (
-                        <Form
-                            noValidate
-                            onSubmit={handleSubmit}
-                            className="">
-                            <Modal.Header>
-                                <Modal.Title>
-                                    Write Off Loan Account
-                                    </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <div className="modal-section">
-                                    <Form.Group>
-                                        <Form.Label className="block-level">Account Recipient</Form.Label>
-
-                                        <h5>{loanDetails.clientName}</h5>
-                                    </Form.Group>
-
-                                    <Form.Group>
-                                        <Form.Label className="block-level">Loan Account</Form.Label>
-
-                                        <h5>{loanDetails.productName}</h5>
-                                    </Form.Group>
-                                </div>
-                                <div>
-                                    <div className="modal-notes grayed">Outstanding Balances</div>
-                                    <div className="each-msg bolden">
-                                       <span>Total</span>
-                                       <span>{numberWithCommas(loanDetails.totalExpected, true)} {loanDetails.currencyCode}</span>
-                                    </div>
-                                    <div className="each-msg">
-                                       <span>Principal</span>
-                                       <span>{numberWithCommas(loanDetails.interestExpected, true)} {loanDetails.currencyCode}</span>
-                                    </div>
-                                    <div className="each-msg">
-                                       <span>Interest</span>
-                                       <span>{numberWithCommas(loanDetails.principalExpected, true)} {loanDetails.currencyCode}</span>
-                                    </div>
-                                    <div className="each-msg">
-                                       <span>Fees</span>
-                                       <span>{numberWithCommas(loanDetails.feesExpected, true)} {loanDetails.currencyCode}</span>
-                                    </div>
-                                    <div className="each-msg">
-                                       <span>Penalty</span>
-                                       <span>{numberWithCommas(loanDetails.penaltyExpected, true)} {loanDetails.currencyCode}</span>
-                                    </div>
-
-                                    <Form.Group className="mt-20">
-                                        <Form.Label className="block-level">Write Off Amount</Form.Label>
-
-                                        <h4>{numberWithCommas(loanDetails.totalExpected, true)} {loanDetails.currencyCode}</h4>
-                                    </Form.Group>
-                                </div>
-
-
-                                <Form.Group>
-                                    <Form.Label className="block-level">Notes</Form.Label>
-                                    <Form.Control as="textarea"
-                                        rows="3"
-                                        onChange={handleChange}
-                                        name="notes"
-                                        value={values.notes}
-                                        className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
-                                    />
-                                    {errors.notes && touched.notes ? (
-                                        <span className="invalid-feedback">{errors.notes}</span>
-                                    ) : null}
-                                </Form.Group>
-
-
-                            </Modal.Body>
-                            <Modal.Footer>
-
-                                <Button variant="light" onClick={this.handleShowWriteOffClose}>
-                                    Cancel
-                                </Button>
-                                {writeOffALoanRequest.request_status !== loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS &&
-                                    <Button
-                                        variant="success"
-                                        type="submit"
-                                        disabled={writeOffALoanRequest.is_request_processing}
-                                    >
-                                        {writeOffALoanRequest.is_request_processing ? "Please wait..." : "Write Off"}
-
-                                    </Button>
-                                }
-
-                            </Modal.Footer>
-                            <div className="footer-alert">
-                                {writeOffALoanRequest.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS &&
-                                    <Alert variant="success" className="w-65 mlr-auto">
-                                        {writeOffALoanRequest.request_data.response.data.message}
-                                    </Alert>
-                                }
-                                {(writeOffALoanRequest.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_FAILURE && writeOffALoanRequest.request_data.error) &&
-                                    <Alert variant="danger" className="w-65 mlr-auto">
-                                        {writeOffALoanRequest.request_data.error}
-                                    </Alert>
-                                }
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
-            </Modal>
-        )
-    }
+    // payOffLoanBox = (loanDetails) => {
+    //     const { showPayOffLoan  } = this.state;
+    //     let payOffALoanRequest = this.props.payOffALoanReducer,
+
+    //         adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
+    //         allChannels = [],
+    //         channelsList,
+    //         payoffAmount = loanDetails.interestExpected + loanDetails.principalExpected;
+
+    //     // if(showPayOffLoan){
+    //     //     this.props.dispatch(loanActions.payOffALoan("CLEAR"));
+    //     // }
+
+    //     if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+    //         && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
+    //         channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+    //         channelsList.map((channel, id) => {
+    //             allChannels.push({ label: channel.name, value: channel.encodedKey });
+    //         })
+    //     }
+
+    //     let loanStateValidationSchema;
+
+    //         loanStateValidationSchema = Yup.object().shape({
+    //             txtChannelEncodedKey: Yup.string()
+    //                 .required('Required'),
+    //             notes: Yup.string()
+    //                 .min(2, 'Valid notes required'),
+
+    //         });
+
+
+
+    //     return (<LoanPayOffModal
+
+    //         {...this.props}
+            
+    //        admin_request_status={adminGetTransactionChannelsRequest?.request_status}
+    //        channelsListData={adminGetTransactionChannelsRequest?.request_data}
+    //                     pay_request_status={payOffALoanRequest.request_status} 
+    //                     pay_request_is_request_processing={payOffALoanRequest.is_request_processing} 
+    //                     loanDetails={loanDetails}
+    //                     payOffLoanData={payOffALoanRequest?.request_data}
+    //                     handleShowPayOffClose={this.handleShowPayOffClose} handlePayOffLoan={this.handlePayOffLoan}
+    //                     getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails} showPayOffLoan={showPayOffLoan}/>
+
+
+    //         // <Modal show={showPayOffLoan} onHide={this.handleShowPayOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
+    //         //     <Formik
+    //         //         initialValues={{
+    //         //             txtChannelEncodedKey: "",
+    //         //             notes: "",
+    //         //         }}
+
+    //         //         validationSchema={loanStateValidationSchema}
+    //         //         onSubmit={(values, { resetForm }) => {
+
+    //         //             let changeLoanStatePayload ={
+    //         //                 accountEncodedKey:loanDetails.encodedKey,
+    //         //                 clientEncodedKey:this.props.match.params.id,
+    //         //                 channelEncodedKey:values.txtChannelEncodedKey,
+    //         //                 notes:values.notes
+    //         //             };
+
+
+
+
+
+    //         //             this.handlePayOffLoan(changeLoanStatePayload)
+    //         //                 .then(
+    //         //                     () => {
+
+    //         //                         if (this.props.payOffALoanReducer.request_status === loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS) {
+    //         //                             resetForm();
+    //         //                             // value = {null}
+
+    //         //                             setTimeout(() => {
+    //         //                                 // this.props.dispatch(loanActions.payOffALoan("CLEAR"))
+    //         //                                 this.getCustomerLoanAccountDetails(this.loanEncodedKey);
+    //         //                                 this.handleShowPayOffClose();
+    //         //                             }, 3000);
+    //         //                         }
+
+
+    //         //                     }
+    //         //                 )
+
+    //         //         }}
+    //         //     >
+    //         //         {({ handleSubmit,
+    //         //             handleChange,
+    //         //             handleBlur,
+    //         //             resetForm,
+    //         //             values,
+    //         //             setFieldValue,
+    //         //             setFieldTouched,
+    //         //             touched,
+    //         //             isValid,
+    //         //             errors, }) => (
+    //         //             <Form
+    //         //                 noValidate
+    //         //                 onSubmit={handleSubmit}
+    //         //                 className="">
+    //         //                 <Modal.Header>
+    //         //                     <Modal.Title>
+    //         //                         Pay Off Loan
+    //         //                         </Modal.Title>
+    //         //                 </Modal.Header>
+    //         //                 <Modal.Body>
+    //         //                     <div className="modal-notes">
+    //         //                         Remaining balance will be paid off and the account will be closed
+    //         //                     </div>
+    //         //                     <Form.Row>
+    //         //                         <Col>
+    //         //                             <Form.Label className="block-level">Principal Balance</Form.Label>
+
+    //         //                             <h5> {numberWithCommas(loanDetails.principalExpected,true)} {loanDetails.currencyCode} </h5>
+    //         //                         </Col>
+    //         //                         <Col>
+    //         //                             <Form.Label className="block-level">Interest Balance</Form.Label>
+
+    //         //                             <h5>{numberWithCommas(loanDetails.interestExpected,true)} {loanDetails.currencyCode}</h5>
+    //         //                         </Col>
+    //         //                     </Form.Row>
+    //         //                     <Form.Row>
+    //         //                         <Col>
+    //         //                             <Form.Label className="block-level">Pay Off Amount</Form.Label>
+
+    //         //                             <h5>{numberWithCommas(payoffAmount,true)} {loanDetails.currencyCode}</h5>
+    //         //                         </Col>
+    //         //                         <Col>
+
+    //         //                         </Col>
+    //         //                     </Form.Row>
+    //         //                     <Form.Row>
+    //         //                         <Col>
+    //         //                             <Form.Group className="mb-0">
+    //         //                                 <Form.Label className="block-level mb-10">Transaction Channel</Form.Label>
+    //         //                                 {allChannels.length >= 1 &&
+    //         //                                     <div>
+    //         //                                         <Select
+    //         //                                             options={allChannels}
+
+    //         //                                             onChange={(selected) => {
+    //         //                                                 setFieldValue('txtChannelEncodedKey', selected.value)
+    //         //                                             }}
+    //         //                                             onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
+    //         //                                             className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+    //         //                                             name="txtChannelEncodedKey"
+    //         //                                         />
+    //         //                                         {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
+    //         //                                             <span className="invalid-feedback">{errors.txtChannelEncodedKey}</span>
+    //         //                                         ) : null}
+    //         //                                     </div>
+    //         //                                 }
+    //         //                                 {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+    //         //                                     <div className="errormsg"> Unable to load channels</div>
+    //         //                                 }
+
+
+    //         //                             </Form.Group>
+    //         //                         </Col>
+    //         //                         <Col>
+
+    //         //                         </Col>
+    //         //                     </Form.Row>
+    //         //                     <Form.Group>
+    //         //                         <Form.Label className="block-level">Notes</Form.Label>
+    //         //                         <Form.Control as="textarea"
+    //         //                             rows="3"
+    //         //                             onChange={handleChange}
+    //         //                             name="notes"
+    //         //                             value={values.notes}
+    //         //                             className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+    //         //                         />
+    //         //                         {errors.notes && touched.notes ? (
+    //         //                             <span className="invalid-feedback">{errors.notes}</span>
+    //         //                         ) : null}
+    //         //                     </Form.Group>
+
+
+    //         //                 </Modal.Body>
+    //         //                 <Modal.Footer>
+
+    //         //                     <Button variant="light" onClick={this.handleShowPayOffClose}>
+    //         //                         Cancel
+    //         //                     </Button>
+    //         //                     {payOffALoanRequest.request_status !== loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS &&
+    //         //                         <Button
+    //         //                             variant="success"
+    //         //                             type="submit"
+    //         //                             disabled={payOffALoanRequest.is_request_processing}
+    //         //                         >
+    //         //                             {payOffALoanRequest.is_request_processing ? "Please wait..." : "Pay Off"}
+
+    //         //                         </Button>
+    //         //                     }
+
+    //         //                 </Modal.Footer>
+    //         //                 <div className="footer-alert">
+    //         //                     {payOffALoanRequest.request_status === loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS &&
+    //         //                         <Alert variant="success" className="w-65 mlr-auto">
+    //         //                             {payOffALoanRequest.request_data.response.data.message}
+    //         //                         </Alert>
+    //         //                     }
+    //         //                     {(payOffALoanRequest.request_status === loanAndDepositsConstants.PAYOFF_LOAN_FAILURE && payOffALoanRequest.request_data.error) &&
+    //         //                         <Alert variant="danger" className="w-65 mlr-auto">
+    //         //                             {payOffALoanRequest.request_data.error}
+    //         //                         </Alert>
+    //         //                     }
+    //         //                 </div>
+    //         //             </Form>
+    //         //         )}
+    //         //     </Formik>
+    //         // </Modal>
+    //     )
+    // }
+
+    // writeOffLoanBox = (loanDetails) => {
+    //     const { showWriteOffLoan  } = this.state;
+    //     let writeOffALoanRequest = this.props.writeOffALoanReducer,
+
+    //         adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
+    //         allChannels = [],
+    //         channelsList;
+
+    //     // if(showWriteOffLoan){
+    //     //     this.props.dispatch(loanActions.payOffALoan("CLEAR"));
+    //     // }
+
+    //     // console.log("props info", this.props.match.params);
+    //     // console.log("loanDetails", loanDetails);
+
+    //     if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+    //         && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
+    //         channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+
+    //         channelsList.map((channel, id) => {
+    //             allChannels.push({ label: channel.name, value: channel.encodedKey });
+    //         })
+    //     }
+
+    //     let loanStateValidationSchema;
+
+    //         loanStateValidationSchema = Yup.object().shape({
+    //             notes: Yup.string()
+    //                 .min(2, 'Valid notes required'),
+
+    //         });
+
+
+
+    //     return (
+    //         <Modal show={showWriteOffLoan} onHide={this.handleShowWriteOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
+    //             <Formik
+    //                 initialValues={{
+
+    //                     notes: "",
+    //                 }}
+
+    //                 validationSchema={loanStateValidationSchema}
+    //                 onSubmit={(values, { resetForm }) => {
+
+    //                     let changeLoanStatePayload ={
+    //                         accountEncodedKey:loanDetails.encodedKey,
+    //                         clientEncodedKey:this.props.match.params.id,
+    //                         notes:values.notes
+    //                     };
+
+
+
+
+
+    //                     this.handleWriteOffLoan(changeLoanStatePayload)
+    //                         .then(
+    //                             () => {
+
+    //                                 if (this.props.writeOffALoanReducer.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS) {
+    //                                     resetForm();
+    //                                     // value = {null}
+
+    //                                     setTimeout(() => {
+    //                                         // this.props.dispatch(loanActions.payOffALoan("CLEAR"))
+    //                                         this.getCustomerLoanAccountDetails(this.loanEncodedKey);
+    //                                         this.handleShowWriteOffClose()
+    //                                     }, 5000);
+    //                                 }
+
+
+    //                             }
+    //                         )
+
+    //                 }}
+    //             >
+    //                 {({ handleSubmit,
+    //                     handleChange,
+    //                     handleBlur,
+    //                     resetForm,
+    //                     values,
+    //                     setFieldValue,
+    //                     setFieldTouched,
+    //                     touched,
+    //                     isValid,
+    //                     errors, }) => (
+    //                     <Form
+    //                         noValidate
+    //                         onSubmit={handleSubmit}
+    //                         className="">
+    //                         <Modal.Header>
+    //                             <Modal.Title>
+    //                                 Write Off Loan Account
+    //                                 </Modal.Title>
+    //                         </Modal.Header>
+    //                         <Modal.Body>
+    //                             <div className="modal-section">
+    //                                 <Form.Group>
+    //                                     <Form.Label className="block-level">Account Recipient</Form.Label>
+
+    //                                     <h5>{loanDetails.clientName}</h5>
+    //                                 </Form.Group>
+
+    //                                 <Form.Group>
+    //                                     <Form.Label className="block-level">Loan Account</Form.Label>
+
+    //                                     <h5>{loanDetails.productName}</h5>
+    //                                 </Form.Group>
+    //                             </div>
+    //                             <div>
+    //                                 <div className="modal-notes grayed">Outstanding Balances</div>
+    //                                 <div className="each-msg bolden">
+    //                                    <span>Total</span>
+    //                                    <span>{numberWithCommas(loanDetails.totalExpected, true)} {loanDetails.currencyCode}</span>
+    //                                 </div>
+    //                                 <div className="each-msg">
+    //                                    <span>Principal</span>
+    //                                    <span>{numberWithCommas(loanDetails.interestExpected, true)} {loanDetails.currencyCode}</span>
+    //                                 </div>
+    //                                 <div className="each-msg">
+    //                                    <span>Interest</span>
+    //                                    <span>{numberWithCommas(loanDetails.principalExpected, true)} {loanDetails.currencyCode}</span>
+    //                                 </div>
+    //                                 <div className="each-msg">
+    //                                    <span>Fees</span>
+    //                                    <span>{numberWithCommas(loanDetails.feesExpected, true)} {loanDetails.currencyCode}</span>
+    //                                 </div>
+    //                                 <div className="each-msg">
+    //                                    <span>Penalty</span>
+    //                                    <span>{numberWithCommas(loanDetails.penaltyExpected, true)} {loanDetails.currencyCode}</span>
+    //                                 </div>
+
+    //                                 <Form.Group className="mt-20">
+    //                                     <Form.Label className="block-level">Write Off Amount</Form.Label>
+
+    //                                     <h4>{numberWithCommas(loanDetails.totalExpected, true)} {loanDetails.currencyCode}</h4>
+    //                                 </Form.Group>
+    //                             </div>
+
+
+    //                             <Form.Group>
+    //                                 <Form.Label className="block-level">Notes</Form.Label>
+    //                                 <Form.Control as="textarea"
+    //                                     rows="3"
+    //                                     onChange={handleChange}
+    //                                     name="notes"
+    //                                     value={values.notes}
+    //                                     className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+    //                                 />
+    //                                 {errors.notes && touched.notes ? (
+    //                                     <span className="invalid-feedback">{errors.notes}</span>
+    //                                 ) : null}
+    //                             </Form.Group>
+
+
+    //                         </Modal.Body>
+    //                         <Modal.Footer>
+
+    //                             <Button variant="light" onClick={this.handleShowWriteOffClose}>
+    //                                 Cancel
+    //                             </Button>
+    //                             {writeOffALoanRequest.request_status !== loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS &&
+    //                                 <Button
+    //                                     variant="success"
+    //                                     type="submit"
+    //                                     disabled={writeOffALoanRequest.is_request_processing}
+    //                                 >
+    //                                     {writeOffALoanRequest.is_request_processing ? "Please wait..." : "Write Off"}
+
+    //                                 </Button>
+    //                             }
+
+    //                         </Modal.Footer>
+    //                         <div className="footer-alert">
+    //                             {writeOffALoanRequest.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS &&
+    //                                 <Alert variant="success" className="w-65 mlr-auto">
+    //                                     {writeOffALoanRequest.request_data.response.data.message}
+    //                                 </Alert>
+    //                             }
+    //                             {(writeOffALoanRequest.request_status === loanAndDepositsConstants.WRITEOFF_LOAN_FAILURE && writeOffALoanRequest.request_data.error) &&
+    //                                 <Alert variant="danger" className="w-65 mlr-auto">
+    //                                     {writeOffALoanRequest.request_data.error}
+    //                                 </Alert>
+    //                             }
+    //                         </div>
+    //                     </Form>
+    //                 )}
+    //             </Formik>
+    //         </Modal>
+    //     )
+    // }
 
     changeLoanStateBox = (loanDetails) => {
         const { changeLoanState, newState, ctaText, newStateUpdate, showDisburseLoanForm } = this.state;
@@ -3728,9 +3742,27 @@ class ViewLoanAccount extends React.Component {
             return (
                 <div className="row">
 
-                    {this.payOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)}
-                    {this.writeOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)}
+
+(
+    <LoanPayOffModal {...this.props} loanDetails={getAClientLoanAccountRequest.request_data.response.data} 
+handleShowPayOffClose={this.handleShowPayOffClose} handlePayOffLoan={this.handlePayOffLoan}
+            getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails} 
+            showPayOffLoan={this.state.showPayOffLoan}/>
+
+<WriteOffLoanModal {...this.props} loanDetails={getAClientLoanAccountRequest.request_data.response.data} 
+handleShowWriteOffClose={this.handleShowWriteOffClose} handleWriteOffLoan={this.handleWriteOffLoan}
+            getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails} 
+            showWriteOffLoan={this.state.showWriteOffLoan}/>
+
+                    {/* {this.payOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)} */}
+
+
+
+
+                    {/* {this.writeOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)} */}
                     {this.changeLoanStateBox(getAClientLoanAccountRequest.request_data.response.data)}
+
+
                     <div className="col-sm-12">
                         <div className="middle-content">
                             <div className="customerprofile-tabs">

@@ -188,15 +188,22 @@ fetchErrorState(){
         <div>
             <div className="heading-with-cta">
                 <Form className="one-liner">
-
-                    <Form.Group controlId="filterDropdown" className="no-margins pr-10">
+                <div className="table-helper mb-10">
+                <input type="checkbox" name="" 
+                     onChange={(e)=>this.setShowDetails(e, responseData.result)}
+                   
+                    checked={this.state.FullDetails}
+                    id="showFullDetails" />
+                <label htmlFor="showFullDetails">Show full details</label>
+            </div>
+                    {/* <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                         <Form.Control as="select" size="sm">
                             <option>No Filter</option>
                             <option>Add New Filter</option>
                             <option>Custom Filter</option>
                         </Form.Control>
                     </Form.Group>
-                    <Button className="no-margins" variant="primary" type="submit">Filter</Button>
+                    <Button className="no-margins" variant="primary" type="submit">Filter</Button> */}
                 </Form>
 
                 <div className="pagination-wrap">
@@ -221,14 +228,7 @@ fetchErrorState(){
                         />
                 </div>
             </div>
-            <div className="table-helper mb-10">
-                <input type="checkbox" name="" 
-                     onChange={(e)=>this.setShowDetails(e, responseData.result)}
-                   
-                    checked={this.state.FullDetails}
-                    id="showFullDetails" />
-                <label htmlFor="showFullDetails">Show full details</label>
-            </div>
+           
             
             <TableComponent classnames="striped bordered hover">
                 <thead>

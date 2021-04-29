@@ -444,65 +444,7 @@ class ViewCustomer extends React.Component {
                                         <div className="col-sm-8">
 
                                             <CustomerAccountSummarySection customerLoanAccounts={customerLoanAccounts} customerDepositAccounts={customerDepositAccounts}/>
-                                            {/* <div className="main-details">
-                                                <TableComponent classnames="striped bordered hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Account Name</th>
-                                                            <th>Date Created</th>
-                                                            <th>Product</th>
-                                                            <th>Type</th>
-                                                            <th>State</th>
-                                                            <th>Balance</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {customerLoanAccounts.result!==null && (customerLoanAccounts.result.length>=1) &&
-                                                            customerLoanAccounts.result.map((eachAccount, index)=>{
-                                                                if(eachAccount.loanState===5){
-                                                                    return(
-                                                                        <tr key={index}>
-                                                                            <td>{eachAccount.clientName}</td>
-                                                                            <td>{eachAccount.dateCreated}</td>
-                                                                            <td>
-                                                                            {(eachAccount.productName!==null && eachAccount.productName!=="")?
-                                                                                    `${eachAccount.productName} - `:""}
-                                                                            {eachAccount.accountNumber}
-                                                                            </td>
-                                                                            <td>Loan</td>
-                                                                            <td>{eachAccount.loanStateDescription}</td>
-                                                                            <td>{numberWithCommas(eachAccount.loanAmount, true, true)} {eachAccount.currencyCode} </td>
-                                                                        </tr>
-                                                                    )
-                                                                }
-                                                            })
-                                                        }
-
-
-                                                        {customerDepositAccounts.result!==null && (customerDepositAccounts.result.length>=1) &&
-                                                            customerDepositAccounts.result.map((eachAccount, index)=>{
-                                                                if(eachAccount.accountState===5){
-                                                                    return(
-                                                                        <tr key={index}>
-                                                                            <td>{eachAccount.accountHolderName}</td>
-                                                                            <td>{eachAccount.dateCreated}</td>
-                                                                            <td>
-                                                                            {(eachAccount.productName!==null && eachAccount.productName!=="")?
-                                                                                    `${eachAccount.productName} - `:""}
-                                                                            {eachAccount.accountNumber}
-                                                                            </td>
-                                                                            <td>Deposit</td>
-                                                                            <td>{eachAccount.accountStateDescription}</td>
-                                                                            <td>{numberWithCommas(eachAccount.depositBalance, true, true)} {eachAccount.currencyCode}</td>
-                                                                        </tr>
-                                                                    )
-                                                                }
-                                                            })
-                                                        }
-                                                        
-                                                    </tbody>
-                                                </TableComponent>
-                                            </div> */}
+                                      
                                             <div className="main-details mt-20">
                                                 <div className="overview-wrap profile-overview">
                                                     <div className="each-profile-column">
