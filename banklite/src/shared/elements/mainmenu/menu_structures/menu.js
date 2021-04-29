@@ -242,6 +242,10 @@ export const menuList = [
             {
                 subMenuLabel: "All Branches",
                 subMenuRoute: "/branches"
+            },
+            {
+                subMenuLabel: "Branch Closures",
+                subMenuRoute: "/branch-closures"
             }
         ]
     },

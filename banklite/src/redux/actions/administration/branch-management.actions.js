@@ -70,15 +70,23 @@ export const branchConstants = {
   
 }
 
-function getAllBranches(params, tempData) {
+function getAllBranches(params, tempData, isAll) {
   return (dispatch) => {
 
-
-    let consume = ApiService.request(
-      routes.GET_BRANCHES + "?" + params,
-      "GET",
-      null
-    );
+    let consume
+    if(!isAll){
+        consume = ApiService.request(
+            routes.GET_BRANCHES + "?" + params,
+            "GET",
+            null
+        );
+    }else{
+        consume = ApiService.request(
+            `${routes.GET_BRANCHES}/all`,
+            "GET",
+            null
+        );
+    }
     //quickly return to caller
     dispatch(request(consume, tempData));
    
@@ -215,12 +223,13 @@ function getBranchesClosed  (params, tempData){
 
 }
 
-function openABranch  (branchPayload){
+function openABranch  (branchPayload, branchAction){
   if(branchPayload!=="CLEAR"){
       return dispatch =>{
           
          
-          let consume = ApiService.request(`${routes.GET_BRANCHES}/branchclosure/open`, "POST", branchPayload);
+          let consume = ApiService.request(`${routes.GET_BRANCHES}/branchclosure/${branchAction.toLowerCase()}`, "POST", branchPayload);
+        //   let consume = ApiService.request(`${routes.GET_BRANCHES}/branchclosure/open`, "POST", branchPayload);
           dispatch(request(consume));
           return consume
               .then(response =>{
