@@ -26,7 +26,9 @@ import { acoountingActions } from '../../redux/actions/accounting/accounting.act
 import { accountingConstants } from '../../redux/actiontypes/accounting/accounting.constants';
 
 import { administrationActions } from '../../redux/actions/administration/administration.action';
-import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants';
+// import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants';
+
+import {branchActions,branchConstants} from '../../redux/actions/administration/branch-management.actions';
 
 import Alert from 'react-bootstrap/Alert';
 import './accountsmanagement.scss';
@@ -52,7 +54,7 @@ class BalanceSheet extends React.Component {
   fetchBranchesList = (tempData) => {
     const { dispatch } = this.props;
 
-    dispatch(administrationActions.fetchBranchesList());
+    dispatch(branchActions.fetchBranchesList());
   };
 
   setYear = (e) => {
@@ -87,6 +89,7 @@ class BalanceSheet extends React.Component {
       CurrentPage: parseInt(CurrentPage),
     };
 
+    
     if (tempData) {
       dispatch(acoountingActions.getBalanceSheet(payload, tempData));
     } else {
@@ -393,6 +396,7 @@ class BalanceSheet extends React.Component {
 
     // if()
     switch (getBalanceSheetRequest.request_status) {
+      
       case accountingConstants.GET_BALANCE_SHEET_PENDING:
         if (
           saveRequestData === null ||
