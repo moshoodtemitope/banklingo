@@ -24,6 +24,7 @@ import { allowNumbersOnly, numberWithCommas } from '../../shared/utils';
 
 import { administrationActions } from '../../redux/actions/administration/administration.action';
 import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants';
+import {customerTypeActions,customerTypeConstants} from '../../redux/actions/administration/customer-types-management.actions';
 import Alert from 'react-bootstrap/Alert';
 
 import Form from 'react-bootstrap/Form';
@@ -204,7 +205,7 @@ class NewClient extends React.Component {
       getAllUsersRequest.request_status ===
         administrationConstants.GET_ALL_USERS_PENDING ||
       adminGetCustomerTypesRequest.request_status ===
-        administrationConstants.GET_ALL_CUSTOMERTYPES_PENDING
+        customerTypeConstants.GET_ALL_CUSTOMERTYPES_PENDING
     ) {
       return (
         <div className='loading-content card'>
@@ -217,7 +218,7 @@ class NewClient extends React.Component {
       getAllUsersRequest.request_status ===
         administrationConstants.GET_ALL_USERS_SUCCESS &&
       adminGetCustomerTypesRequest.request_status ===
-        administrationConstants.GET_ALL_CUSTOMERTYPES_SUCCESS
+      customerTypeConstants.GET_ALL_CUSTOMERTYPES_SUCCESS
     ) {
       let allCustomerTypesData =
           adminGetCustomerTypesRequest.request_data.response,
@@ -1321,7 +1322,7 @@ class NewClient extends React.Component {
 
     if (
       adminGetCustomerTypesRequest.request_status ===
-      administrationConstants.GET_ALL_CUSTOMERTYPES_FAILURE
+      customerTypeConstants.GET_ALL_CUSTOMERTYPES_FAILURE
     ) {
       return (
         <div className='loading-content card'>

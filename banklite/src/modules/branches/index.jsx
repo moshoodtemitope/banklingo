@@ -110,7 +110,7 @@ class BranchesManagement extends React.Component
                         return (
                             <div className="loading-content"> 
                                 <div className="heading-with-cta">
-                                    <Form className="one-liner">
+                                    {/* <Form className="one-liner">
 
                                         <Form.Group controlId="filterDropdown" className="no-margins pr-10">
                                             <Form.Control as="select" size="sm">
@@ -120,7 +120,7 @@ class BranchesManagement extends React.Component
                                             </Form.Control>
                                         </Form.Group>
                                         <Button className="no-margins" variant="primary" type="submit">Filter</Button>
-                                    </Form>
+                                    </Form> */}
 
                                     <div className="pagination-wrap">
                                         <label htmlFor="toshow">Show</label>
