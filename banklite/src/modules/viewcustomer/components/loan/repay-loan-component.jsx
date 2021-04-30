@@ -14,6 +14,8 @@ import Modal from 'react-bootstrap/Modal'
 import * as Yup from 'yup';
 import "react-datepicker/dist/react-datepicker.css";
 import Alert from 'react-bootstrap/Alert'
+
+import DatePicker from '../../../../_helpers/datepickerfield'
 import { Formik } from 'formik';
 // import  TableComponent from '../../../shared/elements/table'
 import "../../customerprofile.scss"; 
@@ -21,6 +23,7 @@ import "../../customerprofile.scss";
 import { numberWithCommas, getDateFromISO} from '../../../../shared/utils';
 import { administrationConstants } from "../../../../redux/actiontypes/administration/administration.constants";
 import { loanAndDepositsConstants } from "../../../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants";
+import { loanActions } from "../../../../redux/actions/loans/loans.action";
 
 export class RepayLoanModal extends React.Component {
     constructor(props) {
@@ -43,8 +46,7 @@ export class RepayLoanModal extends React.Component {
 
   render (){
 
-    let loanDetails=this.props.loanDetails;
-    const { changeLoanState, newState, ctaText, newStateUpdate, showDisburseLoanForm } = this.state;
+    const { changeLoanState, ctaText, newStateUpdate, showDisburseLoanForm } = this.state;
     let changeLoanStateRequest = this.props.changeLoanStateReducer;
     let getAClientLoanAccountRequest = this.props.getAClientLoanAccountReducer,
         adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
@@ -56,7 +58,7 @@ export class RepayLoanModal extends React.Component {
         && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
         channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
 
-        channelsList.map((channel, id) => {
+        channelsList.map((channel) => {
             allChannels.push({ label: channel.name, value: channel.encodedKey });
         })
     }
@@ -131,7 +133,7 @@ export class RepayLoanModal extends React.Component {
     // }
 
     return (
-        <Modal show={changeLoanState} onHide={this.handleLoanChangeStateClose} size="lg" centered="true" dialogClassName={showDisburseLoanForm !== true ? "modal-40w withcentered-heading" : "modal-50w withcentered-heading"} animation={false}>
+        <Modal backdrop="static" show={this.props.showRepaymentModal} onHide={this.props.handleCloseRepaymentModal} size="lg" centered="true" dialogClassName= "modal-40w withcentered-heading" animation={false}>
             <Formik
                 initialValues={{
                     comment: "",
@@ -149,16 +151,7 @@ export class RepayLoanModal extends React.Component {
                 validationSchema={changeLoanStateValidationSchema}
                 onSubmit={(values, { resetForm }) => {
 
-                    let changeLoanStatePayload;
-                    // if (showDisburseLoanForm !== true && newState !== "repayloan") {
-                    //     changeLoanStatePayload = {
-                    //         comment: values.comment,
-                    //         accountEncodedKey: this.loanEncodedKey
-                    //     }
-                    // }
-
-                    if (showDisburseLoanForm === true || newState === "repayloan") {
-                        changeLoanStatePayload = {
+                        let changeLoanStatePayload = {
                             accountEncodedKey: this.loanEncodedKey,
                             notes: values.notes,
                             channelEncodedKey: values.txtChannelEncodedKey,
@@ -167,25 +160,13 @@ export class RepayLoanModal extends React.Component {
                             isBookingDate: values.showBookingDate,
                             bookingDate: values.bookingDateChosen !== "" ? values.bookingDateChosen.toISOString() : null,
                         }
-                    }
-
-                    if (newState === "repayloan") {
+                  
                         changeLoanStatePayload.amount = parseFloat(values.amountToRepay.replace(/,/g, ''));
-                    } 
                     
-                    // else {
-                    //     if (changeLoanStatePayload.amount) {
-                    //         delete changeLoanStatePayload.amount;
-                    //     }
-                    // }
-
-
-                    // let changeLoanStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
 
 
 
-
-                    this.props.handleNewLoanState(changeLoanStatePayload, newStateUpdate)
+                    this.props.handleNewLoanState(changeLoanStatePayload, this.props.newStateUpdate)
                         .then(
                             () => {
 
@@ -216,15 +197,14 @@ export class RepayLoanModal extends React.Component {
 
                 }}
             >
+
+
                 {({ handleSubmit,
                     handleChange,
-                    handleBlur,
-                    resetForm,
                     values,
                     setFieldValue,
                     setFieldTouched,
                     touched,
-                    isValid,
                     errors, }) => (
                     <Form
                         noValidate
@@ -238,6 +218,7 @@ export class RepayLoanModal extends React.Component {
                         </Modal.Header>
                         <Modal.Body>
                                 <div>
+                                    
                                     <Form.Row>
                                         <Col>
                                             <Form.Label className="block-level">Amount to repay ({getAClientLoanAccountRequest.request_data.response.data.currencyCode})</Form.Label>
@@ -254,6 +235,8 @@ export class RepayLoanModal extends React.Component {
                                         </Col>
                                         <Col></Col>
                                     </Form.Row>
+
+
                                     <Form.Row className="mb-10">
                                         <Col>
                                             <Form.Group className="mb-0">
@@ -262,7 +245,6 @@ export class RepayLoanModal extends React.Component {
                                                     <div>
                                                         <Select
                                                             options={allChannels}
-
                                                             onChange={(selected) => {
                                                                 setFieldValue('txtChannelEncodedKey', selected.value)
                                                             }}
@@ -352,6 +334,8 @@ export class RepayLoanModal extends React.Component {
                                             }
                                         </Col>
                                     </Form.Row>
+
+
                                     <Form.Group>
                                         <Form.Label className="block-level">Notes</Form.Label>
                                         <Form.Control as="textarea"
@@ -370,7 +354,7 @@ export class RepayLoanModal extends React.Component {
                         </Modal.Body>
                         <Modal.Footer>
 
-                            <Button variant="light" onClick={this.handleLoanChangeStateClose}>
+                            <Button variant="light" onClick={this.props.handleCloseRepaymentModal}>
                                 Cancel
                                 </Button>
                             <Button
@@ -378,7 +362,7 @@ export class RepayLoanModal extends React.Component {
                                 type="submit"
                                 disabled={changeLoanStateRequest.is_request_processing}
                             >
-                                {changeLoanStateRequest.is_request_processing ? "Please wait..." : `${ctaText}`}
+                                {changeLoanStateRequest.is_request_processing ? "Please wait..." : `${this.props.ctaText}`}
 
                             </Button>
 
@@ -421,9 +405,7 @@ function mapStateToProps(state) {
         // createALoanAttachmentReducer: state.loansReducers.createALoanAttachmentReducer,
         // getALoanAccountCommunicationsReducer: state.loansReducers.getALoanAccountCommunicationsReducer,
         changeLoanStateReducer: state.loansReducers.changeLoanStateReducer,
-        // writeOffALoanReducer: state.loansReducers.writeOffALoanReducer,
-       
-       
+        // writeOffALoanReducer: state.loansReducers.writeOffALoanReducer,       
         payOffALoanReducer: state.loansReducers.payOffALoanReducer,
     };
 }
