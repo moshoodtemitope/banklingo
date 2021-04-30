@@ -51,6 +51,9 @@ import Alert from 'react-bootstrap/Alert'
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import { LoanPayOffModal } from "./components/loan/pay-off-component";
 import {WriteOffLoanModal} from "./components/loan/writeoff-loan-component";
+import { ChangeLoanStateModal } from "./components/loan/change-loan-state-component";
+import { LoanStateConstants } from "../../redux/actions/clients/client-states-constants";
+import { RepayLoanModal } from "./components/loan/repay-loan-component";
 class ViewLoanAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -94,6 +97,7 @@ class ViewLoanAccount extends React.Component {
             showDisburseLoanForm: false,
             showPayOffLoan: false,
             showWriteOffLoan:false,
+            showRepaymentModal:false,
 
             txtnEndDate: "",
             txtnStartDate: "",
@@ -2504,6 +2508,10 @@ class ViewLoanAccount extends React.Component {
 
     handleLoanChangeStateShow = () => this.setState({ changeLoanState: true });
 
+
+    handleShowRepaymentModal= () => this.setState({ showRepaymentModal: true });
+    handleCloseRepaymentModal = () => this.setState({ showRepaymentModal: false });
+
     handleNewLoanState = async (changeLoanStatePayload, newStateUpdate) => {
         const { dispatch } = this.props;
 
@@ -3568,7 +3576,7 @@ class ViewLoanAccount extends React.Component {
                             <Button size="sm"
                                 onClick={() => {
                                     this.setState({ newState: "repayloan", newStateUpdate: "repayloan", ctaText: "Apply Repayment", showDisburseLoanForm: false })
-                                    this.handleLoanChangeStateShow()
+                                    this.handleShowRepaymentModal()
                                 }}
                             >Enter Repayment</Button>
                         </li>
@@ -3647,11 +3655,15 @@ class ViewLoanAccount extends React.Component {
                                 {((loanDetails.loanState === 1 || loanDetails.loanState === 2) && allUSerPermissions.indexOf("bnk_reject_loan_account") > -1) &&
                                     <Dropdown.Item eventKey="1"
                                         onClick={() => {
+                                            // LoanStateConstants.ACTIVE
+                                            // LoanStateConstants.PENDING_APPROVAL
                                             this.setState({ newState: "Rejected", newStateUpdate: "reject", ctaText: "Reject" })
                                             this.handleLoanChangeStateShow()
                                         }}
                                     >Reject</Dropdown.Item>
                                 }
+
+
                                 {(loanDetails.loanState === 1 || loanDetails.loanState === 2 || loanDetails.loanState === 3) &&
                                     <Dropdown.Item eventKey="2"
                                         onClick={() => {
@@ -3660,9 +3672,13 @@ class ViewLoanAccount extends React.Component {
                                         }}
                                     >Withdraw</Dropdown.Item>
                                 }
+
+                                {/* Connected to pay off component */}
                                 {(loanDetails.loanState === 5 && allUSerPermissions.indexOf("bnk_payoff_loan_account") > -1) &&
                                     <Dropdown.Item eventKey="3">Pay Off</Dropdown.Item>
                                 }
+
+                                {/* Connected to write off component */}
                                 {(loanDetails.loanState === 5 && allUSerPermissions.indexOf("bnk_writeoff_loan_account") > -1) &&
                                     <Dropdown.Item eventKey="4">Write Off</Dropdown.Item>
                                 }
@@ -3700,6 +3716,7 @@ class ViewLoanAccount extends React.Component {
                                     <div className="dropdown-item with-botom"
                                         onClick={()=>this.handleShowWriteOffShow()}
                                     >Write off Loan</div>
+                                    // Writeoff loan is done
                                 }
                                 {/* <Dropdown.Item eventKey="1"> */}
                                 {allUSerPermissions.indexOf("bnk_refinance_loan_account") > -1 &&
@@ -3755,12 +3772,22 @@ handleShowWriteOffClose={this.handleShowWriteOffClose} handleWriteOffLoan={this.
             showWriteOffLoan={this.state.showWriteOffLoan}/>
 
                     {/* {this.payOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)} */}
+       <ChangeLoanStateModal {...this.props} loanDetails={getAClientLoanAccountRequest.request_data.response.data} 
+    newStateUpdate ={this.state.newStateUpdate}
+    newState= {this.state.newState}
+    handleLoanChangeStateClose={this.handleLoanChangeStateClose} changeLoanState={this.state.changeLoanState}
+            getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}/>
 
 
-
+<RepayLoanModal {...this.props} loanDetails={getAClientLoanAccountRequest.request_data.response.data} 
+    newStateUpdate ={this.state.newStateUpdate}
+    newState= {this.state.newState}
+    ctaText ={this.state.ctaText}
+    handleCloseRepaymentModal={this.handleCloseRepaymentModal} showRepaymentModal={this.state.showRepaymentModal}
+            getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}/>
 
                     {/* {this.writeOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)} */}
-                    {this.changeLoanStateBox(getAClientLoanAccountRequest.request_data.response.data)}
+                    {/* {this.changeLoanStateBox(getAClientLoanAccountRequest.request_data.response.data)} */}
 
 
                     <div className="col-sm-12">

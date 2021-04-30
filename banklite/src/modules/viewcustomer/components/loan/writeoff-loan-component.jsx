@@ -77,7 +77,7 @@ export class WriteOffLoanModal extends React.Component {
 
 
     return (
-        <Modal show={this.props.showWriteOffLoan} onHide={this.props.handleShowWriteOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
+        <Modal backdrop="static" show={this.props.showWriteOffLoan} onHide={this.props.handleShowWriteOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
             <Formik
                 initialValues={{
 

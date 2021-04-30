@@ -86,7 +86,7 @@ export class LoanPayOffModal extends React.Component {
 
 
     return (
-        <Modal show={this.props.showPayOffLoan} onHide={this.props.handleShowPayOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
+        <Modal backdrop="static" show={this.props.showPayOffLoan} onHide={this.props.handleShowPayOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
             <Formik initialValues={{
                     txtChannelEncodedKey: "",
                     notes: "",
