@@ -3517,6 +3517,13 @@ class ViewLoanAccount extends React.Component {
         )
     }
 
+    enforcePermission=(loanDetails)=>{
+
+        // let allowEdit=((loanDetails.loanState === 5 || loanDetails.loanState === 6) && allUSerPermissions.indexOf("bnk_edit_loan_account") > -1);
+        // this.setState({allowEdit:allowEdit});
+
+    }
+
     renderLoanCtas = (loanDetails) => {
         //     public enum LoanStateEnum
         // {
@@ -3544,9 +3551,14 @@ class ViewLoanAccount extends React.Component {
             allUSerPermissions.push(eachPermission.permissionCode)
         })
         return (
+            //ShowEdit
+            //showApproved
+            //show
             <div className="heading-ctas">
                 <ul className="nav">
-                {((loanDetails.loanState === 5 || loanDetails.loanState === 6) && allUSerPermissions.indexOf("bnk_edit_loan_account") > -1) &&
+                {
+                
+                ((loanDetails.loanState === 5 || loanDetails.loanState === 6) && allUSerPermissions.indexOf("bnk_edit_loan_account") > -1) &&
                     <li>
                         <NavLink className="btn btn-primary btn-sm" to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/edit`}>Edit Loan</NavLink>
                     </li>
@@ -3861,7 +3873,6 @@ handleShowWriteOffClose={this.handleShowWriteOffClose} handleWriteOffLoan={this.
                                             {this.renderALoanCommunicatons()}
                                         </Tab.Pane>
                                     </Tab.Content>
-
                                 </Tab.Container>
                             </div>
                         </div>
