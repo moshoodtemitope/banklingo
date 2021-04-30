@@ -53,7 +53,10 @@ import { LoanPayOffModal } from "./components/loan/pay-off-component";
 import {WriteOffLoanModal} from "./components/loan/writeoff-loan-component";
 import { ChangeLoanStateModal } from "./components/loan/change-loan-state-component";
 import { LoanStateConstants } from "../../redux/actions/clients/client-states-constants";
+import {  DisburseLoanModal } from "./components/loan/disburse-loan-component";
 import { RepayLoanModal } from "./components/loan/repay-loan-component";
+
+
 class ViewLoanAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -2512,6 +2515,9 @@ class ViewLoanAccount extends React.Component {
     handleShowRepaymentModal= () => this.setState({ showRepaymentModal: true });
     handleCloseRepaymentModal = () => this.setState({ showRepaymentModal: false });
 
+    handleShowDisbursementModal= () => this.setState({ showRepaymentModal: true });
+    handleCloseDisbursementModal = () => this.setState({ showRepaymentModal: false });
+
     handleNewLoanState = async (changeLoanStatePayload, newStateUpdate) => {
         const { dispatch } = this.props;
 
@@ -3644,17 +3650,17 @@ class ViewLoanAccount extends React.Component {
                         </li>
                     }
 
-                    {(loanDetails.loanState === 3) &&
+                    {(loanDetails.loanState === LoanStateConstants.APPROVED) &&
                         <li>
                             <Button size="sm"
                                 onClick={() => {
-                                    this.setState({ newState: "Disbursed", newStateUpdate: "disburseloan", ctaText: "Disburse Loan", showDisburseLoanForm: true })
-                                    this.handleLoanChangeStateShow()
+                                    this.setState({ newState: "Disbursed", newStateUpdate: "disburseloan", ctaText: "Disburse Loan", showDisbursementModal: true })
+                                    this.handleShowDisbursementModal()
                                 }}
                             >Disburse Loan</Button>
                         </li>
                     }
-                    {(loanDetails.loanState === 1 || loanDetails.loanState === 2 || loanDetails.loanState === 3) &&
+                    {(loanDetails.loanState === 1 || loanDetails.loanState === 2 || loanDetails.loanState === LoanStateConstants.APPROVED) &&
                         <li>
                             <DropdownButton
                                 size="sm"
@@ -3797,6 +3803,14 @@ handleShowWriteOffClose={this.handleShowWriteOffClose} handleWriteOffLoan={this.
     ctaText ={this.state.ctaText}
     handleCloseRepaymentModal={this.handleCloseRepaymentModal} showRepaymentModal={this.state.showRepaymentModal}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}/>
+
+<DisburseLoanModal {...this.props} loanDetails={getAClientLoanAccountRequest.request_data.response.data} 
+    newStateUpdate ={this.state.newStateUpdate}
+    newState= {this.state.newState}
+    ctaText ={this.state.ctaText}
+    handleCloseDisbursementModal={this.handleCloseDisbursementModal} showDisbursementModal={this.state.showDisbursementModal}
+            getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}/>
+
 
                     {/* {this.writeOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)} */}
                     {/* {this.changeLoanStateBox(getAClientLoanAccountRequest.request_data.response.data)} */}
