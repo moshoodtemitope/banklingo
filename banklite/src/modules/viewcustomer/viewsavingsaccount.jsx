@@ -3137,7 +3137,7 @@ if(depositDetails==null ) return;
                 Set Recommended Deposit
               </Dropdown.Item>
 
-              <Dropdown.Item
+              {/* <Dropdown.Item
                 eventKey="7"
                 onClick={() => {
                   this.setState({
@@ -3177,7 +3177,7 @@ if(depositDetails==null ) return;
                 }}
               >
                 Unlock Amount
-              </Dropdown.Item>
+              </Dropdown.Item> */}
             </DropdownButton>
           </li>
         </ul>

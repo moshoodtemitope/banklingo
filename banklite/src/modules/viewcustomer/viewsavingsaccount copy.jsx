@@ -3723,7 +3723,7 @@ class ViewSavingsAccount extends React.Component {
                                 }}
                             >Lock Account</Dropdown.Item>
 
-
+{/* 
 <Dropdown.Item eventKey="8"
                                 onClick={() => {
                                     this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading: "Recommended Deposit Amount", ctaText: "Update" })
@@ -3745,7 +3745,7 @@ class ViewSavingsAccount extends React.Component {
                                     this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading: "Recommended Deposit Amount", ctaText: "Update" })
                                     this.handleShowRecommendedAmountModal()
                                 }}
-                            >Unlock Amount</Dropdown.Item>
+                            >Unlock Amount</Dropdown.Item> */}
 
                         </DropdownButton>
                     </li>
