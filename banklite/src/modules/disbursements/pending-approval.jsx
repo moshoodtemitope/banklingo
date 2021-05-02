@@ -1207,7 +1207,7 @@ class DisbursementPendingApproval extends React.Component {
                       <Col xs={6}>
                         <Form.Label className='block-level'>Amount</Form.Label>
                         <span className='form-text disabled-field'>
-                          &#8358;
+                          CurCode
                           {numberWithCommas(transactionToProcess.amount, true)}
                         </span>
                       </Col>

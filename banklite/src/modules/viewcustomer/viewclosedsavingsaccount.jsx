@@ -432,7 +432,7 @@ class ViewClosedSavingsAccount extends React.Component {
                     <Form>
                         <Form.Row>
                             <Col>
-                                <Form.Label className="block-level">Recommended Deposit Amount (₦)</Form.Label>
+                                <Form.Label className="block-level">Recommended Deposit Amount ()</Form.Label>
                                 {/* Search dropdown of staff list */}
                                 <Form.Control type="text"  />
                             </Col>
@@ -470,7 +470,7 @@ class ViewClosedSavingsAccount extends React.Component {
                     <Form>
                         <Form.Row>
                             <Col>
-                                <Form.Label className="block-level">Maximum Withdrawal Amount (₦)</Form.Label>
+                                <Form.Label className="block-level">Maximum Withdrawal Amount ()</Form.Label>
                                 {/* Search dropdown of staff list */}
                                 <Form.Control type="text"  />
                             </Col>
@@ -654,7 +654,7 @@ class ViewClosedSavingsAccount extends React.Component {
                     {depositAccountData.accountState===5 &&
                         <div className="eachamount">
                             <h6>Total Balance</h6>
-                            <div className="amounttext"> &#8358;{numberWithCommas(depositAccountData.depositAvailableBalance, true)}</div>
+                            <div className="amounttext"> CurCode{numberWithCommas(depositAccountData.depositAvailableBalance, true)}</div>
                         </div>
                     }
 
@@ -3208,7 +3208,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                         <div>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">{newStateHeading} (&#8358;) </Form.Label>
+                                                    <Form.Label className="block-level">{newStateHeading} (CurCode) </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         autoComplete="off"
@@ -3395,7 +3395,7 @@ class ViewClosedSavingsAccount extends React.Component {
                                                 }
                                                 <Form.Row>
                                                     <Col>
-                                                        <Form.Label className="block-level">Amount (&#8358;)</Form.Label>
+                                                        <Form.Label className="block-level">Amount (CurCode)</Form.Label>
                                                         <Form.Control
                                                             type="text"
                                                             autoComplete="off"

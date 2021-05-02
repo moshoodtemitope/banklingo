@@ -439,7 +439,7 @@ class ManageCompanyInfo extends React.Component {
                   <Form.Row>
                     <Col>
                       <Form.Label className='block-level'>
-                        Maximum loan amount (₦)
+                        Maximum loan amount ()
                       </Form.Label>
                       <Form.Control
                         type='text'
@@ -727,7 +727,7 @@ class ManageCompanyInfo extends React.Component {
                                         <Col> */}
                   <Form.Group>
                     <Form.Label className='block-level'>
-                      Maximum loan amount (₦)
+                      Maximum loan amount ()
                     </Form.Label>
                     <Form.Control
                       type='text'

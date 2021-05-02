@@ -16,8 +16,6 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import  TableComponent from '../../shared/elements/table'
 import  TablePagination from '../../shared/elements/table/pagination'
-// import  SidebarElement from '../../shared/elements/sidebar'
-// import "./administration.scss";
 import DatePicker from '../../_helpers/datepickerfield'
 import {default as DatePickerFilter} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -45,6 +43,12 @@ import {dashboardActions} from '../../redux/actions/dashboard/dashboard.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
+import { BeginMaturityModal } from "./components/deposits/begin-maturity-component";
+import { MakeAccountDepositModal } from "./components/deposits/deposit-fund-component";
+import { MakeAccountWithdrawalModal } from "./components/deposits/make-withdrawal-component";
+import { SetMaximumWithdrawalModal } from "./components/deposits/set-maximum-withdrawal-amount-component";
+import { SetRecommendedAmountModal } from "./components/deposits/set-recommended-amount-component";
+import { MakeTransferModal } from "./components/deposits/transfer-component";
 class ViewSavingsAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -98,7 +102,10 @@ class ViewSavingsAccount extends React.Component {
 
             txtnEndDate: "",
             txtnStartDate: "",
+//the following boolean fields toggle all the modal component for the page
+            showBeginMaturityModal:false,showDepositFundModal:false,showMakeWithdrawalModal:false,showSetMaximumWithdrawalAmountModal:false,showRecommendedAmountModal:false,showTransferFundModal:false
         }
+      //  {showBeginMaturityModal:false,showDepositFundModal:false,showMakeWithdrawalModal:false,showSetMaximumWithdrawalAmountModal:false,showRecommendedAmountModal:false,showTransferFundModal:false}
 
         this.userPermissions =  JSON.parse(localStorage.getItem("x-u-perm"));
 
@@ -423,182 +430,182 @@ class ViewSavingsAccount extends React.Component {
 
     handleChangeHistoryShow = () => this.setState({showChangeHistory:true});
 
-    setDepositBox = ()=>{
-        const {showSetDeposit} = this.state;
-        return(
-            <Modal show={showSetDeposit} onHide={this.handleSetDepositClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
-                <Modal.Header>
-                    <Modal.Title>Recommended Deposit Amount</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Row>
-                            <Col>
-                                <Form.Label className="block-level">Recommended Deposit Amount (₦)</Form.Label>
-                                {/* Search dropdown of staff list */}
-                                <Form.Control type="text"  />
-                            </Col>
-                            <Col className="date-wrap">
-                            </Col>
-                        </Form.Row>
-                        <Form.Group controlId="debitLocation">
-                            <Form.Label className="block-level">Notes</Form.Label>
-                            <Form.Control as="textarea" rows="2" />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
+    // setDepositBox = ()=>{
+    //     const {showSetDeposit} = this.state;
+    //     return(
+    //         <Modal show={showSetDeposit} onHide={this.handleSetDepositClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+    //             <Modal.Header>
+    //                 <Modal.Title>Recommended Deposit Amount</Modal.Title>
+    //             </Modal.Header>
+    //             <Modal.Body>
+    //                 <Form>
+    //                     <Form.Row>
+    //                         <Col>
+    //                             <Form.Label className="block-level">Recommended Deposit Amount ()</Form.Label>
+    //                             {/* Search dropdown of staff list */}
+    //                             <Form.Control type="text"  />
+    //                         </Col>
+    //                         <Col className="date-wrap">
+    //                         </Col>
+    //                     </Form.Row>
+    //                     <Form.Group controlId="debitLocation">
+    //                         <Form.Label className="block-level">Notes</Form.Label>
+    //                         <Form.Control as="textarea" rows="2" />
+    //                     </Form.Group>
+    //                 </Form>
+    //             </Modal.Body>
+    //             <Modal.Footer>
 
-                    <Button variant="light" onClick={this.handleSetDepositClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="secondary">
-                        Save Changes
-                    </Button>
+    //                 <Button variant="light" onClick={this.handleSetDepositClose}>
+    //                     Cancel
+    //                 </Button>
+    //                 <Button variant="secondary">
+    //                     Save Changes
+    //                 </Button>
 
-                </Modal.Footer>
-            </Modal>
-        )
-    }
+    //             </Modal.Footer>
+    //         </Modal>
+    //     )
+    // }
 
-    setMaxWithdrawalBox = ()=>{
-        const {showSetMaxWithdrawal} = this.state;
-        return(
-            <Modal show={showSetMaxWithdrawal} onHide={this.handleSetMaxWithdrawalClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
-                <Modal.Header>
-                    <Modal.Title>Maximum Withdrawal Amount</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Row>
-                            <Col>
-                                <Form.Label className="block-level">Maximum Withdrawal Amount (₦)</Form.Label>
-                                {/* Search dropdown of staff list */}
-                                <Form.Control type="text"  />
-                            </Col>
-                            <Col className="date-wrap">
-                            </Col>
-                        </Form.Row>
-                        <Form.Group controlId="debitLocation">
-                            <Form.Label className="block-level">Notes</Form.Label>
-                            <Form.Control as="textarea" rows="2" />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
+    // setMaxWithdrawalBox = ()=>{
+    //     const {showSetMaxWithdrawal} = this.state;
+    //     return(
+    //         <Modal show={showSetMaxWithdrawal} onHide={this.handleSetMaxWithdrawalClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+    //             <Modal.Header>
+    //                 <Modal.Title>Maximum Withdrawal Amount</Modal.Title>
+    //             </Modal.Header>
+    //             <Modal.Body>
+    //                 <Form>
+    //                     <Form.Row>
+    //                         <Col>
+    //                             <Form.Label className="block-level">Maximum Withdrawal Amount ()</Form.Label>
+    //                             {/* Search dropdown of staff list */}
+    //                             <Form.Control type="text"  />
+    //                         </Col>
+    //                         <Col className="date-wrap">
+    //                         </Col>
+    //                     </Form.Row>
+    //                     <Form.Group controlId="debitLocation">
+    //                         <Form.Label className="block-level">Notes</Form.Label>
+    //                         <Form.Control as="textarea" rows="2" />
+    //                     </Form.Group>
+    //                 </Form>
+    //             </Modal.Body>
+    //             <Modal.Footer>
 
-                    <Button variant="light" onClick={this.handleSetMaxWithdrawalClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="secondary">
-                        Save Changes
-                    </Button>
+    //                 <Button variant="light" onClick={this.handleSetMaxWithdrawalClose}>
+    //                     Cancel
+    //                 </Button>
+    //                 <Button variant="secondary">
+    //                     Save Changes
+    //                 </Button>
 
-                </Modal.Footer>
-            </Modal>
-        )
-    }
+    //             </Modal.Footer>
+    //         </Modal>
+    //     )
+    // }
 
-    changeAccountStateBox = ()=>{
-        const {showChangeAccountState} = this.state;
-        return(
-            <Modal show={showChangeAccountState} onHide={this.handleChangeAccountStateModalClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
-                <Modal.Header>
-                    <Modal.Title>Changing Account State</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Row>
-                            <Col>
-                                <Form.Label className="block-level">Previous State</Form.Label>
-                                <span className="form-text">Active</span>
-                            </Col>
-                            <Col>
-                                <Form.Label className="block-level">New State</Form.Label>
-                                {/* Display clicked state here closed or locked */}
-                                <span className="form-text">Closed</span>
-                            </Col>
-                        </Form.Row>
-                        <Form.Group controlId="debitLocation">
-                            <Form.Label className="block-level">Comments</Form.Label>
-                            <Form.Control as="textarea" rows="2" />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
+    // changeAccountStateBox = ()=>{
+    //     const {showChangeAccountState} = this.state;
+    //     return(
+    //         <Modal show={showChangeAccountState} onHide={this.handleChangeAccountStateModalClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+    //             <Modal.Header>
+    //                 <Modal.Title>Changing Account State</Modal.Title>
+    //             </Modal.Header>
+    //             <Modal.Body>
+    //                 <Form>
+    //                     <Form.Row>
+    //                         <Col>
+    //                             <Form.Label className="block-level">Previous State</Form.Label>
+    //                             <span className="form-text">Active</span>
+    //                         </Col>
+    //                         <Col>
+    //                             <Form.Label className="block-level">New State</Form.Label>
+    //                             {/* Display clicked state here closed or locked */}
+    //                             <span className="form-text">Closed</span>
+    //                         </Col>
+    //                     </Form.Row>
+    //                     <Form.Group controlId="debitLocation">
+    //                         <Form.Label className="block-level">Comments</Form.Label>
+    //                         <Form.Control as="textarea" rows="2" />
+    //                     </Form.Group>
+    //                 </Form>
+    //             </Modal.Body>
+    //             <Modal.Footer>
 
-                    <Button variant="light" onClick={this.handleChangeAccountStateModalClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="secondary">
-                        Change Status
-                    </Button>
+    //                 <Button variant="light" onClick={this.handleChangeAccountStateModalClose}>
+    //                     Cancel
+    //                 </Button>
+    //                 <Button variant="secondary">
+    //                     Change Status
+    //                 </Button>
 
-                </Modal.Footer>
-            </Modal>
-        )
-    }
+    //             </Modal.Footer>
+    //         </Modal>
+    //     )
+    // }
 
-    changeHistoryBox = ()=>{
-        const {showChangeHistory} = this.state;
-        return(
-            <Modal show={showChangeHistory} onHide={this.handleChangeHistoryClose} size="lg" centered="true" dialogClassName="modal-45w withcentered-heading"  animation={false}>
-                <Modal.Header>
-                    <Modal.Title>History Change Log</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <div className="select-wrap w-40">
-                            <label>Changed Fields</label>
-                            <select className="form-control form-control-sm w-20" name="" id="">
-                                <option value="">All</option>
-                            </select>
-                        </div>
+    // changeHistoryBox = ()=>{
+    //     const {showChangeHistory} = this.state;
+    //     return(
+    //         <Modal show={showChangeHistory} onHide={this.handleChangeHistoryClose} size="lg" centered="true" dialogClassName="modal-45w withcentered-heading"  animation={false}>
+    //             <Modal.Header>
+    //                 <Modal.Title>History Change Log</Modal.Title>
+    //             </Modal.Header>
+    //             <Modal.Body>
+    //                 <Form>
+    //                     <div className="select-wrap w-40">
+    //                         <label>Changed Fields</label>
+    //                         <select className="form-control form-control-sm w-20" name="" id="">
+    //                             <option value="">All</option>
+    //                         </select>
+    //                     </div>
 
-                        <TableComponent classnames="striped bordered hover">
-                            <thead>
-                                <tr>
-                                    <th>Change</th>
-                                    <th>Original Value</th>
-                                    <th>New Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <p>Employer</p>
-                                        <small>Daniel Ugheghe</small>
-                                        <small>11-09-2019 15:20:24</small>
-                                    </td>
-                                    <td></td>
-                                    <td>ADMINISTRATIVE STAFF COLLEGE OF NIGERIA</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p>Employer Category</p>
-                                        <small>API</small>
-                                        <small>11-09-2019 15:20:24</small>
-                                    </td>
-                                    <td>-</td>
-                                    <td>GENERAL</td>
-                                </tr>
-                            </tbody>
-                        </TableComponent>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
+    //                     <TableComponent classnames="striped bordered hover">
+    //                         <thead>
+    //                             <tr>
+    //                                 <th>Change</th>
+    //                                 <th>Original Value</th>
+    //                                 <th>New Value</th>
+    //                             </tr>
+    //                         </thead>
+    //                         <tbody>
+    //                             <tr>
+    //                                 <td>
+    //                                     <p>Employer</p>
+    //                                     <small>Daniel Ugheghe</small>
+    //                                     <small>11-09-2019 15:20:24</small>
+    //                                 </td>
+    //                                 <td></td>
+    //                                 <td>ADMINISTRATIVE STAFF COLLEGE OF NIGERIA</td>
+    //                             </tr>
+    //                             <tr>
+    //                                 <td>
+    //                                     <p>Employer Category</p>
+    //                                     <small>API</small>
+    //                                     <small>11-09-2019 15:20:24</small>
+    //                                 </td>
+    //                                 <td>-</td>
+    //                                 <td>GENERAL</td>
+    //                             </tr>
+    //                         </tbody>
+    //                     </TableComponent>
+    //                 </Form>
+    //             </Modal.Body>
+    //             <Modal.Footer>
 
-                    <Button variant="light" onClick={this.handleChangeHistoryClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="secondary">
-                        Save Changes
-                    </Button>
+    //                 <Button variant="light" onClick={this.handleChangeHistoryClose}>
+    //                     Cancel
+    //                 </Button>
+    //                 <Button variant="secondary">
+    //                     Save Changes
+    //                 </Button>
 
-                </Modal.Footer>
-            </Modal>
-        )
-    }
+    //             </Modal.Footer>
+    //         </Modal>
+    //     )
+    // }
 
     handleTxtnDateChangeRaw = (e) => {
         e.preventDefault();
@@ -656,7 +663,7 @@ class ViewSavingsAccount extends React.Component {
                     {depositAccountData.accountState===5 &&
                         <div className="eachamount">
                             <h6>Total Balance</h6>
-                            <div className="amounttext"> &#8358;{numberWithCommas(depositAccountData.depositAvailableBalance, true)}</div>
+                            <div className="amounttext"> CurCode{numberWithCommas(depositAccountData.depositAvailableBalance, true)}</div>
                         </div>
                     }
 
@@ -2418,9 +2425,29 @@ class ViewSavingsAccount extends React.Component {
         )
     }
 
+
+    handleShowBeginMaturityModal = () => this.setState({showBeginMaturityModal:true});
+    handleShowDepositFundModal = () => this.setState({showDepositFundModal:true});
+    handleShowMakeWithdrawalModal = () => this.setState({showMakeWithdrawalModal:true});
+    handleShowSetMaximumWithdrawalAmountModal = () => this.setState({showSetMaximumWithdrawalAmountModal:true});
+    handleShowRecommendedAmountModal = () => this.setState({showRecommendedAmountModal:true});
+    handleShowTransferFundModal = () => this.setState({showTransferFundModal:true});
+
+    
+    handleHideBeginMaturityModal = () => this.setState({showBeginMaturityModal:false});
+    handleHideDepositFundModal = () => this.setState({showDepositFundModal:false});
+    handleHideMakeWithdrawalModal = () => this.setState({showMakeWithdrawalModal:false});
+    handleHideSetMaximumWithdrawalAmountModal = () => this.setState({showSetMaximumWithdrawalAmountModal:false});
+    handleHideRecommendedAmountModal = () => this.setState({showRecommendedAmountModal:false});
+    handleHideTransferFundModal = () => this.setState({showTransferFundModal:false});
+
+
     handleDepositChangeStateClose = () => this.setState({changeDepositState:false, showDepositFundsForm:false});
 
     handleDepositChangeStateShow = () => this.setState({changeDepositState:true});
+
+
+
 
     handleNewDepositState = async (changeDepositStatePayload, newStateUpdate)=>{
         const {dispatch} = this.props;
@@ -2698,818 +2725,822 @@ class ViewSavingsAccount extends React.Component {
     //     }
     // }
 
-    changeDepositStateBox = (depositDetails)=>{
-        const {changeDepositState,
-                selectOtherCustomerAccount,
-                isCustommerAccountsFetchedWithKey,
-                selectOtherCustomer,
-                firstChosenTransferCriteria,
-                typeOfTransfer,
-                newState,
-                ctaText,
-                newStateHeading,
-                newStateUpdate,
-                selectACustomerAccount,
-                defaultAccountOptions,
-                showDepositFundsForm} = this.state;
-        let  changeDepositStateRequest = this.props.changeDepositStateReducer,
-            getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
-
-        let   customerLoanAccounts = this.props.getClientLoansReducer.request_data.response.data;
-        let   customerDepositAccounts = this.props.getClientDepositsReducer.request_data.response.data;
-        let   searchForAccountsWithCustomerKeyRequest =  this.props.searchForAccountsWithCustomerKeyReducer;
-        let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
-            allChannels =[],
-            allAccountOfCurrentCustomer =[],
-            channelsList;
-
-        let searchAccountNumberRequest = this.props.searchAccountNumbersReducer;
-            if(customerLoanAccounts.result!==null){
-                customerLoanAccounts.result.map((eachLoanAccount,  index)=>{
-                    if(eachLoanAccount.loanState ===5 || eachLoanAccount.loanState ===6){
-                        allAccountOfCurrentCustomer.push({label: `${eachLoanAccount.productName} - ${eachLoanAccount.accountNumber}`, value:eachLoanAccount.encodedKey});
-                    }
-                })
-            }
-
-            if(customerDepositAccounts.result!==null){
-                customerDepositAccounts.result.map((eachDepositAccount,  index)=>{
-                    if((eachDepositAccount.accountState ===3 || eachDepositAccount.accountState ===5) && eachDepositAccount.accountNumber !==getAClientDepositAccountRequest.accountNumber ){
-                        allAccountOfCurrentCustomer.push({label: `${eachDepositAccount.productName} - ${eachDepositAccount.accountNumber}`, value:eachDepositAccount.encodedKey});
-                    }
-                })
-            }
-
-
-        if(adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
-            && adminGetTransactionChannelsRequest.request_data.response.data.result.length>=1){
-                channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
-
-                channelsList.map((channel, id)=>{
-                    allChannels.push({label: channel.name, value:channel.encodedKey});
-                })
-        }
-
-        let changeDepositStateValidationSchema;
-        if(showDepositFundsForm!==true){
-            changeDepositStateValidationSchema = Yup.object().shape({
-                comment:  Yup.string()
-                    .min(2, 'Valid comments required'),
-                notes:  Yup.string()
-                    .min(2, 'Valid notes required'),
-
-            });
-        }
-
-        if(newStateUpdate==="beginmaturity"){
-            changeDepositStateValidationSchema = Yup.object().shape({
-                notes:  Yup.string()
-                    .min(2, 'Valid notes required'),
-                maturityDate:  Yup.string()
-                    .required('Required'),
-
-            });
-        }
-
-        if(showDepositFundsForm===true){
-            changeDepositStateValidationSchema = Yup.object().shape({
-                    notes:  Yup.string()
-                        .min(2, 'Valid notes required'),
-                    depositChannelEncodedKey:  Yup.string()
-                        .required('Required'),
-                    amountToDeposit:  Yup.string()
-                        .required('Required'),
-                    backDateChosen:  Yup.string()
-                        .when('allowBackDate',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-                    bookingDateChosen:  Yup.string()
-                        .when('showBookingDate',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-
-            });
-        }
-
-        if(newStateUpdate === "makewithdrawal"){
-            changeDepositStateValidationSchema = Yup.object().shape({
-                    notes:  Yup.string()
-                        .min(2, 'Valid notes required'),
-                    depositChannelEncodedKey:  Yup.string()
-                        .required('Required'),
-                    amountToWithdraw:  Yup.string()
-                        .required('Required'),
-                    backDateChosen:  Yup.string()
-                        .when('allowBackDate',{
-                            is:(value)=>value===true,
-                            then: Yup.string()
-                                .required('Required')
-                        }),
-
-            });
-        }
-
-        if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
-            changeDepositStateValidationSchema = Yup.object().shape({
-                    notes:  Yup.string()
-                        .min(2, 'Valid notes required'),
-                    amountToDeposit:  Yup.string()
-                        .required('Required'),
-
-            });
-        }
-
-        if(newStateUpdate === "transfer"){
-            if(typeOfTransfer ==="currentcustomer"){
-                changeDepositStateValidationSchema = Yup.object().shape({
-                        notes:  Yup.string()
-                            .min(2, 'Valid notes required'),
-                        currentCustomerChosenAccount:  Yup.string()
-                            .required('Required'),
-                        amountToTransfer:  Yup.string()
-                            .required('Required'),
-
-                });
-            }
-            if(typeOfTransfer ==="anothercustomer"){
-                changeDepositStateValidationSchema = Yup.object().shape({
-                        notes:  Yup.string()
-                            .min(2, 'Valid notes required'),
-                        chosenAccountNum:  Yup.string()
-                            .required('Required'),
-                        // chosenCustomerEncodedKey:  Yup.string()
-                        //     .required('Required'),
-                        amountToTransfer:  Yup.string()
-                            .required('Required'),
-
-                });
-            }
-        }
-
-        return(
-            <Modal show={changeDepositState} onHide={this.handleDepositChangeStateClose} size="lg" centered="true" dialogClassName={showDepositFundsForm!==true?"modal-40w withcentered-heading": "modal-50w withcentered-heading"}  animation={false}>
-                <Formik
-                    initialValues={{
-                        comment:"",
-                        allowBackDate:false,
-                        showBookingDate:false,
-                        depositChannelEncodedKey:"",
-                        backDateChosen:"",
-                        bookingDateChosen:"",
-                        amountToWithdraw:"",
-                        maturityDate:"",
-                        notes:"",
-                        amountToDeposit:"",
-                        currentCustomerChosenAccount:"",
-                        amountToTransfer:"",
-                        chosenAccountNum:selectOtherCustomerAccount!==""?selectOtherCustomerAccount.searchItemEncodedKey:"",
-                        chosenCustomerEncodedKey:selectOtherCustomerAccount!==""?selectOtherCustomerAccount.clientEncodedKey:""
-                    }}
-
-                    validationSchema={changeDepositStateValidationSchema}
-                    onSubmit={(values, { resetForm }) => {
-
-                        let changeDepositStatePayload;
-                        if(showDepositFundsForm!==true){
-                            changeDepositStatePayload = {
-                                comment:values.comment,
-                                accountEncodedKey:this.depositEncodedKey
-                            }
-                        }
-                        if(newStateUpdate==="beginmaturity"){
-                            changeDepositStatePayload = {
-                                notes:values.notes,
-                                accountEncodedKey:this.depositEncodedKey,
-                                maturityDate: values.maturityDate.toISOString()
-                            }
-                        }
-
-                        if(showDepositFundsForm===true){
-                            changeDepositStatePayload = {
-                                accountEncodedKey:this.depositEncodedKey,
-                                notes:values.notes,
-                                amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
-                                channelEncodedKey:values.depositChannelEncodedKey,
-                                isBackDated:values.allowBackDate,
-                                backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
-                                isBookingDate: values.showBookingDate,
-                                bookingDate: values.bookingDateChosen!==""? values.bookingDateChosen.toISOString() : null,
-                            }
-                        }
-
-                        if(newStateUpdate === "makewithdrawal"){
-                            changeDepositStatePayload = {
-                                accountEncodedKey:this.depositEncodedKey,
-                                notes:values.notes,
-                                amount: parseFloat(values.amountToWithdraw.replace(/,/g, '')),
-                                channelEncodedKey:values.depositChannelEncodedKey,
-                                isBackDated:values.allowBackDate,
-                                backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
-                            }
-                        }
-
-                        if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
-                            changeDepositStatePayload ={
-                                accountEncodedKey:this.depositEncodedKey,
-                                notes:values.notes,
-                                amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
-                            }
-                        }
-
-                        if(newStateUpdate==="transfer"){
-                            changeDepositStatePayload ={
-                                accountEncodedKey:this.depositEncodedKey,
-                                notes:values.notes,
-                                amount: parseFloat(values.amountToTransfer.replace(/,/g, '')),
-                            }
-
-                            if(typeOfTransfer ==="currentcustomer"){
-                                changeDepositStatePayload.destinationCustomerEncodedKey = getAClientDepositAccountRequest.clientEncodedKey
-                                changeDepositStatePayload.destinationAccountEncodedKey = values.currentCustomerChosenAccount
-                            }
-
-                            if(typeOfTransfer ==="anothercustomer"  && selectOtherCustomerAccount!==""){
-                                changeDepositStatePayload.destinationCustomerEncodedKey = selectOtherCustomerAccount.clientEncodedKey
-                                changeDepositStatePayload.destinationAccountEncodedKey = selectOtherCustomerAccount.searchItemEncodedKey
-                            }
-                        }
-
-                        // let changeDepositStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
-
-
-
-                        // return false;
-
-                        this.handleNewDepositState(changeDepositStatePayload,newStateUpdate )
-                            .then(
-                                () => {
-
-                                    if (this.props.changeDepositStateReducer.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS) {
-                                        resetForm();
-                                        // value = {null}
-
-                                        setTimeout(() => {
-                                            this.props.dispatch(depositActions.changeDepositState("CLEAR"))
-                                            this.handleDepositChangeStateClose();
-                                            this.getCustomerDepositAccountDetails(this.depositEncodedKey);
-                                        }, 3000);
-                                    }
-
-                                    if(this.props.changeDepositStateReducer.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE) {
-                                        resetForm();
-                                        // value = {null}
-
-                                        setTimeout(() => {
-                                            this.props.dispatch(depositActions.changeDepositState("CLEAR"))
-                                        }, 3000);
-                                    }
-
-
-
-                                }
-                            )
-
-                    }}
-                >
-                    {({ handleSubmit,
-                        handleChange,
-                        handleBlur,
-                        resetForm,
-                        values,
-                        setFieldValue,
-                        setFieldTouched,
-                        touched,
-                        isValid,
-                        errors, }) => (
-                            <Form
-                                noValidate
-                                onSubmit={handleSubmit}
-                                className="">
-
-                                <Modal.Header>
-                                    <Modal.Title>{newStateHeading}</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-
-                                    {(showDepositFundsForm!==true &&
-                                        newStateUpdate!=="setmaximumwithdrawalamount" && newStateUpdate!=="setrecommendeddepositamount"
-                                         && newStateUpdate!=="beginmaturity" && newStateUpdate!=="makewithdrawal"
-                                         && newStateUpdate!=="transfer") &&
-                                        <Form.Group>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Present State</Form.Label>
-                                                    <span className="form-text">{depositDetails.accountStateDescription} </span>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Label className="block-level">New State</Form.Label>
-                                                    <span className="form-text">{newState}</span>
-                                                </Col>
-                                            </Form.Row>
-                                        </Form.Group>
-                                    }
-
-                                    {newStateUpdate==="beginmaturity" &&
-                                        <Form.Row className="mb-10">
-                                            <Col className="date-wrap">
-                                                <Form.Label className="block-level">Maturity Date</Form.Label>
-                                                <Form.Group className="mb-0 date-wrap">
-                                                     placeholderText="Choose  date"
-                                                            autoComplete="new-password"
-                                                        dateFormat={window.dateformat}
-                                                        className="form-control form-control-sm"
-                                                        peekNextMonth
-                                                        showMonthDropdown
-                                                        name="maturityDate"
-                                                        value={values.maturityDate}
-                                                        onChange={setFieldValue}
-                                                        showYearDropdown
-                                                        dropdownMode="select"
-                                                        minDate={new Date()}
-                                                        className={errors.maturityDate && touched.maturityDate ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                    />
-                                                    {errors.maturityDate && touched.maturityDate ? (
-                                                        <span className="invalid-feedback">{errors.maturityDate}</span>
-                                                    ) : null}
-                                                </Form.Group>
-
-                                            </Col>
-                                        </Form.Row>
-                                    }
-                                    {(showDepositFundsForm!==true &&
-                                        newStateUpdate!=="setmaximumwithdrawalamount" && newStateUpdate!=="setrecommendeddepositamount"
-                                        && newStateUpdate!=="beginmaturity" && newStateUpdate!=="makewithdrawal"
-                                         && newStateUpdate!=="transfer") &&
-                                        <Form.Group>
-                                            <Form.Label className="block-level">Comments</Form.Label>
-                                            <Form.Control as="textarea"
-                                                rows="3"
-                                                onChange={handleChange}
-                                                name="comment"
-                                            value={values.comment}
-                                            className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null}
-                                            />
-                                            {errors.comment && touched.comment ? (
-                                                <span className="invalid-feedback">{errors.comment}</span>
-                                            ) : null}
-                                        </Form.Group>
-                                    }
-
-                                    {newStateUpdate === "makewithdrawal" &&
-                                        <div>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Amount</Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        autoComplete="off"
-                                                        onChange={handleChange}
-                                                        value={numberWithCommas(values.amountToWithdraw)}
-                                                        className={errors.amountToWithdraw && touched.amountToWithdraw ? "is-invalid h-38px" : "h-38px"}
-                                                        name="amountToWithdraw" required />
-                                                    {errors.amountToWithdraw && touched.amountToWithdraw ? (
-                                                        <span className="invalid-feedback">{errors.amountToWithdraw}</span>
-                                                    ) : null}
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group className="mb-0">
-                                                        <Form.Label className="block-level">Transaction Channel</Form.Label>
-                                                        {allChannels.length >= 1 &&
-                                                            <div>
-                                                                <Select
-                                                                    options={allChannels}
-
-                                                                    onChange={(selected) => {
-                                                                        setFieldValue('depositChannelEncodedKey', selected.value)
-                                                                    }}
-                                                                    onBlur={() => setFieldTouched('depositChannelEncodedKey', true)}
-                                                                    className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
-                                                                    name="depositChannelEncodedKey"
-                                                                />
-                                                                {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
-                                                                    <span className="invalid-feedback">{errors.depositChannelEncodedKey}</span>
-                                                                ) : null}
-                                                            </div>
-                                                        }
-                                                        {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
-                                                            <div className="errormsg"> Unable to load Disbursment channels</div>
-                                                        }
-
-
-                                                    </Form.Group>
-                                                </Col>
-                                            </Form.Row>
-                                            <Form.Row className="mb-10">
-                                                <Col className="date-wrap">
-                                                    <Form.Group className="table-helper m-b-5">
-                                                        <input type="checkbox"
-                                                            name="allowBackDate"
-                                                            onChange={handleChange}
-                                                            checked={values.allowBackDate ? values.allowBackDate : null}
-                                                            value={values.allowBackDate}
-                                                            id="allowBackDate" />
-                                                        <label htmlFor="allowBackDate">Backdate</label>
-                                                    </Form.Group>
-                                                    {values.allowBackDate === true &&
-                                                        <Form.Group className="mb-0 date-wrap">
-                                                             placeholderText="Choose  date"
-                                                            autoComplete="new-password"
-                                                                dateFormat={window.dateformat}
-                                                                className="form-control form-control-sm"
-                                                                peekNextMonth
-                                                                showMonthDropdown
-                                                                name="backDateChosen"
-                                                                value={values.backDateChosen}
-                                                                onChange={setFieldValue}
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                maxDate={new Date()}
-                                                                className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                            />
-                                                            {errors.backDateChosen && touched.backDateChosen ? (
-                                                                <span className="invalid-feedback">{errors.backDateChosen}</span>
-                                                            ) : null}
-                                                        </Form.Group>
-                                                    }
-                                                </Col>
-                                            </Form.Row>
-                                        </div>
-                                    }
-
-                                    {showDepositFundsForm===true &&
-                                        <div>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Amount</Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        autoComplete="off"
-                                                        onChange={handleChange}
-                                                        value={numberWithCommas(values.amountToDeposit)}
-                                                        className={errors.amountToDeposit && touched.amountToDeposit ? "is-invalid h-38px" : "h-38px"}
-                                                        name="amountToDeposit" required />
-                                                    {errors.amountToDeposit && touched.amountToDeposit ? (
-                                                        <span className="invalid-feedback">{errors.amountToDeposit}</span>
-                                                    ) : null}
-                                                </Col>
-                                                <Col>
-                                                    <Form.Group className="mb-0">
-                                                        <Form.Label className="block-level">Transaction Channel</Form.Label>
-                                                        {allChannels.length >=1 &&
-                                                            <div>
-                                                                <Select
-                                                                    options={allChannels}
-
-                                                                    onChange={(selected) => {
-                                                                        setFieldValue('depositChannelEncodedKey', selected.value)
-                                                                    }}
-                                                                    onBlur={()=> setFieldTouched('depositChannelEncodedKey', true)}
-                                                                    className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
-                                                                    name="depositChannelEncodedKey"
-                                                                />
-                                                                {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
-                                                                    <span className="invalid-feedback">{errors.depositChannelEncodedKey}</span>
-                                                                ) : null}
-                                                            </div>
-                                                        }
-                                                        {adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
-                                                            <div className="errormsg"> Unable to load Disbursment channels</div>
-                                                        }
-
-
-                                                    </Form.Group>
-                                                </Col>
-                                            </Form.Row>
-                                            <Form.Row className="mb-10">
-                                                <Col className="date-wrap">
-                                                    <Form.Group className="table-helper m-b-5">
-                                                        <input type="checkbox"
-                                                        name="allowBackDate"
-                                                        onChange={handleChange}
-                                                        checked={values.allowBackDate? values.allowBackDate:null}
-                                                        value={values.allowBackDate}
-                                                        id="allowBackDate"/>
-                                                        <label htmlFor="allowBackDate">Backdate</label>
-                                                    </Form.Group>
-                                                    {values.allowBackDate===true &&
-                                                        <Form.Group className="mb-0 date-wrap">
-                                                             placeholderText="Choose  date"
-                                                            autoComplete="new-password"
-                                                                dateFormat={window.dateformat}
-                                                                className="form-control form-control-sm"
-                                                                peekNextMonth
-                                                                showMonthDropdown
-                                                                name="backDateChosen"
-                                                                value={values.backDateChosen}
-                                                                onChange={setFieldValue}
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                maxDate={new Date()}
-                                                                className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                            />
-                                                            {errors.backDateChosen && touched.backDateChosen ? (
-                                                                <span className="invalid-feedback">{errors.backDateChosen}</span>
-                                                            ) : null}
-                                                        </Form.Group>
-                                                    }
-                                                </Col>
-                                                <Col className="date-wrap">
-                                                    <Form.Group className="table-helper m-b-5">
-                                                        <input type="checkbox"
-                                                        name="showBookingDate"
-                                                        onChange={handleChange}
-                                                        checked={values.showBookingDate? values.showBookingDate:null}
-                                                        value={values.showBookingDate}
-                                                        id="showBookingDate"/>
-                                                        <label htmlFor="showBookingDate">Booking Date</label>
-                                                    </Form.Group>
-                                                    {values.showBookingDate===true &&
-                                                        <Form.Group className="mb-0 date-wrap">
-                                                             placeholderText="Choose  date"
-                                                            autoComplete="new-password"
-                                                                dateFormat={window.dateformat}
-                                                                className="form-control form-control-sm"
-                                                                peekNextMonth
-                                                                showMonthDropdown
-                                                                name="bookingDateChosen"
-                                                                value={values.bookingDateChosen}
-                                                                onChange={setFieldValue}
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                maxDate={new Date()}
-                                                                className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
-                                                            />
-                                                            {errors.bookingDateChosen && touched.bookingDateChosen ? (
-                                                                <span className="invalid-feedback">{errors.bookingDateChosen}</span>
-                                                            ) : null}
-                                                        </Form.Group>
-                                                    }
-                                                </Col>
-                                            </Form.Row>
-
-
-                                        </div>
-                                    }
-                                    {(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount") &&
-                                        <div>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">{newStateHeading} (&#8358;) </Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        autoComplete="off"
-                                                        onChange={handleChange}
-                                                        value={numberWithCommas(values.amountToDeposit)}
-                                                        className={errors.amountToDeposit && touched.amountToDeposit ? "is-invalid h-38px" : "h-38px"}
-                                                        name="amountToDeposit" required />
-                                                    {errors.amountToDeposit && touched.amountToDeposit ? (
-                                                        <span className="invalid-feedback">{errors.amountToDeposit}</span>
-                                                    ) : null}
-                                                </Col>
-                                                <Col>
-                                                </Col>
-
-                                            </Form.Row>
-
-                                        </div>
-                                    }
-
-                                    {(showDepositFundsForm===true || newStateUpdate === "setmaximumwithdrawalamount" || newStateUpdate === "setrecommendeddepositamount"
-                                        || newStateUpdate==="beginmaturity" || newStateUpdate ==="makewithdrawal") &&
-
-                                        <Form.Group>
-                                            <Form.Label className="block-level">Notes</Form.Label>
-                                            <Form.Control as="textarea"
-                                                rows="3"
-                                                onChange={handleChange}
-                                                name="notes"
-                                                value={values.notes}
-                                                className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
-                                            />
-                                            {errors.notes && touched.notes ? (
-                                                <span className="invalid-feedback">{errors.notes}</span>
-                                            ) : null}
-                                        </Form.Group>
-                                    }
-                                    {
-                                        newStateUpdate==="transfer" &&
-                                            <div>
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">From</Form.Label>
-                                                        <span className="form-text">{getAClientDepositAccountRequest.productName}-{getAClientDepositAccountRequest.accountNumber}</span>
-                                                    </Col>
-                                                    <Col>
-                                                        <Form.Label className="block-level">To</Form.Label>
-                                                        <select className="form-control form-control-sm"
-                                                            value={typeOfTransfer}
-                                                            name="typeOfTransferToInitiate"
-                                                            onChange={(e)=>{
-                                                                this.setState({typeOfTransfer: e.target.value,
-                                                                    selectOtherCustomerAccount:"",
-                                                                    defaultAccountOptions:"",
-                                                                    selectACustomerAccount:""})
-                                                            }}
-                                                        >
-                                                            <option value="currentcustomer">{getAClientDepositAccountRequest.accountHolderName}</option>
-                                                            <option value="anothercustomer">Another Customer</option>
-                                                        </select>
-                                                    </Col>
-                                                </Form.Row>
-                                                {typeOfTransfer ==="currentcustomer" &&
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Account to Transfer To</Form.Label>
-                                                            <Select
-                                                                options={allAccountOfCurrentCustomer}
-
-                                                                onChange={(selected) => {
-                                                                    setFieldValue('currentCustomerChosenAccount', selected.value)
-                                                                }}
-                                                                onBlur={()=> setFieldTouched('currentCustomerChosenAccount', true)}
-                                                                className={errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? "is-invalid" : null}
-                                                                name="currentCustomerChosenAccount"
-                                                            />
-                                                            {errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? (
-                                                                <span className="invalid-feedback">{errors.currentCustomerChosenAccount}</span>
-                                                            ) : null}
-                                                        </Col>
-                                                    </Form.Row>
-                                                }
-                                                {typeOfTransfer ==="anothercustomer" &&
-                                                    <Form.Row>
-                                                        <Col className="async-search-wrap">
-                                                            <Form.Label className="block-level">Account to Transfer To</Form.Label>
-                                                            {   (
-                                                                 searchForAccountsWithCustomerKeyRequest.request_status !== loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING)
-                                                                &&
-                                                                <div>
-                                                                    <AsyncSelect
-                                                                        cacheOptions= {false}
-                                                                        value={selectOtherCustomerAccount}
-                                                                        noOptionsMessage={this.noOptionsForAccountMessage}
-                                                                        getOptionValue={this.getSearchForAccountOptionValue}
-                                                                        getOptionLabel={this.getSearchOptionForAccountLabel}
-                                                                        defaultOptions={defaultAccountOptions!==""?defaultAccountOptions:null}
-                                                                        loadOptions={this.initiateAccountSearch}
-                                                                        placeholder="Search Accounts"
-                                                                        name="chosenAccountNum"
-                                                                        className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
-                                                                        onChange={(selectedOption)=>{
-                                                                            setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
-
-                                                                            if (this.state.isCustommerAccountsFetchedWithKey!==true){
-                                                                                this.setState({
-                                                                                    selectOtherCustomerAccount: selectedOption,
-                                                                                    firstChosenTransferCriteria:"accounts",
-                                                                                    selectACustomerAccount:""
-                                                                                });
-                                                                            }else{
-                                                                                this.setState({
-                                                                                    selectOtherCustomerAccount: selectedOption,
-                                                                                    firstChosenTransferCriteria:"customer",
-                                                                                });
-                                                                            }
-
-                                                                        }}
-                                                                        onBlur={()=> setFieldTouched('chosenAccountNum', true)}
-                                                                    />
-                                                                    {errors.chosenAccountNum && touched.chosenAccountNum ? (
-                                                                        <span className="invalid-feedback">{errors.chosenAccountNum}</span>
-                                                                    ) : null}
-                                                                </div>
-                                                            }
-                                                            {
-                                                                (searchForAccountsWithCustomerKeyRequest.request_status
-                                                                && searchForAccountsWithCustomerKeyRequest.request_status === loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING)
-                                                                &&
-                                                                <span className="form-text">Loading all accounts of {selectACustomerAccount.clientName}... </span>
-                                                            }
-
-                                                            {
-                                                                // ( selectOtherCustomerAccount!=="" && defaultAccountOptions==="") &&
-                                                                (searchAccountNumberRequest.request_status === loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS && selectOtherCustomerAccount!=="" && defaultAccountOptions==="" ) &&
-                                                                    <div className="mt-20">
-                                                                        <Form.Label className="block-level">Customer to transfer To</Form.Label>
-                                                                        <span className="form-text">{selectOtherCustomerAccount.clientName}
-                                                                            <em className="edit-link"
-                                                                                onClick={()=>{
-                                                                                    this.setState({selectOtherCustomerAccount:"", isCustommerAccountsFetchedWithKey:""})
-                                                                                    this.props.dispatch(depositActions.searchAccountNumbers("CLEAR"));
-                                                                                }}> change</em>
-                                                                        </span>
-                                                                    </div>
-                                                            }
-
-                                                            {
-                                                            // ((isCustommerAccountsFetchedWithKey==="" || isCustommerAccountsFetchedWithKey===true)
-                                                            //     && selectOtherCustomerAccount==="")
-                                                                // && (searchAccountNumberRequest.request_status !== loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS
-                                                                //      || )) &&
-                                                                (selectOtherCustomerAccount==="" || firstChosenTransferCriteria==="customer")    &&
-                                                                <div className="mt-20">
-                                                                    <Form.Label className="block-level">Customer to transfer To</Form.Label>
-                                                                    <AsyncSelect
-                                                                        cacheOptions= {false}
-                                                                        value={selectACustomerAccount}
-                                                                        noOptionsMessage={this.noOptionsForCustomerMessage}
-                                                                        getOptionValue={this.getSearchForCustomerOptionValue}
-                                                                        getOptionLabel={this.getSearchOptionForCustomerLabel}
-                                                                        // defaultOptions={defaultOptions}
-                                                                        loadOptions={this.initiateCustomerSearch}
-                                                                        placeholder="Search Accounts"
-                                                                        onChange={this.handleSearchACustomerInputChange}
-                                                                    />
-                                                                </div>
-                                                            }
-                                                            {/* <Select
-                                                                options={allAccountOfCurrentCustomer}
-
-                                                                onChange={(selected) => {
-                                                                    setFieldValue('chosenAccountNum', selected.value)
-                                                                }}
-                                                                onBlur={()=> setFieldTouched('chosenAccountNum', true)}
-                                                                className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
-                                                                name="chosenAccountNum"
-                                                            />
-                                                            {errors.chosenAccountNum && touched.chosenAccountNum ? (
-                                                                <span className="invalid-feedback">{errors.chosenAccountNum}</span>
-                                                            ) : null} */}
-                                                        </Col>
-                                                    </Form.Row>
-
-                                                }
-                                                <Form.Row>
-                                                    <Col>
-                                                        <Form.Label className="block-level">Amount (&#8358;)</Form.Label>
-                                                        <Form.Control
-                                                            type="text"
-                                                            autoComplete="off"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.amountToTransfer)}
-                                                            className={errors.amountToTransfer && touched.amountToTransfer ? "is-invalid h-38px" : "h-38px"}
-                                                            name="amountToTransfer" required />
-                                                        {errors.amountToTransfer && touched.amountToTransfer ? (
-                                                            <span className="invalid-feedback">{errors.amountToTransfer}</span>
-                                                        ) : null}
-                                                    </Col>
-                                                    <Col></Col>
-                                                </Form.Row>
-                                                <Form.Group>
-                                                    <Form.Label className="block-level">Notes</Form.Label>
-                                                    <Form.Control as="textarea"
-                                                        rows="3"
-                                                        onChange={handleChange}
-                                                        name="notes"
-                                                        value={values.notes}
-                                                        className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
-                                                    />
-                                                    {errors.notes && touched.notes ? (
-                                                        <span className="invalid-feedback">{errors.notes}</span>
-                                                    ) : null}
-                                                </Form.Group>
-                                            </div>
-                                    }
-
-
-                                </Modal.Body>
-                                <Modal.Footer>
-
-                                    <Button variant="light" onClick={this.handleDepositChangeStateClose}>
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        variant="success"
-                                        type="submit"
-                                        disabled={changeDepositStateRequest.is_request_processing}
-                                    >
-                                        {changeDepositStateRequest.is_request_processing?"Please wait...":`${ctaText}`}
-
-                                    </Button>
-
-                                </Modal.Footer>
-                                <div className="footer-alert">
-                                    {changeDepositStateRequest.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS &&
-                                        <Alert variant="success" className="w-65 mlr-auto">
-                                            {changeDepositStateRequest.request_data.response.data.message}
-                                        </Alert>
-                                    }
-                                    {(changeDepositStateRequest.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE && changeDepositStateRequest.request_data.error )&&
-                                        <Alert variant="danger" className="w-65 mlr-auto">
-                                            {changeDepositStateRequest.request_data.error}
-                                        </Alert>
-                                    }
-                                </div>
-                            </Form>
-                        )}
-                </Formik>
-            </Modal>
-        )
-    }
+    // changeDepositStateBox = (depositDetails)=>{
+    //     const {changeDepositState,
+    //             selectOtherCustomerAccount,
+    //             isCustommerAccountsFetchedWithKey,
+    //             selectOtherCustomer,
+    //             firstChosenTransferCriteria,
+    //             typeOfTransfer,
+    //             newState,
+    //             ctaText,
+    //             newStateHeading,
+    //             newStateUpdate,
+    //             selectACustomerAccount,
+    //             defaultAccountOptions,
+    //             showDepositFundsForm} = this.state;
+    //     let  changeDepositStateRequest = this.props.changeDepositStateReducer,
+    //         getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
+
+    //     let   customerLoanAccounts = this.props.getClientLoansReducer.request_data.response.data;
+    //     let   customerDepositAccounts = this.props.getClientDepositsReducer.request_data.response.data;
+    //     let   searchForAccountsWithCustomerKeyRequest =  this.props.searchForAccountsWithCustomerKeyReducer;
+    //     let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
+    //         allChannels =[],
+    //         allAccountOfCurrentCustomer =[],
+    //         channelsList;
+
+    //     let searchAccountNumberRequest = this.props.searchAccountNumbersReducer;
+    //         if(customerLoanAccounts.result!==null){
+    //             customerLoanAccounts.result.map((eachLoanAccount,  index)=>{
+    //                 if(eachLoanAccount.loanState ===5 || eachLoanAccount.loanState ===6){
+    //                     allAccountOfCurrentCustomer.push({label: `${eachLoanAccount.productName} - ${eachLoanAccount.accountNumber}`, value:eachLoanAccount.encodedKey});
+    //                 }
+    //             })
+    //         }
+
+    //         if(customerDepositAccounts.result!==null){
+    //             customerDepositAccounts.result.map((eachDepositAccount,  index)=>{
+    //                 if((eachDepositAccount.accountState ===3 || eachDepositAccount.accountState ===5) && eachDepositAccount.accountNumber !==getAClientDepositAccountRequest.accountNumber ){
+    //                     allAccountOfCurrentCustomer.push({label: `${eachDepositAccount.productName} - ${eachDepositAccount.accountNumber}`, value:eachDepositAccount.encodedKey});
+    //                 }
+    //             })
+    //         }
+
+
+    //     if(adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+    //         && adminGetTransactionChannelsRequest.request_data.response.data.result.length>=1){
+    //             channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+
+    //             channelsList.map((channel, id)=>{
+    //                 allChannels.push({label: channel.name, value:channel.encodedKey});
+    //             })
+    //     }
+
+    //     let changeDepositStateValidationSchema;
+    //     if(showDepositFundsForm!==true){
+    //         changeDepositStateValidationSchema = Yup.object().shape({
+    //             comment:  Yup.string()
+    //                 .min(2, 'Valid comments required'),
+    //             notes:  Yup.string()
+    //                 .min(2, 'Valid notes required'),
+
+    //         });
+    //     }
+
+    //     if(newStateUpdate==="beginmaturity"){
+    //         changeDepositStateValidationSchema = Yup.object().shape({
+    //             notes:  Yup.string()
+    //                 .min(2, 'Valid notes required'),
+    //             maturityDate:  Yup.string()
+    //                 .required('Required'),
+
+    //         });
+    //     }
+
+    //     if(showDepositFundsForm===true){
+    //         changeDepositStateValidationSchema = Yup.object().shape({
+    //                 notes:  Yup.string()
+    //                     .min(2, 'Valid notes required'),
+    //                 depositChannelEncodedKey:  Yup.string()
+    //                     .required('Required'),
+    //                 amountToDeposit:  Yup.string()
+    //                     .required('Required'),
+    //                 backDateChosen:  Yup.string()
+    //                     .when('allowBackDate',{
+    //                         is:(value)=>value===true,
+    //                         then: Yup.string()
+    //                             .required('Required')
+    //                     }),
+    //                 bookingDateChosen:  Yup.string()
+    //                     .when('showBookingDate',{
+    //                         is:(value)=>value===true,
+    //                         then: Yup.string()
+    //                             .required('Required')
+    //                     }),
+
+    //         });
+    //     }
+
+    //     if(newStateUpdate === "makewithdrawal"){
+    //         changeDepositStateValidationSchema = Yup.object().shape({
+    //                 notes:  Yup.string()
+    //                     .min(2, 'Valid notes required'),
+    //                 depositChannelEncodedKey:  Yup.string()
+    //                     .required('Required'),
+    //                 amountToWithdraw:  Yup.string()
+    //                     .required('Required'),
+    //                 backDateChosen:  Yup.string()
+    //                     .when('allowBackDate',{
+    //                         is:(value)=>value===true,
+    //                         then: Yup.string()
+    //                             .required('Required')
+    //                     }),
+
+    //         });
+    //     }
+
+    //     if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
+    //         changeDepositStateValidationSchema = Yup.object().shape({
+    //                 notes:  Yup.string()
+    //                     .min(2, 'Valid notes required'),
+    //                 amountToDeposit:  Yup.string()
+    //                     .required('Required'),
+
+    //         });
+    //     }
+
+    //     if(newStateUpdate === "transfer"){
+    //         if(typeOfTransfer ==="currentcustomer"){
+    //             changeDepositStateValidationSchema = Yup.object().shape({
+    //                     notes:  Yup.string()
+    //                         .min(2, 'Valid notes required'),
+    //                     currentCustomerChosenAccount:  Yup.string()
+    //                         .required('Required'),
+    //                     amountToTransfer:  Yup.string()
+    //                         .required('Required'),
+
+    //             });
+    //         }
+    //         if(typeOfTransfer ==="anothercustomer"){
+    //             changeDepositStateValidationSchema = Yup.object().shape({
+    //                     notes:  Yup.string()
+    //                         .min(2, 'Valid notes required'),
+    //                     chosenAccountNum:  Yup.string()
+    //                         .required('Required'),
+    //                     // chosenCustomerEncodedKey:  Yup.string()
+    //                     //     .required('Required'),
+    //                     amountToTransfer:  Yup.string()
+    //                         .required('Required'),
+
+    //             });
+    //         }
+    //     }
+
+    //     return(
+    //         <Modal show={changeDepositState} onHide={this.handleDepositChangeStateClose} size="lg" centered="true" dialogClassName={showDepositFundsForm!==true?"modal-40w withcentered-heading": "modal-50w withcentered-heading"}  animation={false}>
+    //             <Formik
+    //                 initialValues={{
+    //                     comment:"",
+    //                     allowBackDate:false,
+    //                     showBookingDate:false,
+    //                     depositChannelEncodedKey:"",
+    //                     backDateChosen:"",
+    //                     bookingDateChosen:"",
+    //                     amountToWithdraw:"",
+    //                     maturityDate:"",
+    //                     notes:"",
+    //                     amountToDeposit:"",
+    //                     currentCustomerChosenAccount:"",
+    //                     amountToTransfer:"",
+    //                     chosenAccountNum:selectOtherCustomerAccount!==""?selectOtherCustomerAccount.searchItemEncodedKey:"",
+    //                     chosenCustomerEncodedKey:selectOtherCustomerAccount!==""?selectOtherCustomerAccount.clientEncodedKey:""
+    //                 }}
+
+    //                 validationSchema={changeDepositStateValidationSchema}
+    //                 onSubmit={(values, { resetForm }) => {
+
+    //                     let changeDepositStatePayload;
+    //                     if(showDepositFundsForm!==true){
+    //                         changeDepositStatePayload = {
+    //                             comment:values.comment,
+    //                             accountEncodedKey:this.depositEncodedKey
+    //                         }
+    //                     }
+    //                     if(newStateUpdate==="beginmaturity"){
+    //                         changeDepositStatePayload = {
+    //                             notes:values.notes,
+    //                             accountEncodedKey:this.depositEncodedKey,
+    //                             maturityDate: values.maturityDate.toISOString()
+    //                         }
+    //                     }
+
+    //                     if(showDepositFundsForm===true){
+    //                         changeDepositStatePayload = {
+    //                             accountEncodedKey:this.depositEncodedKey,
+    //                             notes:values.notes,
+    //                             amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
+    //                             channelEncodedKey:values.depositChannelEncodedKey,
+    //                             isBackDated:values.allowBackDate,
+    //                             backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
+    //                             isBookingDate: values.showBookingDate,
+    //                             bookingDate: values.bookingDateChosen!==""? values.bookingDateChosen.toISOString() : null,
+    //                         }
+    //                     }
+
+    //                     if(newStateUpdate === "makewithdrawal"){
+    //                         changeDepositStatePayload = {
+    //                             accountEncodedKey:this.depositEncodedKey,
+    //                             notes:values.notes,
+    //                             amount: parseFloat(values.amountToWithdraw.replace(/,/g, '')),
+    //                             channelEncodedKey:values.depositChannelEncodedKey,
+    //                             isBackDated:values.allowBackDate,
+    //                             backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
+    //                         }
+    //                     }
+
+    //                     if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
+    //                         changeDepositStatePayload ={
+    //                             accountEncodedKey:this.depositEncodedKey,
+    //                             notes:values.notes,
+    //                             amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
+    //                         }
+    //                     }
+
+    //                     if(newStateUpdate==="transfer"){
+    //                         changeDepositStatePayload ={
+    //                             accountEncodedKey:this.depositEncodedKey,
+    //                             notes:values.notes,
+    //                             amount: parseFloat(values.amountToTransfer.replace(/,/g, '')),
+    //                         }
+
+    //                         if(typeOfTransfer ==="currentcustomer"){
+    //                             changeDepositStatePayload.destinationCustomerEncodedKey = getAClientDepositAccountRequest.clientEncodedKey
+    //                             changeDepositStatePayload.destinationAccountEncodedKey = values.currentCustomerChosenAccount
+    //                         }
+
+    //                         if(typeOfTransfer ==="anothercustomer"  && selectOtherCustomerAccount!==""){
+    //                             changeDepositStatePayload.destinationCustomerEncodedKey = selectOtherCustomerAccount.clientEncodedKey
+    //                             changeDepositStatePayload.destinationAccountEncodedKey = selectOtherCustomerAccount.searchItemEncodedKey
+    //                         }
+    //                     }
+
+    //                     // let changeDepositStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
+
+
+
+    //                     // return false;
+
+    //                     this.handleNewDepositState(changeDepositStatePayload,newStateUpdate )
+    //                         .then(
+    //                             () => {
+
+    //                                 if (this.props.changeDepositStateReducer.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS) {
+    //                                     resetForm();
+    //                                     // value = {null}
+
+    //                                     setTimeout(() => {
+    //                                         this.props.dispatch(depositActions.changeDepositState("CLEAR"))
+    //                                         this.handleDepositChangeStateClose();
+    //                                         this.getCustomerDepositAccountDetails(this.depositEncodedKey);
+    //                                     }, 3000);
+    //                                 }
+
+    //                                 if(this.props.changeDepositStateReducer.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE) {
+    //                                     resetForm();
+    //                                     // value = {null}
+
+    //                                     setTimeout(() => {
+    //                                         this.props.dispatch(depositActions.changeDepositState("CLEAR"))
+    //                                     }, 3000);
+    //                                 }
+
+
+
+    //                             }
+    //                         )
+
+    //                 }}
+    //             >
+    //                 {({ handleSubmit,
+    //                     handleChange,
+    //                     handleBlur,
+    //                     resetForm,
+    //                     values,
+    //                     setFieldValue,
+    //                     setFieldTouched,
+    //                     touched,
+    //                     isValid,
+    //                     errors, }) => (
+    //                         <Form
+    //                             noValidate
+    //                             onSubmit={handleSubmit}
+    //                             className="">
+
+    //                             <Modal.Header>
+    //                                 <Modal.Title>{newStateHeading}</Modal.Title>
+    //                             </Modal.Header>
+    //                             <Modal.Body>
+
+    //                                 {(showDepositFundsForm!==true &&
+    //                                     newStateUpdate!=="setmaximumwithdrawalamount" && newStateUpdate!=="setrecommendeddepositamount"
+    //                                      && newStateUpdate!=="beginmaturity" && newStateUpdate!=="makewithdrawal"
+    //                                      && newStateUpdate!=="transfer") &&
+    //                                     <Form.Group>
+    //                                         <Form.Row>
+    //                                             <Col>
+    //                                                 <Form.Label className="block-level">Present State</Form.Label>
+    //                                                 <span className="form-text">{depositDetails.accountStateDescription} </span>
+    //                                             </Col>
+    //                                             <Col>
+    //                                                 <Form.Label className="block-level">New State</Form.Label>
+    //                                                 <span className="form-text">{newState}</span>
+    //                                             </Col>
+    //                                         </Form.Row>
+    //                                     </Form.Group>
+    //                                 }
+
+    //                                 {newStateUpdate==="beginmaturity" &&
+    //                                     <Form.Row className="mb-10">
+    //                                         <Col className="date-wrap">
+    //                                             <Form.Label className="block-level">Maturity Date</Form.Label>
+    //                                             <Form.Group className="mb-0 date-wrap">
+    //                                             <DatePickerFilter
+    //                                                  placeholderText="Choose  date"
+    //                                                         autoComplete="new-password"
+    //                                                     dateFormat={window.dateformat}
+    //                                                     className="form-control form-control-sm"
+    //                                                     peekNextMonth
+    //                                                     showMonthDropdown
+    //                                                     name="maturityDate"
+    //                                                     value={values.maturityDate}
+    //                                                     onChange={setFieldValue}
+    //                                                     showYearDropdown
+    //                                                     dropdownMode="select"
+    //                                                     minDate={new Date()}
+    //                                                     className={errors.maturityDate && touched.maturityDate ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+    //                                                 />
+    //                                                 {errors.maturityDate && touched.maturityDate ? (
+    //                                                     <span className="invalid-feedback">{errors.maturityDate}</span>
+    //                                                 ) : null}
+    //                                             </Form.Group>
+
+    //                                         </Col>
+    //                                     </Form.Row>
+    //                                 }
+    //                                 {(showDepositFundsForm!==true &&
+    //                                     newStateUpdate!=="setmaximumwithdrawalamount" && newStateUpdate!=="setrecommendeddepositamount"
+    //                                     && newStateUpdate!=="beginmaturity" && newStateUpdate!=="makewithdrawal"
+    //                                      && newStateUpdate!=="transfer") &&
+    //                                     <Form.Group>
+    //                                         <Form.Label className="block-level">Comments</Form.Label>
+    //                                         <Form.Control as="textarea"
+    //                                             rows="3"
+    //                                             onChange={handleChange}
+    //                                             name="comment"
+    //                                         value={values.comment}
+    //                                         className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null}
+    //                                         />
+    //                                         {errors.comment && touched.comment ? (
+    //                                             <span className="invalid-feedback">{errors.comment}</span>
+    //                                         ) : null}
+    //                                     </Form.Group>
+    //                                 }
+
+    //                                 {newStateUpdate === "makewithdrawal" &&
+    //                                     <div>
+    //                                         <Form.Row>
+    //                                             <Col>
+    //                                                 <Form.Label className="block-level">Amount</Form.Label>
+    //                                                 <Form.Control
+    //                                                     type="text"
+    //                                                     autoComplete="off"
+    //                                                     onChange={handleChange}
+    //                                                     value={numberWithCommas(values.amountToWithdraw)}
+    //                                                     className={errors.amountToWithdraw && touched.amountToWithdraw ? "is-invalid h-38px" : "h-38px"}
+    //                                                     name="amountToWithdraw" required />
+    //                                                 {errors.amountToWithdraw && touched.amountToWithdraw ? (
+    //                                                     <span className="invalid-feedback">{errors.amountToWithdraw}</span>
+    //                                                 ) : null}
+    //                                             </Col>
+    //                                             <Col>
+    //                                                 <Form.Group className="mb-0">
+    //                                                     <Form.Label className="block-level">Transaction Channel</Form.Label>
+    //                                                     {allChannels.length >= 1 &&
+    //                                                         <div>
+    //                                                             <Select
+    //                                                                 options={allChannels}
+
+    //                                                                 onChange={(selected) => {
+    //                                                                     setFieldValue('depositChannelEncodedKey', selected.value)
+    //                                                                 }}
+    //                                                                 onBlur={() => setFieldTouched('depositChannelEncodedKey', true)}
+    //                                                                 className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
+    //                                                                 name="depositChannelEncodedKey"
+    //                                                             />
+    //                                                             {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
+    //                                                                 <span className="invalid-feedback">{errors.depositChannelEncodedKey}</span>
+    //                                                             ) : null}
+    //                                                         </div>
+    //                                                     }
+    //                                                     {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+    //                                                         <div className="errormsg"> Unable to load Disbursment channels</div>
+    //                                                     }
+
+
+    //                                                 </Form.Group>
+    //                                             </Col>
+    //                                         </Form.Row>
+    //                                         <Form.Row className="mb-10">
+    //                                             <Col className="date-wrap">
+    //                                                 <Form.Group className="table-helper m-b-5">
+    //                                                     <input type="checkbox"
+    //                                                         name="allowBackDate"
+    //                                                         onChange={handleChange}
+    //                                                         checked={values.allowBackDate ? values.allowBackDate : null}
+    //                                                         value={values.allowBackDate}
+    //                                                         id="allowBackDate" />
+    //                                                     <label htmlFor="allowBackDate">Backdate</label>
+    //                                                 </Form.Group>
+    //                                                 {values.allowBackDate === true &&
+    //                                                     <Form.Group className="mb-0 date-wrap">
+    //                                                         <DatePickerFilter
+    //                                                          placeholderText="Choose  date"
+    //                                                         autoComplete="new-password"
+    //                                                             dateFormat={window.dateformat}
+    //                                                             className="form-control form-control-sm"
+    //                                                             peekNextMonth
+    //                                                             showMonthDropdown
+    //                                                             name="backDateChosen"
+    //                                                             value={values.backDateChosen}
+    //                                                             onChange={setFieldValue}
+    //                                                             showYearDropdown
+    //                                                             dropdownMode="select"
+    //                                                             maxDate={new Date()}
+    //                                                             className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+    //                                                         />
+    //                                                         {errors.backDateChosen && touched.backDateChosen ? (
+    //                                                             <span className="invalid-feedback">{errors.backDateChosen}</span>
+    //                                                         ) : null}
+    //                                                     </Form.Group>
+    //                                                 }
+    //                                             </Col>
+    //                                         </Form.Row>
+    //                                     </div>
+    //                                 }
+
+    //                                 {showDepositFundsForm===true &&
+    //                                     <div>
+    //                                         <Form.Row>
+    //                                             <Col>
+    //                                                 <Form.Label className="block-level">Amount</Form.Label>
+    //                                                 <Form.Control
+    //                                                     type="text"
+    //                                                     autoComplete="off"
+    //                                                     onChange={handleChange}
+    //                                                     value={numberWithCommas(values.amountToDeposit)}
+    //                                                     className={errors.amountToDeposit && touched.amountToDeposit ? "is-invalid h-38px" : "h-38px"}
+    //                                                     name="amountToDeposit" required />
+    //                                                 {errors.amountToDeposit && touched.amountToDeposit ? (
+    //                                                     <span className="invalid-feedback">{errors.amountToDeposit}</span>
+    //                                                 ) : null}
+    //                                             </Col>
+    //                                             <Col>
+    //                                                 <Form.Group className="mb-0">
+    //                                                     <Form.Label className="block-level">Transaction Channel</Form.Label>
+    //                                                     {allChannels.length >=1 &&
+    //                                                         <div>
+    //                                                             <Select
+    //                                                                 options={allChannels}
+
+    //                                                                 onChange={(selected) => {
+    //                                                                     setFieldValue('depositChannelEncodedKey', selected.value)
+    //                                                                 }}
+    //                                                                 onBlur={()=> setFieldTouched('depositChannelEncodedKey', true)}
+    //                                                                 className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
+    //                                                                 name="depositChannelEncodedKey"
+    //                                                             />
+    //                                                             {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
+    //                                                                 <span className="invalid-feedback">{errors.depositChannelEncodedKey}</span>
+    //                                                             ) : null}
+    //                                                         </div>
+    //                                                     }
+    //                                                     {adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
+    //                                                         <div className="errormsg"> Unable to load Disbursment channels</div>
+    //                                                     }
+
+
+    //                                                 </Form.Group>
+    //                                             </Col>
+    //                                         </Form.Row>
+    //                                         <Form.Row className="mb-10">
+    //                                             <Col className="date-wrap">
+    //                                                 <Form.Group className="table-helper m-b-5">
+    //                                                     <input type="checkbox"
+    //                                                     name="allowBackDate"
+    //                                                     onChange={handleChange}
+    //                                                     checked={values.allowBackDate? values.allowBackDate:null}
+    //                                                     value={values.allowBackDate}
+    //                                                     id="allowBackDate"/>
+    //                                                     <label htmlFor="allowBackDate">Backdate</label>
+    //                                                 </Form.Group>
+    //                                                 {values.allowBackDate===true &&
+    //                                                     <Form.Group className="mb-0 date-wrap">
+    //                                                         <DatePickerFilter
+    //                                                          placeholderText="Choose  date"
+    //                                                         autoComplete="new-password"
+    //                                                             dateFormat={window.dateformat}
+    //                                                             className="form-control form-control-sm"
+    //                                                             peekNextMonth
+    //                                                             showMonthDropdown
+    //                                                             name="backDateChosen"
+    //                                                             value={values.backDateChosen}
+    //                                                             onChange={setFieldValue}
+    //                                                             showYearDropdown
+    //                                                             dropdownMode="select"
+    //                                                             maxDate={new Date()}
+    //                                                             className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+    //                                                         />
+    //                                                         {errors.backDateChosen && touched.backDateChosen ? (
+    //                                                             <span className="invalid-feedback">{errors.backDateChosen}</span>
+    //                                                         ) : null}
+    //                                                     </Form.Group>
+    //                                                 }
+    //                                             </Col>
+    //                                             <Col className="date-wrap">
+    //                                                 <Form.Group className="table-helper m-b-5">
+    //                                                     <input type="checkbox"
+    //                                                     name="showBookingDate"
+    //                                                     onChange={handleChange}
+    //                                                     checked={values.showBookingDate? values.showBookingDate:null}
+    //                                                     value={values.showBookingDate}
+    //                                                     id="showBookingDate"/>
+    //                                                     <label htmlFor="showBookingDate">Booking Date</label>
+    //                                                 </Form.Group>
+    //                                                 {values.showBookingDate===true &&
+    //                                                     <Form.Group className="mb-0 date-wrap">
+    //                                                         <DatePickerFilter
+    //                                                          placeholderText="Choose  date"
+    //                                                         autoComplete="new-password"
+    //                                                             dateFormat={window.dateformat}
+    //                                                             className="form-control form-control-sm"
+    //                                                             peekNextMonth
+    //                                                             showMonthDropdown
+    //                                                             name="bookingDateChosen"
+    //                                                             value={values.bookingDateChosen}
+    //                                                             onChange={setFieldValue}
+    //                                                             showYearDropdown
+    //                                                             dropdownMode="select"
+    //                                                             maxDate={new Date()}
+    //                                                             className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+    //                                                         />
+    //                                                         {errors.bookingDateChosen && touched.bookingDateChosen ? (
+    //                                                             <span className="invalid-feedback">{errors.bookingDateChosen}</span>
+    //                                                         ) : null}
+    //                                                     </Form.Group>
+    //                                                 }
+    //                                             </Col>
+    //                                         </Form.Row>
+
+
+    //                                     </div>
+    //                                 }
+    //                                 {(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount") &&
+    //                                     <div>
+    //                                         <Form.Row>
+    //                                             <Col>
+    //                                                 <Form.Label className="block-level">{newStateHeading} (CurCode) </Form.Label>
+    //                                                 <Form.Control
+    //                                                     type="text"
+    //                                                     autoComplete="off"
+    //                                                     onChange={handleChange}
+    //                                                     value={numberWithCommas(values.amountToDeposit)}
+    //                                                     className={errors.amountToDeposit && touched.amountToDeposit ? "is-invalid h-38px" : "h-38px"}
+    //                                                     name="amountToDeposit" required />
+    //                                                 {errors.amountToDeposit && touched.amountToDeposit ? (
+    //                                                     <span className="invalid-feedback">{errors.amountToDeposit}</span>
+    //                                                 ) : null}
+    //                                             </Col>
+    //                                             <Col>
+    //                                             </Col>
+
+    //                                         </Form.Row>
+
+    //                                     </div>
+    //                                 }
+
+    //                                 {(showDepositFundsForm===true || newStateUpdate === "setmaximumwithdrawalamount" || newStateUpdate === "setrecommendeddepositamount"
+    //                                     || newStateUpdate==="beginmaturity" || newStateUpdate ==="makewithdrawal") &&
+
+    //                                     <Form.Group>
+    //                                         <Form.Label className="block-level">Notes</Form.Label>
+    //                                         <Form.Control as="textarea"
+    //                                             rows="3"
+    //                                             onChange={handleChange}
+    //                                             name="notes"
+    //                                             value={values.notes}
+    //                                             className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+    //                                         />
+    //                                         {errors.notes && touched.notes ? (
+    //                                             <span className="invalid-feedback">{errors.notes}</span>
+    //                                         ) : null}
+    //                                     </Form.Group>
+    //                                 }
+    //                                 {
+    //                                     newStateUpdate==="transfer" &&
+    //                                         <div>
+    //                                             <Form.Row>
+    //                                                 <Col>
+    //                                                     <Form.Label className="block-level">From</Form.Label>
+    //                                                     <span className="form-text">{getAClientDepositAccountRequest.productName}-{getAClientDepositAccountRequest.accountNumber}</span>
+    //                                                 </Col>
+    //                                                 <Col>
+    //                                                     <Form.Label className="block-level">To</Form.Label>
+    //                                                     <select className="form-control form-control-sm"
+    //                                                         value={typeOfTransfer}
+    //                                                         name="typeOfTransferToInitiate"
+    //                                                         onChange={(e)=>{
+    //                                                             this.setState({typeOfTransfer: e.target.value,
+    //                                                                 selectOtherCustomerAccount:"",
+    //                                                                 defaultAccountOptions:"",
+    //                                                                 selectACustomerAccount:""})
+    //                                                         }}
+    //                                                     >
+    //                                                         <option value="currentcustomer">{getAClientDepositAccountRequest.accountHolderName}</option>
+    //                                                         <option value="anothercustomer">Another Customer</option>
+    //                                                     </select>
+    //                                                 </Col>
+    //                                             </Form.Row>
+    //                                             {typeOfTransfer ==="currentcustomer" &&
+    //                                                 <Form.Row>
+    //                                                     <Col>
+    //                                                         <Form.Label className="block-level">Account to Transfer To</Form.Label>
+    //                                                         <Select
+    //                                                             options={allAccountOfCurrentCustomer}
+
+    //                                                             onChange={(selected) => {
+    //                                                                 setFieldValue('currentCustomerChosenAccount', selected.value)
+    //                                                             }}
+    //                                                             onBlur={()=> setFieldTouched('currentCustomerChosenAccount', true)}
+    //                                                             className={errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? "is-invalid" : null}
+    //                                                             name="currentCustomerChosenAccount"
+    //                                                         />
+    //                                                         {errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? (
+    //                                                             <span className="invalid-feedback">{errors.currentCustomerChosenAccount}</span>
+    //                                                         ) : null}
+    //                                                     </Col>
+    //                                                 </Form.Row>
+    //                                             }
+    //                                             {typeOfTransfer ==="anothercustomer" &&
+    //                                                 <Form.Row>
+    //                                                     <Col className="async-search-wrap">
+    //                                                         <Form.Label className="block-level">Account to Transfer To</Form.Label>
+    //                                                         {   (
+    //                                                              searchForAccountsWithCustomerKeyRequest.request_status !== loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING)
+    //                                                             &&
+    //                                                             <div>
+    //                                                                 <AsyncSelect
+    //                                                                     cacheOptions= {false}
+    //                                                                     value={selectOtherCustomerAccount}
+    //                                                                     noOptionsMessage={this.noOptionsForAccountMessage}
+    //                                                                     getOptionValue={this.getSearchForAccountOptionValue}
+    //                                                                     getOptionLabel={this.getSearchOptionForAccountLabel}
+    //                                                                     defaultOptions={defaultAccountOptions!==""?defaultAccountOptions:null}
+    //                                                                     loadOptions={this.initiateAccountSearch}
+    //                                                                     placeholder="Search Accounts"
+    //                                                                     name="chosenAccountNum"
+    //                                                                     className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+    //                                                                     onChange={(selectedOption)=>{
+    //                                                                         setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
+
+    //                                                                         if (this.state.isCustommerAccountsFetchedWithKey!==true){
+    //                                                                             this.setState({
+    //                                                                                 selectOtherCustomerAccount: selectedOption,
+    //                                                                                 firstChosenTransferCriteria:"accounts",
+    //                                                                                 selectACustomerAccount:""
+    //                                                                             });
+    //                                                                         }else{
+    //                                                                             this.setState({
+    //                                                                                 selectOtherCustomerAccount: selectedOption,
+    //                                                                                 firstChosenTransferCriteria:"customer",
+    //                                                                             });
+    //                                                                         }
+
+    //                                                                     }}
+    //                                                                     onBlur={()=> setFieldTouched('chosenAccountNum', true)}
+    //                                                                 />
+    //                                                                 {errors.chosenAccountNum && touched.chosenAccountNum ? (
+    //                                                                     <span className="invalid-feedback">{errors.chosenAccountNum}</span>
+    //                                                                 ) : null}
+    //                                                             </div>
+    //                                                         }
+    //                                                         {
+    //                                                             (searchForAccountsWithCustomerKeyRequest.request_status
+    //                                                             && searchForAccountsWithCustomerKeyRequest.request_status === loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING)
+    //                                                             &&
+    //                                                             <span className="form-text">Loading all accounts of {selectACustomerAccount.clientName}... </span>
+    //                                                         }
+
+    //                                                         {
+    //                                                             // ( selectOtherCustomerAccount!=="" && defaultAccountOptions==="") &&
+    //                                                             (searchAccountNumberRequest.request_status === loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS && selectOtherCustomerAccount!=="" && defaultAccountOptions==="" ) &&
+    //                                                                 <div className="mt-20">
+    //                                                                     <Form.Label className="block-level">Customer to transfer To</Form.Label>
+    //                                                                     <span className="form-text">{selectOtherCustomerAccount.clientName}
+    //                                                                         <em className="edit-link"
+    //                                                                             onClick={()=>{
+    //                                                                                 this.setState({selectOtherCustomerAccount:"", isCustommerAccountsFetchedWithKey:""})
+    //                                                                                 this.props.dispatch(depositActions.searchAccountNumbers("CLEAR"));
+    //                                                                             }}> change</em>
+    //                                                                     </span>
+    //                                                                 </div>
+    //                                                         }
+
+    //                                                         {
+    //                                                         // ((isCustommerAccountsFetchedWithKey==="" || isCustommerAccountsFetchedWithKey===true)
+    //                                                         //     && selectOtherCustomerAccount==="")
+    //                                                             // && (searchAccountNumberRequest.request_status !== loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS
+    //                                                             //      || )) &&
+    //                                                             (selectOtherCustomerAccount==="" || firstChosenTransferCriteria==="customer")    &&
+    //                                                             <div className="mt-20">
+    //                                                                 <Form.Label className="block-level">Customer to transfer To</Form.Label>
+    //                                                                 <AsyncSelect
+    //                                                                     cacheOptions= {false}
+    //                                                                     value={selectACustomerAccount}
+    //                                                                     noOptionsMessage={this.noOptionsForCustomerMessage}
+    //                                                                     getOptionValue={this.getSearchForCustomerOptionValue}
+    //                                                                     getOptionLabel={this.getSearchOptionForCustomerLabel}
+    //                                                                     // defaultOptions={defaultOptions}
+    //                                                                     loadOptions={this.initiateCustomerSearch}
+    //                                                                     placeholder="Search Accounts"
+    //                                                                     onChange={this.handleSearchACustomerInputChange}
+    //                                                                 />
+    //                                                             </div>
+    //                                                         }
+    //                                                         {/* <Select
+    //                                                             options={allAccountOfCurrentCustomer}
+
+    //                                                             onChange={(selected) => {
+    //                                                                 setFieldValue('chosenAccountNum', selected.value)
+    //                                                             }}
+    //                                                             onBlur={()=> setFieldTouched('chosenAccountNum', true)}
+    //                                                             className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+    //                                                             name="chosenAccountNum"
+    //                                                         />
+    //                                                         {errors.chosenAccountNum && touched.chosenAccountNum ? (
+    //                                                             <span className="invalid-feedback">{errors.chosenAccountNum}</span>
+    //                                                         ) : null} */}
+    //                                                     </Col>
+    //                                                 </Form.Row>
+
+    //                                             }
+    //                                             <Form.Row>
+    //                                                 <Col>
+    //                                                     <Form.Label className="block-level">Amount (CurCode)</Form.Label>
+    //                                                     <Form.Control
+    //                                                         type="text"
+    //                                                         autoComplete="off"
+    //                                                         onChange={handleChange}
+    //                                                         value={numberWithCommas(values.amountToTransfer)}
+    //                                                         className={errors.amountToTransfer && touched.amountToTransfer ? "is-invalid h-38px" : "h-38px"}
+    //                                                         name="amountToTransfer" required />
+    //                                                     {errors.amountToTransfer && touched.amountToTransfer ? (
+    //                                                         <span className="invalid-feedback">{errors.amountToTransfer}</span>
+    //                                                     ) : null}
+    //                                                 </Col>
+    //                                                 <Col></Col>
+    //                                             </Form.Row>
+    //                                             <Form.Group>
+    //                                                 <Form.Label className="block-level">Notes</Form.Label>
+    //                                                 <Form.Control as="textarea"
+    //                                                     rows="3"
+    //                                                     onChange={handleChange}
+    //                                                     name="notes"
+    //                                                     value={values.notes}
+    //                                                     className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
+    //                                                 />
+    //                                                 {errors.notes && touched.notes ? (
+    //                                                     <span className="invalid-feedback">{errors.notes}</span>
+    //                                                 ) : null}
+    //                                             </Form.Group>
+    //                                         </div>
+    //                                 }
+
+
+    //                             </Modal.Body>
+    //                             <Modal.Footer>
+
+    //                                 <Button variant="light" onClick={this.handleDepositChangeStateClose}>
+    //                                     Cancel
+    //                                 </Button>
+    //                                 <Button
+    //                                     variant="success"
+    //                                     type="submit"
+    //                                     disabled={changeDepositStateRequest.is_request_processing}
+    //                                 >
+    //                                     {changeDepositStateRequest.is_request_processing?"Please wait...":`${ctaText}`}
+
+    //                                 </Button>
+
+    //                             </Modal.Footer>
+    //                             <div className="footer-alert">
+    //                                 {changeDepositStateRequest.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS &&
+    //                                     <Alert variant="success" className="w-65 mlr-auto">
+    //                                         {changeDepositStateRequest.request_data.response.data.message}
+    //                                     </Alert>
+    //                                 }
+    //                                 {(changeDepositStateRequest.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE && changeDepositStateRequest.request_data.error )&&
+    //                                     <Alert variant="danger" className="w-65 mlr-auto">
+    //                                         {changeDepositStateRequest.request_data.error}
+    //                                     </Alert>
+    //                                 }
+    //                             </div>
+    //                         </Form>
+    //                     )}
+    //             </Formik>
+    //         </Modal>
+    //     )
+    // }
 
     renderDepositCtas = (depositDetails) => {
         //     public enum depositStateEnum
@@ -3566,24 +3597,24 @@ class ViewSavingsAccount extends React.Component {
                             <Button size="sm"
                                 onClick={() => {
                                     this.setState({ newState: "Begin Maturity Period", newStateHeading: "Begin Maturity Period", newStateUpdate: "beginmaturity", ctaText: "Begin Maturity" })
-                                    this.handleDepositChangeStateShow()
+                                    this.handleShowBeginMaturityModal()
                                 }}
                             >Begin Maturity</Button>
                         </li>
                     }
 
-                    {(depositDetails.accountState === 5 && depositDetails.depositAvailableBalance >= 1) &&
+                    {(depositDetails.accountState === 5) &&
                         <li>
                             <Button size="sm"
                                 onClick={() => {
                                     this.setState({ newState: "Make Withdrawal", newStateHeading: "Make Withdrawal", newStateUpdate: "makewithdrawal", ctaText: "Make Withdrawal" })
-                                    this.handleDepositChangeStateShow()
+                                    this.handleShowMakeWithdrawalModal()
                                 }}
-                            >Withdrawal</Button>
+                            >Make Withdrawal</Button>
                         </li>
                     }
 
-                    {((depositDetails.accountState === 5 || depositDetails.accountState === 3) && (depositDetails.productType === 2 || depositDetails.productType === 1 || depositDetails.productType === 4) && depositDetails.depositAvailableBalance >= 1) &&
+                    {((depositDetails.accountState === 5 || depositDetails.accountState === 3) && (depositDetails.productType === 2 || depositDetails.productType === 1 || depositDetails.productType === 4)) &&
                         <li>
                             <Button size="sm"
                                 onClick={() => {
@@ -3596,7 +3627,7 @@ class ViewSavingsAccount extends React.Component {
                                         newStateUpdate: "transfer",
                                         ctaText: "Make Transfer"
                                     })
-                                    this.handleDepositChangeStateShow()
+                                    this.handleShowTransferFundModal()
                                 }}
                             >Transfer</Button>
                         </li>
@@ -3623,8 +3654,8 @@ class ViewSavingsAccount extends React.Component {
                         <li>
                             <Button size="sm"
                                 onClick={() => {
-                                    this.setState({  newStateUpdate: "deposit", newStateHeading: "Change Deposit State", ctaText: "Make Deposit", showDepositFundsForm: true })
-                                    this.handleDepositChangeStateShow()
+                                    this.setState({  newStateUpdate: "deposit", newStateHeading: "Deposit Transaction", ctaText: "Make Deposit", showDepositFundsForm: true })
+                                    this.handleShowDepositFundModal()
                                 }}
                             >Make Deposit</Button>
                         </li>
@@ -3675,15 +3706,46 @@ class ViewSavingsAccount extends React.Component {
                             <Dropdown.Item eventKey="5"
                                 onClick={() => {
                                     this.setState({ newStateUpdate: "setmaximumwithdrawalamount", newStateHeading: "Maximum Withdrawal Amount", ctaText: "Update" })
-                                    this.handleDepositChangeStateShow()
+                                    this.handleShowSetMaximumWithdrawalAmountModal()
                                 }}
                             >Set Max Withdrawal Amount</Dropdown.Item>
                             <Dropdown.Item eventKey="6"
                                 onClick={() => {
                                     this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading: "Recommended Deposit Amount", ctaText: "Update" })
-                                    this.handleDepositChangeStateShow()
+                                    this.handleShowRecommendedAmountModal()
                                 }}
                             >Set Recommended Deposit</Dropdown.Item>
+
+<Dropdown.Item eventKey="7"
+                                onClick={() => {
+                                    this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading: "Recommended Deposit Amount", ctaText: "Update" })
+                                    this.handleShowRecommendedAmountModal()
+                                }}
+                            >Lock Account</Dropdown.Item>
+
+
+<Dropdown.Item eventKey="8"
+                                onClick={() => {
+                                    this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading: "Recommended Deposit Amount", ctaText: "Update" })
+                                    this.handleShowRecommendedAmountModal()
+                                }}
+                            >Unlock Account</Dropdown.Item>
+
+
+<Dropdown.Item eventKey="9"
+                                onClick={() => {
+                                    this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading: "Recommended Deposit Amount", ctaText: "Update" })
+                                    this.handleShowRecommendedAmountModal()
+                                }}
+                            >Lock Amount</Dropdown.Item>
+
+
+<Dropdown.Item eventKey="10"
+                                onClick={() => {
+                                    this.setState({ newStateUpdate: "setrecommendeddepositamount", newStateHeading: "Recommended Deposit Amount", ctaText: "Update" })
+                                    this.handleShowRecommendedAmountModal()
+                                }}
+                            >Unlock Amount</Dropdown.Item>
 
                         </DropdownButton>
                     </li>
@@ -3721,7 +3783,23 @@ class ViewSavingsAccount extends React.Component {
             && getClientDepositsRequest.request_status ===loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS){
                 return(
                     <div className="row">
-                        {this.changeDepositStateBox(getAClientDepositAccountRequest.request_data.response.data)}
+
+
+<BeginMaturityModal {...this.props}
+            showModal={this.state.showBeginMaturityModal}
+            handleHideModal={this.handleHideBeginMaturityModal}
+            handleNewDepositState={this.handleNewDepositState}
+            getCustomerDepositAccountDetails={this.getCustomerDepositAccountDetails}/>
+
+
+            
+<MakeAccountDepositModal {...this.props}   showModal={this.state.showDepositFundModal} handleHideModal={this.handleHideDepositFundModal} handleNewDepositState={this.handleNewDepositState} getCustomerDepositAccountDetails={this.getCustomerDepositAccountDetails}/>
+<MakeAccountWithdrawalModal {...this.props}  showModal={this.state.showMakeWithdrawalModal}  handleHideModal={this.handleHideMakeWithdrawalModal}  handleNewDepositState={this.handleNewDepositState}  getCustomerDepositAccountDetails={this.getCustomerDepositAccountDetails}/>
+<SetMaximumWithdrawalModal {...this.props}  showModal={this.state.showSetMaximumWithdrawalAmountModal} handleHideModal={this.handleHideSetMaximumWithdrawalAmountModal} handleNewDepositState={this.handleNewDepositState}  getCustomerDepositAccountDetails={this.getCustomerDepositAccountDetails} />
+<SetRecommendedAmountModal {...this.props}  showModal={this.state.showRecommendedAmountModal}  handleHideModal={this.handleHideRecommendedAmountModal} handleNewDepositState={this.handleNewDepositState}  getCustomerDepositAccountDetails={this.getCustomerDepositAccountDetails}/>
+<MakeTransferModal {...this.props}  showModal={this.state.showTransferFundModal}  handleHideModal={this.handleHideTransferFundModal}  handleNewDepositState={this.handleNewDepositState}  getCustomerDepositAccountDetails={this.getCustomerDepositAccountDetails}/>
+
+                        {/* {this.changeDepositStateBox(getAClientDepositAccountRequest.request_data.response.data)} */}
                         <div className="col-sm-12">
                             <div className="middle-content">
 
@@ -3803,10 +3881,10 @@ class ViewSavingsAccount extends React.Component {
             <Fragment>
                 {/* <InnerPageContainer {...this.props}> */}
                     <div className="content-wrapper">
-                        {this.setDepositBox()}
+                        {/* {this.setDepositBox()}
                         {this.changeAccountStateBox()}
                         {this.setMaxWithdrawalBox()}
-                        {this.changeHistoryBox()}
+                        {this.changeHistoryBox()} */}
                         {/* <CustomerHeading {...this.props}/> */}
                     <div className="module-content">
                         <div className="content-container">

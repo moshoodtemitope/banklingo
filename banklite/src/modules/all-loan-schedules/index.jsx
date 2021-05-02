@@ -359,7 +359,7 @@ class AllLoanSchedules extends React.Component {
                           <td>
                             {eachSchedule.loanAmount !== null &&
                             eachSchedule.loanAmount > 0
-                              ? `₦${numberWithCommas(
+                              ? `${numberWithCommas(
                                   eachSchedule.loanAmount,
                                   true
                                 )}`
@@ -375,7 +375,7 @@ class AllLoanSchedules extends React.Component {
                             <td>
                               {eachSchedule.principalExpected !== null &&
                               eachSchedule.principalExpected > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.principalExpected,
                                     true
                                   )}`
@@ -386,7 +386,7 @@ class AllLoanSchedules extends React.Component {
                             <td>
                               {eachSchedule.interestExpected !== null &&
                               eachSchedule.interestExpected > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.interestExpected,
                                     true
                                   )}`
@@ -397,7 +397,7 @@ class AllLoanSchedules extends React.Component {
                             <td>
                               {eachSchedule.feesExpected !== null &&
                               eachSchedule.feesExpected > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.feesExpected,
                                     true
                                   )}`
@@ -408,7 +408,7 @@ class AllLoanSchedules extends React.Component {
                             <td className='borderdright'>
                               {eachSchedule.penaltyExpected !== null &&
                               eachSchedule.penaltyExpected > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.penaltyExpected,
                                     true
                                   )}`
@@ -419,7 +419,7 @@ class AllLoanSchedules extends React.Component {
                             <td className='borderdright'>
                               {eachSchedule.totalExpected !== null &&
                               eachSchedule.totalExpected > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.totalExpected,
                                     true
                                   )}`
@@ -430,7 +430,7 @@ class AllLoanSchedules extends React.Component {
                             <td>
                               {eachSchedule.principalPaid !== null &&
                               eachSchedule.principalPaid > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.principalPaid,
                                     true
                                   )}`
@@ -441,7 +441,7 @@ class AllLoanSchedules extends React.Component {
                             <td>
                               {eachSchedule.feePaid !== null &&
                               eachSchedule.feePaid > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.feePaid,
                                     true
                                   )}`
@@ -452,7 +452,7 @@ class AllLoanSchedules extends React.Component {
                             <td>
                               {eachSchedule.interestPaid !== null &&
                               eachSchedule.interestPaid > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.interestPaid,
                                     true
                                   )}`
@@ -463,7 +463,7 @@ class AllLoanSchedules extends React.Component {
                             <td className='borderdright'>
                               {eachSchedule.penaltyPaid !== null &&
                               eachSchedule.penaltyPaid > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.penaltyPaid,
                                     true
                                   )}`
@@ -474,7 +474,7 @@ class AllLoanSchedules extends React.Component {
                             <td className='borderdright'>
                               {eachSchedule.totalPaid !== null &&
                               eachSchedule.totalPaid > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.totalPaid,
                                     true
                                   )}`
@@ -482,23 +482,23 @@ class AllLoanSchedules extends React.Component {
                             </td>
                           )}
                           {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                           {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.interestDue !== null && eachSchedule.interestDue > 0) ? `₦${numberWithCommas(eachSchedule.interestDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.interestDue !== null && eachSchedule.interestDue > 0) ? `${numberWithCommas(eachSchedule.interestDue, true)}` : "-"}</td>
                                                             } */}
                           {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.feeDue !== null && eachSchedule.feeDue > 0) ? `₦${numberWithCommas(eachSchedule.feeDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.feeDue !== null && eachSchedule.feeDue > 0) ? `${numberWithCommas(eachSchedule.feeDue, true)}` : "-"}</td>
                                                             } */}
                           {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.penaltyDue !== null && eachSchedule.penaltyDue > 0) ? `₦${numberWithCommas(eachSchedule.penaltyDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.penaltyDue !== null && eachSchedule.penaltyDue > 0) ? `${numberWithCommas(eachSchedule.penaltyDue, true)}` : "-"}</td>
                                                             } */}
                           {this.state.showAmountDue && (
                             <td className='borderdright'>
                               {eachSchedule.totalDue !== null &&
                               eachSchedule.totalDue > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.totalDue,
                                     true
                                   )}`
@@ -786,7 +786,7 @@ class AllLoanSchedules extends React.Component {
                             <td>
                               {eachSchedule.loanAmount !== null &&
                               eachSchedule.loanAmount > 0
-                                ? `₦${numberWithCommas(
+                                ? `${numberWithCommas(
                                     eachSchedule.loanAmount,
                                     true
                                   )}`
@@ -802,7 +802,7 @@ class AllLoanSchedules extends React.Component {
                               <td>
                                 {eachSchedule.principalExpected !== null &&
                                 eachSchedule.principalExpected > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.principalExpected,
                                       true
                                     )}`
@@ -813,7 +813,7 @@ class AllLoanSchedules extends React.Component {
                               <td>
                                 {eachSchedule.interestExpected !== null &&
                                 eachSchedule.interestExpected > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.interestExpected,
                                       true
                                     )}`
@@ -824,7 +824,7 @@ class AllLoanSchedules extends React.Component {
                               <td>
                                 {eachSchedule.feesExpected !== null &&
                                 eachSchedule.feesExpected > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.feesExpected,
                                       true
                                     )}`
@@ -835,7 +835,7 @@ class AllLoanSchedules extends React.Component {
                               <td className='borderdright'>
                                 {eachSchedule.penaltyExpected !== null &&
                                 eachSchedule.penaltyExpected > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.penaltyExpected,
                                       true
                                     )}`
@@ -846,7 +846,7 @@ class AllLoanSchedules extends React.Component {
                               <td className='borderdright'>
                                 {eachSchedule.totalExpected !== null &&
                                 eachSchedule.totalExpected > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.totalExpected,
                                       true
                                     )}`
@@ -857,7 +857,7 @@ class AllLoanSchedules extends React.Component {
                               <td>
                                 {eachSchedule.principalPaid !== null &&
                                 eachSchedule.principalPaid > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.principalPaid,
                                       true
                                     )}`
@@ -868,7 +868,7 @@ class AllLoanSchedules extends React.Component {
                               <td>
                                 {eachSchedule.feePaid !== null &&
                                 eachSchedule.feePaid > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.feePaid,
                                       true
                                     )}`
@@ -879,7 +879,7 @@ class AllLoanSchedules extends React.Component {
                               <td>
                                 {eachSchedule.interestPaid !== null &&
                                 eachSchedule.interestPaid > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.interestPaid,
                                       true
                                     )}`
@@ -890,7 +890,7 @@ class AllLoanSchedules extends React.Component {
                               <td className='borderdright'>
                                 {eachSchedule.penaltyPaid !== null &&
                                 eachSchedule.penaltyPaid > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.penaltyPaid,
                                       true
                                     )}`
@@ -901,7 +901,7 @@ class AllLoanSchedules extends React.Component {
                               <td className='borderdright'>
                                 {eachSchedule.totalPaid !== null &&
                                 eachSchedule.totalPaid > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.totalPaid,
                                       true
                                     )}`
@@ -909,23 +909,23 @@ class AllLoanSchedules extends React.Component {
                               </td>
                             )}
                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `₦${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.principalDue !== null && eachSchedule.principalDue > 0) ? `${numberWithCommas(eachSchedule.principalDue, true)}` : "-"}</td>
                                                             } */}
 
                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.interestDue !== null && eachSchedule.interestDue > 0) ? `₦${numberWithCommas(eachSchedule.interestDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.interestDue !== null && eachSchedule.interestDue > 0) ? `${numberWithCommas(eachSchedule.interestDue, true)}` : "-"}</td>
                                                             } */}
                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.feeDue !== null && eachSchedule.feeDue > 0) ? `₦${numberWithCommas(eachSchedule.feeDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.feeDue !== null && eachSchedule.feeDue > 0) ? `${numberWithCommas(eachSchedule.feeDue, true)}` : "-"}</td>
                                                             } */}
                             {/* {this.state.showAmountDue &&
-                                                                <td>{(eachSchedule.penaltyDue !== null && eachSchedule.penaltyDue > 0) ? `₦${numberWithCommas(eachSchedule.penaltyDue, true)}` : "-"}</td>
+                                                                <td>{(eachSchedule.penaltyDue !== null && eachSchedule.penaltyDue > 0) ? `${numberWithCommas(eachSchedule.penaltyDue, true)}` : "-"}</td>
                                                             } */}
                             {this.state.showAmountDue && (
                               <td className='borderdright'>
                                 {eachSchedule.totalDue !== null &&
                                 eachSchedule.totalDue > 0
-                                  ? `₦${numberWithCommas(
+                                  ? `${numberWithCommas(
                                       eachSchedule.totalDue,
                                       true
                                     )}`

@@ -1047,7 +1047,7 @@
 //                               <Form.Row>
 //                                 <Col>
 //                                   <Form.Label className='block-level'>
-//                                     Interest Balance (&#8358;)
+//                                     Interest Balance (CurCode)
 //                                   </Form.Label>
 //                                   <Form.Control
 //                                     type='text'
@@ -1106,10 +1106,10 @@
 //                                   />
 //                                   {/* <span className="input-helptext form-text">
 //                                                                                     {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun !== null &&
-//                                                                                         <span>Min: &#8358;{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+//                                                                                         <span>Min: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
 //                                                                                     }
 //                                                                                     {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum !== null &&
-//                                                                                         <span>  Max: &#8358;{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
+//                                                                                         <span>  Max: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
 //                                                                                     }
 
 //                                                                                     {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun === null &&
@@ -1128,7 +1128,7 @@
 //                                 </Col>
 //                                 <Col>
 //                                   <Form.Label className='block-level'>
-//                                     Fee Balance &#8358;
+//                                     Fee Balance CurCode
 //                                   </Form.Label>
 //                                   <Form.Control
 //                                     type='text'
@@ -1190,7 +1190,7 @@
 //                               <Form.Row>
 //                                 <Col sm={6}>
 //                                   <Form.Label className='block-level'>
-//                                     Penalty Balance (&#8358;){' '}
+//                                     Penalty Balance (CurCode){' '}
 //                                   </Form.Label>
 //                                   <Form.Control
 //                                     type='text'
@@ -1230,7 +1230,7 @@
 //                               <Form.Row>
 //                                 <Col>
 //                                   <Form.Label className='block-level'>
-//                                     Current Oustanding Principal (&#8358;)
+//                                     Current Oustanding Principal (CurCode)
 //                                   </Form.Label>
 //                                   <Form.Control
 //                                     type='text'
@@ -1292,7 +1292,7 @@
 //                               <Form.Row>
 //                                 <Col>
 //                                   <Form.Label className='block-level'>
-//                                     Loan Amount (&#8358;)
+//                                     Loan Amount (CurCode)
 //                                   </Form.Label>
 //                                   <Form.Control
 //                                     type='text'
@@ -1354,7 +1354,7 @@
 //                                       .loanAmountSetting.loanAmountMinimun !==
 //                                       null && (
 //                                       <span>
-//                                         Min: &#8358;
+//                                         Min: CurCode
 //                                         {numberWithCommas(
 //                                           this.selectedLoanProductDetails
 //                                             .loanAmountSetting.loanAmountMinimun
@@ -1366,7 +1366,7 @@
 //                                       null && (
 //                                       <span>
 //                                         {' '}
-//                                         Max: &#8358;
+//                                         Max: CurCode
 //                                         {numberWithCommas(
 //                                           this.selectedLoanProductDetails
 //                                             .loanAmountSetting.loanAmountMaximum

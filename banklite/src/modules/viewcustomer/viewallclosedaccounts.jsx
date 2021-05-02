@@ -88,7 +88,7 @@ class ViewClosedAccounts extends React.Component {
                                                                             </td>
                                                                             <td>Loan</td>
                                                                             <td>{eachAccount.loanStateDescription}</td>
-                                                                            <td>₦{numberWithCommas(eachAccount.loanAmount, true, true)}</td>
+                                                                            <td>{numberWithCommas(eachAccount.loanAmount, true, true)}</td>
                                                                         </tr>
                                                                     ) 
                                                                 }
@@ -112,7 +112,7 @@ class ViewClosedAccounts extends React.Component {
                                                                             </td>
                                                                             <td>Deposit</td>
                                                                             <td>{eachAccount.accountStateDescription}</td>
-                                                                            <td>₦{numberWithCommas(eachAccount.depositAvailableBalance, true, true)}</td>
+                                                                            <td>{numberWithCommas(eachAccount.depositAvailableBalance, true, true)}</td>
                                                                         </tr>
                                                                     ) 
                                                                 }
@@ -132,7 +132,7 @@ class ViewClosedAccounts extends React.Component {
                                                                     </td>
                                                                     <td>Deposit</td>
                                                                     <td>{eachAccount.accountStateDescription}</td>
-                                                                    <td>₦{eachAccount.depositBalance}</td>
+                                                                    <td>{eachAccount.depositBalance}</td>
                                                                 </tr>
                                                                ) 
                                                             })

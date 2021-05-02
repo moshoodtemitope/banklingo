@@ -63,17 +63,6 @@ export class DisburseLoanModal extends React.Component {
         })
     }
 
-    // let changeLoanStateValidationSchema;
-    // if (showDisburseLoanForm !== true && newState !== "repayloan") {
-    //     changeLoanStateValidationSchema = Yup.object().shape({
-    //         comment: Yup.string()
-    //             .min(2, 'Valid comments required'),
-    //         notes: Yup.string()
-    //             .min(2, 'Valid notes required'),
-
-    //     });
-    // }
-
    
     let changeLoanStateValidationSchema   = Yup.object().shape({
             notes: Yup.string()
@@ -102,35 +91,6 @@ export class DisburseLoanModal extends React.Component {
         });
     
 
-    // // if (newState === "repayloan") {
-    //     let changeLoanStateValidationSchema  = Yup.object().shape({
-    //         notes: Yup.string()
-    //             .min(2, 'Valid notes required'),
-    //         txtChannelEncodedKey: Yup.string()
-    //             .required('Required'),
-    //         amountToRepay: Yup.string()
-    //             .required('Required'),
-    //         firstRepaymentDate: Yup.string()
-    //             .when('showFirstRepayment', {
-    //                 is: (value) => value === true,
-    //                 then: Yup.string()
-    //                     .required('Required')
-    //             }),
-    //         backDateChosen: Yup.string()
-    //             .when('allowBackDate', {
-    //                 is: (value) => value === true,
-    //                 then: Yup.string()
-    //                     .required('Required')
-    //             }),
-    //         bookingDateChosen: Yup.string()
-    //             .when('showBookingDate', {
-    //                 is: (value) => value === true,
-    //                 then: Yup.string()
-    //                     .required('Required')
-    //             }),
-
-    //     });
-    // }
 
     return (
         <Modal backdrop="static" show={this.props.showDisbursementModal} onHide={this.props.handleCloseDisbursementModal} size="lg" centered="true" dialogClassName= "modal-40w withcentered-heading" animation={false}>
@@ -161,11 +121,7 @@ export class DisburseLoanModal extends React.Component {
                             bookingDate: values.bookingDateChosen !== "" ? values.bookingDateChosen.toISOString() : null,
                         }
                   
-                     //   changeLoanStatePayload.amount = parseFloat(values.amountToRepay.replace(/,/g, ''));
-                    
-
-
-
+              
                     this.props.handleNewLoanState(changeLoanStatePayload, this.props.newStateUpdate)
                         .then(
                             () => {
@@ -251,13 +207,7 @@ export class DisburseLoanModal extends React.Component {
                                                     {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
                                                         <div className="errormsg"> Unable to load Disbursment channels</div>
                                                     }
-                                                    {/* <Form.Control
-                                                            type="text"
-                                                            onChange={handleChange}
-                                                            value={numberWithCommas(values.collectPrincipalEveryRepayments)}
-                                                            className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid h-38px" : "h-38px"}
-                                                            name="collectPrincipalEveryRepayments" required /> */}
-
+                                                
                                                 </Form.Group>
                                             </Col>
                                             <Col className="date-wrap">

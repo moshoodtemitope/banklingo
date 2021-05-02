@@ -66,9 +66,7 @@ export class WriteOffLoanModal extends React.Component {
         })
     }
 
-    let loanStateValidationSchema;
-
-        loanStateValidationSchema = Yup.object().shape({
+    let loanStateValidationSchema = Yup.object().shape({
             notes: Yup.string()
                 .min(2, 'Valid notes required'),
 
