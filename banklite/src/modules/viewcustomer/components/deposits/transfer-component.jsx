@@ -548,7 +548,7 @@ export class MakeTransferModal extends React.Component {
                                     <div>
                                         <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">{newStateHeading} (CurCode) </Form.Label>
+                                                <Form.Label className="block-level">{newStateHeading}  </Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     autoComplete="off"
@@ -735,7 +735,7 @@ export class MakeTransferModal extends React.Component {
                                             }
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Amount (CurCode)</Form.Label>
+                                                    <Form.Label className="block-level">Amount </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         autoComplete="off"

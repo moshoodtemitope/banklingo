@@ -1183,7 +1183,7 @@ class InitiateDisbursement extends React.Component {
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">Amount</Form.Label>
-                                                    <span className="form-text disabled-field">CurCode{numberWithCommas(postDisbursementpayload.amount, true)}</span>
+                                                    <span className="form-text disabled-field">{numberWithCommas(postDisbursementpayload.amount, true)}</span>
                                                 </Col>
                                                 <Col>
                                                     <Form.Label className="block-level">Narration</Form.Label>
