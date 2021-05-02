@@ -734,7 +734,7 @@ class ManageBankInfo extends React.Component {
 
                     <Col>
                       <Form.Label className='block-level'>
-                        Maximum loan amount (₦)
+                        Maximum loan amount ()
                       </Form.Label>
                       <Form.Control
                         type='text'

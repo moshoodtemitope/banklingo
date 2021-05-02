@@ -133,7 +133,7 @@ export class RepayLoanModal extends React.Component {
     // }
 
     return (
-        <Modal backdrop="static" show={this.props.showRepaymentModal} onHide={this.props.handleCloseRepaymentModal} size="lg" centered="true" dialogClassName= "modal-40w withcentered-heading" animation={false}>
+        <Modal backdrop="static" show={this.props.showRepaymentModal} onHide={this.props.closeModal} size="lg" centered="true" dialogClassName= "modal-40w withcentered-heading" animation={false}>
             <Formik
                 initialValues={{
                     comment: "",
@@ -152,7 +152,7 @@ export class RepayLoanModal extends React.Component {
                 onSubmit={(values, { resetForm }) => {
 
                         let changeLoanStatePayload = {
-                            accountEncodedKey: this.loanEncodedKey,
+                            accountEncodedKey:this.props.loanEncodedKey,
                             notes: values.notes,
                             channelEncodedKey: values.txtChannelEncodedKey,
                             isBackDated: values.allowBackDate,
@@ -176,8 +176,8 @@ export class RepayLoanModal extends React.Component {
 
                                     setTimeout(() => {
                                         this.props.dispatch(loanActions.changeLoanState("CLEAR"))
-                                        this.props.handleLoanChangeStateClose();
-                                        this.props.getCustomerLoanAccountDetails(this.loanEncodedKey);
+                                        this.props.closeModal();
+                                        this.props.getCustomerLoanAccountDetails(this.props.loanEncodedKey);
                                     }, 3000);
                                 }
 

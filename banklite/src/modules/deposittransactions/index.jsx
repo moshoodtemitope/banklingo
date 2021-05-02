@@ -309,6 +309,7 @@ class DepositTransactions extends React.Component {
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                   </tr>
                 </tbody>
               </TableComponent>
@@ -462,6 +463,7 @@ class DepositTransactions extends React.Component {
                               true
                             )}
                           </td>
+                          <td>{eachTransaction.currencyCode}</td>
                           <td>{eachTransaction.key}</td>
                           <td>{eachTransaction.narration}</td>
                           <td>{eachTransaction.userName}</td>
@@ -641,6 +643,7 @@ class DepositTransactions extends React.Component {
                       <th>Deposit Account Number</th>
                       <th>Type</th>
                       <th>Transaction Amount</th>
+                      <th>Currency</th>
                       <th>Transaction ID</th>
                       <th>Narration</th>
                       <th>User Name</th>

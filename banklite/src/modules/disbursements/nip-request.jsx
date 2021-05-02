@@ -378,11 +378,11 @@ class NipRequests extends React.Component {
                         <td>{eachRequest.destinationAccountName}</td>
                         <td>{eachRequest.destinationInstitutionName}</td>
                         <td>
-                          &#x20A6;
+                          
                           {numberWithCommas(eachRequest.amount, true, true)}
                         </td>
                         <td>
-                          &#x20A6;
+                          
                           {numberWithCommas(eachRequest.fee, true, true)}
                         </td>
                         <td>{eachRequest.status}</td>
@@ -562,11 +562,11 @@ class NipRequests extends React.Component {
                           <td>{eachRequest.destinationAccountName}</td>
                           <td>{eachRequest.destinationInstitutionName}</td>
                           <td>
-                            &#x20A6;
+                            
                             {numberWithCommas(eachRequest.amount, true, true)}
                           </td>
                           <td>
-                            &#x20A6;
+                            
                             {numberWithCommas(eachRequest.fee, true, true)}
                           </td>
                           <td>{eachRequest.status}</td>

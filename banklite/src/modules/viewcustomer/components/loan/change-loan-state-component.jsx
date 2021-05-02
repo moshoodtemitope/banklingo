@@ -49,19 +49,19 @@ export class ChangeLoanStateModal extends React.Component {
     let newState =this.props.newState;
     // const {  newState, newStateUpdate } = this.state;
     let changeLoanStateRequest = this.props.changeLoanStateReducer;
-    let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
-        allChannels = [],
-        channelsList;
-    // this.props.dispatch(loanActions.changeLoanState("CLEAR"));
+    // let adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
+    //     allChannels = [],
+    //     channelsList;
+    // // this.props.dispatch(loanActions.changeLoanState("CLEAR"));
 
-    if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
-        && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
-        channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
+    // if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
+    //     && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
+    //     channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
 
-        channelsList.map((channel, id) => {
-            allChannels.push({ label: channel.name, value: channel.encodedKey });
-        })
-    }
+    //     channelsList.map((channel, id) => {
+    //         allChannels.push({ label: channel.name, value: channel.encodedKey });
+    //     })
+    // }
 
     let changeLoanStateValidationSchema
          = Yup.object().shape({
@@ -74,19 +74,19 @@ export class ChangeLoanStateModal extends React.Component {
 
 
     return (
-        <Modal backdrop="static" show={this.props.changeLoanState} onHide={this.props.handleLoanChangeStateClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+        <Modal backdrop="static" show={this.props.changeLoanState} onHide={this.props.closeModal} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
             <Formik
                 initialValues={{
                     comment: "",
-                    showFirstRepayment: false,
-                    allowBackDate: false,
-                    showBookingDate: false,
-                    txtChannelEncodedKey: "",
-                    firstRepaymentDate: "",
-                    backDateChosen: "",
-                    bookingDateChosen: "",
+                    // showFirstRepayment: false,
+                    // allowBackDate: false,
+                    // showBookingDate: false,
+                    // txtChannelEncodedKey: "",
+                    // firstRepaymentDate: "",
+                    // backDateChosen: "",
+                    // bookingDateChosen: "",
                     notes: "",
-                    amountToRepay: ""
+                    // amountToRepay: ""
                 }}
 
                 validationSchema={changeLoanStateValidationSchema}
@@ -94,7 +94,7 @@ export class ChangeLoanStateModal extends React.Component {
 
                     let changeLoanStatePayload = {
                             comment: values.comment,
-                            accountEncodedKey: this.loanEncodedKey
+                            accountEncodedKey: this.props.loanEncodedKey
                         }
                     
 
@@ -115,7 +115,7 @@ export class ChangeLoanStateModal extends React.Component {
 
                                     setTimeout(() => {
                                         this.props.dispatch(loanActions.changeLoanState("CLEAR"))
-                                        this.props.handleLoanChangeStateClose();
+                                        this.props.closeModal();
                                         this.props.getCustomerLoanAccountDetails(this.loanEncodedKey);
                                     }, 3000);
                                 }
@@ -187,7 +187,7 @@ export class ChangeLoanStateModal extends React.Component {
                         </Modal.Body>
                         <Modal.Footer>
 
-                            <Button variant="light" onClick={this.props.handleLoanChangeStateClose}>
+                            <Button variant="light" onClick={this.props.closeModal}>
                                 Cancel
                                 </Button>
                             <Button

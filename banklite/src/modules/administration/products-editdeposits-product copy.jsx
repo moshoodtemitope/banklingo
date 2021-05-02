@@ -449,7 +449,7 @@ class EditADepositsProduct extends React.Component {
                                                                             <span>Flat (CFA)</span>
                                                                         </Col>
                                                                         <Col>
-                                                                            <Form.Label className="block-level">Amount (₦)</Form.Label>
+                                                                            <Form.Label className="block-level">Amount ()</Form.Label>
                                                                             <Form.Control type="text" />
                                                                             <span>CFA</span>
                                                                         </Col>

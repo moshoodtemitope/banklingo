@@ -246,6 +246,7 @@ fetchForEmptyState=()=>{
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
       </tr>
     </tbody>);
     default: return null;
@@ -319,6 +320,7 @@ fetchForBusyState(){
                         true
                       )}
                     </td>
+                    <td>{eachTransaction.currencyCode}</td>
                     <td>{eachTransaction.key}</td>
                     <td width='300'>{eachTransaction.narration}</td>
                     <td>{eachTransaction.userName}</td>
@@ -518,6 +520,7 @@ fetchPageList() {
                     <th>Deposit Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
+                    <th>Currency</th>
                     <th>Transaction ID</th>
                     <th>Narration</th>
                     <th>User Name</th>

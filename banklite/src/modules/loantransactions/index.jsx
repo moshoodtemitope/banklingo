@@ -382,6 +382,7 @@ class LoanTransactions extends React.Component {
                     <th>Loan Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
+                    <th>Currency</th>
                     <th>Transaction ID</th>
                     <th>UserName</th>
                     <th>Narration</th>
@@ -417,6 +418,7 @@ class LoanTransactions extends React.Component {
                               true
                             )}
                           </td>
+                          <td>{eachTransaction.currencyCode}</td>
                           <td>{eachTransaction.userName}</td>
                           <td>{eachTransaction.transactionKey}</td>
                           <td>{eachTransaction.remarks}</td>

@@ -343,7 +343,7 @@ class ProfitAndLoss extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Amount(&#8358;)</th>
+                                        <th>Amount(CurCode)</th>
 
                                     </tr>
                                 </thead>
@@ -367,7 +367,7 @@ class ProfitAndLoss extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Amount(&#8358;) </th>
+                                        <th>Amount(CurCode) </th>
 
                                     </tr>
                                 </thead>
@@ -431,7 +431,7 @@ class ProfitAndLoss extends React.Component {
                                         <tr>
                                             <th>GL Code</th>
                                             <th>Account Name</th>
-                                            <th>Amount(&#8358;)</th>
+                                            <th>Amount(CurCode)</th>
 
                                         </tr>
                                     </thead>
@@ -487,7 +487,7 @@ class ProfitAndLoss extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Amount(&#8358;)</th>
+                                        <th>Amount(CurCode)</th>
 
                                     </tr>
                                 </thead>

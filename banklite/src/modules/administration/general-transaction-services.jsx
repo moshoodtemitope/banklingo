@@ -1364,8 +1364,8 @@ class TransactionServices extends React.Component {
                       <th>Service Name</th>
                       <th>Service Code</th>
                       <th>Commision Calculation</th>
-                      <th>Service Commission (&#x20A6;)</th>
-                      <th>Max Service Commission (&#x20A6;)</th>
+                      <th>Service Commission ()</th>
+                      <th>Max Service Commission ()</th>
                       <th>Service Description</th>
                       <th>Status</th>
                       <th>Date Created</th>

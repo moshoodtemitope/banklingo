@@ -464,7 +464,7 @@ class ManageCustomerWhitelist extends React.Component {
                                         <Form.Row>
 
                                         <Col>
-                                            <Form.Label className="block-level">Amount (₦)</Form.Label>
+                                            <Form.Label className="block-level">Amount ()</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={(e) => {
                                                     if (this.state.updateType !== "edit") {
@@ -822,7 +822,7 @@ class ManageCustomerWhitelist extends React.Component {
                       <Form.Row>
                         <Col>
                           <Form.Label className='block-level'>
-                            Amount (₦)
+                            Amount ()
                           </Form.Label>
                           <Form.Control
                             type='text'
