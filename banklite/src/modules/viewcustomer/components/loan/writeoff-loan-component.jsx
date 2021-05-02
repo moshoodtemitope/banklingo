@@ -75,7 +75,7 @@ export class WriteOffLoanModal extends React.Component {
 
 
     return (
-        <Modal backdrop="static" show={this.props.showWriteOffLoan} onHide={this.props.handleShowWriteOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
+        <Modal backdrop="static" show={this.props.showWriteOffLoan} onHide={this.props.closeModal} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
             <Formik
                 initialValues={{
 
@@ -86,7 +86,7 @@ export class WriteOffLoanModal extends React.Component {
                 onSubmit={(values, { resetForm }) => {
 
                     let changeLoanStatePayload ={
-                        accountEncodedKey:loanDetails.encodedKey,
+                        accountEncodedKey:this.props.loanEncodedKey,
                         clientEncodedKey:this.props.match.params.id,
                         notes:values.notes
                     };
@@ -105,8 +105,8 @@ export class WriteOffLoanModal extends React.Component {
 
                                     setTimeout(() => {
                                         // this.props.dispatch(loanActions.payOffALoan("CLEAR"))
-                                        this.props.getCustomerLoanAccountDetails(this.loanEncodedKey);
-                                        this.props.handleShowWriteOffClose()
+                                        this.props.getCustomerLoanAccountDetails(this.props.loanEncodedKey);
+                                        this.props.closeModal()
                                     }, 5000);
                                 }
 
@@ -198,7 +198,7 @@ export class WriteOffLoanModal extends React.Component {
                         </Modal.Body>
                         <Modal.Footer>
 
-                            <Button variant="light" onClick={this.props.handleShowWriteOffClose}>
+                            <Button variant="light" onClick={this.props.closeModal}>
                                 Cancel
                             </Button>
                             {writeOffALoanRequest.request_status !== loanAndDepositsConstants.WRITEOFF_LOAN_SUCCESS &&

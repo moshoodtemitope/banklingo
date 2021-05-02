@@ -275,6 +275,7 @@ fetchForBusyState(){
                           true
                         )}
                       </td>
+                      <td>{eachTransaction.currencyCode}</td>
                       <td>{eachTransaction.transactionKey}</td>
                       <td>{eachTransaction.userName}</td>
                       <td>{eachTransaction.remarks}</td>
@@ -475,6 +476,7 @@ fetchPageList() {
                                             <th>Account Holder Name</th>
                                             <th>Transaction Type</th>
                                             <th>Transaction Amount</th>
+                                            <th>Currency</th>
                                             <th>Username</th>
                                             <th>Transaction Date</th>
                                             <th>Entry Date</th>

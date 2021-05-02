@@ -107,7 +107,7 @@ export class MakeAccountWithdrawalModal extends React.Component {
    
 
     return(
-        <Modal show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName={"modal-40w withcentered-heading"}  animation={false}>
+        <Modal  backdrop="static"  show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName={"modal-40w withcentered-heading"}  animation={false}>
             <Formik
                 initialValues={{
                     // comment:"",
@@ -132,7 +132,7 @@ export class MakeAccountWithdrawalModal extends React.Component {
                   
                     // if(newStateUpdate === "makewithdrawal"){
                      let   changeDepositStatePayload = {
-                            accountEncodedKey:this.depositEncodedKey,
+                            accountEncodedKey: this.props.depositEncodedKey,
                             notes:values.notes,
                             amount: parseFloat(values.amountToWithdraw.replace(/,/g, '')),
                             channelEncodedKey:values.depositChannelEncodedKey,
@@ -154,7 +154,7 @@ export class MakeAccountWithdrawalModal extends React.Component {
                                     setTimeout(() => {
                                         this.props.dispatch(depositActions.changeDepositState("CLEAR"))
                                         this.handleHideModal();
-                                        this.getCustomerDepositAccountDetails(this.depositEncodedKey);
+                                        this.getCustomerDepositAccountDetails(this.props.depositEncodedKey);
                                     }, 3000);
                                 }
 

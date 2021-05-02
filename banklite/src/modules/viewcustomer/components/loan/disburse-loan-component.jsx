@@ -93,7 +93,7 @@ export class DisburseLoanModal extends React.Component {
 
 
     return (
-        <Modal backdrop="static" show={this.props.showDisbursementModal} onHide={this.props.handleCloseDisbursementModal} size="lg" centered="true" dialogClassName= "modal-40w withcentered-heading" animation={false}>
+        <Modal backdrop="static" show={this.props.showDisbursementModal} onHide={this.props.closeModal} size="lg" centered="true" dialogClassName= "modal-40w withcentered-heading" animation={false}>
             <Formik
                 initialValues={{
                     comment: "",
@@ -112,7 +112,7 @@ export class DisburseLoanModal extends React.Component {
                 onSubmit={(values, { resetForm }) => {
 
                         let changeLoanStatePayload = {
-                            accountEncodedKey: this.loanEncodedKey,
+                            accountEncodedKey: this.props.loanEncodedKey,
                             notes: values.notes,
                             channelEncodedKey: values.txtChannelEncodedKey,
                             isBackDated: values.allowBackDate,
@@ -133,7 +133,7 @@ export class DisburseLoanModal extends React.Component {
                                     setTimeout(() => {
                                         this.props.dispatch(loanActions.changeLoanState("CLEAR"))
                                         this.props.handleLoanChangeStateClose();
-                                        this.props.getCustomerLoanAccountDetails(this.loanEncodedKey);
+                                        this.props.getCustomerLoanAccountDetails(this.props.loanEncodedKey);
                                     }, 3000);
                                 }
 
@@ -332,7 +332,7 @@ export class DisburseLoanModal extends React.Component {
                         </Modal.Body>
                         <Modal.Footer>
 
-                            <Button variant="light" onClick={this.props.handleCloseDisbursementModal}>
+                            <Button variant="light" onClick={this.props.closeModal}>
                                 Cancel
                                 </Button>
                             <Button

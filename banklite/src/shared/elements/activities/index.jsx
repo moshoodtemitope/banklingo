@@ -33,21 +33,15 @@ class ActivitiesBox extends React.Component{
 
     getDashboardActivities = ()=>{
         const {dispatch} = this.props;
-
         let { PageSize, CurrentPage } = this.state;
-
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-
         dispatch(dashboardActions.getLoggedInUserActivitiesData(params));
     }
 
     getClientActivities = ()=>{
         const {dispatch} = this.props;
-
         let { PageSize, CurrentPage } = this.state;
-
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-
         dispatch(clientsActions.getAClientActivities(this.props.clientEncodedKey, params));
     }
 
@@ -178,29 +172,31 @@ class ActivitiesBox extends React.Component{
                         <div className="loading-text">Please wait... </div>
                         <div className="all-activity-items">
                             {
-                                saveRequestData.map((eachActivity, index) => {
-                                    return (
+
+this.renderActivitiesBody(saveRequestData)
+                                // saveRequestData.map((eachActivity, index) => {
+                                //     return (
 
 
 
-                                        <div className="each-activity-item" key={index}>
-                                            <div className="activity-icon">
-                                                <img src={InfoIco} alt="" />
-                                            </div>
-                                            <div className="activity-wrap">
-                                                <div className="action-info">
-                                                    <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
-                                                    <span className="activity-item">{eachActivity.action}</span>
-                                                </div>
-                                                <div className="timing">
-                                                    <span>{eachActivity.creationDate}</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                //         <div className="each-activity-item" key={index}>
+                                //             <div className="activity-icon">
+                                //                 <img src={InfoIco} alt="" />
+                                //             </div>
+                                //             <div className="activity-wrap">
+                                //                 <div className="action-info">
+                                //                     <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
+                                //                     <span className="activity-item">{eachActivity.action}</span>
+                                //                 </div>
+                                //                 <div className="timing">
+                                //                     <span>{eachActivity.creationDate}</span>
+                                //                 </div>
+                                //             </div>
+                                //         </div>
 
 
-                                    )
-                                })
+                                //     )
+                                // })
                             }
                         </div>
                         
@@ -217,29 +213,30 @@ class ActivitiesBox extends React.Component{
                     <div className="each-card-content">
                         <div className="all-activity-items">
                             {
-                                customerActivitiesData.result.map((eachActivity, index) => {
-                                    return (
+                                this.renderActivitiesBody( customerActivitiesData.result)
+                                // customerActivitiesData.result.map((eachActivity, index) => {
+                                //     return (
 
 
 
-                                        <div className="each-activity-item" key={index}>
-                                            <div className="activity-icon">
-                                                <img src={InfoIco} alt="" />
-                                            </div>
-                                            <div className="activity-wrap">
-                                                <div className="action-info">
-                                                    <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
-                                                    <span className="activity-item">{eachActivity.action}</span>
-                                                </div>
-                                                <div className="timing">
-                                                    <span>{eachActivity.creationDate}</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                //         <div className="each-activity-item" key={index}>
+                                //             <div className="activity-icon">
+                                //                 <img src={InfoIco} alt="" />
+                                //             </div>
+                                //             <div className="activity-wrap">
+                                //                 <div className="action-info">
+                                //                     <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
+                                //                     <span className="activity-item">{eachActivity.action}</span>
+                                //                 </div>
+                                //                 <div className="timing">
+                                //                     <span>{eachActivity.creationDate}</span>
+                                //                 </div>
+                                //             </div>
+                                //         </div>
 
 
-                                    )
-                                })
+                                //     )
+                                // })
                             }
                         </div>
                         <div className="pagination-wrap foractivity">
@@ -307,29 +304,30 @@ class ActivitiesBox extends React.Component{
                          <div className="loading-text">Please wait... </div>
                         <div className="all-activity-items">
                             {
-                                saveRequestData.map((eachActivity, index) => {
-                                    return (
+                                this.renderActivitiesBody(saveRequestData)
+                                // saveRequestData.map((eachActivity, index) => {
+                                //     return (
 
 
 
-                                        <div className="each-activity-item" key={index}>
-                                            <div className="activity-icon">
-                                                <img src={InfoIco} alt="" />
-                                            </div>
-                                            <div className="activity-wrap">
-                                                <div className="action-info">
-                                                    <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
-                                                    <span className="activity-item">{eachActivity.action}</span>
-                                                </div>
-                                                <div className="timing">
-                                                    <span>{eachActivity.creationDate}</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                //         <div className="each-activity-item" key={index}>
+                                //             <div className="activity-icon">
+                                //                 <img src={InfoIco} alt="" />
+                                //             </div>
+                                //             <div className="activity-wrap">
+                                //                 <div className="action-info">
+                                //                     <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
+                                //                     <span className="activity-item">{eachActivity.action}</span>
+                                //                 </div>
+                                //                 <div className="timing">
+                                //                     <span>{eachActivity.creationDate}</span>
+                                //                 </div>
+                                //             </div>
+                                //         </div>
 
 
-                                    )
-                                })
+                                //     )
+                                // })
                             }
                         </div>
                     </div>
@@ -345,29 +343,30 @@ class ActivitiesBox extends React.Component{
                     <div className="each-card-content">
                         <div className="all-activity-items">
                             {
-                                customerActivitiesData.result.map((eachActivity, index) => {
-                                    return (
+                                this.renderActivitiesBody( customerActivitiesData.result)
+                                // customerActivitiesData.result.map((eachActivity, index) => {
+                                //     return (
 
 
 
-                                        <div className="each-activity-item" key={index}>
-                                            <div className="activity-icon">
-                                                <img src={InfoIco} alt="" />
-                                            </div>
-                                            <div className="activity-wrap">
-                                                <div className="action-info">
-                                                    <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
-                                                    <span className="activity-item">{eachActivity.action}</span>
-                                                </div>
-                                                <div className="timing">
-                                                    <span>{eachActivity.creationDate}</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                //         <div className="each-activity-item" key={index}>
+                                //             <div className="activity-icon">
+                                //                 <img src={InfoIco} alt="" />
+                                //             </div>
+                                //             <div className="activity-wrap">
+                                //                 <div className="action-info">
+                                //                     <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
+                                //                     <span className="activity-item">{eachActivity.action}</span>
+                                //                 </div>
+                                //                 <div className="timing">
+                                //                     <span>{eachActivity.creationDate}</span>
+                                //                 </div>
+                                //             </div>
+                                //         </div>
 
 
-                                    )
-                                })
+                                //     )
+                                // })
                             }
                         </div>
                         <div className="pagination-wrap foractivity">
@@ -417,11 +416,43 @@ class ActivitiesBox extends React.Component{
         }
     }
 
+    //This section displays the activity body
+renderActivitiesBody=(saveRequestData)=>{
+
+    return saveRequestData?.map((eachActivity, index) => {
+            return (
+
+
+
+                <div className="each-activity-item" key={index}>
+                    <div className="activity-icon">
+                        <img src={InfoIco} alt="" />
+                    </div>
+                    <div className="activity-wrap">
+                        <div className="action-info">
+                                     <span className="activity-item">{eachActivity.action}</span>
+                        </div>
+                        <div className="timing">
+                            <span>{eachActivity.creationDate}</span>
+                            <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
+                  
+                        </div>
+                    </div>
+                </div>
+
+
+            )
+        });
+    
+}
     renderUserActivities =()=>{
         let getAUserActivitiesRequest = this.props.getAUserActivitiesReducer;
         let saveRequestData= getAUserActivitiesRequest.request_data!==undefined?getAUserActivitiesRequest.request_data.tempData:null;
        
         if(getAUserActivitiesRequest.request_status===administrationConstants.GET_A_USER_ACTIVITIES_PENDING){
+           
+           
+           
             if ((saveRequestData === undefined) || (saveRequestData !== undefined && saveRequestData.result !== undefined && saveRequestData.result.length < 1)){
                 return(
                     <div className="each-card-content centered-item">
@@ -434,29 +465,30 @@ class ActivitiesBox extends React.Component{
                          <div className="loading-text">Please wait... </div>
                         <div className="all-activity-items">
                             {
-                                saveRequestData.map((eachActivity, index) => {
-                                    return (
+                                this.renderActivitiesBody(saveRequestData)
+                                // saveRequestData.map((eachActivity, index) => {
+                                //     return (
 
 
 
-                                        <div className="each-activity-item" key={index}>
-                                            <div className="activity-icon">
-                                                <img src={InfoIco} alt="" />
-                                            </div>
-                                            <div className="activity-wrap">
-                                                <div className="action-info">
-                                                    <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
-                                                    <span className="activity-item">{eachActivity.action}</span>
-                                                </div>
-                                                <div className="timing">
-                                                    <span>{eachActivity.creationDate}</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                //         <div className="each-activity-item" key={index}>
+                                //             <div className="activity-icon">
+                                //                 <img src={InfoIco} alt="" />
+                                //             </div>
+                                //             <div className="activity-wrap">
+                                //                 <div className="action-info">
+                                //                     <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
+                                //                     <span className="activity-item">{eachActivity.action}</span>
+                                //                 </div>
+                                //                 <div className="timing">
+                                //                     <span>{eachActivity.creationDate}</span>
+                                //                 </div>
+                                //             </div>
+                                //         </div>
 
 
-                                    )
-                                })
+                                //     )
+                                // })
                             }
                         </div>
                     </div>
@@ -472,29 +504,31 @@ class ActivitiesBox extends React.Component{
                     <div className="each-card-content">
                         <div className="all-activity-items">
                             {
-                                customerActivitiesData.result.map((eachActivity, index) => {
-                                    return (
+
+this.renderActivitiesBody( customerActivitiesData.result)
+                                // customerActivitiesData.result.map((eachActivity, index) => {
+                                //     return (
 
 
 
-                                        <div className="each-activity-item" key={index}>
-                                            <div className="activity-icon">
-                                                <img src={InfoIco} alt="" />
-                                            </div>
-                                            <div className="activity-wrap">
-                                                <div className="action-info">
-                                                    <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
-                                                    <span className="activity-item">{eachActivity.action}</span>
-                                                </div>
-                                                <div className="timing">
-                                                    <span>{eachActivity.creationDate}</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                //         <div className="each-activity-item" key={index}>
+                                //             <div className="activity-icon">
+                                //                 <img src={InfoIco} alt="" />
+                                //             </div>
+                                //             <div className="activity-wrap">
+                                //                 <div className="action-info">
+                                //                     <span className="username"><NavLink to={`/user/${eachActivity.affectedCustomerEncodedKey}`}>{eachActivity.userName}</NavLink></span>
+                                //                     <span className="activity-item">{eachActivity.action}</span>
+                                //                 </div>
+                                //                 <div className="timing">
+                                //                     <span>{eachActivity.creationDate}</span>
+                                //                 </div>
+                                //             </div>
+                                //         </div>
 
 
-                                    )
-                                })
+                                //     )
+                                // })
                             }
                         </div>
                         <div className="pagination-wrap foractivity">

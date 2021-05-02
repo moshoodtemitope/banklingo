@@ -84,70 +84,7 @@ export class SetRecommendedAmountModal extends React.Component {
             })
     }
 
-    // let changeDepositStateValidationSchema;
-    // if(showDepositFundsForm!==true){
-    //     changeDepositStateValidationSchema = Yup.object().shape({
-    //         comment:  Yup.string()
-    //             .min(2, 'Valid comments required'),
-    //         notes:  Yup.string()
-    //             .min(2, 'Valid notes required'),
-
-    //     });
-    // }
-
-    // if(newStateUpdate==="beginmaturity"){
-    //     changeDepositStateValidationSchema = Yup.object().shape({
-    //         notes:  Yup.string()
-    //             .min(2, 'Valid notes required'),
-    //         maturityDate:  Yup.string()
-    //             .required('Required'),
-
-    //     });
-    // }
-
-    // if(showDepositFundsForm===true){
-    //     changeDepositStateValidationSchema = Yup.object().shape({
-    //             notes:  Yup.string()
-    //                 .min(2, 'Valid notes required'),
-    //             depositChannelEncodedKey:  Yup.string()
-    //                 .required('Required'),
-    //             amountToDeposit:  Yup.string()
-    //                 .required('Required'),
-    //             backDateChosen:  Yup.string()
-    //                 .when('allowBackDate',{
-    //                     is:(value)=>value===true,
-    //                     then: Yup.string()
-    //                         .required('Required')
-    //                 }),
-    //             bookingDateChosen:  Yup.string()
-    //                 .when('showBookingDate',{
-    //                     is:(value)=>value===true,
-    //                     then: Yup.string()
-    //                         .required('Required')
-    //                 }),
-
-    //     });
-    // }
-
-    // if(newStateUpdate === "makewithdrawal"){
-    //     changeDepositStateValidationSchema = Yup.object().shape({
-    //             notes:  Yup.string()
-    //                 .min(2, 'Valid notes required'),
-    //             depositChannelEncodedKey:  Yup.string()
-    //                 .required('Required'),
-    //             amountToWithdraw:  Yup.string()
-    //                 .required('Required'),
-    //             backDateChosen:  Yup.string()
-    //                 .when('allowBackDate',{
-    //                     is:(value)=>value===true,
-    //                     then: Yup.string()
-    //                         .required('Required')
-    //                 }),
-
-    //     });
-    // }
-
-    // if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
+  
      let   changeDepositStateValidationSchema = Yup.object().shape({
                 notes:  Yup.string()
                     .min(2, 'Valid notes required'),
@@ -155,37 +92,10 @@ export class SetRecommendedAmountModal extends React.Component {
                     .required('Required'),
 
         });
-    // }
-
-    // if(newStateUpdate === "transfer"){
-    //     if(typeOfTransfer ==="currentcustomer"){
-    //         changeDepositStateValidationSchema = Yup.object().shape({
-    //                 notes:  Yup.string()
-    //                     .min(2, 'Valid notes required'),
-    //                 currentCustomerChosenAccount:  Yup.string()
-    //                     .required('Required'),
-    //                 amountToTransfer:  Yup.string()
-    //                     .required('Required'),
-
-    //         });
-    //     }
-    //     if(typeOfTransfer ==="anothercustomer"){
-    //         changeDepositStateValidationSchema = Yup.object().shape({
-    //                 notes:  Yup.string()
-    //                     .min(2, 'Valid notes required'),
-    //                 chosenAccountNum:  Yup.string()
-    //                     .required('Required'),
-    //                 // chosenCustomerEncodedKey:  Yup.string()
-    //                 //     .required('Required'),
-    //                 amountToTransfer:  Yup.string()
-    //                     .required('Required'),
-
-    //         });
-    //     }
-    // }
+    
 
     return(
-        <Modal show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+        <Modal  backdrop="static"  show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
             <Formik
                 initialValues={{
                     // comment:"",
@@ -207,76 +117,12 @@ export class SetRecommendedAmountModal extends React.Component {
                 validationSchema={changeDepositStateValidationSchema}
                 onSubmit={(values, { resetForm }) => {
 
-                    // let changeDepositStatePayload;
-                    // if(showDepositFundsForm!==true){
-                    //     changeDepositStatePayload = {
-                    //         comment:values.comment,
-                    //         accountEncodedKey:this.depositEncodedKey
-                    //     }
-                    // }
-                    // if(newStateUpdate==="beginmaturity"){
-                    //     changeDepositStatePayload = {
-                    //         notes:values.notes,
-                    //         accountEncodedKey:this.depositEncodedKey,
-                    //         maturityDate: values.maturityDate.toISOString()
-                    //     }
-                    // }
-
-                    // if(showDepositFundsForm===true){
-                    //     changeDepositStatePayload = {
-                    //         accountEncodedKey:this.depositEncodedKey,
-                    //         notes:values.notes,
-                    //         amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
-                    //         channelEncodedKey:values.depositChannelEncodedKey,
-                    //         isBackDated:values.allowBackDate,
-                    //         backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
-                    //         isBookingDate: values.showBookingDate,
-                    //         bookingDate: values.bookingDateChosen!==""? values.bookingDateChosen.toISOString() : null,
-                    //     }
-                    // }
-
-                    // if(newStateUpdate === "makewithdrawal"){
-                    //     changeDepositStatePayload = {
-                    //         accountEncodedKey:this.depositEncodedKey,
-                    //         notes:values.notes,
-                    //         amount: parseFloat(values.amountToWithdraw.replace(/,/g, '')),
-                    //         channelEncodedKey:values.depositChannelEncodedKey,
-                    //         isBackDated:values.allowBackDate,
-                    //         backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
-                    //     }
-                    // }
-
-                    // if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
                       let  changeDepositStatePayload ={
-                            accountEncodedKey:this.depositEncodedKey,
+                            accountEncodedKey: this.props.depositEncodedKey,
                             notes:values.notes,
                             amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
                         }
-                    // }
-
-                    // if(newStateUpdate==="transfer"){
-                    //     changeDepositStatePayload ={
-                    //         accountEncodedKey:this.depositEncodedKey,
-                    //         notes:values.notes,
-                    //         amount: parseFloat(values.amountToTransfer.replace(/,/g, '')),
-                    //     }
-
-                    //     if(typeOfTransfer ==="currentcustomer"){
-                    //         changeDepositStatePayload.destinationCustomerEncodedKey = getAClientDepositAccountRequest.clientEncodedKey
-                    //         changeDepositStatePayload.destinationAccountEncodedKey = values.currentCustomerChosenAccount
-                    //     }
-
-                    //     if(typeOfTransfer ==="anothercustomer"  && selectOtherCustomerAccount!==""){
-                    //         changeDepositStatePayload.destinationCustomerEncodedKey = selectOtherCustomerAccount.clientEncodedKey
-                    //         changeDepositStatePayload.destinationAccountEncodedKey = selectOtherCustomerAccount.searchItemEncodedKey
-                    //     }
-                    // }
-
-                    // let changeDepositStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
-
-
-
-                    // return false;
+                    
 
                     this.props.handleNewDepositState(changeDepositStatePayload,newStateUpdate )
                         .then(
@@ -289,7 +135,7 @@ export class SetRecommendedAmountModal extends React.Component {
                                     setTimeout(() => {
                                         this.props.dispatch(depositActions.changeDepositState("CLEAR"))
                                         this.props.handleHideModal();
-                                        this.props.getCustomerDepositAccountDetails(this.depositEncodedKey);
+                                        this.props.getCustomerDepositAccountDetails(this.props.depositEncodedKey);
                                     }, 3000);
                                 }
 

@@ -3,8 +3,9 @@ export const ClientStateConstants={
 }
 
 export const LoanStateConstants={
-    ALL_LOANS:0,  ACTIVE:1, PENDING_APPROVAL:2, APPROVED:3, REJECTED:4, ACTIVE:5, IN_ARREARS:6, CLOSED:7,CLOSED_WRITTEN_OFF:8,CLOSED_WITHDRAWN:9
+    ALL_LOANS:0,  PARTIAL_APPLICATION:1, PENDING_APPROVAL:2, APPROVED:3, REJECTED:4, ACTIVE:5, IN_ARREARS:6, CLOSED:7,CLOSED_WRITTEN_OFF:8,CLOSED_WITHDRAWN:9
 }
+
 
 export const LoanSubStateConstants={
    All:-1, Pending_1stLevel_Approval:3,Pending_2ndLevel_Approval:4,Pending_Client_Acceptance:6

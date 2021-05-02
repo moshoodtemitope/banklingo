@@ -320,6 +320,7 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed' {...this.props} authed={this.props.user} loanState={LoanStateConstants.CLOSED} component={LoanListDisplay} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-off' {...this.props} authed={this.props.user} loanState={LoanStateConstants.CLOSED_WRITTEN_OFF} component={LoanListDisplay} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-withdrawn' {...this.props} authed={this.props.user} loanState={LoanStateConstants.CLOSED_WITHDRAWN} component={LoanListDisplay} />  
+                        <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/partial-application' {...this.props} authed={this.props.user} loanState={LoanStateConstants.PARTIAL_APPLICATION} component={LoanListDisplay} />  
 
 
                         {/* ALL:0,  
@@ -349,7 +350,11 @@ class AuthenticatedRoutes extends React.Component {
 
                         <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
                         <PrivateRoute accessRequired="bnk_create_loan" exact path='/all-loans/newloan-account/:clientId' {...this.props} authed={this.props.user} component={NewLoanAccount} />  
+
+
                         <PrivateRoute accessRequired="bnk_edit_loan_account" exact path='/all-loans/:clientId/:loanId/edit' {...this.props} authed={this.props.user} component={EditALoanAccount} />  
+
+
                         <PrivateRoute accessRequired="bnk_refinance_loan_account" exact path='/all-loans/:clientId/:loanId/refinance' {...this.props} authed={this.props.user} component={RefinanceALoanAccount} />  
                         <PrivateRoute accessRequired="bnk_reschedule_loan_account" exact path='/all-loans/:clientId/:loanId/reschedule' {...this.props} authed={this.props.user} component={RescheduleALoanAccount} />  
                         

@@ -46,10 +46,11 @@ import { loanAndDepositsConstants } from "../../redux/actiontypes/LoanAndDeposit
 import { LoanPayOffModal } from "./components/loan/pay-off-component";
 import { WriteOffLoanModal } from "./components/loan/writeoff-loan-component";
 import { ChangeLoanStateModal } from "./components/loan/change-loan-state-component";
-import { LoanStateConstants } from "../../redux/actions/clients/client-states-constants";
+import { LoanStateConstants, LoanSubStateConstants } from "../../redux/actions/clients/client-states-constants";
 import { DisburseLoanModal } from "./components/loan/disburse-loan-component";
 import { RepayLoanModal } from "./components/loan/repay-loan-component";
 
+import ReactDOM from 'react-dom';
 class ViewLoanAccount extends React.Component {
   constructor(props) {
     super(props);
@@ -100,6 +101,7 @@ class ViewLoanAccount extends React.Component {
     };
 
     this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
+    this.enforcePermissions();
   }
 
   componentDidMount() {
@@ -2021,27 +2023,34 @@ class ViewLoanAccount extends React.Component {
     return (
       <div>
         <div className="amounts-wrap w-65">
+
+        <div className="eachamount">
+            <h6>Loan Amount</h6>
+            <div className="amounttext">
+              {numberWithCommas(loanAccountData.loanAmount, true)}{" "}
+              {/* {loanAccountData.currencyCode} */}
+            </div>
+          </div>
+{!this.visibility.showNotLoanActiveAmounts && (<div>
           <div className="eachamount">
             <h6>Total Balance</h6>
             <div className="amounttext">
               {numberWithCommas(loanAccountData.totalBalance, true)}{" "}
-              {loanAccountData.currencyCode}
             </div>
           </div>
           <div className="eachamount">
             <h6>Total Due</h6>
             <div className="amounttext">
               {numberWithCommas(loanAccountData.totalDue, true)}{" "}
-              {loanAccountData.currencyCode}
             </div>
           </div>
           <div className="eachamount">
             <h6>Total Paid</h6>
             <div className="amounttext">
               {numberWithCommas(loanAccountData.totalPaid, true)}{" "}
-              {loanAccountData.currencyCode}
             </div>
-          </div>
+          </div></div>
+          )}
           <div className="eachamount">
             <h6>Installments</h6>
             <div className="amounttext">{loanAccountData.installments}</div>
@@ -2073,9 +2082,18 @@ class ViewLoanAccount extends React.Component {
                   <td>{loanAccountData.accountOfficerName}</td>
                 </tr>
                 <tr>
+                  <td>Loan Amount</td>
+                  <td> {numberWithCommas(
+                      loanAccountData.loanAmount,
+                      true,
+                      true
+                    )}</td>
+                </tr>
+                <tr>
                   <td>Currency</td>
                   <td> {loanAccountData.currencyCode}</td>
                 </tr>
+               
                 <tr>
                   <td>First repayment Date</td>
                   <td>{getDateFromISO(loanAccountData.firstRepaymentDate)}</td>
@@ -2099,14 +2117,14 @@ class ViewLoanAccount extends React.Component {
                       true,
                       true
                     )}{" "}
-                    {loanAccountData.currencyCode}
+                    {/* {loanAccountData.currencyCode} */}
                   </td>
                 </tr>
                 <tr>
                   <td>Principal Due</td>
                   <td>
                     {numberWithCommas(loanAccountData.duePrincipal, true, true)}{" "}
-                    {loanAccountData.currencyCode}
+                    {/* {loanAccountData.currencyCode} */}
                   </td>
                 </tr>
                 <tr>
@@ -2127,42 +2145,42 @@ class ViewLoanAccount extends React.Component {
                   <td>Interest Paid</td>
                   <td>
                     {numberWithCommas(loanAccountData.interestPaid, true, true)}{" "}
-                    {loanAccountData.currencyCode}
+                    {/* {loanAccountData.currencyCode} */}
                   </td>
                 </tr>
                 <tr>
                   <td>Interest Due</td>
                   <td>
                     {numberWithCommas(loanAccountData.dueInterest, true, true)}{" "}
-                    {loanAccountData.currencyCode}
+                    {/* {loanAccountData.currencyCode} */}
                   </td>
                 </tr>
                 <tr>
                   <td>Penalty Due</td>
                   <td>
                     {numberWithCommas(loanAccountData.duePenalty, true, true)}{" "}
-                    {loanAccountData.currencyCode}
+                    {/* {loanAccountData.currencyCode} */}
                   </td>
                 </tr>
                 <tr>
                   <td>Penalty Paid</td>
                   <td>
                     {numberWithCommas(loanAccountData.penaltyPaid, true, true)}{" "}
-                    {loanAccountData.currencyCode}
+                    {/* {loanAccountData.currencyCode} */}
                   </td>
                 </tr>
                 <tr>
                   <td>Fee Due</td>
                   <td>
                     {numberWithCommas(loanAccountData.dueFees, true, true)}{" "}
-                    {loanAccountData.currencyCode}
+                    {/* {loanAccountData.currencyCode} */}
                   </td>
                 </tr>
                 <tr>
                   <td>Fee Paid</td>
                   <td>
                     {numberWithCommas(loanAccountData.feePaid, true, true)}{" "}
-                    {loanAccountData.currencyCode}
+                    {/* {loanAccountData.currencyCode} */}
                   </td>
                 </tr>
               </tbody>
@@ -3051,6 +3069,9 @@ class ViewLoanAccount extends React.Component {
   handleCloseDisbursementModal = () =>
     this.setState({ showDisbursementModal: false });
 
+
+
+
   handleNewLoanState = async (changeLoanStatePayload, newStateUpdate) => {
     const { dispatch } = this.props;
 
@@ -3074,11 +3095,7 @@ class ViewLoanAccount extends React.Component {
     this.setState({ showPayOffLoan: true });
   };
 
-  handleWriteOffLoan = async (loanPayload) => {
-    const { dispatch } = this.props;
-
-    await dispatch(loanActions.writeOffALoan(loanPayload));
-  };
+  
 
   handleShowWriteOffClose = () => {
     if (this.props.writeOffALoanReducer.is_request_processing === false) {
@@ -3089,6 +3106,12 @@ class ViewLoanAccount extends React.Component {
   handleShowWriteOffShow = () => {
     this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
     this.setState({ showWriteOffLoan: true });
+  };
+
+  handleWriteOffLoan = async (loanPayload) => {
+    const { dispatch } = this.props;
+
+    await dispatch(loanActions.writeOffALoan(loanPayload));
   };
 
   // payOffLoanBox = (loanDetails) => {
@@ -4066,28 +4089,31 @@ class ViewLoanAccount extends React.Component {
       allUSerPermissions.indexOf("bnk_reschedule_loan_account") > -1;
 
 
+this.permissions={
+    allowEditLoan: allowEditLoan,
+    allowRequestLoanApproval: allowRequestLoanApproval,
+    allowPayOff: allowPayOff,
+    allowWriteOff: allowWriteOff,
+    allowApproveLoan: allowApproveLoan,
+    allowClientAcceptLoan: allowClientAcceptLoan,
+    allowClientAcceptLoan: allowClientAcceptLoan,
+    allowClientRejectOffer: allowClientRejectOffer,
+    allowSecondLevelAproval: allowSecondLevelAproval,
+    allowrejectloan: allowrejectloan,
+    allowRefinanceLoan: allowRefinanceLoan,
+    allowRescheduleLoan:allowRescheduleLoan
+  };
 
-
-    this.setState({
-      allowEditLoan: allowEditLoan,
-      allowRequestLoanApproval: allowRequestLoanApproval,
-      allowPayOff: allowPayOff,
-      allowWriteOff: allowWriteOff,
-      allowApproveLoan: allowApproveLoan,
-      allowClientAcceptLoan: allowClientAcceptLoan,
-      allowClientAcceptLoan: allowClientAcceptLoan,
-      allowClientRejectOffer: allowClientRejectOffer,
-      allowSecondLevelAproval: allowSecondLevelAproval,
-      allowrejectloan: allowrejectloan,
-      allowRefinanceLoan: allowRefinanceLoan,
-      allowRescheduleLoan:allowRescheduleLoan
-    });
+  return this.permissions;
   };
 
   enforceVisibility = (loanDetails) => {
     //ALL_LOANS:0,  ACTIVE:1, PENDING_APPROVAL:2, APPROVED:3, REJECTED:4, ACTIVE:5, IN_ARREARS:6, CLOSED:7,CLOSED_WRITTEN_OFF:8,CLOSED_WITHDRAWN:9
-
+//  All:-1, Pending_1stLevel_Approval:3,Pending_2ndLevel_Approval:4,Pending_Client_Acceptance:6
+//let loanDetails=this.loanDetails;
     let showEdit =
+    
+      loanDetails.loanState === LoanStateConstants.PARTIAL_APPLICATION ||
       loanDetails.loanState === LoanStateConstants.ACTIVE ||
       loanDetails.loanState === LoanStateConstants.IN_ARREARS;
 
@@ -4097,32 +4123,34 @@ class ViewLoanAccount extends React.Component {
 
     let showSetIncomplete =
       loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL;
+
     let showEnterRepayment =
       loanDetails.loanState === LoanStateConstants.ACTIVE ||
       loanDetails.loanState === LoanStateConstants.IN_ARREARS;
 
     let show1stLevelApproveLoan =
       loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL &&
-      loanDetails.loanSubState === 3;
+      loanDetails.loanSubState === LoanSubStateConstants.Pending_1stLevel_Approval;
 
     let showAcceptOffer =
       loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL &&
-      loanDetails.loanSubState === 6;
+      loanDetails.loanSubState === LoanSubStateConstants.Pending_Client_Acceptance;
 
     let showRejectOffer =
       loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL &&
-      loanDetails.loanSubState === 6;
+      loanDetails.loanSubState === LoanSubStateConstants.Pending_Client_Acceptance;
 
     let show2ndLevelApproval =
       loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL &&
-      loanDetails.loanSubState === 4;
+      loanDetails.loanSubState === LoanSubStateConstants.Pending_2ndLevel_Approval;
 
     let showDisburseLoan =
       loanDetails.loanState === LoanStateConstants.APPROVED;
 
     let showCloseOptionsForLoansNotYetActive =
-      loanDetails.loanState === LoanStateConstants.ACTIVE ||
-      loanDetails.loanState === LoanStateConstants.IN_ARREARS;
+    loanDetails.loanState === LoanStateConstants.PARTIAL_APPLICATION ||
+      loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL ||
+      loanDetails.loanState === LoanStateConstants.APPROVED;
 
     // loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL ||
     //   loanDetails.loanState === LoanStateConstants.APPROVED;
@@ -4139,45 +4167,57 @@ class ViewLoanAccount extends React.Component {
       loanDetails.loanState === LoanStateConstants.ACTIVE ||
       loanDetails.loanState === LoanStateConstants.IN_ARREARS;
 
-    let showRequestApproval = loanDetails.loanState === 1;
+    let showRequestApproval = loanDetails.loanState === LoanStateConstants.PARTIAL_APPLICATION;
 
     let showrejectloan =
-      loanDetails.loanState === 1 || loanDetails.loanState === 2;
+      loanDetails.loanState === LoanStateConstants.PARTIAL_APPLICATION || loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL;
 
     let showwithdrawloan =
+    loanDetails.loanState === LoanStateConstants.PARTIAL_APPLICATION ||
       loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL ||
       loanDetails.loanState === LoanStateConstants.APPROVED;
 
-    this.setState({
-      showEdit: showEdit,
-      showApprove: showApprove,
-      showRejectOffer: showRejectOffer,
-      showSetIncomplete: showSetIncomplete,
-      showEnterRepayment: showEnterRepayment,
-      show1stLevelApproveLoan: show1stLevelApproveLoan,
-      show2ndLevelApproval: show2ndLevelApproval,
-      showAcceptOffer: showAcceptOffer,
-      showDisburseLoan: showDisburseLoan,
-      showCloseOptionsForLoansNotYetActive: showCloseOptionsForLoansNotYetActive,
-      showClosedOptionsForActiveLoans: showClosedOptionsForActiveLoans,
-      showPayOff: showPayOff,
-      showWriteOff: showWriteOff,
-      showRequestApproval: showRequestApproval,
-      showrejectloan: showrejectloan,
-      showwithdrawloan: showwithdrawloan,
-    });
+      let showNotLoanActiveAmounts= loanDetails.loanState === LoanStateConstants.PARTIAL_APPLICATION ||
+      loanDetails.loanState === LoanStateConstants.PENDING_APPROVAL ||
+      loanDetails.loanState === LoanStateConstants.APPROVED;
+   
+     
+        this.visibility= {
+            showEdit: showEdit,
+            showApprove: showApprove,
+            showRejectOffer: showRejectOffer,
+            showSetIncomplete: showSetIncomplete,
+            showEnterRepayment: showEnterRepayment,
+            show1stLevelApproveLoan: show1stLevelApproveLoan,
+            show2ndLevelApproval: show2ndLevelApproval,
+            showAcceptOffer: showAcceptOffer,
+            showDisburseLoan: showDisburseLoan,
+            showCloseOptionsForLoansNotYetActive: showCloseOptionsForLoansNotYetActive,
+            showClosedOptionsForActiveLoans: showClosedOptionsForActiveLoans,
+            showPayOff: showPayOff,
+            showWriteOff: showWriteOff,
+            showNotLoanActiveAmounts:showNotLoanActiveAmounts,
+            showRequestApproval: showRequestApproval,
+            showrejectloan: showrejectloan,
+            showwithdrawloan: showwithdrawloan,
+          };
+          return this.visibility;
   };
 
   renderLoanCtas = (loanDetails) => {
-    this.enforcePermissions();
-    this.enforceVisibility(loanDetails);
+   
+   let visibility= this.enforceVisibility(loanDetails);
+
+//    console.log(JSON.stringify(visibility));
+//    console.log(JSON.stringify(this.permissions));
+ 
     return (
       //ShowEdit
       //showApproved
       //show
       <div className="heading-ctas">
         <ul className="nav">
-          {this.state.showEdit && this.state.allowEditLoan && (
+          {visibility.showEdit && this.permissions.allowEditLoan && (
             <li>
               <NavLink
                 className="btn btn-primary btn-sm"
@@ -4187,7 +4227,7 @@ class ViewLoanAccount extends React.Component {
               </NavLink>
             </li>
           )}
-          {this.state.showApprove && this.state.allowApproveLoan && (
+          {visibility.showApprove && this.permissions.allowApproveLoan && (
             <li>
               <Button
                 size="sm"
@@ -4204,7 +4244,7 @@ class ViewLoanAccount extends React.Component {
               </Button>
             </li>
           )}
-          {this.state.showSetIncomplete && (
+          {visibility.showSetIncomplete && (
             <li>
               <Button
                 size="sm"
@@ -4222,7 +4262,7 @@ class ViewLoanAccount extends React.Component {
             </li>
           )}
 
-          {this.state.showEnterRepayment && ( //TODO: Apply permissions for repayment
+          {visibility.showEnterRepayment && ( //TODO: Apply permissions for repayment
             <li>
               <Button
                 size="sm"
@@ -4240,7 +4280,7 @@ class ViewLoanAccount extends React.Component {
               </Button>
             </li>
           )}
-          {this.state.show1stLevelApproveLoan && this.state.allowApproveLoan && (
+          {visibility.show1stLevelApproveLoan && this.permissions.allowApproveLoan && (
             <li>
               <Button
                 size="sm"
@@ -4258,7 +4298,7 @@ class ViewLoanAccount extends React.Component {
               </Button>
             </li>
           )}
-          {this.state.showAcceptOffer && this.state.allowClientAcceptLoan && (
+          {visibility.showAcceptOffer && this.permissions.allowClientAcceptLoan && (
             <li>
               <Button
                 size="sm"
@@ -4276,13 +4316,13 @@ class ViewLoanAccount extends React.Component {
               </Button>
             </li>
           )}
-          {this.state.showAcceptOffer && this.state.allowClientRejectOffer && (
+          {visibility.showAcceptOffer && this.permissions.allowClientRejectOffer && (
             <li>
               <Button
                 size="sm"
                 onClick={() => {
                   this.setState({
-                    newState: "Accept Offer(Customer)",
+                    newState: "Reject Offer(Customer)",
                     newStateUpdate: "reject",
                     ctaText: "Reject Offer(Customer)",
                     showDisburseLoanForm: false,
@@ -4294,8 +4334,8 @@ class ViewLoanAccount extends React.Component {
               </Button>
             </li>
           )}
-          {this.state.show2ndLevelApproval &&
-            this.state.allowSecondLevelAproval && (
+          {visibility.show2ndLevelApproval &&
+            this.permissions.allowSecondLevelAproval && (
               <li>
                 <Button
                   size="sm"
@@ -4313,8 +4353,8 @@ class ViewLoanAccount extends React.Component {
                 </Button>
               </li>
             )}
-          {this.state.showRequestApproval &&
-            this.state.allowRequestLoanApproval && (
+          {visibility.showRequestApproval &&
+            this.permissions.allowRequestLoanApproval && (
               <li>
                 <Button
                   size="sm"
@@ -4332,7 +4372,7 @@ class ViewLoanAccount extends React.Component {
               </li>
             )}
 
-          {this.state.showDisburseLoan && ( //TODO: include permission for loan disbursment
+          {visibility.showDisburseLoan && ( //TODO: include permission for loan disbursment
             <li>
               <Button
                 size="sm"
@@ -4350,7 +4390,7 @@ class ViewLoanAccount extends React.Component {
               </Button>
             </li>
           )}
-          {this.state.showCloseOptionsForLoansNotYetActive && (
+          {visibility.showCloseOptionsForLoansNotYetActive && (
             <li>
               <DropdownButton
                 size="sm"
@@ -4359,7 +4399,7 @@ class ViewLoanAccount extends React.Component {
                 className="customone"
                 alignRight
               >
-                {this.state.showrejectloan && ( // && this.state.allowrejectloan
+                {visibility.showrejectloan && ( // && this.permissions.allowrejectloan
                   <Dropdown.Item
                     eventKey="1"
                     onClick={() => {
@@ -4377,7 +4417,7 @@ class ViewLoanAccount extends React.Component {
                   </Dropdown.Item>
                 )}
 
-                {this.state.showwithdrawloan && (
+                {visibility.showwithdrawloan && (
                   <Dropdown.Item
                     eventKey="2"
                     onClick={() => {
@@ -4393,21 +4433,13 @@ class ViewLoanAccount extends React.Component {
                   </Dropdown.Item>
                 )}
 
-                {/* Connected to pay off component */}
-                {this.state.showPayOff && this.state.allowPayOff && (
-                  <Dropdown.Item eventKey="3">Pay Off</Dropdown.Item>
-                )}
-
-                {/* Connected to write off component */}
-                {this.state.showWriteOff && this.state.allowWriteOff && (
-                  <Dropdown.Item eventKey="4">Write Off</Dropdown.Item>
-                )}
+              
               </DropdownButton>
             </li>
           )}
 
-          {this.state.showClosedOptionsForActiveLoans
-          && (this.state.allowWriteOff || this.state.allowRefinanceLoan || this.state.allowRescheduleLoan || this.state.allowPayOff)
+          {visibility.showClosedOptionsForActiveLoans
+          && (this.permissions.allowWriteOff || this.permissions.allowRefinanceLoan || this.permissions.allowRescheduleLoan || this.permissions.allowPayOff)
           && (
             <li>
               <DropdownButton
@@ -4425,7 +4457,7 @@ class ViewLoanAccount extends React.Component {
                                 // }}
                                 >Write off Loan</Dropdown.Item> */}
                 {
-                 this.state.allowWriteOff && (
+                 this.permissions.allowWriteOff && (
                     <div
                       className="dropdown-item with-botom"
                       onClick={() => this.handleShowWriteOffShow()}
@@ -4436,7 +4468,7 @@ class ViewLoanAccount extends React.Component {
                   // Writeoff loan is done
                 }
                 {/* <Dropdown.Item eventKey="1"> */}
-                {this.state.allowRefinanceLoan && (
+                {this.permissions.allowRefinanceLoan && (
                   <NavLink
                     className="dropdown-item"
                     to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/refinance`}
@@ -4446,7 +4478,7 @@ class ViewLoanAccount extends React.Component {
                 )}
                 {/* </Dropdown.Item> */}
                 {/* <Dropdown.Item eventKey="1"> */}
-                {this.state.allowRescheduleLoan && (
+                {this.permissions.allowRescheduleLoan && (
                   <NavLink
                     className="dropdown-item"
                     to={`/all-loans/${loanDetails.clientKey}/${this.loanEncodedKey}/reschedule`}
@@ -4456,7 +4488,7 @@ class ViewLoanAccount extends React.Component {
                 )}
                 {/* </Dropdown.Item> */}
                 {/* <Dropdown.Item eventKey="1" onClick={()=>this.handleShowPayOffShow()} >Pay-off Loan</Dropdown.Item> */}
-                {this.state.allowPayOff && (
+                {this.permissions.allowPayOff && (
                   <div
                     className="dropdown-item with-top"
                     onClick={() => this.handleShowPayOffShow()}
@@ -4489,23 +4521,25 @@ class ViewLoanAccount extends React.Component {
     ) {
       return (
         <div className="row">
-          (
+          
           <LoanPayOffModal
             {...this.props}
+            loanEncodedKey= {this.loanEncodedKey}
             loanDetails={
               getAClientLoanAccountRequest.request_data.response.data
             }
-            handleShowPayOffClose={this.handleShowPayOffClose}
+            closeModal={this.handleShowPayOffClose}
             handlePayOffLoan={this.handlePayOffLoan}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
             showPayOffLoan={this.state.showPayOffLoan}
           />
           <WriteOffLoanModal
             {...this.props}
+            loanEncodedKey= {this.loanEncodedKey}
             loanDetails={
               getAClientLoanAccountRequest.request_data.response.data
             }
-            handleShowWriteOffClose={this.handleShowWriteOffClose}
+            closeModal={this.handleShowWriteOffClose}
             handleWriteOffLoan={this.handleWriteOffLoan}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
             showWriteOffLoan={this.state.showWriteOffLoan}
@@ -4513,42 +4547,49 @@ class ViewLoanAccount extends React.Component {
           {/* {this.payOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)} */}
           <ChangeLoanStateModal
             {...this.props}
+            loanEncodedKey= {this.loanEncodedKey}
             loanDetails={
               getAClientLoanAccountRequest.request_data.response.data
             }
             newStateUpdate={this.state.newStateUpdate}
             newState={this.state.newState}
-            handleLoanChangeStateClose={this.handleLoanChangeStateClose}
+            closeModal={this.handleLoanChangeStateClose}
+            handleNewLoanState={this.handleNewLoanState}
             changeLoanState={this.state.changeLoanState}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
           />
+
           <RepayLoanModal
             {...this.props}
+            loanEncodedKey= {this.loanEncodedKey}
             loanDetails={
               getAClientLoanAccountRequest.request_data.response.data
             }
             newStateUpdate={this.state.newStateUpdate}
             newState={this.state.newState}
             ctaText={this.state.ctaText}
-            handleCloseRepaymentModal={this.handleCloseRepaymentModal}
+            closeModal={this.handleCloseRepaymentModal}
+            handleNewLoanState={this.handleNewLoanState}
+            
             showRepaymentModal={this.state.showRepaymentModal}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
           />
 
           <DisburseLoanModal
             {...this.props}
+            loanEncodedKey= {this.loanEncodedKey}
             loanDetails={
               getAClientLoanAccountRequest.request_data.response.data
             }
             newStateUpdate={this.state.newStateUpdate}
             newState={this.state.newState}
             ctaText={this.state.ctaText}
-            handleCloseDisbursementModal={this.handleCloseDisbursementModal}
+            closeModal={this.handleCloseDisbursementModal}
+            handleNewLoanState={this.handleNewLoanState}
             showDisbursementModal={this.state.showDisbursementModal}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
           />
-          {/* {this.writeOffLoanBox(getAClientLoanAccountRequest.request_data.response.data)} */}
-          {/* {this.changeLoanStateBox(getAClientLoanAccountRequest.request_data.response.data)} */}
+
           <div className="col-sm-12">
             <div className="middle-content">
               <div className="customerprofile-tabs">

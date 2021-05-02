@@ -97,7 +97,7 @@ export class SetMaximumWithdrawalModal extends React.Component {
         });
    
     return(
-        <Modal show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
+        <Modal  backdrop="static" show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
             <Formik
                 initialValues={{
                     comment:"",
@@ -117,7 +117,7 @@ export class SetMaximumWithdrawalModal extends React.Component {
                 onSubmit={(values, { resetForm }) => {
 
                       let  changeDepositStatePayload ={
-                            accountEncodedKey:this.depositEncodedKey,
+                            accountEncodedKey: this.props.depositEncodedKey,
                             notes:values.notes,
                             amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
                         }
@@ -134,7 +134,7 @@ export class SetMaximumWithdrawalModal extends React.Component {
                                     setTimeout(() => {
                                         this.props.dispatch(depositActions.changeDepositState("CLEAR"))
                                         this.props.handleHideModal();
-                                        this.props.getCustomerDepositAccountDetails(this.depositEncodedKey);
+                                        this.props.getCustomerDepositAccountDetails(this.props.depositEncodedKey);
                                     }, 3000);
                                 }
 

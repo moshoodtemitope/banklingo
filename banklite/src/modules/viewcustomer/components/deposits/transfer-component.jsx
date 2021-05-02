@@ -196,7 +196,7 @@ export class MakeTransferModal extends React.Component {
     // }
 
     return(
-        <Modal show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName={showDepositFundsForm!==true?"modal-40w withcentered-heading": "modal-50w withcentered-heading"}  animation={false}>
+        <Modal  backdrop="static"  show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName={showDepositFundsForm!==true?"modal-40w withcentered-heading": "modal-50w withcentered-heading"}  animation={false}>
             <Formik
                 initialValues={{
                     comment:"",
@@ -211,63 +211,15 @@ export class MakeTransferModal extends React.Component {
                     amountToDeposit:"",
                     currentCustomerChosenAccount:"",
                     amountToTransfer:"",
-                    // chosenAccountNum:selectOtherCustomerAccount!==""?selectOtherCustomerAccount.searchItemEncodedKey:"",
-                    // chosenCustomerEncodedKey:selectOtherCustomerAccount!==""?selectOtherCustomerAccount.clientEncodedKey:""
+                    
                 }}
 
                 validationSchema={changeDepositStateValidationSchema}
                 onSubmit={(values, { resetForm }) => {
 
-                    // let changeDepositStatePayload;
-                    // if(showDepositFundsForm!==true){
-                    //     changeDepositStatePayload = {
-                    //         comment:values.comment,
-                    //         accountEncodedKey:this.depositEncodedKey
-                    //     }
-                    // }
-                    // if(newStateUpdate==="beginmaturity"){
-                    //     changeDepositStatePayload = {
-                    //         notes:values.notes,
-                    //         accountEncodedKey:this.depositEncodedKey,
-                    //         maturityDate: values.maturityDate.toISOString()
-                    //     }
-                    // }
-
-                    // if(showDepositFundsForm===true){
-                    //     changeDepositStatePayload = {
-                    //         accountEncodedKey:this.depositEncodedKey,
-                    //         notes:values.notes,
-                    //         amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
-                    //         channelEncodedKey:values.depositChannelEncodedKey,
-                    //         isBackDated:values.allowBackDate,
-                    //         backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
-                    //         isBookingDate: values.showBookingDate,
-                    //         bookingDate: values.bookingDateChosen!==""? values.bookingDateChosen.toISOString() : null,
-                    //     }
-                    // }
-
-                    // if(newStateUpdate === "makewithdrawal"){
-                    //     changeDepositStatePayload = {
-                    //         accountEncodedKey:this.depositEncodedKey,
-                    //         notes:values.notes,
-                    //         amount: parseFloat(values.amountToWithdraw.replace(/,/g, '')),
-                    //         channelEncodedKey:values.depositChannelEncodedKey,
-                    //         isBackDated:values.allowBackDate,
-                    //         backDateValueDate: values.backDateChosen!==""? values.backDateChosen.toISOString():null,
-                    //     }
-                    // }
-
-                    // if(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount"){
-                    //     changeDepositStatePayload ={
-                    //         accountEncodedKey:this.depositEncodedKey,
-                    //         notes:values.notes,
-                    //         amount: parseFloat(values.amountToDeposit.replace(/,/g, '')),
-                    //     }
-                    // }
-
-                    // if(newStateUpdate==="transfer"){
+                   
                        let changeDepositStatePayload ={
-                            accountEncodedKey:this.depositEncodedKey,
+                            accountEncodedKey:this.props.depositEncodedKey,
                             notes:values.notes,
                             amount: parseFloat(values.amountToTransfer.replace(/,/g, '')),
                         }
@@ -281,14 +233,7 @@ export class MakeTransferModal extends React.Component {
                             changeDepositStatePayload.destinationCustomerEncodedKey = selectOtherCustomerAccount.clientEncodedKey
                             changeDepositStatePayload.destinationAccountEncodedKey = selectOtherCustomerAccount.searchItemEncodedKey
                         }
-                    // }
-
-                    // let changeDepositStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
-
-
-
-                    // return false;
-
+                   
                     this.props.handleNewDepositState(changeDepositStatePayload,newStateUpdate )
                         .then(
                             () => {
@@ -300,7 +245,7 @@ export class MakeTransferModal extends React.Component {
                                     setTimeout(() => {
                                         this.props.dispatch(depositActions.changeDepositState("CLEAR"))
                                         this.handleHideModal();
-                                        this.getCustomerDepositAccountDetails(this.depositEncodedKey);
+                                        this.getCustomerDepositAccountDetails(this.props.depositEncodedKey);
                                     }, 3000);
                                 }
 
