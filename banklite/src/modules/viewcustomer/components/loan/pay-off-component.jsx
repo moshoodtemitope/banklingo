@@ -86,7 +86,7 @@ export class LoanPayOffModal extends React.Component {
 
 
     return (
-        <Modal show={this.props.showPayOffLoan} onHide={this.props.handleShowPayOffClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
+        <Modal backdrop="static" show={this.props.showPayOffLoan} onHide={this.props.closeModal} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={false}>
             <Formik initialValues={{
                     txtChannelEncodedKey: "",
                     notes: "",
@@ -96,7 +96,7 @@ export class LoanPayOffModal extends React.Component {
                 onSubmit={(values, { resetForm }) => {
 
                     let changeLoanStatePayload ={
-                        accountEncodedKey:loanDetails.encodedKey,
+                        accountEncodedKey:this.props.loanEncodedKey,
                         clientEncodedKey:this.props.match.params.id,
                         channelEncodedKey:values.txtChannelEncodedKey,
                         notes:values.notes
@@ -116,8 +116,8 @@ export class LoanPayOffModal extends React.Component {
 
                                     setTimeout(() => {
                                         // this.props.dispatch(loanActions.payOffALoan("CLEAR"))
-                                        this.props.getCustomerLoanAccountDetails(this.loanEncodedKey);
-                                        this.props.handleShowPayOffClose();
+                                        this.props.getCustomerLoanAccountDetails(this.props.loanEncodedKey);
+                                        this.props.closeModal();
                                     }, 3000);
                                 }
 
@@ -222,7 +222,7 @@ export class LoanPayOffModal extends React.Component {
                         </Modal.Body>
                         <Modal.Footer>
 
-                            <Button variant="light" onClick={this.props.handleShowPayOffClose}>
+                            <Button variant="light" onClick={this.props.closeModal}>
                                 Cancel
                             </Button>
                             {payOffALoanRequest.request_status !== loanAndDepositsConstants.PAYOFF_LOAN_SUCCESS &&

@@ -28,8 +28,6 @@ import {accountingConstants} from '../../redux/actiontypes/accounting/accounting
 import {administrationActions} from '../../redux/actions/administration/administration.action';
 import {administrationConstants} from '../../redux/actiontypes/administration/administration.constants'
 import {branchActions, branchConstants} from '../../redux/actions/administration/branch-management.actions';
-
-// import {branchActions,branchConstants} from '../../redux/actions/administration/branch-management.actions';
 import Alert from 'react-bootstrap/Alert'
 import "./accountsmanagement.scss"; 
 import AccountingNav from './_menu'
@@ -345,7 +343,7 @@ class ProfitAndLoss extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Amount(&#8358;)</th>
+                                        <th>Amount(CurCode)</th>
 
                                     </tr>
                                 </thead>
@@ -369,7 +367,7 @@ class ProfitAndLoss extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Amount(&#8358;) </th>
+                                        <th>Amount(CurCode) </th>
 
                                     </tr>
                                 </thead>
@@ -433,7 +431,7 @@ class ProfitAndLoss extends React.Component {
                                         <tr>
                                             <th>GL Code</th>
                                             <th>Account Name</th>
-                                            <th>Amount(&#8358;)</th>
+                                            <th>Amount(CurCode)</th>
 
                                         </tr>
                                     </thead>
@@ -489,7 +487,7 @@ class ProfitAndLoss extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Amount(&#8358;)</th>
+                                        <th>Amount(CurCode)</th>
 
                                     </tr>
                                 </thead>

@@ -38,6 +38,11 @@ export const LOAN_MODULE_MENU_LINKS = [
     exact: false,
   },
   {
+    label: 'Partial Applications',
+    url: '/all-loans/partial-application',
+    exact: false,
+  },
+  {
     label: 'Pending Approval',
     url: '/all-loans/pending',
     exact: false,

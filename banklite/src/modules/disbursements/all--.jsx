@@ -219,7 +219,7 @@ class DisbursementManagement extends React.Component {
                             <span className='form-text disabled-field'>
                               {eachInfo.value !== '' && eachInfo.value !== null
                                 ? eachInfo.key === 'Amount'
-                                  ? `₦${numberWithCommas(eachInfo.value, true)}`
+                                  ? `${numberWithCommas(eachInfo.value, true)}`
                                   : eachInfo.value
                                 : 'N/A'}
                             </span>

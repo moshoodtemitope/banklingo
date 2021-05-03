@@ -100,7 +100,7 @@ class ViewClosedAccount extends React.Component {
                                                         </tr>
                                                         <tr>
                                                             <td>Currency</td>
-                                                            <td>₦ NGN</td>
+                                                            <td> NGN</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Activation Date</td>
@@ -116,27 +116,27 @@ class ViewClosedAccount extends React.Component {
                                                     <tbody>
                                                         <tr>
                                                             <td>Principal Balance</td>
-                                                            <td>₦1,019,000.00</td>
+                                                            <td>1,019,000.00</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Interest Balance</td>
-                                                            <td>₦317,928.00</td>
+                                                            <td>317,928.00</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Interest Accrued</td>
-                                                            <td>₦18,545.80</td>
+                                                            <td>18,545.80</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Fee Balance</td>
-                                                            <td>₦0.00</td>
+                                                            <td>0.00</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Penalty Balance</td>
-                                                            <td>₦0.00</td>
+                                                            <td>0.00</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Principal Due</td>
-                                                            <td>₦679,333.36</td>
+                                                            <td>679,333.36</td>
                                                         </tr>
                                                     </tbody>
                                                 </TableComponent>
@@ -161,41 +161,41 @@ class ViewClosedAccount extends React.Component {
                                                 <tr>
                                                     <td>1</td>
                                                     <td>25-03-2019 00:00:00</td>
-                                                    <td>₦84,916.67</td>
-                                                    <td>₦39,741.00</td>
+                                                    <td>84,916.67</td>
+                                                    <td>39,741.00</td>
                                                     <td>-</td>
                                                     <td>-</td>
-                                                    <td>₦124,657.67</td>
+                                                    <td>124,657.67</td>
                                                     <td>Late</td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
                                                     <td>25-03-2019 00:00:00</td>
-                                                    <td>₦84,916.67</td>
-                                                    <td>₦39,741.00</td>
+                                                    <td>84,916.67</td>
+                                                    <td>39,741.00</td>
                                                     <td>-</td>
                                                     <td>-</td>
-                                                    <td>₦124,657.67</td>
+                                                    <td>124,657.67</td>
                                                     <td>Pending</td>
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
                                                     <td>25-03-2019 00:00:00</td>
-                                                    <td>₦84,916.67</td>
-                                                    <td>₦39,741.00</td>
+                                                    <td>84,916.67</td>
+                                                    <td>39,741.00</td>
                                                     <td>-</td>
                                                     <td>-</td>
-                                                    <td>₦124,657.67</td>
+                                                    <td>124,657.67</td>
                                                     <td>Pending</td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
                                                     <td>Total</td>
-                                                    <td>₦1,019,000.00	</td>
-                                                    <td>₦476,892.00	</td>
+                                                    <td>1,019,000.00	</td>
+                                                    <td>476,892.00	</td>
                                                     <td>-</td>
                                                     <td>-</td>
-                                                    <td>₦124,657.67</td>
+                                                    <td>124,657.67</td>
                                                     <td></td>
                                                 </tr>
                                             </tbody>
@@ -231,30 +231,30 @@ class ViewClosedAccount extends React.Component {
                                                     <td>1346858</td>
                                                     <td>25-03-2019 00:00:00</td>
                                                     <td>Disbursement</td>
-                                                    <td>₦1,000,000.00</td>
-                                                    <td>₦1,019,000.00</td>
-                                                    <td>₦0.00</td>
-                                                    <td>₦1,019,000.00</td>
+                                                    <td>1,000,000.00</td>
+                                                    <td>1,019,000.00</td>
+                                                    <td>0.00</td>
+                                                    <td>1,019,000.00</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mayokun Malomo</td>
                                                     <td>1346858</td>
                                                     <td>25-03-2019 00:00:00</td>
                                                     <td>Interest Applied</td>
-                                                    <td>₦1,000,000.00</td>
-                                                    <td>₦1,019,000.00</td>
-                                                    <td>₦-373,973.01</td>
-                                                    <td>₦1,019,000.00</td>
+                                                    <td>1,000,000.00</td>
+                                                    <td>1,019,000.00</td>
+                                                    <td>-373,973.01</td>
+                                                    <td>1,019,000.00</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mayokun Malomo</td>
                                                     <td>1346858</td>
                                                     <td>25-03-2019 00:00:00</td>
                                                     <td>Interest Applied</td>
-                                                    <td>₦1,000,000.00</td>
-                                                    <td>₦1,019,000.00</td>
-                                                    <td>₦-373,973.01</td>
-                                                    <td>₦1,019,000.00</td>
+                                                    <td>1,000,000.00</td>
+                                                    <td>1,019,000.00</td>
+                                                    <td>-373,973.01</td>
+                                                    <td>1,019,000.00</td>
                                                 </tr>
                                             </tbody>
                                         </TableComponent>
@@ -263,7 +263,7 @@ class ViewClosedAccount extends React.Component {
                                         <div className="amounts-wrap">
                                             <div className="eachamount">
                                                 <h6>Amount Guaranteed</h6>
-                                                <div className="amounttext">₦0.00</div>
+                                                <div className="amounttext">0.00</div>
                                             </div>
                                             <div className="eachamount">
                                                 <h6>Outstanding Principal Guaranteed</h6>

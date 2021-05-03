@@ -228,9 +228,11 @@ class NewClient extends React.Component {
 
       // console.log("+++++",allCustomerTypesData);
       let selectedCustype = allCustomerTypesData.filter(
-        (CustType) => CustType.encodedKey === this.props.match.params.custTypeid
+        (CustType) => CustType.encodedKey === this.props.match?.params?.custTypeid
       )[0];
+
       let daysWrap = [];
+
       for (var i = 1; i <= 31; i++) {
         daysWrap.push(
           <option key={i} value={i}>
@@ -439,8 +441,9 @@ class NewClient extends React.Component {
                   {selectedCustype && (
                     <span className='form-text'>{selectedCustype.name}</span>
                   )}
-                  {/* <Select
-                                                            options={allCustomerTypes}
+                   {!selectedCustype && (<Select
+
+                                                            options={allCustomerTypesData}
                                                             onChange={(selectedCustType) => {
                                                                 this.setState({ selectedCustType });
                                                                 errors.custType = null
@@ -451,10 +454,11 @@ class NewClient extends React.Component {
                                                             name="custType"
                                                             // value={values.currencyCode}
                                                             required
-                                                        />
+                                                        />)}
+                                                    
                                                         {errors.custType && touched.custType ? (
                                                                 <span className="invalid-feedback">{errors.custType}</span>
-                                                        ) : null} */}
+                                                        ) : null}
                 </Col>
               </Form.Row>
               <Form.Row>

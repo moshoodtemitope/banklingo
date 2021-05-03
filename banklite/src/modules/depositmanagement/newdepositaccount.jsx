@@ -491,7 +491,7 @@ class NewDepositAccount extends React.Component {
                                                                         <Col sm={6}>
                                                                             <Form.Label className="block-level">Opening Balance</Form.Label>
                                                                             { this.selectedDepositProductDetails &&
-                                                                                <span className="form-text">Min: {this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance!==null?`₦${numberWithCommas(this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString())}`:"N/A"}
+                                                                                <span className="form-text">Min: {this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance!==null?`${numberWithCommas(this.selectedDepositProductDetails.depositFixedSettingModel.defaultOpeningBalance.toString())}`:"N/A"}
                                                                                 </span>
                                                                             }
                                                                         </Col>

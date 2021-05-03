@@ -778,8 +778,8 @@ class JournalEntries extends React.Component {
                     <th>Booking Date (Entry Date)</th>
                     <th>GL Account Name</th>
                     <th>GL Code</th>
-                    <th>Debit Amount (&#8358;)</th>
-                    <th>Credit Amount (&#8358;)</th>
+                    <th>Debit Amount (CurCode)</th>
+                    <th>Credit Amount (CurCode)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -898,8 +898,8 @@ class JournalEntries extends React.Component {
                     <th>Booking Date (Entry Date)</th>
                     <th>GL Account Name</th>
                     <th>GL Code</th>
-                    <th>Debit Amount (&#8358;)</th>
-                    <th>Credit Amount (&#8358;)</th>
+                    <th>Debit Amount (CurCode)</th>
+                    <th>Credit Amount (CurCode)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1208,8 +1208,8 @@ class JournalEntries extends React.Component {
                       <th>Booking Date (Entry Date)</th>
                       <th>GL Account Name</th>
                       <th>GL Code</th>
-                      <th>Debit Amount (&#8358;)</th>
-                      <th>Credit Amount (&#8358;)</th>
+                      <th>Debit Amount (CurCode)</th>
+                      <th>Credit Amount (CurCode)</th>
                     </tr>
                   </thead>
                   <tbody>

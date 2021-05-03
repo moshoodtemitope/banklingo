@@ -281,6 +281,7 @@ retrieveFromApi = (tempData)=>{
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
       </tr>
     </tbody>);
     default: return  null;
@@ -378,6 +379,7 @@ fetchForDataState=()=> {
                 </td>
                 <td>{eachDeposit.productName}</td>
                 <td>{eachDeposit.productTypeDescription}</td>
+                <td>{eachDeposit.currencyCode}</td>
                 <td>
                   {numberWithCommas(
                     eachDeposit.depositBalance,
@@ -559,6 +561,7 @@ fetchForDataState=()=> {
             <th>Account Holder Name</th>
             <th>Product</th>
             <th>Product Type</th>
+            <th>Currency</th>
             <th>Deposit Balance</th>
             <th>Account State</th>
             <th>Date Created</th>
