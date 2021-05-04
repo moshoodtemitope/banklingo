@@ -355,6 +355,11 @@ class CreateNewUser extends React.Component {
                                         setTimeout(() => {
                                             this.props.dispatch(administrationActions.createUser("CLEAR"));
                                             resetForm();
+                                            this.selectBranchesToAdd = [];
+                                            this.selectBranchesList = [];
+                                    
+                                            this.selectTxtnLimitsToAdd = [];
+                                            this.selectTxtnLimitsList = [];
                                             values.roleId = null;
                                         }, 3000);
                                     } else {

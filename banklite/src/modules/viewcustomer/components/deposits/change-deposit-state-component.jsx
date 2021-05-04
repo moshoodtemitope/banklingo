@@ -24,10 +24,7 @@ import { depositActions } from "../../../../redux/actions/deposits/deposits.acti
 export class ChangeDepositStateModal extends React.Component {
   constructor(props) {
     super(props);
-    // this.clientEncodedKey = this.props.match.params.id;
-    // this.state = {
-      // showModal:false,
-    // };
+    
   }
 
   componentDidMount() {
@@ -65,10 +62,7 @@ export class ChangeDepositStateModal extends React.Component {
                                 comment:values.comment,
                                 accountEncodedKey:this.props.depositEncodedKey
                             }
-                      
-
-                       
-
+                  
                         // return false;
 
                         this.props.handleNewDepositState(changeDepositStatePayload,this.props.newStateUpdate )
