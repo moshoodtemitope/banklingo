@@ -1217,7 +1217,7 @@ class RefinanceALoanAccount extends React.Component {
                             <Form.Row>
                               <Col>
                                 <Form.Label className='block-level'>
-                                  Interest Balance (CurCode)
+                                  Interest Balance 
                                 </Form.Label>
                                 <Form.Control
                                   type='text'
@@ -1303,12 +1303,12 @@ class RefinanceALoanAccount extends React.Component {
                                 />
                                 <span className='input-helptext form-text'>
                                   {/* {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun !== null &&
-                                                                                    <span>Min: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+                                                                                    <span>Min: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
                                                                                 } */}
                                   {loanData.outstandingInterest !== null && (
                                     <span>
                                       {' '}
-                                      Min: CurCode
+                                      Min: 
                                       {numberWithCommas(
                                         loanData.outstandingInterest,
                                         true
@@ -1331,7 +1331,7 @@ class RefinanceALoanAccount extends React.Component {
                               </Col>
                               <Col>
                                 <Form.Label className='block-level'>
-                                  Fee Balance CurCode
+                                  Fee Balance 
                                 </Form.Label>
                                 <Form.Control
                                   type='text'
@@ -1388,12 +1388,12 @@ class RefinanceALoanAccount extends React.Component {
 
                                 <span className='input-helptext form-text'>
                                   {/* {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun !== null &&
-                                                                                    <span>Min: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+                                                                                    <span>Min: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
                                                                                 } */}
                                   {loanData.outstandingFees !== null && (
                                     <span>
                                       {' '}
-                                      Min: CurCode
+                                      Min: 
                                       {numberWithCommas(
                                         loanData.outstandingFees,
                                         true
@@ -1419,7 +1419,7 @@ class RefinanceALoanAccount extends React.Component {
                             <Form.Row>
                               <Col sm={6}>
                                 <Form.Label className='block-level'>
-                                  Penalty Balance (CurCode){' '}
+                                  Penalty Balance {' '}
                                 </Form.Label>
                                 <Form.Control
                                   type='text'
@@ -1476,12 +1476,12 @@ class RefinanceALoanAccount extends React.Component {
                                 />
                                 <span className='input-helptext form-text'>
                                   {/* {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun !== null &&
-                                                                                    <span>Min: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+                                                                                    <span>Min: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
                                                                                 } */}
                                   {loanData.outstandingPenalty !== null && (
                                     <span>
                                       {' '}
-                                      Min: CurCode
+                                      Min: 
                                       {numberWithCommas(
                                         loanData.outstandingPenalty,
                                         true
@@ -1504,7 +1504,7 @@ class RefinanceALoanAccount extends React.Component {
                               </Col>
                               <Col>
                                 <Form.Label className='block-level'>
-                                  Current Oustanding Principal (CurCode)
+                                  Current Oustanding Principal 
                                 </Form.Label>
                                 <Form.Control
                                   type='text'
@@ -1563,12 +1563,12 @@ class RefinanceALoanAccount extends React.Component {
 
                                 <span className='input-helptext form-text'>
                                   {/* {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun !== null &&
-                                                                                    <span>Min: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+                                                                                    <span>Min: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
                                                                                 } */}
                                   {loanData.outstandingPrincipal !== null && (
                                     <span>
                                       {' '}
-                                      Min: CurCode
+                                      Min: 
                                       {numberWithCommas(
                                         loanData.outstandingPrincipal,
                                         true
@@ -1609,7 +1609,7 @@ class RefinanceALoanAccount extends React.Component {
                             <Form.Row>
                               <Col>
                                 <Form.Label className='block-level'>
-                                  Top Up Amount (CurCode)
+                                  Top Up Amount 
                                 </Form.Label>
                                 <Form.Control
                                   type='text'
@@ -1676,10 +1676,10 @@ class RefinanceALoanAccount extends React.Component {
                                 />
                                 {/* <span className="input-helptext form-text">
                                                                                 {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun !== null &&
-                                                                                    <span>Min: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+                                                                                    <span>Min: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
                                                                                 }
                                                                                 {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum !== null &&
-                                                                                    <span>  Max: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
+                                                                                    <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
                                                                                 }
 
                                                                                 {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun === null &&
@@ -1701,7 +1701,7 @@ class RefinanceALoanAccount extends React.Component {
                             <Form.Row>
                               <Col>
                                 <Form.Label className='block-level'>
-                                  Loan Amount (CurCode)
+                                  Loan Amount 
                                 </Form.Label>
                                 <Form.Control
                                   type='text'
@@ -1761,7 +1761,7 @@ class RefinanceALoanAccount extends React.Component {
                                     .loanAmountSetting.loanAmountMinimun !==
                                     null && (
                                     <span>
-                                      Min: CurCode
+                                      Min: 
                                       {numberWithCommas(
                                         this.selectedLoanProductDetails
                                           .loanAmountSetting.loanAmountMinimun
@@ -1773,7 +1773,7 @@ class RefinanceALoanAccount extends React.Component {
                                     null && (
                                     <span>
                                       {' '}
-                                      Max: CurCode
+                                      Max: 
                                       {numberWithCommas(
                                         this.selectedLoanProductDetails
                                           .loanAmountSetting.loanAmountMaximum

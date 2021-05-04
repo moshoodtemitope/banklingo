@@ -664,7 +664,7 @@ class ViewSavingsAccount extends React.Component {
                     {depositAccountData.accountState===5 &&
                         <div className="eachamount">
                             <h6>Total Balance</h6>
-                            <div className="amounttext"> CurCode{numberWithCommas(depositAccountData.depositAvailableBalance, true)}</div>
+                            <div className="amounttext"> {numberWithCommas(depositAccountData.depositAvailableBalance, true)}</div>
                         </div>
                     }
 
@@ -3289,7 +3289,7 @@ class ViewSavingsAccount extends React.Component {
     //                                     <div>
     //                                         <Form.Row>
     //                                             <Col>
-    //                                                 <Form.Label className="block-level">{newStateHeading} (CurCode) </Form.Label>
+    //                                                 <Form.Label className="block-level">{newStateHeading}  </Form.Label>
     //                                                 <Form.Control
     //                                                     type="text"
     //                                                     autoComplete="off"
@@ -3476,7 +3476,7 @@ class ViewSavingsAccount extends React.Component {
     //                                             }
     //                                             <Form.Row>
     //                                                 <Col>
-    //                                                     <Form.Label className="block-level">Amount (CurCode)</Form.Label>
+    //                                                     <Form.Label className="block-level">Amount </Form.Label>
     //                                                     <Form.Control
     //                                                         type="text"
     //                                                         autoComplete="off"

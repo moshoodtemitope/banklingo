@@ -438,7 +438,7 @@ export class SetRecommendedAmountModal extends React.Component {
                                     <div>
                                         <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">Recommended Deposit Amount {this.props.CurCode? `({this.props.CurCode})`: ""} </Form.Label>
+                                                <Form.Label className="block-level">Recommended Deposit Amount {this.props.CurCode? `(${this.props.CurCode})`: ""} </Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     autoComplete="off"
