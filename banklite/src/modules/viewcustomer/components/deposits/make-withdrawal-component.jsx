@@ -143,7 +143,7 @@ export class MakeAccountWithdrawalModal extends React.Component {
 
                     // return false;
 
-                    this.props.handleNewDepositState(changeDepositStatePayload,newStateUpdate )
+                    this.props.handleNewDepositState(changeDepositStatePayload,"makewithdrawal" )
                         .then(
                             () => {
 
@@ -196,7 +196,7 @@ export class MakeAccountWithdrawalModal extends React.Component {
                                     <div>
                                         <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">Amount</Form.Label>
+                                                <Form.Label className="block-level">Amount {this.props.CurCode? `({this.props.CurCode})`: ""}</Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     autoComplete="off"

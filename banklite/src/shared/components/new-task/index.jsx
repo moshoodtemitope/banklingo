@@ -231,9 +231,9 @@ class CreateNewTask extends React.Component {
                                                         dispatch(dashboardActions.getAClientTask(this.clientEncodedKey, params))
                                                     }
 
-                                                    setTimeout(() => {
+                                                    // setTimeout(() => {
                                                         
-                                                    }, timeout);
+                                                    // }, timeout);
 
                                                     // if(this.props.source==="mytasks"){
                                                     //     dispatch(dashboardActions.getAClientTask(this.clientEncodedKey, params))

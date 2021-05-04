@@ -123,7 +123,7 @@ export class SetMaximumWithdrawalModal extends React.Component {
                         }
                     
 
-                    this.props.handleNewDepositState(changeDepositStatePayload,newStateUpdate )
+                    this.props.handleNewDepositState(changeDepositStatePayload,"setmaximumwithdrawalamount" )
                         .then(
                             () => {
 
@@ -178,7 +178,7 @@ export class SetMaximumWithdrawalModal extends React.Component {
                                      <div>
                                         <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">{newStateHeading} (CurCode) </Form.Label>
+                                                <Form.Label className="block-level">Withdrawal Limit {this.props.CurCode? `({this.props.CurCode})`: ""} </Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     autoComplete="off"
