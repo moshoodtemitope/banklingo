@@ -276,7 +276,7 @@ export class MakeAccountDepositModal extends React.Component {
                                     <div>
                                         <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">Amount</Form.Label>
+                                                <Form.Label className="block-level">Amount {this.props.CurCode? `(${this.props.CurCode})`: ""} </Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     autoComplete="off"

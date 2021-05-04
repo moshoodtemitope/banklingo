@@ -141,7 +141,7 @@ export class BeginMaturityModal extends React.Component {
 
             this.props.handleNewDepositState(
               changeDepositStatePayload,
-              newStateUpdate
+              "beginmaturity"
             ).then(() => {
               if (
                 this.props.changeDepositStateReducer.request_status ===

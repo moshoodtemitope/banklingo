@@ -118,7 +118,7 @@ class ProfitAndLoss extends React.Component {
     renderOptions = ()=>{
         let getProfitAndLossRequest = this.props.getProfitAndLossReducer,
             fetchBranchesListRequest = this.props.fetchBranchesListReducer;
-        let {branchId, invalidDate}= this.state;
+        
 
 
         switch (fetchBranchesListRequest.request_status){

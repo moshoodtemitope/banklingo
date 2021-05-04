@@ -124,7 +124,7 @@ export class SetRecommendedAmountModal extends React.Component {
                         }
                     
 
-                    this.props.handleNewDepositState(changeDepositStatePayload,newStateUpdate )
+                    this.props.handleNewDepositState(changeDepositStatePayload,"setrecommendeddepositamount" )
                         .then(
                             () => {
 
@@ -171,7 +171,7 @@ export class SetRecommendedAmountModal extends React.Component {
                             className="">
 
                             <Modal.Header>
-                                <Modal.Title>{"Set Recommended Deposit Amount"}</Modal.Title>
+                                <Modal.Title>{"Set Recommended Deposit Amount"} </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
 
@@ -438,7 +438,7 @@ export class SetRecommendedAmountModal extends React.Component {
                                     <div>
                                         <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">{newStateHeading}  </Form.Label>
+                                                <Form.Label className="block-level">Recommended Deposit Amount {this.props.CurCode? `(${this.props.CurCode})`: ""} </Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     autoComplete="off"

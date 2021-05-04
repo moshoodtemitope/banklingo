@@ -48,7 +48,7 @@ export const LOAN_MODULE_MENU_LINKS = [
     exact: false,
   },
   {
-    label: 'Approve',
+    label: 'Approved',
     url: '/all-loans/approved',
     exact: true,
   },
