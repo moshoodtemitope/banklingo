@@ -1048,7 +1048,7 @@ class EditALoanAccount extends React.Component {
                               <Form.Row>
                                 <Col>
                                   <Form.Label className='block-level'>
-                                    Interest Balance (CurCode)
+                                    Interest Balance 
                                   </Form.Label>
                                   <Form.Control
                                     type='text'
@@ -1107,10 +1107,10 @@ class EditALoanAccount extends React.Component {
                                   />
                                   {/* <span className="input-helptext form-text">
                                                                                     {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun !== null &&
-                                                                                        <span>Min: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
+                                                                                        <span>Min: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
                                                                                     }
                                                                                     {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum !== null &&
-                                                                                        <span>  Max: CurCode{numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
+                                                                                        <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
                                                                                     }
 
                                                                                     {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun === null &&
@@ -1129,7 +1129,7 @@ class EditALoanAccount extends React.Component {
                                 </Col>
                                 <Col>
                                   <Form.Label className='block-level'>
-                                    Fee Balance CurCode
+                                    Fee Balance 
                                   </Form.Label>
                                   <Form.Control
                                     type='text'
@@ -1191,7 +1191,7 @@ class EditALoanAccount extends React.Component {
                               <Form.Row>
                                 <Col sm={6}>
                                   <Form.Label className='block-level'>
-                                    Penalty Balance (CurCode){' '}
+                                    Penalty Balance {' '}
                                   </Form.Label>
                                   <Form.Control
                                     type='text'
@@ -1231,7 +1231,7 @@ class EditALoanAccount extends React.Component {
                               <Form.Row>
                                 <Col>
                                   <Form.Label className='block-level'>
-                                    Current Oustanding Principal (CurCode)
+                                    Current Oustanding Principal 
                                   </Form.Label>
                                   <Form.Control
                                     type='text'
@@ -1293,7 +1293,7 @@ class EditALoanAccount extends React.Component {
                               <Form.Row>
                                 <Col>
                                   <Form.Label className='block-level'>
-                                    Loan Amount (CurCode)
+                                    Loan Amount 
                                   </Form.Label>
                                   <Form.Control
                                     type='text'
@@ -1355,7 +1355,7 @@ class EditALoanAccount extends React.Component {
                                       .loanAmountSetting.loanAmountMinimun !==
                                       null && (
                                       <span>
-                                        Min: CurCode
+                                        Min: 
                                         {numberWithCommas(
                                           this.selectedLoanProductDetails
                                             .loanAmountSetting.loanAmountMinimun
@@ -1367,7 +1367,7 @@ class EditALoanAccount extends React.Component {
                                       null && (
                                       <span>
                                         {' '}
-                                        Max: CurCode
+                                        Max: 
                                         {numberWithCommas(
                                           this.selectedLoanProductDetails
                                             .loanAmountSetting.loanAmountMaximum

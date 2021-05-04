@@ -213,29 +213,29 @@ class ReverseTransaction extends React.Component {
                                     <div className="modal-notes grayed">Outstanding Balances</div>
                                     <div className="each-msg bolden">
                                        <span>Total</span> 
-                                       <span>CurCode{numberWithCommas(loanDetails.totalExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.totalExpected, true)}</span> 
                                     </div>
                                     <div className="each-msg">
                                        <span>Principal</span> 
-                                       <span>CurCode{numberWithCommas(loanDetails.interestExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.interestExpected, true)}</span> 
                                     </div>
                                     <div className="each-msg">
                                        <span>Interest</span> 
-                                       <span>CurCode{numberWithCommas(loanDetails.principalExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.principalExpected, true)}</span> 
                                     </div>
                                     <div className="each-msg">
                                        <span>Fees</span> 
-                                       <span>CurCode{numberWithCommas(loanDetails.feesExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.feesExpected, true)}</span> 
                                     </div>
                                     <div className="each-msg">
                                        <span>Penalty</span> 
-                                       <span>CurCode{numberWithCommas(loanDetails.penaltyExpected, true)}</span> 
+                                       <span>{numberWithCommas(loanDetails.penaltyExpected, true)}</span> 
                                     </div>
 
                                     <Form.Group className="mt-20">
                                         <Form.Label className="block-level">Write Off Amount</Form.Label>
                                         
-                                        <h4>CurCode{numberWithCommas(loanDetails.totalExpected, true)}</h4>
+                                        <h4>{numberWithCommas(loanDetails.totalExpected, true)}</h4>
                                     </Form.Group>
                                 </div> */}
                                 
