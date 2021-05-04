@@ -312,7 +312,7 @@ class LoginWrap extends React.Component {
             <Fragment>
                 <Helmet>
                     {(getTenant===null) && <title>BankLingo </title>}
-                    {(getTenant) && <title>BankLingo | {getTenant.companyName} </title>}
+                    {(getTenant) && <title>BankLingo | {getTenant?.companyName} </title>}
                     {/* <title>BankLingo | Card Generator </title> */}
                 </Helmet>
                 {/* {
