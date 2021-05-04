@@ -178,7 +178,7 @@ class EditAClient extends React.Component {
       // .min(2, 'Valid response required')
       // .max(50, 'Max limit reached'),
       nextOfKinMobile: Yup.string()
-        .min(10, 'Valid mobile number is required')
+        .min(9, 'Valid mobile number is required')
         .max(16, 'Max limit reached'),
       notes: Yup.string(),
     });
