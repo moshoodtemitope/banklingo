@@ -81,14 +81,16 @@ class ChangeCustomerStateModal extends React.Component {
                             <Col className="date-wrap">
                                 <Form.Label className="block-level">Due Date</Form.Label>
                                 <DatePickerEx 
-                                 placeholderText="Choose entry date" selected={this.state.dob} 
+                                 placeholderText="Choose entry date" 
                                     onChange={this.handleDatePicker}
                                     onChangeRaw={(e)=>this.handleChange(e)}
                                     dateFormat={window.dateformat}
                                     className="form-control form-control-sm"
                                     peekNextMonth
                                     showMonthDropdown
+                                    showYearDropdown
                                     dropdownMode="select"
+                                    value={values.dueDate}
                                     maxDate={new Date()}
                                     />
                                 {/* /> */}

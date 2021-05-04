@@ -29,6 +29,8 @@ import Select from 'react-select';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import  DatePickerEx from "react-datepicker";
+
 import {clientsConstants} from '../../redux/actiontypes/clients/clients.constants'
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 
@@ -281,7 +283,7 @@ class ViewCustomerTasks extends React.Component {
                                                 </Col>
                                                 <Col className="date-wrap">
                                                     <Form.Label className="block-level">Due Date</Form.Label>
-                                                    <DatePicker
+                                                    <DatePickerEx 
                                                      placeholderText="Choose entry date"
                                                         dateFormat={window.dateformat}
                                                         className="form-control form-control-sm"
