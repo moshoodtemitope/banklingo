@@ -105,7 +105,7 @@ export class ChangeLoanStateModal extends React.Component {
 
 
                     // let changeLoanStatePayload = `Comment=${values.Comment}&ClientEncodedKey=${this.clientEncodedKey}`;
-                    this.handleNewLoanState(changeLoanStatePayload, newStateUpdate)
+                    this.props.handleNewLoanState(changeLoanStatePayload, newStateUpdate)
                         .then(
                             () => {
 

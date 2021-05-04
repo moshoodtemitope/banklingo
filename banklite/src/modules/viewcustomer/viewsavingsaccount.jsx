@@ -2904,8 +2904,8 @@ if(depositDetails==null ) return;
      //this.enforcePermissions();
 
     
-   console.log(JSON.stringify(visibility));
-   console.log(JSON.stringify(this.permissions));
+//    console.log(JSON.stringify(visibility));
+//    console.log(JSON.stringify(this.permissions));
 
     return (
       <div className="heading-ctas">
@@ -3252,6 +3252,7 @@ if(depositDetails==null ) return;
               this.getCustomerDepositAccountDetails
             }
           />
+          
           <MakeAccountDepositModal
             {...this.props}
             newStateUpdate={this.state.newStateUpdate}

@@ -2655,7 +2655,7 @@ class ViewClosedLoanAccount extends React.Component {
                                             <Form.Row>
                                                 <Col>
                                                     <Form.Label className="block-level">Amount</Form.Label>
-                                                    <h5>{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5>
+                                                    <h5>&#8358;{getAClientLoanAccountRequest.request_data.response.data.loanAmount}</h5>
                                                 </Col>
                                                 <Col>
 
@@ -2815,7 +2815,7 @@ class ViewClosedLoanAccount extends React.Component {
                                         <div>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Amount to repay </Form.Label>
+                                                    <Form.Label className="block-level">Amount to repay (&#8358;)</Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         autoComplete="off"
