@@ -276,7 +276,7 @@ class ProfitAndLoss extends React.Component {
                                                 ) : null}
                                             </Form.Group>
             
-                                            <Button variant="secondary" type="button">More >> </Button>
+                                            <Button variant="secondary" type="button">More {">>"} </Button>
                                             <Button variant="primary"
                                                 type="submit"
                                                 disabled={getProfitAndLossRequest.is_request_processing}>{getProfitAndLossRequest.is_request_processing?"Generating...":" Generate Profit & Loss"}</Button>

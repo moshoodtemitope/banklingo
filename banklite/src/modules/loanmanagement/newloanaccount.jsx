@@ -848,10 +848,14 @@ class NewLoanAccount extends React.Component {
                           loanAndDepositsConstants.CREATE_A_LOAN_ACCOUNT_SUCCESS
                         ) {
                           setTimeout(() => {
-                            // resetForm();
+                         
+                            //TODO: reset form and go to he account screen
                             this.props.dispatch(
                               loanActions.createLoanAccount('CLEAR')
                             );
+
+                            resetForm();
+
                           }, 3000);
                         }
 

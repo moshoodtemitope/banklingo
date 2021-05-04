@@ -3258,6 +3258,7 @@ if(depositDetails==null ) return;
               this.getCustomerDepositAccountDetails
             }
           />
+          
           <MakeAccountDepositModal
             {...this.props}
             newStateUpdate={this.state.newStateUpdate}

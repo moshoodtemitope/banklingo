@@ -740,7 +740,7 @@ export class MakeTransferModal extends React.Component {
                                     <div>
                                         <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">{newStateHeading}  </Form.Label>
+                                                <Form.Label className="block-level">{newStateHeading} (CurCode) </Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     autoComplete="off"
