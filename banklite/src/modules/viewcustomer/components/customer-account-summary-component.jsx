@@ -47,6 +47,16 @@ export class CustomerAccountSummarySection extends React.Component {
             </tr>
         </thead>
         <tbody>
+        {customerLoanAccounts?.result!==null && (customerLoanAccounts.result.length===0) &&
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
             {customerLoanAccounts?.result!==null && (customerLoanAccounts.result.length>=1) &&
                 customerLoanAccounts.result.map((eachAccount, index)=>{
                     if(eachAccount.loanState===5){

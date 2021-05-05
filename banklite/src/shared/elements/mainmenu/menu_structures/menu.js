@@ -41,6 +41,19 @@ export const menuList = [
         ]
     },
 
+    {
+        menuGroup: "Clients Management",
+        mainMenu: "Groups",
+        permissionCode: "bnk_view_clients",
+        hasSubMenu: true,
+        subMenus: [
+            {
+                subMenuLabel: "All Groups",
+                subMenuRoute: "groups"
+            },
+        ]
+    },
+
 
     
     {
@@ -493,6 +506,12 @@ export const quickCreateMenuList = [
         permissionCode: "bnk_create_user",
         menuRoute: "/administration/access/new-user",
     },
+    // {
+    //     permissionName: "Create Client",
+    //     mainMenu: "Group",
+    //     permissionCode: "bnk_create_client",
+    //     menuRoute: "/groups/new",
+    // },
 ]
 
 export const administrationModuleMenuList = [

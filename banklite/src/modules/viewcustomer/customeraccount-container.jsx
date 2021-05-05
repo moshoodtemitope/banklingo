@@ -54,17 +54,18 @@ class CustomerAccountContainer extends React.Component {
     super(props);
 
     this.clientEncodedKey = this.props.match.params.id;
+    console.log("view group", this.props.isGroupAccount)
     this.state = {
       user: '',
       generatedRoutes: {
-        customer: `/customer/${this.clientEncodedKey}`,
-        attachments: `/customer/${this.clientEncodedKey}/attachments`,
-        activities: `/customer/${this.clientEncodedKey}/activities`,
-        tasks: `/customer/${this.clientEncodedKey}/tasks`,
-        communications: `/customer/${this.clientEncodedKey}/communications`,
-        comments: `/customer/${this.clientEncodedKey}/comments`,
+        customer: !this.props.isGroupAccount?`/customer/${this.clientEncodedKey}`: `/group/${this.clientEncodedKey}` ,
+        attachments: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/attachments` : `/group/${this.clientEncodedKey}/attachments`,
+        activities: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/activities` : `/group/${this.clientEncodedKey}/activities`,
+        tasks:  !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/tasks` : `/group/${this.clientEncodedKey}/tasks`, 
+        communications: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/communications` : `/group/${this.clientEncodedKey}/communications`,
+        comments: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/comments` : `/group/${this.clientEncodedKey}/comments`, 
 
-        allclosedaccounts: `/customer/${this.clientEncodedKey}/closedaccounts`,
+        allclosedaccounts: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/closedaccounts` : `/group/${this.clientEncodedKey}/closedaccounts`,
       },
       showNewTask: false,
       showSetNotification: false,
@@ -108,7 +109,7 @@ class CustomerAccountContainer extends React.Component {
   getClientInfo = (clientEncodedKey) => {
     const { dispatch } = this.props;
 
-    dispatch(clientsActions.getAClient(clientEncodedKey));
+    dispatch(clientsActions.getAClient(clientEncodedKey, this.props.isGroupAccount));
   };
 
   componentWillReceiveProps(nextProps) {
@@ -117,14 +118,14 @@ class CustomerAccountContainer extends React.Component {
 
       this.setState({
         generatedRoutes: {
-          customer: `/customer/${this.clientEncodedKey}`,
-          attachments: `/customer/${this.clientEncodedKey}/attachments`,
-          activities: `/customer/${this.clientEncodedKey}/activities`,
-          tasks: `/customer/${this.clientEncodedKey}/tasks`,
-          communications: `/customer/${this.clientEncodedKey}/communications`,
-          comments: `/customer/${this.clientEncodedKey}/comments`,
-
-          allclosedaccounts: `/customer/${this.clientEncodedKey}/closedaccounts`,
+          customer: !this.props.isGroupAccount?`/customer/${this.clientEncodedKey}`: `/group/${this.clientEncodedKey}` ,
+          attachments: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/attachments` : `/group/${this.clientEncodedKey}/attachments`,
+          activities: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/activities` : `/group/${this.clientEncodedKey}/activities`,
+          tasks:  !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/tasks` : `/group/${this.clientEncodedKey}/tasks`, 
+          communications: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/communications` : `/group/${this.clientEncodedKey}/communications`,
+          comments: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/comments` : `/group/${this.clientEncodedKey}/comments`, 
+  
+          allclosedaccounts: !this.props.isGroupAccount ? `/customer/${this.clientEncodedKey}/closedaccounts` : `/group/${this.clientEncodedKey}/closedaccounts`,
         },
       });
       this.loadInitialCustomerData();
@@ -857,6 +858,71 @@ class CustomerAccountContainer extends React.Component {
     );
   };
 
+  renderGroupAccountSubMenu = (loanAccounts, savingsAccounts) => {
+    let { generatedRoutes } = this.state;
+    // let numberOfClosedLoans = 0;
+    // let numberOfClosedSavings = 0;
+
+    let allUSerPermissions = [];
+    this.userPermissions.map((eachPermission) => {
+      allUSerPermissions.push(eachPermission.permissionCode);
+    });
+    //     numberOfClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription==="Rejected" || eachLoanAccount.loanStateDescription==="Closed Withdrawn" || eachLoanAccount.loanStateDescription==="Closed").length;
+    // let unClosedLoans = loanAccounts.result.filter((eachLoanAccount)=> eachLoanAccount.loanStateDescription!=="Rejected" && eachLoanAccount.loanStateDescription!=="Closed Withdrawn" && eachLoanAccount.loanStateDescription!=="Closed");
+
+    // numberOfClosedLoans = loanAccounts.result.filter(
+    //   (eachLoanAccount) =>
+    //     eachLoanAccount.loanState === 4 ||
+    //     eachLoanAccount.loanState === 7 ||
+    //     eachLoanAccount.loanState === 8 ||
+    //     eachLoanAccount.loanState === 9
+    // ).length;
+
+
+    // let unClosedLoans = loanAccounts.result.filter(
+    //   (eachLoanAccount) =>
+    //     eachLoanAccount.loanState !== 4 &&
+    //     eachLoanAccount.loanState !== 7 &&
+    //     eachLoanAccount.loanState !== 8 &&
+    //     eachLoanAccount.loanState !== 9
+    // );
+
+    // numberOfClosedSavings = savingsAccounts.result.filter(
+    //   (eachSavingsAccount) =>
+    //     eachSavingsAccount.accountState === 4 ||
+    //     eachSavingsAccount.accountState === 7 ||
+    //     eachSavingsAccount.accountState === 8 ||
+    //     eachSavingsAccount.accountState === 9
+    // ).length;
+    // let unClosedSavings = savingsAccounts.result.filter(
+    //   (eachSavingsAccount) =>
+    //     eachSavingsAccount.accountState !== 4 &&
+    //     eachSavingsAccount.accountState !== 7 &&
+    //     eachSavingsAccount.accountState !== 8 &&
+    //     eachSavingsAccount.accountState !== 9
+    // );
+    // let totalClosed = numberOfClosedSavings + numberOfClosedLoans;
+
+    // console.log("unClosedSavings", unClosedSavings);
+    return (
+      <div className='module-submenu'>
+        <div className='content-container'>
+          <ul className='nav'>
+            <li>
+              <NavLink exact to={generatedRoutes.customer}>
+                Overview
+              </NavLink>
+            </li>
+            
+            
+            
+
+          </ul>
+        </div>
+      </div>
+    );
+  };
+
   renderCustomerName = (customerDetails) => {
     return (
       <div className='content-container'>
@@ -864,6 +930,10 @@ class CustomerAccountContainer extends React.Component {
           <div className='col-sm-12'>
             <div className=''>
               <h2>
+              {customerDetails.groupName !== null &&
+                customerDetails.groupName !== ''
+                  ? customerDetails.groupName
+                  : ''}
                 {customerDetails.firstName !== null &&
                 customerDetails.firstName !== ''
                   ? customerDetails.firstName
@@ -929,7 +999,8 @@ class CustomerAccountContainer extends React.Component {
               {this.renderHeadingCtas(customerDetails)}
               {this.renderCustomerName(customerDetails)}
             </div>
-            {this.renderSubMenu(customerLoanAccounts, customerDepositAccounts)}
+            {!this.props.isGroupAccount && this.renderSubMenu(customerLoanAccounts, customerDepositAccounts)}
+            {this.props.isGroupAccount && this.renderGroupAccountSubMenu()}
           </div>
         </div>
       );
@@ -948,7 +1019,8 @@ class CustomerAccountContainer extends React.Component {
 
 
             {this.props.children}
-            <Route exact to='/customer/:id' component={AccountContainer} />
+            <Route exact to={this.props.isGroupAccount? '/group/:id' : '/customer/:id' }  component={AccountContainer} />
+            {/* <Route exact to='/group/:id' component={AccountContainer} /> */}
           </div>
         </InnerPageContainer>
       </Fragment>
