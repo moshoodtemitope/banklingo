@@ -3218,6 +3218,8 @@ if(depositDetails==null ) return;
       getClientDepositsRequest.request_status ===
         loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS
     ) {
+
+        
       return (
         <div className="row">
           <BeginMaturityModal
@@ -3227,6 +3229,8 @@ if(depositDetails==null ) return;
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
             showModal={this.state.showBeginMaturityModal}
+            CurCode = {getAClientDepositAccountRequest.request_data.response
+                .data.currencyCode}
             handleHideModal={this.handleHideBeginMaturityModal}
             handleNewDepositState={this.handleNewDepositState}
             getCustomerDepositAccountDetails={
@@ -3245,6 +3249,8 @@ if(depositDetails==null ) return;
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             ctaText={this.state.ctaText}
+            CurCode = {getAClientDepositAccountRequest.request_data.response
+                .data.currencyCode}
             showModal={this.state.showChangeStateModal}
             handleHideModal={this.handleDepositChangeStateClose}
             handleNewDepositState={this.handleNewDepositState}
@@ -3260,6 +3266,8 @@ if(depositDetails==null ) return;
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
             showModal={this.state.showDepositFundModal}
+            CurCode = {getAClientDepositAccountRequest.request_data.response
+                .data.currencyCode}
             handleHideModal={this.handleHideDepositFundModal}
             handleNewDepositState={this.handleNewDepositState}
             getCustomerDepositAccountDetails={
@@ -3273,6 +3281,8 @@ if(depositDetails==null ) return;
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
             showModal={this.state.showMakeWithdrawalModal}
+            CurCode = {getAClientDepositAccountRequest.request_data.response
+                .data.currencyCode}
             handleHideModal={this.handleHideMakeWithdrawalModal}
             handleNewDepositState={this.handleNewDepositState}
             getCustomerDepositAccountDetails={
@@ -3285,6 +3295,8 @@ if(depositDetails==null ) return;
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
+            CurCode = {getAClientDepositAccountRequest.request_data.response
+                .data.currencyCode}
             showModal={this.state.showSetMaximumWithdrawalAmountModal}
             handleHideModal={this.handleHideSetMaximumWithdrawalAmountModal}
             handleNewDepositState={this.handleNewDepositState}
@@ -3298,6 +3310,8 @@ if(depositDetails==null ) return;
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
+            CurCode = {getAClientDepositAccountRequest.request_data.response
+                .data.currencyCode}
             showModal={this.state.showRecommendedAmountModal}
             handleHideModal={this.handleHideRecommendedAmountModal}
             handleNewDepositState={this.handleNewDepositState}
@@ -3311,6 +3325,8 @@ if(depositDetails==null ) return;
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
+            CurCode = {getAClientDepositAccountRequest.request_data.response
+                .data.currencyCode}
             showModal={this.state.showTransferFundModal}
             handleHideModal={this.handleHideTransferFundModal}
             handleNewDepositState={this.handleNewDepositState}
@@ -3428,6 +3444,8 @@ if(depositDetails==null ) return;
                         handleCloseReverse={this.handleShowReverseClose}
                         transactionDetails={this.state.transactionDetails}
                         showReverseTransaction={this.state.showReverseBox}
+                        CurCode = {getAClientDepositAccountRequest.request_data.response
+                            .data.currencyCode}
                         transactionMode="Deposit"
                       />
                       <ViewATransaction
@@ -3435,6 +3453,8 @@ if(depositDetails==null ) return;
                         transactionType={this.state.transactionType}
                         handleViewTxtnClose={this.handleViewTxtnClose}
                         transactionDetails={this.state.transactionDetails}
+                        CurCode = {getAClientDepositAccountRequest.request_data.response
+                            .data.currencyCode}
                         ViewTxtnBox={this.state.ViewTxtnBox}
                         transactionMode="Deposit"
                       />
