@@ -31,6 +31,39 @@ export const CLIENTS_MODULE_MENU_LINKS = [
   },
 ];
 
+export const GROUP_MODULE_MENU_LINKS = [
+  {
+    label: 'All',
+    url: '/groups',
+    exact: false,
+  },
+  // {
+  //   label: 'Active',
+  //   url: '/groups/active',
+  //   exact: false,
+  // },
+  // {
+  //   label: 'Inactive',
+  //   url: '/groups/inactive',
+  //   exact: false,
+  // },
+  // {
+  //   label: 'Pending Approval',
+  //   url: '/groups/pending-approval',
+  //   exact: false,
+  // },
+  // {
+  //   label: 'Exited',
+  //   url: '/groups/exited',
+  //   exact: false,
+  // },
+  // {
+  //   label: 'Blacklisted',
+  //   url: '/groups/blacklisted',
+  //   exact: false,
+  // },
+];
+
 export const LOAN_MODULE_MENU_LINKS = [
   {
     label: 'All',

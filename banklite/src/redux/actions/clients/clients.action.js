@@ -117,11 +117,17 @@ export const clientsActions = {
 
 
 
-function getClients  (params, tempData){
+function getClients  (params, tempData, isGroupAccount){
     
     return dispatch =>{
         
-        let consume = ApiService.request(routes.HIT_CLIENTS+`?${params}`, "GET", null);
+        let consume;
+        if(!isGroupAccount){
+            consume = ApiService.request(routes.HIT_CLIENTS+`?${params}`, "GET", null);
+        }
+        if(isGroupAccount){
+            consume = ApiService.request(routes.HIT_CLIENT_GROUP+`?${params}`, "GET", null);
+        }
         dispatch(request(consume,tempData));
         return consume
             .then(response =>{
@@ -232,11 +238,17 @@ function failure(error) { return { type: clientsConstants.GET_ALL_CLIENTS_FAILUR
 
 }
 
-function getAClient  (encodedKey){
+function getAClient  (encodedKey, isGroupAccount){
     if(encodedKey!=="CLEAR"){
         return dispatch =>{
             
-            let consume = ApiService.request(routes.HIT_CLIENTS+`/${encodedKey}`, "GET", null);
+            let consume;
+            if(!isGroupAccount){
+                consume = ApiService.request(routes.HIT_CLIENTS+`/${encodedKey}`, "GET", null);
+            }
+            if(isGroupAccount){
+                consume = ApiService.request(routes.HIT_CLIENT_GROUP+`/${encodedKey}`, "GET", null);
+            }
             dispatch(request(consume));
             return consume
                 .then(response =>{
@@ -284,10 +296,17 @@ function getAClient  (encodedKey){
 }
 
 
-function createClient   (createClientPayload){
+function createClient   (createClientPayload, clientType){
     if(createClientPayload!=="CLEAR"){
         return dispatch =>{
-            let url = routes.HIT_CLIENTS;
+            let url;
+                if(clientType==="individual"){
+                    url = routes.HIT_CLIENTS;
+                }
+
+                if(clientType==="group"){
+                    url = routes.HIT_CLIENT_GROUP;
+                }
             let consume = ApiService.request(url, "POST", createClientPayload);
             dispatch(request(consume));
             return consume
@@ -295,7 +314,12 @@ function createClient   (createClientPayload){
                     dispatch(success(response));
 
                     setTimeout(() => {
-                        history.push(`/customer/${response.data.result.encodedKey}`);
+                        if(clientType==="individual"){
+                            history.push(`/customer/${response.data.result.encodedKey}`);
+                        }
+                        if(clientType==="group"){
+                            history.push(`/group/${response.data.result.encodedKey}`);
+                        }
                     }, 2500);
                 }).catch(error =>{
                     

@@ -40,34 +40,48 @@ export class GeneralInfomationSection extends React.Component {
     <TableComponent classnames="striped hover">
 
         <tbody>
-            <tr>
-                <td>Customer ID</td>
-                <td>{customerDetails?.clientCode}</td>
-            </tr>
-            <tr>
-                <td>Assigned Branch</td>
-                <td>{customerDetails?.branchName}</td>
-            </tr>
-            <tr>
-                <td>Assigned Account Officer</td>
-                <td>{customerDetails?.accountOfficer}</td>
-            </tr>
-            <tr>
-                <td>Customer Type</td>
-                <td>{customerTypeVal?.name}</td>
-            </tr>
-            <tr>
-                <td>Created</td>
-                <td>{customerDetails?.createdDate}</td>
-            </tr>
-            <tr>
-                <td>Last modified</td>
-                <td>{customerDetails?.lastUpdated}</td>
-            </tr>
-            <tr>
-                <td>Customer State</td>
-                <td>{customerDetails?.clientStateDescription}</td>
-            </tr>
+            {customerDetails.clientCode &&
+                <tr>
+                    <td>Customer ID</td>
+                    <td>{customerDetails?.clientCode}</td>
+                </tr>
+            }
+            {customerDetails.branchName &&
+                <tr>
+                    <td>Assigned Branch</td>
+                    <td>{customerDetails?.branchName}</td>
+                </tr>
+            }
+            {customerDetails.accountOfficer &&
+                <tr>
+                    <td>Assigned Account Officer</td>
+                    <td>{customerDetails?.accountOfficer}</td>
+                </tr>
+            }
+            {customerTypeVal && customerTypeVal.name &&
+                <tr>
+                    <td>Customer Type</td>
+                    <td>{customerTypeVal?.name}</td>
+                </tr>
+            }
+            {customerDetails.createdDate &&
+                <tr>
+                    <td>Created</td>
+                    <td>{customerDetails?.createdDate}</td>
+                </tr>
+            }
+            {customerDetails.lastUpdated &&
+                <tr>
+                    <td>Last modified</td>
+                    <td>{customerDetails?.lastUpdated}</td>
+                </tr>
+            }
+            {customerDetails.clientStateDescription &&
+                <tr>
+                    <td>Customer State</td>
+                    <td>{customerDetails?.clientStateDescription}</td>
+                </tr>
+            }
 
         </tbody>
     </TableComponent>

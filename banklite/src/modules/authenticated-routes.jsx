@@ -18,6 +18,7 @@ import ClientsPendingApproval from './clients/pending-approval'
 import ClientsExited from './clients/clients-exited'
 import ClientsBlacklisted from './clients/blacklisted'
 import NewClient from './clients/new-client'
+import NewGroupClient from './groups/new-group'
 import EditAClient from './clients/edit-client'
 
 import ViewAllTasks from './all-tasks'
@@ -281,6 +282,9 @@ class AuthenticatedRoutes extends React.Component {
                                 {/* <Route exact path='/clients' render={(props) => <ClientsManagement {...this.props} />} /> */}
 
                         <PrivateRoute accessRequired="bnk_create_client" exact path='/clients/new/:customertype/:custTypeid'  authed={this.props.user} component={NewClient} />
+                        
+                        <PrivateRoute accessRequired="bnk_create_client" exact path='/groups/new/:customertype/:custTypeid'  authed={this.props.user} component={NewGroupClient} />
+                        <PrivateRoute accessRequired="bnk_create_client" exact path='/groups/new'  authed={this.props.user} component={NewGroupClient} />
                         <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} />
 
                         <PrivateRoute accessRequired="bnk_edit_client" exact path='/clients/edit/:encodedkey'    authed={this.props.user} component={EditAClient} />
@@ -293,6 +297,7 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <Route exact path='/inactive-clients' render={(props) => <InactiveClients {...this.props} />} /> */}
                         {/* <Route exact path='/active-clients' render={(props) => <ActiveClients {...this.props} />} /> */}
                         <PrivateRoute accessRequired="bnk_view_clients"  exact path='/clients' {...this.props} authed={this.props.user} clientState={ClientStateConstants.ALL_CLIENTS} component={ClientsListDisplay}  />
+                        <PrivateRoute accessRequired="bnk_view_clients"  exact path='/groups' isGroupAccount={true} {...this.props} authed={this.props.user} clientState={ClientStateConstants.ALL_CLIENTS} component={ClientsListDisplay}  />
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/active-clients' {...this.props} authed={this.props.user} clientState={ClientStateConstants.ACTIVE} component={ClientsListDisplay} />
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/inactive-clients' {...this.props} authed={this.props.user} clientState={ClientStateConstants.INACTIVE} component={ClientsListDisplay} />
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/clients-pending-approval' {...this.props} authed={this.props.user}  clientState={ClientStateConstants.PENDING_APPROVAL} component={ClientsListDisplay} />
@@ -475,7 +480,8 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/access/authentication' {...this.props} authed={this.props.user} component={AccessAuth} />
 
 
-                        <PrivateRoute accessRequired="bnk_view_clients" path='/customer/:id' {...this.props} authed={this.props.user} component={CustomerAccountContainer} />
+                        <PrivateRoute accessRequired="bnk_view_clients" path='/customer/:id' isGroupAccount={false} {...this.props} authed={this.props.user} component={CustomerAccountContainer} />
+                        <PrivateRoute accessRequired="bnk_view_clients" path='/group/:id' isGroupAccount={true} {...this.props} authed={this.props.user} component={CustomerAccountContainer} />
                         <PrivateRoute accessRequired="bnk_view_all_users" path='/user/:userid' {...this.props} authed={this.props.user} component={UserAccountContainer} />
                         <PrivateRoute accessRequired="bnk_view_all_users" exact path='/my-profile' {...this.props} authed={this.props.user} component={UserAccountContainer} />
                         <PrivateRoute accessRequired="bnk_manage_products" path='/depositproduct/:productid' {...this.props} authed={this.props.user} component={DepositProductInfoContainer} />

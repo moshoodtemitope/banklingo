@@ -119,6 +119,7 @@ export const routes = {
 
     //Clients Endpoints
     HIT_CLIENTS: BASEURL + '/api/Clients',
+    HIT_CLIENT_GROUP: BASEURL + '/api/ClientGroup',
 
     //Activities Endpoints
     HIT_ACTIVITIES: BASEURL + '/api/Activities',

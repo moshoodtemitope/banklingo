@@ -15,7 +15,7 @@ import { ClientStateConstants } from '../../redux/actions/clients/client-states-
 // import { clientsConstants } from '../../redux/actiontypes/clients/clients.constants';
 import './clients.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
-import { CLIENTS_MODULE_MENU_LINKS } from '../../shared/config';
+import { CLIENTS_MODULE_MENU_LINKS, GROUP_MODULE_MENU_LINKS } from '../../shared/config';
 import SubMenu from '../../shared/components/SubMenu';
 
 class ClientsListDisplay extends React.Component {
@@ -23,6 +23,8 @@ class ClientsListDisplay extends React.Component {
     super(props);
     this.initializeState();
     this.userPermissions = JSON.parse(localStorage.getItem('x-u-perm'));
+
+    this.clientType = this.props.isGroupAccount? "group": "customer"
   }
 
   initializeState=()=>{
@@ -101,9 +103,9 @@ retrieveFromApi = (tempData)=>{
     //let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
     
     if(tempData){
-        dispatch(clientsActions.getClients(params, tempData));
+        dispatch(clientsActions.getClients(params, tempData, this.props.isGroupAccount));
     }else{
-        dispatch(clientsActions.getClients(params));
+        dispatch(clientsActions.getClients(params, null, this.props.isGroupAccount));
     }
     
 }
@@ -171,10 +173,23 @@ exportClients = () => {
       case (ClientStateConstants.PENDING_APPROVAL): return  (<div>Customers (Pending Approval)</div>);
       case (ClientStateConstants.ACTIVE): return  (<div>Customers (Active)</div>);
       case (ClientStateConstants.INACTIVE): return  (<div>Customers (In-Active)</div>);
-      case (ClientStateConstants.ALL_CLIENTS): return  (<div>Customers (All)</div>);
+      case (ClientStateConstants.ALL_CLIENTS): 
+        if(!this.props.isGroupAccount){
+          return  (<div>Customers (All)</div>);
+        }
+        if(this.props.isGroupAccount){
+          return  (<div>Groups (All)</div>);
+        }
       case (ClientStateConstants.EXITED): return  (<div>Customers (Exited)</div>);
       case (ClientStateConstants.BLACKLISTED): return  (<div>Customers (Blacklisted)</div>);
-                 default:             return  (<div>Customers (All)</div>);
+                 
+        default:            
+          if(!this.props.isGroupAccount){
+            return  (<div>Customers (All)</div>);
+          }
+          if(this.props.isGroupAccount){
+            return  (<div>Groups (All)</div>);
+          };
     }
 
   }
@@ -251,16 +266,27 @@ fetchForBusyState(){
           return (
             <Fragment key={index}>
               <tr>
+                {!eachClient.groupName &&
+                  <td>
+                    <NavLink
+                      to={`/${this.clientType}/${eachClient.clientEncodedKey}`}
+                    >
+                      {eachClient.firstName} {eachClient.lastName}
+                    </NavLink>
+                  </td>
+                }
+                {eachClient.groupName &&
+                  <td>
+                    <NavLink
+                      to={`/${this.clientType}/${eachClient.clientEncodedKey}`}
+                    >
+                      {eachClient.groupName}
+                    </NavLink>
+                  </td>
+                }
                 <td>
                   <NavLink
-                    to={`/customer/${eachClient.clientEncodedKey}`}
-                  >
-                    {eachClient.firstName} {eachClient.lastName}
-                  </NavLink>
-                </td>
-                <td>
-                  <NavLink
-                    to={`/customer/${eachClient.clientEncodedKey}`}
+                    to={`/${this.clientType}/${eachClient.clientEncodedKey}`}
                   >
                     {eachClient.clientCode}
                   </NavLink>
@@ -287,7 +313,7 @@ fetchForBusyState(){
                       </NavLink>
                       <NavLink
                         className='dropdown-item'
-                        to={`/customer/${eachClient.clientEncodedKey}`}
+                        to={`/${this.clientType}/${eachClient.clientEncodedKey}`}
                       >
                         View
                       </NavLink>
@@ -540,7 +566,9 @@ fetchForBusyState(){
                   </div>
                 </div>
               </div>
-              <SubMenu  links={CLIENTS_MODULE_MENU_LINKS} key={this.props.clientState}/>
+              {!this.props.isGroupAccount && <SubMenu  links={CLIENTS_MODULE_MENU_LINKS} key={this.props.clientState}/> }
+              {this.props.isGroupAccount && <SubMenu  links={GROUP_MODULE_MENU_LINKS} key={this.props.clientState}/> }
+              
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
