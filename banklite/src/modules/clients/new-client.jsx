@@ -34,7 +34,7 @@ import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
 class NewClient extends React.Component {
   constructor(props) {
     super(props);
-    console.log('Lopncsc');
+    // console.log('Lopncsc');
     this.state = {
       user: JSON.parse(localStorage.getItem('lingoAuth')),
     };
@@ -53,7 +53,7 @@ class NewClient extends React.Component {
   handleCreateNewCustomer = async (createNewCustomerpayload) => {
     const { dispatch } = this.props;
 
-    await dispatch(clientsActions.createClient(createNewCustomerpayload));
+    await dispatch(clientsActions.createClient(createNewCustomerpayload, "individual"));
   };
 
 

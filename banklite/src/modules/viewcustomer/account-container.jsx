@@ -28,6 +28,7 @@ import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposit
 
 
 import ViewCustomer from '.'
+import ViewGroupCustomer from './groupInfo'
 import ViewCustomerAttachments from './attachments'
 import ViewCustomerComments from './comments'
 import ViewCustomerCommunications from './communications'
@@ -70,9 +71,9 @@ class AccountContainer extends React.Component {
                         
                         {this.props.children}
                         <Route  exact path='/customer/:id'  component={ViewCustomer} /> 
-                        <Route  path='/createnewcustomer'                render={(props) => <NewCustomerAccount {...props} />} /> 
-                        <Route  path='/create-investmentcustomer'        render={(props) => <NewInvestmentCustomerAccount {...props} />} /> 
-                        <Route  path='/editcustomer'                     render={(props) => <EditCustomerAccount {...props} />}  /> 
+                        {/* <Route  path='/createnewcustomer'                render={(props) => <NewCustomerAccount {...props} />} /> 
+                        <Route  path='/create-investmentcustomer'        render={(props) => <NewInvestmentCustomerAccount {...props} />} />  */}
+                        {/* <Route  path='/editcustomer'                     render={(props) => <EditCustomerAccount {...props} />}  />  */}
                         <Route  path='/customer/:id/attachments'         render={(props) => <ViewCustomerAttachments {...props} />} /> 
                         <Route  path='/customer/:id/tasks'               render={(props) => <ViewCustomerTasks {...props} />} /> 
                         <Route  path='/customer/:id/activities'               render={(props) => <ViewCustomerActivites {...props} />} /> 
@@ -84,6 +85,22 @@ class AccountContainer extends React.Component {
                         {/* <Route  path='/customer/:id/closedaccounts/:accountid' render={(props) => <ViewClosedLoanAccount {...props} />} /> */}
                         <Route  path='/customer/:id/closedaccounts/loan/:accountid' render={(props) => <ViewClosedLoanAccount {...props} />} />
                         <Route  path='/customer/:id/closedaccounts/savings/:accountid' render={(props) => <ViewClosedSavingsAccount {...props} />} />
+
+                        <Route  exact path='/group/:id'  component={ViewGroupCustomer} /> 
+                        {/* <Route  path='/createnewcustomer'                render={(props) => <NewCustomerAccount {...props} />} /> 
+                        <Route  path='/create-investmentcustomer'        render={(props) => <NewInvestmentCustomerAccount {...props} />} /> 
+                        <Route  path='/editcustomer'                     render={(props) => <EditCustomerAccount {...props} />}  />  */}
+                        <Route  path='/group/:id/attachments'         render={(props) => <ViewCustomerAttachments {...props} />} /> 
+                        <Route  path='/group/:id/tasks'               render={(props) => <ViewCustomerTasks {...props} />} /> 
+                        <Route  path='/group/:id/activities'               render={(props) => <ViewCustomerActivites {...props} />} /> 
+                        <Route  path='/group/:id/communications'      render={(props) => <ViewCustomerCommunications {...props} />} /> 
+                        <Route  path='/group/:id/comments'            render={(props) => <ViewCustomerComments {...props} />}  /> 
+                        <Route exact  path='/group/:id/closedaccounts'      render={(props) => <ViewClosedAccounts {...props} />} /> 
+                        <Route  path='/group/:id/loanaccount/:loanid'       render={(props) => <ViewLoanAccount {...props} />} /> 
+                        <Route  path='/group/:id/savingsaccount/:accountid' render={(props) => <ViewSavingsAccount {...props} />} /> 
+                        {/* <Route  path='/customer/:id/closedaccounts/:accountid' render={(props) => <ViewClosedLoanAccount {...props} />} /> */}
+                        <Route  path='/group/:id/closedaccounts/loan/:accountid' render={(props) => <ViewClosedLoanAccount {...props} />} />
+                        <Route  path='/group/:id/closedaccounts/savings/:accountid' render={(props) => <ViewClosedSavingsAccount {...props} />} />
                     </div>
              </Fragment>
         );
