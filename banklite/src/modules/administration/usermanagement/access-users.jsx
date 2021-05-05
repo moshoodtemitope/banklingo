@@ -148,9 +148,9 @@ retrieveFromApi = (tempData)=>{
 
 
   
-  submitActivationRequest = async (activationAction) => {
+  submitActivationRequest = async () => {
    
-    const { modalAccountEncodedKey } = this.state;
+    const { modalAccountEncodedKey,activationAction } = this.state;
     
     const { dispatch } = this.props;
     await dispatch(
@@ -706,7 +706,7 @@ fetchPageList() {
                         <PinResetModal open={showPINStatus} selectedUser={selectedUser} toggleHandler={this.togglePINModal} proceedHandler={this.submitResetPinRequest} requestProcessor={this.props.ResetPinReducer} />
                         <PasswordResetModal open={showResetPasswordStatus}  selectedUser={selectedUser} toggleHandler={this.toggleShowPasswordModal} proceedHandler={this.submitPasswordResest} requestProcessor={this.props.ResetPasswordReducer} />
                        
-                        <ActivateUserModal open={showActivationStatus}  selectedUser={selectedUser} activationAction={activationAction}  toggleHandler={this.toggleShowActivationModal} proceedHandler={this.submitActivationRequest} requestProcessor={this.props.ActivateDeactivateUserReducer} />
+                        <ActivateUserModal open={showActivationStatus} selectedUser={selectedUser} activationAction={activationAction}  toggleHandler={this.toggleShowActivationModal} proceedHandler={this.submitActivationRequest} requestProcessor={this.props.ActivateDeactivateUserReducer} />
                        
                         {/* {showActivationStatus && this.ActivationActionStatus()} */}
                       </div>
