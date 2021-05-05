@@ -2024,13 +2024,16 @@ class ViewLoanAccount extends React.Component {
       <div>
         <div className="amounts-wrap w-65">
 
-        <div className="eachamount">
+       {this.visibility.showNotLoanActiveAmounts && <div className="eachamount">
             <h6>Loan Amount</h6>
             <div className="amounttext">
               {numberWithCommas(loanAccountData.loanAmount, true)}{" "}
-              {/* {loanAccountData.currencyCode} */}
+            
             </div>
           </div>
+  }
+
+
 {!this.visibility.showNotLoanActiveAmounts && (<div>
           <div className="eachamount">
             <h6>Total Balance</h6>
