@@ -109,14 +109,26 @@ class CustomerHeading extends React.Component {
     handleChangeHistoryClose = () => this.setState({showChangeHistory:false});
     
     handleChangeHistoryShow = () => this.setState({showChangeHistory:true});
+    handleChange = (e) => {
+        e.preventDefault();
+      };
 
+      handleDatePicker = (startDate) => {
+        startDate.setHours(startDate.getHours() + 1);
+    
+        // this.setState({ startDate }, () => {
+        //   if (this.state.endDate !== '') {
+        //     //this.getHistory();
+        //   }
+        // });
+      };
     newTask = ()=>{
         ///This should be an add task component
         const {showNewTask} = this.state;
         return(
             <Modal show={showNewTask} onHide={this.handleTaskClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
                 <Modal.Header>
-                    <Modal.Title>Creating Task</Modal.Title>
+                    <Modal.Title>Creating Tas./.k</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
@@ -140,6 +152,9 @@ class CustomerHeading extends React.Component {
                                  placeholderText="Choose entry date" selected={this.state.dob} 
                                     onChange={this.handleDatePicker}
                                     onChangeRaw={(e)=>this.handleChange(e)}
+
+                                    {/* onChangeRaw={this.handleDateChangeRaw}
+                    onChange={this.handleEndDatePicker} */}
                                     dateFormat={window.dateformat}
                                     className="form-control form-control-sm"
                                     peekNextMonth

@@ -681,8 +681,8 @@ class MainHeader extends React.Component{
                 
                 <Navbar  >
                 {/* <Navbar  expand="lg"> */}
-                    {getTenant && <Navbar.Brand as={Link} to="/dashboard">{getTenant.companyName}</Navbar.Brand>}
-                    {!getTenant && <Navbar.Brand as={Link} to="/dashboard">Empire Trust</Navbar.Brand>}
+                    {getTenant && <Navbar.Brand as={Link} to="/dashboard">{getTenant?.companyName}</Navbar.Brand>}
+                    {!getTenant && <Navbar.Brand as={Link} to="/dashboard">{getTenant?.companyName??""}</Navbar.Brand>}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="heading-nav">
                         {/* <Nav className="">

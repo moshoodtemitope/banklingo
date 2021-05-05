@@ -17,6 +17,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Button from 'react-bootstrap/Button'
 import  TableComponent from '../../../shared/elements/table'
 import "../customerprofile.scss"; 
+
+import  DatePickerEx from "react-datepicker";
 // import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 
 // import { clientsActions } from '../../../redux/actions/clients/clients.action';
@@ -41,6 +43,9 @@ class ChangeCustomerStateModal extends React.Component {
 
      
 
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+      };
 //   toggleModal = () =>{
 //     this.setState({ showModal: !this.state.showModal });
 //   }
@@ -78,15 +83,19 @@ class ChangeCustomerStateModal extends React.Component {
                             </Col>
                             <Col className="date-wrap">
                                 <Form.Label className="block-level">Due Date</Form.Label>
-                                 placeholderText="Choose entry date" selected={this.state.dob} 
+                                <DatePickerEx 
+                                 placeholderText="Choose entry date" 
                                     onChange={this.handleDatePicker}
-                                    onChangeRaw={(e)=>this.handleChange(e)}
+                                    onChangeRaw={this.handleDateChangeRaw}
                                     dateFormat={window.dateformat}
                                     className="form-control form-control-sm"
                                     peekNextMonth
                                     showMonthDropdown
+                                    showYearDropdown
                                     dropdownMode="select"
+                                    value={values.dueDate}
                                     maxDate={new Date()}
+                                    />
                                 {/* /> */}
                             </Col>
                         </Form.Row>
