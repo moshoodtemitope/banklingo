@@ -43,6 +43,9 @@ class ChangeCustomerStateModal extends React.Component {
 
      
 
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+      };
 //   toggleModal = () =>{
 //     this.setState({ showModal: !this.state.showModal });
 //   }
@@ -83,7 +86,7 @@ class ChangeCustomerStateModal extends React.Component {
                                 <DatePickerEx 
                                  placeholderText="Choose entry date" 
                                     onChange={this.handleDatePicker}
-                                    onChangeRaw={(e)=>this.handleChange(e)}
+                                    onChangeRaw={this.handleDateChangeRaw}
                                     dateFormat={window.dateformat}
                                     className="form-control form-control-sm"
                                     peekNextMonth

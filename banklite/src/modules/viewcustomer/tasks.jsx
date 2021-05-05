@@ -112,6 +112,10 @@ class ViewCustomerTasks extends React.Component {
         
     }
 
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+      };
+
     loadNextPage = (nextPage, tempData)=>{
         
         const {dispatch} = this.props;
@@ -172,6 +176,8 @@ class ViewCustomerTasks extends React.Component {
                             validationSchema={addClientTaskValidationSchema}
                             onSubmit={(values, { resetForm }) => {
 
+                             
+                             
                                 let addCustomerCommentsPayload = {
                                     assignedToEncodedKey:values.assignedToEncodedKey,
                                     assignedToUserName:values.assignedToUserName,
@@ -283,7 +289,9 @@ class ViewCustomerTasks extends React.Component {
                                                 </Col>
                                                 <Col className="date-wrap">
                                                     <Form.Label className="block-level">Due Date</Form.Label>
+                                                    
                                                     <DatePickerEx 
+                                                    onChangeRaw={this.handleDateChangeRaw}
                                                      placeholderText="Choose entry date"
                                                         dateFormat={window.dateformat}
                                                         className="form-control form-control-sm"
@@ -293,6 +301,7 @@ class ViewCustomerTasks extends React.Component {
                                                         dropdownMode="select"
                                                         minDate={new Date()}
                                                         name="dueDate"
+                                                        
                                                         value={values.dueDate}
                                                         onChange={setFieldValue}
                                                         className={errors.dueDate && touched.dueDate ? "is-invalid form-control form-control-sm" : "form-control form-control-sm"}

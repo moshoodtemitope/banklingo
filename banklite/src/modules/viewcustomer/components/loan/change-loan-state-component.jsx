@@ -116,7 +116,7 @@ export class ChangeLoanStateModal extends React.Component {
                                     setTimeout(() => {
                                         this.props.dispatch(loanActions.changeLoanState("CLEAR"))
                                         this.props.closeModal();
-                                        this.props.getCustomerLoanAccountDetails(this.loanEncodedKey);
+                                        this.props.getCustomerLoanAccountDetails(this.props.loanEncodedKey);
                                     }, 3000);
                                 }
 

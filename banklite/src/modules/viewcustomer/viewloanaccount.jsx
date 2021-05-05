@@ -4069,6 +4069,7 @@ class ViewLoanAccount extends React.Component {
       allUSerPermissions.indexOf("bnk_client_accept_loan_offer") > -1;
     let allowClientRejectOffer =
       allUSerPermissions.indexOf("bnk_client_reject_loan_offer") > -1;
+    
     let allowSecondLevelAproval =
       allUSerPermissions.indexOf("bnk_approve_loan_2ndlevel_account") > -1;
     let allowRequestLoanApproval =
@@ -4287,7 +4288,7 @@ this.permissions={
                 onClick={() => {
                   this.setState({
                     newState: "Approve (Level 1)",
-                    newStateUpdate: "approve",
+                    newStateUpdate: "approvefirstlevel",
                     ctaText: "Approve (Level 1)",
                     showDisburseLoanForm: false,
                   });

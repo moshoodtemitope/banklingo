@@ -178,7 +178,7 @@ class EditAClient extends React.Component {
       // .min(2, 'Valid response required')
       // .max(50, 'Max limit reached'),
       nextOfKinMobile: Yup.string()
-        .min(11, 'Valid mobile number is required')
+        .min(9, 'Valid mobile number is required')
         .max(16, 'Max limit reached'),
       notes: Yup.string(),
     });
@@ -234,6 +234,8 @@ class EditAClient extends React.Component {
         selectedCustype = custTypes.filter(
           (type) => type.id === allCustomerData.clientTypeId
         )[0];
+
+
       if (Object.keys(allCustomerData).length >= 1) {
         return (
           <Formik
@@ -291,7 +293,11 @@ class EditAClient extends React.Component {
                   ? allCustomerData.gender
                   : '',
               // dateOfBirth: (allCustomerData.dateOfBirth!==null && allCustomerData.dateOfBirth!==undefined && allCustomerData.dateOfBirth!=='')? getDateFromISO(allCustomerData.dateOfBirth):null,
-              dateOfBirth: null,
+              dateOfBirth:  allCustomerData.dateOfBirth !== undefined &&
+                allCustomerData.dateOfBirth !== null &&
+                allCustomerData.dateOfBirth !== ''
+                  ? allCustomerData.dateOfBirth:'',
+                  
               custType: allCustomerData.clientTypeId,
               notes: allCustomerData.notes.notes
                 ? allCustomerData.notes.notes
