@@ -10,6 +10,7 @@ import  TableComponent from '../../../shared/elements/table'
 import "../customerprofile.scss"; 
 
 import { numberWithCommas, getDateFromISO} from '../../../shared/utils';
+import { ClientClassificationConstants } from "../../../redux/actions/clients/client-states-constants";
 
 export class EmploymentInformationSection extends React.Component {
     constructor(props) {
@@ -33,7 +34,7 @@ export class EmploymentInformationSection extends React.Component {
   render (){
    let customerDetails=this.props.customerDetails;
 
-   
+   if(customerDetails.clientClassification===ClientClassificationConstants.GROUP) return null;
     return (<div className="each-overview">
     <h6>Employment Information</h6>
     <TableComponent classnames="striped bordered hover">

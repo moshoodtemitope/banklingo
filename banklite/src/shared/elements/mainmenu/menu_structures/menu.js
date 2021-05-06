@@ -49,7 +49,7 @@ export const menuList = [
         subMenus: [
             {
                 subMenuLabel: "All Groups",
-                subMenuRoute: "groups"
+                subMenuRoute: "/groups"
             },
         ]
     },

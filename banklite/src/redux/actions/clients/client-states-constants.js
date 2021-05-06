@@ -12,6 +12,10 @@ export const LoanSubStateConstants={
 }
 
 
+export const ClientClassificationConstants={
+    INDIVIDUAL:0,  GROUP:1
+}
+
 
 
 export const LoanPendingApprovalSubStateConstants={

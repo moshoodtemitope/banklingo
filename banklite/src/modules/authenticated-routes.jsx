@@ -175,6 +175,7 @@ import { clientsConstants } from '../redux/actions/clients/clients.action';
 import { ClientStateConstants, DepositStateConstants, LoanStateConstants, LoanSubStateConstants } from '../redux/actions/clients/client-states-constants';
 import LoanListDisplay from './loanmanagement/loan-list-display';
 import AccessUsers from './administration/usermanagement/access-users';
+import GroupListDisplay from './clients/group-list-display';
 
 
 // var permissionsList = JSON.parse(localStorage.getItem('x-u-perm'));
@@ -297,7 +298,7 @@ class AuthenticatedRoutes extends React.Component {
                         {/* <Route exact path='/inactive-clients' render={(props) => <InactiveClients {...this.props} />} /> */}
                         {/* <Route exact path='/active-clients' render={(props) => <ActiveClients {...this.props} />} /> */}
                         <PrivateRoute accessRequired="bnk_view_clients"  exact path='/clients' {...this.props} authed={this.props.user} clientState={ClientStateConstants.ALL_CLIENTS} component={ClientsListDisplay}  />
-                        <PrivateRoute accessRequired="bnk_view_clients"  exact path='/groups' isGroupAccount={true} {...this.props} authed={this.props.user} clientState={ClientStateConstants.ALL_CLIENTS} component={ClientsListDisplay}  />
+                        <PrivateRoute accessRequired="bnk_view_clients"  exact path='/groups' isGroupAccount={true} {...this.props} authed={this.props.user} clientState={ClientStateConstants.ALL_CLIENTS} component={GroupListDisplay}  />
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/active-clients' {...this.props} authed={this.props.user} clientState={ClientStateConstants.ACTIVE} component={ClientsListDisplay} />
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/inactive-clients' {...this.props} authed={this.props.user} clientState={ClientStateConstants.INACTIVE} component={ClientsListDisplay} />
                         <PrivateRoute accessRequired="bnk_view_clients" exact path='/clients-pending-approval' {...this.props} authed={this.props.user}  clientState={ClientStateConstants.PENDING_APPROVAL} component={ClientsListDisplay} />
