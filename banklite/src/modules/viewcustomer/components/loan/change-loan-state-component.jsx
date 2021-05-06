@@ -66,9 +66,8 @@ export class ChangeLoanStateModal extends React.Component {
     let changeLoanStateValidationSchema
          = Yup.object().shape({
             comment: Yup.string()
-                .min(2, 'Valid comments required'),
-            notes: Yup.string()
-                .min(2, 'Valid notes required')
+                .min(2, 'Valid comments required').required('Comment is required')
+         
         });
     
 

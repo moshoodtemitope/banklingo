@@ -560,7 +560,7 @@ class ViewCustomer extends React.Component {
                               />
                             )}
                             <div className="mandate-title">
-                              Customer BVN Photo
+                              Customer Biometric ID Photo
                             </div>
                           </div>
                         </div>

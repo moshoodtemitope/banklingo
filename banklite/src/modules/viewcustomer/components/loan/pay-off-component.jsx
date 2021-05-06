@@ -79,7 +79,7 @@ export class LoanPayOffModal extends React.Component {
             txtChannelEncodedKey: Yup.string()
                 .required('Required'),
             notes: Yup.string()
-                .min(2, 'Valid notes required'),
+                .min(2, 'Valid notes required').required('Note is required'),
 
         });
 

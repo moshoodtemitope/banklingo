@@ -47,7 +47,7 @@ export class PersonalInformationSection extends React.Component {
                 <td>{getDateFromISO(customerDetails.dateOfBirth)} </td>
             </tr>
             <tr>
-                <td>BVN</td>
+                <td>Biometric ID</td>
                 <td>{customerDetails.bvn}</td>
             </tr>
         </tbody>

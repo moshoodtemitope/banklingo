@@ -199,7 +199,7 @@ class NewCustomerAccount extends React.Component {
                                                                
                                                                 <Form.Row>
                                                                     <Col>
-                                                                        <Form.Label className="block-level">BVN</Form.Label>
+                                                                        <Form.Label className="block-level">Biometric ID</Form.Label>
                                                                         <Form.Control type="text"  />
                                                                     </Col>
                                                                     <Col>
@@ -233,7 +233,7 @@ class NewCustomerAccount extends React.Component {
                                                                 </Form.Row>
                                                                 <Form.Row>
                                                                     <Col>
-                                                                        <Form.Label className="block-level">BVN Validation Status</Form.Label>
+                                                                        <Form.Label className="block-level">Biometric ID Validation Status</Form.Label>
                                                                         <Form.Control type="text"  />
                                                                     </Col>
                                                                     <Col>

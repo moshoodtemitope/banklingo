@@ -463,7 +463,7 @@ class NewClient extends React.Component {
               </Form.Row>
               <Form.Row>
                 <Col>
-                  <Form.Label className='block-level'>BVN</Form.Label>
+                  <Form.Label className='block-level'>Biometric ID</Form.Label>
                   <Form.Control
                     type='number'
                     name='BVN'

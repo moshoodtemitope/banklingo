@@ -1190,7 +1190,7 @@ class DashboardLanding extends React.Component {
                             <div className="detail-value">{customerDetails.contact.contactMobile}</div>
                         </div>
                         <div className="each-detail">
-                            <div className="detail-title">BVN</div>
+                            <div className="detail-title">Biometric ID</div>
                             <div className="detail-value">{customerDetails.bvn}</div>
                         </div>
                         {/* <div className="each-detail">

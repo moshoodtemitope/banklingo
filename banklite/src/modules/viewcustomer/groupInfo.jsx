@@ -507,7 +507,7 @@ class ViewGroupCustomer extends React.Component {
                                                                     {!passport &&
                                                                         <img className="no-mandate" src={PictureIco} alt=""/>
                                                                     }
-                                                                    <div className="mandate-title">Customer BVN Photo</div>
+                                                                    <div className="mandate-title">Customer Biometric ID Photo</div>
                                                                     
                                                                 </div>
                                                             </div>
