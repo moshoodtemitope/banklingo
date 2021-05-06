@@ -31,6 +31,7 @@ export class MakeTransferModal extends React.Component {
         // this.clientEncodedKey = this.props.match.params.id;
         this.state = {
             // showModal:false,
+            typeOfTransfer: "currentcustomer"
         }
 
     }
@@ -436,8 +437,8 @@ export class MakeTransferModal extends React.Component {
 
                                         setTimeout(() => {
                                             this.props.dispatch(depositActions.changeDepositState("CLEAR"))
-                                            this.handleHideModal();
-                                            this.getCustomerDepositAccountDetails(this.props.depositEncodedKey);
+                                            this.props.handleHideModal();
+                                            this.props.getCustomerDepositAccountDetails(this.props.depositEncodedKey);
                                         }, 3000);
                                     }
 
@@ -477,308 +478,6 @@ export class MakeTransferModal extends React.Component {
                             </Modal.Header>
                             <Modal.Body>
 
-                                {/* {(showDepositFundsForm!==true &&
-                                    newStateUpdate!=="setmaximumwithdrawalamount" && newStateUpdate!=="setrecommendeddepositamount"
-                                     && newStateUpdate!=="beginmaturity" && newStateUpdate!=="makewithdrawal"
-                                     && newStateUpdate!=="transfer") &&
-                                    <Form.Group>
-                                        <Form.Row>
-                                            <Col>
-                                                <Form.Label className="block-level">Present State</Form.Label>
-                                                <span className="form-text">{depositDetails.accountStateDescription} </span>
-                                            </Col>
-                                            <Col>
-                                                <Form.Label className="block-level">New State</Form.Label>
-                                                <span className="form-text">{newState}</span>
-                                            </Col>
-                                        </Form.Row>
-                                    </Form.Group>
-                                } */}
-
-                                {/* {newStateUpdate==="beginmaturity" &&
-                                    <Form.Row className="mb-10">
-                                        <Col className="date-wrap">
-                                            <Form.Label className="block-level">Maturity Date</Form.Label>
-                                            <Form.Group className="mb-0 date-wrap">
-                                                 placeholderText="Choose  date"
-                                                        autoComplete="new-password"
-                                                    dateFormat={window.dateformat}
-                                                    className="form-control form-control-sm"
-                                                    peekNextMonth
-                                                    showMonthDropdown
-                                                    name="maturityDate"
-                                                    value={values.maturityDate}
-                                                    onChange={setFieldValue}
-                                                    showYearDropdown
-                                                    dropdownMode="select"
-                                                    minDate={new Date()}
-                                                    className={errors.maturityDate && touched.maturityDate ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                />
-                                                {errors.maturityDate && touched.maturityDate ? (
-                                                    <span className="invalid-feedback">{errors.maturityDate}</span>
-                                                ) : null}
-                                            </Form.Group>
-
-                                        </Col>
-                                    </Form.Row>
-                                }
-                                {(showDepositFundsForm!==true &&
-                                    newStateUpdate!=="setmaximumwithdrawalamount" && newStateUpdate!=="setrecommendeddepositamount"
-                                    && newStateUpdate!=="beginmaturity" && newStateUpdate!=="makewithdrawal"
-                                     && newStateUpdate!=="transfer") &&
-                                    <Form.Group>
-                                        <Form.Label className="block-level">Comments</Form.Label>
-                                        <Form.Control as="textarea"
-                                            rows="3"
-                                            onChange={handleChange}
-                                            name="comment"
-                                        value={values.comment}
-                                        className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null}
-                                        />
-                                        {errors.comment && touched.comment ? (
-                                            <span className="invalid-feedback">{errors.comment}</span>
-                                        ) : null}
-                                    </Form.Group>
-                                }
-
-                                {newStateUpdate === "makewithdrawal" &&
-                                    <div>
-                                        <Form.Row>
-                                            <Col>
-                                                <Form.Label className="block-level">Amount</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    autoComplete="off"
-                                                    onChange={handleChange}
-                                                    value={numberWithCommas(values.amountToWithdraw)}
-                                                    className={errors.amountToWithdraw && touched.amountToWithdraw ? "is-invalid h-38px" : "h-38px"}
-                                                    name="amountToWithdraw" required />
-                                                {errors.amountToWithdraw && touched.amountToWithdraw ? (
-                                                    <span className="invalid-feedback">{errors.amountToWithdraw}</span>
-                                                ) : null}
-                                            </Col>
-                                            <Col>
-                                                <Form.Group className="mb-0">
-                                                    <Form.Label className="block-level">Transaction Channel</Form.Label>
-                                                    {allChannels.length >= 1 &&
-                                                        <div>
-                                                            <Select
-                                                                options={allChannels}
-
-                                                                onChange={(selected) => {
-                                                                    setFieldValue('depositChannelEncodedKey', selected.value)
-                                                                }}
-                                                                onBlur={() => setFieldTouched('depositChannelEncodedKey', true)}
-                                                                className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
-                                                                name="depositChannelEncodedKey"
-                                                            />
-                                                            {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
-                                                                <span className="invalid-feedback">{errors.depositChannelEncodedKey}</span>
-                                                            ) : null}
-                                                        </div>
-                                                    }
-                                                    {adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
-                                                        <div className="errormsg"> Unable to load Disbursment channels</div>
-                                                    }
-
-
-                                                </Form.Group>
-                                            </Col>
-                                        </Form.Row>
-                                        <Form.Row className="mb-10">
-                                            <Col className="date-wrap">
-                                                <Form.Group className="table-helper m-b-5">
-                                                    <input type="checkbox"
-                                                        name="allowBackDate"
-                                                        onChange={handleChange}
-                                                        checked={values.allowBackDate ? values.allowBackDate : null}
-                                                        value={values.allowBackDate}
-                                                        id="allowBackDate" />
-                                                    <label htmlFor="allowBackDate">Backdate</label>
-                                                </Form.Group>
-                                                {values.allowBackDate === true &&
-                                                    <Form.Group className="mb-0 date-wrap">
-                                                         placeholderText="Choose  date"
-                                                        autoComplete="new-password"
-                                                            dateFormat={window.dateformat}
-                                                            className="form-control form-control-sm"
-                                                            peekNextMonth
-                                                            showMonthDropdown
-                                                            name="backDateChosen"
-                                                            value={values.backDateChosen}
-                                                            onChange={setFieldValue}
-                                                            showYearDropdown
-                                                            dropdownMode="select"
-                                                            maxDate={new Date()}
-                                                            className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                        />
-                                                        {errors.backDateChosen && touched.backDateChosen ? (
-                                                            <span className="invalid-feedback">{errors.backDateChosen}</span>
-                                                        ) : null}
-                                                    </Form.Group>
-                                                }
-                                            </Col>
-                                        </Form.Row>
-                                    </div>
-                                }
-
-                                {showDepositFundsForm===true &&
-                                    <div>
-                                        <Form.Row>
-                                            <Col>
-                                                <Form.Label className="block-level">Amount</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    autoComplete="off"
-                                                    onChange={handleChange}
-                                                    value={numberWithCommas(values.amountToDeposit)}
-                                                    className={errors.amountToDeposit && touched.amountToDeposit ? "is-invalid h-38px" : "h-38px"}
-                                                    name="amountToDeposit" required />
-                                                {errors.amountToDeposit && touched.amountToDeposit ? (
-                                                    <span className="invalid-feedback">{errors.amountToDeposit}</span>
-                                                ) : null}
-                                            </Col>
-                                            <Col>
-                                                <Form.Group className="mb-0">
-                                                    <Form.Label className="block-level">Transaction Channel</Form.Label>
-                                                    {allChannels.length >=1 &&
-                                                        <div>
-                                                            <Select
-                                                                options={allChannels}
-
-                                                                onChange={(selected) => {
-                                                                    setFieldValue('depositChannelEncodedKey', selected.value)
-                                                                }}
-                                                                onBlur={()=> setFieldTouched('depositChannelEncodedKey', true)}
-                                                                className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
-                                                                name="depositChannelEncodedKey"
-                                                            />
-                                                            {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
-                                                                <span className="invalid-feedback">{errors.depositChannelEncodedKey}</span>
-                                                            ) : null}
-                                                        </div>
-                                                    }
-                                                    {adminGetTransactionChannelsRequest.request_status=== administrationConstants.GET_TRANSACTION_CHANNELS_FAILURE &&
-                                                        <div className="errormsg"> Unable to load Disbursment channels</div>
-                                                    }
-
-
-                                                </Form.Group>
-                                            </Col>
-                                        </Form.Row>
-                                        <Form.Row className="mb-10">
-                                            <Col className="date-wrap">
-                                                <Form.Group className="table-helper m-b-5">
-                                                    <input type="checkbox"
-                                                    name="allowBackDate"
-                                                    onChange={handleChange}
-                                                    checked={values.allowBackDate? values.allowBackDate:null}
-                                                    value={values.allowBackDate}
-                                                    id="allowBackDate"/>
-                                                    <label htmlFor="allowBackDate">Backdate</label>
-                                                </Form.Group>
-                                                {values.allowBackDate===true &&
-                                                    <Form.Group className="mb-0 date-wrap">
-                                                         placeholderText="Choose  date"
-                                                        autoComplete="new-password"
-                                                            dateFormat={window.dateformat}
-                                                            className="form-control form-control-sm"
-                                                            peekNextMonth
-                                                            showMonthDropdown
-                                                            name="backDateChosen"
-                                                            value={values.backDateChosen}
-                                                            onChange={setFieldValue}
-                                                            showYearDropdown
-                                                            dropdownMode="select"
-                                                            maxDate={new Date()}
-                                                            className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                        />
-                                                        {errors.backDateChosen && touched.backDateChosen ? (
-                                                            <span className="invalid-feedback">{errors.backDateChosen}</span>
-                                                        ) : null}
-                                                    </Form.Group>
-                                                }
-                                            </Col>
-                                            <Col className="date-wrap">
-                                                <Form.Group className="table-helper m-b-5">
-                                                    <input type="checkbox"
-                                                    name="showBookingDate"
-                                                    onChange={handleChange}
-                                                    checked={values.showBookingDate? values.showBookingDate:null}
-                                                    value={values.showBookingDate}
-                                                    id="showBookingDate"/>
-                                                    <label htmlFor="showBookingDate">Booking Date</label>
-                                                </Form.Group>
-                                                {values.showBookingDate===true &&
-                                                    <Form.Group className="mb-0 date-wrap">
-                                                         placeholderText="Choose  date"
-                                                        autoComplete="new-password"
-                                                            dateFormat={window.dateformat}
-                                                            className="form-control form-control-sm"
-                                                            peekNextMonth
-                                                            showMonthDropdown
-                                                            name="bookingDateChosen"
-                                                            value={values.bookingDateChosen}
-                                                            onChange={setFieldValue}
-                                                            showYearDropdown
-                                                            dropdownMode="select"
-                                                            maxDate={new Date()}
-                                                            className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
-                                                        />
-                                                        {errors.bookingDateChosen && touched.bookingDateChosen ? (
-                                                            <span className="invalid-feedback">{errors.bookingDateChosen}</span>
-                                                        ) : null}
-                                                    </Form.Group>
-                                                }
-                                            </Col>
-                                        </Form.Row>
-
-
-                                    </div>
-                                }
-                                {(newStateUpdate==="setmaximumwithdrawalamount" || newStateUpdate==="setrecommendeddepositamount") &&
-                                    <div>
-                                        <Form.Row>
-                                            <Col>
-                                                <Form.Label className="block-level">{newStateHeading} (CurCode) </Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    autoComplete="off"
-                                                    onChange={handleChange}
-                                                    value={numberWithCommas(values.amountToDeposit)}
-                                                    className={errors.amountToDeposit && touched.amountToDeposit ? "is-invalid h-38px" : "h-38px"}
-                                                    name="amountToDeposit" required />
-                                                {errors.amountToDeposit && touched.amountToDeposit ? (
-                                                    <span className="invalid-feedback">{errors.amountToDeposit}</span>
-                                                ) : null}
-                                            </Col>
-                                            <Col>
-                                            </Col>
-
-                                        </Form.Row>
-
-                                    </div>
-                                }
-
-                                {(showDepositFundsForm===true || newStateUpdate === "setmaximumwithdrawalamount" || newStateUpdate === "setrecommendeddepositamount"
-                                    || newStateUpdate==="beginmaturity" || newStateUpdate ==="makewithdrawal") &&
-
-                                    <Form.Group>
-                                        <Form.Label className="block-level">Notes</Form.Label>
-                                        <Form.Control as="textarea"
-                                            rows="3"
-                                            onChange={handleChange}
-                                            name="notes"
-                                            value={values.notes}
-                                            className={errors.notes && touched.notes ? "is-invalid form-control form-control-sm" : null}
-                                        />
-                                        {errors.notes && touched.notes ? (
-                                            <span className="invalid-feedback">{errors.notes}</span>
-                                        ) : null}
-                                    </Form.Group>
-                                } */}
-                                {/* {
-                                    newStateUpdate==="transfer" && */}
                                 <div>
                                     <Form.Row>
                                         <Col>
@@ -791,6 +490,12 @@ export class MakeTransferModal extends React.Component {
                                                 value={typeOfTransfer}
                                                 name="typeOfTransferToInitiate"
                                                 onChange={(e) => {
+                                                    console.log({
+                                                        typeOfTransfer: e.target.value,
+                                                        selectOtherCustomerAccount: "",
+                                                        defaultAccountOptions: "",
+                                                        selectACustomerAccount: ""
+                                                    });
                                                     this.setState({
                                                         typeOfTransfer: e.target.value,
                                                         selectOtherCustomerAccount: "",
