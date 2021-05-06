@@ -83,7 +83,9 @@ class NewBranch extends React.Component {
     renderCreateNewBranch = ()=>{
 
 
-        let adminCreateNewBranchRequest = this.prop?.adminCreateNewBranch;
+        let adminCreateNewBranchRequest = this.props.adminCreateNewBranch;
+
+        //if(adminCreateNewBranchRequest==null) return null;
         return (
             <Formik
                 initialValues={{
@@ -329,10 +331,10 @@ class NewBranch extends React.Component {
                                 >
                                     Cancel</Button>
                                 <Button variant="success" type="submit"
-                                    disabled={adminCreateNewBranchRequest.is_request_processing} 
+                                    disabled={adminCreateNewBranchRequest?.is_request_processing} 
                                     className="mr-20"   
                                     > 
-                                        {adminCreateNewBranchRequest.is_request_processing?"Please wait...": "Create Branch"}
+                                        {adminCreateNewBranchRequest?.is_request_processing?"Please wait...": "Create Branch"}
                                 </Button>
 
                                 

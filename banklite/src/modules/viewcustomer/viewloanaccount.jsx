@@ -4092,6 +4092,15 @@ class ViewLoanAccount extends React.Component {
       let allowRescheduleLoan =
       allUSerPermissions.indexOf("bnk_reschedule_loan_account") > -1;
 
+      let allowDisburseLoan =
+      allUSerPermissions.indexOf("bnk_disburse_loan_account") > -1;
+
+      let allowAplyRepayment=
+      allUSerPermissions.indexOf("bnk_apply_loan_repayment") > -1;
+
+
+      
+
 
 this.permissions={
     allowEditLoan: allowEditLoan,
@@ -4105,6 +4114,8 @@ this.permissions={
     allowSecondLevelAproval: allowSecondLevelAproval,
     allowrejectloan: allowrejectloan,
     allowRefinanceLoan: allowRefinanceLoan,
+    allowDisburseLoan:allowDisburseLoan,
+    allowAplyRepayment:allowAplyRepayment,
     allowRescheduleLoan:allowRescheduleLoan
   };
 
@@ -4266,7 +4277,7 @@ this.permissions={
             </li>
           )}
 
-          {visibility.showEnterRepayment && ( //TODO: Apply permissions for repayment
+          {visibility.showEnterRepayment && this.permissions.allowAplyRepayment &&( //TODO: Apply permissions for repayment
             <li>
               <Button
                 size="sm"
@@ -4376,7 +4387,7 @@ this.permissions={
               </li>
             )}
 
-          {visibility.showDisburseLoan && ( //TODO: include permission for loan disbursment
+          {visibility.showDisburseLoan &&  this.permissions.allowDisburseLoan &&( //TODO: include permission for loan disbursment
             <li>
               <Button
                 size="sm"
