@@ -906,14 +906,6 @@ class DashboardLanding extends React.Component {
                     ctaText = "Undo Close Till";
                 }
                 
-
-           
-
-
-           
-            
-
-            
                 
         return(
             <div className="slidein-wrap">
@@ -1019,7 +1011,7 @@ class DashboardLanding extends React.Component {
                 <div className="slidein-form" ref={this.setWrapperRef}>
                     <div className="slide-in-heading">
                         
-                            <h3>View  Till - {tillId}</h3> 
+                            <h3>View Till - {tillId}</h3> 
                         
                         
                         
@@ -1090,7 +1082,7 @@ class DashboardLanding extends React.Component {
                                             <Button variant="secondary" 
                                                
                                                 onClick={this.hideViewTill}>
-                                                Close
+                                                Cancel
                                             </Button>
                                             
                                         </div>

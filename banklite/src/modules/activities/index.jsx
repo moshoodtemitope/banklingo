@@ -245,7 +245,7 @@ class Activties extends React.Component {
                   />
                   <DatePicker
                     autoComplete='new-off'
-                    placeholderText='End  date'
+                    placeholderText='End date'
                     onChangeRaw={this.handleDateChangeRaw}
                     onChange={this.handleEndDatePicker}
                     selected={this.state.endDate}
@@ -376,7 +376,7 @@ class Activties extends React.Component {
                     />
                     <DatePicker
                       autoComplete='new-off'
-                      placeholderText='End  date'
+                      placeholderText='End date'
                       onChangeRaw={this.handleDateChangeRaw}
                       onChange={this.handleEndDatePicker}
                       selected={this.state.endDate}

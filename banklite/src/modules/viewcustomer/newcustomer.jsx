@@ -280,7 +280,9 @@ class NewCustomerAccount extends React.Component {
                                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
-                                                                            onChangeRaw={(e)=>this.handleChange(e)}
+
+                                                                          
+                                                                            ChangeRaw={(e)=>this.handleChange(e)}
                                                                             dateFormat={window.dateformat}
                                                                             className="form-control form-control-sm"
                                                                             peekNextMonth
