@@ -169,7 +169,7 @@ exportClients = () => {
    getHeaderDescription=()=> {
      
     //this.retrieveFromApi();
-    switch(this.props.clientState){
+    switch(this.zprops.clientState){
       case (ClientStateConstants.PENDING_APPROVAL): return  (<div>Customers (Pending Approval)</div>);
       case (ClientStateConstants.ACTIVE): return  (<div>Customers (Active)</div>);
       case (ClientStateConstants.INACTIVE): return  (<div>Customers (In-Active)</div>);
@@ -264,7 +264,7 @@ fetchForBusyState(){
                 {!eachClient.groupName &&
                   <td>
                     <NavLink
-                      to={`/${this.clientType}/${eachClient.clientEncodedKey}`}
+                      to={`/customer/${eachClient.clientEncodedKey}`}
                     >
                       {eachClient.firstName} {eachClient.lastName}
                     </NavLink>
@@ -273,7 +273,7 @@ fetchForBusyState(){
                 {eachClient.groupName &&
                   <td>
                     <NavLink
-                      to={`/${this.clientType}/${eachClient.clientEncodedKey}`}
+                      to={`/customer/${eachClient.clientEncodedKey}`}
                     >
                       {eachClient.groupName}
                     </NavLink>
@@ -281,7 +281,7 @@ fetchForBusyState(){
                 }
                 <td>
                   <NavLink
-                    to={`/${this.clientType}/${eachClient.clientEncodedKey}`}
+                    to={`/customer/${eachClient.clientEncodedKey}`}
                   >
                     {eachClient.clientCode}
                   </NavLink>
@@ -289,7 +289,7 @@ fetchForBusyState(){
                 <td>{eachClient?.clientStateDescription}</td>
                 <td>{eachClient?.accountOfficer}</td>
                 <td>{eachClient?.clientBranch}</td>
-                <td>{eachClient?.clientType}</td>
+                <td>Group</td>
                 <td>{eachClient?.lastUpdated}</td>
                 {allUSerPermissions.indexOf('bnk_edit_client') >
                   -1 && (
@@ -308,7 +308,7 @@ fetchForBusyState(){
                       </NavLink>
                       <NavLink
                         className='dropdown-item'
-                        to={`/${this.clientType}/${eachClient.clientEncodedKey}`}
+                        to={`/customer/${eachClient.clientEncodedKey}`}
                       >
                         View
                       </NavLink>
@@ -514,12 +514,12 @@ fetchForBusyState(){
       <TableComponent classnames='striped bordered hover'>
         <thead>
           <tr>
-            <th>Customer Name</th>
-            <th>Customer ID</th>
-            <th>Customer Status</th>
+            <th>Group Name</th>
+            <th>Group ID</th>
+            <th>Group Status</th>
             <th>Account Officer</th>
             <th>Branch</th>
-            <th>Customer Type</th>
+            <th>Group Type</th>
             <th>Date Created</th>
             {allUSerPermissions.indexOf('bnk_edit_client') > -1 && (
               <th>Actions</th>

@@ -199,7 +199,7 @@ class NewCustomerAccount extends React.Component {
                                                                
                                                                 <Form.Row>
                                                                     <Col>
-                                                                        <Form.Label className="block-level">BVN</Form.Label>
+                                                                        <Form.Label className="block-level">Biometric ID</Form.Label>
                                                                         <Form.Control type="text"  />
                                                                     </Col>
                                                                     <Col>
@@ -233,7 +233,7 @@ class NewCustomerAccount extends React.Component {
                                                                 </Form.Row>
                                                                 <Form.Row>
                                                                     <Col>
-                                                                        <Form.Label className="block-level">BVN Validation Status</Form.Label>
+                                                                        <Form.Label className="block-level">Biometric ID Validation Status</Form.Label>
                                                                         <Form.Control type="text"  />
                                                                     </Col>
                                                                     <Col>
@@ -280,7 +280,9 @@ class NewCustomerAccount extends React.Component {
                                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
-                                                                            onChangeRaw={(e)=>this.handleChange(e)}
+
+                                                                          
+                                                                            ChangeRaw={(e)=>this.handleChange(e)}
                                                                             dateFormat={window.dateformat}
                                                                             className="form-control form-control-sm"
                                                                             peekNextMonth

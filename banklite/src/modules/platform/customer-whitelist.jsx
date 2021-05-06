@@ -440,7 +440,7 @@ class ManageCustomerWhitelist extends React.Component {
                                     </Form.Row>
                                     <Form.Row>
                                         <Col>
-                                            <Form.Label className="block-level">BVN</Form.Label>
+                                            <Form.Label className="block-level">Biometric ID</Form.Label>
                                             <Form.Control type="text"
                                                 onChange={(e) => {
                                                     if (this.state.updateType !== "edit") {
@@ -974,7 +974,7 @@ class ManageCustomerWhitelist extends React.Component {
               <TableComponent classnames='striped bordered hover'>
                 <thead>
                   <tr>
-                    <th>BVN</th>
+                    <th>Biometric ID</th>
                     <th>Amount</th>
                     <th>Customer name</th>
                     <th>Status</th>
@@ -1041,7 +1041,7 @@ class ManageCustomerWhitelist extends React.Component {
               <TableComponent classnames='striped bordered hover'>
                 <thead>
                   <tr>
-                    <th>BVN</th>
+                    <th>Biometric ID</th>
                     <th>Amount</th>
                     <th>Customer name</th>
                     <th>Status</th>
@@ -1240,7 +1240,7 @@ class ManageCustomerWhitelist extends React.Component {
                 <TableComponent classnames='striped bordered hover'>
                   <thead>
                     <tr>
-                      <th>BVN</th>
+                      <th>Biometric ID</th>
                       <th>Amount</th>
                       <th>Customer name</th>
                       <th>Status</th>
@@ -1365,7 +1365,7 @@ class ManageCustomerWhitelist extends React.Component {
                 <TableComponent classnames='striped bordered hover'>
                   <thead>
                     <tr>
-                      <th>BVN</th>
+                      <th>Biometric ID</th>
                       <th>Amount</th>
                       <th>Customer name</th>
                       <th>Status</th>

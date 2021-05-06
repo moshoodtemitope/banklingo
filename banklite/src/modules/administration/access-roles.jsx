@@ -132,6 +132,7 @@ class AccessRoles extends React.Component {
                                 <thead>
                                     <tr>
                                         <th>Role Name</th>
+                                        <th>Users</th>
                                         <th>Created</th>
                                         {/* <th></th> */}
                                     </tr>
@@ -181,6 +182,7 @@ class AccessRoles extends React.Component {
                                 <thead>
                                     <tr>
                                         <th>Role Name</th>
+                                        <th>Users</th>
                                         <th>Created</th>
                                         {allUSerPermissions.indexOf("bnk_manage_role") >-1 &&
                                             <th></th>
@@ -194,6 +196,7 @@ class AccessRoles extends React.Component {
                                                 <Fragment key={index}>
                                                     <tr>
                                                         <td>{eachRole.roleName}</td>
+                                                        <td>{eachRole.usersCount}</td>
                                                         <td>{getDateFromISO(eachRole.dateCreated)}</td>
                                                         {allUSerPermissions.indexOf("bnk_manage_role") >-1 &&
                                                             <td>
@@ -266,6 +269,7 @@ class AccessRoles extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Role Name</th>
+                                            <th>Users</th>
                                             <th>Created</th>
                                             {allUSerPermissions.indexOf("bnk_manage_role") >-1 &&
                                                 <th></th>
@@ -279,6 +283,7 @@ class AccessRoles extends React.Component {
                                                     <Fragment key={index}>
                                                         <tr>
                                                             <td>{eachRole.roleName}</td>
+                                                            <td>{eachRole.usersCount}</td>
                                                             <td>{getDateFromISO(eachRole.dateCreated)}</td>
                                                             {allUSerPermissions.indexOf("bnk_manage_role") >-1 &&
                                                                 <td>
@@ -339,6 +344,7 @@ class AccessRoles extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Role Name</th>
+                                            <th>Users</th>
                                             <th>Created</th>
                                             {/* <th></th> */}
                                         </tr>
