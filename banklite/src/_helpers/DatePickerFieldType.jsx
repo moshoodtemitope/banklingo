@@ -1,9 +1,15 @@
 import React from 'react';
 import './DatePickerFieldType.scss';
 
+
 const DatePickerFieldType = React.forwardRef(
   ({ value, onClick, placeHolder }, ref) => (
-    <button className='date-picker' onClick={onClick} ref={ref}>
+    <button className='date-picker' onClick={(e)=>{
+        onClick();
+        e.preventDefault(); //prevent postback
+     
+
+    }} ref={ref}>
       <span className='text'>{value ? value : placeHolder}</span>
       <span className='icon'>
         <svg
