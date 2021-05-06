@@ -95,6 +95,7 @@ export const clientsConstants ={
 
 export const clientsActions = {
     getClients,
+    getClientGroups,
     exportClients,
     createClient,
     getAllClients,
@@ -117,17 +118,47 @@ export const clientsActions = {
 
 
 
-function getClients  (params, tempData, isGroupAccount){
+function getClients  (params, tempData){
     
     return dispatch =>{
         
-        let consume;
-        if(!isGroupAccount){
-            consume = ApiService.request(routes.HIT_CLIENTS+`?${params}`, "GET", null);
+        let consume = ApiService.request(routes.HIT_CLIENTS+`?${params}`, "GET", null);
+      
+        dispatch(request(consume,tempData));
+        return consume
+            .then(response =>{
+                dispatch(success(response));
+            }).catch(error =>{
+                
+                dispatch(failure(handleRequestErrors(error)));
+            });
+        
+    }
+
+    function request(user, tempData) { 
+        if(tempData===undefined){
+            return { type: clientsConstants.GET_CLIENTS_PENDING, user } 
         }
-        if(isGroupAccount){
-            consume = ApiService.request(routes.HIT_CLIENT_GROUP+`?${params}`, "GET", null);
+        else{
+            return { type: clientsConstants.GET_CLIENTS_PENDING, user, tempData } 
         }
+    }
+        
+
+    // function request(user) { return { type: clientsConstants.GET_CLIENTS_PENDING, user } }
+    function success(response) { return { type: clientsConstants.GET_CLIENTS_SUCCESS, response } }
+    function failure(error) { return { type: clientsConstants.GET_CLIENTS_FAILURE, error } }
+
+}
+
+
+
+function getClientGroups  (params, tempData){
+    
+    return dispatch =>{
+        
+        let consume = ApiService.request(routes.HIT_CLIENT_GROUP+`?${params}`, "GET", null);
+        
         dispatch(request(consume,tempData));
         return consume
             .then(response =>{

@@ -113,15 +113,7 @@ class CustomerHeading extends React.Component {
         e.preventDefault();
       };
 
-      handleDatePicker = (startDate) => {
-        startDate.setHours(startDate.getHours() + 1);
-    
-        // this.setState({ startDate }, () => {
-        //   if (this.state.endDate !== '') {
-        //     //this.getHistory();
-        //   }
-        // });
-      };
+      
     newTask = ()=>{
         ///This should be an add task component
         const {showNewTask} = this.state;

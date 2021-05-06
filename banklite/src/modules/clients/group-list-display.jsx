@@ -18,7 +18,7 @@ import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
 import { CLIENTS_MODULE_MENU_LINKS, GROUP_MODULE_MENU_LINKS } from '../../shared/config';
 import SubMenu from '../../shared/components/SubMenu';
 
-class ClientsListDisplay extends React.Component {
+class GroupListDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.initializeState();
@@ -103,9 +103,9 @@ retrieveFromApi = (tempData)=>{
     //let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}`;
     
     if(tempData){
-        dispatch(clientsActions.getClients(params, tempData));
+        dispatch(clientsActions.getClientGroups(params, tempData));
     }else{
-        dispatch(clientsActions.getClients(params, null));
+        dispatch(clientsActions.getClientGroups(params, null));
     }
     
 }
@@ -174,15 +174,16 @@ exportClients = () => {
       case (ClientStateConstants.ACTIVE): return  (<div>Customers (Active)</div>);
       case (ClientStateConstants.INACTIVE): return  (<div>Customers (In-Active)</div>);
       case (ClientStateConstants.ALL_CLIENTS): 
-       
-          return  (<div>Customers (All)</div>);
-       
+      
+          return  (<div>Groups (All)</div>);
+        
       case (ClientStateConstants.EXITED): return  (<div>Customers (Exited)</div>);
       case (ClientStateConstants.BLACKLISTED): return  (<div>Customers (Blacklisted)</div>);
                  
         default:            
          
-            return  (<div>Customers (All)</div>);
+         
+            return  (<div>Groups (All)</div>);
           
     }
 
@@ -351,9 +352,9 @@ fetchForBusyState(){
       let params = `FullDetails=${FullDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&ClientState=${ClientState}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
       if (tempData) {
-        dispatch(clientsActions.getClients(params, tempData));
+        dispatch(clientsActions.getClientGroups(params, tempData));
       } else {
-        dispatch(clientsActions.getClients(params));
+        dispatch(clientsActions.getClientGroups(params));
       }
     }
   };
@@ -560,8 +561,8 @@ fetchForBusyState(){
                   </div>
                 </div>
               </div>
-               <SubMenu  links={CLIENTS_MODULE_MENU_LINKS} key={this.props.clientState}/>
-            
+             
+             <SubMenu  links={GROUP_MODULE_MENU_LINKS} key={this.props.clientState}/> 
               
               <div className='module-content'>
                 <div className='content-container'>
@@ -591,4 +592,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ClientsListDisplay);
+export default connect(mapStateToProps)(GroupListDisplay);

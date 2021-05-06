@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import  TableComponent from '../../../shared/elements/table'
 import "../customerprofile.scss"; 
+import { LoanStateConstants,ClientClassificationConstants } from "../../../redux/actions/clients/client-states-constants";
 
 
 export class NextOfKinInfomationSection extends React.Component {
@@ -31,6 +32,7 @@ export class NextOfKinInfomationSection extends React.Component {
 
   render (){
    let customerDetails=this.props.customerDetails;
+   if(customerDetails.clientClassification===ClientClassificationConstants.GROUP) return null;
     return (<div className="each-overview">
     <h6>Next of Kin</h6>
     <TableComponent classnames="striped bordered hover">
@@ -38,19 +40,19 @@ export class NextOfKinInfomationSection extends React.Component {
         <tbody>
             <tr>
                 <td>Name</td>
-                <td>{customerDetails.nextOfKin.nextOfKinFullName}</td>
+                <td>{customerDetails.nextOfKin?.nextOfKinFullName}</td>
             </tr>
             <tr>
                 <td>Phone number</td>
-                <td>{customerDetails.nextOfKin.nextOfKinMobileNumber}</td>
+                <td>{customerDetails.nextOfKin?.nextOfKinMobileNumber}</td>
             </tr>
             <tr>
                 <td>Relationship</td>
-                <td>{customerDetails.nextOfKin.relationship}</td>
+                <td>{customerDetails.nextOfKin?.relationship}</td>
             </tr>
             <tr>
                 <td>Home address</td>
-                <td>{customerDetails.nextOfKin.nextofKinHomeAddress}</td>
+                <td>{customerDetails.nextOfKin?.nextofKinHomeAddress}</td>
             </tr>
         </tbody>
     </TableComponent>

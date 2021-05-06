@@ -186,7 +186,7 @@ class CustomerAccountContainer extends React.Component {
                 <Form.Control type='text' />
               </Col>
               <Col className='date-wrap'>
-                <Form.Label className='block-level'>Due Date ,.</Form.Label>
+                <Form.Label className='block-level'>Due Date</Form.Label>
                 <DatePicker
                   placeholderText='Choose entry date'
                   selected={this.state.dob}
