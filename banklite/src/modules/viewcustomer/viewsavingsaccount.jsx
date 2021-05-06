@@ -50,6 +50,7 @@ import { MakeAccountDepositModal } from "./components/deposits/deposit-fund-comp
 import { MakeAccountWithdrawalModal } from "./components/deposits/make-withdrawal-component";
 import { SetMaximumWithdrawalModal } from "./components/deposits/set-maximum-withdrawal-amount-component";
 import { SetRecommendedAmountModal } from "./components/deposits/set-recommended-amount-component";
+import { SetLockAccountModal } from "./components/deposits/set-lock-account-component";
 import { MakeTransferModal } from "./components/deposits/transfer-component";
 import { ChangeDepositStateModal } from "./components/deposits/change-deposit-state-component";
 import { DepositStateConstants } from "../../redux/actions/clients/client-states-constants";
@@ -101,6 +102,9 @@ class ViewSavingsAccount extends React.Component {
       CommunicationsCurrentPage: 1,
       NotificationType: 0,
 
+      LockAccountPageSize: 100,
+      LockAccountCurrentPage: 1,
+
       changeDepositState: false,
       showDepositFundsForm: false,
 
@@ -112,22 +116,22 @@ class ViewSavingsAccount extends React.Component {
       showMakeWithdrawalModal: false,
       showSetMaximumWithdrawalAmountModal: false,
       showRecommendedAmountModal: false,
+      showLockAccountModal: false,
       showTransferFundModal: false,
     };
     //  {showBeginMaturityModal:false,showDepositFundModal:false,showMakeWithdrawalModal:false,showSetMaximumWithdrawalAmountModal:false,showRecommendedAmountModal:false,showTransferFundModal:false}
 
-
     this.setState({
-        showApprove: false,
-        showIncomplete: false,
-        showRequestApproval: false,
-        showbeginMaturity: false,
-        showMakeWithdrawal: false,
-        showTransfer: false,
-        showMakeDeposit: false,
-        showReject: false,
-        showClosedWithdraw: false,
-      });
+      showApprove: false,
+      showIncomplete: false,
+      showRequestApproval: false,
+      showbeginMaturity: false,
+      showMakeWithdrawal: false,
+      showTransfer: false,
+      showMakeDeposit: false,
+      showReject: false,
+      showClosedWithdraw: false,
+    });
     this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
     this.enforcePermissions();
   }
@@ -150,6 +154,7 @@ class ViewSavingsAccount extends React.Component {
     this.getTransactionChannels();
     // this.getADepositActivities();
     // this.getADepositCommunications();
+    // this.getLockedAccount();
     // this.getCustomerDepositTransactions();
     // this.getADepositComments();
     // this.getACustomerDepositAttachments();
@@ -180,6 +185,18 @@ class ViewSavingsAccount extends React.Component {
     );
   };
 
+  getLockedAccount = () => {
+    const { dispatch } = this.props;
+
+    let {
+      LockAccountPageSize,
+      LockAccountCurrentPage,
+      NotificationType,
+    } = this.state;
+
+    let params = `PageSize=${LockAccountPageSize}&CurrentPage=${LockAccountCurrentPage}&NotificationType=${NotificationType}`;
+    dispatch(depositActions.getLockedAccount(this.depositEncodedKey, params));
+  };
   getADepositCommunications = () => {
     const { dispatch } = this.props;
 
@@ -513,7 +530,7 @@ class ViewSavingsAccount extends React.Component {
             <h6>Total Balance</h6>
             <div className="amounttext">
               {" "}
-              {depositAccountData.currencyCode??""+" "}
+              {depositAccountData.currencyCode ?? "" + " "}
               {numberWithCommas(
                 depositAccountData.depositAvailableBalance,
                 true
@@ -844,6 +861,273 @@ class ViewSavingsAccount extends React.Component {
     }
   };
 
+  renderALockedAccount = () => {
+    let getADepositAccountCommunicationsRequest = this.props
+      .getADepositAccountCommunicationsReducer;
+    let saveRequestData =
+      getADepositAccountCommunicationsRequest.request_data !== undefined
+        ? getADepositAccountCommunicationsRequest.request_data.tempData
+        : null;
+    if (
+      getADepositAccountCommunicationsRequest.request_status ===
+      loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_PENDING
+    ) {
+      if (
+        saveRequestData === undefined ||
+        (saveRequestData !== undefined && saveRequestData.length < 1)
+      ) {
+        return (
+          <div className="loading-content">
+            <div className="loading-text">Please wait... </div>
+            <div className="heading-with-cta ">
+              <Form className="one-liner"></Form>
+              <div className="pagination-wrap">
+                <label htmlFor="toshow">Show</label>
+                <select
+                  id="toshow"
+                  onChange={this.setPagesize}
+                  value={this.state.PageSize}
+                  className="countdropdown form-control form-control-sm"
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="200">200</option>
+                </select>
+              </div>
+            </div>
+            <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>Sent By</th>
+                  <th>Destination</th>
+                  <th>Message</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Date Sent</th>
+                  <th>Failure reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </TableComponent>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <div className="loading-text">Please wait... </div>
+            <div className="heading-with-cta ">
+              <Form className="one-liner"></Form>
+              <div className="pagination-wrap">
+                <label htmlFor="toshow">Show</label>
+                <select
+                  id="toshow"
+                  value={this.state.PageSize}
+                  className="countdropdown form-control form-control-sm"
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="200">200</option>
+                </select>
+              </div>
+            </div>
+            <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Sent By</th>
+                  <th>Destination</th>
+                  <th>Message</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Date Sent</th>
+                  <th>Failure reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                {saveRequestData.map((eachCommunication, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{eachCommunication.id} </td>
+                      <td>{eachCommunication.sentBy} </td>
+                      <td>{eachCommunication.destination} </td>
+                      <td>{eachCommunication.message} </td>
+                      <td>{eachCommunication.communicationTypeDescription} </td>
+                      <td>
+                        {eachCommunication.communicationStateDescription}{" "}
+                      </td>
+                      <td>{eachCommunication.dateSent} </td>
+                      <td>{eachCommunication.failureReason} </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </div>
+        );
+      }
+    }
+
+    if (
+      getADepositAccountCommunicationsRequest.request_status ===
+      loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_SUCCESS
+    ) {
+      let getADepositAccountCommunicationsInfo =
+        getADepositAccountCommunicationsRequest.request_data.response.data;
+      let getADepositAccountCommunicationsData =
+        getADepositAccountCommunicationsRequest.request_data.response.data
+          .result;
+
+      if (getADepositAccountCommunicationsData.length >= 1) {
+        return (
+          <div>
+            <div className="heading-with-cta ">
+              <Form className="one-liner"></Form>
+              <div className="pagination-wrap">
+                <label htmlFor="toshow">Show</label>
+                <select
+                  id="toshow"
+                  onChange={(e) =>
+                    this.setCommunicationsRequestPagesize(
+                      e,
+                      getADepositAccountCommunicationsData
+                    )
+                  }
+                  value={this.state.CommunicationsPageSize}
+                  className="countdropdown form-control form-control-sm"
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="200">200</option>
+                </select>
+                <TablePagination
+                  totalPages={getADepositAccountCommunicationsInfo.totalPages}
+                  currPage={getADepositAccountCommunicationsInfo.currentPage}
+                  currRecordsCount={getADepositAccountCommunicationsInfo.length}
+                  totalRows={getADepositAccountCommunicationsInfo.totalRows}
+                  tempData={getADepositAccountCommunicationsData}
+                  pagesCountToshow={4}
+                  refreshFunc={this.setCommunicationsRequestNextPage}
+                />
+              </div>
+            </div>
+            <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Sent By</th>
+                  <th>Destination</th>
+                  <th>Message</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Date Sent</th>
+                  <th>Failure reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getADepositAccountCommunicationsData.map(
+                  (eachCommunication, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{eachCommunication.id} </td>
+                        <td>{eachCommunication.sentBy} </td>
+                        <td>{eachCommunication.destination} </td>
+                        <td>{eachCommunication.message} </td>
+                        <td>
+                          {eachCommunication.communicationTypeDescription}{" "}
+                        </td>
+                        <td>
+                          {eachCommunication.communicationStateDescription}{" "}
+                        </td>
+                        <td>{eachCommunication.dateSent} </td>
+                        <td>{eachCommunication.failureReason} </td>
+                      </tr>
+                    );
+                  }
+                )}
+              </tbody>
+            </TableComponent>
+          </div>
+        );
+      } else {
+        return (
+          <div className="no-records">
+            <div className="heading-with-cta ">
+              <Form className="one-liner"></Form>
+              <div className="pagination-wrap">
+                <label htmlFor="toshow">Show</label>
+                <select
+                  id="toshow"
+                  onChange={(e) =>
+                    this.setCommunicationsRequestPagesize(
+                      e,
+                      getADepositAccountCommunicationsData
+                    )
+                  }
+                  value={this.state.CommunicationsPageSize}
+                  className="countdropdown form-control form-control-sm"
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="200">200</option>
+                </select>
+              </div>
+            </div>
+            <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>Sent By</th>
+                  <th>Destination</th>
+                  <th>Message</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Date Sent</th>
+                  <th>Failure reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </TableComponent>
+          </div>
+        );
+      }
+    }
+
+    if (
+      getADepositAccountCommunicationsRequest.request_status ===
+      loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_FAILURE
+    ) {
+      return (
+        <div className="loading-content errormsg">
+          <div>
+            {getADepositAccountCommunicationsRequest.request_data.error}
+          </div>
+        </div>
+      );
+    }
+  };
   renderADepositCommunicatons = () => {
     let getADepositAccountCommunicationsRequest = this.props
       .getADepositAccountCommunicationsReducer;
@@ -2468,7 +2752,7 @@ class ViewSavingsAccount extends React.Component {
                 </tr>
                 <tr>
                   <td>Currency</td>
-                  <td>{depositAccountData?.currencyCode??""+" "} </td>
+                  <td>{depositAccountData?.currencyCode ?? "" + " "} </td>
                 </tr>
                 {/* <tr>
                                     <td>Activation Date</td>
@@ -2488,7 +2772,6 @@ class ViewSavingsAccount extends React.Component {
                 <tr>
                   <td>Interest Accrued</td>
                   <td>
-                    
                     {numberWithCommas(
                       depositAccountData.interestAccrued,
                       true,
@@ -2499,7 +2782,6 @@ class ViewSavingsAccount extends React.Component {
                 <tr>
                   <td>Interest Earned</td>
                   <td>
-                    
                     {numberWithCommas(
                       depositAccountData.interestDue,
                       true,
@@ -2510,7 +2792,6 @@ class ViewSavingsAccount extends React.Component {
                 <tr>
                   <td>Interest Paid</td>
                   <td>
-                    
                     {numberWithCommas(
                       depositAccountData.interestPaid,
                       true,
@@ -2521,7 +2802,6 @@ class ViewSavingsAccount extends React.Component {
                 <tr>
                   <td>Blocked Amount</td>
                   <td>
-                    
                     {numberWithCommas(
                       depositAccountData.blockedAmount,
                       true,
@@ -2534,7 +2814,6 @@ class ViewSavingsAccount extends React.Component {
                   {depositAccountData.withdrawalLimit && (
                     <td>
                       {" "}
-                      
                       {numberWithCommas(
                         depositAccountData.withdrawalLimit,
                         true,
@@ -2575,6 +2854,8 @@ class ViewSavingsAccount extends React.Component {
     this.setState({ showSetMaximumWithdrawalAmountModal: true });
   handleShowRecommendedAmountModal = () =>
     this.setState({ showRecommendedAmountModal: true });
+  handleShowLockAccountModal = () =>
+    this.setState({ showLockAccountModal: true });
   handleShowTransferFundModal = () =>
     this.setState({ showTransferFundModal: true });
 
@@ -2588,6 +2869,8 @@ class ViewSavingsAccount extends React.Component {
     this.setState({ showSetMaximumWithdrawalAmountModal: false });
   handleHideRecommendedAmountModal = () =>
     this.setState({ showRecommendedAmountModal: false });
+  handleHideLockAccountModal = () =>
+    this.setState({ showLockAccountModal: false });
   handleHideTransferFundModal = () =>
     this.setState({ showTransferFundModal: false });
 
@@ -2836,7 +3119,7 @@ class ViewSavingsAccount extends React.Component {
     let allowRejectDepositApproval =
       allUSerPermissions.indexOf("bnk_reject_deposit_account") > -1;
 
-    this.permissions={
+    this.permissions = {
       allowApproveDeposit: allowApproveDeposit,
       allowRequestDepositApproval: allowRequestDepositApproval,
       allowRejectDepositApproval: allowRejectDepositApproval,
@@ -2846,7 +3129,7 @@ class ViewSavingsAccount extends React.Component {
 
   enforceVisibility = (depositDetails) => {
     //  ALL:0, Partial_Application:1,Pending_Approval:2,  Approved:3,REJECTED:4, ACTIVE:5,IN_ARREARS:6,CLOSED:7,CLOSED_WRITTEN_OFF:8,DORMANT:9,LOCKED:10,MARTURED:11,
-if(depositDetails==null ) return;
+    if (depositDetails == null) return;
     let showApprove =
       depositDetails.accountState === DepositStateConstants.Pending_Approval;
 
@@ -2900,35 +3183,34 @@ if(depositDetails==null ) return;
     //   allUSerPermissions.push(eachPermission.permissionCode);
     // });
 
-    let visibility=this.enforceVisibility(depositDetails);
-     //this.enforcePermissions();
+    let visibility = this.enforceVisibility(depositDetails);
+    //this.enforcePermissions();
 
-    
-//    console.log(JSON.stringify(visibility));
-//    console.log(JSON.stringify(this.permissions));
+    //    console.log(JSON.stringify(visibility));
+    //    console.log(JSON.stringify(this.permissions));
 
     return (
       <div className="heading-ctas">
         <ul className="nav">
-          { visibility.showApprove && this.permissions.allowApproveDeposit && (
-              <li>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    this.setState({
-                      newState: "Approved",
-                      newStateUpdate: "approve",
-                      newStateHeading: "Change Deposit State",
-                      ctaText: "Approve Deposit",
-                    });
-                    this.handleDepositChangeStateShow();
-                  }}
-                >
-                  Approve
-                </Button>
-              </li>
-            )}
-          { visibility.showIncomplete  && (
+          {visibility.showApprove && this.permissions.allowApproveDeposit && (
+            <li>
+              <Button
+                size="sm"
+                onClick={() => {
+                  this.setState({
+                    newState: "Approved",
+                    newStateUpdate: "approve",
+                    newStateHeading: "Change Deposit State",
+                    ctaText: "Approve Deposit",
+                  });
+                  this.handleDepositChangeStateShow();
+                }}
+              >
+                Approve
+              </Button>
+            </li>
+          )}
+          {visibility.showIncomplete && (
             <li>
               <Button
                 size="sm"
@@ -2948,23 +3230,23 @@ if(depositDetails==null ) return;
           )}
 
           {visibility.showbeginMaturity && (
-              <li>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    this.setState({
-                      newState: "Begin Maturity Period",
-                      newStateHeading: "Begin Maturity Period",
-                      newStateUpdate: "beginmaturity",
-                      ctaText: "Begin Maturity",
-                    });
-                    this.handleShowBeginMaturityModal();
-                  }}
-                >
-                  Begin Maturity
-                </Button>
-              </li>
-            )}
+            <li>
+              <Button
+                size="sm"
+                onClick={() => {
+                  this.setState({
+                    newState: "Begin Maturity Period",
+                    newStateHeading: "Begin Maturity Period",
+                    newStateUpdate: "beginmaturity",
+                    ctaText: "Begin Maturity",
+                  });
+                  this.handleShowBeginMaturityModal();
+                }}
+              >
+                Begin Maturity
+              </Button>
+            </li>
+          )}
 
           {visibility.showMakeWithdrawal && (
             <li>
@@ -2986,26 +3268,26 @@ if(depositDetails==null ) return;
           )}
 
           {visibility.showTransfer && (
-              <li>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    this.setState({
-                      typeOfTransfer: "currentcustomer",
-                      selectOtherCustomerAccount: "",
-                      selectACustomerAccount: "",
-                      newState: "Make Transfer",
-                      newStateHeading: "Make Transfer",
-                      newStateUpdate: "transfer",
-                      ctaText: "Make Transfer",
-                    });
-                    this.handleShowTransferFundModal();
-                  }}
-                >
-                  Transfer
-                </Button>
-              </li>
-            )}
+            <li>
+              <Button
+                size="sm"
+                onClick={() => {
+                  this.setState({
+                    typeOfTransfer: "currentcustomer",
+                    selectOtherCustomerAccount: "",
+                    selectACustomerAccount: "",
+                    newState: "Make Transfer",
+                    newStateHeading: "Make Transfer",
+                    newStateUpdate: "transfer",
+                    ctaText: "Make Transfer",
+                  });
+                  this.handleShowTransferFundModal();
+                }}
+              >
+                Transfer
+              </Button>
+            </li>
+          )}
 
           {/* {(depositDetails.accountState ===5) &&
                             <li>
@@ -3013,7 +3295,8 @@ if(depositDetails==null ) return;
                             </li>
                         } */}
 
-          {visibility.showRequestApproval && this.permissions.allowRequestDepositApproval && (
+          {visibility.showRequestApproval &&
+            this.permissions.allowRequestDepositApproval && (
               <li>
                 <Button
                   size="sm"
@@ -3061,7 +3344,8 @@ if(depositDetails==null ) return;
                 className="customone"
                 alignRight
               >
-                {visibility.showReject && this.permissions.allowRejectDepositApproval && (
+                {visibility.showReject &&
+                  this.permissions.allowRejectDepositApproval && (
                     <Dropdown.Item
                       eventKey="1"
                       onClick={() => {
@@ -3077,7 +3361,7 @@ if(depositDetails==null ) return;
                       Reject
                     </Dropdown.Item>
                   )}
-                { visibility.showClosedWithdraw && (
+                {visibility.showClosedWithdraw && (
                   <Dropdown.Item
                     eventKey="2"
                     onClick={() => {
@@ -3137,47 +3421,19 @@ if(depositDetails==null ) return;
                 Set Recommended Deposit
               </Dropdown.Item>
 
-              {/* <Dropdown.Item
+              <Dropdown.Item
                 eventKey="7"
                 onClick={() => {
                   this.setState({
-                    newStateUpdate: "setrecommendeddepositamount",
-                    newStateHeading: "Recommended Deposit Amount",
-                    ctaText: "Update",
+                    newStateUpdate: "lockAccount",
+                    newStateHeading: "Lock Account",
+                    ctaText: "Lock",
                   });
-                  this.handleShowRecommendedAmountModal();
+                  this.handleShowLockAccountModal();
                 }}
               >
                 Lock Account
               </Dropdown.Item>
-
-              <Dropdown.Item
-                eventKey="9"
-                onClick={() => {
-                  this.setState({
-                    newStateUpdate: "setrecommendeddepositamount",
-                    newStateHeading: "Recommended Deposit Amount",
-                    ctaText: "Update",
-                  });
-                  this.handleShowRecommendedAmountModal();
-                }}
-              >
-                Lock Amount
-              </Dropdown.Item>
-
-              <Dropdown.Item
-                eventKey="10"
-                onClick={() => {
-                  this.setState({
-                    newStateUpdate: "setrecommendeddepositamount",
-                    newStateHeading: "Recommended Deposit Amount",
-                    ctaText: "Update",
-                  });
-                  this.handleShowRecommendedAmountModal();
-                }}
-              >
-                Unlock Amount
-              </Dropdown.Item> */}
             </DropdownButton>
           </li>
         </ul>
@@ -3218,8 +3474,6 @@ if(depositDetails==null ) return;
       getClientDepositsRequest.request_status ===
         loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS
     ) {
-
-        
       return (
         <div className="row">
           <BeginMaturityModal
@@ -3229,8 +3483,10 @@ if(depositDetails==null ) return;
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
             showModal={this.state.showBeginMaturityModal}
-            CurCode = {getAClientDepositAccountRequest.request_data.response
-                .data.currencyCode}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
             handleHideModal={this.handleHideBeginMaturityModal}
             handleNewDepositState={this.handleNewDepositState}
             getCustomerDepositAccountDetails={
@@ -3240,7 +3496,6 @@ if(depositDetails==null ) return;
           <ChangeDepositStateModal
             {...this.props}
             depositEncodedKey={this.depositEncodedKey}
-           
             oldState={
               getAClientDepositAccountRequest.request_data?.response.data
                 ?.accountStateDescription
@@ -3249,8 +3504,10 @@ if(depositDetails==null ) return;
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             ctaText={this.state.ctaText}
-            CurCode = {getAClientDepositAccountRequest.request_data.response
-                .data.currencyCode}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
             showModal={this.state.showChangeStateModal}
             handleHideModal={this.handleDepositChangeStateClose}
             handleNewDepositState={this.handleNewDepositState}
@@ -3258,7 +3515,7 @@ if(depositDetails==null ) return;
               this.getCustomerDepositAccountDetails
             }
           />
-          
+
           <MakeAccountDepositModal
             {...this.props}
             newStateUpdate={this.state.newStateUpdate}
@@ -3266,8 +3523,10 @@ if(depositDetails==null ) return;
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
             showModal={this.state.showDepositFundModal}
-            CurCode = {getAClientDepositAccountRequest.request_data.response
-                .data.currencyCode}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
             handleHideModal={this.handleHideDepositFundModal}
             handleNewDepositState={this.handleNewDepositState}
             getCustomerDepositAccountDetails={
@@ -3281,8 +3540,10 @@ if(depositDetails==null ) return;
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
             showModal={this.state.showMakeWithdrawalModal}
-            CurCode = {getAClientDepositAccountRequest.request_data.response
-                .data.currencyCode}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
             handleHideModal={this.handleHideMakeWithdrawalModal}
             handleNewDepositState={this.handleNewDepositState}
             getCustomerDepositAccountDetails={
@@ -3295,8 +3556,10 @@ if(depositDetails==null ) return;
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
-            CurCode = {getAClientDepositAccountRequest.request_data.response
-                .data.currencyCode}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
             showModal={this.state.showSetMaximumWithdrawalAmountModal}
             handleHideModal={this.handleHideSetMaximumWithdrawalAmountModal}
             handleNewDepositState={this.handleNewDepositState}
@@ -3310,10 +3573,29 @@ if(depositDetails==null ) return;
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
-            CurCode = {getAClientDepositAccountRequest.request_data.response
-                .data.currencyCode}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
             showModal={this.state.showRecommendedAmountModal}
             handleHideModal={this.handleHideRecommendedAmountModal}
+            handleNewDepositState={this.handleNewDepositState}
+            getCustomerDepositAccountDetails={
+              this.getCustomerDepositAccountDetails
+            }
+          />
+          <SetLockAccountModal
+            {...this.props}
+            newStateUpdate={this.state.newStateUpdate}
+            newStateHeading={this.state.newStateHeading}
+            newState={this.state.newState}
+            depositEncodedKey={this.depositEncodedKey}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
+            showModal={this.state.showLockAccountModal}
+            handleHideModal={this.handleHideLockAccountModal}
             handleNewDepositState={this.handleNewDepositState}
             getCustomerDepositAccountDetails={
               this.getCustomerDepositAccountDetails
@@ -3325,8 +3607,10 @@ if(depositDetails==null ) return;
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
-            CurCode = {getAClientDepositAccountRequest.request_data.response
-                .data.currencyCode}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
             showModal={this.state.showTransferFundModal}
             handleHideModal={this.handleHideTransferFundModal}
             handleNewDepositState={this.handleNewDepositState}
@@ -3365,7 +3649,6 @@ if(depositDetails==null ) return;
                       </Nav.Item>
                     )}
 
-                    
                     {allUSerPermissions.indexOf("bnk_view_deposit_activities") >
                       -1 && (
                       <Nav.Item>
@@ -3420,6 +3703,16 @@ if(depositDetails==null ) return;
                         </Nav.Link>
                       </Nav.Item>
                     )}
+                    <Nav.Item>
+                      <Nav.Link
+                        bsPrefix="disable"
+                        className="navLink"
+                        eventKey="lockAccount"
+                        onSelect={this.getLockedAccount}
+                      >
+                        All Locked Account
+                      </Nav.Link>
+                    </Nav.Item>
                   </Nav>
                   {this.renderDepositCtas(
                     getAClientDepositAccountRequest.request_data.response.data
@@ -3444,8 +3737,10 @@ if(depositDetails==null ) return;
                         handleCloseReverse={this.handleShowReverseClose}
                         transactionDetails={this.state.transactionDetails}
                         showReverseTransaction={this.state.showReverseBox}
-                        CurCode = {getAClientDepositAccountRequest.request_data.response
-                            .data.currencyCode}
+                        CurCode={
+                          getAClientDepositAccountRequest.request_data.response
+                            .data.currencyCode
+                        }
                         transactionMode="Deposit"
                       />
                       <ViewATransaction
@@ -3453,8 +3748,10 @@ if(depositDetails==null ) return;
                         transactionType={this.state.transactionType}
                         handleViewTxtnClose={this.handleViewTxtnClose}
                         transactionDetails={this.state.transactionDetails}
-                        CurCode = {getAClientDepositAccountRequest.request_data.response
-                            .data.currencyCode}
+                        CurCode={
+                          getAClientDepositAccountRequest.request_data.response
+                            .data.currencyCode
+                        }
                         ViewTxtnBox={this.state.ViewTxtnBox}
                         transactionMode="Deposit"
                       />
@@ -3472,6 +3769,9 @@ if(depositDetails==null ) return;
                     </Tab.Pane>
                     <Tab.Pane eventKey="communications">
                       {this.renderADepositCommunicatons()}
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="lockAccount">
+                      {this.renderALockedAccount()}
                     </Tab.Pane>
                   </Tab.Content>
                 </Tab.Container>
