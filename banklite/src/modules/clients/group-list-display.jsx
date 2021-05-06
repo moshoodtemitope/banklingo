@@ -24,7 +24,7 @@ class GroupListDisplay extends React.Component {
     this.initializeState();
     this.userPermissions = JSON.parse(localStorage.getItem('x-u-perm'));
 
-    this.clientType = "customer";
+    this.clientType = "group";
   }
 
   initializeState=()=>{
