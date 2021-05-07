@@ -100,12 +100,12 @@ function Login   (loginPayload){
                                             })
                                             .catch(error => {
 
+                                                console.log('1'+ JSON.parse(error));
                                                 if (error.response.status === 401) {
                                                     dispatch(failure(handleRequestErrors("Unable to login. Please try again")))
                                                 } else {
                                                     dispatch(failure(handleRequestErrors(error)));
                                                 }
-
 
                                             });
                                 })
@@ -137,13 +137,14 @@ function Login   (loginPayload){
 
                         
                     }
-                    // else{
-                    //     localStorage.setItem('lingoAuth', JSON.stringify(response.data));
+                    else{
+                        console.log('token is undefined');
+                        // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                        
-                    //     dispatch(success(response.data));
-                    //     history.push('/dashboard');
-                    //     // dispatch(failure(handleRequestErrors(response.data.message)))
-                    // }
+                        // dispatch(success(response.data));
+                        // history.push('/dashboard');
+                        // dispatch(failure(handleRequestErrors(response.data.message)))
+                    }
                     
                     
                 }).catch(error =>{
