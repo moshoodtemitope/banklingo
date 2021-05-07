@@ -2,8 +2,11 @@
   "name": "banklite",
   "version": "0.1.1",
   "private": true,
-  "homepage": "https://banklite.surge.sh/",
+  "homepage": "https://banklite.app/",
   "dependencies": {
+    "@babel/helper-builder-react-jsx": "^7.12.13",
+    "@babel/helper-define-map": "^7.13.12",
+    "@babel/helper-regex": "^7.10.5",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "formik": "^2.0.8",
@@ -29,7 +32,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "xlsx": "^0.16.9",
-    "yup": "^0.27.0"
+    "yup": "0.27.0"
   },
   "devDependencies": {
     "eslint": "6.8.0",

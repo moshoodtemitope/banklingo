@@ -302,7 +302,7 @@ fetchForBusyState(){
                     >
                       <NavLink
                         className='dropdown-item'
-                        to={`/clients/edit/${eachClient.clientEncodedKey}`}
+                        to={`/group/edit/${eachClient.clientEncodedKey}`}
                       >
                         Edit
                       </NavLink>

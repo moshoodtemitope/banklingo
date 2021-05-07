@@ -506,12 +506,12 @@ export const quickCreateMenuList = [
         permissionCode: "bnk_create_user",
         menuRoute: "/administration/access/new-user",
     },
-    // {
-    //     permissionName: "Create Client",
-    //     mainMenu: "Group",
-    //     permissionCode: "bnk_create_client",
-    //     menuRoute: "/groups/new",
-    // },
+    {
+        permissionName: "Create Client",
+        mainMenu: "Group",
+        permissionCode: "bnk_create_client",
+        menuRoute: "/groups/new",
+    },
 ]
 
 export const administrationModuleMenuList = [

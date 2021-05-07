@@ -283,27 +283,43 @@ function getAClient  (encodedKey, isGroupAccount){
             dispatch(request(consume));
             return consume
                 .then(response =>{
-                    let consume2 = ApiService.request(routes.HIT_CLIENTS + `/passport/${encodedKey}`, "GET", null);
-                    dispatch(request(consume2));
-                    return consume2
-                        .then(response2 => {
-                            let consume3 = ApiService.request(routes.HIT_CLIENTS + `/fetchmandate/${encodedKey}`, "GET", null);
-                            dispatch(request(consume3));
-                            return consume3
-                                .then(response3 => {
-                                    
-                                    dispatch(success({...response,...response2.data, mandate:response3.data }));
-                                }).catch(error => {
-                                    dispatch(success({...response,...response2.data }));
+                    console.log("response is", response.data);
+                    if(response.data.clientClassification===0){
+                        let consume2 = ApiService.request(routes.HIT_CLIENTS + `/passport/${encodedKey}`, "GET", null);
+                        dispatch(request(consume2));
+                        return consume2
+                            .then(response2 => {
+                                let consume3 = ApiService.request(routes.HIT_CLIENTS + `/fetchmandate/${encodedKey}`, "GET", null);
+                                dispatch(request(consume3));
+                                return consume3
+                                    .then(response3 => {
+                                        
+                                        dispatch(success({...response,...response2.data, mandate:response3.data }));
+                                    }).catch(error => {
+                                        dispatch(success({...response,...response2.data }));
 
-                                    // dispatch(failure(handleRequestErrors(error)));
-                                });
-                            
-                            // dispatch(success({...response,...response2.data }));
-                        }).catch(error => {
+                                        // dispatch(failure(handleRequestErrors(error)));
+                                    });
+                                
+                                // dispatch(success({...response,...response2.data }));
+                            }).catch(error => {
 
-                            dispatch(failure(handleRequestErrors(error)));
-                        });
+                                dispatch(failure(handleRequestErrors(error)));
+                            });
+                    }
+                    if(response.data.clientClassification===1){
+                        let consume3 = ApiService.request(routes.HIT_CLIENT_GROUP + `/${encodedKey}/groupmembers`, "GET", null);
+                                dispatch(request(consume3));
+                                return consume3
+                                    .then(response3 => {
+                                        
+                                        dispatch(success({...response,groupMembers:response3.data }));
+                                    }).catch(error => {
+                                        // dispatch(success({...response }));
+
+                                        dispatch(failure(handleRequestErrors(error)));
+                                    });
+                    }
                     // dispatch(success(response));
                 }).catch(error =>{
                     
@@ -437,10 +453,21 @@ function addAClientPassport   (clientKey, payload){
 }
 
 
-function updateAClient   (updateUserPayload){
+function updateAClient   (updateUserPayload, clientType){
     if(updateUserPayload!=="CLEAR"){
         return dispatch =>{
-            let url = routes.HIT_CLIENTS+`/${updateUserPayload.encodedKey}`;
+            let url;
+                if(clientType==="individual"){
+                    url = `${routes.HIT_CLIENTS}/${updateUserPayload.encodedKey}`
+                }
+
+                if(clientType==="group"){
+                    url = `${routes.HIT_CLIENT_GROUP}/${updateUserPayload.encodedKey}`
+                    
+                }
+
+                
+            // let url = routes.HIT_CLIENTS+`/${updateUserPayload.encodedKey}`;
             delete updateUserPayload.encodedKey;
             let consume = ApiService.request(url, "POST", updateUserPayload);
             dispatch(request(consume));

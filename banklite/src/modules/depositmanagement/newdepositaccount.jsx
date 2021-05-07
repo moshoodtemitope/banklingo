@@ -401,10 +401,23 @@ class NewDepositAccount extends React.Component {
                                                         (customerFetchedData !== undefined && this.props.match.params.clientId !== undefined) &&
                                                         <Col>
                                                             <Form.Label className="block-level">Customer Name</Form.Label>
-                                                            <h3>{customerFetchedData.lastName} {customerFetchedData.firstName} {customerFetchedData.middleName} </h3>
+                                                            {customerFetchedData.clientClassification === 0 &&
+                                                                <h3>
+                                                                    {customerFetchedData.lastName}{' '}
+                                                                    {customerFetchedData.firstName}{' '}
+                                                                    {customerFetchedData.middleName}{' '}
+                                                                </h3>
+                                                            }
+                                                            {customerFetchedData.clientClassification === 1 &&
+                                                                <h3>
+                                                                    {customerFetchedData.groupName}{' '}
+                                                                </h3>
+                                                            }
+                                                            
                                                         </Col>
 
                                                     }
+                                                    
                                                 </Form.Row>
                                                 <Form.Row>
                                                     <Col>

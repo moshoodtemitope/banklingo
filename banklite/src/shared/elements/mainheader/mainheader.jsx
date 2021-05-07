@@ -190,7 +190,7 @@ class MainHeader extends React.Component{
                                             }
                                         })
                                     }
-                                    {
+                                    {/* {
                                         allCustomerTypesData.map((eachType, id)=>{
                                             // allCustomerTypes.push({label: eachType.name, value:eachType.id});
                                             let custType = eachType.name.split(' ').join('');
@@ -201,9 +201,9 @@ class MainHeader extends React.Component{
                                             }else{
                                                 return null;
                                             }
-                                            //  return( <NavLink to={'/dashboard'}>dsdhsjdhshjd</NavLink>)
+                                            
                                         })
-                                    }
+                                    } */}
                                     
                                     {/* <NavLink exact to={'/all-loans/newloan-account'}>Loan Account</NavLink>
                                     <NavLink to={'/deposits/newaccount'}>Deposit Account</NavLink>

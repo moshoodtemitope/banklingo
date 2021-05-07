@@ -56,19 +56,25 @@ export class MakeTransferModal extends React.Component {
                 if (loadedCustomerAccounts.length >= 1) {
                     loadedCustomerAccounts.map((eachAccount, index) => {
                         if (
-                            (eachAccount.searchItemType === 2 &&
-                                (eachAccount.state === 5 || eachAccount.state === 6)) ||
-                            (eachAccount.searchItemType === 3 &&
-                                (eachAccount.state === 3 || eachAccount.state === 5))
+                            (eachAccount.searchItemType === 2) 
+                            // (eachAccount.searchItemType === 2 && (eachAccount.state === 5 || eachAccount.state === 6)) 
+                            ||
+                            (eachAccount.searchItemType === 3)
+                            // (eachAccount.searchItemType === 3 && (eachAccount.state === 3 || eachAccount.state === 5))
                         ) {
                             customerAccounts.push({
-                                label: eachAccount.searchText,
+                                label: `${eachAccount.searchText} - ${eachAccount.searchKey}`,
+                                // value: eachAccount.clientEncodedKey,
+                                ...eachAccount,
                                 value: eachAccount.searchItemEncodedKey,
                             });
                         }
                     });
+
+                    
                     this.setState({
-                        defaultAccountOptions: loadedCustomerAccounts,
+                        defaultAccountOptions: customerAccounts,
+                        // defaultAccountOptions: loadedCustomerAccounts,
                         isCustommerAccountsFetchedWithKey: true,
                     });
                 }
@@ -87,7 +93,8 @@ export class MakeTransferModal extends React.Component {
         return option.searchItemEncodedKey;
     }; // maps the result 'id' as the 'value'
     getSearchOptionForCustomerLabel = (option) => {
-        return `${option.clientName} -${option.clientCode}`;
+        return `${option.searchText}`;
+        // return `${option.clientName} -${option.clientCode}`;
     }; // maps the result 'name' as the 'label'
     noOptionsForCustomerMessage(inputValue) {
         return "";
@@ -133,42 +140,73 @@ export class MakeTransferModal extends React.Component {
             searchResultsList = [],
             getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
         this.props.dispatch(depositActions.searchAccountNumbers("CLEAR"));
-        console.log('initiateAccountSearch' + inputValue +'  '+ searchAccountNumberRequest.request_status);
-        console.log(searchAccountNumberRequest.request_status+' --- '+'---'+  searchAccountNumberRequest.request_data?.response?.data);
+        // console.log('initiateAccountSearch' + inputValue +'  '+ searchAccountNumberRequest.request_status);
+        // console.log(searchAccountNumberRequest.request_status+' --- '+'---'+  searchAccountNumberRequest.request_data?.response?.data);
 
         if (inputValue.length >= 1) {
             return this.getSearchedAccountResults(inputValue).then(() => {
 
 
-                console.log('SEARCH BACK '+ searchAccountNumberRequest.request_status);
-                // if (
-                //     searchAccountNumberRequest.request_status ===
-                //     loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS
-                // ) {
+                // console.log('SEARCH BACK '+ searchAccountNumberRequest.request_status);
+                if (
+                    this.props.searchAccountNumbersReducer.request_status ===
+                    loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS
+                ) {
                   
                   
                     searchResultsData =
                         searchAccountNumberRequest?.request_data?.response.data;
 
-                        console.log('SEARCH_BACK '+ JSON.parse(searchResultsData));
-if(searchResultsData==null) return;
-                    searchResultsData = searchResultsData.filter(
-                        (eachResult) =>
-                            ((eachResult.searchItemType === 3 &&
-                                (eachResult.state === 3 || eachResult.state === 5)) ||
-                                (eachResult.searchItemType === 2 &&
-                                    (eachResult.state === 6 || eachResult.state === 5))) &&
-                            eachResult.searchKey !==
-                            getAClientDepositAccountRequest.accountNumber &&
-                            eachResult.clientEncodedKey !==
-                            getAClientDepositAccountRequest.clientEncodedKey
-                    );
+                        // console.log('SEARCH_BACK '+ JSON.parse(searchResultsData));
+                    if(searchResultsData==null) return;
+                        // searchResultsData = searchResultsData.filter(
+                        //     (eachResult) =>
+                        //         ((eachResult.searchItemType === 3 &&
+                        //             (eachResult.state === 3 || eachResult.state === 5)) ||
+                        //             (eachResult.searchItemType === 2 && (eachResult.state === 6 || eachResult.state === 5))) &&
+                        //                 eachResult.searchKey !==
+                        //                 getAClientDepositAccountRequest.accountNumber &&
+                        //                 eachResult.clientEncodedKey !==
+                        //                 getAClientDepositAccountRequest.clientEncodedKey
+                        // );
 
-                    this.setState({ isCustommerAccountsFetchedWithKey: false });
+                        searchResultsData.map((eachAccount, index) => {
+                            // console.log("each data", eachAccount)
+                            if (
+                                // (eachAccount.searchItemType === 2) 
+                                // (eachAccount.searchItemType === 2 && (eachAccount.state === 5 || eachAccount.state === 6)) 
+                                // ||
+                                (eachAccount.searchItemType === 3)
+                                // (eachAccount.searchItemType === 3 && (eachAccount.state === 3 || eachAccount.state === 5))
+                            ) {
+                                // customerAccounts.push({
+                                //     label: `${eachAccount.searchText} - ${eachAccount.searchKey}`,
+                                //     // value: eachAccount.clientEncodedKey,
+                                //     ...eachAccount,
+                                //     value: eachAccount.searchItemEncodedKey,
+                                // });
 
-                    console.log('FOUND' +JSON.parse(searchResultsData) );
+                                
+                                searchResultsList.push({
+                                    label: `${eachAccount.searchText} - ${eachAccount.searchKey}`,
+                                    // value: eachAccount.clientEncodedKey,
+                                    ...eachAccount,
+                                    value: eachAccount.searchItemEncodedKey,
+                                });
+                            }
+                        });
+
+                        // console.log("result data", searchResultsData)
+                        // console.log("bulk data", searchResultsList)
+
+                    this.setState({ 
+                            isCustommerAccountsFetchedWithKey: false,
+                            defaultAccountOptions: searchResultsList,
+                        });
+
+                    console.log('FOUND', searchResultsData);
                     return searchResultsData;
-                // }
+                }
             });
         } else {
             return null;
@@ -191,7 +229,8 @@ if(searchResultsData==null) return;
     };
 
     handleSearchACustomerInputChange = (selectedOption) => {
-        this.loadCustomerAccounts(selectedOption.clientEncodedKey);
+        this.loadCustomerAccounts(selectedOption.searchKey);
+        // this.loadCustomerAccounts(selectedOption.clientEncodedKey);
         this.setState({
             selectACustomerAccount: selectedOption,
             firstChosenTransferCriteria: "customer",
@@ -207,6 +246,7 @@ if(searchResultsData==null) return;
             // searchResultsList = [],
             getAClientDepositAccountRequest = this.props
                 .getAClientDepositAccountReducer.request_data.response.data;
+
         this.props.dispatch(depositActions.searchCustomerAccount("CLEAR"));
         if (inputValue.length >= 1) {
             return this.getSearchedCustomerResults(inputValue).then(() => {
@@ -214,7 +254,7 @@ if(searchResultsData==null) return;
                     this.props.searchCustomerAccountReducer.request_status ===
                     loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS
                 ) {
-                    // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
+                    console.log("serch rsulrs", this.props.searchCustomerAccountReducer.request_data.response.data);
                     searchResultsData = this.props.searchCustomerAccountReducer.request_data.response.data;
 
                     searchResultsData = searchResultsData.filter(
@@ -605,14 +645,14 @@ if(searchResultsData==null) return;
                                                     <div className="mt-20">
                                                         <Form.Label className="block-level">Customer to transfer To</Form.Label>
                                                         <AsyncSelect
-                                                            cacheOptions={false}
+                                                            cacheOptions
                                                             value={selectACustomerAccount}
                                                             noOptionsMessage={this.noOptionsForCustomerMessage}
                                                             getOptionValue={this.getSearchForCustomerOptionValue}
                                                             getOptionLabel={this.getSearchOptionForCustomerLabel}
-                                                            // defaultOptions={defaultOptions}
+                                                            defaultOptions={this.state.defaultOptions}
                                                             loadOptions={this.initiateCustomerSearch}
-                                                            placeholder="Search Accounts"
+                                                            placeholder="Search customer"
                                                             onChange={(selectedOption)=> {
                                                                 
                                                                 // setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
