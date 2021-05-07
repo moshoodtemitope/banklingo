@@ -24,6 +24,9 @@ import { loanActions } from "../../../../redux/actions/loans/loans.action";
 
 import {default as DatePickerFilter} from "react-datepicker";
 import { depositActions } from "../../../../redux/actions/deposits/deposits.action";
+import DatePickerFieldType from "../../../../_helpers/DatePickerFieldType";
+import DatePicker from 'react-datepicker';
+
 
 export class BeginMaturityModal extends React.Component {
   constructor(props) {
@@ -199,7 +202,7 @@ export class BeginMaturityModal extends React.Component {
                         Maturity Date
                       </Form.Label>
                       <Form.Group className="mb-0 date-wrap">
-                        <DatePickerFilter
+                        {/* <DatePickerFilter
                           placeholderText="Choose  date"
                           autoComplete="new-password"
                           dateFormat={window.dateformat}
@@ -217,7 +220,31 @@ export class BeginMaturityModal extends React.Component {
                               ? "is-invalid form-control form-control-sm h-38px"
                               : "form-control h-38px form-control-sm"
                           }
-                        />
+                        /> */}
+
+<DatePicker
+                  placeholderText='Choose date'
+                  dateFormat={window.dateformat}
+                  onChange={(date) => {
+                    date.setHours(date.getHours() + 1);
+                    setFieldValue('maturityDate', date);
+                    this.setState({ maturityDate:date }, () => {
+                    });
+                  }}
+                  name="maturityDate"
+                  onChangeRaw={(e) => this.handleChange(e)}
+                  selected={this.state.maturityDate}
+                  dateFormat={window.dateformat}
+                  peekNextMonth
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode='select'
+                  maxDate={new Date()}
+                  className={errors.maturityDate && touched.maturityDate ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                  customInput={
+                    <DatePickerFieldType placeHolder='Choose date' />
+                  }
+                />
                         {errors.maturityDate && touched.maturityDate ? (
                           <span className="invalid-feedback">
                             {errors.maturityDate}

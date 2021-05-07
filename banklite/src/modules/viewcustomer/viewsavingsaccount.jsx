@@ -3145,10 +3145,14 @@ class ViewSavingsAccount extends React.Component {
 
     let showTransfer =
       (depositDetails.accountState === DepositStateConstants.ACTIVE ||
-        depositDetails.accountState === DepositStateConstants.Approved) &&
-      (depositDetails.productType === 2 ||
-        depositDetails.productType === 1 ||
-        depositDetails.productType === 4);
+        depositDetails.accountState === DepositStateConstants.Approved)
+      //    &&
+      // (depositDetails.productType === 2 ||
+      //   depositDetails.productType === 1 ||
+      //   depositDetails.productType === 4)
+        ;
+
+
     let showMakeDeposit =
       depositDetails.accountState === DepositStateConstants.ACTIVE ||
       depositDetails.accountState === DepositStateConstants.Approved;
