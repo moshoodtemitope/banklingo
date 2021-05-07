@@ -5,7 +5,7 @@
   "homepage": "https://banklite.surge.sh/",
   "dependencies": {
     "@babel/helper-builder-react-jsx": "^7.12.13",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.3.1",
     "create-react-app": "3.3.0",
     "formik": "^2.0.8",
@@ -33,7 +33,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "xlsx": "^0.16.9",
-    "yup": "^0.27.0"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "eslint": "6.8.0",
