@@ -24,14 +24,19 @@ import { loanAndDepositsConstants } from "../../../../redux/actiontypes/LoanAndD
 import { loanActions } from "../../../../redux/actions/loans/loans.action";
 
 import {default as DatePickerFilter} from "react-datepicker";
+
 import { depositActions } from "../../../../redux/actions/deposits/deposits.action";
+import DatePickerFieldType from "../../../../_helpers/DatePickerFieldType";
+import DatePicker from 'react-datepicker';
+// import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
 
 export class MakeAccountDepositModal extends React.Component {
     constructor(props) {
         super(props);
        // this.clientEncodedKey = this.props.match.params.id;
         this.state={
-           // showModal:false,
+            backDateChosen:'',
+            bookingDateChosen:''
         }
         
     }
@@ -274,10 +279,33 @@ export class MakeAccountDepositModal extends React.Component {
                             <Modal.Body>
 
                                     <div>
-                                        <Form.Row>
+                                    {/* <div class="card bg-light">
+            <div class="card-body">
+                <h5 class="card-title">Light card title</h5>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu sem tempor.</p>
+            </div>
+        </div> */}
+                                        {/* <Form.Row>
                                             <Col>
-                                                <Form.Label className="block-level">Amount {this.props.CurCode? `(${this.props.CurCode})`: ""} </Form.Label>
+                                          
+                                            
+                                            </Col>
+                                        </Form.Row> */}
+{/* 
+
+<div class="color-box">
+                    <div class="shadow">
+                        <div class="info-tab note-icon" title="Important Notes"><i></i></div>
+                        <div class="note-box">
+                            <p><strong>Note:</strong> Overriding the tooltip's default <code>container</code> option value does not produce any visible difference on the page. To see the actual result you need inspect the resulting DOM using the Firebug or Developer tools.</p>
+                        </div>
+                    </div>
+                </div> */}
+                                        <Form.Row>
+                                            <Col >
+                                                <Form.Label className="block-level">Transaction Amount {this.props.CurCode? `(${this.props.CurCode})`: ""} </Form.Label>
                                                 <Form.Control
+                                              
                                                     type="text"
                                                     autoComplete="off"
                                                     onChange={handleChange}
@@ -288,6 +316,11 @@ export class MakeAccountDepositModal extends React.Component {
                                                     <span className="invalid-feedback">{errors.amountToDeposit}</span>
                                                 ) : null}
                                             </Col>
+                                            <Col></Col>
+                                        </Form.Row>
+
+                                        <Form.Row>
+                                          
                                             <Col>
                                                 <Form.Group className="mb-0">
                                                     <Form.Label className="block-level">Transaction Channel</Form.Label>
@@ -315,21 +348,24 @@ export class MakeAccountDepositModal extends React.Component {
 
                                                 </Form.Group>
                                             </Col>
+                                            <Col>
+                                            </Col>
                                         </Form.Row>
-                                        <Form.Row className="mb-10">
-                                            <Col className="date-wrap">
+                                        {/* <Form.Row className="mb-10"> */}
+                                            <Form.Row>
+                                                <Col className="date-wrap">
                                                 <Form.Group className="table-helper m-b-5">
                                                     <input type="checkbox"
                                                     name="allowBackDate"
                                                     onChange={handleChange}
-                                                    checked={values.allowBackDate? values.allowBackDate:null}
+                                                    checked={values.allowBackDate? values.allowBackDate:false}
                                                     value={values.allowBackDate}
                                                     id="allowBackDate"/>
-                                                    <label htmlFor="allowBackDate">Backdate</label>
+                                                    <label htmlFor="allowBackDate">Do you want to Backdate transaction?</label>
                                                 </Form.Group>
                                                 {values.allowBackDate===true &&
-                                                    <Form.Group className="mb-0 date-wrap">
-                                                         <DatePickerFilter
+                                                    <Form.Group>
+                                                         {/* <DatePickerFilter
                                                          placeholderText="Choose  date"
                                                         autoComplete="new-password"
                                                             dateFormat={window.dateformat}
@@ -343,26 +379,55 @@ export class MakeAccountDepositModal extends React.Component {
                                                             dropdownMode="select"
                                                             maxDate={new Date()}
                                                             className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                        />
+                                                        /> */}
+
+
+                <DatePicker
+                  placeholderText='Choose date'
+                  dateFormat={window.dateformat}
+                  onChange={(date) => {
+                    date.setHours(date.getHours() + 1);
+                    setFieldValue('backDateChosen', date);
+                    this.setState({ backDateChosen:date }, () => {
+                    });
+                  }}
+                  name="backDateChosen"
+                  onChangeRaw={(e) => this.handleChange(e)}
+                  selected={this.state.backDateChosen}
+                  dateFormat={window.dateformat}
+                  peekNextMonth
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode='select'
+                  maxDate={new Date()}
+                  className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                  customInput={
+                    <DatePickerFieldType placeHolder='Choose date' />
+                  }
+                />
+
                                                         {errors.backDateChosen && touched.backDateChosen ? (
                                                             <span className="invalid-feedback">{errors.backDateChosen}</span>
                                                         ) : null}
                                                     </Form.Group>
                                                 }
-                                            </Col>
-                                            <Col className="date-wrap">
+                                                </Col>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                
+                                                <Col className="date-wrap">
                                                 <Form.Group className="table-helper m-b-5">
                                                     <input type="checkbox"
                                                     name="showBookingDate"
                                                     onChange={handleChange}
-                                                    checked={values.showBookingDate? values.showBookingDate:null}
+                                                    checked={values.showBookingDate? values.showBookingDate:false}
                                                     value={values.showBookingDate}
                                                     id="showBookingDate"/>
-                                                    <label htmlFor="showBookingDate">Booking Date</label>
+                                                    <label htmlFor="showBookingDate">Do you want to set Booking Date?</label>
                                                 </Form.Group>
                                                 {values.showBookingDate===true &&
                                                     <Form.Group className="mb-0 date-wrap">
-                                                         <DatePickerFilter
+                                                         {/* <DatePickerFilter
                                                          placeholderText="Choose  date"
                                                         autoComplete="new-password"
                                                             dateFormat={window.dateformat}
@@ -376,13 +441,37 @@ export class MakeAccountDepositModal extends React.Component {
                                                             dropdownMode="select"
                                                             maxDate={new Date()}
                                                             className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
-                                                        />
+                                                        /> */}
+                                                         <DatePicker
+                  placeholderText='Choose date'
+                  dateFormat={window.dateformat}
+                  onChange={(date) => {
+                    date.setHours(date.getHours() + 1);
+                    setFieldValue('bookingDateChosen', date);
+                    this.setState({ bookingDateChosen:date }, () => {
+                    });
+                  }}
+                  name="bookingDateChosen"
+                  onChangeRaw={(e) => this.handleChange(e)}
+                   selected={this.state.bookingDateChosen}
+                  dateFormat={window.dateformat}
+                  peekNextMonth
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode='select'
+                  maxDate={new Date()}
+                  className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                  customInput={
+                    <DatePickerFieldType placeHolder='Choose date' />
+                  }
+                />
                                                         {errors.bookingDateChosen && touched.bookingDateChosen ? (
                                                             <span className="invalid-feedback">{errors.bookingDateChosen}</span>
                                                         ) : null}
                                                     </Form.Group>
                                                 }
-                                            </Col>
+                                                </Col>
+                                            {/* </Form.Row> */}
                                         </Form.Row>
 
 

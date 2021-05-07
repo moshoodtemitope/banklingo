@@ -25,6 +25,8 @@ import { loanActions } from "../../../../redux/actions/loans/loans.action";
 import { depositActions } from "../../../../redux/actions/deposits/deposits.action";
 
 import {default as DatePickerFilter} from "react-datepicker";
+import DatePickerFieldType from "../../../../_helpers/DatePickerFieldType";
+import DatePicker from 'react-datepicker';
 
 export class MakeAccountWithdrawalModal extends React.Component {
     constructor(props) {
@@ -117,7 +119,7 @@ export class MakeAccountWithdrawalModal extends React.Component {
                     backDateChosen:"",
                     bookingDateChosen:"",
                     amountToWithdraw:"",
-                    // maturityDate:"",
+                    // backDateChosen:"",
                     notes:"",
                     // amountToDeposit:"",
                     currentCustomerChosenAccount:"",
@@ -209,6 +211,13 @@ export class MakeAccountWithdrawalModal extends React.Component {
                                                 ) : null}
                                             </Col>
                                             <Col>
+                                               
+                                            </Col>
+                                        </Form.Row>
+
+                                        <Form.Row>
+                        
+                                            <Col>
                                                 <Form.Group className="mb-0">
                                                     <Form.Label className="block-level">Transaction Channel</Form.Label>
                                                     {allChannels.length >= 1 &&
@@ -235,6 +244,7 @@ export class MakeAccountWithdrawalModal extends React.Component {
 
                                                 </Form.Group>
                                             </Col>
+                                            <Col></Col>
                                         </Form.Row>
                                         <Form.Row className="mb-10">
                                             <Col className="date-wrap">
@@ -242,14 +252,14 @@ export class MakeAccountWithdrawalModal extends React.Component {
                                                     <input type="checkbox"
                                                         name="allowBackDate"
                                                         onChange={handleChange}
-                                                        checked={values.allowBackDate ? values.allowBackDate : null}
+                                                        checked={values.allowBackDate ? values.allowBackDate : false}
                                                         value={values.allowBackDate}
                                                         id="allowBackDate" />
                                                     <label htmlFor="allowBackDate">Backdate</label>
                                                 </Form.Group>
                                                 {values.allowBackDate === true &&
                                                     <Form.Group className="mb-0 date-wrap">
-                                                         <DatePickerFilter
+                                                         {/* <DatePickerFilter
                                                          placeholderText="Choose  date"
                                                         autoComplete="new-password"
                                                             dateFormat={window.dateformat}
@@ -263,7 +273,31 @@ export class MakeAccountWithdrawalModal extends React.Component {
                                                             dropdownMode="select"
                                                             maxDate={new Date()}
                                                             className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                                                        />
+                                                        /> */}
+
+<DatePicker
+                  placeholderText='Choose date'
+                  dateFormat={window.dateformat}
+                  onChange={(date) => {
+                    date.setHours(date.getHours() + 1);
+                    setFieldValue('backDateChosen', date);
+                    this.setState({ backDateChosen:date }, () => {
+                    });
+                  }}
+                  name="backDateChosen"
+                  onChangeRaw={(e) => this.handleChange(e)}
+                  selected={this.state.backDateChosen}
+                  dateFormat={window.dateformat}
+                  peekNextMonth
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode='select'
+                  maxDate={new Date()}
+                  className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                  customInput={
+                    <DatePickerFieldType placeHolder='Choose date' />
+                  }
+                />
                                                         {errors.backDateChosen && touched.backDateChosen ? (
                                                             <span className="invalid-feedback">{errors.backDateChosen}</span>
                                                         ) : null}

@@ -38,3 +38,22 @@ export const DepositStateConstants={
     LOCKED:10,
     MARTURED:11,
 }
+
+export const DepositproductTypesConstants={
+ALL:0,
+CURRENT_ACCOUNT:1,
+FIXED_DEPOSIT:2,
+FUNDING_ACCOUNT:3,
+SAVINGS_ACCOUNT:4,
+SAVINGS_PLAN:5
+}
+
+// public enum DepositAccountTypeEnum
+// {
+//     All = 0,
+//     Current_Account = 1,
+//     Fixed_Deposit = 2,
+//     Funding_Account = 3,
+//     Savings_Account = 4,
+//     Savings_Plan = 5
+// }
