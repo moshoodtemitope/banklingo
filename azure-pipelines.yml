@@ -17,7 +17,7 @@ steps:
 ## Run the npm install/build
 - script: |
     # npm install
-    npm clean
+    # npm clean
     pushd $(projectFolder) && npm install && popd
     pushd $(projectFolder) && npm run build && popd
 ## Copy the client to the staging directory
