@@ -137,13 +137,14 @@ function Login   (loginPayload){
 
                         
                     }
-                    // else{
-                    //     localStorage.setItem('lingoAuth', JSON.stringify(response.data));
+                    else{
+                        console.log('token is undefined');
+                        // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                        
-                    //     dispatch(success(response.data));
-                    //     history.push('/dashboard');
-                    //     // dispatch(failure(handleRequestErrors(response.data.message)))
-                    // }
+                        // dispatch(success(response.data));
+                        // history.push('/dashboard');
+                        // dispatch(failure(handleRequestErrors(response.data.message)))
+                    }
                     
                     
                 }).catch(error =>{

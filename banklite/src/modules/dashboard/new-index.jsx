@@ -53,7 +53,7 @@ class DashboardLanding extends React.Component {
         this.selectRef2 = null;
         this.selectRef3 = null;
         this.selectRef4 = null;
-
+console.log('dashboard load');
         this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
 
         this.allUSerPermissions = [];
