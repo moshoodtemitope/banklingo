@@ -518,6 +518,8 @@ class CustomerAccountContainer extends React.Component {
     this.userPermissions.map((eachPermission) => {
       allUSerPermissions.push(eachPermission.permissionCode);
     });
+
+    let clientTypeMode = customerDetails.clientClassification===0?"clients":"group";
     return (
       <div className='heading-ctas'>
         <ul className='nav'>
@@ -565,7 +567,7 @@ class CustomerAccountContainer extends React.Component {
             <li>
               <Button size='sm'>
                 <NavLink
-                  to={`/clients/edit/${customerDetails.clientEncodedKey}`}
+                  to={`/${clientTypeMode}/edit/${customerDetails.clientEncodedKey}`}
                 >
                   Edit
                 </NavLink>
@@ -882,22 +884,32 @@ class CustomerAccountContainer extends React.Component {
         <div className='row'>
           <div className='col-sm-12'>
             <div className=''>
-              <h2>
-                {customerDetails.firstName !== null &&
-                customerDetails.firstName !== ''
-                  ? customerDetails.firstName
-                  : ''}
-                &nbsp;
-                {customerDetails.lastName !== null &&
-                customerDetails.lastName !== ''
-                  ? customerDetails.lastName
-                  : ''}
-                &nbsp;
-                {customerDetails.middleName !== null &&
-                customerDetails.middleName !== ''
-                  ? customerDetails.middleName
-                  : ''}
-              </h2>
+              {customerDetails.clientClassification===0 &&
+                <h2>
+                  {customerDetails.firstName !== null &&
+                  customerDetails.firstName !== ''
+                    ? customerDetails.firstName
+                    : ''}
+                  &nbsp;
+                  {customerDetails.lastName !== null &&
+                  customerDetails.lastName !== ''
+                    ? customerDetails.lastName
+                    : ''}
+                  &nbsp;
+                  {customerDetails.middleName !== null &&
+                  customerDetails.middleName !== ''
+                    ? customerDetails.middleName
+                    : ''}
+                </h2>
+              }
+              {customerDetails.clientClassification===1 &&
+                <h2>
+                  {customerDetails.groupName !== null &&
+                  customerDetails.groupName !== ''
+                    ? customerDetails.groupName
+                    : ''}
+                </h2>
+              }
             </div>
           </div>
         </div>

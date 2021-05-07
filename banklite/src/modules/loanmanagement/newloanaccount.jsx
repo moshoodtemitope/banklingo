@@ -84,7 +84,9 @@ class NewLoanAccount extends React.Component {
     this.getAllLoanProducts(params);
     this.getFullLoanProducts();
 
+    
     this.getAllClients(params);
+    
     this.getTransactionChannels(params);
     this.getAllUsers();
     this.getAllBranches(params);
@@ -475,6 +477,7 @@ class NewLoanAccount extends React.Component {
               adminGetTransactionChannelsRequest.request_data.response.data
                 .result.length >= 0
             ) {
+              
               if (getClientsRequest.request_data.response.data.length >= 0) {
                 let allLoanProducts =
                     getAllLoanProductsRequest.request_data.response.data.result,
@@ -935,11 +938,18 @@ class NewLoanAccount extends React.Component {
                                 <Form.Label className='block-level'>
                                   Customer Name
                                 </Form.Label>
-                                <h3>
-                                  {customerFetchedData.lastName}{' '}
-                                  {customerFetchedData.firstName}{' '}
-                                  {customerFetchedData.middleName}{' '}
-                                </h3>
+                                {customerFetchedData.clientClassification===0 &&
+                                  <h3>
+                                    { customerFetchedData.lastName}{' '}
+                                    {customerFetchedData.firstName}{' '}
+                                    {customerFetchedData.middleName}{' '}
+                                  </h3>
+                                }
+                                {customerFetchedData.clientClassification===1 &&
+                                  <h3>
+                                    { customerFetchedData.groupName}{' '}
+                                  </h3>
+                                }
                               </Col>
                             )}
                         </Form.Row>

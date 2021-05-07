@@ -16,6 +16,7 @@ import DatePicker from '../../_helpers/datepickerfield';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 
 import { clientsActions } from '../../redux/actions/clients/clients.action';
 import { clientsConstants } from '../../redux/actiontypes/clients/clients.constants';
@@ -25,6 +26,9 @@ import { allowNumbersOnly, numberWithCommas } from '../../shared/utils';
 import { administrationActions } from '../../redux/actions/administration/administration.action';
 import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants';
 import {customerTypeActions,customerTypeConstants} from '../../redux/actions/administration/customer-types-management.actions';
+
+import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
+import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 import Alert from 'react-bootstrap/Alert';
 
 import Form from 'react-bootstrap/Form';
@@ -37,7 +41,11 @@ class NewGroupClient extends React.Component {
     
     this.state = {
       user: JSON.parse(localStorage.getItem('lingoAuth')),
+      allMembersList:[],
+      groupMembers:[],
+      groupMembersData:[]
     };
+    this.selectRef = null;
   }
 
   componentDidMount() {
@@ -57,6 +65,99 @@ class NewGroupClient extends React.Component {
   };
 
 
+  loadSearchResults = (inputValue, callback) => {
+    return this.getSearchedCustomerResults(inputValue)
+      .then(() => {
+        if (this.props.searchForCustomerReducer.request_status === dashboardConstants.SEARCH_FOR_CUSTOMER_SUCCESS) {
+          let searchResults = this.props.searchForCustomerReducer.request_data.response.data;
+
+            searchResults = searchResults.filter(eachResult=>(eachResult.searchItemType===0))
+    
+          // this.setState({isCustommerAccountsFetchedWithKey:false, defaultAccountOptions:searchResultsData })
+    
+          this.setState({ defaultOptions: searchResults })
+
+
+          return searchResults;
+        }
+      })
+  }
+
+
+
+
+  getSearchedCustomerResults = async (inputValue) => {
+    const { dispatch } = this.props;
+
+    if (!inputValue || inputValue.length === 0) {
+      return null;
+    }
+
+
+    await dispatch(dashboardActions.searchForCustomer(inputValue));
+
+
+  }
+
+  getSearchForCustomerOptionValue = (option) =>option? option.clientEncodedKey: ""; 
+  getSearchOptionForCustomerLabel = (option) =>option? option.searchText : ""; 
+
+  noOptionsForCustomerMessage(inputValue) {
+        
+    return "No Customers found"
+  }
+
+  //Search Customer
+  handleSearchCustomerChange = (inputValue) => {
+    const customerSearchText = inputValue.replace(/\W/g, '');
+
+    this.setState({ customerSearchText })
+
+  }
+
+  //Handle Selected Customer
+  handleSelectedCustomer = (inputValue) => {
+    let { allMembersList, groupMembers, groupMembersData } = this.state;
+
+    // console.log("customer is", inputValue);
+    // this.loadCustomerAccounts(inputValue.clientEncodedKey, true);
+    let allExistingMembers = allMembersList.filter(eachMember => eachMember.clientEncodedKey === inputValue.clientEncodedKey)
+
+    if (allExistingMembers.length === 0) {
+      allMembersList.push({ ...inputValue })
+    }
+
+
+    groupMembers = groupMembers.filter(eachMember => eachMember.clientEncodedKey !== inputValue.clientEncodedKey);
+
+    groupMembers.push({
+      clientEncodedKey: inputValue.clientEncodedKey,
+      roleId: ""
+    })
+    groupMembersData.push({
+      clientEncodedKey: inputValue.clientEncodedKey,
+      roleId: null
+    })
+    this.setState({
+      selectedCustomer: null,
+      selectACustomerAccount: inputValue,
+      // firstChosenTransferCriteria:"customer",
+      selectOtherCustomerAccount: "",
+      allMembersList,
+      groupMembers,
+      groupMembersData
+    });
+
+    // this.selectRef.select.select.clearValue()
+    // this.getSearchForCustomerOptionValue(null)
+    // this.getSearchOptionForCustomerLabel(null)
+
+    // console.log("data is", this.selectRef.select.select.clearValue())
+
+  }
+
+
+
   createCustomerValidationSchema = Yup.object().shape({
     groupName: Yup.string()
       .min(1, 'Valid Response required')
@@ -66,6 +167,7 @@ class NewGroupClient extends React.Component {
       .min(1, 'Valid response required')
       .max(50, 'Max limit reached')
       .required('Required'),
+    custType: Yup.string().required('Required'),
     clientBranchEncodedKey: Yup.string().required('Required'),
     accountOfficerEncodedKey: Yup.string().required('Required'),
     addressLine1: Yup.string()
@@ -102,26 +204,166 @@ class NewGroupClient extends React.Component {
     notes: Yup.string(),
   });
 
+  renderAllMembersList = () =>{
+    let {allMembersList}= this.state;
+    return(
+      <div className="all-items">
+        {
+          allMembersList.map((eachItem, index)=>{
+            return(
+              <div key={index} className="each-item-detail">
+                <div className="item-detail">{eachItem.searchText}</div>
+                <div className="remove-btn"onClick={()=>this.removeMember(eachItem)}>x</div>
+              </div>
+            )
+          })
+        }
+      </div>
+    )
+  }
+
+  renderAllMembersRoles = () =>{
+    let {allMembersList}= this.state;
+    const roleList = [
+      {
+        label: 'None',
+        value: "none",
+      },
+    ];
+    return(
+      <div className="w-50 m-auto">
+        {
+          allMembersList.map((eachItem, index) => {
+            return (
+              <Form.Row key={index} className="each-role">
+                <Col>
+                  <div className="withasync">
+                    <Form.Label className="block-level">{eachItem.searchText}</Form.Label>
+                  </div>
+                </Col>
+                <Col>
+                  {/* <Form.Row>
+                    <Col> */}
+                      {/* <Form.Label className='block-level'>Role</Form.Label> */}
+                      <select 
+                          id={`role-${index}`}
+                          onChange={(e)=>{
+                            e.stopPropagation()
+                            this.updateMemberRoleList({...eachItem,roleData:e.target.value})
+                          }}
+                          name={`role-${index}`}
+                          // value={values.roleId}
+                          // defaultValue={currentRole? currentRole.roleId : ""}
+                          className="form-control form-control-sm h-38px"
+                          // className={errors.roleId && touched.roleId ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+                      >
+                          <option  value="">Select</option>
+                          {
+                              roleList.map((eachRole, index)=>{
+                                  return(
+                                      <option key={index} value={eachRole.value}>{eachRole.label}</option>
+                                  )
+                              })
+                          }
+                          
+                      </select>
+                      {/* <Select
+                        options={roleList}
+                        onChange={(selectedRole) => {
+                          this.setState({ selectedRole });
+
+                          errors.roleChosen = null
+                          values.roleChosen = selectedRole.value
+                        }}
+                        className={errors.roleChosen && touched.roleChosen ? "is-invalid" : null}
+                        name="roleChosen"
+                        required
+                      />
+                      {errors.roleChosen && touched.roleChosen ? (
+                        <span className="invalid-feedback">{errors.roleChosen}</span>
+                      ) : null} */}
+                    {/* </Col> */}
+                    {/* <Col>
+                    </Col> */}
+                  {/* </Form.Row> */}
+                </Col>
+              </Form.Row>
+            )
+          })
+        }
+      </div>
+    )
+  }
+
+  updateMemberRoleList = (member)=>{
+    let {groupMembers, groupMembersData} = this.state;
+      // console.log("existing list", groupMembers);
+
+    groupMembers  = groupMembers.filter(eachMember=>eachMember.clientEncodedKey!==member.clientEncodedKey);
+    groupMembersData  = groupMembersData.filter(eachMember=>eachMember.clientEncodedKey!==member.clientEncodedKey);
+
+    groupMembers.push({
+      clientEncodedKey:member.clientEncodedKey,
+      roleId: member.roleData
+    })
+
+    groupMembersData.push({
+      clientEncodedKey:member.clientEncodedKey,
+      roleId: member.roleData!=="none"? member.roleData: null
+    })
+
+    this.setState({groupMembers})
+    this.validateAllRoleEntries()
+    this.props.dispatch(clientsActions.createClient('CLEAR'));
+    // console.log("role data is ", groupMembersData)
+  }
+
+  validateAllRoleEntries =()=>{
+    
+    let {groupMembers} = this.state;
+    let nonRolegroupMembers  = groupMembers.filter(eachMember=>eachMember.roleId==="");
+    // console.log("unselected roles", nonRolegroupMembers);
+    if(groupMembers.length>=1){
+        if(nonRolegroupMembers.length>=1){
+          return false
+        }else{
+          return true
+        }
+    }
+    else{
+      return true
+    }
+  }
+
+  removeMember =(memberToRemove)=>{
+    let {allMembersList}= this.state;
+        // console.log("to be removed", memberToRemove, allMembersList);
+        allMembersList = allMembersList.filter(eachItem=>eachItem.clientEncodedKey!==memberToRemove.clientEncodedKey)
+        this.setState({allMembersList,groupMembers:allMembersList,groupMembersData:allMembersList })
+        this.validateAllRoleEntries()
+        // console.log("after  removal",  allMembersList);
+  }
+
   renderCreateNewCustomer = () => {
     let createAClientRequest = this.props.createAClient,
       adminGetCustomerTypesRequest = this.props.adminGetCustomerTypes,
       getAllUsersRequest = this.props.getAllUsers,
       userAllowedBraches = this.state.user.AllowedBranches,
       selecBranchList = [],
-      {allGroupMembers, allGroupMemberRoles} = this.state;
+      {  
+        allMembersList,
+        groupMembersData,
+        selectedCustomer,
+        defaultOptions} = this.state;
 
     userAllowedBraches.map((branch, id) => {
       selecBranchList.push({ label: branch.name, value: branch.encodedKey });
     });
 
-    const genderList = [
+    const roleList = [
       {
-        label: 'Male',
-        value: 'Male',
-      },
-      {
-        label: 'Female',
-        value: 'Female',
+        label: 'None',
+        value: null,
       },
     ];
 
@@ -148,12 +390,16 @@ class NewGroupClient extends React.Component {
           adminGetCustomerTypesRequest.request_data.response,
         allUsersData = getAllUsersRequest.request_data.response.data,
         allUserDataList = [],
-        allCustomerTypesList;
+        allCustomerTypesList=[];
 
-      // console.log("+++++",allCustomerTypesData);
+      
       let selectedCustype = allCustomerTypesData.filter(
         (CustType) => CustType.encodedKey === this.props.match?.params?.custTypeid
       )[0];
+
+      allCustomerTypesData.map(((eachData=>{
+        allCustomerTypesList.push({label:eachData.name, value: eachData.encodedKey})
+      })))
 
       let daysWrap = [];
 
@@ -173,6 +419,7 @@ class NewGroupClient extends React.Component {
         <Formik
           initialValues={{
             groupName:'',
+            custType:'',
             groupId: '',
             businessNumber: '',
             addressLine1: '',
@@ -189,45 +436,51 @@ class NewGroupClient extends React.Component {
           }}
           validationSchema={this.createCustomerValidationSchema}
           onSubmit={(values, { resetForm }) => {
-            let createNewCustomerPayload = {
-              // clientTypeId:values.custType,
-              // clientTypeId:selectedCustype.id,
-                clientTypeEncodedKey: selectedCustype? selectedCustype.encodedKey : null,
-                groupName: values.groupName,
-                businessNumber: values.businessNumber,
-                clientCode: values.groupId,
-                address: {
-                    addressLine1: values.addressLine1,
-                    addressLine2: values.addressLine2,
-                    addressCity: values.addressCity,
-                    addressState: values.addressState,
-                    addressCountry: values.addressCountry,
-                    zipCode: values.zipCode,
-                },
-                contact: {
-                    contactMobile: values.contactMobile.toString(),
-                    contactEmail: values.contactEmail,
-                },
-                notes: values.notes,
-                groupMembers: allGroupMembers?allGroupMembers: null,
-                groupMemberRoles: allGroupMemberRoles?allGroupMemberRoles: null,
-                clientBranchEncodedKey: values.clientBranchEncodedKey.toString(),
-                accountOfficerEncodedKey: values.accountOfficerEncodedKey,
-            };
+            let createNewCustomerPayload;
+            if(this.validateAllRoleEntries()){
+              createNewCustomerPayload = {
+                // clientTypeId:values.custType,
+                // clientTypeId:selectedCustype.id, 
+                  clientTypeEncodedKey: values.custType,
+                  // clientTypeEncodedKey: selectedCustype? selectedCustype.encodedKey : null,
+                  groupName: values.groupName,
+                  businessNumber: values.businessNumber,
+                  clientCode: values.groupId,
+                  address: {
+                      addressLine1: values.addressLine1,
+                      addressLine2: values.addressLine2,
+                      addressCity: values.addressCity,
+                      addressState: values.addressState,
+                      addressCountry: values.addressCountry,
+                      zipCode: values.zipCode,
+                  },
+                  contact: {
+                      contactMobile: values.contactMobile.toString(),
+                      contactEmail: values.contactEmail,
+                  },
+                  notes: values.notes,
+                  groupMembers: groupMembersData.length>=1?groupMembersData: null,
+                  // groupMembers: allGroupMembers?allGroupMembers: null,
+                  // groupMemberRoles: allGroupMemberRoles?allGroupMemberRoles: null,
+                  clientBranchEncodedKey: values.clientBranchEncodedKey.toString(),
+                  accountOfficerEncodedKey: values.accountOfficerEncodedKey,
+              };
 
-            this.handleCreateNewGroup(createNewCustomerPayload).then(() => {
-              if (
-                this.props.createAClient.request_status ===
-                clientsConstants.CREATE_A_CLIENT_SUCCESS
-              ) {
-                resetForm();
-                // value = {null}
-              }
+              this.handleCreateNewGroup(createNewCustomerPayload).then(() => {
+                if (
+                  this.props.createAClient.request_status ===
+                  clientsConstants.CREATE_A_CLIENT_SUCCESS
+                ) {
+                  resetForm();
+                  // value = {null}
+                  setTimeout(() => {
+                    this.props.dispatch(clientsActions.createClient('CLEAR'));
+                  }, 3000);
+                }
 
-              setTimeout(() => {
-                this.props.dispatch(clientsActions.createClient('CLEAR'));
-              }, 3000);
-            });
+                
+              });
+            }
           }}
         >
           {({
@@ -297,14 +550,16 @@ class NewGroupClient extends React.Component {
                 </Col>
                 <Col>
                     <Form.Label className='block-level'>Group Type</Form.Label>
-                    {selectedCustype && (
+                    {/* {selectedCustype && (
                         <span className='form-text'>{selectedCustype.name} Group</span>
-                    )}
-                    {!selectedCustype && (<Select
+                    )} */}
+                    {/* {!selectedCustype &&  */}
+                    <Select
 
-                        options={allCustomerTypesData}
+                        options={allCustomerTypesList}
                         onChange={(selectedCustType) => {
                             this.setState({ selectedCustType });
+                            
                             errors.custType = null
                             values.custType = selectedCustType.value
                         }}
@@ -313,7 +568,8 @@ class NewGroupClient extends React.Component {
                         name="custType"
                         // value={values.currencyCode}
                         required
-                    />)}
+                      />
+                    {/* // } */}
 
                     {errors.custType && touched.custType ? (
                         <span className="invalid-feedback">{errors.custType}</span>
@@ -322,7 +578,115 @@ class NewGroupClient extends React.Component {
               </Form.Row>
               
               
-              
+              <Accordion defaultActiveKey='3'>
+                <Accordion.Toggle
+                  className='accordion-headingLink'
+                  as={Button}
+                  variant='link'
+                  eventKey='3'
+                >
+                  Group Members
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey='3'>
+                  <div className='each-formsection'>
+                      <Form.Group className="w-50 m-auto">
+                        <div className="withasync">
+                          <Form.Label className="block-level">Customer</Form.Label>
+                          <div>
+                            <div>
+                              <AsyncSelect
+                                cacheOptions
+                                ref={ref => {
+                                    this.selectRef = ref;
+                                }}
+                                value={selectedCustomer}
+                                // getOptionLabel={e => e.clientName}
+                                getOptionLabel={this.getSearchOptionForCustomerLabel}
+                                getOptionValue={this.getSearchForCustomerOptionValue}
+                                // getOptionValue={e => e.clientEncodedKey}
+                                noOptionsMessage={this.noOptionsForCustomerMessage}
+                                loadOptions={this.loadSearchResults}
+                                defaultOptions={defaultOptions}
+                                name="clientEncodedKey"
+                                placeholder="Search customer name"
+                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
+                                onChange={(e) => {
+                                  if(e){
+                                    setFieldValue("clientEncodedKey", e.clientEncodedKey)
+                                    this.handleSelectedCustomer(e)
+                                  }
+
+                                }}
+
+                                onInputChange={this.handleSearchCustomerChange}
+                              />
+
+
+                              {errors.clientEncodedKey && touched.clientEncodedKey ? (
+                                <span className="invalid-feedback">{errors.clientEncodedKey}</span>
+                              ) : null}
+                            </div>
+
+                          </div>
+                        </div>
+                      </Form.Group>
+                    {allMembersList.length>=1 &&
+                      this.renderAllMembersList()
+                    }
+                  </div>
+                </Accordion.Collapse>
+              </Accordion>
+              <Accordion defaultActiveKey='3'>
+                <Accordion.Toggle
+                  className='accordion-headingLink'
+                  as={Button}
+                  variant='link'
+                  eventKey='3'
+                >
+                  Group Roles
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey='3'>
+                  <div className='each-formsection'>
+                    {/* <Form.Row>
+                      <Col>
+                        <div className="withasync">
+                          <Form.Label className="block-level">Customer</Form.Label>
+                        </div>
+                      </Col>
+                      <Col>
+                        <Form.Row>
+                          <Col>
+                            <Form.Label className='block-level'>Role</Form.Label>
+                            <Select
+                              options={roleList}
+                              onChange={(selectedRole) => {
+                                this.setState({ selectedRole });
+
+                                errors.roleChosen = null
+                                values.roleChosen = selectedRole.value
+                              }}
+                              className={errors.roleChosen && touched.roleChosen ? "is-invalid" : null}
+                              name="roleChosen"
+                              required
+                            />
+                            {errors.roleChosen && touched.roleChosen ? (
+                              <span className="invalid-feedback">{errors.roleChosen}</span>
+                            ) : null}
+                          </Col>
+                          <Col></Col>
+                        </Form.Row>
+                      </Col>
+                    </Form.Row> */}
+                    {
+                      (allMembersList.length>=1 && !this.validateAllRoleEntries()) &&
+                      <div className="errormsg text-center mb-10">Please select role for all members</div>
+                    }
+                    {allMembersList.length>=1 &&
+                      this.renderAllMembersRoles()
+                    }
+                  </div>
+                </Accordion.Collapse>
+              </Accordion>
               <Accordion defaultActiveKey='0'>
                 <Accordion.Toggle
                   className='accordion-headingLink'
@@ -475,70 +839,70 @@ class NewGroupClient extends React.Component {
                   Association
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey='3'>
-                    <div className='each-formsection'>
-                        <Form.Row>
-                            <Col>
-                                <Form.Label className='block-level'>
-                                    Customer branch
+                  <div className='each-formsection'>
+                    <Form.Row>
+                      <Col>
+                        <Form.Label className='block-level'>
+                          Customer branch
 </Form.Label>
-                                <Select
-                                    options={selecBranchList}
-                                    onChange={(selectedBranch) => {
-                                        this.setState({ selectedBranch });
-                                        errors.clientBranchEncodedKey = null;
-                                        values.clientBranchEncodedKey = selectedBranch.value;
-                                    }}
-                                    className={
-                                        errors.clientBranchEncodedKey &&
-                                            touched.clientBranchEncodedKey
-                                            ? 'is-invalid'
-                                            : null
-                                    }
-                                    // value={values.accountUsage}
-                                    name='clientBranchEncodedKey'
-                                    // value={values.currencyCode}
-                                    required
-                                />
+                        <Select
+                          options={selecBranchList}
+                          onChange={(selectedBranch) => {
+                            this.setState({ selectedBranch });
+                            errors.clientBranchEncodedKey = null;
+                            values.clientBranchEncodedKey = selectedBranch.value;
+                          }}
+                          className={
+                            errors.clientBranchEncodedKey &&
+                              touched.clientBranchEncodedKey
+                              ? 'is-invalid'
+                              : null
+                          }
+                          // value={values.accountUsage}
+                          name='clientBranchEncodedKey'
+                          // value={values.currencyCode}
+                          required
+                        />
 
-                                {errors.clientBranchEncodedKey &&
-                                    touched.clientBranchEncodedKey ? (
-                                    <span className='invalid-feedback'>
-                                        {errors.clientBranchEncodedKey}
-                                    </span>
-                                ) : null}
-                            </Col>
-                            <Col>
-                                <Form.Label className='block-level'>
-                                    Account officer
+                        {errors.clientBranchEncodedKey &&
+                          touched.clientBranchEncodedKey ? (
+                          <span className='invalid-feedback'>
+                            {errors.clientBranchEncodedKey}
+                          </span>
+                        ) : null}
+                      </Col>
+                      <Col>
+                        <Form.Label className='block-level'>
+                          Account officer
 </Form.Label>
-                                <Select
-                                    options={allUserDataList}
-                                    onChange={(selectedOfficer) => {
-                                        this.setState({ selectedOfficer });
-                                        errors.accountOfficerEncodedKey = null;
-                                        values.accountOfficerEncodedKey = selectedOfficer.value;
-                                    }}
-                                    className={
-                                        errors.accountOfficerEncodedKey &&
-                                            touched.accountOfficerEncodedKey
-                                            ? 'is-invalid'
-                                            : null
-                                    }
-                                    // value={values.accountUsage}
-                                    name='accountOfficerEncodedKey'
-                                    // value={values.currencyCode}
-                                    required
-                                />
+                        <Select
+                          options={allUserDataList}
+                          onChange={(selectedOfficer) => {
+                            this.setState({ selectedOfficer });
+                            errors.accountOfficerEncodedKey = null;
+                            values.accountOfficerEncodedKey = selectedOfficer.value;
+                          }}
+                          className={
+                            errors.accountOfficerEncodedKey &&
+                              touched.accountOfficerEncodedKey
+                              ? 'is-invalid'
+                              : null
+                          }
+                          // value={values.accountUsage}
+                          name='accountOfficerEncodedKey'
+                          // value={values.currencyCode}
+                          required
+                        />
 
-                                {errors.accountOfficerEncodedKey &&
-                                    touched.accountOfficerEncodedKey ? (
-                                    <span className='invalid-feedback'>
-                                        {errors.accountOfficerEncodedKey}
-                                    </span>
-                                ) : null}
-                            </Col>
-                        </Form.Row>
-                    </div>
+                        {errors.accountOfficerEncodedKey &&
+                          touched.accountOfficerEncodedKey ? (
+                          <span className='invalid-feedback'>
+                            {errors.accountOfficerEncodedKey}
+                          </span>
+                        ) : null}
+                      </Col>
+                    </Form.Row>
+                  </div>
                 </Accordion.Collapse>
               </Accordion>
               
@@ -657,6 +1021,13 @@ class NewGroupClient extends React.Component {
                     : 'Create Group'}
                 </Button>
               </div>
+              {
+                (allMembersList.length>=1 && !this.validateAllRoleEntries()) &&
+                <Alert variant='danger'>
+                  Please select role for all members
+                </Alert>
+                
+              }
               {createAClientRequest.request_status ===
                 clientsConstants.CREATE_A_CLIENT_SUCCESS && (
                 <Alert variant='success'>
@@ -734,6 +1105,7 @@ function mapStateToProps(state) {
       state.administrationReducers.getAllCustomerTypesReducer,
     getAllUsers: state.administrationReducers.adminGetAllUsersReducer,
     createAClient: state.clientsReducers.createAClientReducer,
+    searchForCustomerReducer : state.dashboardReducers.searchForCustomerReducer,
   };
 }
 

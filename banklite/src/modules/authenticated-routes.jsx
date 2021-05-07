@@ -19,6 +19,7 @@ import ClientsExited from './clients/clients-exited'
 import ClientsBlacklisted from './clients/blacklisted'
 import NewClient from './clients/new-client'
 import NewGroupClient from './groups/new-group'
+import EditAGroup from './groups/edit-group'
 import EditAClient from './clients/edit-client'
 
 import ViewAllTasks from './all-tasks'
@@ -289,6 +290,7 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} />
 
                         <PrivateRoute accessRequired="bnk_edit_client" exact path='/clients/edit/:encodedkey'    authed={this.props.user} component={EditAClient} />
+                        <PrivateRoute accessRequired="bnk_edit_client" exact path='/group/edit/:encodedkey'    authed={this.props.user} component={EditAGroup} />
                         {/* <PrivateRoute path='/clients/edit/:encodedkey' exact  encodedKey={this.props.computedMatch.params.encodedkey} authed={this.props.user} component={EditAClient} /> */}
                         {/* <Route exact path='/clients/edit/:encodedkey'  render={(props) => <EditAClient encodedKey={props.match.params.encodedkey} {...this.props} />} /> */}
 
