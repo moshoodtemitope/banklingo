@@ -1,34 +1,23 @@
 import * as React from "react";
-// import {Router} from "react-router";
-
 import { connect } from "react-redux";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import Select from "react-select";
-import Dropdown from "react-bootstrap/Dropdown";
 import Modal from "react-bootstrap/Modal";
 import * as Yup from "yup";
 import "react-datepicker/dist/react-datepicker.css";
 import Alert from "react-bootstrap/Alert";
 import { Formik } from "formik";
-// import  TableComponent from '../../../shared/elements/table'
 import "../../customerprofile.scss";
 
-import { numberWithCommas, getDateFromISO } from "../../../../shared/utils";
+import { accountNumber } from "../../../../shared/utils";
+
 import { administrationConstants } from "../../../../redux/actiontypes/administration/administration.constants";
 import { loanAndDepositsConstants } from "../../../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants";
 import { loanActions } from "../../../../redux/actions/loans/loans.action";
-
-import {default as DatePickerFilter} from "react-datepicker";
 import { depositActions } from "../../../../redux/actions/deposits/deposits.action";
-import DatePickerFieldType from "../../../../_helpers/DatePickerFieldType";
-import DatePicker from 'react-datepicker';
 
-
-export class BeginMaturityModal extends React.Component {
+export class SetLockAccountModal extends React.Component {
   constructor(props) {
     super(props);
     // this.clientEncodedKey = this.props.match.params.id;
@@ -42,10 +31,7 @@ export class BeginMaturityModal extends React.Component {
   }
 
   render() {
-   
-
-
-    let newStateUpdate=this.props.newStateUpdate;
+    const { ctaText, newStateHeading, newStateUpdate } = this.state;
     let changeDepositStateRequest = this.props.changeDepositStateReducer,
       getAClientDepositAccountRequest = this.props
         .getAClientDepositAccountReducer.request_data.response.data;
@@ -93,8 +79,6 @@ export class BeginMaturityModal extends React.Component {
       });
     }
 
-    
-    
     if (
       adminGetTransactionChannelsRequest.request_status ===
         administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS &&
@@ -108,74 +92,62 @@ export class BeginMaturityModal extends React.Component {
         allChannels.push({ label: channel.name, value: channel.encodedKey });
       });
     }
-
-  
-     let changeDepositStateValidationSchema = Yup.object().shape({
-        notes: Yup.string().min(2, "Valid notes required"),
-        maturityDate: Yup.string().required("Required"),
-      });
-  
+    let lockAccountValidationSchema = Yup.object().shape({
+      accountNumber: Yup.string().min(2, "Valid Account Number required"),
+      lockReason: Yup.string().required("Required"),
+    });
 
     return (
       <Modal
-        backdrop="static" 
         show={this.props.showModal}
         onHide={this.props.handleHideModal}
         size="lg"
         centered="true"
-        dialogClassName={"modal-40w withcentered-heading"}
+        dialogClassName="modal-40w withcentered-heading"
         animation={false}
       >
         <Formik
           initialValues={{
-            maturityDate: "",
-            notes: "",
-            
+            accountNumber: "",
+            lockReason: "",
           }}
-          validationSchema={changeDepositStateValidationSchema}
+          validationSchema={lockAccountValidationSchema}
           onSubmit={(values, { resetForm }) => {
-           
-              let changeDepositStatePayload = {
-                notes: values.notes,
-                accountEncodedKey: this.props.depositEncodedKey,
-                maturityDate: values.maturityDate.toISOString(),
-              };
-           
+            let lockAccountPayload = {
+              accountNumber: values.accountNumber,
+              lockReason: values.lockReason,
+            };
+            this.props
+              .handleNewDepositState(lockAccountPayload, "lockaccount")
+              .then(() => {
+                if (
+                  this.props.changeDepositStateReducer.request_status ===
+                  loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS
+                ) {
+                  resetForm();
+                  setTimeout(() => {
+                    this.props.dispatch(
+                      depositActions.changeDepositState("CLEAR")
+                    );
+                    this.props.handleHideModal();
+                    this.props.getCustomerDepositAccountDetails(
+                      this.depositEncodedKey
+                    );
+                  }, 3000);
+                }
 
-            this.props.handleNewDepositState(
-              changeDepositStatePayload,
-              "beginmaturity"
-            ).then(() => {
-              if (
-                this.props.changeDepositStateReducer.request_status ===
-                loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS
-              ) {
-                resetForm();
-                // value = {null}
-
-                setTimeout(() => {
-                  this.props.dispatch(
-                    depositActions.changeDepositState("CLEAR")
-                  );
-                  this.props.handleHideModal();
-                  this.props.getCustomerDepositAccountDetails(this.props.depositEncodedKey);
-                }, 3000);
-              }
-
-              if (
-                this.props.changeDepositStateReducer.request_status ===
-                loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE
-              ) {
-                resetForm();
-                // value = {null}
-
-                setTimeout(() => {
-                  this.props.dispatch(
-                    depositActions.changeDepositState("CLEAR")
-                  );
-                }, 3000);
-              }
-            });
+                if (
+                  this.props.changeDepositStateReducer.request_status ===
+                  loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE
+                ) {
+                  resetForm();
+                  setTimeout(() => {
+                    this.props.dispatch(
+                      depositActions.changeDepositState("CLEAR")
+                    );
+                  }, 3000);
+                }
+              });
           }}
         >
           {({
@@ -192,75 +164,60 @@ export class BeginMaturityModal extends React.Component {
           }) => (
             <Form noValidate onSubmit={handleSubmit} className="">
               <Modal.Header>
-                <Modal.Title>{this.props.newStateHeading}</Modal.Title>
+                <Modal.Title>{"Lock Account"}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-               
-                  <Form.Row className="mb-10">
-                    <Col className="date-wrap">
-                      <Form.Label className="block-level">
-                        Maturity Date
-                      </Form.Label>
-                      <Form.Group className="mb-0 date-wrap">
-                        {/* <DatePickerFilter
-                          placeholderText="Choose  date"
-                          autoComplete="new-password"
-                          dateFormat={window.dateformat}
-                          className="form-control form-control-sm"
-                          peekNextMonth
-                          showMonthDropdown
-                          name="maturityDate"
-                          value={values.maturityDate}
-                          onChange={setFieldValue}
-                          showYearDropdown
-                          dropdownMode="select"
-                          minDate={new Date()}
-                          className={
-                            errors.maturityDate && touched.maturityDate
-                              ? "is-invalid form-control form-control-sm h-38px"
-                              : "form-control h-38px form-control-sm"
-                          }
-                        /> */}
-
-<DatePicker
-                  placeholderText='Choose date'
-                  dateFormat={window.dateformat}
-                  onChange={(date) => {
-                    date.setHours(date.getHours() + 1);
-                    setFieldValue('maturityDate', date);
-                    this.setState({ maturityDate:date }, () => {
-                    });
-                  }}
-                  name="maturityDate"
-                  onChangeRaw={(e) => this.handleChange(e)}
-                  selected={this.state.maturityDate}
-                  dateFormat={window.dateformat}
-                  peekNextMonth
-                  showMonthDropdown
-                  showYearDropdown
-                  dropdownMode='select'
-                  maxDate={new Date()}
-                  className={errors.maturityDate && touched.maturityDate ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
-                  customInput={
-                    <DatePickerFieldType placeHolder='Choose date' />
-                  }
-                />
-                        {errors.maturityDate && touched.maturityDate ? (
-                          <span className="invalid-feedback">
-                            {errors.maturityDate}
-                          </span>
-                        ) : null}
-                      </Form.Group>
-                    </Col>
-                  </Form.Row>
-               
-               
+                <div>
+                  <Form.Group>
+                    <Form.Label className="block-level">
+                      Account Number
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      autoComplete="off"
+                      onChange={handleChange}
+                      value={accountNumber(values.accountNumber)}
+                      className={
+                        errors.accountNumber && touched.accountNumber
+                          ? "is-invalid h-38px"
+                          : "h-38px"
+                      }
+                      name="accountNumber"
+                      required
+                    />
+                    {errors.accountNumber && touched.accountNumber ? (
+                      <span className="invalid-feedback">
+                        {errors.accountNumber}
+                      </span>
+                    ) : null}
+                  </Form.Group>
+                </div>
+                <Form.Group>
+                  <Form.Label className="block-level">
+                    Reason for Locking
+                  </Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows="3"
+                    onChange={handleChange}
+                    name="lockReason"
+                    value={values.lockReason}
+                    className={
+                      errors.lockReason && touched.lockReason
+                        ? "is-invalid form-control form-control-sm"
+                        : null
+                    }
+                  />
+                  {errors.lockReason && touched.lockReason ? (
+                    <span className="invalid-feedback">
+                      {errors.lockReason}
+                    </span>
+                  ) : null}
+                </Form.Group>
+                {/* } */}
               </Modal.Body>
               <Modal.Footer>
-                <Button
-                  variant="light"
-                  onClick={this.props.handleHideModal}
-                >
+                <Button variant="light" onClick={this.props.handleHideModal}>
                   Cancel
                 </Button>
                 <Button
@@ -269,8 +226,8 @@ export class BeginMaturityModal extends React.Component {
                   disabled={changeDepositStateRequest.is_request_processing}
                 >
                   {changeDepositStateRequest.is_request_processing
-                    ? "Please wait..."
-                    : `${this.props.ctaText}`}
+                    ? "Please wait....."
+                    : `Lock Account`}
                 </Button>
               </Modal.Footer>
               <div className="footer-alert">
@@ -332,4 +289,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(BeginMaturityModal);
+export default connect(mapStateToProps)(SetLockAccountModal);

@@ -354,7 +354,7 @@ export class RepayLoanModal extends React.Component {
                         </Modal.Body>
                         <Modal.Footer>
 
-                            <Button variant="light" onClick={this.props.handleCloseRepaymentModal}>
+                            <Button variant="light" onClick={this.props.closeModal}>
                                 Cancel
                                 </Button>
                             <Button

@@ -94,17 +94,18 @@ function Login   (loginPayload){
                                                 localStorage.setItem('x-u-perm', JSON.stringify(response4.data));
                                                 dispatch(success(response2.data));
 
-                                                history.push('/dashboard');
+                                                // history.push('/dashboard');
+                                                history.replace('/dashboard');
                                                
                                             })
                                             .catch(error => {
 
+                                                console.log('1'+ JSON.parse(error));
                                                 if (error.response.status === 401) {
                                                     dispatch(failure(handleRequestErrors("Unable to login. Please try again")))
                                                 } else {
                                                     dispatch(failure(handleRequestErrors(error)));
                                                 }
-
 
                                             });
                                 })
@@ -136,13 +137,14 @@ function Login   (loginPayload){
 
                         
                     }
-                    // else{
-                    //     localStorage.setItem('lingoAuth', JSON.stringify(response.data));
+                    else{
+                        console.log('token is undefined');
+                        // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
                        
-                    //     dispatch(success(response.data));
-                    //     history.push('/dashboard');
-                    //     // dispatch(failure(handleRequestErrors(response.data.message)))
-                    // }
+                        // dispatch(success(response.data));
+                        // history.push('/dashboard');
+                        // dispatch(failure(handleRequestErrors(response.data.message)))
+                    }
                     
                     
                 }).catch(error =>{
@@ -427,7 +429,8 @@ function Logout(redirectType,retUrl) {
         saveRouteForRedirect(redirectType,retUrl);
     }
 
-    history.push('/');
+    // history.push('/');
+    history.replace('/');
     return (dispatch) => {
         dispatch(logout(redirectType,retUrl));
     }

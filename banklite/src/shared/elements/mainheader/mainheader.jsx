@@ -103,7 +103,7 @@ class MainHeader extends React.Component{
         dispatch(authActions.Logout());
         
         localStorage.removeItem("user");
-        history.push('/');
+        history.replace('/');
     }
 
     getCustomerTypes = ()=>{

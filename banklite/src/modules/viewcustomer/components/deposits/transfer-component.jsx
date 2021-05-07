@@ -131,18 +131,27 @@ export class MakeTransferModal extends React.Component {
         let searchAccountNumberRequest = this.props.searchAccountNumbersReducer,
             searchResultsData,
             searchResultsList = [],
-            getAClientDepositAccountRequest = this.props
-                .getAClientDepositAccountReducer.request_data.response.data;
+            getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
         this.props.dispatch(depositActions.searchAccountNumbers("CLEAR"));
+        console.log('initiateAccountSearch' + inputValue +'  '+ searchAccountNumberRequest.request_status);
+        console.log(searchAccountNumberRequest.request_status+' --- '+'---'+  searchAccountNumberRequest.request_data?.response?.data);
+
         if (inputValue.length >= 1) {
             return this.getSearchedAccountResults(inputValue).then(() => {
-                if (
-                    searchAccountNumberRequest.request_status ===
-                    loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS
-                ) {
-                    searchResultsData =
-                        searchAccountNumberRequest.request_data.response.data;
 
+
+                console.log('SEARCH BACK '+ searchAccountNumberRequest.request_status);
+                // if (
+                //     searchAccountNumberRequest.request_status ===
+                //     loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS
+                // ) {
+                  
+                  
+                    searchResultsData =
+                        searchAccountNumberRequest?.request_data?.response.data;
+
+                        console.log('SEARCH_BACK '+ JSON.parse(searchResultsData));
+if(searchResultsData==null) return;
                     searchResultsData = searchResultsData.filter(
                         (eachResult) =>
                             ((eachResult.searchItemType === 3 &&
@@ -157,8 +166,9 @@ export class MakeTransferModal extends React.Component {
 
                     this.setState({ isCustommerAccountsFetchedWithKey: false });
 
+                    console.log('FOUND' +JSON.parse(searchResultsData) );
                     return searchResultsData;
-                }
+                // }
             });
         } else {
             return null;
@@ -191,9 +201,10 @@ export class MakeTransferModal extends React.Component {
 
     initiateCustomerSearch = (inputValue) => {
         this.setState({ firstChosenTransferCriteria: "customer" });
+
         let searchCustomerAccountRequest = this.props.searchCustomerAccountReducer,
             searchResultsData,
-            searchResultsList = [],
+            // searchResultsList = [],
             getAClientDepositAccountRequest = this.props
                 .getAClientDepositAccountReducer.request_data.response.data;
         this.props.dispatch(depositActions.searchCustomerAccount("CLEAR"));
@@ -204,19 +215,7 @@ export class MakeTransferModal extends React.Component {
                     loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS
                 ) {
                     // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
-                    searchResultsData = this.props.searchCustomerAccountReducer
-                        .request_data.response.data;
-
-                    // searchResultsData = searchResultsData.filter(eachResult=>(
-                    //         (
-                    //             (eachResult.searchItemType===3 && (eachResult.state===3 || eachResult.state===5))
-                    //             ||
-                    //             (eachResult.searchItemType===2 && (eachResult.state===6 || eachResult.state===5))
-                    //         )
-                    //         && eachResult.searchKey !==getAClientDepositAccountRequest.accountNumber
-                    //         ))
-
-                    // return searchResultsData;
+                    searchResultsData = this.props.searchCustomerAccountReducer.request_data.response.data;
 
                     searchResultsData = searchResultsData.filter(
                         (eachResult) =>
@@ -236,18 +235,16 @@ export class MakeTransferModal extends React.Component {
 
 
     render() {
-        const { changeDepositState,
+        const { 
             selectOtherCustomerAccount,
 
             firstChosenTransferCriteria,
             typeOfTransfer,
-            newState,
-            ctaText,
-            newStateHeading,
-            newStateUpdate,
+           
             selectACustomerAccount,
             defaultAccountOptions,
             showDepositFundsForm } = this.state;
+
         let changeDepositStateRequest = this.props.changeDepositStateReducer,
             getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
 
@@ -277,6 +274,8 @@ export class MakeTransferModal extends React.Component {
         }
 
 
+
+
         if (adminGetTransactionChannelsRequest.request_status === administrationConstants.GET_TRANSACTION_CHANNELS_SUCCESS
             && adminGetTransactionChannelsRequest.request_data.response.data.result.length >= 1) {
             channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
@@ -286,6 +285,8 @@ export class MakeTransferModal extends React.Component {
             })
         }
 
+        
+     
         // let changeDepositStateValidationSchema;
         // if(showDepositFundsForm!==true){
         // changeDepositStateValidationSchema = Yup.object().shape({
@@ -490,12 +491,6 @@ export class MakeTransferModal extends React.Component {
                                                 value={typeOfTransfer}
                                                 name="typeOfTransferToInitiate"
                                                 onChange={(e) => {
-                                                    console.log({
-                                                        typeOfTransfer: e.target.value,
-                                                        selectOtherCustomerAccount: "",
-                                                        defaultAccountOptions: "",
-                                                        selectACustomerAccount: ""
-                                                    });
                                                     this.setState({
                                                         typeOfTransfer: e.target.value,
                                                         selectOtherCustomerAccount: "",
@@ -509,6 +504,8 @@ export class MakeTransferModal extends React.Component {
                                             </select>
                                         </Col>
                                     </Form.Row>
+
+
                                     {typeOfTransfer === "currentcustomer" &&
                                         <Form.Row>
                                             <Col>
@@ -529,6 +526,8 @@ export class MakeTransferModal extends React.Component {
                                             </Col>
                                         </Form.Row>
                                     }
+
+
                                     {typeOfTransfer === "anothercustomer" &&
                                         <Form.Row>
                                             <Col className="async-search-wrap">
@@ -573,6 +572,7 @@ export class MakeTransferModal extends React.Component {
                                                         ) : null}
                                                     </div>
                                                 }
+
                                                 {
                                                     (searchForAccountsWithCustomerKeyRequest.request_status
                                                         && searchForAccountsWithCustomerKeyRequest.request_status === loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_PENDING)
@@ -581,7 +581,8 @@ export class MakeTransferModal extends React.Component {
                                                 }
 
                                                 {
-                                                    // ( selectOtherCustomerAccount!=="" && defaultAccountOptions==="") &&
+                                                   //
+                                                     ( selectOtherCustomerAccount!=="" && defaultAccountOptions==="") &&
                                                     (searchAccountNumberRequest.request_status === loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS && selectOtherCustomerAccount !== "" && defaultAccountOptions === "") &&
                                                     <div className="mt-20">
                                                         <Form.Label className="block-level">Customer to transfer To</Form.Label>
@@ -620,7 +621,7 @@ export class MakeTransferModal extends React.Component {
                                                         />
                                                     </div>
                                                 }
-                                                {/* <Select
+                                                 {/* <Select
                                                             options={allAccountOfCurrentCustomer}
 
                                                             onChange={(selected) => {
@@ -632,7 +633,7 @@ export class MakeTransferModal extends React.Component {
                                                         />
                                                         {errors.chosenAccountNum && touched.chosenAccountNum ? (
                                                             <span className="invalid-feedback">{errors.chosenAccountNum}</span>
-                                                        ) : null} */}
+                                                        ) : null}  */}
                                             </Col>
                                         </Form.Row>
 
