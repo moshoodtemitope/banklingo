@@ -94,7 +94,8 @@ function Login   (loginPayload){
                                                 localStorage.setItem('x-u-perm', JSON.stringify(response4.data));
                                                 dispatch(success(response2.data));
 
-                                                history.push('/dashboard');
+                                                // history.push('/dashboard');
+                                                history.replace('/dashboard');
                                                
                                             })
                                             .catch(error => {
@@ -427,7 +428,8 @@ function Logout(redirectType,retUrl) {
         saveRouteForRedirect(redirectType,retUrl);
     }
 
-    history.push('/');
+    // history.push('/');
+    history.replace('/');
     return (dispatch) => {
         dispatch(logout(redirectType,retUrl));
     }
