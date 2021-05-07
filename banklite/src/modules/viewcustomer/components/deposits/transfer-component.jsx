@@ -155,9 +155,9 @@ export class MakeTransferModal extends React.Component {
                   
                   
                     searchResultsData =
-                        searchAccountNumberRequest?.request_data?.response.data;
+                    this.props.searchAccountNumbersReducer?.request_data?.response.data;
 
-                        // console.log('SEARCH_BACK '+ JSON.parse(searchResultsData));
+                        // console.log('SEARooo CH_BACK ',searchResultsData);
                     if(searchResultsData==null) return;
                         // searchResultsData = searchResultsData.filter(
                         //     (eachResult) =>
@@ -582,7 +582,7 @@ export class MakeTransferModal extends React.Component {
                                                             noOptionsMessage={this.noOptionsForAccountMessage}
                                                             getOptionValue={this.getSearchForAccountOptionValue}
                                                             getOptionLabel={this.getSearchOptionForAccountLabel}
-                                                            defaultOptions={defaultAccountOptions !== "" ? defaultAccountOptions : null}
+                                                            defaultOptions={this.state.defaultAccountOptions !== "" ? this.state.defaultAccountOptions : null}
                                                             loadOptions={this.initiateAccountSearch}
                                                             placeholder="Search Accounts"
                                                             name="chosenAccountNum"
@@ -750,6 +750,7 @@ export class MakeTransferModal extends React.Component {
 
 
 function mapStateToProps(state) {
+    console.log("gafafa")
     return {
         // adminGetTransactionChannels : state.administrationReducers.adminGetTransactionChannelsReducer,
         // getAClientReducer: state.clientsReducers.getAClientReducer,
