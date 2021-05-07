@@ -94,11 +94,13 @@ function Login   (loginPayload){
                                                 localStorage.setItem('x-u-perm', JSON.stringify(response4.data));
                                                 dispatch(success(response2.data));
 
+                                                console.log('redirect to dashboard - 1');
                                                 history.push('/dashboard');
                                                
                                             })
                                             .catch(error => {
 
+                                                console.log('1'+ JSON.parse(error));
                                                 if (error.response.status === 401) {
                                                     dispatch(failure(handleRequestErrors("Unable to login. Please try again")))
                                                 } else {

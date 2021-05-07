@@ -9,11 +9,11 @@ import { store } from './redux/store';
 
 window.dateformat = 'dd-MMM-yyyy';
 ReactDOM.render(
+  <BrowserRouter forceRefresh={true}>
   <Provider store={store}>
-    <BrowserRouter forceRefresh={true}>
       <App />
-    </BrowserRouter>
-  </Provider>,
+  </Provider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
