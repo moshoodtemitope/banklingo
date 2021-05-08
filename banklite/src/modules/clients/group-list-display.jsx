@@ -169,7 +169,7 @@ exportClients = () => {
    getHeaderDescription=()=> {
      
     //this.retrieveFromApi();
-    switch(this.zprops.clientState){
+    switch(this.props.clientState){
       case (ClientStateConstants.PENDING_APPROVAL): return  (<div>Customers (Pending Approval)</div>);
       case (ClientStateConstants.ACTIVE): return  (<div>Customers (Active)</div>);
       case (ClientStateConstants.INACTIVE): return  (<div>Customers (In-Active)</div>);
@@ -302,7 +302,7 @@ fetchForBusyState(){
                     >
                       <NavLink
                         className='dropdown-item'
-                        to={`/clients/edit/${eachClient.clientEncodedKey}`}
+                        to={`/group/edit/${eachClient.clientEncodedKey}`}
                       >
                         Edit
                       </NavLink>

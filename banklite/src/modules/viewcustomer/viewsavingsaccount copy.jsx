@@ -3786,7 +3786,7 @@ class ViewSavingsAccount extends React.Component {
 
 
 <BeginMaturityModal {...this.props}
-
+newStateHeading={this.state.newStateHeading} newState={this.state.newState} ctaText={this.state.ctaText} 
             showModal={this.state.showBeginMaturityModal}
             handleHideModal={this.handleHideBeginMaturityModal}
             handleNewDepositState={this.handleNewDepositState}

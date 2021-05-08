@@ -2684,11 +2684,11 @@ class ViewSavingsAccount extends React.Component {
     if (inputValue.length >= 1) {
       return this.getSearchedAccountResults(inputValue).then(() => {
         if (
-          searchAccountNumberRequest.request_status ===
+          this.props.searchAccountNumbersReducer.request_status ===
           loanAndDepositsConstants.SEARCH_ACCOUNT_NUMBERS_SUCCESS
         ) {
           searchResultsData =
-            searchAccountNumberRequest.request_data.response.data;
+          this.props.searchAccountNumbersReducer.request_data.response.data;
 
           searchResultsData = searchResultsData.filter(
             (eachResult) =>
@@ -2702,7 +2702,18 @@ class ViewSavingsAccount extends React.Component {
                 getAClientDepositAccountRequest.clientEncodedKey
           );
 
-          this.setState({ isCustommerAccountsFetchedWithKey: false });
+        //   searchResultsList.push({
+        //     label: `${eachAccount.searchText} - ${eachAccount.searchKey}`,
+        //     // value: eachAccount.clientEncodedKey,
+        //     ...eachAccount,
+        //     value: eachAccount.searchItemEncodedKey,
+        // });
+
+        
+          this.setState({ isCustommerAccountsFetchedWithKey: false,
+              // defaultAccountOptions: searchResultsList,
+          
+          });
 
           return searchResultsData;
         }
@@ -2905,10 +2916,14 @@ class ViewSavingsAccount extends React.Component {
 
     let showTransfer =
       (depositDetails.accountState === DepositStateConstants.ACTIVE ||
-        depositDetails.accountState === DepositStateConstants.Approved) &&
-      (depositDetails.productType === 2 ||
-        depositDetails.productType === 1 ||
-        depositDetails.productType === 4);
+        depositDetails.accountState === DepositStateConstants.Approved)
+      //    &&
+      // (depositDetails.productType === 2 ||
+      //   depositDetails.productType === 1 ||
+      //   depositDetails.productType === 4)
+        ;
+
+
     let showMakeDeposit =
       depositDetails.accountState === DepositStateConstants.ACTIVE ||
       depositDetails.accountState === DepositStateConstants.Approved;

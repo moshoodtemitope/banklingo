@@ -19,6 +19,7 @@ import ClientsExited from './clients/clients-exited'
 import ClientsBlacklisted from './clients/blacklisted'
 import NewClient from './clients/new-client'
 import NewGroupClient from './groups/new-group'
+import EditAGroup from './groups/edit-group'
 import EditAClient from './clients/edit-client'
 
 import ViewAllTasks from './all-tasks'
@@ -258,11 +259,6 @@ class AuthenticatedRoutes extends React.Component {
     }
 
 
-
-
-
-
-
     render() {
 
         return (
@@ -272,7 +268,7 @@ class AuthenticatedRoutes extends React.Component {
                     <Switch>
 
                         {/* <Route exact path='/' render={(props) => <UserLogin  />} />  */}
-                        <Route exact path='/' render={(props) => <LoginWrap  />} />
+                        <Route exact path='/' render={(props) => <LoginWrap {...this.props}  />} />
 
                         <PrivateRoute path='/profile/change-password' {...this.props} authed={this.props.user} component={ChangePassword} />
                         <PrivateRoute path='/profile/change-pin' {...this.props} authed={this.props.user} component={ChangePin} />
@@ -289,6 +285,7 @@ class AuthenticatedRoutes extends React.Component {
                         <Route exact path='/clients/new' render={(props) => <NewClient {...this.props} />} />
 
                         <PrivateRoute accessRequired="bnk_edit_client" exact path='/clients/edit/:encodedkey'    authed={this.props.user} component={EditAClient} />
+                        <PrivateRoute accessRequired="bnk_edit_client" exact path='/group/edit/:encodedkey'    authed={this.props.user} component={EditAGroup} />
                         {/* <PrivateRoute path='/clients/edit/:encodedkey' exact  encodedKey={this.props.computedMatch.params.encodedkey} authed={this.props.user} component={EditAClient} /> */}
                         {/* <Route exact path='/clients/edit/:encodedkey'  render={(props) => <EditAClient encodedKey={props.match.params.encodedkey} {...this.props} />} /> */}
 
@@ -328,19 +325,6 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-withdrawn' {...this.props} authed={this.props.user} loanState={LoanStateConstants.CLOSED_WITHDRAWN} component={LoanListDisplay} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/partial-application' {...this.props} authed={this.props.user} loanState={LoanStateConstants.PARTIAL_APPLICATION} component={LoanListDisplay} />  
 
-
-                        {/* ALL:0,  
-    Partial_Application:1, 
-    Pending_Approval:2, 
-    Approved:3, 
-    REJECTED:4, 
-    ACTIVE:5, 
-    IN_ARREARS:6, 
-    CLOSED:7,
-    CLOSED_WRITTEN_OFF:8,
-    DORMANT:9,
-    LOCKED:10,
-    MARTURED:11, */}
                         <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/deposits/all' {...this.props} authed={this.props.user} depositState={DepositStateConstants.ALL} component={DepositManagement} />
                         <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/deposits/partial-applications' {...this.props} authed={this.props.user}  depositState={DepositStateConstants.Partial_Application} component={DepositManagement} />
                         <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/deposits/pending-approval' {...this.props} authed={this.props.user}  depositState={DepositStateConstants.Pending_Approval} component={DepositManagement} />

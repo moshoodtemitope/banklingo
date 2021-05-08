@@ -979,10 +979,11 @@ function searchCustomerAccount(params) {
   if (params !== "CLEAR") {
     return (dispatch) => {
       let consume = ApiService.request(
-        routes.HIT_GLOBAL_SEARCH + `/clients?SearchText=${params}`,
+        routes.HIT_GLOBAL_SEARCH + `/items?SearchText=${params}`,
         "GET",
         null
       );
+      // let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/clients?SearchText=${params}`, "GET", null);
       dispatch(request(consume));
       return consume
         .then((response) => {
@@ -1028,11 +1029,11 @@ function searchForAccountsWithCustomerKey(params) {
   if (params !== "CLEAR") {
     return (dispatch) => {
       let consume = ApiService.request(
-        routes.HIT_GLOBAL_SEARCH +
-          `/customerdepositandloanitems?CustomerEncodedKey=${params}`,
+        routes.HIT_GLOBAL_SEARCH + `/items?SearchText=${params}`,
         "GET",
         null
       );
+      // let consume = ApiService.request(routes.HIT_GLOBAL_SEARCH+`/customerdepositandloanitems?CustomerEncodedKey=${params}`, "GET", null);
       dispatch(request(consume));
       return consume
         .then((response) => {

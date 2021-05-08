@@ -452,6 +452,8 @@ class ViewCustomer extends React.Component {
         (eachType) => eachType.id === customerDetails.clientTypeId
       )[0];
 
+      
+
       return (
         <div className="row">
           {this.state.showAddSignature && this.renderUploadSignature()}
@@ -492,80 +494,84 @@ class ViewCustomer extends React.Component {
                 </div>
                 <div className="col-sm-4">
                   <div className="leftside-items">
-                    <div className="each-card mb-20">
-                      <div className="each-card-content">
-                        <div className="mandate-imgs">
-                          <div className="each-mandate">
-                            {manadateData.isPassportAvailable && (
-                              <img src={manadateData.passport} alt="" />
-                            )}
-                            {!manadateData.isPassportAvailable && (
-                              <img
-                                className="no-mandate"
-                                src={PictureIco}
-                                alt=""
-                              />
-                            )}
-                            <div className="mandate-title">Customer Photo</div>
-                            <Button
-                              variant="success btn-sm"
-                              onClick={this.displayAddPhoto}
-                            >
-                              {!manadateData.isPassportAvailable
-                                ? "Upload Photo"
-                                : "Update Photo"}
-                            </Button>
-                          </div>
-                          <div className="each-mandate">
-                            {manadateData.isSignatureAvailable && (
-                              <img src={manadateData.signature} alt="" />
-                            )}
-                            {!manadateData.isSignatureAvailable && (
-                              <img
-                                className="no-mandate"
-                                src={PictureIco}
-                                alt=""
-                              />
-                            )}
-                            <div className="mandate-title">
-                              Customer Signature
+                    {customerDetails.clientClassification===0 &&
+                      <div className="each-card mb-20">
+                        <div className="each-card-content">
+                          <div className="mandate-imgs">
+                            <div className="each-mandate">
+                              {manadateData.isPassportAvailable && (
+                                <img src={manadateData.passport} alt="" />
+                              )}
+                              {!manadateData.isPassportAvailable && (
+                                <img
+                                  className="no-mandate"
+                                  src={PictureIco}
+                                  alt=""
+                                />
+                              )}
+                              <div className="mandate-title">Customer Photo</div>
+                              <Button
+                                variant="success btn-sm"
+                                onClick={this.displayAddPhoto}
+                              >
+                                {!manadateData.isPassportAvailable
+                                  ? "Upload Photo"
+                                  : "Update Photo"}
+                              </Button>
                             </div>
-                            <Button
-                              variant="success btn-sm"
-                              onClick={this.displayAddSignature}
-                            >
-                              {!manadateData.isSignatureAvailable
-                                ? "Upload Signature"
-                                : "Update Signature"}
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="each-card mb-20">
-                      <div className="each-card-content">
-                        <div className="mandate-imgs">
-                          <div className="each-mandate">
-                            {passport && (
-                              <img
-                                src={`data:image/png;base64,${passport}`}
-                                alt=""
-                              />
-                            )}
-                            {!passport && (
-                              <img
-                                className="no-mandate"
-                                src={PictureIco}
-                                alt=""
-                              />
-                            )}
-                            <div className="mandate-title">
-                              Customer Biometric ID Photo
+                            <div className="each-mandate">
+                              {manadateData.isSignatureAvailable && (
+                                <img src={manadateData.signature} alt="" />
+                              )}
+                              {!manadateData.isSignatureAvailable && (
+                                <img
+                                  className="no-mandate"
+                                  src={PictureIco}
+                                  alt=""
+                                />
+                              )}
+                              <div className="mandate-title">
+                                Customer Signature
+                              </div>
+                              <Button
+                                variant="success btn-sm"
+                                onClick={this.displayAddSignature}
+                              >
+                                {!manadateData.isSignatureAvailable
+                                  ? "Upload Signature"
+                                  : "Update Signature"}
+                              </Button>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    }
+                    {customerDetails.clientClassification===0 &&
+                      <div className="each-card mb-20">
+                        <div className="each-card-content">
+                          <div className="mandate-imgs">
+                            <div className="each-mandate">
+                              {passport && (
+                                <img
+                                  src={`data:image/png;base64,${passport}`}
+                                  alt=""
+                                />
+                              )}
+                              {!passport && (
+                                <img
+                                  className="no-mandate"
+                                  src={PictureIco}
+                                  alt=""
+                                />
+                              )}
+                              <div className="mandate-title">
+                                Customer Biometric ID Photo
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
 
                     <ActivitiesBox
                       activityType="client"

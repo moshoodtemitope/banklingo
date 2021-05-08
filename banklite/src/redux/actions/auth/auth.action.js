@@ -119,6 +119,142 @@ function Login(loginPayload) {
                         );
                         dispatch(success(response2.data));
 
+                        // history.push('/dashboard');
+                        history.replace("/dashboard");
+                      })
+                      .catch((error) => {
+                        console.log("1" + JSON.parse(error));
+                        if (error.response.status === 401) {
+                          dispatch(
+                            failure(
+                              handleRequestErrors(
+                                "Unable to login. Please try again"
+                              )
+                            )
+                          );
+                        } else {
+                          dispatch(failure(handleRequestErrors(error)));
+                        }
+                      });
+                  })
+                  .catch((error) => {
+                    if (error.response.status === 401) {
+                      dispatch(
+                        failure(
+                          handleRequestErrors(
+                            "Unable to login. Please try again"
+                          )
+                        )
+                      );
+                    } else {
+                      dispatch(failure(handleRequestErrors(error)));
+                    }
+                  });
+              })
+              .catch((error) => {
+                if (error.response.status === 401) {
+                  dispatch(
+                    failure(
+                      handleRequestErrors("Unable to login. Please try again")
+                    )
+                  );
+                } else {
+                  dispatch(failure(handleRequestErrors(error)));
+                }
+              });
+          } else {
+            console.log("token is undefined");
+            // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
+
+            // dispatch(success(response.data));
+            // history.push('/dashboard');
+            // dispatch(failure(handleRequestErrors(response.data.message)))
+          }
+        })
+        .catch((error) => {
+          // console.log('error is', error)
+          dispatch(failure(handleRequestErrors(error)));
+        });
+    };
+  }
+
+  return (dispatch) => {
+    dispatch(clear());
+  };
+
+  function request(user) {
+    return { type: authConstants.LOGIN_USER_PENDING, user };
+  }
+  function success(response) {
+    return { type: authConstants.LOGIN_USER_SUCCESS, response };
+  }
+  function failure(error) {
+    return { type: authConstants.LOGIN_USER_FAILURE, error };
+  }
+  function clear() {
+    return { type: authConstants.LOGIN_USER_RESET, clear_data: "" };
+  }
+}
+
+function Login(loginPayload) {
+  if (loginPayload !== "CLEAR") {
+    let userData;
+    return (dispatch) => {
+      let consume = ApiService.request(routes.LOGIN_USER, "POST", loginPayload);
+      dispatch(request(consume));
+      return consume
+        .then((response) => {
+          if (response.data.token !== undefined) {
+            userData = { ...response.data };
+            userData.lastLogForAuth = Date.now();
+
+            localStorage.setItem("lingoAuth", JSON.stringify(userData));
+            // userData = response.data;
+            let consume2 = ApiService.request(
+              routes.ADD_BRANCH + "/allowedbranches",
+              "GET",
+              null
+            );
+            dispatch(request(consume2));
+
+            return consume2
+              .then((response2) => {
+                // localStorage.setItem('lingoAuth', JSON.stringify(response.data));
+                let user = JSON.parse(localStorage.getItem("lingoAuth"));
+                user.AllowableBranches = response2.data;
+                // user.BranchId = response2.data[0].id;
+                if (response2.data.length >= 1) {
+                  user.BranchId = response2.data[0].id;
+                  user.BranchName = response2.data[0].name;
+                }
+                // localStorage.setItem('lingoAuth', JSON.stringify(user));
+
+                let consume3 = ApiService.request(
+                  `${routes.ADD_BRANCH}/allowedbranches?ExcludeAllBranches=true`,
+                  "GET",
+                  null
+                );
+                dispatch(request(consume3));
+                return consume3
+                  .then((response3) => {
+                    user.AllowedBranches = response3.data;
+                    localStorage.setItem("lingoAuth", JSON.stringify(user));
+
+                    let consume4 = ApiService.request(
+                      routes.HIT_ROLE + "/mypermissions",
+                      "GET",
+                      null
+                    );
+                    dispatch(request(consume4));
+                    return consume4
+                      .then((response4) => {
+                        // console.log("Permissions are", response4.data);
+                        localStorage.setItem(
+                          "x-u-perm",
+                          JSON.stringify(response4.data)
+                        );
+                        dispatch(success(response2.data));
+
                         history.push("/dashboard");
                       })
                       .catch((error) => {
@@ -404,48 +540,58 @@ function ResetPassword(resetPasswordPayload) {
   }
 }
 
-function activateDeactivateUser(actionType, userPayload) {
-  if (userPayload !== "CLEAR") {
-    return (dispatch) => {
-      let url;
-      if (actionType === "activate") {
-        url = routes.ACTIVATE_USER;
-      }
-      if (actionType === "deactivate") {
-        url = routes.DEACTIVATE_USER;
-      }
-
-      let consume = ApiService.request(url, "POST", userPayload);
-      dispatch(request(consume));
-      return consume
-        .then((response) => {
-          dispatch(success(response));
-        })
-        .catch((error) => {
-          dispatch(failure(handleRequestErrors(error)));
-        });
-    };
+function Logout(redirectType, retUrl) {
+  // localStorage.clear();
+  // console.log("testwe",retUrl);
+  localStorage.removeItem("lingoAuth");
+  localStorage.removeItem("state");
+  localStorage.removeItem("x-u-perm");
+  localStorage.removeItem("xSessionTracker");
+  if (retUrl !== undefined) {
+    saveRouteForRedirect(redirectType, retUrl);
   }
 
+  // history.push('/');
+  history.replace("/");
   return (dispatch) => {
-    dispatch(clear());
-  };
+    let url;
+    if (actionType === "activate") {
+      url = routes.ACTIVATE_USER;
+    }
+    if (actionType === "deactivate") {
+      url = routes.DEACTIVATE_USER;
+    }
 
-  function request(user) {
-    return { type: authConstants.ACTIVATE_DEACTIVATE_USER_PENDING, user };
-  }
-  function success(response) {
-    return { type: authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS, response };
-  }
-  function failure(error) {
-    return { type: authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE, error };
-  }
-  function clear() {
-    return {
-      type: authConstants.ACTIVATE_DEACTIVATE_USER_RESET,
-      clear_data: "",
-    };
-  }
+    let consume = ApiService.request(url, "POST", userPayload);
+    dispatch(request(consume));
+    return consume
+      .then((response) => {
+        dispatch(success(response));
+      })
+      .catch((error) => {
+        dispatch(failure(handleRequestErrors(error)));
+      });
+  };
+}
+
+return (dispatch) => {
+  dispatch(clear());
+};
+
+function request(user) {
+  return { type: authConstants.ACTIVATE_DEACTIVATE_USER_PENDING, user };
+}
+function success(response) {
+  return { type: authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS, response };
+}
+function failure(error) {
+  return { type: authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE, error };
+}
+function clear() {
+  return {
+    type: authConstants.ACTIVATE_DEACTIVATE_USER_RESET,
+    clear_data: "",
+  };
 }
 
 function Logout(redirectType, retUrl) {
