@@ -108,7 +108,7 @@ export class SetLockAccountModal extends React.Component {
       >
         <Formik
           initialValues={{
-            accountNumber: "",
+            accountNumber: getAClientDepositAccountRequest.accountNumber,
             lockReason: "",
           }}
           validationSchema={lockAccountValidationSchema}
