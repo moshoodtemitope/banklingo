@@ -16,6 +16,8 @@ export const depositActions = {
     getADepositAcountActivities,
     getADepositAccountCommunications,
     getDepositAccountComments,
+    getLockedAmount,
+    lockAmountState,
     creatADepositComment,
     getAccountDepositAttachments,
     creatADepositAttachment,
@@ -533,53 +535,65 @@ function creatADepositAttachment   (createDepositAttachmentPayload){
 
 }
 
+function changeDepositState(newDepositStatePayload, newState) {
+  if (newDepositStatePayload !== "CLEAR") {
+    return (dispatch) => {
+      let url = routes.HIT_DEPOSIT_STATE + `/${newState}`;
 
-function changeDepositState   (newDepositStatePayload, newState){
-    if(newDepositStatePayload!=="CLEAR"){
-        return dispatch =>{
-            let 
-            url = routes.HIT_DEPOSIT_STATE+`/${newState}`;
-
-            if(newState==="setmaximumwithdrawalamount" 
-                || newState==="setrecommendeddepositamount"
-                || newState==="makewithdrawal"
-                || newState==="beginmaturity"
-                || newState==="transfer"
-            ){
-                if(newState==="makewithdrawal"){
-                    url = routes.HIT_DEPOSITS+`/withdraw`;
-                }else{
-                    url = routes.HIT_DEPOSITS+`/${newState}`;
-                }
-            }
-                
-            let consume = ApiService.request(url, "POST", newDepositStatePayload);
-
-            dispatch(request(consume));
-            return consume
-                .then(response =>{
-                    dispatch(success(response));
-                }).catch(error =>{
-                    
-                    dispatch(failure(handleRequestErrors(error)));
-                });
-            
+      if (
+        newState === "setmaximumwithdrawalamount" ||
+        newState === "setrecommendeddepositamount" ||
+        newState === "makewithdrawal" ||
+        newState === "beginmaturity" ||
+        newState === "transfer"
+      ) {
+        if (newState === "makewithdrawal") {
+          url = routes.HIT_DEPOSITS + `/withdraw`;
+        } else {
+          url = routes.HIT_DEPOSITS + `/${newState}`;
         }
-        
-    }
+      }
 
-    return dispatch =>{
-        
-        dispatch(clear());
-        
-    }
+      let consume = ApiService.request(url, "POST", newDepositStatePayload);
 
-    function request(user) { return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_PENDING, user } }
-    function success(response) { return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS, response } }
-    function failure(error) { return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE, error } }
-    function clear() { return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_RESET, clear_data:""} }
+      dispatch(request(consume));
+      return consume
+        .then((response) => {
+          dispatch(success(response));
+        })
+        .catch((error) => {
+          dispatch(failure(handleRequestErrors(error)));
+        });
+    };
+  }
 
+  return (dispatch) => {
+    dispatch(clear());
+  };
+
+  function request(user) {
+    return { type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_PENDING, user };
+  }
+  function success(response) {
+    return {
+      type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS,
+      response,
+    };
+  }
+  function failure(error) {
+    return {
+      type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE,
+      error,
+    };
+  }
+  function clear() {
+    return {
+      type: loanAndDepositsConstants.CHANGE_DEPOSITSTATE_RESET,
+      clear_data: "",
+    };
+  }
 }
+
 
 function searchAccountNumbers(params) {
     if(params!=="CLEAR"){
@@ -680,4 +694,103 @@ function searchForAccountsWithCustomerKey(params) {
     function failure(error) { return { type: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_FAILURE, error } }
     function clear() { return { type: loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_RESET, clear_data:""} }
 
+}
+
+
+function lockAmountState(newLockAmountPayload, newState) {
+  if (newLockAmountPayload !== "CLEAR") {
+    return (dispatch) => {
+      let url = routes.HIT_LOCK_AMOUNT_STATE + `/${newState}`;
+
+      let consume = ApiService.request(url, "POST", newLockAmountPayload);
+
+      dispatch(request(consume));
+      return consume
+        .then((response) => {
+          dispatch(success(response));
+        })
+        .catch((error) => {
+          dispatch(failure(handleRequestErrors(error)));
+        });
+    };
+  }
+
+  return (dispatch) => {
+    dispatch(clear());
+  };
+
+  function request(user) {
+    return { type: loanAndDepositsConstants.GET_LOCK_AMOUNT_PENDING, user };
+  }
+  function success(response) {
+    return {
+      type: loanAndDepositsConstants.GET_LOCK_AMOUNT_SUCCESS,
+      response,
+    };
+  }
+  function failure(error) {
+    return {
+      type: loanAndDepositsConstants.GET_LOCK_AMOUNT_FAILURE,
+      error,
+    };
+  }
+  function clear() {
+    return {
+      type: loanAndDepositsConstants.GET_LOCK_AMOUNT_RESET,
+      clear_data: "",
+    };
+  }
+}
+function getLockedAmount(params) {
+  return (dispatch) => {
+    let consume = ApiService.request(
+      routes.HIT_LOCK_AMOUNT + `?&${params}`,
+      "GET",
+      null
+    );
+    // let consume = ApiService.request(routes.HIT_LOCK_AMOUNT, "GET", null);
+    dispatch(request(consume));
+    return consume
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(success(response));
+        } else {
+          dispatch(
+            failure(handleRequestErrors("Unable to get the Lock Amount"))
+          );
+        }
+      })
+      .catch((error) => {
+        dispatch(failure(handleRequestErrors(error)));
+      });
+  };
+
+  function request(user) {
+    if (params === undefined) {
+      return {
+        type: loanAndDepositsConstants.GET_LOCK_AMOUNT_PENDING,
+        user,
+      };
+    }
+    if (params !== undefined) {
+      return {
+        type: loanAndDepositsConstants.GET_LOCK_AMOUNT_PENDING,
+        user,
+        params,
+      };
+    }
+  }
+
+  function success(response) {
+    return {
+      type: loanAndDepositsConstants.GET_LOCK_AMOUNT_SUCCESS,
+      response,
+    };
+  }
+  function failure(error) {
+    return {
+      type: loanAndDepositsConstants.GET_LOCK_AMOUNT_FAILURE,
+      error,
+    };
+  }
 }

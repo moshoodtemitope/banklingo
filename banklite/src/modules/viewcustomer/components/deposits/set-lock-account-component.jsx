@@ -108,13 +108,13 @@ export class SetLockAccountModal extends React.Component {
       >
         <Formik
           initialValues={{
-            accountNumber: "",
+            accountNumber: getAClientDepositAccountRequest.accountNumber,
             lockReason: "",
           }}
           validationSchema={lockAccountValidationSchema}
           onSubmit={(values, { resetForm }) => {
             let lockAccountPayload = {
-              accountNumber: values.accountNumber,
+              accountNumber:  this.props.depositEncodedKey,
               lockReason: values.lockReason,
             };
             this.props
@@ -131,7 +131,7 @@ export class SetLockAccountModal extends React.Component {
                     );
                     this.props.handleHideModal();
                     this.props.getCustomerDepositAccountDetails(
-                      this.depositEncodedKey
+                      this.props.depositEncodedKey
                     );
                   }, 3000);
                 }
