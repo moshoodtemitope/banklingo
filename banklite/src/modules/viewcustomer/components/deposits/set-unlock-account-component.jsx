@@ -114,7 +114,7 @@ export class SetUnlockAccountModal extends React.Component {
           validationSchema={unlockAccountValidationSchema}
           onSubmit={(values, { resetForm }) => {
             let unlockAccountPayload = {
-              accountNumber: values.accountNumber,
+              accountNumber:  this.props.depositEncodedKey,
               notes: values.notes,
             };
             this.props
@@ -131,7 +131,7 @@ export class SetUnlockAccountModal extends React.Component {
                     );
                     this.props.handleHideModal();
                     this.props.getCustomerDepositAccountDetails(
-                      this.depositEncodedKey
+                      this.props.depositEncodedKey
                     );
                   }, 3000);
                 }

@@ -50,7 +50,7 @@ export class SetLockAmountModal extends React.Component {
           validationSchema={lockAccountValidationSchema}
           onSubmit={(values, { resetForm }) => {
             let lockAmountPayload = {
-              accountNumber: values.accountNumber,
+              accountNumber:  this.props.depositEncodedKey,
               lockReason: values.lockReason,
               amount: parseFloat(values.amount.replace(/,/g, "")),
               blockReference: values.blockReference,
@@ -69,7 +69,7 @@ export class SetLockAmountModal extends React.Component {
                     );
                     this.props.handleHideModal();
                     this.props.getCustomerDepositAccountDetails(
-                      this.depositEncodedKey
+                      this.props.depositEncodedKey
                     );
                   }, 3000);
                 }
