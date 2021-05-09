@@ -51,6 +51,8 @@ import { MakeAccountWithdrawalModal } from "./components/deposits/make-withdrawa
 import { SetMaximumWithdrawalModal } from "./components/deposits/set-maximum-withdrawal-amount-component";
 import { SetRecommendedAmountModal } from "./components/deposits/set-recommended-amount-component";
 import { SetLockAccountModal } from "./components/deposits/set-lock-account-component";
+import { SetUnlockAccountModal } from "./components/deposits/set-unlock-account-component";
+import { SetLockAmountModal } from "./components/deposits/set-lock-amount-component";
 import { MakeTransferModal } from "./components/deposits/transfer-component";
 import { ChangeDepositStateModal } from "./components/deposits/change-deposit-state-component";
 import { DepositStateConstants } from "../../redux/actions/clients/client-states-constants";
@@ -102,8 +104,8 @@ class ViewSavingsAccount extends React.Component {
       CommunicationsCurrentPage: 1,
       NotificationType: 0,
 
-      LockAccountPageSize: 100,
-      LockAccountCurrentPage: 1,
+      LockAmountPageSize: 100,
+      LockAmountCurrentPage: 1,
 
       changeDepositState: false,
       showDepositFundsForm: false,
@@ -117,7 +119,9 @@ class ViewSavingsAccount extends React.Component {
       showSetMaximumWithdrawalAmountModal: false,
       showRecommendedAmountModal: false,
       showLockAccountModal: false,
+      showUnlockAccountModal: false,
       showTransferFundModal: false,
+      showLockAmountModal: false,
     };
     //  {showBeginMaturityModal:false,showDepositFundModal:false,showMakeWithdrawalModal:false,showSetMaximumWithdrawalAmountModal:false,showRecommendedAmountModal:false,showTransferFundModal:false}
 
@@ -154,7 +158,7 @@ class ViewSavingsAccount extends React.Component {
     this.getTransactionChannels();
     // this.getADepositActivities();
     // this.getADepositCommunications();
-    // this.getLockedAccount();
+    // this.getLockedAmount();
     // this.getCustomerDepositTransactions();
     // this.getADepositComments();
     // this.getACustomerDepositAttachments();
@@ -185,17 +189,19 @@ class ViewSavingsAccount extends React.Component {
     );
   };
 
-  getLockedAccount = () => {
+  getLockedAmount = () => {
     const { dispatch } = this.props;
 
-    let {
-      LockAccountPageSize,
-      LockAccountCurrentPage,
-      NotificationType,
-    } = this.state;
+    let { LockAmountPageSize, LockAmountCurrentPage } = this.state;
+    const accountNumber = this.props.getAClientDepositAccountReducer
+      .request_data.response.data.accountNumber;
 
-    let params = `PageSize=${LockAccountPageSize}&CurrentPage=${LockAccountCurrentPage}&NotificationType=${NotificationType}`;
-    dispatch(depositActions.getLockedAccount(this.depositEncodedKey, params));
+    let params = `AccountNumber=${accountNumber}PageSize=${LockAmountPageSize}&CurrentPage=${LockAmountCurrentPage}`;
+    dispatch(depositActions.getLockedAmount(params));
+
+    // if (accountNumber !== undefined) {
+    //   dispatch(depositActions.getLockedAmount(accountNumber, params));
+    // }
   };
   getADepositCommunications = () => {
     const { dispatch } = this.props;
@@ -594,7 +600,7 @@ class ViewSavingsAccount extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -656,7 +662,7 @@ class ViewSavingsAccount extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -749,7 +755,7 @@ class ViewSavingsAccount extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -826,7 +832,7 @@ class ViewSavingsAccount extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -861,272 +867,10 @@ class ViewSavingsAccount extends React.Component {
     }
   };
 
-  renderALockedAccount = () => {
-    let getADepositAccountCommunicationsRequest = this.props
-      .getADepositAccountCommunicationsReducer;
-    let saveRequestData =
-      getADepositAccountCommunicationsRequest.request_data !== undefined
-        ? getADepositAccountCommunicationsRequest.request_data.tempData
-        : null;
-    if (
-      getADepositAccountCommunicationsRequest.request_status ===
-      loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_PENDING
-    ) {
-      if (
-        saveRequestData === undefined ||
-        (saveRequestData !== undefined && saveRequestData.length < 1)
-      ) {
-        return (
-          <div className="loading-content">
-            <div className="loading-text">Please wait... </div>
-            <div className="heading-with-cta ">
-              <Form className="one-liner"></Form>
-              <div className="pagination-wrap">
-                <label htmlFor="toshow">Show</label>
-                <select
-                  id="toshow"
-                  onChange={this.setPagesize}
-                  value={this.state.PageSize}
-                  className="countdropdown form-control form-control-sm"
-                >
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="200">200</option>
-                </select>
-              </div>
-            </div>
-            <TableComponent classnames="striped bordered hover">
-              <thead>
-                <tr>
-                  <th>Sent By</th>
-                  <th>Destination</th>
-                  <th>Message</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Date Sent</th>
-                  <th>Failure reason</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </TableComponent>
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <div className="loading-text">Please wait... </div>
-            <div className="heading-with-cta ">
-              <Form className="one-liner"></Form>
-              <div className="pagination-wrap">
-                <label htmlFor="toshow">Show</label>
-                <select
-                  id="toshow"
-                  value={this.state.PageSize}
-                  className="countdropdown form-control form-control-sm"
-                >
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="200">200</option>
-                </select>
-              </div>
-            </div>
-            <TableComponent classnames="striped bordered hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Sent By</th>
-                  <th>Destination</th>
-                  <th>Message</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Date Sent</th>
-                  <th>Failure reason</th>
-                </tr>
-              </thead>
-              <tbody>
-                {saveRequestData.map((eachCommunication, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{eachCommunication.id} </td>
-                      <td>{eachCommunication.sentBy} </td>
-                      <td>{eachCommunication.destination} </td>
-                      <td>{eachCommunication.message} </td>
-                      <td>{eachCommunication.communicationTypeDescription} </td>
-                      <td>
-                        {eachCommunication.communicationStateDescription}{" "}
-                      </td>
-                      <td>{eachCommunication.dateSent} </td>
-                      <td>{eachCommunication.failureReason} </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </TableComponent>
-          </div>
-        );
-      }
-    }
-
-    if (
-      getADepositAccountCommunicationsRequest.request_status ===
-      loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_SUCCESS
-    ) {
-      let getADepositAccountCommunicationsInfo =
-        getADepositAccountCommunicationsRequest.request_data.response.data;
-      let getADepositAccountCommunicationsData =
-        getADepositAccountCommunicationsRequest.request_data.response.data
-          .result;
-
-      if (getADepositAccountCommunicationsData.length >= 1) {
-        return (
-          <div>
-            <div className="heading-with-cta ">
-              <Form className="one-liner"></Form>
-              <div className="pagination-wrap">
-                <label htmlFor="toshow">Show</label>
-                <select
-                  id="toshow"
-                  onChange={(e) =>
-                    this.setCommunicationsRequestPagesize(
-                      e,
-                      getADepositAccountCommunicationsData
-                    )
-                  }
-                  value={this.state.CommunicationsPageSize}
-                  className="countdropdown form-control form-control-sm"
-                >
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="200">200</option>
-                </select>
-                <TablePagination
-                  totalPages={getADepositAccountCommunicationsInfo.totalPages}
-                  currPage={getADepositAccountCommunicationsInfo.currentPage}
-                  currRecordsCount={getADepositAccountCommunicationsInfo.length}
-                  totalRows={getADepositAccountCommunicationsInfo.totalRows}
-                  tempData={getADepositAccountCommunicationsData}
-                  pagesCountToshow={4}
-                  refreshFunc={this.setCommunicationsRequestNextPage}
-                />
-              </div>
-            </div>
-            <TableComponent classnames="striped bordered hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Sent By</th>
-                  <th>Destination</th>
-                  <th>Message</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Date Sent</th>
-                  <th>Failure reason</th>
-                </tr>
-              </thead>
-              <tbody>
-                {getADepositAccountCommunicationsData.map(
-                  (eachCommunication, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{eachCommunication.id} </td>
-                        <td>{eachCommunication.sentBy} </td>
-                        <td>{eachCommunication.destination} </td>
-                        <td>{eachCommunication.message} </td>
-                        <td>
-                          {eachCommunication.communicationTypeDescription}{" "}
-                        </td>
-                        <td>
-                          {eachCommunication.communicationStateDescription}{" "}
-                        </td>
-                        <td>{eachCommunication.dateSent} </td>
-                        <td>{eachCommunication.failureReason} </td>
-                      </tr>
-                    );
-                  }
-                )}
-              </tbody>
-            </TableComponent>
-          </div>
-        );
-      } else {
-        return (
-          <div className="no-records">
-            <div className="heading-with-cta ">
-              <Form className="one-liner"></Form>
-              <div className="pagination-wrap">
-                <label htmlFor="toshow">Show</label>
-                <select
-                  id="toshow"
-                  onChange={(e) =>
-                    this.setCommunicationsRequestPagesize(
-                      e,
-                      getADepositAccountCommunicationsData
-                    )
-                  }
-                  value={this.state.CommunicationsPageSize}
-                  className="countdropdown form-control form-control-sm"
-                >
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="200">200</option>
-                </select>
-              </div>
-            </div>
-            <TableComponent classnames="striped bordered hover">
-              <thead>
-                <tr>
-                  <th>Sent By</th>
-                  <th>Destination</th>
-                  <th>Message</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Date Sent</th>
-                  <th>Failure reason</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </TableComponent>
-          </div>
-        );
-      }
-    }
-
-    if (
-      getADepositAccountCommunicationsRequest.request_status ===
-      loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_COMMUNICATIONS_FAILURE
-    ) {
-      return (
-        <div className="loading-content errormsg">
-          <div>
-            {getADepositAccountCommunicationsRequest.request_data.error}
-          </div>
-        </div>
-      );
-    }
+  renderALockedAmount = () => {
+    let getlockAmountReducer = this.props.getlockAmountReducer;
+    console.log("getlockAmountReducer>>>>>>", getlockAmountReducer);
+    return <h1>Authorization Holds</h1>;
   };
   renderADepositCommunicatons = () => {
     let getADepositAccountCommunicationsRequest = this.props
@@ -2856,6 +2600,10 @@ class ViewSavingsAccount extends React.Component {
     this.setState({ showRecommendedAmountModal: true });
   handleShowLockAccountModal = () =>
     this.setState({ showLockAccountModal: true });
+  handleShowUnlockAccountModal = () =>
+    this.setState({ showUnlockAccountModal: true });
+  handleShowLockAmountModal = () =>
+    this.setState({ showLockAmountModal: true });
   handleShowTransferFundModal = () =>
     this.setState({ showTransferFundModal: true });
 
@@ -2871,6 +2619,10 @@ class ViewSavingsAccount extends React.Component {
     this.setState({ showRecommendedAmountModal: false });
   handleHideLockAccountModal = () =>
     this.setState({ showLockAccountModal: false });
+  handleHideUnlockAccountModal = () =>
+    this.setState({ showUnlockAccountModal: false });
+  handleHideLockAmountModal = () =>
+    this.setState({ showLockAmountModal: false });
   handleHideTransferFundModal = () =>
     this.setState({ showTransferFundModal: false });
 
@@ -2887,6 +2639,14 @@ class ViewSavingsAccount extends React.Component {
         changeDepositStatePayload,
         newStateUpdate
       )
+    );
+  };
+
+  handleLockAmountState = async (lockAmountPayload, newStateUpdate) => {
+    const { dispatch } = this.props;
+
+    await dispatch(
+      depositActions.lockAmountState(lockAmountPayload, newStateUpdate)
     );
   };
 
@@ -3435,19 +3195,47 @@ class ViewSavingsAccount extends React.Component {
               >
                 Set Recommended Deposit
               </Dropdown.Item>
-
+              {depositDetails.accountStateDescription !== "Locked" ? (
+                <Dropdown.Item
+                  eventKey="7"
+                  onClick={() => {
+                    this.setState({
+                      newStateUpdate: "lockAccount",
+                      newStateHeading: "Lock Account",
+                      ctaText: "Lock",
+                    });
+                    this.handleShowLockAccountModal();
+                  }}
+                >
+                  Lock Account
+                </Dropdown.Item>
+              ) : (
+                <Dropdown.Item
+                  eventKey="8"
+                  onClick={() => {
+                    this.setState({
+                      newStateUpdate: "unlockAccount",
+                      newStateHeading: "UnLock Account",
+                      ctaText: "Unlock",
+                    });
+                    this.handleShowUnlockAccountModal();
+                  }}
+                >
+                  Unlock Account
+                </Dropdown.Item>
+              )}
               <Dropdown.Item
-                eventKey="7"
+                eventKey="9"
                 onClick={() => {
                   this.setState({
-                    newStateUpdate: "lockAccount",
-                    newStateHeading: "Lock Account",
-                    ctaText: "Lock",
+                    newStateUpdate: "lockAmount",
+                    newStateHeading: "Lock Amount",
+                    ctaText: "lockAmount",
                   });
-                  this.handleShowLockAccountModal();
+                  this.handleShowLockAmountModal();
                 }}
               >
-                Lock Account
+                Lock Amount
               </Dropdown.Item>
             </DropdownButton>
           </li>
@@ -3616,6 +3404,32 @@ class ViewSavingsAccount extends React.Component {
               this.getCustomerDepositAccountDetails
             }
           />
+          <SetUnlockAccountModal
+            {...this.props}
+            newStateUpdate={this.state.newStateUpdate}
+            newStateHeading={this.state.newStateHeading}
+            newState={this.state.newState}
+            depositEncodedKey={this.depositEncodedKey}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
+            showModal={this.state.showUnlockAccountModal}
+            handleHideModal={this.handleHideUnlockAccountModal}
+            handleNewDepositState={this.handleNewDepositState}
+            getCustomerDepositAccountDetails={
+              this.getCustomerDepositAccountDetails
+            }
+          />
+          <SetLockAmountModal
+            {...this.props}
+            showModal={this.state.showLockAmountModal}
+            handleHideModal={this.handleHideLockAmountModal}
+            handleLockAmountState={this.handleLockAmountState}
+            getCustomerDepositAccountDetails={
+              this.getCustomerDepositAccountDetails
+            }
+          />
           <MakeTransferModal
             {...this.props}
             newStateUpdate={this.state.newStateUpdate}
@@ -3722,10 +3536,10 @@ class ViewSavingsAccount extends React.Component {
                       <Nav.Link
                         bsPrefix="disable"
                         className="navLink"
-                        eventKey="lockAccount"
-                        onSelect={this.getLockedAccount}
+                        eventKey="lockAmount"
+                        onSelect={this.getLockedAmount}
                       >
-                        All Locked Account
+                        Authorization Holds
                       </Nav.Link>
                     </Nav.Item>
                   </Nav>
@@ -3785,8 +3599,8 @@ class ViewSavingsAccount extends React.Component {
                     <Tab.Pane eventKey="communications">
                       {this.renderADepositCommunicatons()}
                     </Tab.Pane>
-                    <Tab.Pane eventKey="lockAccount">
-                      {this.renderALockedAccount()}
+                    <Tab.Pane eventKey="lockAmount">
+                      {this.renderALockedAmount()}
                     </Tab.Pane>
                   </Tab.Content>
                 </Tab.Container>
@@ -3831,6 +3645,7 @@ function mapStateToProps(state) {
       state.depositsReducers.getADepositAccountActivitiesReducer,
     getADepositAccountCommunicationsReducer:
       state.depositsReducers.getADepositAccountCommunicationsReducer,
+    getlockAmountReducer: state.depositsReducers.getlockAmountReducer,
     getAccountDepositTransactionReducer:
       state.depositsReducers.getAccountDepositTransactionReducer,
     getAClientDepositAccountCommentsReducer:
@@ -3848,6 +3663,7 @@ function mapStateToProps(state) {
       state.depositsReducers.searchCustomerAccountReducer,
     searchForAccountsWithCustomerKeyReducer:
       state.depositsReducers.searchForAccountsWithCustomerKeyReducer,
+    getLockAmountReducer: state.depositsReducers.getLockAmountReducer,
   };
 }
 

@@ -360,7 +360,7 @@ class CustomerHeading extends React.Component {
                             <Dropdown.Item eventKey="1" onClick={this.handleAddFieldShow}>Add Field</Dropdown.Item>
                             <Dropdown.Item eventKey="1" onClick={this.handleSetNotificationShow}>Set Notifications</Dropdown.Item>
                             <Dropdown.Item eventKey="1" onClick={this.handleChangeHistoryShow}>View Change History</Dropdown.Item>
-                            <Dropdown.Item eventKey="1">Blacklist Customer</Dropdown.Item>
+                            <Dropdown.Item eventKey="1">Blacklist Client</Dropdown.Item>
                         </DropdownButton>
                     </li>
                 </ul>

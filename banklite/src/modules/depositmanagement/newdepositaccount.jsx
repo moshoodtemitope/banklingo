@@ -30,6 +30,7 @@ import {clientsConstants} from '../../redux/actiontypes/clients/clients.constant
 import {depositActions} from '../../redux/actions/deposits/deposits.action';
 import {loanAndDepositsConstants} from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./depositmanagement.scss"; 
+import { LoanStateConstants } from "../../redux/actions/clients/client-states-constants";
 class NewDepositAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -286,6 +287,24 @@ class NewDepositAccount extends React.Component {
                                         let accountPayload;
                                         let accountType;
 
+
+
+
+                                        if(depositProductType.value==='1'){
+                                            //This is current account
+                                            accountPayload ={
+                                                clientEncodedKey : values.clientEncodedKey,
+                                                depositProductEncodedKey: values.depositProductEncodedKey,
+                                                depositProductName:values.depositProductName!==""? values.depositProductName:null,
+                                                notes: values.notes!==""? values.notes: null,
+                                                maximumWithdrawalAmount:parseFloat(values.maximumWithdrawalAmount.replace(/,/g, '')),
+                                                interestRate :parseFloat(values.interestRate.replace(/,/g, '')),
+                                                recommendedDepositAmount :parseFloat(values.recommendedDepositAmount.replace(/,/g, ''))
+                                            };
+                                            
+                                            accountType='current';
+                                        }
+
                                         if(depositProductType.value==='2'){
 
                                             accountPayload ={
@@ -299,6 +318,7 @@ class NewDepositAccount extends React.Component {
                                             
                                             accountType='fixed';
                                         }
+
 
                                         if(depositProductType.value==='4'){
                                             accountPayload ={

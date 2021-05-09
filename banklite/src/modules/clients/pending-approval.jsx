@@ -666,7 +666,7 @@
 //                   </tbody>
 //                 </TableComponent>
 //                 {/* <div className="footer-with-cta toleft">
-//                                     <NavLink to={'/clients/new'} className="btn btn-primary">New Customer</NavLink>
+//                                     <NavLink to={'/clients/new'} className="btn btn-primary">New Client</NavLink>
 //                                 </div> */}
 //               </div>
 //             );

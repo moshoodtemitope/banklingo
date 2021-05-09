@@ -39,7 +39,7 @@ class EditCustomerAccount extends React.Component {
                                             <div className="full-pageforms w-60">
                                                 <Form className="form-content card">
                                                     <div className="form-heading">
-                                                        <h3>Editing Customer MAHMOOD SHEHU</h3>
+                                                        <h3>Editing Client</h3>
                                                     </div>
 
                                                     <Accordion>
@@ -70,8 +70,8 @@ class EditCustomerAccount extends React.Component {
                                                                 </Form.Row>
                                                                 <Form.Row>
                                                                     <Col>
-                                                                        <Form.Label className="block-level">Customer Type</Form.Label>
-                                                                        <span className="form-text">Customer</span>
+                                                                        <Form.Label className="block-level">Client Type</Form.Label>
+                                                                        <span className="form-text">Client</span>
                                                                     </Col>
                                                                     <Col></Col>
                                                                 </Form.Row>
@@ -88,6 +88,7 @@ class EditCustomerAccount extends React.Component {
                                                                 <Form.Row>
                                                                     <Col className="date-wrap">
                                                                         <Form.Label className="block-level">Birth Date</Form.Label>
+                                                                        <DatePicker
                                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
@@ -277,6 +278,7 @@ class EditCustomerAccount extends React.Component {
                                                                 <Form.Row>
                                                                     <Col>
                                                                         <Form.Label className="block-level">Employment Date</Form.Label>
+                                                                        <DatePicker
                                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
@@ -378,6 +380,7 @@ class EditCustomerAccount extends React.Component {
                                                                     </Col>
                                                                     <Col className="date-wrap">
                                                                         <Form.Label className="block-level">Contract Expiration Date</Form.Label>
+                                                                        <DatePicker
                                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
@@ -574,6 +577,7 @@ class EditCustomerAccount extends React.Component {
                                                                     </Col>
                                                                     <Col className="date-wrap">
                                                                         <Form.Label className="block-level">Valid Until</Form.Label>
+                                                                        <DatePicker
                                                                          placeholderText="Choose  date"
                                                             autoComplete="new-password" selected={this.state.dob} 
                                                                             onChange={this.handleDatePicker}
@@ -651,7 +655,7 @@ class EditCustomerAccount extends React.Component {
                                                                 onClick={()=>this.props.history.goBack()}
                                                         >
                                                             Cancel</Button>
-                                                        <Button>Save  Customer</Button>
+                                                        <Button>Save  Client</Button>
                                                     </div>
                                                 </Form>
                                                 {/* <div className="footer-with-cta toleft">

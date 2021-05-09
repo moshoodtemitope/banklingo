@@ -540,7 +540,7 @@ export class MakeTransferModal extends React.Component {
                                                 }}
                                             >
                                                 <option value="currentcustomer">{getAClientDepositAccountRequest.accountHolderName}</option>
-                                                <option value="anothercustomer">Another Customer</option>
+                                                <option value="anothercustomer">Another Client</option>
                                             </select>
                                         </Col>
                                     </Form.Row>
