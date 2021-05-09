@@ -30,7 +30,7 @@ import {clientsConstants} from '../../redux/actiontypes/clients/clients.constant
 import {depositActions} from '../../redux/actions/deposits/deposits.action';
 import {loanAndDepositsConstants} from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./depositmanagement.scss"; 
-import { LoanStateConstants } from "../../redux/actions/clients/client-states-constants";
+import { DepositProductTypesConstants } from "../../redux/actions/clients/client-states-constants";
 class NewDepositAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -289,8 +289,9 @@ class NewDepositAccount extends React.Component {
 
 
 
+console.log(depositProductType.value+'  '+DepositProductTypesConstants.Current_Account);
 
-                                        if(depositProductType.value==='1'){
+                                        if(depositProductType.value===DepositProductTypesConstants.Current_Account){
                                             //This is current account
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
@@ -305,7 +306,7 @@ class NewDepositAccount extends React.Component {
                                             accountType='current';
                                         }
 
-                                        if(depositProductType.value==='2'){
+                                        if(depositProductType.value===DepositProductTypesConstants.Fixed_Deposit){
 
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
@@ -317,10 +318,10 @@ class NewDepositAccount extends React.Component {
                                             };
                                             
                                             accountType='fixed';
-                                        }
+                                        }else
 
 
-                                        if(depositProductType.value==='4'){
+                                        if(depositProductType.value===DepositProductTypesConstants.Savings_Account){
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
                                                 depositProductEncodedKey: values.depositProductEncodedKey,
@@ -332,9 +333,9 @@ class NewDepositAccount extends React.Component {
                                             };
                                             
                                             accountType='savingsaccount';
-                                        }
+                                        }else
 
-                                        if(depositProductType.value==='5'){
+                                        if(depositProductType.value===DepositProductTypesConstants.Savings_Plan){
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
                                                 depositProductEncodedKey: values.depositProductEncodedKey,
