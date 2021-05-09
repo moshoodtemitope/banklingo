@@ -111,7 +111,7 @@ class NewDepositAccount extends React.Component {
 
     createDepositAccount = async(accouuntPayload, accountType)=>{
         const {dispatch} = this.props;
-       
+       console.log('creating account ' +accountType);
         await dispatch(depositActions.createDepositAccount(accouuntPayload, accountType));
         
     }
@@ -285,14 +285,15 @@ class NewDepositAccount extends React.Component {
                                     onSubmit={(values, { resetForm }) => {
 
                                         let accountPayload;
-                                        let accountType;
+                                        let accountType='';
 
 
 
-console.log(depositProductType.value+'  '+DepositProductTypesConstants.Current_Account);
+console.log(depositProductType.value+''+DepositProductTypesConstants.Current_Account);
 
-                                        if(depositProductType.value===DepositProductTypesConstants.Current_Account){
+                                        if(depositProductType.value==DepositProductTypesConstants.Current_Account){
                                             //This is current account
+                                            accountType='current';
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
                                                 depositProductEncodedKey: values.depositProductEncodedKey,
@@ -303,10 +304,10 @@ console.log(depositProductType.value+'  '+DepositProductTypesConstants.Current_A
                                                 recommendedDepositAmount :parseFloat(values.recommendedDepositAmount.replace(/,/g, ''))
                                             };
                                             
-                                            accountType='current';
+                                          
                                         }
-
-                                        if(depositProductType.value===DepositProductTypesConstants.Fixed_Deposit){
+else
+                                        if(depositProductType.value==DepositProductTypesConstants.Fixed_Deposit){
 
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
@@ -321,7 +322,7 @@ console.log(depositProductType.value+'  '+DepositProductTypesConstants.Current_A
                                         }else
 
 
-                                        if(depositProductType.value===DepositProductTypesConstants.Savings_Account){
+                                        if(depositProductType.value==DepositProductTypesConstants.Savings_Account){
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
                                                 depositProductEncodedKey: values.depositProductEncodedKey,
@@ -335,7 +336,7 @@ console.log(depositProductType.value+'  '+DepositProductTypesConstants.Current_A
                                             accountType='savingsaccount';
                                         }else
 
-                                        if(depositProductType.value===DepositProductTypesConstants.Savings_Plan){
+                                        if(depositProductType.value==DepositProductTypesConstants.Savings_Plan){
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
                                                 depositProductEncodedKey: values.depositProductEncodedKey,
