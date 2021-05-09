@@ -723,10 +723,10 @@ class MainHeader extends React.Component{
                                 className="headingmenu-dropdown"
                             >
                                
-                                <NavLink exact to={'/createnewcustomer'}>Customer</NavLink>
-                                <NavLink to={'/create-investmentcustomer'}>Investment Customer</NavLink>
-                                <NavLink to={'/dashboard'}>MoneyPal-Nano Customer</NavLink>
-                                <NavLink to={'/dashboard'}>Payrolla Customer</NavLink>
+                                <NavLink exact to={'/createnewcustomer'}>Client</NavLink>
+                                <NavLink to={'/create-investmentcustomer'}>Investment Client</NavLink>
+                                <NavLink to={'/dashboard'}>MoneyPal-Nano Client</NavLink>
+                                <NavLink to={'/dashboard'}>Payrolla Client</NavLink>
                                 
                                 <NavLink to={'/dashboard'}>Group</NavLink>
                                 <NavLink to={'/all-loans/newloan-account'}>Loan Account</NavLink>
