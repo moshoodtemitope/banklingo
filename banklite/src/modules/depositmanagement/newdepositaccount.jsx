@@ -30,6 +30,7 @@ import {clientsConstants} from '../../redux/actiontypes/clients/clients.constant
 import {depositActions} from '../../redux/actions/deposits/deposits.action';
 import {loanAndDepositsConstants} from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./depositmanagement.scss"; 
+import { LoanStateConstants } from "../../redux/actions/clients/client-states-constants";
 class NewDepositAccount extends React.Component {
     constructor(props) {
         super(props);
