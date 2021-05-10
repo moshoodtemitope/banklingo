@@ -976,7 +976,7 @@ class ManageCustomerWhitelist extends React.Component {
                   <tr>
                     <th>Biometric ID</th>
                     <th>Amount</th>
-                    <th>Customer name</th>
+                    <th>Client Name</th>
                     <th>Status</th>
                     <th>Credit Score</th>
                     <th>Whitelisted by</th>
@@ -1043,7 +1043,7 @@ class ManageCustomerWhitelist extends React.Component {
                   <tr>
                     <th>Biometric ID</th>
                     <th>Amount</th>
-                    <th>Customer name</th>
+                    <th>Client Name</th>
                     <th>Status</th>
                     <th>Credit Score</th>
                     <th>Whitelisted by</th>
@@ -1242,7 +1242,7 @@ class ManageCustomerWhitelist extends React.Component {
                     <tr>
                       <th>Biometric ID</th>
                       <th>Amount</th>
-                      <th>Customer name</th>
+                      <th>Client Name</th>
                       <th>Status</th>
                       <th>Credit Score</th>
                       <th>Whitelisted by</th>
@@ -1367,7 +1367,7 @@ class ManageCustomerWhitelist extends React.Component {
                     <tr>
                       <th>Biometric ID</th>
                       <th>Amount</th>
-                      <th>Customer name</th>
+                      <th>Client Name</th>
                       <th>Status</th>
                       <th>Credit Score</th>
                       <th>Whitelisted by</th>

@@ -1232,7 +1232,7 @@ class ViewSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction ID</th>
                                     <th>Narration</th>
                                     <th>Entry Date</th>
@@ -1276,7 +1276,7 @@ class ViewSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction ID</th>
                                     <th>Narration</th>
                                     <th>Entry Date</th>
@@ -1401,7 +1401,7 @@ class ViewSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction Id</th>
                                     <th>Narration</th>
                                     <th>Entry Date</th>
@@ -1466,7 +1466,7 @@ class ViewSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction Id</th>
                                     <th>Narration</th>
                                     <th>Entry Date</th>

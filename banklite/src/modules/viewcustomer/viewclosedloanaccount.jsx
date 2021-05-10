@@ -1306,7 +1306,7 @@ class ViewClosedLoanAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
                                     <th>Type</th>
@@ -1346,7 +1346,7 @@ class ViewClosedLoanAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
                                     <th>Type</th>
@@ -1454,7 +1454,7 @@ class ViewClosedLoanAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
                                     <th>Type</th>
@@ -1502,7 +1502,7 @@ class ViewClosedLoanAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction Date</th>
                                     <th>Entry Date</th>
                                     <th>Type</th>
