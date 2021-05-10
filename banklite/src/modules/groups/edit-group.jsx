@@ -633,7 +633,7 @@ class EditAGroup extends React.Component {
                   <div className='each-formsection'>
                       <Form.Group className="w-50 m-auto">
                         <div className="withasync">
-                          <Form.Label className="block-level">Customer</Form.Label>
+                          <Form.Label className="block-level">Client</Form.Label>
                           <div>
                             <div>
                               <AsyncSelect
@@ -692,7 +692,7 @@ class EditAGroup extends React.Component {
                     {/* <Form.Row>
                       <Col>
                         <div className="withasync">
-                          <Form.Label className="block-level">Customer</Form.Label>
+                          <Form.Label className="block-level">Client</Form.Label>
                         </div>
                       </Col>
                       <Col>

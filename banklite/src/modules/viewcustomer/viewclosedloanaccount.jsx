@@ -477,7 +477,7 @@ class ViewClosedLoanAccount extends React.Component {
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
-                                    <th>Affected Customer</th>
+                                    <th>Affected Client</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
@@ -530,7 +530,7 @@ class ViewClosedLoanAccount extends React.Component {
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
-                                    <th>Affected Customer</th>
+                                    <th>Affected Client</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
@@ -608,7 +608,7 @@ class ViewClosedLoanAccount extends React.Component {
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
-                                    <th>Affected Customer</th>
+                                    <th>Affected Client</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
@@ -670,7 +670,7 @@ class ViewClosedLoanAccount extends React.Component {
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
-                                    <th>Affected Customer</th>
+                                    <th>Affected Client</th>
                                     {/* <th></th> */}
                                 </tr>
                             </thead>
@@ -2706,6 +2706,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.showFirstRepayment===true &&
                                                         <Form.Group className="mb-0 date-wrap">
+                                                            <DatePickerFilter
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
@@ -2740,6 +2741,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.allowBackDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
+                                                            <DatePickerFilter
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
@@ -2772,6 +2774,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.showBookingDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
+                                                            <DatePickerFilter
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
@@ -2878,6 +2881,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.allowBackDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
+                                                            <DatePickerFilter
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                                 dateFormat={window.dateformat}
@@ -2910,6 +2914,7 @@ class ViewClosedLoanAccount extends React.Component {
                                                     </Form.Group>
                                                     {values.showBookingDate===true &&
                                                         <Form.Group className="mb-0 date-wrap">
+                                                            <DatePickerFilter
                                                              placeholderText="Choose  date"
                                                             autoComplete="new-password"
                                                                 dateFormat={window.dateformat}

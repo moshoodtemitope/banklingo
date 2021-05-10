@@ -7,6 +7,19 @@ export const LoanStateConstants={
 }
 
 
+
+export const DepositProductTypesConstants={
+    All : 0,
+    Current_Account :1,
+    Fixed_Deposit : 2,
+    Funding_Account :3,
+    Savings_Account : 4,
+    Savings_Plan : 5
+   }
+
+
+
+
 export const LoanSubStateConstants={
    All:-1, Pending_1stLevel_Approval:3,Pending_2ndLevel_Approval:4,Pending_Client_Acceptance:6
 }

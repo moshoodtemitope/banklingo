@@ -30,6 +30,7 @@ import {clientsConstants} from '../../redux/actiontypes/clients/clients.constant
 import {depositActions} from '../../redux/actions/deposits/deposits.action';
 import {loanAndDepositsConstants} from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./depositmanagement.scss"; 
+import { DepositProductTypesConstants } from "../../redux/actions/clients/client-states-constants";
 class NewDepositAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -110,7 +111,7 @@ class NewDepositAccount extends React.Component {
 
     createDepositAccount = async(accouuntPayload, accountType)=>{
         const {dispatch} = this.props;
-       
+       console.log('creating account ' +accountType);
         await dispatch(depositActions.createDepositAccount(accouuntPayload, accountType));
         
     }
@@ -284,9 +285,29 @@ class NewDepositAccount extends React.Component {
                                     onSubmit={(values, { resetForm }) => {
 
                                         let accountPayload;
-                                        let accountType;
+                                        let accountType='';
 
-                                        if(depositProductType.value==='2'){
+
+
+console.log(depositProductType.value+''+DepositProductTypesConstants.Current_Account);
+
+                                        if(depositProductType.value==DepositProductTypesConstants.Current_Account){
+                                            //This is current account
+                                            accountType='current';
+                                            accountPayload ={
+                                                clientEncodedKey : values.clientEncodedKey,
+                                                depositProductEncodedKey: values.depositProductEncodedKey,
+                                                depositProductName:values.depositProductName!==""? values.depositProductName:null,
+                                                notes: values.notes!==""? values.notes: null,
+                                                maximumWithdrawalAmount:parseFloat(values.maximumWithdrawalAmount.replace(/,/g, '')),
+                                                interestRate :parseFloat(values.interestRate.replace(/,/g, '')),
+                                                recommendedDepositAmount :parseFloat(values.recommendedDepositAmount.replace(/,/g, ''))
+                                            };
+                                            
+                                          
+                                        }
+else
+                                        if(depositProductType.value==DepositProductTypesConstants.Fixed_Deposit){
 
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
@@ -298,9 +319,10 @@ class NewDepositAccount extends React.Component {
                                             };
                                             
                                             accountType='fixed';
-                                        }
+                                        }else
 
-                                        if(depositProductType.value==='4'){
+
+                                        if(depositProductType.value==DepositProductTypesConstants.Savings_Account){
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
                                                 depositProductEncodedKey: values.depositProductEncodedKey,
@@ -312,9 +334,9 @@ class NewDepositAccount extends React.Component {
                                             };
                                             
                                             accountType='savingsaccount';
-                                        }
+                                        }else
 
-                                        if(depositProductType.value==='5'){
+                                        if(depositProductType.value==DepositProductTypesConstants.Savings_Plan){
                                             accountPayload ={
                                                 clientEncodedKey : values.clientEncodedKey,
                                                 depositProductEncodedKey: values.depositProductEncodedKey,

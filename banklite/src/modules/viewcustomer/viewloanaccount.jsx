@@ -472,7 +472,7 @@ class ViewLoanAccount extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -534,7 +534,7 @@ class ViewLoanAccount extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -628,7 +628,7 @@ class ViewLoanAccount extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -698,7 +698,7 @@ class ViewLoanAccount extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}

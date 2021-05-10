@@ -2072,7 +2072,7 @@ console.log('dashboard load');
                                     <div>
                                         <Form.Group>
                                             <div className="withasync">
-                                                <Form.Label className="block-level">Customer</Form.Label>
+                                                <Form.Label className="block-level">Client</Form.Label>
                                                 <div>
                                                     <div>
                                                         <AsyncSelect
@@ -2109,7 +2109,7 @@ console.log('dashboard load');
                                                             <span className="invalid-feedback">{errors.clientEncodedKey}</span>
                                                         ) : null}
                                                     </div>
-                                                    {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Customer</span>}
+                                                    {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Client</span>}
                                                 </div>
                                             </div>
                                         </Form.Group>
@@ -2254,7 +2254,7 @@ console.log('dashboard load');
                                     <div>
                                         <Form.Group>
                                             <div className="withasync">
-                                                <Form.Label className="block-level">Customer</Form.Label>
+                                                <Form.Label className="block-level">Client</Form.Label>
                                                 <div>
                                                     <div>
                                                         <AsyncSelect
@@ -2291,7 +2291,7 @@ console.log('dashboard load');
                                                             <span className="invalid-feedback">{errors.clientEncodedKey}</span>
                                                         ) : null}
                                                     </div>
-                                                    {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Customer</span>}
+                                                    {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Client</span>}
                                                 </div>
                                             </div>
                                         </Form.Group>
