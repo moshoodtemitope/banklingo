@@ -13,7 +13,7 @@ import { accountNumber, numberWithCommas } from "../../../../shared/utils";
 import { loanAndDepositsConstants } from "../../../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants";
 import { depositActions } from "../../../../redux/actions/deposits/deposits.action";
 
-export class SetLockAmountModal extends React.Component {
+export class SetUnlockAmountModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -51,12 +51,10 @@ export class SetLockAmountModal extends React.Component {
           onSubmit={(values, { resetForm }) => {
             let lockAmountPayload = {
               accountNumber: values.accountNumber,
-              lockReason: values.lockReason,
-              amount: parseFloat(values.amount.replace(/,/g, "")),
               blockReference: values.blockReference,
             };
             this.props
-              .handleLockAmountState(lockAmountPayload, "lock")
+              .handleLockAmountState(lockAmountPayload, "delete")
               .then(() => {
                 if (
                   this.props.getLockAmountReducer.request_status ===
@@ -102,30 +100,9 @@ export class SetLockAmountModal extends React.Component {
           }) => (
             <Form noValidate onSubmit={handleSubmit} className="">
               <Modal.Header>
-                <Modal.Title>{"Lock Amount"}</Modal.Title>
+                <Modal.Title>{"Unlock Amount"}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <div>
-                  <Form.Group>
-                    <Form.Label className="block-level">Amount</Form.Label>
-                    <Form.Control
-                      type="text"
-                      autoComplete="off"
-                      onChange={handleChange}
-                      value={numberWithCommas(values.amount)}
-                      className={
-                        errors.amount && touched.amount
-                          ? "is-invalid h-38px"
-                          : "h-38px"
-                      }
-                      name="amount"
-                      required
-                    />
-                    {errors.amount && touched.amount ? (
-                      <span className="invalid-feedback">{errors.amount}</span>
-                    ) : null}
-                  </Form.Group>
-                </div>
                 <div>
                   <Form.Group>
                     <Form.Label className="block-level">
@@ -184,7 +161,7 @@ export class SetLockAmountModal extends React.Component {
                 >
                   {getLockAmountReducer.is_request_processing
                     ? "Please wait....."
-                    : `Lock Amount`}
+                    : `Unlock Amount`}
                 </Button>
               </Modal.Footer>
               <div className="footer-alert">
@@ -210,4 +187,4 @@ export class SetLockAmountModal extends React.Component {
   }
 }
 
-export default SetLockAmountModal;
+export default SetUnlockAmountModal;

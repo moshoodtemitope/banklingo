@@ -1027,11 +1027,10 @@ function lockAmountState(newLockAmountPayload, newState) {
 function getLockedAmount(params) {
   return (dispatch) => {
     let consume = ApiService.request(
-      routes.HIT_LOCK_AMOUNT + `?&${params}`,
+      routes.HIT_LOCK_AMOUNT_STATE + `?${params}`,
       "GET",
       null
     );
-    // let consume = ApiService.request(routes.HIT_LOCK_AMOUNT, "GET", null);
     dispatch(request(consume));
     return consume
       .then((response) => {

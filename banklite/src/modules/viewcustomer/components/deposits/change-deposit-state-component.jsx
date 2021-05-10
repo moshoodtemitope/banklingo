@@ -17,168 +17,181 @@ import { Formik } from "formik";
 // import  TableComponent from '../../../shared/elements/table'
 import "../../customerprofile.scss";
 
-
 import { loanAndDepositsConstants } from "../../../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants";
 import { depositActions } from "../../../../redux/actions/deposits/deposits.action";
 
 export class ChangeDepositStateModal extends React.Component {
   constructor(props) {
     super(props);
-    
   }
 
   componentDidMount() {
     // this.loadInitialCustomerData();
   }
 
+  render() {
+    let changeDepositStateRequest = this.props.changeDepositStateReducer,
+      getAClientDepositAccountRequest = this.props
+        .getAClientDepositAccountReducer.request_data.response.data;
 
-   render(){
-      
-        let  changeDepositStateRequest = this.props.changeDepositStateReducer,
-            getAClientDepositAccountRequest = this.props.getAClientDepositAccountReducer.request_data.response.data;
+    let changeDepositStateValidationSchema = Yup.object().shape({
+      comment: Yup.string().min(2, "Valid comments required"),
+      notes: Yup.string().min(2, "Valid notes required"),
+    });
 
-    
-        let   changeDepositStateValidationSchema = Yup.object().shape({
-                comment:  Yup.string()
-                    .min(2, 'Valid comments required'),
-                notes:  Yup.string()
-                    .min(2, 'Valid notes required'),
+    return (
+      <Modal
+        backdrop="static"
+        show={this.props.showModal}
+        onHide={this.props.handleHideModal}
+        size="lg"
+        centered="true"
+        dialogClassName={"modal-40w withcentered-heading"}
+        animation={false}
+      >
+        <Formik
+          initialValues={{
+            comment: "",
+            notes: "",
+          }}
+          validationSchema={changeDepositStateValidationSchema}
+          onSubmit={(values, { resetForm }) => {
+            let changeDepositStatePayload = {
+              comment: values.comment,
+              accountEncodedKey: this.props.depositEncodedKey,
+            };
 
-            });
-       
+            // return false;
 
-        return(
-            <Modal   backdrop="static"  show={this.props.showModal} onHide={this.props.handleHideModal} size="lg" centered="true" dialogClassName={"modal-40w withcentered-heading"}  animation={false}>
-                <Formik
-                    initialValues={{
-                        comment:"",
-                        notes:""
-                    }}
+            this.props
+              .handleNewDepositState(
+                changeDepositStatePayload,
+                this.props.newStateUpdate
+              )
+              .then(() => {
+                if (
+                  this.props.changeDepositStateReducer.request_status ===
+                  loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS
+                ) {
+                  resetForm();
+                  // value = {null}
 
-                    validationSchema={changeDepositStateValidationSchema}
-                    onSubmit={(values, { resetForm }) => {
+                  setTimeout(() => {
+                    this.props.dispatch(
+                      depositActions.changeDepositState("CLEAR")
+                    );
+                    this.props.handleHideModal();
+                    this.props.getCustomerDepositAccountDetails(
+                      this.props.depositEncodedKey
+                    );
+                  }, 3000);
+                }
 
-                        let changeDepositStatePayload = {
-                                comment:values.comment,
-                                accountEncodedKey:this.props.depositEncodedKey
-                            }
-                  
-                        // return false;
+                if (
+                  this.props.changeDepositStateReducer.request_status ===
+                  loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE
+                ) {
+                  resetForm();
+                  // value = {null}
 
-                        this.props.handleNewDepositState(changeDepositStatePayload,this.props.newStateUpdate )
-                            .then(
-                                () => {
+                  setTimeout(() => {
+                    this.props.dispatch(
+                      depositActions.changeDepositState("CLEAR")
+                    );
+                  }, 3000);
+                }
+              });
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            resetForm,
+            values,
+            setFieldValue,
+            setFieldTouched,
+            touched,
+            isValid,
+            errors,
+          }) => (
+            <Form noValidate onSubmit={handleSubmit} className="">
+              <Modal.Header>
+                <Modal.Title>{this.props.newStateHeading}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form.Group>
+                  <Form.Row>
+                    <Col>
+                      <Form.Label className="block-level">
+                        Present State
+                      </Form.Label>
+                      <span className="form-text">{this.props.oldState} </span>
+                    </Col>
+                    <Col>
+                      <Form.Label className="block-level">New State</Form.Label>
+                      <span className="form-text">{this.props.newState}</span>
+                    </Col>
+                  </Form.Row>
+                </Form.Group>
 
-                                    if (this.props.changeDepositStateReducer.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS) {
-                                        resetForm();
-                                        // value = {null}
-
-                                        setTimeout(() => {
-                                            this.props.dispatch(depositActions.changeDepositState("CLEAR"))
-                                            this.props.handleHideModal();
-                                            this.props.getCustomerDepositAccountDetails(this.props.depositEncodedKey);
-                                        }, 3000);
-                                    }
-
-                                    if(this.props.changeDepositStateReducer.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE) {
-                                        resetForm();
-                                        // value = {null}
-
-                                        setTimeout(() => {
-                                            this.props.dispatch(depositActions.changeDepositState("CLEAR"))
-                                        }, 3000);
-                                    }
-
-
-
-                                }
-                            )
-
-                    }}
+                <Form.Group>
+                  <Form.Label className="block-level">Comments</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows="3"
+                    onChange={handleChange}
+                    name="comment"
+                    value={values.comment}
+                    className={
+                      errors.comment && touched.comment
+                        ? "is-invalid form-control form-control-sm"
+                        : null
+                    }
+                  />
+                  {errors.comment && touched.comment ? (
+                    <span className="invalid-feedback">{errors.comment}</span>
+                  ) : null}
+                </Form.Group>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="light" onClick={this.props.handleHideModal}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="success"
+                  type="submit"
+                  disabled={changeDepositStateRequest.is_request_processing}
                 >
-                    {({ handleSubmit,
-                        handleChange,
-                        handleBlur,
-                        resetForm,
-                        values,
-                        setFieldValue,
-                        setFieldTouched,
-                        touched,
-                        isValid,
-                        errors, }) => (
-                            <Form
-                                noValidate
-                                onSubmit={handleSubmit}
-                                className="">
-
-                                <Modal.Header>
-                                    <Modal.Title>{this.props.newStateHeading}</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-
-                                 
-                                        <Form.Group>
-                                            <Form.Row>
-                                                <Col>
-                                                    <Form.Label className="block-level">Present State</Form.Label>
-                                                    <span className="form-text">{this.props.oldState} </span>
-                                                </Col>
-                                                <Col>
-                                                    <Form.Label className="block-level">New State</Form.Label>
-                                                    <span className="form-text">{this.props.newState}</span>
-                                                </Col>
-                                            </Form.Row>
-                                        </Form.Group>
-                              
-                                        <Form.Group>
-                                            <Form.Label className="block-level">Comments</Form.Label>
-                                            <Form.Control as="textarea"
-                                                rows="3"
-                                                onChange={handleChange}
-                                                name="comment"
-                                            value={values.comment}
-                                            className={errors.comment && touched.comment ? "is-invalid form-control form-control-sm" : null}
-                                            />
-                                            {errors.comment && touched.comment ? (
-                                                <span className="invalid-feedback">{errors.comment}</span>
-                                            ) : null}
-                                        </Form.Group>
-                                        
-                                </Modal.Body>
-                                <Modal.Footer>
-
-                                    <Button variant="light" onClick={this.props.handleHideModal}>
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        variant="success"
-                                        type="submit"
-                                        disabled={changeDepositStateRequest.is_request_processing}
-                                    >
-                                        {changeDepositStateRequest.is_request_processing?"Please wait...":`${this.props.ctaText}`}
-
-                                    </Button>
-
-                                </Modal.Footer>
-                                <div className="footer-alert">
-                                    {changeDepositStateRequest.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS &&
-                                        <Alert variant="success" className="w-65 mlr-auto">
-                                            {changeDepositStateRequest.request_data.response.data.message}
-                                        </Alert>
-                                    }
-                                    {(changeDepositStateRequest.request_status === loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE && changeDepositStateRequest.request_data.error )&&
-                                        <Alert variant="danger" className="w-65 mlr-auto">
-                                            {changeDepositStateRequest.request_data.error}
-                                        </Alert>
-                                    }
-                                </div>
-                            </Form>
-                        )}
-                </Formik>
-            </Modal>
-        )
-    }
-
+                  {changeDepositStateRequest.is_request_processing
+                    ? "Please wait..."
+                    : `${this.props.ctaText}`}
+                </Button>
+              </Modal.Footer>
+              <div className="footer-alert">
+                {changeDepositStateRequest.request_status ===
+                  loanAndDepositsConstants.CHANGE_DEPOSITSTATE_SUCCESS && (
+                  <Alert variant="success" className="w-65 mlr-auto">
+                    {
+                      changeDepositStateRequest.request_data.response.data
+                        .message
+                    }
+                  </Alert>
+                )}
+                {changeDepositStateRequest.request_status ===
+                  loanAndDepositsConstants.CHANGE_DEPOSITSTATE_FAILURE &&
+                  changeDepositStateRequest.request_data.error && (
+                    <Alert variant="danger" className="w-65 mlr-auto">
+                      {changeDepositStateRequest.request_data.error}
+                    </Alert>
+                  )}
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </Modal>
+    );
+  }
 }
 function mapStateToProps(state) {
   return {
