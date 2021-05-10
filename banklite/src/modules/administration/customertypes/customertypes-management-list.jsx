@@ -324,7 +324,7 @@ fetchErrorState(){
             return(
                 <Modal show={showEdit} onHide={this.handleCloseEdit} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading"  animation={false}>
                     <Modal.Header>
-                        <Modal.Title>Editing Customer Type</Modal.Title>
+                        <Modal.Title>Editing Client Type</Modal.Title>
                     </Modal.Header>
                     
                     <Modal.Body>

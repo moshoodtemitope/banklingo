@@ -1709,7 +1709,7 @@ class ViewLoanAccount extends React.Component {
             <TableComponent classnames="striped hover">
               <thead>
                 <tr>
-                  <th>Customer Name</th>
+                  <th>Client Name</th>
                   <th>Transaction ID</th>
                   <th>Transaction Date</th>
                   <th>Entry Date</th>
@@ -1754,7 +1754,7 @@ class ViewLoanAccount extends React.Component {
             <TableComponent classnames="striped hover">
               <thead>
                 <tr>
-                  <th>Customer Name</th>
+                  <th>Client Name</th>
                   <th>Transaction ID</th>
                   <th>Transaction Date</th>
                   <th>Entry Date</th>
@@ -1895,7 +1895,7 @@ class ViewLoanAccount extends React.Component {
             <TableComponent classnames="striped bordered hover">
               <thead>
                 <tr>
-                  <th>Customer Name</th>
+                  <th>Client Name</th>
                   <th>Transaction ID</th>
                   <th>Transaction Date</th>
                   <th>Entry Date</th>
@@ -1992,7 +1992,7 @@ class ViewLoanAccount extends React.Component {
             <TableComponent classnames="striped bordered hover">
               <thead>
                 <tr>
-                  <th>Customer Name</th>
+                  <th>Client Name</th>
                   <th>Transaction ID</th>
                   <th>Transaction Date</th>
                   <th>Entry Date</th>

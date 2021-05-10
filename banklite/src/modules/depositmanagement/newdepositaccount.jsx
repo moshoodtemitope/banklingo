@@ -397,7 +397,7 @@ else
                                                 <Form.Row>
                                                     { (customerFetchedData===undefined || this.props.match.params.clientId===undefined) &&
                                                         <Col>
-                                                            <Form.Label className="block-level">Customer Name</Form.Label>
+                                                            <Form.Label className="block-level">Client Name</Form.Label>
                                                             <Select
                                                                 options={allCustomersList}
                                                                 onChange={(selected) => {
@@ -422,7 +422,7 @@ else
                                                     {
                                                         (customerFetchedData !== undefined && this.props.match.params.clientId !== undefined) &&
                                                         <Col>
-                                                            <Form.Label className="block-level">Customer Name</Form.Label>
+                                                            <Form.Label className="block-level">Client Name</Form.Label>
                                                             {customerFetchedData.clientClassification === 0 &&
                                                                 <h3>
                                                                     {customerFetchedData.lastName}{' '}

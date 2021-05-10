@@ -211,7 +211,7 @@ class LoanPAR extends React.Component {
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Customer Name</th>
+                    <th>Client Name</th>
                     <th>Account Number</th>
                     <th>Maturity Date</th>
                     <th>DPD</th>
@@ -244,7 +244,7 @@ class LoanPAR extends React.Component {
                   <tr>
                     <th>#</th>
                     {/* <th>ID</th> */}
-                    <th>Customer Name</th>
+                    <th>Client Name</th>
                     <th>Account Number</th>
                     <th>Loan Amount</th>
                     <th>Maturity Date</th>
@@ -636,7 +636,7 @@ class LoanPAR extends React.Component {
                     <tr>
                       <th>#</th>
                       {/* <th>ID</th> */}
-                      <th>Customer Name</th>
+                      <th>Client Name</th>
                       <th>Account Number</th>
                       <th>Loan Amount</th>
                       <th>Maturity Date</th>
@@ -986,7 +986,7 @@ class LoanPAR extends React.Component {
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Customer Name</th>
+                      <th>Client Name</th>
                       <th>Account Number</th>
                       <th>Maturity Date</th>
                       <th>DPD</th>

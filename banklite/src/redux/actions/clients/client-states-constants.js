@@ -8,6 +8,15 @@ export const LoanStateConstants={
 
 
 
+
+export const RoleSearchTypeConstants={
+    All_Users:0,
+        Account_Officers_only:1,
+        Account_Tellers_only :2,
+   }
+
+
+
 export const DepositProductTypesConstants={
     All : 0,
     Current_Account :1,

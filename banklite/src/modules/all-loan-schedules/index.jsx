@@ -258,7 +258,7 @@ class AllLoanSchedules extends React.Component {
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Customer Name</th>
+                    <th>Client Name</th>
                     <th>Account Number</th>
                     <th>Due Date</th>
                     {/* <th>Total Balance</th> */}
@@ -288,7 +288,7 @@ class AllLoanSchedules extends React.Component {
                   <tr>
                     <th>#</th>
                     {/* <th>ID</th> */}
-                    <th>Customer Name</th>
+                    <th>Client Name</th>
                     <th>Account Number</th>
                     <th>Loan Amount</th>
                     <th>Due Date</th>
@@ -713,7 +713,7 @@ class AllLoanSchedules extends React.Component {
                     <tr>
                       <th>#</th>
                       {/* <th>ID</th> */}
-                      <th>Customer Name</th>
+                      <th>Client Name</th>
                       <th>Account Number</th>
                       <th>Loan Amount</th>
                       <th>Due Date</th>
@@ -1070,7 +1070,7 @@ class AllLoanSchedules extends React.Component {
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Customer Name</th>
+                      <th>Client Name</th>
                       <th>Account Number</th>
                       <th>Due Date</th>
                       {/* <th>Total Balance</th> */}
