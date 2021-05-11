@@ -425,7 +425,7 @@ class NewGroupClient extends React.Component {
           initialValues={{
             groupName:'',
             custType:'',
-            groupId: '',
+            clientCode: '',
             businessNumber: '',
             addressLine1: '',
             addressLine2: '',
@@ -450,7 +450,7 @@ class NewGroupClient extends React.Component {
                   // clientTypeEncodedKey: selectedCustype? selectedCustype.encodedKey : null,
                   groupName: values.groupName,
                   businessNumber: values.businessNumber,
-                  clientCode: values.groupId,
+                  clientCode: values.clientCode,
                   address: {
                       addressLine1: values.addressLine1,
                       addressLine2: values.addressLine2,
@@ -537,18 +537,38 @@ class NewGroupClient extends React.Component {
                   <Form.Label className='block-level'>Group Code(Optional)</Form.Label>
                   <Form.Control
                     type='text'
-                    name='groupId'
+                    name='clientCode'
                     onChange={handleChange}
-                    value={values.groupId}
+                    value={values.clientCode}
                     className={
-                      errors.groupId && touched.groupId
+                      errors.clientCode && touched.clientCode
                         ? 'is-invalid h-38px'
                         : 'h-38px'
                     }
                     required
                   />
-                  {errors.groupId && touched.groupId ? (
-                    <span className='invalid-feedback'>{errors.groupId}</span>
+                  {errors.clientCode && touched.clientCode ? (
+                    <span className='invalid-feedback'>{errors.clientCode}</span>
+                  ) : null}
+                </Col>
+              </Form.Row>
+              <Form.Row>
+                <Col>
+                  <Form.Label className='block-level'>Registraton Number</Form.Label>
+                  <Form.Control
+                    type='text'
+                    name='businessNumber'
+                    onChange={handleChange}
+                    value={values.businessNumber}
+                    className={
+                      errors.businessNumber && touched.businessNumber
+                        ? 'is-invalid h-38px'
+                        : 'h-38px'
+                    }
+                    required
+                  />
+                  {errors.businessNumber && touched.businessNumber ? (
+                    <span className='invalid-feedback'>{errors.businessNumber}</span>
                   ) : null}
                 </Col>
               </Form.Row>

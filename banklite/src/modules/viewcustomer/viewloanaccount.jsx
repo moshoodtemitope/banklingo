@@ -2022,43 +2022,53 @@ class ViewLoanAccount extends React.Component {
   renderLoanAccountDetails = (loanAccountData) => {
     return (
       <div>
-        <div className="amounts-wrap w-65">
+        
 
-       {this.visibility.showNotLoanActiveAmounts && <div className="eachamount">
-            <h6>Loan Amount</h6>
-            <div className="amounttext">
-              {numberWithCommas(loanAccountData.loanAmount, true)}{" "}
-            
+       {this.visibility.showNotLoanActiveAmounts && 
+          <div className="amounts-wrap w-65">
+            <div className="eachamount">
+              <h6>Loan Amount</h6>
+              <div className="amounttext">
+                {numberWithCommas(loanAccountData.loanAmount, true)}{" "}
+
+              </div>
+            </div>
+            <div className="eachamount">
+              <h6>Installments</h6>
+              <div className="amounttext">{loanAccountData.installments}</div>
             </div>
           </div>
-  }
+        }
 
 
-{!this.visibility.showNotLoanActiveAmounts && (<div>
-          <div className="eachamount">
-            <h6>Total Balance</h6>
-            <div className="amounttext">
-              {numberWithCommas(loanAccountData.totalBalance, true)}{" "}
+          {!this.visibility.showNotLoanActiveAmounts && (
+            <div className="amounts-wrap w-65">
+              <div className="eachamount">
+                <h6>Total Balance</h6>
+                <div className="amounttext">
+                  {numberWithCommas(loanAccountData.totalBalance, true)}{" "}
+                </div>
+              </div>
+              <div className="eachamount">
+                <h6>Total Due</h6>
+                <div className="amounttext">
+                  {numberWithCommas(loanAccountData.totalDue, true)}{" "}
+                </div>
+              </div>
+              <div className="eachamount">
+                <h6>Total Paid</h6>
+                <div className="amounttext">
+                  {numberWithCommas(loanAccountData.totalPaid, true)}{" "}
+                </div>
+              </div>
+              <div className="eachamount">
+                <h6>Installments</h6>
+                <div className="amounttext">{loanAccountData.installments}</div>
+              </div>
             </div>
-          </div>
-          <div className="eachamount">
-            <h6>Total Due</h6>
-            <div className="amounttext">
-              {numberWithCommas(loanAccountData.totalDue, true)}{" "}
-            </div>
-          </div>
-          <div className="eachamount">
-            <h6>Total Paid</h6>
-            <div className="amounttext">
-              {numberWithCommas(loanAccountData.totalPaid, true)}{" "}
-            </div>
-          </div></div>
           )}
-          <div className="eachamount">
-            <h6>Installments</h6>
-            <div className="amounttext">{loanAccountData.installments}</div>
-          </div>
-        </div>
+          
+        
         <div className="overview-wrap">
           <div className="each-overview">
             <h6>General</h6>
