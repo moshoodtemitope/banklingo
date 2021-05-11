@@ -267,7 +267,7 @@
 //               <TableComponent classnames='striped bordered hover'>
 //                 <thead>
 //                   <tr>
-//                     <th>Customer Name</th>
+//                     <th>Client Name</th>
 //                     <th>Customer ID</th>
 //                     <th>Customer Status</th>
 //                     <th>Account Officer</th>
@@ -400,7 +400,7 @@
 //               <TableComponent classnames='striped bordered hover'>
 //                 <thead>
 //                   <tr>
-//                     <th>Customer Name</th>
+//                     <th>Client Name</th>
 //                     <th>Customer ID</th>
 //                     <th>Customer Status</th>
 //                     <th>Account Officer</th>
@@ -606,7 +606,7 @@
 //                 <TableComponent classnames='striped bordered hover'>
 //                   <thead>
 //                     <tr>
-//                       <th>Customer Name</th>
+//                       <th>Client Name</th>
 //                       <th>Customer ID</th>
 //                       <th>Customer Status</th>
 //                       <th>Account Officer</th>
@@ -766,7 +766,7 @@
 //                 <TableComponent classnames='striped bordered hover'>
 //                   <thead>
 //                     <tr>
-//                       <th>Customer Name</th>
+//                       <th>Client Name</th>
 //                       <th>Customer ID</th>
 //                       <th>Customer Status</th>
 //                       <th>Account Officer</th>

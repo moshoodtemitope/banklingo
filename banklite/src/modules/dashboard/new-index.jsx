@@ -1337,7 +1337,7 @@ console.log('dashboard load');
                     
                     <div className="formdetails">
                         <div className="each-detail">
-                            <div className="detail-title">Customer Name</div>
+                            <div className="detail-title">Client Name</div>
                             <div className="detail-value">{accountToView.clientName}</div>
                         </div>
                         <div className="each-detail">
@@ -2086,7 +2086,7 @@ console.log('dashboard load');
                                                             loadOptions={this.loadSearchResults}
                                                             defaultOptions={defaultOptions}
                                                             name="clientEncodedKey"
-                                                            placeholder="Search customer name"
+                                                            placeholder="Search Client Name"
                                                             className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
                                                             onChange={(e) => {
 
@@ -2268,7 +2268,7 @@ console.log('dashboard load');
                                                             loadOptions={this.loadSearchResults}
                                                             defaultOptions={defaultOptions}
                                                             name="clientEncodedKey"
-                                                            placeholder="Search customer name"
+                                                            placeholder="Search Client Name"
                                                             className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
                                                             onChange={(e) => {
 

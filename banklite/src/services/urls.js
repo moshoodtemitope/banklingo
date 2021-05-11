@@ -104,9 +104,6 @@ export const routes = {
   //Deposits Transactions Endpoints
   HIT_DEPOSITS_TRANSACTIONS: BASEURL + "/api/DepositTransactions",
 
-  //Lock Amount Endpoints
-  HIT_LOCK_AMOUNT: BASEURL + "/api/LockAmount",
-
   //LOAN Endpoints
   HIT_LOAN: BASEURL + "/api/Loans",
 

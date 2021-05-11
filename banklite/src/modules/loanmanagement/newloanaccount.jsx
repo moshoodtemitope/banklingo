@@ -901,7 +901,7 @@ class NewLoanAccount extends React.Component {
                             this.props.match.params.clientId === undefined) && (
                             <Col>
                               <Form.Label className='block-level'>
-                                Customer Name
+                                Client Name
                               </Form.Label>
                               <Select
                                 options={allCustomersList}
@@ -911,7 +911,7 @@ class NewLoanAccount extends React.Component {
                                     selected.value
                                   );
                                 }}
-                                placeholder='Search Customer'
+                                placeholder='Search Client'
                                 onBlur={() =>
                                   setFieldTouched('clientEncodedKey', true)
                                 }
@@ -936,7 +936,7 @@ class NewLoanAccount extends React.Component {
                             this.props.match.params.clientId !== undefined && (
                               <Col>
                                 <Form.Label className='block-level'>
-                                  Customer Name
+                                  Client Name
                                 </Form.Label>
                                 {customerFetchedData.clientClassification===0 &&
                                   <h3>

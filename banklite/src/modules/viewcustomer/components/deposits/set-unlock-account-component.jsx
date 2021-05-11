@@ -114,7 +114,7 @@ export class SetUnlockAccountModal extends React.Component {
           validationSchema={unlockAccountValidationSchema}
           onSubmit={(values, { resetForm }) => {
             let unlockAccountPayload = {
-              accountNumber:  this.props.depositEncodedKey,
+              accountNumber: values.accountNumber,
               notes: values.notes,
             };
             this.props
