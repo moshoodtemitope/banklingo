@@ -173,7 +173,7 @@ class GeneralInternalControl extends React.Component {
                                         <Form.Row>
                                             <Col>
                                                 <Form.Group controlId="maximumExposureToCustomer">
-                                                    <Form.Label className="block-level">Maximum Exposure To A Customer</Form.Label>
+                                                    <Form.Label className="block-level">Maximum Exposure To A Client</Form.Label>
                                                     <Form.Control as="select" size="sm"
                                                         name="maximumExposureToCustomer"
                                                         onChange={handleChange} 
@@ -205,7 +205,7 @@ class GeneralInternalControl extends React.Component {
                                                         {/* <option value="1">Yes, Unlimited Number Of Active Loans</option> */}
                                                         <option value="1">Yes</option>
                                                         <option value="2">No</option>
-                                                        {/* <option value="2">No, Only One Active Loan Per Customer</option> */}
+                                                        {/* <option value="2">No, Only One Active Loan Per Client</option> */}
                                                     </Form.Control>
                                                     {errors.customerMultipleLoans && touched.customerMultipleLoans ? (
                                                             <span className="invalid-feedback">{errors.customerMultipleLoans}</span>
@@ -218,7 +218,7 @@ class GeneralInternalControl extends React.Component {
             
                                                 <Col>
                                                     <Form.Group controlId="minimum-days-2">
-                                                        <Form.Label className="block-level">Maximum Amount for Maximum Exposure To A Customer</Form.Label>
+                                                        <Form.Label className="block-level">Maximum Amount for Maximum Exposure To A Client</Form.Label>
                                                         <Form.Control type="text" size="sm" 
                                                             name="maximumExposureToCustomerAmount"
                                                             onChange={handleChange} 
@@ -425,7 +425,7 @@ class GeneralInternalControl extends React.Component {
                                                 <NavLink to={'/administration/general/txt-channels'}>Transaction Channels</NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to={'/administration/general/customer-types'}>Customer Types</NavLink>
+                                                <NavLink to={'/administration/general/customer-types'}>Client Types</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to={'/administration/general/control'}>Internal Control</NavLink>

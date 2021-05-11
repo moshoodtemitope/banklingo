@@ -714,7 +714,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
-                                    <th>Affected Customer</th>
+                                    <th>Affected Client</th>
                                     <th>Affected Item Name</th>
                                     <th>Affected Item Id</th>
                                     {/* <th></th> */}
@@ -771,7 +771,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
-                                    <th>Affected Customer</th>
+                                    <th>Affected Client</th>
                                     <th>Affected Item Name</th>
                                     <th>Affected Item Id</th>
                                     {/* <th></th> */}
@@ -852,7 +852,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
-                                    <th>Affected Customer</th>
+                                    <th>Affected Client</th>
                                     <th>Affected Item Name</th>
                                     <th>Affected Item Id</th>
                                     {/* <th></th> */}
@@ -918,7 +918,7 @@ class ViewSavingsAccount extends React.Component {
                                     <th>Date Created</th>
                                     <th>Username</th>
                                     <th>Action</th>
-                                    <th>Affected Customer</th>
+                                    <th>Affected Client</th>
                                     <th>Affected Item Name</th>
                                     <th>Affected Item Id</th>
                                     {/* <th></th> */}
@@ -1232,7 +1232,7 @@ class ViewSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction ID</th>
                                     <th>Narration</th>
                                     <th>Entry Date</th>
@@ -1276,7 +1276,7 @@ class ViewSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction ID</th>
                                     <th>Narration</th>
                                     <th>Entry Date</th>
@@ -1401,7 +1401,7 @@ class ViewSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction Id</th>
                                     <th>Narration</th>
                                     <th>Entry Date</th>
@@ -1466,7 +1466,7 @@ class ViewSavingsAccount extends React.Component {
                         <TableComponent classnames="striped bordered hover">
                             <thead>
                                 <tr>
-                                    <th>Customer Name</th>
+                                    <th>Client Name</th>
                                     <th>Transaction Id</th>
                                     <th>Narration</th>
                                     <th>Entry Date</th>
@@ -3347,7 +3347,7 @@ class ViewSavingsAccount extends React.Component {
     //                                                         }}
     //                                                     >
     //                                                         <option value="currentcustomer">{getAClientDepositAccountRequest.accountHolderName}</option>
-    //                                                         <option value="anothercustomer">Another Customer</option>
+    //                                                         <option value="anothercustomer">Another Client</option>
     //                                                     </select>
     //                                                 </Col>
     //                                             </Form.Row>

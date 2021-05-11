@@ -594,7 +594,7 @@ class CustomerAccountContainer extends React.Component {
                       this.setState({
                         newState: 'Blacklisted',
                         newStateUpdate: 'blacklist',
-                        ctaText: 'Blacklist Customer',
+                        ctaText: 'Blacklist Client',
                       });
                       this.handleChangeStateShow();
                     }}
@@ -620,7 +620,7 @@ class CustomerAccountContainer extends React.Component {
                       this.setState({
                         newState: 'Approved',
                         newStateUpdate: 'undoblacklist',
-                        ctaText: 'Undo Blacklist Customer',
+                        ctaText: 'Undo Blacklist Client',
                       });
                       this.handleChangeStateShow();
                     }}
@@ -648,7 +648,7 @@ class CustomerAccountContainer extends React.Component {
                         this.setState({
                           newState: 'Approved',
                           newStateUpdate: 'approve',
-                          ctaText: 'Approve Customer',
+                          ctaText: 'Approve Client',
                         });
                         this.handleChangeStateShow();
                       }}
@@ -663,7 +663,7 @@ class CustomerAccountContainer extends React.Component {
                         this.setState({
                           newState: 'Rejected',
                           newStateUpdate: 'rejectcustomer',
-                          ctaText: 'Reject Customer',
+                          ctaText: 'Reject Client',
                         });
                         this.handleChangeStateShow();
                       }}
@@ -679,7 +679,7 @@ class CustomerAccountContainer extends React.Component {
                         this.setState({
                           newState: 'Blacklisted',
                           newStateUpdate: 'blacklist',
-                          ctaText: 'Blacklist Customer',
+                          ctaText: 'Blacklist Client',
                         });
                         this.handleChangeStateShow();
                       }}

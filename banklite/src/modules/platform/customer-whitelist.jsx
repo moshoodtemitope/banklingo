@@ -406,7 +406,7 @@ class ManageCustomerWhitelist extends React.Component {
                   {/* <Form.Row>
 
                                         <Col>
-                                            <Form.Label className="block-level">Customer</Form.Label>
+                                            <Form.Label className="block-level">Client</Form.Label>
                                             <AsyncSelect
                                                 cacheOptions
                                                 value={selectedCustomer}
@@ -628,7 +628,7 @@ class ManageCustomerWhitelist extends React.Component {
         animation={true}
       >
         <Modal.Header>
-          <Modal.Title>Add New Customer</Modal.Title>
+          <Modal.Title>Add New Client</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Formik
@@ -714,7 +714,7 @@ class ManageCustomerWhitelist extends React.Component {
                       >
                         <option value=''>Select</option>
                         <option value='bvn'>BVN</option>
-                        <option value='customer'>Customer</option>
+                        <option value='customer'>Client</option>
                       </select>
                       {errors.whitelistOption && touched.whitelistOption ? (
                         <span className='invalid-feedback'>
@@ -976,7 +976,7 @@ class ManageCustomerWhitelist extends React.Component {
                   <tr>
                     <th>Biometric ID</th>
                     <th>Amount</th>
-                    <th>Customer name</th>
+                    <th>Client Name</th>
                     <th>Status</th>
                     <th>Credit Score</th>
                     <th>Whitelisted by</th>
@@ -1043,7 +1043,7 @@ class ManageCustomerWhitelist extends React.Component {
                   <tr>
                     <th>Biometric ID</th>
                     <th>Amount</th>
-                    <th>Customer name</th>
+                    <th>Client Name</th>
                     <th>Status</th>
                     <th>Credit Score</th>
                     <th>Whitelisted by</th>
@@ -1242,7 +1242,7 @@ class ManageCustomerWhitelist extends React.Component {
                     <tr>
                       <th>Biometric ID</th>
                       <th>Amount</th>
-                      <th>Customer name</th>
+                      <th>Client Name</th>
                       <th>Status</th>
                       <th>Credit Score</th>
                       <th>Whitelisted by</th>
@@ -1367,7 +1367,7 @@ class ManageCustomerWhitelist extends React.Component {
                     <tr>
                       <th>Biometric ID</th>
                       <th>Amount</th>
-                      <th>Customer name</th>
+                      <th>Client Name</th>
                       <th>Status</th>
                       <th>Credit Score</th>
                       <th>Whitelisted by</th>

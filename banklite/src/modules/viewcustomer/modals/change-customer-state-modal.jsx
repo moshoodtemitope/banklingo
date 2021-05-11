@@ -51,7 +51,7 @@ class NewTaskModal extends React.Component {
 // {
 //     newState: 'Approved',
 //     newStateUpdate: 'approve',
-//     ctaText: 'Approve Customer',
+//     ctaText: 'Approve Client',
 //   }
 
     ///this is the new task modal
@@ -66,7 +66,7 @@ class NewTaskModal extends React.Component {
         // {
         //     newState: 'Approved',
         //     newStateUpdate: 'approve',
-        //     ctaText: 'Approve Customer',
+        //     ctaText: 'Approve Client',
         //   }
 
         let changeClientStateRequest = this.props.changeClientStateReducer;

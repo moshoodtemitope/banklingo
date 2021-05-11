@@ -183,7 +183,7 @@ class Activties extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -298,7 +298,7 @@ class Activties extends React.Component {
                   <th>Date Created</th>
                   <th>Username</th>
                   <th>Action</th>
-                  <th>Affected Customer</th>
+                  <th>Affected Client</th>
                   <th>Affected Item Name</th>
                   <th>Affected Item Id</th>
                   {/* <th></th> */}
@@ -447,7 +447,7 @@ class Activties extends React.Component {
                     <th>Date Created</th>
                     <th>Username</th>
                     <th>Action</th>
-                    <th>Affected Customer</th>
+                    <th>Affected Client</th>
                     <th>Affected Item Name</th>
                     <th>Affected Item Id</th>
                     {/* <th></th> */}
@@ -575,7 +575,7 @@ class Activties extends React.Component {
                     <th>Date Created</th>
                     <th>Username</th>
                     <th>Action</th>
-                    <th>Affected Customer</th>
+                    <th>Affected Client</th>
                     <th>Affected Item Name</th>
                     <th>Affected Item Id</th>
                     {/* <th></th> */}

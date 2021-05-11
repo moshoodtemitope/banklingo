@@ -29,12 +29,14 @@ import {customerTypeActions,customerTypeConstants} from '../../redux/actions/adm
 
 import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
 import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
+import ReactTooltip from "react-tooltip";
 import Alert from 'react-bootstrap/Alert';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './clients.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import { RoleSearchTypeConstants } from '../../redux/actions/clients/client-states-constants';
 class NewGroupClient extends React.Component {
   constructor(props) {
     super(props);
@@ -55,7 +57,7 @@ class NewGroupClient extends React.Component {
   getAllUsers = () => {
     const { dispatch } = this.props;
 
-    dispatch(administrationActions.getAllUsers(1));
+    dispatch(administrationActions.getAllUsers(RoleSearchTypeConstants.Account_Officers_only));
   };
 
   handleCreateNewGroup = async (createNewCustomerpayload) => {
@@ -133,11 +135,13 @@ class NewGroupClient extends React.Component {
     groupMembers.push({
       clientEncodedKey: inputValue.clientEncodedKey,
       roleId: ""
-    })
+    });
+
     groupMembersData.push({
       clientEncodedKey: inputValue.clientEncodedKey,
       roleId: null
     })
+
     this.setState({
       selectedCustomer: null,
       selectACustomerAccount: inputValue,
@@ -163,10 +167,10 @@ class NewGroupClient extends React.Component {
       .min(1, 'Valid Response required')
       .max(50, 'Max limit reached')
       .required('Required'),
-    clientCode: Yup.string()
-      .min(1, 'Valid response required')
-      .max(50, 'Max limit reached'),
-      // .required('Required'),
+    // groupId: Yup.string()
+    //   .min(1, 'Valid response required')
+    //   .max(50, 'Max limit reached')
+    //   .required('Required'),
     custType: Yup.string().required('Required'),
     clientBranchEncodedKey: Yup.string().required('Required'),
     accountOfficerEncodedKey: Yup.string().required('Required'),
@@ -188,13 +192,13 @@ class NewGroupClient extends React.Component {
     zipCode: Yup.string()
       .min(2, 'Valid response required')
       .max(10, 'Max limit reached'),
-    businessNumber: Yup.string()
-    //   .required()
-      .matches(/^[0-9]+$/, 'Must be only digits')
-      .min(8, 'Must be between 8 and 15 digits')
-      .max(15, 'Must be between 8 and 15 digits'),
+    // businessNumber: Yup.string()
+    // //   .required()
+    //   .matches(/^[0-9]+$/, 'Must be only digits')
+    //   .min(8, 'Must be between 8 and 15 digits')
+    //   .max(15, 'Must be between 8 and 15 digits'),
     contactMobile: Yup.string()
-      .required()
+      .required('Contact number is required')
       .matches(/^[0-9]+$/, 'Must be only digits')
       .min(8, 'Must be between 8 and 15 digits')
       .max(15, 'Must be between 8 and 15 digits'),
@@ -339,6 +343,7 @@ class NewGroupClient extends React.Component {
     let {allMembersList}= this.state;
         // console.log("to be removed", memberToRemove, allMembersList);
         allMembersList = allMembersList.filter(eachItem=>eachItem.clientEncodedKey!==memberToRemove.clientEncodedKey)
+
         this.setState({allMembersList,groupMembers:allMembersList,groupMembersData:allMembersList })
         this.validateAllRoleEntries()
         // console.log("after  removal",  allMembersList);
@@ -529,7 +534,7 @@ class NewGroupClient extends React.Component {
                   ) : null}
                 </Col>
                 <Col>
-                  <Form.Label className='block-level'>Client Code</Form.Label>
+                  <Form.Label className='block-level'>Group Code(Optional)</Form.Label>
                   <Form.Control
                     type='text'
                     name='clientCode'
@@ -561,6 +566,30 @@ class NewGroupClient extends React.Component {
                         : 'h-38px'
                     }
                     required
+                  />
+                  {errors.businessNumber && touched.businessNumber ? (
+                    <span className='invalid-feedback'>{errors.businessNumber}</span>
+                  ) : null}
+                </Col>
+              </Form.Row>
+              <Form.Row>
+                <Col>
+                  <Form.Label className='block-level'>Business Number(Optional)</Form.Label>
+                  <ReactTooltip id="registerTip" place="right" effect="float">
+       The number issued to the group during  registration with government.
+      </ReactTooltip>                  <Form.Control
+
+data-tip data-for="registerTip"
+                    type='text'
+                    name='businessNumber'
+                    onChange={handleChange}
+                    value={values.groupId}
+                    className={
+                      errors.businessNumber && touched.businessNumber
+                        ? 'is-invalid h-38px'
+                        : 'h-38px'
+                    }
+               
                   />
                   {errors.businessNumber && touched.businessNumber ? (
                     <span className='invalid-feedback'>{errors.businessNumber}</span>
@@ -609,7 +638,7 @@ class NewGroupClient extends React.Component {
                   <div className='each-formsection'>
                       <Form.Group className="w-50 m-auto">
                         <div className="withasync">
-                          <Form.Label className="block-level">Customer</Form.Label>
+                          <Form.Label className="block-level">Client</Form.Label>
                           <div>
                             <div>
                               <AsyncSelect
@@ -626,7 +655,7 @@ class NewGroupClient extends React.Component {
                                 loadOptions={this.loadSearchResults}
                                 defaultOptions={defaultOptions}
                                 name="clientEncodedKey"
-                                placeholder="Search customer name"
+                                placeholder="Search client name"
                                 className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
                                 onChange={(e) => {
                                   if(e){
@@ -668,7 +697,7 @@ class NewGroupClient extends React.Component {
                     {/* <Form.Row>
                       <Col>
                         <div className="withasync">
-                          <Form.Label className="block-level">Customer</Form.Label>
+                          <Form.Label className="block-level">Client</Form.Label>
                         </div>
                       </Col>
                       <Col>

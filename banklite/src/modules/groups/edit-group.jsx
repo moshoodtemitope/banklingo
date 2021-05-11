@@ -651,7 +651,7 @@ class EditAGroup extends React.Component {
                   <div className='each-formsection'>
                       <Form.Group className="w-50 m-auto">
                         <div className="withasync">
-                          <Form.Label className="block-level">Customer</Form.Label>
+                          <Form.Label className="block-level">Client</Form.Label>
                           <div>
                             <div>
                               <AsyncSelect
@@ -668,7 +668,7 @@ class EditAGroup extends React.Component {
                                 loadOptions={this.loadSearchResults}
                                 defaultOptions={defaultOptions}
                                 name="clientEncodedKey"
-                                placeholder="Search customer name"
+                                placeholder="Search Client Name"
                                 className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
                                 onChange={(e) => {
                                   if(e){
@@ -710,7 +710,7 @@ class EditAGroup extends React.Component {
                     {/* <Form.Row>
                       <Col>
                         <div className="withasync">
-                          <Form.Label className="block-level">Customer</Form.Label>
+                          <Form.Label className="block-level">Client</Form.Label>
                         </div>
                       </Col>
                       <Col>
@@ -1113,7 +1113,7 @@ class EditAGroup extends React.Component {
                   >
                     {updateAClientRequest.is_request_processing
                       ? 'Please wait...'
-                      : 'Update Customer'}
+                      : 'Update Client'}
                   </Button>
                 </div>
               </Form>

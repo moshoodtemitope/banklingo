@@ -299,7 +299,7 @@ class CreateNewTask extends React.Component {
                                                             loadOptions={this.loadSearchResults}
                                                             defaultOptions={defaultOptions}
                                                             name="clientEncodedKey"
-                                                            placeholder="Search customer name"
+                                                            placeholder="Search Client Name"
                                                             className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
                                                             onChange={(e) => {
 

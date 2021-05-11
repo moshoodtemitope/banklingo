@@ -752,7 +752,7 @@ class GeneralTxtChannels extends React.Component {
                                                 <NavLink to={'/administration/general/txt-channels'}>Transaction Channels</NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to={'/administration/general/customer-types'}>Customer Types</NavLink>
+                                                <NavLink to={'/administration/general/customer-types'}>Client Types</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to={'/administration/general/control'}>Internal Control</NavLink>

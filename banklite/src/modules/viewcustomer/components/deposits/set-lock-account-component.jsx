@@ -108,13 +108,13 @@ export class SetLockAccountModal extends React.Component {
       >
         <Formik
           initialValues={{
-            accountNumber: "",
+            accountNumber: getAClientDepositAccountRequest.accountNumber,
             lockReason: "",
           }}
           validationSchema={lockAccountValidationSchema}
           onSubmit={(values, { resetForm }) => {
             let lockAccountPayload = {
-              accountNumber: values.accountNumber,
+              accountNumber: this.props.depositEncodedKey,
               lockReason: values.lockReason,
             };
             this.props
@@ -131,7 +131,7 @@ export class SetLockAccountModal extends React.Component {
                     );
                     this.props.handleHideModal();
                     this.props.getCustomerDepositAccountDetails(
-                      this.depositEncodedKey
+                      this.props.depositEncodedKey
                     );
                   }, 3000);
                 }
@@ -169,33 +169,28 @@ export class SetLockAccountModal extends React.Component {
               <Modal.Body>
                 <div>
                   <Form.Group>
-                    <Form.Label className="block-level">
-                      Account Number
-                    </Form.Label>
-                    <Form.Control
-                      type="text"
-                      autoComplete="off"
-                      onChange={handleChange}
-                      value={accountNumber(values.accountNumber)}
-                      className={
-                        errors.accountNumber && touched.accountNumber
-                          ? "is-invalid h-38px"
-                          : "h-38px"
-                      }
-                      name="accountNumber"
-                      required
-                    />
-                    {errors.accountNumber && touched.accountNumber ? (
-                      <span className="invalid-feedback">
-                        {errors.accountNumber}
-                      </span>
-                    ) : null}
+                    <Form.Group>
+                      <Form.Row>
+                        <Col>
+                          <Form.Label className="block-level">
+                            Present State
+                          </Form.Label>
+                          <span className="form-text">
+                            {this.props.oldState}{" "}
+                          </span>
+                        </Col>
+                        <Col>
+                          <Form.Label className="block-level">
+                            New State
+                          </Form.Label>
+                          <span className="form-text">Lock</span>
+                        </Col>
+                      </Form.Row>
+                    </Form.Group>
                   </Form.Group>
                 </div>
                 <Form.Group>
-                  <Form.Label className="block-level">
-                    Reason for Locking
-                  </Form.Label>
+                  <Form.Label className="block-level">Note</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows="3"

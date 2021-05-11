@@ -1286,7 +1286,7 @@ class NewClient extends React.Component {
                 >
                   {createAClientRequest.is_request_processing
                     ? 'Please wait...'
-                    : 'Create Customer'}
+                    : 'Create Client'}
                 </Button>
               </div>
               {createAClientRequest.request_status ===

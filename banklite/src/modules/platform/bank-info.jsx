@@ -359,7 +359,7 @@ class ManageBankInfo extends React.Component {
                 <Form noValidate onSubmit={handleSubmit}>
                   <Form.Row>
                     <Col>
-                      <Form.Label className='block-level'>Customer</Form.Label>
+                      <Form.Label className='block-level'>Client</Form.Label>
                       <AsyncSelect
                         cacheOptions
                         value={selectedCustomer}

@@ -1051,7 +1051,7 @@ class RescheduleALoanAccount extends React.Component {
                           this.props.match.params.clientId !== undefined && (
                             <Col>
                               <Form.Label className='block-level'>
-                                Customer Name
+                                Client Name
                               </Form.Label>
                               <h3>
                                 {customerFetchedData.lastName}{' '}

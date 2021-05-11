@@ -1336,7 +1336,7 @@ class EditAClient extends React.Component {
                   >
                     {updateAClientRequest.is_request_processing
                       ? 'Please wait...'
-                      : 'Update Customer'}
+                      : 'Update Client'}
                   </Button>
                 </div>
                 {updateAClientRequest.request_status ===

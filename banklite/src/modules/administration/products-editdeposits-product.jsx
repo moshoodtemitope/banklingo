@@ -133,7 +133,7 @@ class EditADepositsProduct extends React.Component {
             },
             {   value: '3', 
                 label: 'Funding Account',
-                desc:   'A type of account used for investing funds in other borrowers loan accounts. The customer earns interest after loan investments, instead of the traditional interest paid into account by the organization.'
+                desc:   'A type of account used for investing funds in other borrowers loan accounts. The client earns interest after loan investments, instead of the traditional interest paid into account by the organization.'
             },
             {   value: '4', 
                 label: 'Savings Account',
