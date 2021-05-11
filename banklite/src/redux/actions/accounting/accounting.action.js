@@ -245,7 +245,17 @@ function getJournalEntries  (payload, tempData){
                             dispatch(request(consume3, tempData));
                             return consume3
                                 .then(response3 =>{
-                                    dispatch(success(response,response2, response3));
+                                    // dispatch(success(response,response2, response3));
+                                    let consume4 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
+                                        dispatch(request(consume4, tempData));
+                                        return consume4
+                                            .then(response4 =>{
+                                                dispatch(success(response,response2, response3, response4));
+                                            })
+                                            .catch(error =>{
+                                    
+                                                dispatch(failure(handleRequestErrors(error)));
+                                            });
                                 })
                                 .catch(error =>{
                         
@@ -275,7 +285,7 @@ function getJournalEntries  (payload, tempData){
 
          
     }
-    function success(response,response2, response3) { return { type: accountingConstants.GET_JOURNAL_ENTRY_SUCCESS, response,response2, response3 } }
+    function success(response,response2, response3, response4) { return { type: accountingConstants.GET_JOURNAL_ENTRY_SUCCESS, response,response2, response3, response4 } }
     function failure(error) { return { type: accountingConstants.GET_JOURNAL_ENTRY_FAILURE, error } }
 
 }

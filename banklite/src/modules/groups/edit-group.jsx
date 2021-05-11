@@ -365,10 +365,10 @@ class EditAGroup extends React.Component {
         .min(1, 'Valid Response required')
         .max(50, 'Max limit reached')
         .required('Required'),
-      groupId: Yup.string()
+      clientCode: Yup.string()
         .min(1, 'Valid response required')
-        .max(50, 'Max limit reached')
-        .required('Required'),
+        .max(50, 'Max limit reached'),
+        // .required('Required'),
       custType: Yup.string().required('Required'),
       clientBranchEncodedKey: Yup.string().required('Required'),
       accountOfficerEncodedKey: Yup.string().required('Required'),
@@ -464,7 +464,7 @@ class EditAGroup extends React.Component {
           <Formik
             initialValues={{
               groupName: allCustomerData.groupName,
-              groupId: allCustomerData.clientCode,
+              clientCode: allCustomerData.clientCode,
               addressLine1: allCustomerData.address.addressLine1
                 ? allCustomerData.address.addressLine1
                 : '',
@@ -576,27 +576,45 @@ class EditAGroup extends React.Component {
                       <span className='invalid-feedback'>{errors.groupName}</span>
                     ) : null}
                   </Col>
-                  
-                </Form.Row>
-                <Form.Row>
                   <Col>
-                    <Form.Label className='block-level'>ID</Form.Label>
+                    <Form.Label className='block-level'>Registraton Number</Form.Label>
                     <Form.Control
                       type='text'
-                      name='groupId'
+                      name='businessNumber'
                       onChange={handleChange}
-                      value={values.groupId}
+                      value={values.businessNumber}
                       className={
-                        errors.groupId && touched.groupId
+                        errors.businessNumber && touched.businessNumber
                           ? 'is-invalid h-38px'
                           : 'h-38px'
                       }
                       required
                     />
-                    {errors.groupId && touched.groupId ? (
-                      <span className='invalid-feedback'>{errors.groupId}</span>
+                    {errors.businessNumber && touched.businessNumber ? (
+                      <span className='invalid-feedback'>{errors.businessNumber}</span>
                     ) : null}
                   </Col>
+                  
+                </Form.Row>
+                <Form.Row>
+                  {/* <Col>
+                    <Form.Label className='block-level'>Client Code</Form.Label>
+                    <Form.Control
+                      type='text'
+                      name='clientCode'
+                      onChange={handleChange}
+                      value={values.clientCode}
+                      className={
+                        errors.clientCode && touched.clientCode
+                          ? 'is-invalid h-38px'
+                          : 'h-38px'
+                      }
+                      required
+                    />
+                    {errors.clientCode && touched.clientCode ? (
+                      <span className='invalid-feedback'>{errors.clientCode}</span>
+                    ) : null}
+                  </Col> */}
                   <Col>
                     <Form.Label className='block-level'>
                       Group Type

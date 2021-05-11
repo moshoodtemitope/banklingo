@@ -94,7 +94,9 @@ class EditAClient extends React.Component {
       custType: Yup.string().min(1, 'Valid response required'),
       clientBranchEncodedKey: Yup.string().required('Required'),
       accountOfficerEncodedKey: Yup.string().required('Required'),
-      BVN: Yup.string().required('Required'),
+      BVN: Yup.string()
+      // .required('Required')
+      ,
       addressLine1: Yup.string()
         .min(2, 'Valid response required')
         .max(70, 'Max limit reached'),

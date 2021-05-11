@@ -204,7 +204,7 @@ export class MakeTransferModal extends React.Component {
                             defaultAccountOptions: searchResultsList,
                         });
 
-                    console.log('FOUND', searchResultsData);
+                    // console.log('FOUND', searchResultsData);
                     return searchResultsData;
                 }
             });

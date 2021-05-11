@@ -230,6 +230,12 @@ class CreateNewTask extends React.Component {
                                                     if(this.props.source==="client"){
                                                         dispatch(dashboardActions.getAClientTask(this.clientEncodedKey, params))
                                                     }
+                                                    this.setState({
+                                                        defaultOptions: null,
+                                                        defaultUserOptions: null,
+                                                        selectedUser: null,
+                                                        selectedCustomer:null
+                                                    })
 
                                                     // setTimeout(() => {
                                                         
@@ -425,7 +431,7 @@ class CreateNewTask extends React.Component {
                                                     onClick={this.props.closeNewTask}>
                                                     Cancel
                                                 </Button>
-                                                {createAClientTaskRequest.request_status !== clientsConstants.CREATE_A_CLIENT_TASK_SUCCESS && 
+                                                {/* {createAClientTaskRequest.request_status !== clientsConstants.CREATE_A_CLIENT_TASK_SUCCESS &&  */}
                                                     <Button
                                                         type="submit"
                                                         disabled={createAClientTaskRequest.is_request_processing}
@@ -433,7 +439,7 @@ class CreateNewTask extends React.Component {
                                                         
                                                         {createAClientTaskRequest.is_request_processing ? "Please wait..." : "Save Task"}
                                                     </Button>
-                                                }
+                                                {/* } */}
                                                 
                                             </div>
                                         </div>
