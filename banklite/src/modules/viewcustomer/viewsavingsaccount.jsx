@@ -2729,7 +2729,7 @@ class ViewSavingsAccount extends React.Component {
                 {depositAccountData.isMaturityDateSet === true && (
                   <tr>
                     <td>Maturity Date</td>
-                    <td>{getDateFromISO(depositAccountData.maturityDate)}</td>
+                    <td>{getDateFromISO( depositAccountData.maturityDate)}</td>
                   </tr>
                 )}
                 <tr>

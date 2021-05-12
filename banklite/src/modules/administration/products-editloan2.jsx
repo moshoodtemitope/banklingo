@@ -42,7 +42,9 @@ class EditLoanProduct extends React.Component {
     componentDidMount(){
         this.props.dispatch(productActions.updateLoanProduct("CLEAR"));
         this.getAllGLAccounts();
+        this.getAllDepositProducts();
         this.getALoanProduct(this.props.match.params.encodedKey);
+        
      }
 
     getAllGLAccounts = () =>{
@@ -58,7 +60,11 @@ class EditLoanProduct extends React.Component {
          dispatch(productActions.getSingleLoanProduct(encodedKey));
     }
 
+    getAllDepositProducts = ()=>{
+        const {dispatch} = this.props;
 
+        dispatch(productActions.getAllDepositProducts(null, true));
+    }
 
     handleUpdateLoanProduct = async(updateLoanProductPayload)=>{
         const {dispatch} = this.props;
@@ -85,6 +91,7 @@ class EditLoanProduct extends React.Component {
         let updateLoanProductRequest = this.props.updateLoanProductReducer,
             getSingleLoanProductRequest = this.props.getSingleLoanProductsReducer,
             getAllGLAccountsRequest = this.props.getAllGLAccountsReducer;
+           let getAllDepositProductsRequest = this.props.getAllDepositProductsReducer
 
         let loanProductValidationSchema = Yup.object().shape({
             key: Yup.string()
@@ -128,6 +135,11 @@ class EditLoanProduct extends React.Component {
                 { value: 2, label: 'Months' },
                 { value: 3, label: 'Weeks' },
                 { value: 4, label: 'Days' }
+            ],
+            settlementOptionsList=[
+                { value: 0, label: 'No Automated Transfers' },
+                { value: 1, label: 'Allow Partial Transfers' },
+                { value: 2, label: 'Only Transfer Full Due' }
             ];
 
 
@@ -142,11 +154,31 @@ class EditLoanProduct extends React.Component {
             }
 
             if (getAllGLAccountsRequest.request_status ===accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS &&
-                    getSingleLoanProductRequest.request_status ===productsConstants.GET_A_LOAN_PRODUCT_SUCCESS){
+                    getSingleLoanProductRequest.request_status ===productsConstants.GET_A_LOAN_PRODUCT_SUCCESS
+                    && getAllDepositProductsRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS
+                    ){
                 let allGlAccounts = [],
                     glAccountsList,
                     loanProductDetails = getSingleLoanProductRequest.request_data.response.data;
 
+
+
+                  
+                 
+                    let allDepositProducts = getAllDepositProductsRequest.request_data.response.data,
+                    allCurrencies = getAllDepositProductsRequest.request_data.response3.data,
+                    allDepositProductsList      =[
+                        {
+                            label: "ANY",
+                            value: "ANY"
+                        }
+                    ];
+                
+                allDepositProducts.map((product, id)=>{
+                    allDepositProductsList.push({label: product.productName, value:product.productEncodedKey});
+                })
+
+                    
 
                 if(getAllGLAccountsRequest.request_data.response.data.length>=1){
                     glAccountsList= getAllGLAccountsRequest.request_data.response.data;
@@ -185,6 +217,10 @@ class EditLoanProduct extends React.Component {
                     let interestBalanceCalculationReturned = interestBalanceCalculationOptions.filter(eachItem=>eachItem.value===loanProductDetails.loanProductInterestSetting.interestBalanceCalculation)[0]||null;
                     let repaymentPeriodReturned = repaymentPeriodOptions.filter(eachItem=>eachItem.value===loanProductDetails.repaymentReschedulingModel.repaymentPeriod)[0]||null;
                     let arrearsDaysCalculationReturned = arrearsDaysCalculation.filter(eachItem=>eachItem.value===loanProductDetails.arrearsSetting.arrearsDaysCalculatedFrom)[0]||null;
+
+
+
+                     //"loanProductLinkModel":{"enableLinking":true,"depositProductEncodedKey":"bb476975-2ee1-4927-b35e-200a62614d34","settlementOptions":1,"autoSetSettlementAccountOnCreation":false,"autoCreateSettlementAccount":false}
 
                         // console.log("+++++", transactionSourceAccount);
                         // methodologyReturned = methodologyList.filter(eachItem=>eachItem.value===loanProductDetails.methodology.toString())[0]||null;
@@ -263,12 +299,20 @@ class EditLoanProduct extends React.Component {
                                                     ? loanProductDetails.repaymentReschedulingModel.installmentsMax : null,
                                 collectPrincipalEveryRepayments:(loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.collectPrincipalEveryRepayments!==null)
                                                                     ?loanProductDetails.repaymentReschedulingModel.collectPrincipalEveryRepayments:0,
+
+
+                                                                    isEnableLinking:loanProductDetails.loanProductLinkModel.enableLinking,
+                                                                    depositProductEncodedKey: loanProductDetails.loanProductLinkModel.depositProductEncodedKey,//allDepositProductsList!==null?allDepositProductsList[0].value:null,
+                                                                    settlementOptions:loanProductDetails.loanProductLinkModel.settlementOptions, 
+                                                                    autoSetSettlementAccountOnCreation:loanProductDetails.loanProductLinkModel.autoSetSettlementAccountOnCreation,
+                                                                    autoCreateSettlementAccount: loanProductDetails.loanProductLinkModel.autoCreateSettlementAccount
                             }}
 
                             validationSchema={loanProductValidationSchema}
                             onSubmit={(values, { resetForm }) => {
 
                                 console.log("sdsds",values.interestRateDefault);
+                              
                                 let updateLoanProductPayload = {
                                     key: values.key,
                                     productName: values.productName,
@@ -318,13 +362,37 @@ class EditLoanProduct extends React.Component {
                                         installmentsMax: parseFloat(values.installmentsMax.toString().replace(/,/g, '')),
                                         collectPrincipalEveryRepayments: parseInt(values.collectPrincipalEveryRepayments)
                                     },
-
+                                    // loanProductLinkModel:{
+                                    //     enableLinking
+                                    // }
                                     methodology: parseInt(values.methodology),
                                     isActive: values.isActive
 
                                 }
 
+                                //"loanProductLinkModel":{"enableLinking":true,"depositProductEncodedKey":"bb476975-2ee1-4927-b35e-200a62614d34","settlementOptions":1,"autoSetSettlementAccountOnCreation":false,"autoCreateSettlementAccount":false}
 
+                                if(values.isEnableLinking===false){
+                                    updateLoanProductPayload.loanProductLinkModel={
+                                        enableLinking: values.isEnableLinking,
+                                        depositProductEncodedKey: null,
+                                        settlementOptions: 0,
+                                        autoSetSettlementAccountOnCreation: false,
+                                        // autoSetSettlementAccountOnCreation: null,
+                                        // autoCreateSettlementAccount: null
+                                        autoCreateSettlementAccount: false
+                                    }
+                                }
+
+                                if(values.isEnableLinking===true){
+                                    updateLoanProductPayload.loanProductLinkModel={
+                                        enableLinking: true,
+                                        depositProductEncodedKey: values.depositProductEncodedKey,
+                                        settlementOptions: values.settlementOptions,
+                                        autoSetSettlementAccountOnCreation: values.autoSetSettlementAccountOnCreation,
+                                        autoCreateSettlementAccount: values.autoCreateSettlementAccount
+                                    }
+                                }
 
                                 this.handleUpdateLoanProduct(updateLoanProductPayload)
                                     .then(
@@ -699,6 +767,108 @@ class EditLoanProduct extends React.Component {
                                         </div>
                                     </Accordion.Collapse>
                                 </Accordion>
+
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                        Product Links
+                                    </Accordion.Toggle>
+                                    <Accordion.Collapse eventKey="0">
+                                        <div className="each-formsection">
+                                            <Form.Row>
+                                                <Col>
+                                                    <div className="checkbox-wrap">
+                                                        <input type="checkbox"
+                                                            id="isEnableLinking"
+                                                            checked={values.isEnableLinking ? values.isEnableLinking : null}
+                                                            name="isEnableLinking"
+                                                            onChange={handleChange}
+                                                            value={values.isEnableLinking} />
+                                                        <label htmlFor="isEnableLinking">Enable Linking</label>
+                                                    </div>
+                                                </Col>
+                                            </Form.Row>
+                                            {values.isEnableLinking===true &&
+                                                <div>
+                                                    <Form.Row>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Linked Deposit Product</Form.Label>
+                                                            <Select
+                                                                options={allDepositProductsList}
+                                                                defaultValue ={{label:allDepositProductsList!==null?allDepositProductsList[0].label:null, 
+                                                                    value:allDepositProductsList!==null? allDepositProductsList[0].value:null}}
+                                                                onChange={(selectedDepositProduct) => {
+                                                                    setFieldValue('depositProductEncodedKey', selectedDepositProduct.value)
+                                                                }}
+                                                                className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : null}
+
+
+                                                                name="depositProductEncodedKey"
+
+                                                                required
+                                                            />
+                                                            {errors.depositProductEncodedKey && touched.depositProductEncodedKey ? (
+                                                                <span className="invalid-feedback">{errors.depositProductEncodedKey}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                            <Form.Label className="block-level">Deposit Account Options</Form.Label>
+                                                            <div className="checkbox-wrap">
+                                                                <input type="checkbox"
+                                                                    id="autoSetSettlementAccountOnCreation"
+                                                                    checked={values.autoSetSettlementAccountOnCreation ? values.autoSetSettlementAccountOnCreation : null}
+                                                                    name="autoSetSettlementAccountOnCreation"
+                                                                    onChange={handleChange}
+                                                                    value={values.autoSetSettlementAccountOnCreation} />
+                                                                <label htmlFor="autoSetSettlementAccountOnCreation">Auto-Set Settlement Accounts on Creation</label>
+                                                            </div>
+                                                            <div className="checkbox-wrap">
+                                                                <input type="checkbox"
+                                                                    id="autoCreateSettlementAccount"
+                                                                    checked={values.autoCreateSettlementAccount ? values.autoCreateSettlementAccount : null}
+                                                                    name="autoCreateSettlementAccount"
+                                                                    onChange={handleChange}
+                                                                    value={values.autoCreateSettlementAccount} />
+                                                                <label htmlFor="autoCreateSettlementAccount">Auto-Create Settlement Account</label>
+                                                            </div>
+                                                            
+                                                        </Col>
+                                                    </Form.Row>
+                                                    <Form.Row>
+                                                        <Col>
+                                                        {/* //"loanProductLinkModel":{"enableLinking":true,"depositProductEncodedKey":"bb476975-2ee1-4927-b35e-200a62614d34","settlementOptions":1,"autoSetSettlementAccountOnCreation":false,"autoCreateSettlementAccount":false} */}
+                                                        {/* isEnableLinking:loanProductDetails.loanProductLinkModel.enableLinking,
+                                                                    depositProductEncodedKey: loanProductDetails.loanProductLinkModel.depositProductEncodedKey,//allDepositProductsList!==null?allDepositProductsList[0].value:null,
+                                                                    settlementOptions:loanProductDetails.loanProductLinkModel.settlementOptions, 
+                                                                    autoSetSettlementAccountOnCreation:loanProductDetails.loanProductLinkModel.autoSetSettlementAccountOnCreation,
+                                                                    autoCreateSettlementAccount: loanProductDetails.loanProductLinkModel.autoCreateSettlementAccount */}
+                                                        <Form.Label className="block-level">Settlement Options</Form.Label>
+                                                            <Select
+                                                                options={settlementOptionsList}
+                                                                onChange={(selectedsettlementOption) => {
+                                                                    
+                                                                    setFieldValue('settlementOptions', selectedsettlementOption.value)
+                                                                }}
+                                                                defaultValue={{label:settlementOptionsList[0].label, value: settlementOptionsList[0].value}}
+                                                                className={errors.settlementOptions && touched.settlementOptions ? "is-invalid" : null}
+
+
+                                                                name="settlementOptions"
+
+                                                                required
+                                                            />
+                                                            {errors.settlementOptions && touched.settlementOptions ? (
+                                                                <span className="invalid-feedback">{errors.settlementOptions}</span>
+                                                            ) : null}
+                                                        </Col>
+                                                        <Col>
+                                                        </Col>
+                                                    </Form.Row>
+                                                </div>
+                                            }
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Accordion>
+
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                         Repayment Scheduling
@@ -1272,7 +1442,7 @@ function mapStateToProps(state) {
         updateLoanProductReducer : state.productReducers.updateLoanProductReducer,
         adminGetAllCurrencies : state.administrationReducers.adminGetAllCurrenciesReducer,
         getAllGLAccountsReducer : state.accountingReducers.getAllGLAccountsReducer,
-
+        getAllDepositProductsReducer : state.productReducers.getAllDepositProductsReducer,
 
         createLoanProductReducer : state.productReducers.createLoanProductReducer,
     };
