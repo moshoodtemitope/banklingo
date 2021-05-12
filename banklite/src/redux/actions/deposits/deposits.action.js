@@ -18,6 +18,7 @@ export const depositActions = {
   getDepositAccountComments,
   getLockedAmount,
   lockAmountState,
+  getSettlementAccount,
   creatADepositComment,
   getAccountDepositAttachments,
   creatADepositAttachment,
@@ -1003,27 +1004,28 @@ function lockAmountState(newLockAmountPayload, newState) {
   };
 
   function request(user) {
-    return { type: loanAndDepositsConstants.GET_LOCK_AMOUNT_PENDING, user };
+    return { type: loanAndDepositsConstants.LOCK_AMOUNT_PENDING, user };
   }
   function success(response) {
     return {
-      type: loanAndDepositsConstants.GET_LOCK_AMOUNT_SUCCESS,
+      type: loanAndDepositsConstants.LOCK_AMOUNT_SUCCESS,
       response,
     };
   }
   function failure(error) {
     return {
-      type: loanAndDepositsConstants.GET_LOCK_AMOUNT_FAILURE,
+      type: loanAndDepositsConstants.LOCK_AMOUNT_FAILURE,
       error,
     };
   }
   function clear() {
     return {
-      type: loanAndDepositsConstants.GET_LOCK_AMOUNT_RESET,
+      type: loanAndDepositsConstants.LOCK_AMOUNT_RESET,
       clear_data: "",
     };
   }
 }
+
 function getLockedAmount(params) {
   return (dispatch) => {
     let consume = ApiService.request(
@@ -1072,6 +1074,59 @@ function getLockedAmount(params) {
   function failure(error) {
     return {
       type: loanAndDepositsConstants.GET_LOCK_AMOUNT_FAILURE,
+      error,
+    };
+  }
+}
+
+function getSettlementAccount(params) {
+  return (dispatch) => {
+    let consume = ApiService.request(
+      routes.HIT_LOAN + `?${params}`,
+      "GET",
+      null
+    );
+    dispatch(request(consume));
+    return consume
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(success(response));
+        } else {
+          dispatch(
+            failure(handleRequestErrors("Unable to get the settlement Account"))
+          );
+        }
+      })
+      .catch((error) => {
+        dispatch(failure(handleRequestErrors(error)));
+      });
+  };
+
+  function request(user) {
+    if (params === undefined) {
+      return {
+        type: loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_PENDING,
+        user,
+      };
+    }
+    if (params !== undefined) {
+      return {
+        type: loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_PENDING,
+        user,
+        params,
+      };
+    }
+  }
+
+  function success(response) {
+    return {
+      type: loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_SUCCESS,
+      response,
+    };
+  }
+  function failure(error) {
+    return {
+      type: loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_FAILURE,
       error,
     };
   }

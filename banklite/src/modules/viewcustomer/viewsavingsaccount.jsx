@@ -54,9 +54,13 @@ import { SetLockAccountModal } from "./components/deposits/set-lock-account-comp
 import { SetUnlockAccountModal } from "./components/deposits/set-unlock-account-component";
 import { SetLockAmountModal } from "./components/deposits/set-lock-amount-component";
 import { SetUnlockAmountModal } from "./components/deposits/set-unlock-amount-component";
+import { SiezeAmountModal } from "./components/deposits/set-seize-amount-component";
 import { MakeTransferModal } from "./components/deposits/transfer-component";
 import { ChangeDepositStateModal } from "./components/deposits/change-deposit-state-component";
-import { DepositStateConstants } from "../../redux/actions/clients/client-states-constants";
+import {
+  DepositStateConstants,
+  LockAmountStateConstants,
+} from "../../redux/actions/clients/client-states-constants";
 class ViewSavingsAccount extends React.Component {
   constructor(props) {
     super(props);
@@ -108,6 +112,9 @@ class ViewSavingsAccount extends React.Component {
       LockAmountPageSize: 100,
       LockAmountCurrentPage: 1,
 
+      SettlementAccountPageSize: 100,
+      SettlementAccountCurrentPage: 1,
+
       changeDepositState: false,
       showDepositFundsForm: false,
 
@@ -124,6 +131,7 @@ class ViewSavingsAccount extends React.Component {
       showTransferFundModal: false,
       showLockAmountModal: false,
       showUnlockAmountModal: false,
+      showSeizeAmountModal: false,
     };
     //  {showBeginMaturityModal:false,showDepositFundModal:false,showMakeWithdrawalModal:false,showSetMaximumWithdrawalAmountModal:false,showRecommendedAmountModal:false,showTransferFundModal:false}
 
@@ -158,6 +166,7 @@ class ViewSavingsAccount extends React.Component {
   loadInitialCustomerData = () => {
     this.getCustomerDepositAccountDetails(this.depositEncodedKey);
     this.getTransactionChannels();
+    this.getSettlementAccount();
     // this.getADepositActivities();
     // this.getADepositCommunications();
     // this.getLockedAmount();
@@ -200,10 +209,19 @@ class ViewSavingsAccount extends React.Component {
 
     let params = `AccountNumber=${accountNumber}&PageSize=${LockAmountPageSize}&CurrentPage=${LockAmountCurrentPage}`;
     dispatch(depositActions.getLockedAmount(params));
+  };
 
-    // if (accountNumber !== undefined) {
-    //   dispatch(depositActions.getLockedAmount(accountNumber, params));
-    // }
+  getSettlementAccount = () => {
+    const { dispatch } = this.props;
+
+    let {
+      SettlementAccountPageSize,
+      SettlementAccountCurrentPage,
+    } = this.state;
+    const DepositAccountNumber = this.depositEncodedKey;
+
+    let params = `DepositAccountNumber=${DepositAccountNumber}&PageSize=${SettlementAccountPageSize}&CurrentPage=${SettlementAccountCurrentPage}`;
+    dispatch(depositActions.getSettlementAccount(params));
   };
   getADepositCommunications = () => {
     const { dispatch } = this.props;
@@ -294,6 +312,7 @@ class ViewSavingsAccount extends React.Component {
 
   setTransactionRequestPagesize = (PageSize, tempData) => {
     const { dispatch } = this.props;
+
     let sizeOfPage = PageSize.target.value;
 
     this.setState({ depositTransactionPageSize: sizeOfPage });
@@ -871,7 +890,6 @@ class ViewSavingsAccount extends React.Component {
 
   renderALockedAmount = () => {
     let getLockAmountReducer = this.props.getLockAmountReducer;
-    // console.log("<<<<<<<<<<>>>>>>>>>>>>>>", getLockAmountReducer);
     let saveRequestData =
       getLockAmountReducer.request_data !== undefined
         ? getLockAmountReducer.request_data
@@ -885,7 +903,6 @@ class ViewSavingsAccount extends React.Component {
         saveRequestData === undefined ||
         (saveRequestData !== undefined && saveRequestData.length < 1)
       ) {
-        console.log("resquestData>>>>", saveRequestData);
         return (
           <div className="loading-content">
             <div className="loading-text">Please wait... </div>
@@ -909,8 +926,10 @@ class ViewSavingsAccount extends React.Component {
             <TableComponent classnames="striped bordered hover">
               <thead>
                 <tr>
-                  <th>Reference</th>
+                  <th>Block Reference</th>
+                  <th>Transaction Id</th>
                   <th>User</th>
+                  <th>Reason</th>
                   <th>Entry Date</th>
                   <th>Amount</th>
                   <th>Status</th>
@@ -918,6 +937,8 @@ class ViewSavingsAccount extends React.Component {
               </thead>
               <tbody>
                 <tr>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -939,7 +960,6 @@ class ViewSavingsAccount extends React.Component {
                 <label htmlFor="toshow">Show</label>
                 <select
                   id="toshow"
-                  value={this.state.PageSize}
                   className="countdropdown form-control form-control-sm"
                 >
                   <option value="10">10</option>
@@ -952,8 +972,10 @@ class ViewSavingsAccount extends React.Component {
             <TableComponent classnames="striped bordered hover">
               <thead>
                 <tr>
-                  <th>Reference</th>
+                  <th>Block Reference</th>
+                  <th>Transaction Id</th>
                   <th>User</th>
+                  <th>Reason</th>
                   <th>Entry Date</th>
                   <th>Amount</th>
                   <th>Status</th>
@@ -1021,8 +1043,10 @@ class ViewSavingsAccount extends React.Component {
             <TableComponent classnames="striped bordered hover">
               <thead>
                 <tr>
-                  <th>Reference</th>
+                  <th>Block Reference</th>
+                  <th>Transaction Id</th>
                   <th>User</th>
+                  <th>Reason</th>
                   <th>Entry Date</th>
                   <th>Amount</th>
                   <th>Status</th>
@@ -1034,27 +1058,47 @@ class ViewSavingsAccount extends React.Component {
                   return (
                     <tr key={index}>
                       <td>{lockedDetail.blockReference} </td>
+                      <td>{lockedDetail.transactionId}</td>
                       <td>{lockedDetail.userName}</td>
+                      <td>{lockedDetail.lockReason}</td>
                       <td>{getDateFromISO(lockedDetail.lockedDate)} </td>
                       <td>{numberWithCommas(lockedDetail.lockAmount)}</td>
                       <td>
                         {lockedDetail.amountLockTransactionStateDescription}
                       </td>
-                      <td>
-                        <DropdownButton
-                          size="sm"
-                          title="Actions"
-                          key="unlockAmount"
-                          className="customone"
-                        >
-                          <Dropdown.Item
-                            eventKey="1"
-                            onClick={() => this.handleShowUnlockAmountModal()}
+                      {lockedDetail.amountLockTransactionState ===
+                        LockAmountStateConstants.LOCKED && (
+                        <td>
+                          <DropdownButton
+                            size="sm"
+                            title="Actions"
+                            key="unlockAmount"
+                            className="customone"
                           >
-                            Unlock Amount
-                          </Dropdown.Item>
-                        </DropdownButton>
-                      </td>
+                            <Dropdown.Item
+                              eventKey="1"
+                              onClick={() =>
+                                this.handleShowUnlockAmountModal(
+                                  lockedDetail.blockReference
+                                )
+                              }
+                            >
+                              Unlock Amount
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              eventKey="1"
+                              onClick={() =>
+                                this.handleShowSeizeAmountModal(
+                                  lockedDetail.blockReference,
+                                  lockedDetail.lockAmount
+                                )
+                              }
+                            >
+                              Seize
+                            </Dropdown.Item>
+                          </DropdownButton>
+                        </td>
+                      )}
                     </tr>
                   );
                 })}
@@ -1090,17 +1134,19 @@ class ViewSavingsAccount extends React.Component {
             <TableComponent classnames="striped bordered hover">
               <thead>
                 <tr>
-                  <tr>
-                    <th>Reference</th>
-                    <th>User</th>
-                    <th>Entry Date</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                  </tr>
+                  <th>Block Reference</th>
+                  <th>Transaction Id</th>
+                  <th>User</th>
+                  <th>Reason</th>
+                  <th>Entry Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -2750,10 +2796,6 @@ class ViewSavingsAccount extends React.Component {
                   <td>Currency</td>
                   <td>{depositAccountData?.currencyCode ?? "" + " "} </td>
                 </tr>
-                {/* <tr>
-                                    <td>Activation Date</td>
-                                    <td></td>
-                                </tr> */}
                 <tr>
                   <td>Date Created</td>
                   <td>{depositAccountData.dateCreated}</td>
@@ -2823,21 +2865,126 @@ class ViewSavingsAccount extends React.Component {
             </TableComponent>
           </div>
         </div>
-        <div className="overview-wrap">
+      </div>
+    );
+  };
+
+  renderSettlementAccountData = (settlementAccountData) => {
+    let saveRequestData =
+      settlementAccountData.request_data !== undefined
+        ? settlementAccountData.request_data.tempData
+        : null;
+    if (
+      settlementAccountData.request_status ===
+      loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_PENDING
+    ) {
+      if (
+        saveRequestData === undefined ||
+        (saveRequestData !== undefined && saveRequestData.length < 1)
+      ) {
+        return (
           <div className="each-overview">
-            <h6>Settlement Accounts</h6>
+            <h6> Settlement Account </h6>
+            <div className="loading-text">Please wait... </div>
             <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>Loan Account</th>
+                  <th>Name</th>
+                  <th>Loan Amount</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr>
+                  <td></td>
                   <td></td>
                   <td></td>
                 </tr>
               </tbody>
             </TableComponent>
           </div>
-        </div>
-      </div>
-    );
+        );
+      } else {
+        return (
+          <div className="each-overview">
+            <h6> Settlement Account </h6>
+            <div className="loading-text">Please wait... </div>
+
+            <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>Loan Account</th>
+                  <th>Name</th>
+                  <th>Loan Amount</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </TableComponent>
+          </div>
+        );
+      }
+    }
+
+    if (
+      settlementAccountData.request_status ===
+      loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_SUCCESS
+    ) {
+      let getSettlementAccountData =
+        settlementAccountData.request_data.response.data.result;
+
+      if (getSettlementAccountData.length >= 1) {
+        return (
+          <div className="each-overview">
+            <h6> Settlement Account </h6>
+            <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>Loan Account</th>
+                  <th>Name</th>
+                  <th>Loan Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getSettlementAccountData
+                  .slice(0, 5)
+                  .map((settlement, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{settlement.accountNumber}</td>
+                        <td>{settlement.loanStateDescription}</td>
+                        <td>{numberWithCommas(settlement.loanAmount)}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </TableComponent>
+          </div>
+        );
+      } else {
+        return (
+          <div className="each-overview">
+            <div> Settlement Account </div>
+            <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>Loan Amount</th>
+                  <th>Name</th>
+                  <th>Loan Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </TableComponent>
+          </div>
+        );
+      }
+    }
   };
 
   handleShowBeginMaturityModal = () =>
@@ -2856,8 +3003,10 @@ class ViewSavingsAccount extends React.Component {
     this.setState({ showUnlockAccountModal: true });
   handleShowLockAmountModal = () =>
     this.setState({ showLockAmountModal: true });
-  handleShowUnlockAmountModal = () =>
-    this.setState({ showUnlockAmountModal: true });
+  handleShowUnlockAmountModal = (blockReference) =>
+    this.setState({ showUnlockAmountModal: true, blockReference });
+  handleShowSeizeAmountModal = (blockReference, amount) =>
+    this.setState({ showSeizeAmountModal: true, blockReference, amount });
   handleShowTransferFundModal = () =>
     this.setState({ showTransferFundModal: true });
 
@@ -2879,6 +3028,8 @@ class ViewSavingsAccount extends React.Component {
     this.setState({ showLockAmountModal: false });
   handleHideUnlockAmountModal = () =>
     this.setState({ showUnlockAmountModal: false });
+  handleHideSeizeAmountModal = () =>
+    this.setState({ showSeizeAmountModal: false });
   handleHideTransferFundModal = () =>
     this.setState({ showTransferFundModal: false });
 
@@ -3092,7 +3243,6 @@ class ViewSavingsAccount extends React.Component {
           this.props.searchCustomerAccountReducer.request_status ===
           loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS
         ) {
-          // console.log("serch rsulrs", globalSearchAnItemRequest.request_data.response.data);
           searchResultsData = this.props.searchCustomerAccountReducer
             .request_data.response.data;
 
@@ -3212,10 +3362,6 @@ class ViewSavingsAccount extends React.Component {
 
     let visibility = this.enforceVisibility(depositDetails);
     //this.enforcePermissions();
-
-    //    console.log(JSON.stringify(visibility));
-    //    console.log(JSON.stringify(this.permissions));
-
     return (
       <div className="heading-ctas">
         <ul className="nav">
@@ -3476,19 +3622,21 @@ class ViewSavingsAccount extends React.Component {
                   Unlock Account
                 </Dropdown.Item>
               )}
-              <Dropdown.Item
-                eventKey="9"
-                onClick={() => {
-                  this.setState({
-                    newStateUpdate: "lockAmount",
-                    newStateHeading: "Lock Amount",
-                    ctaText: "lockAmount",
-                  });
-                  this.handleShowLockAmountModal();
-                }}
-              >
-                Lock Amount
-              </Dropdown.Item>
+              {depositDetails.accountStateDescription === "Active" && (
+                <Dropdown.Item
+                  eventKey="9"
+                  onClick={() => {
+                    this.setState({
+                      newStateUpdate: "lockAmount",
+                      newStateHeading: "Lock Amount",
+                      ctaText: "lockAmount",
+                    });
+                    this.handleShowLockAmountModal();
+                  }}
+                >
+                  Lock Amount
+                </Dropdown.Item>
+              )}
             </DropdownButton>
           </li>
         </ul>
@@ -3502,6 +3650,7 @@ class ViewSavingsAccount extends React.Component {
       getAClientDepositAccountRequest = this.props
         .getAClientDepositAccountReducer,
       getClientDepositsRequest = this.props.getClientDepositsReducer;
+    // getSettlementAccountRequest = this.props.getSettlementReducer;
 
     let allUSerPermissions = [];
     this.userPermissions.map((eachPermission) => {
@@ -3509,6 +3658,8 @@ class ViewSavingsAccount extends React.Component {
     });
 
     if (
+      // getSettlementAccountRequest.request_status ===
+      //   loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_PENDING &&
       getAClientRequest.request_status ===
         clientsConstants.GET_A_CLIENT_SUCCESS &&
       getClientLoansRequest.request_status ===
@@ -3522,6 +3673,8 @@ class ViewSavingsAccount extends React.Component {
     }
 
     if (
+      // getSettlementAccountRequest.request_status ===
+      //   loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_SUCCESS &&
       getAClientDepositAccountRequest.request_status ===
         loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_DETAILS_SUCCESS &&
       getClientLoansRequest.request_status ===
@@ -3667,9 +3820,9 @@ class ViewSavingsAccount extends React.Component {
             newStateHeading={this.state.newStateHeading}
             newState={this.state.newState}
             depositEncodedKey={this.depositEncodedKey}
-            CurCode={
-              getAClientDepositAccountRequest.request_data.response.data
-                .currencyCode
+            oldState={
+              getAClientDepositAccountRequest.request_data?.response.data
+                ?.accountStateDescription
             }
             showModal={this.state.showUnlockAccountModal}
             handleHideModal={this.handleHideUnlockAccountModal}
@@ -3680,6 +3833,11 @@ class ViewSavingsAccount extends React.Component {
           />
           <SetLockAmountModal
             {...this.props}
+            oldState={
+              getAClientDepositAccountRequest.request_data?.response.data
+                ?.accountStateDescription
+            }
+            depositEncodedKey={this.depositEncodedKey}
             showModal={this.state.showLockAmountModal}
             handleHideModal={this.handleHideLockAmountModal}
             handleLockAmountState={this.handleLockAmountState}
@@ -3687,8 +3845,33 @@ class ViewSavingsAccount extends React.Component {
               this.getCustomerDepositAccountDetails
             }
           />
+          <SiezeAmountModal
+            {...this.props}
+            newStateUpdate={this.state.newStateUpdate}
+            newStateHeading={this.state.newStateHeading}
+            newState={this.state.newState}
+            depositEncodedKey={this.depositEncodedKey}
+            amount={this.state.amount}
+            CurCode={
+              getAClientDepositAccountRequest.request_data.response.data
+                .currencyCode
+            }
+            blockReference={this.state.blockReference}
+            showModal={this.state.showSeizeAmountModal}
+            handleHideModal={this.handleHideSeizeAmountModal}
+            handleLockAmountState={this.handleLockAmountState}
+            getCustomerDepositAccountDetails={
+              this.getCustomerDepositAccountDetails
+            }
+          />
           <SetUnlockAmountModal
             {...this.props}
+            oldState={
+              getAClientDepositAccountRequest.request_data?.response.data
+                ?.accountStateDescription
+            }
+            depositEncodedKey={this.depositEncodedKey}
+            blockReference={this.state.blockReference}
             showModal={this.state.showUnlockAmountModal}
             handleHideModal={this.handleHideUnlockAmountModal}
             handleLockAmountState={this.handleLockAmountState}
@@ -3824,6 +4007,9 @@ class ViewSavingsAccount extends React.Component {
                         getAClientDepositAccountRequest.request_data.response
                           .data
                       )}
+                      {this.renderSettlementAccountData(
+                        this.props.getSettlementReducer
+                      )}
                     </Tab.Pane>
                     <Tab.Pane eventKey="transactions">
                       <ReverseTransaction
@@ -3929,6 +4115,8 @@ function mapStateToProps(state) {
     searchForAccountsWithCustomerKeyReducer:
       state.depositsReducers.searchForAccountsWithCustomerKeyReducer,
     getLockAmountReducer: state.depositsReducers.getLockAmountReducer,
+    LockAmountReducer: state.depositsReducers.LockAmountReducer,
+    getSettlementReducer: state.depositsReducers.getSettlementReducer,
   };
 }
 
