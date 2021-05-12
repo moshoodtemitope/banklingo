@@ -227,11 +227,14 @@ class NewDepositsProduct extends React.Component {
                                     productName: '',
                                     depositAccountType: '',
                                     description: '',
-                                    savingsControlAccountId: '',
-                                    transactionSourceAccountId: '',
-                                    interestPayableAccountId:'',
-                                    interestExpenseAccountId: '',
-                                    feeIncomeAccountId: '',
+                                    
+                                    savingsControlAccountId: null,
+                                    transactionSourceAccountId: null,
+                                    interestPayableAccountId:null,
+                                    interestExpenseAccountId: null,
+                                    feeIncomeAccountId: null,
+
+
                                     interestAccruedMethod: 0,
                                     methodology: '0',
                                     isActive: true,

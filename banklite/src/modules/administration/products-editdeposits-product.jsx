@@ -266,10 +266,19 @@ class EditADepositsProduct extends React.Component {
                                     productName: (depositProductDetails.productName!==undefined && depositProductDetails.productName!==null)?depositProductDetails.productName.toString():'',
                                     depositAccountType: (depositProductDetails.depositAccountType!==undefined && depositProductDetails.depositAccountType!==null)?depositProductDetails.depositAccountType.toString():'',
                                     description: (depositProductDetails.description!==undefined && depositProductDetails.description!==null)?depositProductDetails.description.toString():'',
-                                    savingsControlAccountId: (depositProductDetails.depositProductAccountingRule.savingsControlAccountId!==undefined && depositProductDetails.depositProductAccountingRule.savingsControlAccountId!==null)?depositProductDetails.depositProductAccountingRule.savingsControlAccountId:'',
-                                    transactionSourceAccountId: (depositProductDetails.depositProductAccountingRule.transactionSourceAccountId!==undefined && depositProductDetails.depositProductAccountingRule.transactionSourceAccountId!==null)?depositProductDetails.depositProductAccountingRule.transactionSourceAccountId:'',
-                                    interestExpenseAccountId: (depositProductDetails.depositProductAccountingRule.interestExpenseAccountId!==undefined && depositProductDetails.depositProductAccountingRule.interestExpenseAccountId!==null)?depositProductDetails.depositProductAccountingRule.interestExpenseAccountId:'',
-                                    feeIncomeAccountId: (depositProductDetails.depositProductAccountingRule.feeIncomeAccountId!==undefined && depositProductDetails.depositProductAccountingRule.feeIncomeAccountId!==null)?depositProductDetails.depositProductAccountingRule.feeIncomeAccountId:'',
+                                  
+                                    savingsControlAccountId: (depositProductDetails.depositProductAccountingRule.savingsControlAccountId!==undefined && depositProductDetails.depositProductAccountingRule.savingsControlAccountId!==null)?depositProductDetails.depositProductAccountingRule.savingsControlAccountId:null,
+                                    transactionSourceAccountId: (depositProductDetails.depositProductAccountingRule.transactionSourceAccountId!==undefined && depositProductDetails.depositProductAccountingRule.transactionSourceAccountId!==null)?depositProductDetails.depositProductAccountingRule.transactionSourceAccountId:null,
+                                    interestExpenseAccountId: (depositProductDetails.depositProductAccountingRule.interestExpenseAccountId!==undefined && depositProductDetails.depositProductAccountingRule.interestExpenseAccountId!==null)?depositProductDetails.depositProductAccountingRule.interestExpenseAccountId:null,
+                                    feeIncomeAccountId: (depositProductDetails.depositProductAccountingRule.feeIncomeAccountId!==undefined && depositProductDetails.depositProductAccountingRule.feeIncomeAccountId!==null)?depositProductDetails.depositProductAccountingRule.feeIncomeAccountId:null,
+                                    interestPayableAccountId:(depositProductDetails.depositProductAccountingRule.interestPayableAccountId!==undefined && depositProductDetails.depositProductAccountingRule.interestPayableAccountId!==null)?depositProductDetails.depositProductAccountingRule.interestPayableAccountId:null,
+
+                                    // savingsControlAccountId: null,
+                                    // transactionSourceAccountId: null,
+                                    // interestPayableAccountId:null,
+                                    // interestExpenseAccountId: null,
+                                    // feeIncomeAccountId: null,
+
                                     interestAccruedMethod: (depositProductDetails.depositProductAccountingRule.interestAccruedMethod!==undefined && depositProductDetails.depositProductAccountingRule.interestAccruedMethod!==null)?depositProductDetails.depositProductAccountingRule.interestAccruedMethod:'',
                                     methodology: (depositProductDetails.methodology!==undefined && depositProductDetails.methodology!==null)?depositProductDetails.methodology:'',
                                     isActive: (depositProductDetails.isActive!==undefined && depositProductDetails.isActive!==null)?depositProductDetails.isActive:'',
