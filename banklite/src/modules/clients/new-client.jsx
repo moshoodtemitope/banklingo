@@ -69,10 +69,11 @@ class NewClient extends React.Component {
     clientBranchEncodedKey: Yup.string().required('Required'),
     accountOfficerEncodedKey: Yup.string().required('Required'),
     BVN: Yup.string()
-      .required()
-      .matches(/^[0-9]+$/, 'Must be only digits')
-      .min(11, 'Must be exactly 11 digits')
-      .max(11, 'Must be exactly 11 digits'),
+      // .required()
+      // .matches(/^[0-9]+$/, 'Must be only digits')
+      // .min(11, 'Must be exactly 11 digits')
+      // .max(11, 'Must be exactly 11 digits')
+      ,
     gender: Yup.string().required('Required'),
     dateOfBirth: Yup.date().required('Required'),
     MName: Yup.string()
