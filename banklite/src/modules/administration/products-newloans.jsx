@@ -134,11 +134,15 @@ class NewLoanProduct extends React.Component {
                     </div>
                 )
             }
+
+
             if ( getAllGLAccountsRequest.request_status === accountingConstants.GET_ALL_GLACCOUNTS_SUCCESS
                 && getAllDepositProductsRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS){
                 let allGlAccounts = [],
                     glAccountsList;
                 
+
+
                 let allDepositProducts = getAllDepositProductsRequest.request_data.response.data,
                     allCurrencies = getAllDepositProductsRequest.request_data.response3.data,
                     allDepositProductsList      =[
@@ -158,6 +162,8 @@ class NewLoanProduct extends React.Component {
                     glAccountsList.map((channel, id)=>{
                         allGlAccounts.push({label: channel.accountDescription, value:channel.id, accType:channel.accountTypeId});
                     })
+
+                    //Load all the accounts for the various sections
                     let portfolioControlAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===1),
                         transactionSourceAccount =allGlAccounts.filter(glAccount=>glAccount.accType===1),
                         writeOffExpenseAccounts =allGlAccounts.filter(glAccount=>glAccount.accType===5),
