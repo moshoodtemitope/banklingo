@@ -208,6 +208,8 @@ import {
 import {
   getDepositsReducer,
   getLockAmountReducer,
+  LockAmountReducer,
+  getSettlementReducer,
   exportDepositsReducer,
   getClientDepositsReducer,
   getDepositTransactionReducer,
@@ -422,6 +424,8 @@ export const platform = {
 export const deposits = {
   getDepositsReducer,
   getLockAmountReducer,
+  getSettlementReducer,
+  LockAmountReducer,
   exportDepositsReducer,
   getClientDepositsReducer,
   getDepositTransactionReducer,

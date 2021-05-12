@@ -20,15 +20,14 @@ export class SetLockAmountModal extends React.Component {
   }
   render() {
     const { ctaText, newStateHeading, newStateUpdate } = this.state;
-    let getLockAmountReducer = this.props.getLockAmountReducer;
+    let LockAmountReducer = this.props.LockAmountReducer;
     let getAClientDepositAccountRequest = this.props
       .getAClientDepositAccountReducer.request_data.response.data;
-    console.log(getLockAmountReducer);
+    console.log(LockAmountReducer);
     let lockAccountValidationSchema = Yup.object().shape({
       accountNumber: Yup.string().min(2, "Valid Account Number required"),
       lockReason: Yup.string().required("Required"),
       amount: Yup.string().required("Required"),
-      blockReference: Yup.string().required("Required"),
     });
 
     return (
@@ -42,7 +41,6 @@ export class SetLockAmountModal extends React.Component {
       >
         <Formik
           initialValues={{
-            accountNumber: getAClientDepositAccountRequest.accountNumber,
             amount: "",
             blockReference: "",
             lockReason: "",
@@ -50,7 +48,7 @@ export class SetLockAmountModal extends React.Component {
           validationSchema={lockAccountValidationSchema}
           onSubmit={(values, { resetForm }) => {
             let lockAmountPayload = {
-              accountNumber: values.accountNumber,
+              accountNumber: this.props.depositEncodedKey,
               lockReason: values.lockReason,
               amount: parseFloat(values.amount.replace(/,/g, "")),
               blockReference: values.blockReference,
@@ -59,8 +57,8 @@ export class SetLockAmountModal extends React.Component {
               .handleLockAmountState(lockAmountPayload, "lock")
               .then(() => {
                 if (
-                  this.props.getLockAmountReducer.request_status ===
-                  loanAndDepositsConstants.GET_LOCK_AMOUNT_PENDING
+                  this.props.LockAmountReducer.request_status ===
+                  loanAndDepositsConstants.LOCK_AMOUNT_PENDING
                 ) {
                   resetForm();
                   setTimeout(() => {
@@ -75,8 +73,8 @@ export class SetLockAmountModal extends React.Component {
                 }
 
                 if (
-                  this.props.getLockAmountReducer.request_status ===
-                  loanAndDepositsConstants.GET_LOCK_AMOUNT_FAILURE
+                  this.props.LockAmountReducer.request_status ===
+                  loanAndDepositsConstants.LOCK_AMOUNT_FAILURE
                 ) {
                   resetForm();
                   setTimeout(() => {
@@ -105,6 +103,28 @@ export class SetLockAmountModal extends React.Component {
                 <Modal.Title>{"Lock Amount"}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
+                <div>
+                  <Form.Group>
+                    <Form.Group>
+                      <Form.Row>
+                        <Col>
+                          <Form.Label className="block-level">
+                            Present State
+                          </Form.Label>
+                          <span className="form-text">
+                            {this.props.oldState}{" "}
+                          </span>
+                        </Col>
+                        <Col>
+                          <Form.Label className="block-level">
+                            New State
+                          </Form.Label>
+                          <span className="form-text">Lock</span>
+                        </Col>
+                      </Form.Row>
+                    </Form.Group>
+                  </Form.Group>
+                </div>
                 <div>
                   <Form.Group>
                     <Form.Label className="block-level">Amount</Form.Label>
@@ -142,7 +162,6 @@ export class SetLockAmountModal extends React.Component {
                           : "h-38px"
                       }
                       name="blockReference"
-                      required
                     />
                     {errors.blockReference && touched.blockReference ? (
                       <span className="invalid-feedback">
@@ -180,25 +199,25 @@ export class SetLockAmountModal extends React.Component {
                 <Button
                   variant="success"
                   type="submit"
-                  disabled={getLockAmountReducer.is_request_processing}
+                  disabled={LockAmountReducer.is_request_processing}
                 >
-                  {getLockAmountReducer.is_request_processing
+                  {LockAmountReducer.is_request_processing
                     ? "Please wait....."
                     : `Lock Amount`}
                 </Button>
               </Modal.Footer>
               <div className="footer-alert">
-                {getLockAmountReducer.request_status ===
-                  loanAndDepositsConstants.GET_LOCK_AMOUNT_SUCCESS && (
+                {LockAmountReducer.request_status ===
+                  loanAndDepositsConstants.LOCK_AMOUNT_SUCCESS && (
                   <Alert variant="success" className="w-65 mlr-auto">
-                    {getLockAmountReducer.request_data.response.data.message}
+                    {LockAmountReducer.request_data.response.data.message}
                   </Alert>
                 )}
-                {getLockAmountReducer.request_status ===
-                  loanAndDepositsConstants.GET_LOCK_AMOUNT_FAILURE &&
-                  getLockAmountReducer.request_data.error && (
+                {LockAmountReducer.request_status ===
+                  loanAndDepositsConstants.LOCK_AMOUNT_FAILURE &&
+                  LockAmountReducer.request_data.error && (
                     <Alert variant="danger" className="w-65 mlr-auto">
-                      {getLockAmountReducer.request_data.error}
+                      {LockAmountReducer.request_data.error}
                     </Alert>
                   )}
               </div>
