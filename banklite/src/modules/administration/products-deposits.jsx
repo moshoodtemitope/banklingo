@@ -146,15 +146,16 @@ class ProductDeposits extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>Deposit Product Name</th>
-                                        <th>Deposit Product Code</th>
-                                        <th>Deposit Product Type</th>
+                                        <th>Product Name</th>
+                                        <th>Product Code</th>
+                                        <th>Product Type</th>
                                         <th>Last Modified</th>
                                         <th>Active</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -219,6 +220,7 @@ class ProductDeposits extends React.Component {
                                                         <NavLink className="dropdown-item" to={`/administration/products/deposit/edit/${eachDepositProduct.productEncodedKey}`}>{eachDepositProduct.productName}</NavLink>
                                                         
                                                     </td>
+                                                    <td>{eachDepositProduct.currencyCode}</td>
                                                     <td>{eachDepositProduct.productCode}</td>
                                                     <td>{eachDepositProduct.depositAccountTypeDescription}</td>
                                                     <td>{eachDepositProduct.lastModified}</td>
@@ -294,9 +296,10 @@ class ProductDeposits extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>Deposit Product Name</th>
-                                            <th>Deposit Product Code</th>
-                                            <th>Deposit Product Type</th>
+                                            <th>Product Name</th>
+                                            <th>Currency</th>
+                                            <th>Product Code</th>
+                                            <th>Product Type</th>
                                             <th>Last Modified</th>
                                             <th>Status</th>
                                             <th></th>
@@ -311,6 +314,7 @@ class ProductDeposits extends React.Component {
                                                             <NavLink to={`/depositproduct/${eachDepositProduct.productEncodedKey}`}>{eachDepositProduct.productName}</NavLink>
                                                             
                                                         </td>
+                                                        <td>{eachDepositProduct.currencyCode}</td>
                                                         <td>{eachDepositProduct.productCode}</td>
                                                         <td>{eachDepositProduct.depositAccountTypeDescription}</td>
                                                         <td>{eachDepositProduct.lastModified}</td>
@@ -374,15 +378,17 @@ class ProductDeposits extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>Deposit Product Name</th>
-                                        <th>Deposit Product Code</th>
-                                        <th>Deposit Product Type</th>
+                                        <th>Product Name</th>
+                                        <th>Currency</th>
+                                        <th>Product Code</th>
+                                        <th>Product Type</th>
                                         <th>Last Modified</th>
                                         <th>Active</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

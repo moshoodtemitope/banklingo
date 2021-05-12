@@ -80,7 +80,7 @@ class JournalEntries extends React.Component {
 
   createJournalEntry = async (journalPayload) => {
     const { dispatch } = this.props;
-
+    
     await dispatch(acoountingActions.createJournalEntry(journalPayload));
   };
 
@@ -178,6 +178,10 @@ class JournalEntries extends React.Component {
       errors.branchId = 'Required';
     }
 
+    if (!values.currencyCode) {
+      errors.currencyCode = 'Required';
+    }
+
     if (!values.entryDate) {
       errors.entryDate = 'Required';
     }
@@ -196,6 +200,7 @@ class JournalEntries extends React.Component {
       getJournalEntriesRequest = this.props.getJournalEntries,
       allGlAccounts = [],
       allBranches = [],
+      allCurrencies = [],
       entryTypes = [
         { value: 1, label: 'Credit' },
         { value: 2, label: 'Debit' },
@@ -213,6 +218,13 @@ class JournalEntries extends React.Component {
       });
     });
 
+    getJournalEntriesRequest.request_data.response4.data.map((currency, id) => {
+      allCurrencies.push({
+        label: `${currency.name} ${currency.symbol? `${currency.symbol}`: null}`,
+        value: currency.code,
+      });
+    });
+
     getJournalEntriesRequest.request_data.response3.data.map((branch, id) => {
       allBranches.push({ label: branch.name, value: branch.id });
     });
@@ -223,6 +235,7 @@ class JournalEntries extends React.Component {
           glAcountlId: Yup.string().required('Required'),
           entryTypeId: Yup.string().required('Required'),
           branchId: Yup.string().required('Required'),
+          currencyCode: Yup.string().required('Required'),
         })
       ),
 
@@ -235,6 +248,7 @@ class JournalEntries extends React.Component {
         entryTypeId: '',
         branchId: '',
         entryAmount: '',
+        currencyCode:'',
         removable: false,
       },
       {
@@ -242,6 +256,7 @@ class JournalEntries extends React.Component {
         entryTypeId: '',
         branchId: '',
         entryAmount: '',
+        currencyCode:'',
         removable: false,
       },
     ];
@@ -286,6 +301,7 @@ class JournalEntries extends React.Component {
                   amount: parseFloat(eachEntry.entryAmount.replace(/,/g, '')),
                   journalEntryType: eachEntry.entryTypeId,
                   branchId: eachEntry.branchId,
+                  currencyCode: eachEntry.currencyCode,
                 });
               });
 
@@ -411,6 +427,75 @@ class JournalEntries extends React.Component {
                                 touched.jornalEntries[index].branchId && (
                                   <span className='invalid-feedback'>
                                     {errors.jornalEntries[index].branchId}
+                                  </span>
+                                )}
+                            </Col>
+                            <Col>
+                              <Form.Label
+                                className='block-level'
+                                htmlFor={`jornalEntries.${index}.currencyCode`}
+                              >
+                                Currency
+                              </Form.Label>
+                              <Select
+                                options={allCurrencies}
+                                onBlur={handleBlur}
+                                className={
+                                  errors.jornalEntries &&
+                                  typeof errors.jornalEntries[index] !==
+                                    'undefined' &&
+                                  errors.jornalEntries[index].hasOwnProperty(
+                                    'currencyCode'
+                                  ) &&
+                                  touched.jornalEntries &&
+                                  typeof touched.jornalEntries[index] !==
+                                    'undefined' &&
+                                  touched.jornalEntries[index].currencyCode
+                                    ? 'is-invalid'
+                                    : null
+                                }
+                                onChange={(selectedCurrency) => {
+                                  this.setState(
+                                    Object.defineProperty(
+                                      {},
+                                      `selectedCurrencyCode-${index}`,
+                                      {
+                                        value: selectedCurrency,
+                                        enumerable: true,
+                                      }
+                                    )
+                                  );
+                                  values.jornalEntries[index].currencyCode =
+                                  selectedCurrency.value;
+
+                                  if (
+                                    errors.jornalEntries &&
+                                    errors.jornalEntries[index] !== undefined
+                                  ) {
+                                    if (errors.jornalEntries[index].currencyCode) {
+                                      delete errors.jornalEntries[index]
+                                        .currencyCode;
+                                    }
+                                  }
+
+                                  if (
+                                    touched.jornalEntries &&
+                                    touched.jornalEntries[index] !== undefined
+                                  ) {
+                                    touched.jornalEntries[
+                                      index
+                                    ].currencyCode = null;
+                                  }
+                                }}
+                                name={`jornalEntries.${index}.currencyCode`}
+                              />
+                              {errors.jornalEntries &&
+                                errors.jornalEntries[index] &&
+                                errors.jornalEntries[index].currencyCode &&
+                                touched.jornalEntries &&
+                                touched.jornalEntries[index].currencyCode && (
+                                  <span className='invalid-feedback'>
+                                    {errors.jornalEntries[index].currencyCode}
                                   </span>
                                 )}
                             </Col>

@@ -136,15 +136,17 @@ class ProductLoans extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>Loan Product Name</th>
-                                        <th>Loan Product Code</th>
-                                        <th>Loan Product Type</th>
+                                        <th>Product Name</th>
+                                        <td>Currency</td>
+                                        <th>Product Code</th>
+                                        <th>Product Type</th>
                                         <th>Last Modified</th>
                                         <th>Active</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -194,10 +196,11 @@ class ProductLoans extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>Loan Product Name</th>
-                                        <th>Loan Product Code</th>
-                                        <th>Loan Product Type</th>
-                                        <th>Last Modified</th>
+                                        <th>Product Name</th>
+                                        <td>Currency</td>
+                                        <th>Product Code</th>
+                                        <th>Product Type</th>
+                                        <th>Modified</th>
                                         <th>Active</th>
                                     </tr>
                                 </thead>
@@ -210,6 +213,7 @@ class ProductLoans extends React.Component {
                                                     <NavLink className="dropdown-item" to={`/administration/products/loans/edit/${eachLoanProduct.productEncodedKey}`}>{eachLoanProduct.productName}</NavLink>
                                                         
                                                     </td>
+                                                    <td>{eachLoanProduct.currencyCode}</td>
                                                     <td>{eachLoanProduct.productCode}</td>
                                                     <td>{eachLoanProduct.loanProductTypeDescription}</td>
                                                     <td>{eachLoanProduct.lastModified}</td>
@@ -284,9 +288,10 @@ class ProductLoans extends React.Component {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>Loan Product Name</th>
-                                            <th>Loan Product Code</th>
-                                            <th>Loan Product Type</th>
+                                            <th>Product Name</th>
+                                            <td>Currency</td>
+                                            <th>Product Code</th>
+                                            <th>Product Type</th>
                                             <th>Last Modified</th>
                                             <th>Status</th>
                                             <th></th>
@@ -301,6 +306,7 @@ class ProductLoans extends React.Component {
                                                         <NavLink to={`/loanproduct/${eachLoanProduct.productEncodedKey}`}>{eachLoanProduct.productName}</NavLink>
                                                             
                                                         </td>
+                                                        <td>{eachLoanProduct.currencyCode}</td>
                                                         <td>{eachLoanProduct.productCode}</td>
                                                         <td>{eachLoanProduct.loanProductTypeDescription}</td>
                                                         <td>{eachLoanProduct.lastModified}</td>
@@ -364,15 +370,17 @@ class ProductLoans extends React.Component {
                             <TableComponent classnames="striped bordered hover">
                                 <thead>
                                     <tr>
-                                        <th>Loan Product Name</th>
-                                        <th>Loan Product Code</th>
-                                        <th>Loan Product Type</th>
-                                        <th>Last Modified</th>
+                                        <th>Product Name</th>
+                                        <td>Currency</td>
+                                        <th>Product Code</th>
+                                        <th>Product Type</th>
+                                        <th>Modified</th>
                                         <th>Active</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

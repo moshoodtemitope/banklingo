@@ -659,7 +659,7 @@ class GeneralTxtChannels extends React.Component {
                                                     <Form.Label className="block-level">GL Account</Form.Label>
                                                     <Select
                                                         options={allGlAccounts}
-                                                        defaultValue ={{label:selectTxtChannelGl.label, value: selectTxtChannelGl.value}}
+                                                        defaultValue ={{label:selectTxtChannelGl?.label, value: selectTxtChannelGl?.value}}
                                                         onChange={(selectedGlAccount) => {
                                                             this.setState({ selectedGlAccount });
                                                             errors.TxtChannelId = null
