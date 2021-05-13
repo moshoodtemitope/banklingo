@@ -2775,7 +2775,7 @@ class ViewSavingsAccount extends React.Component {
                 {depositAccountData.isMaturityDateSet === true && (
                   <tr>
                     <td>Maturity Date</td>
-                    <td>{getDateFromISO( depositAccountData.maturityDate)}</td>
+                    <td>{getDateFromISO(depositAccountData.maturityDate)}</td>
                   </tr>
                 )}
                 <tr>
@@ -3550,12 +3550,6 @@ class ViewSavingsAccount extends React.Component {
                     Withdraw
                   </Dropdown.Item>
                 )}
-                {/* {(depositDetails.accountState === 5) &&
-                                    <Dropdown.Item eventKey="3">Pay Off</Dropdown.Item>
-                                }
-                                {(depositDetails.accountState === 5) &&
-                                    <Dropdown.Item eventKey="4">Write Off</Dropdown.Item>
-                                } */}
               </DropdownButton>
             </li>
           )}

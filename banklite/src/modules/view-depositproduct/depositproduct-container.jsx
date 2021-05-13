@@ -1,70 +1,41 @@
 import * as React from "react";
-// import {Router} from "react-router";
-
-import {Fragment} from "react";
-
-import { NavLink, Route} from 'react-router-dom';
-import { connect } from 'react-redux';
-
-import DatePicker from "react-datepicker";
+import { Fragment } from "react";
+import { Route } from "react-router-dom";
+import { connect } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
-
-import Modal from 'react-bootstrap/Modal'
-import Dropdown from 'react-bootstrap/Dropdown'
-import Form from 'react-bootstrap/Form'
-import Col from 'react-bootstrap/Col'
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Button from 'react-bootstrap/Button'
-import  TableComponent from '../../shared/elements/table'
-import "./styles.scss"; 
-import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
-
-
-
-
-import ViewDepositProduct from '.'
-
-
-
-
+import "./styles.scss";
+import ViewDepositProduct from ".";
+import ViewDepositCharges from "./depositCharges-container";
 class DepositProductContainer extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-        // this.clientEncodedKey = this.props.match.params.id;
-        this.state={
-            user:'',
-        }
-        
-
-        
-    }
-
-
-    
-
-    render() {
-        
-        let {generatedRoutes} = this.state;
-        return (
-             <Fragment>
-                    <div className="content-wrapper">
-                        
-                        {this.props.children}
-                        <Route  exact path='/depositproduct/:productid'  component={ViewDepositProduct} /> 
-                        
-                        
-                        
-                    </div>
-             </Fragment>
-        );
-    }
+  render() {
+    let { generatedRoutes } = this.state;
+    return (
+      <Fragment>
+        <div className="content-wrapper">
+          {this.props.children}
+          <Route
+            exact
+            path="/depositproduct/:productid"
+            component={ViewDepositProduct}
+          />
+          <Route
+            exact
+            path="/depositproduct/:productid/charges"
+            component={ViewDepositCharges}
+          />
+        </div>
+      </Fragment>
+    );
+  }
 }
 
 function mapStateToProps(state) {
-    return {
-        
-    };
+  return {};
 }
 
 export default connect(mapStateToProps)(DepositProductContainer);
