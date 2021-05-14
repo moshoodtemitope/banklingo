@@ -230,7 +230,7 @@ class ViewDepositProduct extends React.Component {
                                     {
                                       getSingleDepositProductData
                                         .depositProductInterestSettingModel
-                                        .whenInterestIsPaid
+                                        .whenInterestIsPaidDescription
                                     }
                                   </td>
                                 </tr>
@@ -292,7 +292,9 @@ class ViewDepositProduct extends React.Component {
                               <tr>
                                 <td>Methodology</td>
                                 <td>
-                                  {getSingleDepositProductData.methodology}
+                                  {
+                                    getSingleDepositProductData.methodologyDescription
+                                  }
                                 </td>
                               </tr>
                             </tbody>

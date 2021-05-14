@@ -27,15 +27,6 @@ class ViewLoanCharges extends React.Component {
   renderPage = () => {
     return (
       <div className="each-overview">
-        <h6
-          style={{
-            borderBottom: "1px solid #D6DBDF",
-            paddingTop: ".4rem",
-          }}
-        >
-          {" "}
-          Deposit Charges{" "}
-        </h6>
         <TableComponent classnames="striped bordered hover">
           <thead>
             <tr>
@@ -43,6 +34,8 @@ class ViewLoanCharges extends React.Component {
               <th>Type (manual,Monthly,arbitrary) </th>
               <th>Amount</th>
               <th>Fee Payment(Flat|Percentage)</th>
+              <th>Gl Account)</th>
+              <th>Date Created</th>
             </tr>
           </thead>
           <tbody>

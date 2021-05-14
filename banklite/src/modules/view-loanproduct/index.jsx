@@ -74,7 +74,9 @@ class ViewLoanProduct extends React.Component {
                               <tr>
                                 <td>Product Type</td>
                                 <td>
-                                  {getSingleLoanProductData.loanProductType}
+                                  {
+                                    getSingleLoanProductData.loanProductTypeDescription
+                                  }
                                 </td>
                               </tr>
                             </tbody>
@@ -206,28 +208,31 @@ class ViewLoanProduct extends React.Component {
                               <tr>
                                 <td>Default Arrears Tolerance Period (Days)</td>
                                 <td>
-                                  {
-                                    getSingleLoanProductData.arrearsSetting
-                                      .arearsTolerancePeriodInDaysDefault
-                                  }
+                                  {getSingleLoanProductData.arrearsSetting
+                                    .arearsTolerancePeriodInDaysDefault === null
+                                    ? "Not set"
+                                    : getSingleLoanProductData.arrearsSetting
+                                        .arearsTolerancePeriodInDaysDefault}
                                 </td>
                               </tr>
                               <tr>
                                 <td>Minimun Arrears Tolerance Period (Days)</td>
                                 <td>
-                                  {
-                                    getSingleLoanProductData.arrearsSetting
-                                      .arearsTolerancePeriodInDaysMin
-                                  }
+                                  {getSingleLoanProductData.arrearsSetting
+                                    .arearsTolerancePeriodInDaysMin === null
+                                    ? "Not Set"
+                                    : getSingleLoanProductData.arrearsSetting
+                                        .arearsTolerancePeriodInDaysMin}
                                 </td>
                               </tr>
                               <tr>
                                 <td>Maximum Arrears Tolerance Period (Days)</td>
                                 <td>
-                                  {
-                                    getSingleLoanProductData.arrearsSetting
-                                      .arearsTolerancePeriodInDaysMax
-                                  }
+                                  {getSingleLoanProductData.arrearsSetting
+                                    .arearsTolerancePeriodInDaysMax === null
+                                    ? "Not set"
+                                    : getSingleLoanProductData.arrearsSetting
+                                        .arearsTolerancePeriodInDaysMax}
                                 </td>
                               </tr>
                               <tr>
@@ -359,20 +364,32 @@ class ViewLoanProduct extends React.Component {
                               <tr>
                                 <td>Link Deposit Product</td>
                                 <td>
+                                  {getSingleLoanProductData.loanProductLinkModel
+                                    .depositProductEncodedKey === null
+                                    ? "Nil"
+                                    : getSingleLoanProductData
+                                        .loanProductLinkModel
+                                        .depositProductEncodedKey}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Auto Set Settlement Account</td>
+                                <td>
                                   {
                                     getSingleLoanProductData
                                       .loanProductLinkModel
-                                      .depositProductEncodedKey
+                                      .autoSetSettlementAccountOnCreation
                                   }
                                 </td>
                               </tr>
                               <tr>
-                                <td>Deposit Account Option</td>
+                                <td>Auto Create Settlement Account</td>
                                 <td>
-                                  {/* {
-                                    getSingleLoanProductData.loanProductLinkModel
-                                      .loanAmountMaximum
-                                } */}
+                                  {
+                                    getSingleLoanProductData
+                                      .loanProductLinkModel
+                                      .autoCreateSettlementAccount
+                                  }
                                 </td>
                               </tr>
                               <tr>
@@ -380,7 +397,8 @@ class ViewLoanProduct extends React.Component {
                                 <td>
                                   {
                                     getSingleLoanProductData
-                                      .loanProductLinkModel.settlementOptions
+                                      .loanProductLinkModel
+                                      .settlementOptionsDescription
                                   }
                                 </td>
                               </tr>
@@ -405,6 +423,14 @@ class ViewLoanProduct extends React.Component {
                           <h6>Loan Product Rules</h6>
                           <TableComponent classnames="striped bordered hover">
                             <tbody>
+                              <tr>
+                                <td>Methodology</td>
+                                <td>
+                                  {
+                                    getSingleLoanProductData.methodologyDescription
+                                  }
+                                </td>
+                              </tr>
                               <tr>
                                 <td>Fees Income Account Id</td>
                                 <td>
