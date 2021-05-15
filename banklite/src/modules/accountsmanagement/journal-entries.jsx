@@ -235,11 +235,11 @@ class JournalEntries extends React.Component {
           glAcountlId: Yup.string().required('Required'),
           entryTypeId: Yup.string().required('Required'),
           branchId: Yup.string().required('Required'),
-          currencyCode: Yup.string().required('Required'),
         })
       ),
 
       entryDate: Yup.string().required('Required'),
+      currencyCode: Yup.string().required('Required'),
     });
 
     let jornalEntries = [
@@ -248,7 +248,6 @@ class JournalEntries extends React.Component {
         entryTypeId: '',
         branchId: '',
         entryAmount: '',
-        currencyCode:'',
         removable: false,
       },
       {
@@ -256,7 +255,6 @@ class JournalEntries extends React.Component {
         entryTypeId: '',
         branchId: '',
         entryAmount: '',
-        currencyCode:'',
         removable: false,
       },
     ];
@@ -278,6 +276,7 @@ class JournalEntries extends React.Component {
             initialValues={{
               entryDate: '',
               entryNotes: '',
+              currencyCode: '',
               jornalEntries,
             }}
             validationSchema={createJournalEntrySchema}
@@ -301,7 +300,6 @@ class JournalEntries extends React.Component {
                   amount: parseFloat(eachEntry.entryAmount.replace(/,/g, '')),
                   journalEntryType: eachEntry.entryTypeId,
                   branchId: eachEntry.branchId,
-                  currencyCode: eachEntry.currencyCode,
                 });
               });
 
@@ -319,6 +317,7 @@ class JournalEntries extends React.Component {
                   ],
                   notes: values.entryNotes,
                   bookingDate: values.entryDate.toISOString(),
+                  currencyCode: values.currencyCode,
                 };
 
                 this.createJournalEntry(newJournalEntryPayload).then(() => {
@@ -430,75 +429,7 @@ class JournalEntries extends React.Component {
                                   </span>
                                 )}
                             </Col>
-                            <Col>
-                              <Form.Label
-                                className='block-level'
-                                htmlFor={`jornalEntries.${index}.currencyCode`}
-                              >
-                                Currency
-                              </Form.Label>
-                              <Select
-                                options={allCurrencies}
-                                onBlur={handleBlur}
-                                className={
-                                  errors.jornalEntries &&
-                                  typeof errors.jornalEntries[index] !==
-                                    'undefined' &&
-                                  errors.jornalEntries[index].hasOwnProperty(
-                                    'currencyCode'
-                                  ) &&
-                                  touched.jornalEntries &&
-                                  typeof touched.jornalEntries[index] !==
-                                    'undefined' &&
-                                  touched.jornalEntries[index].currencyCode
-                                    ? 'is-invalid'
-                                    : null
-                                }
-                                onChange={(selectedCurrency) => {
-                                  this.setState(
-                                    Object.defineProperty(
-                                      {},
-                                      `selectedCurrencyCode-${index}`,
-                                      {
-                                        value: selectedCurrency,
-                                        enumerable: true,
-                                      }
-                                    )
-                                  );
-                                  values.jornalEntries[index].currencyCode =
-                                  selectedCurrency.value;
-
-                                  if (
-                                    errors.jornalEntries &&
-                                    errors.jornalEntries[index] !== undefined
-                                  ) {
-                                    if (errors.jornalEntries[index].currencyCode) {
-                                      delete errors.jornalEntries[index]
-                                        .currencyCode;
-                                    }
-                                  }
-
-                                  if (
-                                    touched.jornalEntries &&
-                                    touched.jornalEntries[index] !== undefined
-                                  ) {
-                                    touched.jornalEntries[
-                                      index
-                                    ].currencyCode = null;
-                                  }
-                                }}
-                                name={`jornalEntries.${index}.currencyCode`}
-                              />
-                              {errors.jornalEntries &&
-                                errors.jornalEntries[index] &&
-                                errors.jornalEntries[index].currencyCode &&
-                                touched.jornalEntries &&
-                                touched.jornalEntries[index].currencyCode && (
-                                  <span className='invalid-feedback'>
-                                    {errors.jornalEntries[index].currencyCode}
-                                  </span>
-                                )}
-                            </Col>
+                            
                             <Col>
                               <Form.Label
                                 className='block-level'
@@ -744,7 +675,32 @@ class JournalEntries extends React.Component {
                       ) : null}
                     </Form.Group>
                   </Col>
-                  <Col></Col>
+                  <Col>
+                    <Form.Label
+                      className='block-level'>Currency</Form.Label>
+                    <Select
+                      options={allCurrencies}
+                      onBlur={handleBlur}
+                      className={
+                        errors.currencyCode && touched.currencyCode
+                            ? 'is-invalid form-control form-control-sm'
+                            : 'form-control form-control-sm'
+                      }
+                      onChange={(selectedCurrency) => {
+                        setFieldValue("currencyCode", selectedCurrency.value);
+                        this.setState({selectedCurrency})
+                        
+                        
+                      }}
+                      name="currencyCode"
+                    />
+
+                    {errors.currencyCode && touched.currencyCode ? (
+                        <span className='invalid-feedback'>
+                          {errors.currencyCode}
+                        </span>
+                      ) : null}
+                  </Col>
                 </Form.Row>
                 <Form.Row>
                   <Col>
