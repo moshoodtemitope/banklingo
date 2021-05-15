@@ -104,7 +104,7 @@ setShowDetails = (event,tempData)=>{
 }
 
 retrieveFromApi = (tempData)=>{
-
+  this.props.dispatch(authActions.activateDeactivateUser(null, "CLEAR"))
     const {dispatch} = this.props;        
   //  let  {PageSize,FullDetails, CurrentPage, CurrentSelectedPage} = this.state;
 
@@ -404,15 +404,16 @@ fetchForDataState=()=> {
                         {eachUser.objectState !== 1 && (
                           <Dropdown.Item
                             eventKey='1'
-                            onClick={() =>
+                            onClick={() =>{
                               // this.activateDeactivateUser(
                               //   { encodedKey: eachUser.encodedKey },
                               //   eachUser.name,
                               //   'activate'
                               // )
-                           
-                              this.setState({showActivationStatus:true, activationAction:'activate',selectedUser:  eachUser.name, modalAccountEncodedKey: eachUser.encodedKey })
-
+                                this.props.dispatch(authActions.activateDeactivateUser(null, "CLEAR"))
+                            
+                                this.setState({showActivationStatus:true, activationAction:'activate',selectedUser:  eachUser.name, modalAccountEncodedKey: eachUser.encodedKey })
+                              }
                             }
                           >
                             Activate User
@@ -421,9 +422,10 @@ fetchForDataState=()=> {
                         {eachUser.objectState === 1 && (
                           <Dropdown.Item
                             eventKey='1'
-                            onClick={() =>
-                              this.setState({showActivationStatus:true, activationAction:'deactivate',selectedUser:  eachUser.name,  modalAccountEncodedKey: eachUser.encodedKey })
-
+                            onClick={() =>{
+                                this.setState({showActivationStatus:true, activationAction:'deactivate',selectedUser:  eachUser.name,  modalAccountEncodedKey: eachUser.encodedKey })
+                                this.props.dispatch(authActions.activateDeactivateUser(null, "CLEAR"))
+                              }
                               // this.activateDeactivateUser(
                               //   { encodedKey: eachUser.encodedKey },
                               //   eachUser.name,

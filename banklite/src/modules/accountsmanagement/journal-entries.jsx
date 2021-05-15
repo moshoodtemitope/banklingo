@@ -683,8 +683,8 @@ class JournalEntries extends React.Component {
                       onBlur={handleBlur}
                       className={
                         errors.currencyCode && touched.currencyCode
-                            ? 'is-invalid form-control form-control-sm'
-                            : 'form-control form-control-sm'
+                            ? 'is-invalid '
+                            : null
                       }
                       onChange={(selectedCurrency) => {
                         setFieldValue("currencyCode", selectedCurrency.value);
@@ -701,6 +701,7 @@ class JournalEntries extends React.Component {
                         </span>
                       ) : null}
                   </Col>
+                  <Col></Col>
                 </Form.Row>
                 <Form.Row>
                   <Col>
