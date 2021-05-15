@@ -277,8 +277,7 @@ function postATransaction  (txtnPayload, transactiontype){
 
                 
                 if(transactiontype === "chequedepositwithteller" 
-                    || transactiontype === "chequewithdrawalwithteller"
-                    || transactiontype === "clearcheque"){
+                    || transactiontype === "chequewithdrawalwithteller"){
                         consume = ApiService.request(`${routes.CHEQUE_MANAGEMENT}/${transactiontype}`, "POST", txtnPayload);
                 }else{
                         consume = ApiService.request(`${routes.TELLER_MANAGEMENT}/${transactiontype}`, "POST", txtnPayload);

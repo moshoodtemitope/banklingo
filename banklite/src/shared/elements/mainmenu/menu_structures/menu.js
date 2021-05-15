@@ -110,7 +110,12 @@ export const menuList = [
                 subMenuLabel: "All Deposits",
                 subMenuRoute: "/deposits/all"
             },
+            {
+                subMenuLabel: "Cheques",
+                subMenuRoute: "/cheques"
+            },
         ]
+        
     },
 
     {

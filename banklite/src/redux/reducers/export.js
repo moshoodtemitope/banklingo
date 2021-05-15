@@ -227,6 +227,8 @@ import {
   searchAccountNumbersReducer,
   searchCustomerAccountReducer,
   searchForAccountsWithCustomerKeyReducer,
+  getChequesReducer,
+  updateAChequeReducer,
 } from "./deposits/deposits.reducer";
 
 import {
@@ -443,6 +445,8 @@ export const deposits = {
   searchAccountNumbersReducer,
   searchCustomerAccountReducer,
   searchForAccountsWithCustomerKeyReducer,
+  getChequesReducer,
+  updateAChequeReducer,
 };
 
 export const clients = {

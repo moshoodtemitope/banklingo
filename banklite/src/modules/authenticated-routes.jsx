@@ -24,6 +24,9 @@ import EditAClient from './clients/edit-client'
 
 import ViewAllTasks from './all-tasks'
 
+import ChequeManagement from './cheques'
+import UnclearedChequeManagement from './cheques/uncleared'
+
 import LoansManagement from './loanmanagement'
 import ActiveLoans from './loanmanagement/active'
 import ApprovedLoans from './loanmanagement/approved'
@@ -325,6 +328,9 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-withdrawn' {...this.props} authed={this.props.user} loanState={LoanStateConstants.CLOSED_WITHDRAWN} component={LoanListDisplay} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/partial-application' {...this.props} authed={this.props.user} loanState={LoanStateConstants.PARTIAL_APPLICATION} component={LoanListDisplay} />  
 
+                        <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/cheques' {...this.props} authed={this.props.user}  component={ChequeManagement} />
+                        <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/cheques/uncleared' {...this.props} authed={this.props.user}  component={UnclearedChequeManagement} />
+                        
                         <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/deposits/all' {...this.props} authed={this.props.user} depositState={DepositStateConstants.ALL} component={DepositManagement} />
                         <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/deposits/partial-applications' {...this.props} authed={this.props.user}  depositState={DepositStateConstants.Partial_Application} component={DepositManagement} />
                         <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/deposits/pending-approval' {...this.props} authed={this.props.user}  depositState={DepositStateConstants.Pending_Approval} component={DepositManagement} />

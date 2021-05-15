@@ -6,6 +6,9 @@
 }
 .tablecomponent-container > .container > .row{
     overflow-x: auto !important;
+    &.none-overflow{
+        overflow-x: unset !important;
+    }
 }
 .red-color{
     color: red;
@@ -22,6 +25,7 @@ span.action-link {
 .amber-color{
     color: #ffbf00;
 }
+
 
 span.each-pagenum {
     background-color: white;
