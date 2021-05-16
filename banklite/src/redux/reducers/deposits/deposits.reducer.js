@@ -107,6 +107,57 @@ export function getDepositTransactionReducer(state = [], action) {
   }
 }
 
+export function LockAmountReducer(state = [], action) {
+  switch (action.type) {
+    case loanAndDepositsConstants.LOCK_AMOUNT_PENDING:
+      return {
+        request_status: loanAndDepositsConstants.LOCK_AMOUNT_PENDING,
+        is_request_processing: true,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.LOCK_AMOUNT_SUCCESS:
+      return {
+        request_status: loanAndDepositsConstants.LOCK_AMOUNT_SUCCESS,
+        is_request_processing: false,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.LOCK_AMOUNT_FAILURE:
+      return {
+        request_status: loanAndDepositsConstants.LOCK_AMOUNT_FAILURE,
+        is_request_processing: false,
+        request_data: action,
+      };
+
+    default:
+      return { ...state };
+  }
+}
+
+export function getSettlementReducer(state = [], action) {
+  switch (action.type) {
+    case loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_PENDING:
+      return {
+        request_status: loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_PENDING,
+        is_request_processing: true,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_SUCCESS:
+      return {
+        request_status: loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_SUCCESS,
+        is_request_processing: false,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_FAILURE:
+      return {
+        request_status: loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_FAILURE,
+        is_request_processing: false,
+        request_data: action,
+      };
+
+    default:
+      return { ...state };
+  }
+}
 export function getLockAmountReducer(state = [], action) {
   switch (action.type) {
     case loanAndDepositsConstants.GET_LOCK_AMOUNT_PENDING:
@@ -569,6 +620,68 @@ export function searchForAccountsWithCustomerKeyReducer(state = [], action) {
       return {
         request_status:
           loanAndDepositsConstants.SEARCH_FOR_ACCOUNTS_WITH_CUSTOMERKEY_RESET,
+        is_request_processing: false,
+        request_data: {},
+      };
+
+    default:
+      return { ...state };
+  }
+}
+
+export function getChequesReducer(state = [], action) {
+  switch (action.type) {
+    case loanAndDepositsConstants.GET_CHEQUES_PENDING:
+      return {
+        request_status: loanAndDepositsConstants.GET_CHEQUES_PENDING,
+        is_request_processing: true,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.GET_CHEQUES_SUCCESS:
+      return {
+        request_status: loanAndDepositsConstants.GET_CHEQUES_SUCCESS,
+        is_request_processing: false,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.GET_CHEQUES_FAILURE:
+      return {
+        request_status: loanAndDepositsConstants.GET_CHEQUES_FAILURE,
+        is_request_processing: false,
+        request_data: action,
+      };
+
+    default:
+      return { ...state };
+  }
+}
+
+export function updateAChequeReducer(state = [], action) {
+  switch (action.type) {
+    case loanAndDepositsConstants.UPDATE_A_CHEQUE_PENDING:
+      return {
+        request_status:
+          loanAndDepositsConstants.UPDATE_A_CHEQUE_PENDING,
+        is_request_processing: true,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.UPDATE_A_CHEQUE_SUCCESS:
+      return {
+        request_status:
+          loanAndDepositsConstants.UPDATE_A_CHEQUE_SUCCESS,
+        is_request_processing: false,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.UPDATE_A_CHEQUE_FAILURE:
+      return {
+        request_status:
+          loanAndDepositsConstants.UPDATE_A_CHEQUE_FAILURE,
+        is_request_processing: false,
+        request_data: action,
+      };
+    case loanAndDepositsConstants.UPDATE_A_CHEQUE_RESET:
+      return {
+        request_status:
+          loanAndDepositsConstants.UPDATE_A_CHEQUE_RESET,
         is_request_processing: false,
         request_data: {},
       };

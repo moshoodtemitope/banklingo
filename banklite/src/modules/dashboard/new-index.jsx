@@ -1882,7 +1882,7 @@ console.log('dashboard load');
                         .required('Required'),
                 });
 
-                if(txtOption==="cheque"){
+                if(this.state.txtOption==="cheque"){
                     validationSchema = Yup.object().shape({
                         // tillId: Yup.string()
                         //     .required('Required'),
@@ -1957,10 +1957,10 @@ console.log('dashboard load');
                             referenceID:'',
                             chequeNo:''
                         }}
-                        validationSchema={validationSchema}
+                        // validationSchema={validationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
-                            console.log("txtnType", values.txtnType)
+                            // console.log("txtnType", values.txtnType)
                             let transactionAction;
                             if (values.txtnType === 1) {
                                 transactionAction = "loanrepaymentwithteller"
@@ -1978,9 +1978,9 @@ console.log('dashboard load');
                             if (values.txtnType === 5) {
                                 transactionAction = "chequewithdrawalwithteller"
                             }
-                            if (values.txtnType === 6) {
-                                transactionAction = "clearcheque"
-                            }
+                            // if (values.txtnType === 6) {
+                            //     transactionAction = "clearcheque"
+                            // }
 
                             let requestPayload = {
                                 tillId: this.state.selectedTillData.tillId,
@@ -2315,7 +2315,7 @@ console.log('dashboard load');
                                                                 setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
                                                                 errors.chosenAccountNum = null;
                                                                 touched.chosenAccountNum = null;
-                                                                console.log("calleded", selectedOption)
+                                                                // console.log("calleded", selectedOption)
                                                                 setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
                                                                 this.handleSelectedAccount(selectedOption)
                                                                 this.getSearchOptionForCustomerLabel(selectedOption)

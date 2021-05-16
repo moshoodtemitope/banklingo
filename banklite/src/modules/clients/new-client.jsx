@@ -166,7 +166,7 @@ class NewClient extends React.Component {
       .min(2, 'Valid response required')
       .max(50, 'Max limit reached'),
     nextOfKinMobile: Yup.string()
-      .required()
+      .required("Required")
       .matches(/^[0-9]+$/, 'Must be only digits')
       .min(8, 'Must be between 8 and 11 digits')
       .max(15, 'Must be between 8 and 11 digits'),

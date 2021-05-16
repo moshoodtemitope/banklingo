@@ -208,6 +208,8 @@ import {
 import {
   getDepositsReducer,
   getLockAmountReducer,
+  LockAmountReducer,
+  getSettlementReducer,
   exportDepositsReducer,
   getClientDepositsReducer,
   getDepositTransactionReducer,
@@ -225,6 +227,8 @@ import {
   searchAccountNumbersReducer,
   searchCustomerAccountReducer,
   searchForAccountsWithCustomerKeyReducer,
+  getChequesReducer,
+  updateAChequeReducer,
 } from "./deposits/deposits.reducer";
 
 import {
@@ -422,6 +426,8 @@ export const platform = {
 export const deposits = {
   getDepositsReducer,
   getLockAmountReducer,
+  getSettlementReducer,
+  LockAmountReducer,
   exportDepositsReducer,
   getClientDepositsReducer,
   getDepositTransactionReducer,
@@ -439,6 +445,8 @@ export const deposits = {
   searchAccountNumbersReducer,
   searchCustomerAccountReducer,
   searchForAccountsWithCustomerKeyReducer,
+  getChequesReducer,
+  updateAChequeReducer,
 };
 
 export const clients = {

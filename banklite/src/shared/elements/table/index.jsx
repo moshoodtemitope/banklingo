@@ -41,7 +41,7 @@ class TableComponent extends React.Component{
 
                 <div className="tablecomponent-container">
                     <div className="container">
-                        <div className="row">
+                        <div className={this.props.overflow?"row none-overflow":"row"}>
                             {this.renderTable()}
                         </div>
                     </div>
