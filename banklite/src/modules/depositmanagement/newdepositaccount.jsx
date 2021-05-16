@@ -263,13 +263,18 @@ class NewDepositAccount extends React.Component {
                                     notes:  Yup.string()
                                         .min(3, 'Valid response required'),
                                 });
+                                let currentClientEncodedKey= this.props.match.params.clientId;
+                                if(customerFetchedData!==undefined){
+                                    currentClientEncodedKey=customerFetchedData.encodedKey;
+                                }
+                                
                                 return(
                                     <Formik
                                     initialValues={{
                                         // productEncodedKey :'',
                                         // productDisplayName:  allLoanProductsList[0].label,
                                         // interestRate:this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault!==null ? this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault : '',
-                                        clientEncodedKey:(customerFetchedData!==undefined && this.props.match.params.clientId!==undefined)?customerFetchedData.encodedKey :'',
+                                        clientEncodedKey:currentClientEncodedKey,
                                         depositProductEncodedKey: this.selectedDepositProductDetails?  allDepositProductsList!==null?allDepositProductsList[0].value:null : '',
                                         // depositProductName:allDepositProductsList[0].label,
                                         notes:'',
