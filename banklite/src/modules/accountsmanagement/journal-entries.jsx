@@ -357,16 +357,52 @@ class JournalEntries extends React.Component {
                   name='jornalEntries'
                   render={({ insert, remove, push }) => (
                     <div>
-                      {values.jornalEntries.length > 0 &&
-                        values.jornalEntries.map((entry, index) => (
-                          <Form.Row key={index}>
-                            <Col>
+                      <Form.Row key={-10}>
+                            <Col xs="3">
                               <Form.Label
                                 className='block-level'
-                                htmlFor={`jornalEntries.${index}.branchId`}
+                                htmlFor={`jornalEntries.${-10}.branchId`}
                               >
                                 Branch
                               </Form.Label>
+                             
+                            </Col>
+                            
+                            <Col xs="3">
+                              <Form.Label
+                                className='block-level'
+                                htmlFor={`jornalEntries.${-10}.glAcountlId`}
+                              >
+                                GL Account
+                              </Form.Label>
+                             
+                            </Col>
+                            <Col xs="3">
+                              <Form.Label
+                                className='block-level'
+                                htmlFor={`jornalEntries.${-10}.entryTypeId`}
+                              >
+                                Type
+                              </Form.Label>
+                              
+                            </Col>
+                            <Col xs="2">
+                              <Form.Label
+                                className='block-level'
+                                htmlFor={`jornalEntries.${-10}.entryAmount`}
+                              >
+                                Amount
+                              </Form.Label>
+                              
+                            </Col>
+                            <Col xs="1">
+                            </Col>
+                          </Form.Row>
+                      {values.jornalEntries.length > 0 &&
+                        values.jornalEntries.map((entry, index) => (
+                          <Form.Row key={index}>
+                            <Col xs="3">
+                             
                               <Select
                                 options={allBranches}
                                 onBlur={handleBlur}
@@ -430,13 +466,8 @@ class JournalEntries extends React.Component {
                                 )}
                             </Col>
                             
-                            <Col>
-                              <Form.Label
-                                className='block-level'
-                                htmlFor={`jornalEntries.${index}.glAcountlId`}
-                              >
-                                GL Account
-                              </Form.Label>
+                            <Col xs="3">
+                            
                               <Select
                                 options={allGlAccounts}
                                 onBlur={handleBlur}
@@ -505,13 +536,8 @@ class JournalEntries extends React.Component {
                                   </span>
                                 )}
                             </Col>
-                            <Col>
-                              <Form.Label
-                                className='block-level'
-                                htmlFor={`jornalEntries.${index}.entryTypeId`}
-                              >
-                                Journal Entry Type
-                              </Form.Label>
+                            <Col xs="3">
+                           
                               <Select
                                 options={entryTypes}
                                 onBlur={handleBlur}
@@ -564,13 +590,8 @@ class JournalEntries extends React.Component {
                                   </span>
                                 )}
                             </Col>
-                            <Col>
-                              <Form.Label
-                                className='block-level'
-                                htmlFor={`jornalEntries.${index}.entryAmount`}
-                              >
-                                Amount
-                              </Form.Label>
+                            <Col xs="2">
+                             
                               <Form.Control
                                 type='text'
                                 onChange={handleChange}
@@ -600,6 +621,7 @@ class JournalEntries extends React.Component {
                                   </span>
                                 )}
                             </Col>
+                            <Col  xs="auto">
                             {entry.removable === true && (
                               <Button
                                 type='button'
@@ -610,6 +632,8 @@ class JournalEntries extends React.Component {
                                 -
                               </Button>
                             )}
+                            </Col>
+                           
                           </Form.Row>
                         ))}
 
