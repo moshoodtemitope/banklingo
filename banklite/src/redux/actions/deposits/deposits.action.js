@@ -26,6 +26,8 @@ export const depositActions = {
   searchAccountNumbers,
   searchCustomerAccount,
   searchForAccountsWithCustomerKey,
+  getAllCheques,
+  updateACheque
 };
 
 function getDeposits(params, tempData) {
@@ -1130,4 +1132,85 @@ function getSettlementAccount(params) {
       error,
     };
   }
+}
+
+function getAllCheques(params, option, tempData) {
+  return (dispatch) => {
+    let optionUrl;
+      if(option==="all"){
+        optionUrl = `${routes.CHEQUE_MANAGEMENT}/fetchchequeclearingrequests`
+      }
+
+      if(option==="uncleared"){
+        optionUrl = `${routes.CHEQUE_MANAGEMENT}/unclearedrequests`
+      }
+
+    let consume = ApiService.request(
+      optionUrl + `?${params}`,
+      "GET",
+      null
+    );
+    dispatch(request(consume, tempData));
+    return consume
+      .then((response) => {
+        dispatch(success(response));
+      })
+      .catch((error) => {
+        dispatch(failure(handleRequestErrors(error)));
+      });
+  };
+
+  function request(user, tempData) {
+    if (tempData === undefined) {
+      return { type: loanAndDepositsConstants.GET_CHEQUES_PENDING, user };
+    }
+    if (tempData !== undefined) {
+      return {
+        type: loanAndDepositsConstants.GET_CHEQUES_PENDING,
+        user,
+        tempData,
+      };
+    }
+  }
+
+  // function request(user) { return { type: loanAndDepositsConstants.GET_CHEQUES_PENDING, user } }
+  function success(response) {
+    return { type: loanAndDepositsConstants.GET_CHEQUES_SUCCESS, response };
+  }
+  function failure(error) {
+    return { type: loanAndDepositsConstants.GET_CHEQUES_FAILURE, error };
+  }
+}
+
+function updateACheque  (txtnPayload, transactiontype){
+  if(txtnPayload!=="CLEAR"){
+
+      return dispatch =>{
+          let consume;
+
+              
+          consume = ApiService.request(`${routes.CHEQUE_MANAGEMENT}/${transactiontype}`, "POST", txtnPayload);
+          dispatch(request(consume));
+          return consume
+              .then(response =>{
+                  dispatch(success(response));
+              }).catch(error =>{
+                  dispatch(failure(handleRequestErrors(error)));
+              });
+          
+      }
+      
+  }
+
+  return dispatch =>{
+      
+      dispatch(clear());
+      
+  }
+
+  function request(user) { return { type: loanAndDepositsConstants.UPDATE_A_CHEQUE_PENDING, user } }
+  function success(response) { return { type: loanAndDepositsConstants.UPDATE_A_CHEQUE_SUCCESS, response } }
+  function failure(error) { return { type: loanAndDepositsConstants.UPDATE_A_CHEQUE_FAILURE, error } }
+  function clear() { return { type: loanAndDepositsConstants.UPDATE_A_CHEQUE_RESET, clear_data:""} }
+
 }

@@ -15,23 +15,23 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import './disbursements.scss';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import closeIcon from '../../assets/img/close.svg';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import { numberWithCommas, getDateFromISO } from '../../shared/utils';
-import { disbursementActions } from '../../redux/actions/disbursment/disbursment.action';
-import { disbursmentConstants } from '../../redux/actiontypes/disbursment/disbursment.constants';
+import { depositActions } from "../../redux/actions/deposits/deposits.action";
+import ViewACheque from '../../shared/components/view-cheque'
+import { loanAndDepositsConstants } from "../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants";
 
-import DisbursementNav from './_menu';
+import ChequeNav from './_menu';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
-class DisbursementManagement extends React.Component {
+class ChequeManagement extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user: '',
       PageSize: 25,
       CurrentPage: 1,
-      showDetails: false,
+      
       endDate: '',
       startDate: '',
       SearchText: '',
@@ -45,13 +45,13 @@ class DisbursementManagement extends React.Component {
   loadInitialData = () => {
     let { PageSize, CurrentPage } = this.state;
     let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-    this.getDisbursements(params);
+    this.getCheques(params);
   };
 
-  getDisbursements = (paramters) => {
+  getCheques = (paramters) => {
     const { dispatch } = this.props;
 
-    dispatch(disbursementActions.getDisbursement(paramters));
+    dispatch(depositActions.getAllCheques(paramters, "all"));
   };
 
   handleDateChangeRaw = (e) => {
@@ -86,40 +86,18 @@ class DisbursementManagement extends React.Component {
     this.setState({ PageSize: sizeOfPage });
 
     let params = `&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
-    // this.getDisbursements(params);
+    
 
     if (tempData) {
-      dispatch(disbursementActions.getDisbursement(params, false, tempData));
+      dispatch(depositActions.getAllCheques(params, "all", tempData));
     } else {
-      dispatch(disbursementActions.getDisbursement(params, false));
+      dispatch(depositActions.getAllCheques(params, "all"));
     }
   };
 
-  getADisbursment = (transactionReference) => {
-    const { dispatch } = this.props;
+  
 
-    dispatch(disbursementActions.getDisbursementByRef(transactionReference));
-  };
-
-  showDetails = (transactionReference) => {
-    this.setState({ showDetails: true, transactionReference });
-    this.getADisbursment(transactionReference);
-  };
-
-  exportDisbursmentBatches = () => {
-    let { PageSize, CurrentPage, SearchText, endDate, startDate } = this.state;
-
-    if (endDate !== '') {
-      endDate = endDate.toISOString();
-    }
-    if (startDate !== '') {
-      startDate = startDate.toISOString();
-    }
-    let paramters = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
-    const { dispatch } = this.props;
-
-    dispatch(disbursementActions.exportDisbursmentBatches(paramters));
-  };
+ 
 
   loadNextPage = (nextPage, tempData) => {
     const { dispatch } = this.props;
@@ -132,9 +110,9 @@ class DisbursementManagement extends React.Component {
     let params = `&PageSize=${PageSize}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
     if (tempData) {
-      dispatch(disbursementActions.getDisbursement(params, tempData));
+      dispatch(depositActions.getAllCheques(params, "all", tempData));
     } else {
-      dispatch(disbursementActions.getDisbursement(params));
+      dispatch(depositActions.getAllCheques(params, "all"));
     }
   };
 
@@ -164,105 +142,25 @@ class DisbursementManagement extends React.Component {
       let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
       if (tempData) {
-        dispatch(disbursementActions.getDisbursement(params, tempData));
+        dispatch(depositActions.getAllCheques(params, "all", tempData));
       } else {
-        dispatch(disbursementActions.getDisbursement(params));
+        dispatch(depositActions.getAllCheques(params, "all"));
       }
     }
   };
 
-  closeDetails = () => {
-    this.setState({ showDetails: false });
-  };
+  
 
-  renderADisbursment = (transactionReference) => {
-    let getDisbursementByRefRequest = this.props.getDisbursementByRefReducer;
+  
 
-    switch (getDisbursementByRefRequest.request_status) {
-      case disbursmentConstants.GET_A_DISBURSMENT_PENDING:
-        return (
-          <div className='card form-content details-wrap w-40'>
-            <div className='close-icon' onClick={this.closeDetails}>
-              <img src={closeIcon} alt='' />
-            </div>
-            <div className='loading-content'>
-              <div className='loading-text'>Please wait... </div>
-            </div>
-          </div>
-        );
-      case disbursmentConstants.GET_A_DISBURSMENT_SUCCESS:
-        let disbursmentData =
-          getDisbursementByRefRequest.request_data.response.data;
-
-        if (disbursmentData !== undefined) {
-          if (disbursmentData.length >= 1) {
-            return (
-              <div className=''>
-                <div className='card form-content details-wrap  w-40'>
-                  <div className='form-heading centered mb-20'>
-                    <h4>Disbursment details</h4>
-                    <div className='close-icon' onClick={this.closeDetails}>
-                      <img src={closeIcon} alt='' />
-                    </div>
-                  </div>
-                  <Row>
-                    {disbursmentData.map((eachInfo, index) => {
-                      return (
-                        <Col xs={6} className='mb-10' key={index}>
-                          <div className='dissburseInfo'>
-                            <Form.Label className='block-level'>
-                              {eachInfo.key}
-                            </Form.Label>
-                            <span className='form-text disabled-field'>
-                              {eachInfo.value !== '' && eachInfo.value !== null
-                                ? eachInfo.key === 'Amount'
-                                  ? `${numberWithCommas(eachInfo.value, true)}`
-                                  : eachInfo.value
-                                : 'N/A'}
-                            </span>
-                          </div>
-                        </Col>
-                      );
-                    })}
-                  </Row>
-                </div>
-              </div>
-            );
-          } else {
-            return (
-              <div className='card form-content details-wrap w-40'>
-                <div className='close-icon' onClick={this.closeDetails}>
-                  <img src={closeIcon} alt='' />
-                </div>
-                <div className='no-records'>No records found</div>
-              </div>
-            );
-          }
-        } else {
-          return null;
-        }
-
-      case disbursmentConstants.GET_A_DISBURSMENT_FAILURE:
-        return (
-          <div className='card form-content w-40'>
-            <div className='loading-content errormsg'>
-              <div>{getDisbursementByRefRequest.request_data.error}</div>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
-  renderAllDisbursments = () => {
-    let getDisbursementsRequest = this.props.getDisbursementsReducer;
+  renderAllCheques = () => {
+    let getChequesReducer = this.props.getChequesReducer;
     let saveRequestData =
-      getDisbursementsRequest.request_data !== undefined
-        ? getDisbursementsRequest.request_data.tempData
+      getChequesReducer.request_data !== undefined
+        ? getChequesReducer.request_data.tempData
         : null;
-    switch (getDisbursementsRequest.request_status) {
-      case disbursmentConstants.GET_DISBURSMENTS_PENDING:
+    switch (getChequesReducer.request_status) {
+      case loanAndDepositsConstants.GET_CHEQUES_PENDING:
         if (
           saveRequestData === undefined ||
           (saveRequestData !== undefined && saveRequestData.result.length < 1)
@@ -307,16 +205,18 @@ class DisbursementManagement extends React.Component {
               <TableComponent classnames='striped bordered hover'>
                 <thead>
                   <tr>
-                    <th>Batch Description</th>
-                    <th>Batch Reference</th>
-                    <th>Total Amount</th>
-                    <th>Date Initiated</th>
-                    <th>Batch Status</th>
-                    <th>Initiated by</th>
+                    <th>Cheque No</th>
+                    <th>Cheque Transaction</th>
+                    <th>Cheque Amount </th>
+                    <th>Cheque State </th>
+                    <th>Request Date </th>
+                    <th>Reference ID </th>
+                    <th>Remarks </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -424,34 +324,28 @@ class DisbursementManagement extends React.Component {
               </div>
               <TableComponent classnames='striped bordered hover'>
                 <thead>
-                  <tr>
-                    <th>Batch Description</th>
-                    <th>Batch Reference</th>
-                    <th>Total Amount</th>
-                    <th>Date Initiated</th>
-                    <th>Batch Status</th>
-                    <th>Initiated by</th>
-                  </tr>
+                    <tr>
+                        <th>Cheque No</th>
+                        <th>Cheque Transaction</th>
+                        <th>Cheque Amount </th>
+                        <th>Cheque State </th>
+                        <th>Request Date </th>
+                        <th>Reference ID </th>
+                        <th>Remarks </th>
+                    </tr>
                 </thead>
                 <tbody>
-                  {saveRequestData.result.map((eachDisburment, index) => {
+                  {saveRequestData.result.map((eachRequest, index) => {
                     return (
                       <Fragment key={index}>
                         <tr>
-                          <td>{eachDisburment.batchDescription}</td>
-                          <td>{eachDisburment.batchReference}</td>
-                          <td>
-                            {numberWithCommas(
-                              eachDisburment.totalAmount,
-                              true,
-                              true
-                            )}
-                          </td>
-                          <td>
-                            {getDateFromISO(eachDisburment.dateInitiated, true)}
-                          </td>
-                          <td>{eachDisburment.batchStatusDescription}</td>
-                          <td>{eachDisburment.initiatedBy}</td>
+                            <td>{eachRequest.chequeNo} </td>
+                            <td>{eachRequest.chequeClearingTransactionTypeDesc} </td>
+                            <td>{numberWithCommas(eachRequest.chequeAmount, true, true)} {eachRequest.currencyCode} </td>
+                            <td>{eachRequest.chequeClearingStateDesc} </td>
+                            <td>{getDateFromISO(eachRequest.requestDate, true)} </td>
+                            <td>{eachRequest.referenceId} </td>
+                            <td>{eachRequest.remarks} </td>
                         </tr>
                       </Fragment>
                     );
@@ -461,19 +355,19 @@ class DisbursementManagement extends React.Component {
             </div>
           );
         }
-      case disbursmentConstants.GET_DISBURSMENTS_SUCCESS:
-        let allDisbursments =
-            getDisbursementsRequest.request_data.response.data,
+      case loanAndDepositsConstants.GET_CHEQUES_SUCCESS:
+        let allCheques =
+            getChequesReducer.request_data.response.data,
           currentItemState;
 
-        if (allDisbursments !== undefined) {
-          if (allDisbursments.result.length >= 1) {
+        if (allCheques !== undefined) {
+          if (allCheques.result.length >= 1) {
             return (
               <div>
                 <div className='heading-with-cta'>
                   <Form
                     className='one-liner'
-                    onSubmit={(e) => this.searchTxtn(e, allDisbursments.result)}
+                    onSubmit={(e) => this.searchTxtn(e, allCheques.result)}
                   >
                     <Form.Group
                       controlId='filterDropdown'
@@ -544,28 +438,14 @@ class DisbursementManagement extends React.Component {
                     >
                       Filter
                     </Button>
-                    <div className='actions-wrap'>
-                      <Button
-                        onClick={this.exportDisbursmentBatches}
-                        className='action-icon'
-                        variant='outline-secondary'
-                        type='button'
-                      >
-                        <img
-                          alt='download excel'
-                          src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg=='
-                          width='16'
-                          height='16'
-                        />
-                      </Button>
-                    </div>
+                    
                   </Form>
 
                   <div className='pagination-wrap'>
                     <label htmlFor='toshow'>Show</label>
                     <select
                       id='toshow'
-                      onChange={(e) => this.setPagesize(e, allDisbursments)}
+                      onChange={(e) => this.setPagesize(e, allCheques)}
                       value={this.state.PageSize}
                       className='countdropdown form-control form-control-sm'
                     >
@@ -575,11 +455,11 @@ class DisbursementManagement extends React.Component {
                       <option value='200'>200</option>
                     </select>
                     <TablePagination
-                      totalPages={allDisbursments.totalPages}
-                      currPage={allDisbursments.currentPage}
-                      currRecordsCount={allDisbursments.result.length}
-                      totalRows={allDisbursments.totalRows}
-                      tempData={allDisbursments.result}
+                      totalPages={allCheques.totalPages}
+                      currPage={allCheques.currentPage}
+                      currRecordsCount={allCheques.result.length}
+                      totalRows={allCheques.totalRows}
+                      tempData={allCheques.result}
                       pagesCountToshow={4}
                       refreshFunc={this.loadNextPage}
                     />
@@ -588,84 +468,42 @@ class DisbursementManagement extends React.Component {
                 <TableComponent classnames='striped bordered hover'>
                   <thead>
                     <tr>
-                      <th>Batch Description</th>
-                      <th>Batch Reference</th>
-                      <th>Total Amount</th>
-                      <th>Date Initiated</th>
-                      <th>Batch Status</th>
-                      <th>Initiated by</th>
-                      <th></th>
+                        <th>Cheque No</th>
+                        <th>Cheque Transaction</th>
+                        <th>Cheque Amount </th>
+                        <th>Cheque State </th>
+                        <th>Request Date </th>
+                        <th>Reference ID </th>
+                        <th>Remarks </th>
+                        <th>Action </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {allDisbursments.result.map((eachDisburment, index) => {
-                      if (
-                        eachDisburment.batchStatus === 1 ||
-                        eachDisburment.batchStatus === 0
-                      ) {
-                        currentItemState = 'partial';
-                      }
-                      if (eachDisburment.batchStatus === 2) {
-                        currentItemState = 'pending-review';
-                      }
-                      if (eachDisburment.batchStatus === 3) {
-                        currentItemState = 'all';
-                      }
-                      if (eachDisburment.batchStatus === 4) {
-                        currentItemState = 'pending-approval';
-                      }
-                      if (eachDisburment.batchStatus === 5) {
-                        currentItemState = 'all';
-                      }
-                      if (eachDisburment.batchStatus === 6) {
-                        currentItemState = 'all';
-                      }
-                      if (
-                        eachDisburment.batchStatus === 7 ||
-                        eachDisburment.batchStatus === 8
-                      ) {
-                        currentItemState = 'all';
-                      }
+                    {allCheques.result.map((eachRequest, index) => {
+                      
 
                       return (
                         <Fragment key={index}>
                           <tr>
-                            <td>{eachDisburment.batchDescription}</td>
-                            <td>{eachDisburment.batchReference}</td>
-                            <td>
-                              {numberWithCommas(
-                                eachDisburment.totalAmount,
-                                true,
-                                true
-                              )}
-                            </td>
-                            <td>
-                              {getDateFromISO(
-                                eachDisburment.dateInitiated,
-                                true
-                              )}
-                            </td>
-                            <td>{eachDisburment.batchStatusDescription}</td>
-                            <td>{eachDisburment.initiatedBy}</td>
-                            <td>
-                              <DropdownButton
-                                size='sm'
-                                title='Actions'
-                                key='action'
-                                className='customone'
-                              >
-                                <NavLink
-                                  className='dropdown-item'
-                                  to={`/disbursements/${currentItemState}/${eachDisburment.batchReference}`}
-                                >
-                                  View Batch
-                                </NavLink>
-                              </DropdownButton>
-                            </td>
-                            {/* <td><NavLink to={`/disbursements/partial/${eachDisburment.batchReference}`}> {eachDisburment.id} </NavLink> </td> */}
-                            {/* <td>{numberWithCommas(eachDisburment.totalAmount, true, true)}</td> */}
-                            {/* <td>{getDateFromISO(eachDisburment.lastUpdated)}</td> */}
-                          </tr>
+                                <td>{eachRequest.chequeNo} </td>
+                                <td>{eachRequest.chequeClearingTransactionTypeDesc} </td>
+                                <td>{numberWithCommas(eachRequest.chequeAmount, true, true)} {eachRequest.currencyCode} </td>
+                                <td>{eachRequest.chequeClearingStateDesc} </td>
+                                <td>{getDateFromISO(eachRequest.requestDate, true)} </td>
+                                <td>{eachRequest.referenceId} </td>
+                                <td>{eachRequest.remarks} </td>
+                                <td>
+                                  <DropdownButton
+                                    size='sm'
+                                    title='Actions'
+                                    key='activeCurrency'
+                                    className='customone'
+                                  >
+                                    
+                                    <Dropdown.Item onClick={()=>this.handleShowCheque(eachRequest)} eventKey='1'>View</Dropdown.Item>
+                                  </DropdownButton>
+                                </td>
+                            </tr>
                         </Fragment>
                       );
                     })}
@@ -679,7 +517,7 @@ class DisbursementManagement extends React.Component {
                 <div className='heading-with-cta'>
                   <Form
                     className='one-liner'
-                    onSubmit={(e) => this.searchTxtn(e, allDisbursments.result)}
+                    onSubmit={(e) => this.searchTxtn(e, allCheques.result)}
                   >
                     <Form.Group
                       controlId='filterDropdown'
@@ -739,9 +577,7 @@ class DisbursementManagement extends React.Component {
                           this.setState({ SearchText: e.target.value.trim() });
                         }}
                       />
-                      {/* {errors.startDate && touched.startDate ? (
-<span className="invalid-feedback">{errors.startDate}</span>
-) : null} */}
+                      
                     </Form.Group>
                     <Button
                       className='no-margins'
@@ -767,26 +603,28 @@ class DisbursementManagement extends React.Component {
                   </div>
                 </div>
                 <TableComponent classnames='striped bordered hover'>
-                  <thead>
-                    <tr>
-                      <th>Batch Description</th>
-                      <th>Batch Reference</th>
-                      <th>Total Amount</th>
-                      <th>Date Initiated</th>
-                      <th>Batch Status</th>
-                      <th>Initiated by</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
+                <thead>
+                  <tr>
+                    <th>Cheque No</th>
+                    <th>Cheque Transaction</th>
+                    <th>Cheque Amount </th>
+                    <th>Cheque State </th>
+                    <th>Request Date </th>
+                    <th>Reference ID </th>
+                    <th>Remarks </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
                 </TableComponent>
               </div>
             );
@@ -795,10 +633,10 @@ class DisbursementManagement extends React.Component {
           return null;
         }
 
-      case disbursmentConstants.GET_DISBURSMENTS_FAILURE:
+      case loanAndDepositsConstants.GET_CHEQUES_FAILURE:
         return (
           <div className='loading-content errormsg'>
-            <div>{getDisbursementsRequest.request_data.error}</div>
+            <div>{getChequesReducer.request_data.error}</div>
           </div>
         );
       default:
@@ -806,8 +644,17 @@ class DisbursementManagement extends React.Component {
     }
   };
 
+  handleShowCheque = (chequeSelected) => {
+    this.props.dispatch(depositActions.updateACheque("CLEAR"))
+    this.setState({chequeSelected,  displayCheque: true })
+  };
+  handleCloseChequeView = () => {
+    
+    this.setState({ displayCheque: false })
+  };
+
   render() {
-    const { showDetails, transactionReference } = this.state;
+    const {  transactionReference } = this.state;
     return (
       <Fragment>
         <InnerPageContainer {...this.props}>
@@ -818,7 +665,7 @@ class DisbursementManagement extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className=''>
-                        <h2>Disbursements</h2>
+                        <h2>All Cheques</h2>
                       </div>
                     </div>
                   </div>
@@ -826,25 +673,8 @@ class DisbursementManagement extends React.Component {
               </div>
               <div className='module-submenu'>
                 <div className='content-container'>
-                  <DisbursementNav />
-                  {/* <ul className="nav">
-                                        <li>
-                                            <NavLink exact to={'/disbursements'}>Disbursements</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/disbursements/initiate'}>Initiate Disbursement</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/disbursements/pending-review'}>Pending Review</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/disbursements/pending-approval'}>Pending Approval</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to={'/disbursements/nip-requests'}>NIP Requests</NavLink>
-                                            
-                                        </li>
-                                    </ul> */}
+                  <ChequeNav />
+                  <ViewACheque source="all" headingText="Cheque Details" chequeSelected={this.state.chequeSelected} closeViewCheque={this.handleCloseChequeView} displayCheque={this.state.displayCheque} />
                 </div>
               </div>
               <div className='module-content'>
@@ -852,10 +682,9 @@ class DisbursementManagement extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className='middle-content'>
-                        {this.renderAllDisbursments()}
+                        {this.renderAllCheques()}
 
-                        {showDetails === true &&
-                          this.renderADisbursment(transactionReference)}
+                        
                       </div>
                     </div>
                   </div>
@@ -870,10 +699,8 @@ class DisbursementManagement extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    getDisbursementsReducer: state.disbursmentReducers.getDisbursementsReducer,
-    getDisbursementByRefReducer:
-      state.disbursmentReducers.getDisbursementByRefReducer,
+    getChequesReducer: state.depositsReducers.getChequesReducer,
   };
 }
 
-export default connect(mapStateToProps)(DisbursementManagement);
+export default connect(mapStateToProps)(ChequeManagement);

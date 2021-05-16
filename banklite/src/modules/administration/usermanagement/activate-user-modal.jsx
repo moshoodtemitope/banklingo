@@ -52,10 +52,12 @@ export const ActivateUserModal =  ({ open, toggleHandler,proceedHandler,requestP
     </Modal.Header>
     <Modal.Body>
 
-         
-    <div className='text-center '>
-              Are you sure you want to proceed?
+        {requestProcessor.request_status ===
+          authConstants.ACTIVATE_DEACTIVATE_USER_RESET &&
+          <div className='text-center '>
+            Are you sure you want to proceed?
         </div>
+        }
       {requestProcessor.request_status ===
         authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE && (
         <div className='text-center errortxt'>
@@ -86,25 +88,28 @@ export const ActivateUserModal =  ({ open, toggleHandler,proceedHandler,requestP
 
 
      
-    <Modal.Footer>
-       
-       <Button variant="light" onClick={toggleHandler}>
-                               Cancel
-                           </Button>
-                          
-                               <Button
-                               onClick={proceedHandler}
-                                   variant="success"
-                                   type="submit"
-                                   disabled={requestProcessor.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS ||
-                                     requestProcessor.request_status ===
-                                       authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE}
-                               >
-                                   {requestProcessor.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_PENDING ? "Please wait..." : `Proceed`}
+      <Modal.Footer>
 
-                               </Button>
-                           
-     </Modal.Footer>
+        <Button variant="light" onClick={toggleHandler}>
+          
+          {requestProcessor.request_status !== authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS && "Cancel"}
+          {requestProcessor.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS && "Okay"}
+        </Button>
+        {requestProcessor.request_status !== authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS &&
+          <Button
+            onClick={proceedHandler}
+            variant="success"
+            type="submit"
+            disabled={requestProcessor.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS ||
+              requestProcessor.request_status ===
+              authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE}
+          >
+            {requestProcessor.request_status === authConstants.ACTIVATE_DEACTIVATE_USER_PENDING ? "Please wait..." : `Proceed`}
+
+          </Button>
+        }
+
+      </Modal.Footer>
 
 
 
