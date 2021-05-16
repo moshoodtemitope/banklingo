@@ -396,10 +396,12 @@ console.log('dashboard load');
                     // maximumBalance: Yup.string()
                     //     .required('Required'),
                     openingAmount: Yup.string()
-                        .required('Required'),
+                        .required('Required').nullable(),
                     tillBalanceConstraintType: Yup.string()
-                        .required('Required'),
+                        .required('Required').nullable(),
                 });
+
+
                 let tellersData =  this.props.fetchAllTillsReducer.request_data.response4.data,
                     currencyData =  this.props.fetchAllTillsReducer.request_data.response5.data,
                     allTellers = [],
@@ -422,8 +424,6 @@ console.log('dashboard load');
 
 
                 
-                
-
                 
                     const selectStyle =  {
                         control: base => ({
@@ -453,9 +453,9 @@ console.log('dashboard load');
                             <Formik
                                 initialValues={{
                                     // tillId: "",
-                                    openingAmount:"",
-                                    maximumBalance:"",
-                                    mimimumbalance:"",
+                                    openingAmount:null,
+                                    maximumBalance:null,
+                                    mimimumbalance:null,
                                     tillBalanceConstraintType:"",
                                     currencyCode:"",
                                     userEncodedKey:"",
@@ -482,7 +482,7 @@ console.log('dashboard load');
                                         currencyCode: values.currencyCode
                                     }
 
-                                    // console.log("till datata", requestPayload);
+                                //    console.log("till datata", requestPayload);
                                     
 
                                     this.handleOpenTill(requestPayload)
@@ -585,7 +585,7 @@ console.log('dashboard load');
                                             <Form.Control
                                                 type="text"
                                                 name="openingAmount"
-                                                value={numberWithCommas(values.openingAmount)}
+                                                value={numberWithCommas(values.openingAmount)??""}
                                                 onChange={handleChange}
                                                 className={errors.openingAmount && touched.openingAmount ? "is-invalid" : null}
                                                 required />
@@ -599,7 +599,7 @@ console.log('dashboard load');
                                             <Form.Control
                                                 type="text"
                                                 name="maximumBalance"
-                                                value={numberWithCommas(values.maximumBalance)}
+                                                value={numberWithCommas(values.maximumBalance)??""}
                                                 onChange={handleChange}
                                                 className={errors.maximumBalance && touched.maximumBalance ? "is-invalid" : null}
                                                 required />
@@ -613,7 +613,7 @@ console.log('dashboard load');
                                             <Form.Control
                                                 type="text"
                                                 name="mimimumbalance"
-                                                value={numberWithCommas(values.mimimumbalance)}
+                                                value={numberWithCommas(values.mimimumbalance)??""}
                                                 onChange={handleChange}
                                                 className={errors.mimimumbalance && touched.mimimumbalance ? "is-invalid" : null}
                                                 required />
@@ -649,7 +649,6 @@ console.log('dashboard load');
                                         </Form.Group>
                                         
                                         
-
                                         
                                         
                                         
