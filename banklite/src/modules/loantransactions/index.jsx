@@ -255,7 +255,7 @@ class LoanTransactions extends React.Component {
                 <thead>
                   <tr>
                     <th>Account Holder</th>
-                    <th>Loan Account Number</th>
+                    <th>Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Transaction ID</th>
@@ -380,7 +380,7 @@ class LoanTransactions extends React.Component {
                 <thead>
                   <tr>
                     <th>Account Holder</th>
-                    <th>Loan Account Number</th>
+                    <th>Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Currency</th>
@@ -583,7 +583,7 @@ class LoanTransactions extends React.Component {
                   <thead>
                     <tr>
                       <th>Account Holder</th>
-                      <th>Loan Account Number</th>
+                      <th>Account Number</th>
                       <th>Type</th>
                       <th>Transaction Amount</th>
                       <th>Transaction ID</th>
@@ -788,7 +788,7 @@ class LoanTransactions extends React.Component {
                   <thead>
                     <tr>
                       <th>Account Holder</th>
-                      <th>Loan Account Number</th>
+                      <th>Account Number</th>
                       <th>Type</th>
                       <th>Transaction Amount</th>
                       <th>Transaction ID</th>

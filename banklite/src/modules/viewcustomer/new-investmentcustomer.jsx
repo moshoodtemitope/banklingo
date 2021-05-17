@@ -657,10 +657,7 @@ class NewInvestmentCustomerAccount extends React.Component {
                                                         <Button>Create Investment Client</Button>
                                                     </div>
                                                 </Form>
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                               
                                             </div>
                                         </div>
                                     </div>

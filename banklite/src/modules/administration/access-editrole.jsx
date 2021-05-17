@@ -531,10 +531,7 @@ class EditRole extends React.Component {
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
                                                 {this.renderUpdateRole()}
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                            
                                             </div>
                                         </div>
                                     </div>

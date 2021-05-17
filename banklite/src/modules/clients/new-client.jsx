@@ -1348,10 +1348,7 @@ class NewClient extends React.Component {
                   <div className='col-sm-12'>
                     <div className='middle-content'>
                       <div className='full-pageforms w-60'>
-                        {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                       
                         {this.renderCreateNewCustomer()}
                       </div>
                     </div>
