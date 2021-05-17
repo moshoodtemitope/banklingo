@@ -457,7 +457,7 @@ class JournalEntries extends React.Component {
                                                                 </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level"
-                                                                    htmlFor={`jornalEntries.${index}.entryTypeId`}>Journal Entry Type</Form.Label>
+                                                                    htmlFor={`jornalEntries.${index}.entryTypeId`}>Type</Form.Label>
                                                                 <Select
                                                                     options={entryTypes}
                                                                     // onBlur={handleBlur}
