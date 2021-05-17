@@ -289,7 +289,7 @@ class DepositTransactions extends React.Component {
                 <thead>
                   <tr>
                     <th>Account Holder</th>
-                    <th>Deposit Account Number</th>
+                    <th>Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Transaction ID</th>
@@ -424,7 +424,7 @@ class DepositTransactions extends React.Component {
                 <thead>
                   <tr>
                     <th>Account Holder</th>
-                    <th>Deposit Account Number</th>
+                    <th>Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Transaction ID</th>
@@ -640,7 +640,7 @@ class DepositTransactions extends React.Component {
                   <thead>
                     <tr>
                       <th>Account Holder</th>
-                      <th>Deposit Account Number</th>
+                      <th>Account Number</th>
                       <th>Type</th>
                       <th>Transaction Amount</th>
                       <th>Currency</th>
@@ -829,7 +829,7 @@ class DepositTransactions extends React.Component {
                   <thead>
                     <tr>
                       <th>Account Holder</th>
-                      <th>Deposit Account Number</th>
+                      <th>Account Number</th>
                       <th>Type</th>
                       <th>Transaction Amount</th>
                       <th>Transaction ID</th>
