@@ -37,6 +37,7 @@ class AccountManagement extends React.Component {
             accountTypeToFetch:0
         }
         this.statsTemp = '';
+        this.userPermissions = JSON.parse(localStorage.getItem('x-u-perm'));
         
     }
 
@@ -202,6 +203,11 @@ class AccountManagement extends React.Component {
             {CurrentPage, PageSize, typeToShow} = this.state,
             createGLAccountRequest = this.props.createGLAccount,
             updateGLAccount = this.props.updateGLAccount;
+
+        let allUSerPermissions = [];
+            this.userPermissions.map((eachPermission) => {
+              allUSerPermissions.push(eachPermission.permissionCode);
+            });
 
         let saveRequestData= getGLAccountsRequest.request_data!==undefined?getGLAccountsRequest.request_data.tempData:null;
         
@@ -643,9 +649,12 @@ class AccountManagement extends React.Component {
                                         
                                     </tbody>
                                 </TableComponent>
-                                <div className="footer-with-cta toleft">
-                                    <Button onClick={this.handleShow}>Add a new account</Button>
-                                </div>
+                                {allUSerPermissions.indexOf('bnk_create_charts_of_accounts') >
+                                    -1 &&
+                                    <div className="footer-with-cta toleft">
+                                        <Button onClick={this.handleShow}>Add a new account</Button>
+                                    </div>
+                                }
                 
                             </div>
                         )
