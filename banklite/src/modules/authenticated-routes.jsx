@@ -328,8 +328,8 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/closed-withdrawn' {...this.props} authed={this.props.user} loanState={LoanStateConstants.CLOSED_WITHDRAWN} component={LoanListDisplay} />  
                         <PrivateRoute accessRequired="bnk_view_loan_accounts" exact path='/all-loans/partial-application' {...this.props} authed={this.props.user} loanState={LoanStateConstants.PARTIAL_APPLICATION} component={LoanListDisplay} />  
 
-                        <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/cheques' {...this.props} authed={this.props.user}  component={ChequeManagement} />
-                        <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/cheques/uncleared' {...this.props} authed={this.props.user}  component={UnclearedChequeManagement} />
+                        <PrivateRoute accessRequired="bnk_view_cheque_clearing" exact path='/cheques' {...this.props} authed={this.props.user}  component={ChequeManagement} />
+                        <PrivateRoute accessRequired="bnk_view_cheque_clearing" exact path='/cheques/uncleared' {...this.props} authed={this.props.user}  component={UnclearedChequeManagement} />
                         
                         <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/deposits/all' {...this.props} authed={this.props.user} depositState={DepositStateConstants.ALL} component={DepositManagement} />
                         <PrivateRoute accessRequired="bnk_view_deposit_accounts" exact path='/deposits/partial-applications' {...this.props} authed={this.props.user}  depositState={DepositStateConstants.Partial_Application} component={DepositManagement} />
@@ -437,7 +437,7 @@ class AuthenticatedRoutes extends React.Component {
                        
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/newbranch' {...this.props} authed={this.props.user} component={NewBranch} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/editbranch/:encodedkey' {...this.props} authed={this.props.user} component={EditBranch} />
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/branch-closures' {...this.props} authed={this.props.user} component={OrganizationBranchesClosures} />
+                        <PrivateRoute accessRequired="bnk_manage_branch_closure" exact path='/branch-closures' {...this.props} authed={this.props.user} component={OrganizationBranchesClosures} />
                         {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures' {...this.props} authed={this.props.user} component={OrganizationBranchesClosures} /> */}
                         {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures/open' {...this.props} authed={this.props.user} component={OrganizationBranchesOpen} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures/closed' {...this.props} authed={this.props.user} component={OrganizationBranchesClosed} /> */}
