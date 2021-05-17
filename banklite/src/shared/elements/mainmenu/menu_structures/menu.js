@@ -111,7 +111,8 @@ export const menuList = [
                 subMenuRoute: "/deposits/all"
             },
             {
-                subMenuLabel: "Cheques",
+                subMenuLabel: "Cheque Clearing",
+                permissionCode: "bnk_view_cheque_clearing",
                 subMenuRoute: "/cheques"
             },
         ]
@@ -263,6 +264,7 @@ export const menuList = [
             },
             {
                 subMenuLabel: "Branch Closures",
+                permissionCode:"bnk_manage_branch_closure",
                 subMenuRoute: "/branch-closures"
             }
         ]

@@ -37,6 +37,7 @@ class UnclearedChequeManagement extends React.Component {
       startDate: '',
       SearchText: '',
     };
+    this.userPermissions = JSON.parse(localStorage.getItem('x-u-perm'));
   }
 
   componentDidMount() {
@@ -160,6 +161,11 @@ class UnclearedChequeManagement extends React.Component {
       getChequesReducer.request_data !== undefined
         ? getChequesReducer.request_data.tempData
         : null;
+
+    let allUSerPermissions = [];
+      this.userPermissions.map((eachPermission) => {
+        allUSerPermissions.push(eachPermission.permissionCode);
+      });
     switch (getChequesReducer.request_status) {
       case loanAndDepositsConstants.GET_CHEQUES_PENDING:
         if (
@@ -500,10 +506,21 @@ class UnclearedChequeManagement extends React.Component {
                                     key='activeCurrency'
                                     className='customone'
                                   >
-                                    <Dropdown.Item onClick={()=>this.handleShowCheque(eachRequest, "Cheque Details")} eventKey='1'>View</Dropdown.Item>
-                                    <Dropdown.Item onClick={()=>this.handleShowCheque(eachRequest, "Clear Cheque", "clearcheque")} eventKey='2'>Clear Cheque</Dropdown.Item>
-                                    <Dropdown.Item onClick={()=>this.handleShowCheque(eachRequest, "Bounce Cheque", "bounce")} eventKey='2'>Bounce Cheque</Dropdown.Item>
-                                    <Dropdown.Item onClick={()=>this.handleShowCheque(eachRequest, "Cancel Cheque", "cancel")} eventKey='3'>Cancel Cheque</Dropdown.Item>
+                                  {allUSerPermissions.indexOf('bnk_view_cheque_clearing') >
+                                    -1 && <Dropdown.Item onClick={() => this.handleShowCheque(eachRequest, "Cheque Details")} eventKey='1'>View</Dropdown.Item>
+                                  }
+                                  {allUSerPermissions.indexOf('bnk_clear_cheque_clearing') >
+                                    -1 && <Dropdown.Item onClick={()=>this.handleShowCheque(eachRequest, "Clear Cheque", "clearcheque")} eventKey='2'>Clear Cheque</Dropdown.Item>
+                                  }
+                                  {allUSerPermissions.indexOf('bnk_cancel_cheque_clearing') >
+                                    -1 && <Dropdown.Item onClick={()=>this.handleShowCheque(eachRequest, "Bounce Cheque", "bounce")} eventKey='2'>Bounce Cheque</Dropdown.Item>
+                                  }
+                                  {allUSerPermissions.indexOf('bnk_cancel_cheque_clearing') >
+                                    -1 && <Dropdown.Item onClick={()=>this.handleShowCheque(eachRequest, "Cancel Cheque", "cancel")} eventKey='3'>Cancel Cheque</Dropdown.Item>
+                                  }
+                                    
+                                    
+                                    
                                   </DropdownButton>
                                 </td>
                             </tr>
