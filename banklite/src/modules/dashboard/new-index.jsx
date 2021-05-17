@@ -1451,6 +1451,10 @@ console.log('dashboard load');
                 .then(()=>{
                     if(this.props.searchForCustomerReducer.request_status===dashboardConstants.SEARCH_FOR_CUSTOMER_SUCCESS){
                         let searchResults = this.props.searchForCustomerReducer.request_data.response.data;
+                        
+
+                        searchResults = searchResults.filter(eachResult=>eachResult.searchItemType===0);
+                        console.log("search items", searchResults);
                         this.setState({defaultOptions:searchResults })
 
                         
@@ -1569,7 +1573,7 @@ console.log('dashboard load');
     }
 
     getSearchForCustomerOptionValue = (option) => option.clientEncodedKey; 
-    getSearchOptionForCustomerLabel = (option) => option.clientName; 
+    getSearchOptionForCustomerLabel = (option) => option.clientName || option.searchText; 
     
     getSearchForAccountOptionValue = (option) => option.searchItemEncodedKey; // maps the result 'id' as the 'value'
     getSearchOptionForAccountLabel = (option) => `${option.searchText} ${option.searchKey}`; // maps the result 'name' as the 'label'
@@ -1923,6 +1927,14 @@ console.log('dashboard load');
                         allMyTills.push(eachtill.tillId)
                     })
 
+                    // if(txtOption!=="cheque"){
+                    //     allTxtn =[
+                    //         {label: "Repayment", value:1},
+                    //         {label: "Deposit", value:2},
+                    //         {label: "Withdrawal", value:3}
+                    //     ]
+                    // }
+
                     if(this.state.selectedOption && this.state.selectedOption.searchItemType===2){
                         allTxtn =[
                             {label: "Repayment", value:1},
@@ -2131,10 +2143,14 @@ console.log('dashboard load');
                                                             onChange={(selectedOption) => {
                                                                 setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
                                                                 // console.log("calleded", selectedOption)
-                                                                setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
-                                                                this.handleSelectedAccount(selectedOption)
-                                                                this.getSearchOptionForCustomerLabel(selectedOption)
-                                                                this.getSearchForCustomerOptionValue(selectedOption)
+                                                                
+                                                                if(values.clientEncodedKey===""){
+                                                                    setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
+                                                                    this.handleSelectedAccount(selectedOption)
+                                                                }
+                                                                
+                                                                // this.getSearchOptionForCustomerLabel(selectedOption)
+                                                                // this.getSearchForCustomerOptionValue(selectedOption)
                                                                 // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
 
 
@@ -2151,19 +2167,20 @@ console.log('dashboard load');
                                                             <span className="invalid-feedback">{errors.chosenAccountNum}</span>
                                                         ) : null}
                                                     </div>
-                                                    {this.state.showMandateLink && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
+                                                    {(this.state.showMandateLink && values.chosenAccountNum!=="")  && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
                                                     {/* {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>} */}
                                                 </div>
                                             </div>
 
                                         </Form.Group>
-                                        {this.state.selectedOption &&
+                                        {/* {this.state.selectedOption && */}
                                             <Form.Group>
                                                 <Form.Label className="block-level">Transaction</Form.Label>
 
                                                 <div className="select-drop pr-10">
                                                     <Select
-                                                        options={allTxtn}
+                                                        options={ allTxtn}
+                                                        // options={this.state.selectedOption ? allTxtn : []}
                                                         ref={ref => {
                                                             this.selectRef = ref;
                                                         }}
@@ -2175,6 +2192,7 @@ console.log('dashboard load');
                                                                 values.txtnType = selectedTxtn.value
                                                             }
                                                         }}
+                                                        noOptionsMessage={() => 'Account must be selected'}
                                                         className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
                                                         name="txtnType"
                                                         required
@@ -2186,7 +2204,7 @@ console.log('dashboard load');
                                                 </div>
 
                                             </Form.Group>
-                                        }
+                                        {/* } */}
                                         <Form.Group className="mr-10">
                                             <Form.Label className="block-level">Amount</Form.Label>
                                             <Form.Control type="text"
