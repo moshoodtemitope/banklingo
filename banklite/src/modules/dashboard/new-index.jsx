@@ -2334,10 +2334,15 @@ console.log('dashboard load');
                                                                 errors.chosenAccountNum = null;
                                                                 touched.chosenAccountNum = null;
                                                                 // console.log("calleded", selectedOption)
-                                                                setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
-                                                                this.handleSelectedAccount(selectedOption)
-                                                                this.getSearchOptionForCustomerLabel(selectedOption)
-                                                                this.getSearchForCustomerOptionValue(selectedOption)
+                                                                // setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
+                                                                // this.handleSelectedAccount(selectedOption)
+                                                                if(values.clientEncodedKey===""){
+                                                                    setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
+                                                                    this.handleSelectedAccount(selectedOption)
+                                                                }
+
+                                                                // this.getSearchOptionForCustomerLabel(selectedOption)
+                                                                // this.getSearchForCustomerOptionValue(selectedOption)
                                                                 // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
 
 
@@ -2354,7 +2359,7 @@ console.log('dashboard load');
                                                             <span className="invalid-feedback">{errors.chosenAccountNum}</span>
                                                         ) : null}
                                                     </div>
-                                                    {this.state.showMandateLink && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
+                                                    {(this.state.showMandateLink && values.chosenAccountNum!=="") && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
                                                     {/* {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>} */}
                                                 </div>
                                             </div>
