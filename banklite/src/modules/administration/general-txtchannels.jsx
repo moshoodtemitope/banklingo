@@ -399,7 +399,7 @@ class GeneralTxtChannels extends React.Component {
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
-                                                                    <td>{eachChannel.name}</td>
+                                                                    <td>{eachChannel.name} {eachChannel.isCashDefault===true && <span className="base-currency">Default</span>}</td>
                                                                     <td>{eachChannel.key}</td>
                                                                     <td>{eachChannel.dateCreated}</td>
                                                                     <td>{eachChannel.createdBy!==null?eachChannel.createdBy:''}</td>
@@ -423,9 +423,9 @@ class GeneralTxtChannels extends React.Component {
                                             </tbody>
                                         </TableComponent>
                                         <div className="footer-with-cta toleft">
-                                            {/* <Button variant="secondary" className="grayed-out">Rearrange</Button> */}
+                                           
                                             <NavLink to={'/administration/general/new-txt-channels'} className="btn btn-primary">Add Channel</NavLink>
-                                            {/* <Button href="/administration/general/new-txt-channels">Add Channel</Button> */}
+                                           
                                         </div>
                                     </div>
                                 )

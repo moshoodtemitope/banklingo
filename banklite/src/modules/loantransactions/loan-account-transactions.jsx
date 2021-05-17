@@ -277,6 +277,7 @@ fetchForBusyState(){
                       </td>
                       <td>{eachTransaction.currencyCode}</td>
                       <td>{eachTransaction.transactionKey}</td>
+                      <td>{eachTransaction.transactionStateDescription}</td>
                       <td>{eachTransaction.userName}</td>
                       <td>{eachTransaction.remarks}</td>
                       {/* <td></td> */}
@@ -472,11 +473,13 @@ fetchPageList() {
                                 <TableComponent classnames="striped bordered hover">
                                     <thead>
                                         <tr>
-                                            <th>Loan Account Number</th>
-                                            <th>Account Holder Name</th>
+                                            <th>Account Number</th>
+                                            <th>Account Holder</th>
                                             <th>Transaction Type</th>
                                             <th>Transaction Amount</th>
                                             <th>Currency</th>
+                                            <th>Transaction Id</th>
+                                            <th>State</th>
                                             <th>Username</th>
                                             <th>Transaction Date</th>
                                             <th>Entry Date</th>

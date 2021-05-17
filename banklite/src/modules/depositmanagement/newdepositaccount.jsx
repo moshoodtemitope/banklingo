@@ -267,7 +267,7 @@ class NewDepositAccount extends React.Component {
                                 if(customerFetchedData!==undefined){
                                     currentClientEncodedKey=customerFetchedData.encodedKey;
                                 }
-                                
+
                                 return(
                                     <Formik
                                     initialValues={{
@@ -706,10 +706,7 @@ else
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
                                                 {this.renderCreateDepositAccount()}
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                                
                                             </div>
                                         </div>
                                     </div>
