@@ -513,7 +513,7 @@ console.log('dashboard load');
                                     errors, }) =>{
                                         
                                         
-                                        console.log(errors);
+                                        console.log('model validations '+errors);
                                         
                                         
                                         return (
@@ -522,22 +522,6 @@ console.log('dashboard load');
                                     <Form noValidate
                                         onSubmit={handleSubmit}>
 
-                                        {/* <Form.Group>
-                                            <Form.Label className="block-level">ID</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="tillId"
-                                                value={values.tillId}
-                                                onChange={handleChange}
-                                                disabled={true}
-                                                placeholder=""
-                                                className={errors.tillId && touched.tillId ? "is-invalid" : null}
-                                                required />
-
-                                            {errors.tillId && touched.tillId ? (
-                                                <span className="invalid-feedback">{errors.tillId}</span>
-                                            ) : null}
-                                        </Form.Group> */}
                                         <Form.Group>
                                             <Form.Label className="block-level">Teller</Form.Label>
                                             <div className="select-drop">
@@ -644,7 +628,7 @@ console.log('dashboard load');
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
                                                         if(selectedOption){
-                                                            errors.tillBalanceConstraintType = null
+                                                         //   errors.tillBalanceConstraintType = null
                                                             values.tillBalanceConstraintType = selectedOption.value
                                                         }
                                                     }}
