@@ -687,7 +687,7 @@ class UnclearedChequeManagement extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className=''>
-                        <h2>All Cheques</h2>
+                        <h2>All Requests</h2>
                       </div>
                     </div>
                   </div>
