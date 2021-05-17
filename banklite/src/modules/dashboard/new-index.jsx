@@ -397,6 +397,7 @@ console.log('dashboard load');
                     //     .required('Required'),
                     openingAmount: Yup.string()
                         .required('Required').nullable(),
+                        
                     tillBalanceConstraintType: Yup.string()
                         .required('Required').nullable(),
                 });
@@ -509,7 +510,15 @@ console.log('dashboard load');
                                     values,
                                     touched,
                                     isValid,
-                                    errors, }) => (
+                                    errors, }) =>{
+                                        
+                                        
+                                        console.log(errors);
+                                        
+                                        
+                                        return (
+
+                                        
                                     <Form noValidate
                                         onSubmit={handleSubmit}>
 
@@ -540,7 +549,7 @@ console.log('dashboard load');
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
                                                         if(selectedOption){
-                                                            errors.userEncodedKey = null
+                                                          //  errors.userEncodedKey = null
                                                             values.userEncodedKey = selectedOption.value
                                                         }
                                                     }}
@@ -565,7 +574,7 @@ console.log('dashboard load');
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
                                                         if(selectedOption){
-                                                            errors.currencyCode = null
+                                                          //  errors.currencyCode = null
                                                             values.currencyCode = selectedOption.value
                                                         }
                                                     }}
@@ -575,9 +584,11 @@ console.log('dashboard load');
                                                 />
 
                                                 {errors.currencyCode && touched.currencyCode ? (
+                                                   
                                                     <span className="invalid-feedback">{errors.currencyCode}</span>
                                                 ) : null}
                                             </div>
+                                         
                                         </Form.Group>
 
                                         <Form.Group>
@@ -623,7 +634,7 @@ console.log('dashboard load');
                                             ) : null}
                                         </Form.Group>
                                         <Form.Group>
-                                            <Form.Label className="block-level">Balance Constant Type</Form.Label>
+                                            <Form.Label className="block-level">Balance Constraint Type</Form.Label>
                                             <div className="select-drop">
                                                 <Select
                                                     options={allOptions}
@@ -691,7 +702,7 @@ console.log('dashboard load');
 
 
                                     </Form>
-                                )}
+                                )}}
                             </Formik>
                         </div>
                     </div>
@@ -2604,7 +2615,7 @@ console.log('dashboard load');
             return (
                 <div className="each-card mt-20">
                     <div className="each-card-heading">
-                        
+
                         <h4>Teller Management</h4>
                         <div className="card-actions at-end">
                             <div className="each-cardaction" onClick={this.showOpenTill}>

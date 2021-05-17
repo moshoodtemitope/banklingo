@@ -293,6 +293,7 @@ class DepositTransactions extends React.Component {
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Transaction ID</th>
+                    <th>State</th>
                     <th>Narration</th>
                     <th>User Name</th>
                     {/* <th>Entry Date</th> */}
@@ -301,6 +302,7 @@ class DepositTransactions extends React.Component {
                 </thead>
                 <tbody>
                   <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -428,6 +430,7 @@ class DepositTransactions extends React.Component {
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Transaction ID</th>
+                    <th>State</th>
                     <th>Narration</th>
                     <th>User Name</th>
                     {/* <th>Entry Date</th> */}
@@ -465,6 +468,7 @@ class DepositTransactions extends React.Component {
                           </td>
                           <td>{eachTransaction.currencyCode}</td>
                           <td>{eachTransaction.key}</td>
+                          <td>{eachTransaction.transactionStateDescription}</td>
                           <td>{eachTransaction.narration}</td>
                           <td>{eachTransaction.userName}</td>
                           {/* <td>{eachTransaction.entryDate}</td> */}
@@ -645,6 +649,7 @@ class DepositTransactions extends React.Component {
                       <th>Transaction Amount</th>
                       <th>Currency</th>
                       <th>Transaction ID</th>
+                      <th>State</th>
                       <th>Narration</th>
                       <th>User Name</th>
                       {/* <th>Entry Date</th> */}
@@ -681,6 +686,7 @@ class DepositTransactions extends React.Component {
                                 )}
                               </td>
                               <td>{eachTransaction.key}</td>
+                              <td>{eachTransaction.transactionStateDescription}</td>
                               <td width='300'>{eachTransaction.narration}</td>
                               <td>{eachTransaction.userName}</td>
                               {/* <td>{eachTransaction.entryDate}</td> */}
@@ -833,6 +839,7 @@ class DepositTransactions extends React.Component {
                       <th>Type</th>
                       <th>Transaction Amount</th>
                       <th>Transaction ID</th>
+                      <th>State</th>
                       <th>Narration</th>
                       <th>User Name</th>
                       {/* <th>Entry Date</th> */}
