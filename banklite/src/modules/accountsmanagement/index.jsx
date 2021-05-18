@@ -607,15 +607,18 @@ class AccountManagement extends React.Component {
                                                                 <td>{eachGL.manualEntriesAllowed.toString()==="true"?"Allowed":"Not Allowed"}</td>
                                                             }
                                                             <td>
-                                                                <DropdownButton
-                                                                    size="sm"
-                                                                    title="Actions"
-                                                                    key="glAccountActions"
-                                                                    // drop="left"
-                                                                    className="customone"
-                                                                >
-                                                                    <Dropdown.Item eventKey="1" onClick={()=>this.handleEditGlShow(eachGL.glCode, eachGL.accountTypeDescription)}>Edit</Dropdown.Item>
-                                                                </DropdownButton>
+                                                                {allUSerPermissions.indexOf('bnk_edit_charts_of_accounts') >
+                                                                    -1 &&
+                                                                    <DropdownButton
+                                                                        size="sm"
+                                                                        title="Actions"
+                                                                        key="glAccountActions"
+                                                                        // drop="left"
+                                                                        className="customone"
+                                                                    >
+                                                                        <Dropdown.Item eventKey="1" onClick={() => this.handleEditGlShow(eachGL.glCode, eachGL.accountTypeDescription)}>Edit</Dropdown.Item>
+                                                                    </DropdownButton>
+                                                                }
                                                             </td>
                                                         </tr>
                                                     )
