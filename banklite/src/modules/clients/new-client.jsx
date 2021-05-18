@@ -105,51 +105,55 @@ class NewClient extends React.Component {
         is: '1',
         then: Yup.string().required('Required'),
       }),
-    employmentDate: Yup.string()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.string().required("Required"),
-      }),
-    officialEmail: Yup.string()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.string(),
-      }),
-    monthlySalary: Yup.string()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.string().nullable(),
-      }),
-    employeeSector: Yup.string()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.string().required('Required'),
-      }),
-    employeeSubSector: Yup.string()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.string().required('Required'),
-      }),
-    payDay: Yup.number()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.number().required('Required'),
-      }),
-    employerAddress: Yup.string()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.string().required('Required'),
-      }),
-    employerAddressState: Yup.string()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.string().required('Required'),
-      }),
-    employerAddressCity: Yup.string()
-      .when('workStatus', {
-        is: '1',
-        then: Yup.string().required('Required'),
-      }),
+    // employmentDate: Yup.string()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.string().required("Required"),
+    //   }),
+    // officialEmail: Yup.string()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.string(),
+    //   }),
+    // monthlySalary: Yup.string()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.string().nullable(),
+    //   }),
+    // employeeSector: Yup.string()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.string().required('Required'),
+    //   }),
+    // employeeSubSector: Yup.string()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.string().required('Required'),
+    //   }),
+    // payDay: Yup.number()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.number().required('Required'),
+    //   }),
+    // employerAddress: Yup.string()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.string().required('Required'),
+    //   }),
+    // employerAddressState: Yup.string()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.string().required('Required')
+    //     ,
+    //   }),
+    // employerAddressCity: Yup.string()
+    //   .when('workStatus', {
+    //     is: '1',
+    //     then: Yup.string()//.required('Required')
+    //     ,
+    //   }
+      
+    //   ),
 
     contactMobile: Yup.string()
       .required()
@@ -309,35 +313,20 @@ class NewClient extends React.Component {
                 nextOfKinMobileNumber: values.nextOfKinMobile.toString(),
                 relationship: values.nextOfKinRelationship,
               },
-              employmentInformation: {
+              employmentInformation:values.workStatus !== '1'? null:  {
                 workStatus: parseInt(values.workStatus),
                 employerName: values.employerName,
-                employmentDate:
-                  values.employmentDate !== '' && values.workStatus === '1'
-                    ? values.employmentDate.toISOString()
-                    : null,
-                officialEmail:
-                  values.workStatus === '1' ? values.officialEmail : null,
-                monthlySalary:
-                  values.workStatus === '1'
-                    ? parseFloat(values.monthlySalary.replace(/,/g, ''))
-                    : null,
-                employeeSector:
-                  values.workStatus === '1' ? values.employeeSector : null,
-                employeeSubSector:
-                  values.workStatus === '1' ? values.employeeSubSector : null,
-                payDay:
-                  values.workStatus === '1' ? parseInt(values.payDay) : null,
-                employerAddress:
-                  values.workStatus === '1' ? values.employerAddress : null,
-                employerAddressCity:
-                  values.workStatus === '1' ? values.employerAddressCity : null,
-                employerAddressState:
-                  values.workStatus === '1'
-                    ? values.employerAddressState
-                    : null,
+                employmentDate:(values.employmentDate === "" || values.employmentDate === null)? null:values.employmentDate?.toISOString(),
+                officialEmail: values.officialEmail,
+                monthlySalary:(values.monthlySalary === "" || values.monthlySalary === null)? null:parseFloat(values.monthlySalary.replace(/,/g, '')),
+                employeeSector: values.employeeSector,
+                employeeSubSector: values.employeeSubSector,
+                payDay:(values.payDay === "")? null:parseInt(values.payDay),
+                employerAddress: values.employerAddress,
+                employerAddressCity: values.employerAddressCity,
+                employerAddressState: values.employerAddressState,
               },
-              bvn: values.BVN.toString(),
+              bvn: values.BVN?.toString(),
               gender: values.gender,
               dateOfBirth:
                 values.dateOfBirth !== ''
@@ -979,7 +968,7 @@ class NewClient extends React.Component {
                               type='text'
                               name='officialEmail'
                               onChange={handleChange}
-                              value={values.officialEmail}
+                              value={values.officialEmail??''}
                               className={
                                 errors.officialEmail && touched.officialEmail
                                   ? 'is-invalid'
