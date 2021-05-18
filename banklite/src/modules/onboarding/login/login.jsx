@@ -190,7 +190,7 @@ class LoginWrap extends React.Component {
                                     value={values.email}
                                     onChange={handleChange}
                                     placeholder="Enter your username"
-                                    className={errors.email && touched.email ? "is-invalid" : null}
+                                    className={errors.email && touched.email ? "is-invalid" : ""}
                                     required />
 
                                     {errors.email && touched.email ? (
@@ -206,7 +206,7 @@ class LoginWrap extends React.Component {
                                     value={values.password}
                                     placeholder="Enter your password"
                                     onChange={handleChange}
-                                    className={errors.password && touched.password ? "is-invalid" : null}
+                                    className={errors.password && touched.password ? "is-invalid" : ""}
                                     required />
 
                                     {errors.password && touched.password ? (

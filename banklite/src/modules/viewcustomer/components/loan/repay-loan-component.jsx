@@ -249,7 +249,7 @@ export class RepayLoanModal extends React.Component {
                                                                 setFieldValue('txtChannelEncodedKey', selected.value)
                                                             }}
                                                             onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
-                                                            className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+                                                            className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : ""}
                                                             name="txtChannelEncodedKey"
                                                         />
                                                         {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (

@@ -279,7 +279,7 @@ class NewGroupClient extends React.Component {
                           errors.roleChosen = null
                           values.roleChosen = selectedRole.value
                         }}
-                        className={errors.roleChosen && touched.roleChosen ? "is-invalid" : null}
+                        className={errors.roleChosen && touched.roleChosen ? "is-invalid" : ""}
                         name="roleChosen"
                         required
                       />
@@ -610,7 +610,7 @@ data-tip data-for="registerTip"
                             errors.custType = null
                             values.custType = selectedCustType.value
                         }}
-                        className={errors.custType && touched.custType ? "is-invalid" : null}
+                        className={errors.custType && touched.custType ? "is-invalid" : ""}
                         // value={values.accountUsage}
                         name="custType"
                         // value={values.currencyCode}
@@ -712,7 +712,7 @@ data-tip data-for="registerTip"
                                 errors.roleChosen = null
                                 values.roleChosen = selectedRole.value
                               }}
-                              className={errors.roleChosen && touched.roleChosen ? "is-invalid" : null}
+                              className={errors.roleChosen && touched.roleChosen ? "is-invalid" : ""}
                               name="roleChosen"
                               required
                             />

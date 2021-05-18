@@ -631,7 +631,7 @@ class GeneralTxtChannels extends React.Component {
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={values.TxtChannelName}
-                                                            className={errors.TxtChannelName && touched.TxtChannelName ? "is-invalid" : null}
+                                                            className={errors.TxtChannelName && touched.TxtChannelName ? "is-invalid" : ""}
                                                             name="TxtChannelName" required />
                                                         {errors.TxtChannelName && touched.TxtChannelName ? (
                                                             <span className="invalid-feedback">{errors.TxtChannelName}</span>
@@ -645,7 +645,7 @@ class GeneralTxtChannels extends React.Component {
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={values.TxtChannelKey}
-                                                            className={errors.TxtChannelKey && touched.TxtChannelKey ? "is-invalid" : null}
+                                                            className={errors.TxtChannelKey && touched.TxtChannelKey ? "is-invalid" : ""}
                                                             name="TxtChannelKey" required />
 
                                                         {errors.TxtChannelKey && touched.TxtChannelKey ? (
@@ -667,7 +667,7 @@ class GeneralTxtChannels extends React.Component {
                                                             
                                                             
                                                         }}
-                                                        className={errors.TxtChannelId && touched.TxtChannelId ? "is-invalid" : null}
+                                                        className={errors.TxtChannelId && touched.TxtChannelId ? "is-invalid" : ""}
                                                         
                                                         name="TxtChannelId"
                                                         // value={values.currencyCode}

@@ -324,11 +324,11 @@ class EditUser extends React.Component {
                 // validationSchema={updateUserValidationSchema}
                 onSubmit={(values, { resetForm }) => {
                     let allErrors = "";
-                    if(values.canAccessAllBranches ===false && this.selectBranchesList.length===0){
-                        allErrors += "Select allowed branches"
-                    }else{
-                        allErrors =""
-                    }
+                    // if(values.canAccessAllBranches ===false && this.selectBranchesList.length===0){
+                    //     allErrors += "Select allowed branches"
+                    // }else{
+                    //     allErrors =""
+                    // }
 
                     // console.log("kjkhgh", )
 
@@ -513,7 +513,7 @@ class EditUser extends React.Component {
                                             
                                         }}
                                         onBlur={() => setFieldTouched('roleId', true)}
-                                        className={errors.roleId && touched.roleId ? "is-invalid" : null}
+                                        className={errors.roleId && touched.roleId ? "is-invalid" : ""}
                                         name="roleId"
                                         
                                     />
@@ -732,7 +732,7 @@ class EditUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressLine1}
-                                                    className={errors.addressLine1 && touched.addressLine1 ? "is-invalid" : null}
+                                                    className={errors.addressLine1 && touched.addressLine1 ? "is-invalid" : ""}
                                                     name="addressLine1" />
                                                 {errors.addressLine1 && touched.addressLine1 ? (
                                                     <span className="invalid-feedback">{errors.addressLine1}</span>
@@ -744,7 +744,7 @@ class EditUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressLine2}
-                                                    className={errors.addressLine2 && touched.addressLine2 ? "is-invalid" : null}
+                                                    className={errors.addressLine2 && touched.addressLine2 ? "is-invalid" : ""}
                                                     name="addressLine2" />
                                                 {errors.addressLine2 && touched.addressLine2 ? (
                                                     <span className="invalid-feedback">{errors.addressLine2}</span>
@@ -759,7 +759,7 @@ class EditUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressCity}
-                                                    className={errors.addressCity && touched.addressCity ? "is-invalid" : null}
+                                                    className={errors.addressCity && touched.addressCity ? "is-invalid" : ""}
                                                     name="addressCity" />
                                                 {errors.addressCity && touched.addressCity ? (
                                                     <span className="invalid-feedback">{errors.addressCity}</span>
@@ -771,7 +771,7 @@ class EditUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressState}
-                                                    className={errors.addressState && touched.addressState ? "is-invalid" : null}
+                                                    className={errors.addressState && touched.addressState ? "is-invalid" : ""}
                                                     name="addressState" />
                                                 {errors.addressState && touched.addressState ? (
                                                     <span className="invalid-feedback">{errors.addressState}</span>
@@ -786,7 +786,7 @@ class EditUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressCountry}
-                                                    className={errors.addressCountry && touched.addressCountry ? "is-invalid" : null}
+                                                    className={errors.addressCountry && touched.addressCountry ? "is-invalid" : ""}
                                                     name="addressCountry" />
                                                 {errors.addressCountry && touched.addressCountry ? (
                                                     <span className="invalid-feedback">{errors.addressCountry}</span>
@@ -798,7 +798,7 @@ class EditUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.zipCode}
-                                                    className={errors.zipCode && touched.zipCode ? "is-invalid" : null}
+                                                    className={errors.zipCode && touched.zipCode ? "is-invalid" : ""}
                                                     name="zipCode" />
                                                 {errors.zipCode && touched.zipCode ? (
                                                     <span className="invalid-feedback">{errors.zipCode}</span>
@@ -852,7 +852,7 @@ class EditUser extends React.Component {
                                                     }}
                                                     value={values.password}
                                                     disabled = {true}
-                                                    className={errors.password && touched.password ? "is-invalid" : null}
+                                                    className={errors.password && touched.password ? "is-invalid" : ""}
                                                     name="password" />
                                                 {errors.password && touched.password ? (
                                                     <span className="invalid-feedback">{errors.password}</span>
@@ -892,7 +892,7 @@ class EditUser extends React.Component {
                                                         
                                                     }}
                                                     onBlur={() => setFieldTouched('branchId', true)}
-                                                    className={errors.branchId && touched.branchId ? "is-invalid" : null}
+                                                    className={errors.branchId && touched.branchId ? "is-invalid" : ""}
                                                     
                                                     name="branchId"
                                                     
@@ -943,7 +943,7 @@ class EditUser extends React.Component {
                                                                 values.branchToAdd = branchToAdd.value
                                                             }
                                                         }}
-                                                        className={errors.branchToAdd && touched.branchToAdd ? "is-invalid" : null}
+                                                        className={errors.branchToAdd && touched.branchToAdd ? "is-invalid" : ""}
                                                         // value="branchToAdd"
                                                         name="branchToAdd"
                                                         // value={values.branchToAdd || ''}
@@ -1010,7 +1010,7 @@ class EditUser extends React.Component {
                                                 as="textarea" rows="3"
                                                 onChange={handleChange}
                                                 value={values.note}
-                                                className={errors.note && touched.note ? "is-invalid" : null}
+                                                className={errors.note && touched.note ? "is-invalid" : ""}
                                                 name="note"
                                             />
                                             {errors.note && touched.note ? (
@@ -1020,22 +1020,6 @@ class EditUser extends React.Component {
                                     </div>
                                 </Accordion.Collapse>
                             </Accordion>
-
-
-
-                            <div className="footer-with-cta toleft">
-                                {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
-                                {/* <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
-                                <Button variant="light" 
-                                                        className="btn btn-secondary grayed-out"
-                                                        onClick={()=>this.props.history.goBack()}
-                                                >
-                                                    Cancel</Button>
-                                <Button 
-                                    type="submit"
-                                    disabled={adminUpdateAUserRequest.is_request_processing} 
-                                    className="mr-20">{adminUpdateAUserRequest.is_request_processing?'Please wait...': 'Update User'}</Button>
-                            </div>
                             {adminUpdateAUserRequest.request_status === administrationConstants.UPDATE_A_USER_SUCCESS && 
                                 <Alert variant="success">
                                     {adminUpdateAUserRequest.request_data.response.data.message}
@@ -1052,6 +1036,22 @@ class EditUser extends React.Component {
                                     {submitError}
                                 </Alert>
                             }
+
+
+                            <div className="footer-with-cta toleft">
+                                {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
+                                {/* <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                <Button variant="light" 
+                                                        className="btn btn-secondary grayed-out"
+                                                        onClick={()=>this.props.history.goBack()}
+                                                >
+                                                    Cancel</Button>
+                                <Button 
+                                    type="submit"
+                                    disabled={adminUpdateAUserRequest.is_request_processing} 
+                                    className="mr-20">{adminUpdateAUserRequest.is_request_processing?'Please wait...': 'Update User'}</Button>
+                            </div>
+                           
                         </Form>
                     )}
             </Formik>

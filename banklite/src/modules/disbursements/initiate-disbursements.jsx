@@ -292,7 +292,7 @@ class InitiateDisbursement extends React.Component {
                                                 <Form.Label className="block-level">Destination Bank</Form.Label>
                                                 <Select
                                                     options={allBanksList}
-                                                    className={errors.bankCode && touched.bankCode ? "is-invalid" : null}
+                                                    className={errors.bankCode && touched.bankCode ? "is-invalid" : ""}
                                                     onChange={(selected) => setFieldValue('bankCode', selected.value)}
                                                     onBlur={() => setFieldTouched('bankCode', true)}
                                                     name="bankCode"
@@ -330,7 +330,7 @@ class InitiateDisbursement extends React.Component {
                                                 onChange={handleChange}
                                                 // pattern="\d+((\.|,)\d+)?"
                                                 value={numberWithCommas(values.amount)}
-                                                className={errors.amount && touched.amount ? "is-invalid" : null} />
+                                                className={errors.amount && touched.amount ? "is-invalid" : ""} />
 
                                             {errors.amount && touched.amount ? (
                                                 <span className="invalid-feedback">{errors.amount}</span>
@@ -344,7 +344,7 @@ class InitiateDisbursement extends React.Component {
                                                 name="narration"
                                                 onChange={handleChange}
                                                 value={values.narration}
-                                                className={errors.narration && touched.narration ? "is-invalid" : null} />
+                                                className={errors.narration && touched.narration ? "is-invalid" : ""} />
 
                                             {errors.narration && touched.narration ? (
                                                 <span className="invalid-feedback">{errors.narration}</span>
@@ -491,7 +491,7 @@ class InitiateDisbursement extends React.Component {
                                                 <Form.Label className="block-level">Transaction Source</Form.Label>
                                                 <Select
                                                     options={transactionSourceList}
-                                                    className={errors.transactionSource && touched.transactionSource ? "is-invalid" : null}
+                                                    className={errors.transactionSource && touched.transactionSource ? "is-invalid" : ""}
                                                     onChange={(selected) => setFieldValue('transactionSource', selected.value)}
                                                     onBlur={() => setFieldTouched('transactionSource', true)}
                                                     name="transactionSource"
@@ -528,7 +528,7 @@ class InitiateDisbursement extends React.Component {
                                                 name="batchDescription"
                                                 onChange={handleChange}
                                                 value={values.batchDescription}
-                                                className={errors.batchDescription && touched.batchDescription ? "is-invalid" : null} />
+                                                className={errors.batchDescription && touched.batchDescription ? "is-invalid" : ""} />
 
                                             {errors.batchDescription && touched.batchDescription ? (
                                                 <span className="invalid-feedback">{errors.batchDescription}</span>
@@ -781,11 +781,11 @@ class InitiateDisbursement extends React.Component {
                                                                                 name="transactionSource"
                                                                                 onChange={handleChange}
                                                                                 value={values.transactionSource}
-                                                                                className={errors.transactionSource && touched.transactionSource ? "is-invalid" : null} /> */}
+                                                                                className={errors.transactionSource && touched.transactionSource ? "is-invalid" : ""} /> */}
                                                                     {dataToEdit !== null &&
                                                                         <Select
                                                                             options={transactionSourceList}
-                                                                            className={errors.transactionSource && touched.transactionSource ? "is-invalid" : null}
+                                                                            className={errors.transactionSource && touched.transactionSource ? "is-invalid" : ""}
                                                                             // onBlur={handleBlur}
                                                                             defaultValue={{ label: txtSourceToEdit.label, value: txtSourceToEdit.value }}
                                                                             // onChange={(selectedTxtSource) => {
@@ -805,7 +805,7 @@ class InitiateDisbursement extends React.Component {
                                                                     {dataToEdit === null &&
                                                                         <Select
                                                                             options={transactionSourceList}
-                                                                            className={errors.transactionSource && touched.transactionSource ? "is-invalid" : null}
+                                                                            className={errors.transactionSource && touched.transactionSource ? "is-invalid" : ""}
                                                                             // onBlur={handleBlur}
                                                                             // onChange={(selectedTxtSource) => {
                                                                             //     this.setState({ selectedTxtSource });
@@ -821,7 +821,7 @@ class InitiateDisbursement extends React.Component {
                                                                     }
                                                                     {/* <Select
                                                                                     options={transactionSourceList}
-                                                                                    className={errors.transactionSource && touched.transactionSource ? "is-invalid" : null}
+                                                                                    className={errors.transactionSource && touched.transactionSource ? "is-invalid" : ""}
                                                                                     onBlur={handleBlur}
 
                                                                                     onChange={(selectedTxtSource) => {
@@ -878,7 +878,7 @@ class InitiateDisbursement extends React.Component {
                                                                         {dataToEdit !== null &&
                                                                             <Select
                                                                                 options={allBanksList}
-                                                                                className={errors.bankCode && touched.bankCode ? "is-invalid" : null}
+                                                                                className={errors.bankCode && touched.bankCode ? "is-invalid" : ""}
                                                                                 defaultValue={{ label: destinationBankToEdit.bankName, value: destinationBankToEdit.bankCode }}
                                                                                 // onBlur={handleBlur}
                                                                                 // onChange={(selectedBank) => {
@@ -897,7 +897,7 @@ class InitiateDisbursement extends React.Component {
                                                                         {dataToEdit === null &&
                                                                             <Select
                                                                                 options={allBanksList}
-                                                                                className={errors.bankCode && touched.bankCode ? "is-invalid" : null}
+                                                                                className={errors.bankCode && touched.bankCode ? "is-invalid" : ""}
                                                                                 // onBlur={handleBlur}
                                                                                 // onChange={(selectedBank) => {
                                                                                 //     this.setState({ selectedBank });
@@ -953,7 +953,7 @@ class InitiateDisbursement extends React.Component {
                                                                         onChange={handleChange}
                                                                         // pattern="\d+((\.|,)\d+)?"
                                                                         value={numberWithCommas(values.amount)}
-                                                                        className={errors.amount && touched.amount ? "is-invalid" : null} />
+                                                                        className={errors.amount && touched.amount ? "is-invalid" : ""} />
 
                                                                     {errors.amount && touched.amount ? (
                                                                         <span className="invalid-feedback">{errors.amount}</span>
@@ -967,7 +967,7 @@ class InitiateDisbursement extends React.Component {
                                                                         name="narration"
                                                                         onChange={handleChange}
                                                                         value={values.narration}
-                                                                        className={errors.narration && touched.narration ? "is-invalid" : null} />
+                                                                        className={errors.narration && touched.narration ? "is-invalid" : ""} />
 
                                                                     {errors.narration && touched.narration ? (
                                                                         <span className="invalid-feedback">{errors.narration}</span>
@@ -1211,7 +1211,7 @@ class InitiateDisbursement extends React.Component {
                                                             onChange={handleChange}
                                                             placeholder="Enter the security code sent to you"
                                                             value={values.securityCode}
-                                                            className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                                                            className={errors.securityCode && touched.securityCode ? "is-invalid" : ""}
                                                             required />
                                                         {errors.securityCode && touched.securityCode ? (
                                                             <span className="invalid-feedback">{errors.securityCode}</span>

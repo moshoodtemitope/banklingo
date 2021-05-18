@@ -32,9 +32,14 @@ class InnerPageContainer extends React.Component{
     
     }
 
+    _isMounted = false;
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
+    componentDidMount() {
+       this. _isMounted=true;
 
-    componentDidMount(){
-        // this.resfreshTokenTimer();
+  
     }
     
 
@@ -44,22 +49,22 @@ class InnerPageContainer extends React.Component{
     }
 
     handleClose = () => {
-        this.setState({ showModal: false })
+         if (this._isMounted) this.setState({ showModal: false })
     }
 
     handleLogout = () => {
-        this.setState({ showModal: false })
+         if (this._isMounted) this.setState({ showModal: false })
         this.props.history.push('/')
     }
 
     onAction = (e)=> {
         // console.log('user did something', e)
-        this.setState({ isTimedOut: false })
+         if (this._isMounted) this.setState({ isTimedOut: false })
     }
 
     onActive =(e)=> {
         // console.log('user is active', e)
-        this.setState({ isTimedOut: false })
+         if (this._isMounted) this.setState({ isTimedOut: false })
     }
 
     onIdle =(e)=> {
@@ -68,9 +73,9 @@ class InnerPageContainer extends React.Component{
         if (isTimedOut) {
             this.props.history.push('/')
         } else {
-            this.setState({ showModal: true })
+             if (this._isMounted) this.setState({ showModal: true })
             this.idleTimer.reset();
-            this.setState({ isTimedOut: true })
+             if (this._isMounted) this.setState({ isTimedOut: true })
         }
 
     }

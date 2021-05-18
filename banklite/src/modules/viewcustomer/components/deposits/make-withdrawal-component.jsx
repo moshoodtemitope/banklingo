@@ -229,7 +229,7 @@ export class MakeAccountWithdrawalModal extends React.Component {
                                                                     setFieldValue('depositChannelEncodedKey', selected.value)
                                                                 }}
                                                                 onBlur={() => setFieldTouched('depositChannelEncodedKey', true)}
-                                                                className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
+                                                                className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : ""}
                                                                 name="depositChannelEncodedKey"
                                                             />
                                                             {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (

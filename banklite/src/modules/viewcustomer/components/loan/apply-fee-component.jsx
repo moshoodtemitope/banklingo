@@ -401,7 +401,7 @@ export class ApplyFeeModal extends React.Component {
                                                             setFieldValue('feeToPay', selected.value)
                                                         }}
                                                         onBlur={() => setFieldTouched('feeToPay', true)}
-                                                        className={errors.feeToPay && touched.feeToPay ? "is-invalid" : null}
+                                                        className={errors.feeToPay && touched.feeToPay ? "is-invalid" : ""}
                                                         name="feeToPay"
                                                     />
                                                     {errors.feeToPay || (errors.feeToPay && touched.feeToPay) ? (
@@ -446,7 +446,7 @@ export class ApplyFeeModal extends React.Component {
                                                             }
                                                         }}
                                                         onBlur={() => setFieldTouched('feeDue', true)}
-                                                        className={errors.feeDue && touched.feeDue ? "is-invalid" : null}
+                                                        className={errors.feeDue && touched.feeDue ? "is-invalid" : ""}
                                                         name="feeDue"
                                                     />
                                                     {errors.feeDue || (errors.feeDue && touched.feeDue) ? (

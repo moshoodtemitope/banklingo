@@ -153,7 +153,7 @@ class InitiatedDisbursmentBatches extends React.Component {
                 }
                 placeholder='Enter your security code'
                 value={allowNumbersOnly(this.state.securityCode)}
-                // className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                // className={errors.securityCode && touched.securityCode ? "is-invalid" : ""}
                 required
               />
             </Form.Group>

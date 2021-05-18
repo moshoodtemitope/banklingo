@@ -117,7 +117,7 @@ class ChangePassword extends React.Component {
                                         onChange={handleChange}
                                         value={values.currentPassword}
                                         required
-                                        className={errors.currentPassword && touched.currentPassword ? "is-invalid" : null}
+                                        className={errors.currentPassword && touched.currentPassword ? "is-invalid" : ""}
                                     />
                                     {errors.currentPassword && touched.currentPassword ? (
                                         <span className="invalid-feedback">{errors.currentPassword}</span>
@@ -133,7 +133,7 @@ class ChangePassword extends React.Component {
                                         onChange={handleChange}
                                         value={values.newPassword}
                                         required
-                                        className={errors.newPassword && touched.newPassword ? "is-invalid" : null}
+                                        className={errors.newPassword && touched.newPassword ? "is-invalid" : ""}
                                     />
                                     {errors.newPassword && touched.newPassword ? (
                                         <span className="invalid-feedback">{errors.newPassword}</span>
@@ -149,7 +149,7 @@ class ChangePassword extends React.Component {
                                         onChange={handleChange}
                                         value={values.confirmNewPassword}
                                         required
-                                        className={errors.confirmNewPassword && touched.confirmNewPassword ? "is-invalid" : null}
+                                        className={errors.confirmNewPassword && touched.confirmNewPassword ? "is-invalid" : ""}
                                     />
                                     {errors.confirmNewPassword && touched.confirmNewPassword ? (
                                         <span className="invalid-feedback">{errors.confirmNewPassword}</span>

@@ -453,7 +453,7 @@ function addAClientPassport   (clientKey, payload){
 }
 
 
-function updateAClient   (updateUserPayload, clientType){
+function updateAClient   (updateUserPayload, clientType="individual"){
     if(updateUserPayload!=="CLEAR"){
         return dispatch =>{
             let url;
@@ -468,7 +468,7 @@ function updateAClient   (updateUserPayload, clientType){
 
                 
             // let url = routes.HIT_CLIENTS+`/${updateUserPayload.encodedKey}`;
-            delete updateUserPayload.encodedKey;
+            //delete updateUserPayload.encodedKey;
             let consume = ApiService.request(url, "POST", updateUserPayload);
             dispatch(request(consume));
             return consume

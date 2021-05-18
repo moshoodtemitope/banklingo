@@ -2688,7 +2688,7 @@
 //     //                             setFieldValue('currentCustomerChosenAccount', selected.value)
 //     //                         }}
 //     //                         onBlur={()=> setFieldTouched('currentCustomerChosenAccount', true)}
-//     //                         className={errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? "is-invalid" : null}
+//     //                         className={errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? "is-invalid" : ""}
 //     //                         name="currentCustomerChosenAccount"
 //     //                     />
 //     //                     {errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? (
@@ -3115,7 +3115,7 @@
 //     //                                                                     setFieldValue('depositChannelEncodedKey', selected.value)
 //     //                                                                 }}
 //     //                                                                 onBlur={() => setFieldTouched('depositChannelEncodedKey', true)}
-//     //                                                                 className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
+//     //                                                                 className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : ""}
 //     //                                                                 name="depositChannelEncodedKey"
 //     //                                                             />
 //     //                                                             {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
@@ -3197,7 +3197,7 @@
 //     //                                                                     setFieldValue('depositChannelEncodedKey', selected.value)
 //     //                                                                 }}
 //     //                                                                 onBlur={()=> setFieldTouched('depositChannelEncodedKey', true)}
-//     //                                                                 className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : null}
+//     //                                                                 className={errors.depositChannelEncodedKey && touched.depositChannelEncodedKey ? "is-invalid" : ""}
 //     //                                                                 name="depositChannelEncodedKey"
 //     //                                                             />
 //     //                                                             {errors.depositChannelEncodedKey || (errors.depositChannelEncodedKey && touched.depositChannelEncodedKey) ? (
@@ -3362,7 +3362,7 @@
 //     //                                                                 setFieldValue('currentCustomerChosenAccount', selected.value)
 //     //                                                             }}
 //     //                                                             onBlur={()=> setFieldTouched('currentCustomerChosenAccount', true)}
-//     //                                                             className={errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? "is-invalid" : null}
+//     //                                                             className={errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? "is-invalid" : ""}
 //     //                                                             name="currentCustomerChosenAccount"
 //     //                                                         />
 //     //                                                         {errors.currentCustomerChosenAccount && touched.currentCustomerChosenAccount ? (
@@ -3389,7 +3389,7 @@
 //     //                                                                     loadOptions={this.initiateAccountSearch}
 //     //                                                                     placeholder="Search Accounts"
 //     //                                                                     name="chosenAccountNum"
-//     //                                                                     className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+//     //                                                                     className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : ""}
 //     //                                                                     onChange={(selectedOption)=>{
 //     //                                                                         setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
 
@@ -3464,7 +3464,7 @@
 //     //                                                                 setFieldValue('chosenAccountNum', selected.value)
 //     //                                                             }}
 //     //                                                             onBlur={()=> setFieldTouched('chosenAccountNum', true)}
-//     //                                                             className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+//     //                                                             className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : ""}
 //     //                                                             name="chosenAccountNum"
 //     //                                                         />
 //     //                                                         {errors.chosenAccountNum && touched.chosenAccountNum ? (

@@ -245,7 +245,7 @@ class ReverseTransaction extends React.Component {
                                     <Form.Control as="textarea" rows="3"
                                         onChange={handleChange}
                                         value={values.reason}
-                                        className={errors.reason && touched.reason ? "is-invalid" : null}
+                                        className={errors.reason && touched.reason ? "is-invalid" : ""}
                                         name="reason"  />
                                     {errors.reason && touched.reason ? (
                                         <span className="invalid-feedback">{errors.reason}</span>
