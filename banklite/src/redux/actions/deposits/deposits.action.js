@@ -1084,7 +1084,8 @@ function getLockedAmount(params) {
 function getSettlementAccount(params) {
   return (dispatch) => {
     let consume = ApiService.request(
-      routes.HIT_LOAN + `?${params}`,
+      `${routes.HIT_BASE_URL}/api/Loans/fetchsettlementaccounts?${params}`,
+    //  routes.HIT_BASE_URL + `​/api​/Loans​/fetchsettlementaccounts?${params}`,
       "GET",
       null
     );

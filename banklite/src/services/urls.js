@@ -107,6 +107,7 @@ export const routes = {
   HIT_DEPOSITS_TRANSACTIONS: BASEURL + "/api/DepositTransactions",
 
   //LOAN Endpoints
+  HIT_BASE_URL:BASEURL,
   HIT_LOAN: BASEURL + "/api/Loans",
 
   //Loan Transactions Endpoints

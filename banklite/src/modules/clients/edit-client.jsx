@@ -39,9 +39,10 @@ class EditAClient extends React.Component {
     super(props);
     this.state = {
       user: JSON.parse(localStorage.getItem('lingoAuth')),
-      // selectedOfficer:'',
-      // selectedBranch:''
+      // selectedOfficer:"",
+      // selectedBranch:""
     };
+   
   }
 
   componentDidMount() {
@@ -246,123 +247,101 @@ class EditAClient extends React.Component {
         return (
           <Formik
             initialValues={{
-              FName: allCustomerData.firstName,
-              LName: allCustomerData.lastName,
-              MName: allCustomerData.middleName
-                ? allCustomerData.middleName
-                : '',
-              BVN: allCustomerData.bvn ? allCustomerData.bvn : '',
+              FName: allCustomerData.firstName??"",
+              LName: allCustomerData.lastName??"",
+              MName: allCustomerData.middleName??"",
+              BVN: allCustomerData.bvn ? allCustomerData.bvn : "",
               addressLine1: allCustomerData.address.addressLine1
                 ? allCustomerData.address.addressLine1
-                : '',
+                : "",
               addressLine2: allCustomerData.address.addressLine2
                 ? allCustomerData.address.addressLine2
-                : '',
+                : "",
               addressCity: allCustomerData.address.addressCity
                 ? allCustomerData.address.addressCity
-                : '',
+                : "",
               addressState: allCustomerData.address.addressState
                 ? allCustomerData.address.addressState
-                : '',
+                : "",
               addressCountry: allCustomerData.address.addressCountry
                 ? allCustomerData.address.addressCountry
-                : '',
+                : "",
               zipCode: allCustomerData.address.zipCode
                 ? allCustomerData.address.zipCode
-                : '',
+                : "",
               contactMobile: allCustomerData.contact.contactMobile
                 ? allCustomerData.contact.contactMobile
-                : '',
+                : "",
               contactEmail: allCustomerData.contact.contactEmail
                 ? allCustomerData.contact.contactEmail
-                : '',
+                : "",
               nextOfKinFullName:
-                allCustomerData.nextOfKin.nextOfKinFullName !== null
+                allCustomerData.nextOfKin?.nextOfKinFullName !== null
                   ? allCustomerData.nextOfKin.nextOfKinFullName
-                  : '',
+                  : "",
               nextOfKinAddress:
-                allCustomerData.nextOfKin.nextofKinHomeAddress !== null
+                allCustomerData.nextOfKin?.nextofKinHomeAddress !== null
                   ? allCustomerData.nextOfKin.nextofKinHomeAddress
-                  : '',
+                  : "",
               nextOfKinMobile:
-                allCustomerData.nextOfKin.nextOfKinMobileNumber !== null
+                allCustomerData.nextOfKin?.nextOfKinMobileNumber !== null
                   ? allCustomerData.nextOfKin.nextOfKinMobileNumber
-                  : '',
+                  : "",
               nextOfKinRelationship:
-                allCustomerData.nextOfKin.relationship !== null
+                allCustomerData.nextOfKin?.relationship !== null
                   ? allCustomerData.nextOfKin.relationship
-                  : '',
+                  : "",
               gender:
                 allCustomerData.gender !== undefined &&
                 allCustomerData.gender !== null &&
-                allCustomerData.gender !== ''
+                allCustomerData.gender !== ""
                   ? allCustomerData.gender
-                  : '',
-              // dateOfBirth: (allCustomerData.dateOfBirth!==null && allCustomerData.dateOfBirth!==undefined && allCustomerData.dateOfBirth!=='')? getDateFromISO(allCustomerData.dateOfBirth):null,
-              dateOfBirth:  allCustomerData.dateOfBirth !== undefined &&
-                allCustomerData.dateOfBirth !== null &&
-                allCustomerData.dateOfBirth !== ''
-                  ? allCustomerData.dateOfBirth:'',
+                  : "",
+              // dateOfBirth: (allCustomerData.dateOfBirth!==null && allCustomerData.dateOfBirth!==undefined && allCustomerData.dateOfBirth!=="")? getDateFromISO(allCustomerData.dateOfBirth):null,
+              dateOfBirth:  allCustomerData.dateOfBirth??"",
                   
               custType: allCustomerData.clientTypeId,
               notes: allCustomerData.notes.notes
                 ? allCustomerData.notes.notes
-                : '',
+                : "",
               clientBranchEncodedKey: allCustomerData.branchEncodedKey
                 ? allCustomerData.branchEncodedKey
-                : '',
-              accountOfficerEncodedKey: allCustomerData.accountOfficerEncodedKey??'',
+                : "",
+              accountOfficerEncodedKey: allCustomerData.accountOfficerEncodedKey??"",
 
-              employerName:
-                allCustomerData.employeeInfo.employerName !== null
-                  ? allCustomerData.employeeInfo.employerName
-                  : '',
+              employerName:allCustomerData.employeeInfo?.employerName??"",
               employmentDate: (allCustomerData.employeeInfo && allCustomerData.employeeInfo.employerName) || undefined,
-              officialEmail:
-                allCustomerData.employeeInfo.officialEmail !== null
-                  ? allCustomerData.employeeInfo.officialEmail
-                  : '',
+              officialEmail: allCustomerData.employeeInfo?.officialEmail??"",
               monthlySalary:
-                (allCustomerData.employeeInfo.monthlySalary !== null)
+               
+              (allCustomerData.employeeInfo.monthlySalary !== null && allCustomerData.employeeInfo.monthlySalary !== "")
                   ? numberWithCommas(
                       allCustomerData.employeeInfo.monthlySalary??0,
                       true
                     )
-                  : '',
+                  : "",
               employeeSector:
-                allCustomerData.employeeInfo.employeeSector !== null
-                  ? allCustomerData.employeeInfo.employeeSector
-                  : '',
+                allCustomerData.employeeInfo?.employeeSector?? "",
               employeeSubSector:
-                allCustomerData.employeeInfo.employeeSubSector !== null
-                  ? allCustomerData.employeeInfo.employeeSubSector
-                  : '',
+                allCustomerData.employeeInfo?.employeeSubSector??"",
+
               payDay:
                 allCustomerData.employeeInfo.payDay !== null
                   ? numberWithCommas(allCustomerData.employeeInfo.payDay, true)
-                  : '',
-              employerAddress:
-                allCustomerData.employeeInfo.employerAddress !== null
-                  ? allCustomerData.employeeInfo.employerAddress
-                  : '',
-              employerAddressState:
-                allCustomerData.employeeInfo.employerAddressState !== null
-                  ? allCustomerData.employeeInfo.employerAddressState
-                  : '',
-              employerAddressCity:
-                allCustomerData.employeeInfo.employerAddressCity !== null
-                  ? allCustomerData.employeeInfo.employerAddressCity
-                  : '',
-              workStatus:
-                allCustomerData.employeeInfo.workStatus !== null
-                  ? allCustomerData.employeeInfo.workStatus
-                  : '',
-                  clientEncodedKey:allCustomerData.clientEncodedKey,
+                  : "",
+              employerAddress: allCustomerData.employeeInfo?.employerAddress??"",
+              employerAddressState: allCustomerData.employeeInfo?.employerAddressState??"",
+              employerAddressCity: allCustomerData.employeeInfo?.employerAddressCity??"",
+              workStatus: allCustomerData.employeeInfo?.workStatus??"",
+              clientEncodedKey:allCustomerData.clientEncodedKey,
             }}
+
+
+            
             validationSchema={updateACustomerValidationSchema}
             onSubmit={(values, { resetForm }) => {
               let updateCustomerPayload = {
-                encodedKey:''+allCustomerData.encodedKey,// this.props.match.params.encodedkey,
+                encodedKey:""+allCustomerData.encodedKey,// this.props.match.params.encodedkey,
                 clientTypeId: values.custType,
                 firstName: values.FName,
                 middleName: values.MName,
@@ -390,7 +369,7 @@ class EditAClient extends React.Component {
                   employerName: values.employerName,
                   employmentDate:(values.employmentDate === "" || values.employmentDate === null)? null:values.employmentDate?.toISOString(),
                   officialEmail: values.officialEmail,
-                  monthlySalary:(values.monthlySalary === "" || values.monthlySalary === null)? null:parseFloat(values.monthlySalary.replace(/,/g, '')),
+                  monthlySalary:(values.monthlySalary === "" || values.monthlySalary === null)? null:parseFloat(values.monthlySalary.replace(/,/g, "")),
                   employeeSector: values.employeeSector,
                   employeeSubSector: values.employeeSubSector,
                   payDay:(values.payDay === "")? null:parseInt(values.payDay),
@@ -399,14 +378,14 @@ class EditAClient extends React.Component {
                   employerAddressState: values.employerAddressState,
                 },
                 bvn: values.BVN,
-                gender: values.gender ? values.gender : '',
-                dateOfBirth: allCustomerData.dateOfBirth && allCustomerData.dateOfBirth !== ''
+                gender: values.gender ? values.gender : "",
+                dateOfBirth: allCustomerData.dateOfBirth && allCustomerData.dateOfBirth !== ""
                   ? new Date(allCustomerData.dateOfBirth)
                   : null,
                 notes: values.notes || null,
                
-                clientBranchEncodedKey: values.clientBranchEncodedKey??'',
-                accountOfficerEncodedKey: values.accountOfficerEncodedKey??'',
+                clientBranchEncodedKey: values.clientBranchEncodedKey??"",
+                accountOfficerEncodedKey: values.accountOfficerEncodedKey??"",
               };
 
               // console.log(updateCustomerPayload);
@@ -433,7 +412,7 @@ class EditAClient extends React.Component {
               errors,
             }) =>{ 
               
-              console.log(errors);
+              //console.log(errors);
               
               return (
               <Form
@@ -641,7 +620,7 @@ class EditAClient extends React.Component {
                         errors.clientBranchEncodedKey &&
                         touched.clientBranchEncodedKey
                           ? 'is-invalid'
-                          : ''
+                          : ""
                       }
                       // value={values.accountUsage}
                       name='clientBranchEncodedKey'
@@ -677,7 +656,7 @@ class EditAClient extends React.Component {
                         errors.accountOfficerEncodedKey &&
                         touched.accountOfficerEncodedKey
                           ? 'is-invalid'
-                          : ''
+                          : ""
                       }
                       name='accountOfficerEncodedKey'
                       required
@@ -688,7 +667,7 @@ class EditAClient extends React.Component {
                       <span className='invalid-feedback'>
                         {errors.accountOfficerEncodedKey}
                       </span>
-                    ) : ''}
+                    ) : ""}
                   </Col>
                 </Form.Row>
                 <Accordion defaultActiveKey='0'>
@@ -857,7 +836,7 @@ class EditAClient extends React.Component {
                             value={values.workStatus}
                             className='countdropdown form-control form-control-sm'
                           >
-                            <option value=''>Select</option>
+                            <option value="">Select</option>
                             <option value='1'>Yes</option>
                             <option value='2'>No</option>
                           </select>
@@ -974,7 +953,7 @@ class EditAClient extends React.Component {
                                 className={
                                   errors.monthlySalary && touched.monthlySalary
                                     ? 'is-invalid'
-                                    : ''
+                                    : ""
                                 }
                               />
                               {errors.monthlySalary && touched.monthlySalary ? (
@@ -1341,7 +1320,9 @@ class EditAClient extends React.Component {
                   <Button
                     variant='light'
                     className='btn btn-secondary grayed-out'
-                    onClick={() => this.props.history.goBack()}
+                    onClick={() => { 
+                      
+                      this.props.history.goBack();}}
                   >
                     Cancel
                   </Button>

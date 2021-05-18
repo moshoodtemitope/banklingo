@@ -2869,6 +2869,9 @@ class ViewSavingsAccount extends React.Component {
     );
   };
 
+
+  
+
   renderSettlementAccountData = (settlementAccountData) => {
     let saveRequestData =
       settlementAccountData.request_data !== undefined
