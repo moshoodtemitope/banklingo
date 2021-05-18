@@ -760,7 +760,7 @@ class DisbursementManagement extends React.Component {
                       value={this.state.PageSize}
                     >
                       <option value='10'>10</option>
-                      /partial
+                      
                       <option value='50'>50</option>
                       <option value='200'>200</option>
                     </select>

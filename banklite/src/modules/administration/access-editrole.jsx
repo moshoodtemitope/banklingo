@@ -43,7 +43,7 @@ class EditRole extends React.Component {
 
 
     componentDidMount() {
-
+        this.props.dispatch(administrationActions.addARole("CLEAR"));
         // this.getAllPermissions();
 
         this.getARole(this.props.match.params.roleId);
@@ -211,7 +211,10 @@ class EditRole extends React.Component {
                     values,
                     touched,
                     isValid,
-                    errors, }) => (
+                    errors, }) => 
+                    {
+                    console.log(errors);
+                   return (
                         <Form
                             noValidate 
                             onSubmit={handleSubmit} 
@@ -248,7 +251,7 @@ class EditRole extends React.Component {
                                                     <input 
                                                         type="checkbox" 
                                                         id="roleIsAdministrator" 
-                                                        checked={values.roleIsAdministrator? values.roleIsAdministrator:null}
+                                                        checked={values.roleIsAdministrator? values.roleIsAdministrator:false}
                                                         name="roleIsAdministrator"
                                                         onChange={handleChange} 
                                                         value={values.roleIsAdministrator} 
@@ -260,7 +263,7 @@ class EditRole extends React.Component {
                                                     <input 
                                                          type="checkbox" 
                                                          id="roleIsTeller" 
-                                                         checked={values.roleIsTeller? values.roleIsTeller:null}
+                                                         checked={values.roleIsTeller? values.roleIsTeller:false}
                                                          name="roleIsTeller"
                                                          onChange={handleChange} 
                                                          value={values.roleIsTeller}  />
@@ -273,7 +276,7 @@ class EditRole extends React.Component {
                                                     <input 
                                                         type="checkbox" 
                                                         id="roleHasPortalAccessRight" 
-                                                        checked={values.roleHasPortalAccessRight? values.roleHasPortalAccessRight:null}
+                                                        checked={values.roleHasPortalAccessRight? values.roleHasPortalAccessRight:false}
                                                         name="roleHasPortalAccessRight"
                                                         onChange={handleChange} 
                                                         value={values.roleHasPortalAccessRight}  />
@@ -283,7 +286,7 @@ class EditRole extends React.Component {
                                                     <input 
                                                         type="checkbox" 
                                                         id="roleHasApiAccessRight" 
-                                                        checked={values.roleHasApiAccessRight? values.roleHasApiAccessRight:null}
+                                                        checked={values.roleHasApiAccessRight? values.roleHasApiAccessRight:false}
                                                         name="roleHasApiAccessRight"
                                                         onChange={handleChange} 
                                                         value={values.roleHasApiAccessRight}  />
@@ -438,19 +441,7 @@ class EditRole extends React.Component {
                             </Accordion>
 
 
-                            <div className="footer-with-cta toleft">
-                                {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
-                                {/* <NavLink to={'/administration/access'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
-                                <Button variant="light" 
-                                        className="btn btn-secondary grayed-out"
-                                        onClick={()=>this.props.history.goBack()}
-                                >
-                                    Cancel</Button>
-                                <Button
-                                    type="submit"
-                                    disabled={updateARoleRequest.is_request_processing} 
-                                    className="mr-20">{updateARoleRequest.is_request_processing?'Please wait...': 'Update Role'}</Button>
-                            </div>
+                          
                             {updateARoleRequest.request_status === administrationConstants.UPDATE_A_ROLE_SUCCESS && 
                                 <Alert variant="success">
                                     {updateARoleRequest.request_data.response.data.message}
@@ -468,11 +459,26 @@ class EditRole extends React.Component {
                             
                                 </Alert>
                             }
+
+<div className="footer-with-cta toleft">
+                                {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
+                                {/* <NavLink to={'/administration/access'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                <Button variant="light" 
+                                        className="btn btn-secondary grayed-out"
+                                        onClick={()=>this.props.history.goBack()}
+                                >
+                                    Cancel</Button>
+                                <Button
+                                    type="submit"
+                                    disabled={updateARoleRequest.is_request_processing} 
+                                    className="mr-20">{updateARoleRequest.is_request_processing?'Please wait...': 'Update Role'}</Button>
+                            </div>
                         </Form>
                         )}
+    }
             </Formik>
         )
-    }
+}
 
     renderUpdateRole = ()=>{
         let getARoleRequest = this.props.adminGetARole;
@@ -531,10 +537,7 @@ class EditRole extends React.Component {
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
                                                 {this.renderUpdateRole()}
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                            
                                             </div>
                                         </div>
                                     </div>

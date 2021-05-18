@@ -49,6 +49,7 @@ class CreateNewUser extends React.Component {
     selectRef2 = null;
 
     componentDidMount(){
+        this.props.dispatch(administrationActions.createUser("CLEAR"));
         this.getRoles();
     }
 
@@ -271,11 +272,11 @@ class CreateNewUser extends React.Component {
                 validationSchema={createUserValidationSchema}
                 onSubmit={(values, { resetForm }) => {
                     let allErrors = "";
-                    if(values.canAccessAllBranches ===false && this.selectBranchesList.length===0){
-                        allErrors += "Select allowed branches"
-                    }else{
-                        allErrors =""
-                    }
+                    // if(values.canAccessAllBranches ===false && this.selectBranchesList.length===0){
+                    //     allErrors += "Select allowed branches"
+                    // }else{
+                    //     allErrors =""
+                    // }
 
                     this.setState({submitError:allErrors});
                     if (allErrors === "") {
@@ -433,10 +434,10 @@ class CreateNewUser extends React.Component {
                                         options={allRoles}
                                         onChange={(selectedRole) => {
                                             this.setState({ selectedRole });
-                                            errors.roleId = null
+                                           // errors.roleId = null
                                             values.roleId = selectedRole.value
                                         }}
-                                        className={errors.roleId && touched.roleId ? "is-invalid" : null}
+                                        className={errors.roleId && touched.roleId ? "is-invalid" : ""}
                                         // value="roleId"
                                         name="roleId"
                                         // value={values.roleId || ''}
@@ -462,7 +463,7 @@ class CreateNewUser extends React.Component {
                                                 <div className="checkbox-wrap">
                                                     <input type="checkbox" 
                                                         id="userIsAdministrator" 
-                                                        checked={values.userIsAdministrator? values.userIsAdministrator:null}
+                                                        checked={values.userIsAdministrator? values.userIsAdministrator:false}
                                                         name="userIsAdministrator"
                                                         onChange={handleChange} 
                                                         value={values.userIsAdministrator}  />
@@ -471,7 +472,7 @@ class CreateNewUser extends React.Component {
                                                 <div className="checkbox-wrap">
                                                     <input type="checkbox" 
                                                         id="userIsTeller" 
-                                                        checked={values.userIsTeller? values.userIsTeller:null}
+                                                        checked={values.userIsTeller? values.userIsTeller:false}
                                                         name="userIsTeller"
                                                         onChange={handleChange} 
                                                         value={values.userIsTeller} />
@@ -480,7 +481,7 @@ class CreateNewUser extends React.Component {
                                                 <div className="checkbox-wrap">
                                                     <input type="checkbox" 
                                                         id="userIsAccountOfficer" 
-                                                        checked={values.userIsAccountOfficer? values.userIsAccountOfficer:null}
+                                                        checked={values.userIsAccountOfficer? values.userIsAccountOfficer:false}
                                                         name="userIsAccountOfficer"
                                                         onChange={handleChange} 
                                                         value={values.userIsAccountOfficer}/>
@@ -492,7 +493,7 @@ class CreateNewUser extends React.Component {
                                                 <div className="checkbox-wrap">
                                                     <input type="checkbox" 
                                                         id="userIsPortalAdministrator" 
-                                                        checked={values.userIsPortalAdministrator? values.userIsPortalAdministrator:null}
+                                                        checked={values.userIsPortalAdministrator? values.userIsPortalAdministrator:false}
                                                         name="userIsPortalAdministrator"
                                                         onChange={handleChange} 
                                                         value={values.userIsPortalAdministrator} />
@@ -501,7 +502,7 @@ class CreateNewUser extends React.Component {
                                                 <div className="checkbox-wrap">
                                                     <input type="checkbox" 
                                                             id="userHasApiAccessRight" 
-                                                            checked={values.userHasApiAccessRight? values.userHasApiAccessRight:null}
+                                                            checked={values.userHasApiAccessRight? values.userHasApiAccessRight:false}
                                                             name="userHasApiAccessRight"
                                                             onChange={handleChange} 
                                                             value={values.userHasApiAccessRight} />
@@ -652,7 +653,7 @@ class CreateNewUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressLine1}
-                                                    className={errors.addressLine1 && touched.addressLine1 ? "is-invalid" : null}
+                                                    className={errors.addressLine1 && touched.addressLine1 ? "is-invalid" : ""}
                                                     name="addressLine1" />
                                                 {errors.addressLine1 && touched.addressLine1 ? (
                                                     <span className="invalid-feedback">{errors.addressLine1}</span>
@@ -664,7 +665,7 @@ class CreateNewUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressLine2}
-                                                    className={errors.addressLine2 && touched.addressLine2 ? "is-invalid" : null}
+                                                    className={errors.addressLine2 && touched.addressLine2 ? "is-invalid" : ""}
                                                     name="addressLine2" />
                                                 {errors.addressLine2 && touched.addressLine2 ? (
                                                     <span className="invalid-feedback">{errors.addressLine2}</span>
@@ -679,7 +680,7 @@ class CreateNewUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressCity}
-                                                    className={errors.addressCity && touched.addressCity ? "is-invalid" : null}
+                                                    className={errors.addressCity && touched.addressCity ? "is-invalid" : ""}
                                                     name="addressCity" />
                                                 {errors.addressCity && touched.addressCity ? (
                                                     <span className="invalid-feedback">{errors.addressCity}</span>
@@ -691,7 +692,7 @@ class CreateNewUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressState}
-                                                    className={errors.addressState && touched.addressState ? "is-invalid" : null}
+                                                    className={errors.addressState && touched.addressState ? "is-invalid" : ""}
                                                     name="addressState" />
                                                 {errors.addressState && touched.addressState ? (
                                                     <span className="invalid-feedback">{errors.addressState}</span>
@@ -706,7 +707,7 @@ class CreateNewUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.addressCountry}
-                                                    className={errors.addressCountry && touched.addressCountry ? "is-invalid" : null}
+                                                    className={errors.addressCountry && touched.addressCountry ? "is-invalid" : ""}
                                                     name="addressCountry" />
                                                 {errors.addressCountry && touched.addressCountry ? (
                                                     <span className="invalid-feedback">{errors.addressCountry}</span>
@@ -718,7 +719,7 @@ class CreateNewUser extends React.Component {
                                                     type="text"
                                                     onChange={handleChange}
                                                     value={values.zipCode}
-                                                    className={errors.zipCode && touched.zipCode ? "is-invalid" : null}
+                                                    className={errors.zipCode && touched.zipCode ? "is-invalid" : ""}
                                                     name="zipCode" />
                                                 {errors.zipCode && touched.zipCode ? (
                                                     <span className="invalid-feedback">{errors.zipCode}</span>
@@ -768,7 +769,7 @@ class CreateNewUser extends React.Component {
                                                     type="password"
                                                     onChange={handleChange}
                                                     value={values.password}
-                                                    className={errors.password && touched.password ? "is-invalid" : null}
+                                                    className={errors.password && touched.password ? "is-invalid" : ""}
                                                     name="password" />
                                                 {errors.password && touched.password ? (
                                                     <span className="invalid-feedback">{errors.password}</span>
@@ -780,10 +781,10 @@ class CreateNewUser extends React.Component {
                                                     options={allBranches}
                                                     onChange={(selectedBranch) => {
                                                         this.setState({ selectedBranch });
-                                                        errors.branchId = null
+                                                       // errors.branchId = null
                                                         values.branchId = selectedBranch.id
                                                     }}
-                                                    className={errors.branchId && touched.branchId ? "is-invalid" : null}
+                                                    className={errors.branchId && touched.branchId ? "is-invalid" : ""}
                                                     // value="branchId"
                                                     name="branchId"
                                                     // value={values.branchId || ''}
@@ -837,7 +838,7 @@ class CreateNewUser extends React.Component {
                                                                 values.branchToAdd = branchToAdd.value
                                                             }
                                                         }}
-                                                        className={errors.branchToAdd && touched.branchToAdd ? "is-invalid" : null}
+                                                        className={errors.branchToAdd && touched.branchToAdd ? "is-invalid" : ""}
                                                         // value="branchToAdd"
                                                         name="branchToAdd"
                                                         // value={values.branchToAdd || ''}
@@ -905,7 +906,7 @@ class CreateNewUser extends React.Component {
                                                 as="textarea" rows="3"
                                                 onChange={handleChange}
                                                 value={values.note}
-                                                className={errors.note && touched.note ? "is-invalid" : null}
+                                                className={errors.note && touched.note ? "is-invalid" : ""}
                                                 name="note"
                                             />
                                             {errors.note && touched.note ? (
@@ -917,20 +918,6 @@ class CreateNewUser extends React.Component {
                             </Accordion>
 
 
-
-                            <div className="footer-with-cta toleft">
-                                {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
-                                <Button variant="light" 
-                                        className="btn btn-secondary grayed-out"
-                                        onClick={()=>this.props.history.goBack()}
-                                >
-                                    Cancel</Button>
-                                {/* <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
-                                <Button 
-                                    type="submit"
-                                    disabled={adminCreateAUserRequest.is_request_processing} 
-                                    className="mr-20">{adminCreateAUserRequest.is_request_processing?'Please wait...': 'Create User'}</Button>
-                            </div>
                             {adminCreateAUserRequest.request_status === administrationConstants.CREATE_A_USER_SUCCESS && 
                                 <Alert variant="success">
                                     {adminCreateAUserRequest.request_data.response.data.message}
@@ -947,6 +934,20 @@ class CreateNewUser extends React.Component {
                                     {submitError}
                                 </Alert>
                             }
+                            <div className="footer-with-cta toleft">
+                                {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
+                                <Button variant="light" 
+                                        className="btn btn-secondary grayed-out"
+                                        onClick={()=>this.props.history.goBack()}
+                                >
+                                    Cancel</Button>
+                                {/* <NavLink to={'/administration/access/users'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
+                                <Button 
+                                    type="submit"
+                                    disabled={adminCreateAUserRequest.is_request_processing} 
+                                    className="mr-20">{adminCreateAUserRequest.is_request_processing?'Please wait...': 'Create User'}</Button>
+                            </div>
+                            
                         </Form>
                     )}
             </Formik>
@@ -1024,10 +1025,7 @@ class CreateNewUser extends React.Component {
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
                                                 {this.renderCreateUser()}
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                             
                                             </div>
                                         </div>
                                     </div>

@@ -360,7 +360,7 @@ class JournalEntries extends React.Component {
                                                                         className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') 
                                                                                     && errors.jornalEntries[index].hasOwnProperty('branchId') 
                                                                                     && (touched.jornalEntries && typeof touched.jornalEntries[index] !== 'undefined')
-                                                                                     && touched.jornalEntries[index].branchId ? "is-invalid" : null}
+                                                                                     && touched.jornalEntries[index].branchId ? "is-invalid" : ""}
                                                                         onChange={(selectedBranch) => {
                                                                            
                                                                             
@@ -411,7 +411,7 @@ class JournalEntries extends React.Component {
                                                                         className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') 
                                                                                     && errors.jornalEntries[index].hasOwnProperty('glAcountlId') 
                                                                                     && (touched.jornalEntries && typeof touched.jornalEntries[index] !== 'undefined')
-                                                                                     && touched.jornalEntries[index].hasOwnProperty('glAcountlId') ? "is-invalid" : null}
+                                                                                     && touched.jornalEntries[index].hasOwnProperty('glAcountlId') ? "is-invalid" : ""}
                                                                         onChange={(selectedGlAccount) => {
                                                                             this.setState(
                                                                                 Object.defineProperty({}, `selectedGlAccount-${index}`, {
@@ -439,7 +439,7 @@ class JournalEntries extends React.Component {
 
                                                                         // onChange={(selected) => setFieldValue(`jornalEntries.${index}.glAcountlId`, selected.value)}
                                                                         onBlur={()=> setFieldTouched(`jornalEntries.${index}.glAcountlId`, true)}
-                                                                        // className={errors.glAcountlId && touched.glAcountlId ? "is-invalid" : null}
+                                                                        // className={errors.glAcountlId && touched.glAcountlId ? "is-invalid" : ""}
                                                                         
                                                                         name={`jornalEntries.${index}.glAcountlId`}
                                                                         
@@ -457,11 +457,11 @@ class JournalEntries extends React.Component {
                                                                 </Col>
                                                             <Col>
                                                                 <Form.Label className="block-level"
-                                                                    htmlFor={`jornalEntries.${index}.entryTypeId`}>Journal Entry Type</Form.Label>
+                                                                    htmlFor={`jornalEntries.${index}.entryTypeId`}>Type</Form.Label>
                                                                 <Select
                                                                     options={entryTypes}
                                                                     // onBlur={handleBlur}
-                                                                    className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') &&  errors.jornalEntries[index].entryTypeId && touched.jornalEntries &&  touched.jornalEntries[index].entryTypeId ? "is-invalid" : null}
+                                                                    className={(errors.jornalEntries && typeof errors.jornalEntries[index] !== 'undefined') &&  errors.jornalEntries[index].entryTypeId && touched.jornalEntries &&  touched.jornalEntries[index].entryTypeId ? "is-invalid" : ""}
                                                                     onChange={(selectedType) => {
                                                                         
                                                                        

@@ -610,6 +610,12 @@ export const adminGeneralMenuList = [
     menuRoute: "/administration/general/customer-types",
   },
   {
+    permissionName: "Manage Customer Types",
+    mainMenu: "Group Types",
+    permissionCode: "bnk_manage_customer_types",
+    menuRoute: "/administration/general/group-types",
+  },
+  {
     permissionName: "Manage Internal Control",
     mainMenu: "Internal Control",
     permissionCode: "bnk_manage_internal_control",

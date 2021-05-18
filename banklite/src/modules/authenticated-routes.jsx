@@ -167,11 +167,12 @@ import PageNotFound from "./pagenot-found";
 import ForbiddenPage from "./unauthed-page";
 import unAuthedPage from "./unauthed-page/un-authed";
 import { authActions } from "../redux/actions/auth/auth.action";
-import { clientsConstants } from "../redux/actions/clients/clients.action";
+// import { clientsConstants } from "../redux/actions/clients/clients.action";
 import {
   ClientStateConstants,
   DepositStateConstants,
   LoanStateConstants,
+  TypeConstant,
   LoanSubStateConstants,
 } from "../redux/actions/clients/client-states-constants";
 import LoanListDisplay from "./loanmanagement/loan-list-display";
@@ -1072,6 +1073,16 @@ class AuthenticatedRoutes extends React.Component {
               path="/administration/general/customer-types"
               {...this.props}
               authed={this.props.user}
+              TypeConstant={TypeConstant.INDIVIDUAL_CLIENT}
+              component={CustomerTypesAdministration}
+            />
+            <PrivateRoute
+              accessRequired="bnk_manage_customer_types"
+              exact
+              path="/administration/general/group-types"
+              {...this.props}
+              authed={this.props.user}
+              TypeConstant={TypeConstant.GROUP_CLIENT}
               component={CustomerTypesAdministration}
             />
             <PrivateRoute

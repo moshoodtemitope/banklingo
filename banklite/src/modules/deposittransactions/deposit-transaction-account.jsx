@@ -517,7 +517,7 @@ fetchPageList() {
         <thead>
                   <tr>
                     <th>Account Holder</th>
-                    <th>Deposit Account Number</th>
+                    <th>Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Currency</th>

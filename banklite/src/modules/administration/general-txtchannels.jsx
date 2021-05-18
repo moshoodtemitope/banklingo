@@ -399,7 +399,7 @@ class GeneralTxtChannels extends React.Component {
                                                         return(
                                                             <Fragment key={index}>
                                                                 <tr>
-                                                                    <td>{eachChannel.name}</td>
+                                                                    <td>{eachChannel.name} {eachChannel.isCashDefault===true && <span className="base-currency">Default</span>}</td>
                                                                     <td>{eachChannel.key}</td>
                                                                     <td>{eachChannel.dateCreated}</td>
                                                                     <td>{eachChannel.createdBy!==null?eachChannel.createdBy:''}</td>
@@ -423,9 +423,9 @@ class GeneralTxtChannels extends React.Component {
                                             </tbody>
                                         </TableComponent>
                                         <div className="footer-with-cta toleft">
-                                            {/* <Button variant="secondary" className="grayed-out">Rearrange</Button> */}
+                                           
                                             <NavLink to={'/administration/general/new-txt-channels'} className="btn btn-primary">Add Channel</NavLink>
-                                            {/* <Button href="/administration/general/new-txt-channels">Add Channel</Button> */}
+                                           
                                         </div>
                                     </div>
                                 )
@@ -631,7 +631,7 @@ class GeneralTxtChannels extends React.Component {
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={values.TxtChannelName}
-                                                            className={errors.TxtChannelName && touched.TxtChannelName ? "is-invalid" : null}
+                                                            className={errors.TxtChannelName && touched.TxtChannelName ? "is-invalid" : ""}
                                                             name="TxtChannelName" required />
                                                         {errors.TxtChannelName && touched.TxtChannelName ? (
                                                             <span className="invalid-feedback">{errors.TxtChannelName}</span>
@@ -645,7 +645,7 @@ class GeneralTxtChannels extends React.Component {
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={values.TxtChannelKey}
-                                                            className={errors.TxtChannelKey && touched.TxtChannelKey ? "is-invalid" : null}
+                                                            className={errors.TxtChannelKey && touched.TxtChannelKey ? "is-invalid" : ""}
                                                             name="TxtChannelKey" required />
 
                                                         {errors.TxtChannelKey && touched.TxtChannelKey ? (
@@ -667,7 +667,7 @@ class GeneralTxtChannels extends React.Component {
                                                             
                                                             
                                                         }}
-                                                        className={errors.TxtChannelId && touched.TxtChannelId ? "is-invalid" : null}
+                                                        className={errors.TxtChannelId && touched.TxtChannelId ? "is-invalid" : ""}
                                                         
                                                         name="TxtChannelId"
                                                         // value={values.currencyCode}

@@ -440,7 +440,7 @@ class EditLoanProduct extends React.Component {
                                             type="text"
                                             onChange={handleChange}
                                             value={values.productName}
-                                            className={errors.productName && touched.productName ? "is-invalid" : null}
+                                            className={errors.productName && touched.productName ? "is-invalid" : ""}
                                             name="productName" required />
                                         {errors.productName && touched.productName ? (
                                             <span className="invalid-feedback">{errors.productName}</span>
@@ -452,7 +452,7 @@ class EditLoanProduct extends React.Component {
                                             type="text"
                                             onChange={handleChange}
                                             value={noWhiteSpaces(values.key)}
-                                            className={errors.key && touched.key ? "is-invalid" : null}
+                                            className={errors.key && touched.key ? "is-invalid" : ""}
                                             name="key" required />
                                         {errors.key && touched.key ? (
                                             <span className="invalid-feedback">{errors.key}</span>
@@ -474,7 +474,7 @@ class EditLoanProduct extends React.Component {
                                             // }}
                                             onChange={(selected) => setFieldValue('loanProductType', selected.value)}
                                             onBlur={()=> setFieldTouched('loanProductType', true)}
-                                            className={errors.loanProductType && touched.loanProductType ? "is-invalid" : null}
+                                            className={errors.loanProductType && touched.loanProductType ? "is-invalid" : ""}
 
 
                                             name="loanProductType"
@@ -516,7 +516,7 @@ class EditLoanProduct extends React.Component {
                                                 <Form.Control as="textarea" rows="3"
                                                     onChange={handleChange}
                                                     value={values.description}
-                                                    className={errors.description && touched.description ? "is-invalid" : null}
+                                                    className={errors.description && touched.description ? "is-invalid" : ""}
                                                     name="description"  />
                                                 {errors.description && touched.description ? (
                                                     <span className="invalid-feedback">{errors.description}</span>
@@ -539,7 +539,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.defaultLoanAmount)}
-                                                        className={errors.defaultLoanAmount && touched.defaultLoanAmount ? "is-invalid" : null}
+                                                        className={errors.defaultLoanAmount && touched.defaultLoanAmount ? "is-invalid" : ""}
                                                         name="defaultLoanAmount" required />
                                                     {errors.defaultLoanAmount && touched.defaultLoanAmount ? (
                                                         <span className="invalid-feedback">{errors.defaultLoanAmount}</span>
@@ -551,7 +551,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.minimumLoanAmount)}
-                                                        className={errors.minimumLoanAmount && touched.minimumLoanAmount ? "is-invalid" : null}
+                                                        className={errors.minimumLoanAmount && touched.minimumLoanAmount ? "is-invalid" : ""}
                                                         name="minimumLoanAmount" required />
                                                     {errors.minimumLoanAmount && touched.minimumLoanAmount ? (
                                                         <span className="invalid-feedback">{errors.minimumLoanAmount}</span>
@@ -565,7 +565,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.maximumLoanAmount)}
-                                                        className={errors.maximumLoanAmount && touched.maximumLoanAmount ? "is-invalid" : null}
+                                                        className={errors.maximumLoanAmount && touched.maximumLoanAmount ? "is-invalid" : ""}
                                                         name="maximumLoanAmount" required />
                                                     {errors.maximumLoanAmount && touched.maximumLoanAmount ? (
                                                         <span className="invalid-feedback">{errors.maximumLoanAmount}</span>
@@ -590,7 +590,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.arearsTolerancePeriodInDaysDefault)}
-                                                        className={errors.arearsTolerancePeriodInDaysDefault && touched.arearsTolerancePeriodInDaysDefault ? "is-invalid" : null}
+                                                        className={errors.arearsTolerancePeriodInDaysDefault && touched.arearsTolerancePeriodInDaysDefault ? "is-invalid" : ""}
                                                         name="arearsTolerancePeriodInDaysDefault" required />
                                                     {errors.arearsTolerancePeriodInDaysDefault && touched.arearsTolerancePeriodInDaysDefault ? (
                                                         <span className="invalid-feedback">{errors.arearsTolerancePeriodInDaysDefault}</span>
@@ -602,7 +602,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.arearsTolerancePeriodInDaysMin)}
-                                                        className={errors.arearsTolerancePeriodInDaysMin && touched.arearsTolerancePeriodInDaysMin ? "is-invalid" : null}
+                                                        className={errors.arearsTolerancePeriodInDaysMin && touched.arearsTolerancePeriodInDaysMin ? "is-invalid" : ""}
                                                         name="arearsTolerancePeriodInDaysMin" required />
                                                     {errors.arearsTolerancePeriodInDaysMin && touched.arearsTolerancePeriodInDaysMin ? (
                                                         <span className="invalid-feedback">{errors.arearsTolerancePeriodInDaysMin}</span>
@@ -616,7 +616,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.arearsTolerancePeriodInDaysMax)}
-                                                        className={errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? "is-invalid" : null}
+                                                        className={errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? "is-invalid" : ""}
                                                         name="arearsTolerancePeriodInDaysMax" required />
                                                     {errors.arearsTolerancePeriodInDaysMax && touched.arearsTolerancePeriodInDaysMax ? (
                                                         <span className="invalid-feedback">{errors.arearsTolerancePeriodInDaysMax}</span>
@@ -636,7 +636,7 @@ class EditLoanProduct extends React.Component {
                                                         // }}
                                                         onChange={(selected) => setFieldValue('arrearsDaysCalculationChosen', selected.value)}
                                                         onBlur={()=> setFieldTouched('arrearsDaysCalculationChosen', true)}
-                                                        className={errors.arrearsDaysCalculationChosen && touched.arrearsDaysCalculationChosen ? "is-invalid" : null}
+                                                        className={errors.arrearsDaysCalculationChosen && touched.arrearsDaysCalculationChosen ? "is-invalid" : ""}
 
 
                                                         name="arrearsDaysCalculationChosen"
@@ -683,7 +683,7 @@ class EditLoanProduct extends React.Component {
 
                                                                 onChange={(selected) => setFieldValue('interestBalanceCalculation', selected.value)}
                                                                 onBlur={()=> setFieldTouched('interestBalanceCalculation', true)}
-                                                                className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
+                                                                className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : ""}
 
 
                                                                 name="interestBalanceCalculation"
@@ -708,7 +708,7 @@ class EditLoanProduct extends React.Component {
                                                                 // }}
                                                                 onChange={(selected) => setFieldValue('interestRateTerms', selected.value)}
                                                                 onBlur={()=> setFieldTouched('interestRateTerms', true)}
-                                                                className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
+                                                                className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : ""}
 
 
                                                                 name="interestRateTerms"
@@ -727,7 +727,7 @@ class EditLoanProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.interestRateDefault)}
-                                                                className={errors.interestRateDefault && touched.interestRateDefault ? "is-invalid" : null}
+                                                                className={errors.interestRateDefault && touched.interestRateDefault ? "is-invalid" : ""}
                                                                 name="interestRateDefault" required />
                                                             {errors.interestRateDefault && touched.interestRateDefault ? (
                                                                 <span className="invalid-feedback">{errors.interestRateDefault}</span>
@@ -739,7 +739,7 @@ class EditLoanProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.interestRateMin)}
-                                                                className={errors.interestRateMin && touched.interestRateMin ? "is-invalid" : null}
+                                                                className={errors.interestRateMin && touched.interestRateMin ? "is-invalid" : ""}
                                                                 name="interestRateMin" required />
                                                             {errors.interestRateMin && touched.interestRateMin ? (
                                                                 <span className="invalid-feedback">{errors.interestRateMin}</span>
@@ -753,7 +753,7 @@ class EditLoanProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.interestRateMax)}
-                                                                className={errors.interestRateMax && touched.interestRateMax ? "is-invalid" : null}
+                                                                className={errors.interestRateMax && touched.interestRateMax ? "is-invalid" : ""}
                                                                 name="interestRateMax" required />
                                                             {errors.interestRateMax && touched.interestRateMax ? (
                                                                 <span className="invalid-feedback">{errors.interestRateMax}</span>
@@ -799,7 +799,7 @@ class EditLoanProduct extends React.Component {
                                                                 onChange={(selectedDepositProduct) => {
                                                                     setFieldValue('depositProductEncodedKey', selectedDepositProduct.value)
                                                                 }}
-                                                                className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : null}
+                                                                className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : ""}
 
 
                                                                 name="depositProductEncodedKey"
@@ -849,7 +849,7 @@ class EditLoanProduct extends React.Component {
                                                                     setFieldValue('settlementOptions', selectedsettlementOption.value)
                                                                 }}
                                                                 defaultValue={{label:settlementOptionsList[0].label, value: settlementOptionsList[0].value}}
-                                                                className={errors.settlementOptions && touched.settlementOptions ? "is-invalid" : null}
+                                                                className={errors.settlementOptions && touched.settlementOptions ? "is-invalid" : ""}
 
 
                                                                 name="settlementOptions"
@@ -882,7 +882,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.repaymentEvery)}
-                                                        className={errors.repaymentEvery && touched.repaymentEvery ? "is-invalid" : null}
+                                                        className={errors.repaymentEvery && touched.repaymentEvery ? "is-invalid" : ""}
                                                         name="repaymentEvery" required />
                                                     {errors.repaymentEvery && touched.repaymentEvery ? (
                                                         <span className="invalid-feedback">{errors.repaymentEvery}</span>
@@ -902,7 +902,7 @@ class EditLoanProduct extends React.Component {
                                                         // }}
                                                         onChange={(selected) => setFieldValue('repaymentPeriod', selected.value)}
                                                         onBlur={()=> setFieldTouched('repaymentPeriod', true)}
-                                                        className={errors.repaymentPeriod && touched.repaymentPeriod ? "is-invalid" : null}
+                                                        className={errors.repaymentPeriod && touched.repaymentPeriod ? "is-invalid" : ""}
 
 
                                                         name="repaymentPeriod"
@@ -928,7 +928,7 @@ class EditLoanProduct extends React.Component {
                                                         // }}
                                                         onChange={(selected) => setFieldValue('interestBalanceCalculationSelected', selected.value)}
                                                         onBlur={()=> setFieldTouched('interestBalanceCalculationSelected', true)}
-                                                        className={errors.interestBalanceCalculationSelected && touched.interestBalanceCalculationSelected ? "is-invalid" : null}
+                                                        className={errors.interestBalanceCalculationSelected && touched.interestBalanceCalculationSelected ? "is-invalid" : ""}
 
 
                                                         name="interestBalanceCalculationSelected"
@@ -945,7 +945,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.firstDueDateOffsetConstraintDefault)}
-                                                        className={errors.firstDueDateOffsetConstraintDefault && touched.firstDueDateOffsetConstraintDefault ? "is-invalid" : null}
+                                                        className={errors.firstDueDateOffsetConstraintDefault && touched.firstDueDateOffsetConstraintDefault ? "is-invalid" : ""}
                                                         name="firstDueDateOffsetConstraintDefault" required />
                                                     {errors.firstDueDateOffsetConstraintDefault && touched.firstDueDateOffsetConstraintDefault ? (
                                                         <span className="invalid-feedback">{errors.firstDueDateOffsetConstraintDefault}</span>
@@ -959,7 +959,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.firstDueDateOffsetConstraintMin)}
-                                                        className={errors.firstDueDateOffsetConstraintMin && touched.firstDueDateOffsetConstraintMin ? "is-invalid" : null}
+                                                        className={errors.firstDueDateOffsetConstraintMin && touched.firstDueDateOffsetConstraintMin ? "is-invalid" : ""}
                                                         name="firstDueDateOffsetConstraintMin" required />
                                                     {errors.firstDueDateOffsetConstraintMin && touched.firstDueDateOffsetConstraintMin ? (
                                                         <span className="invalid-feedback">{errors.firstDueDateOffsetConstraintMin}</span>
@@ -971,7 +971,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.firstDueDateOffsetConstraintMax)}
-                                                        className={errors.firstDueDateOffsetConstraintMax && touched.firstDueDateOffsetConstraintMax ? "is-invalid" : null}
+                                                        className={errors.firstDueDateOffsetConstraintMax && touched.firstDueDateOffsetConstraintMax ? "is-invalid" : ""}
                                                         name="firstDueDateOffsetConstraintMax" required />
                                                     {errors.firstDueDateOffsetConstraintMax && touched.firstDueDateOffsetConstraintMax ? (
                                                         <span className="invalid-feedback">{errors.firstDueDateOffsetConstraintMax}</span>
@@ -985,7 +985,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.installmentsDefault)}
-                                                        className={errors.installmentsDefault && touched.installmentsDefault ? "is-invalid" : null}
+                                                        className={errors.installmentsDefault && touched.installmentsDefault ? "is-invalid" : ""}
                                                         name="installmentsDefault" required />
                                                     {errors.installmentsDefault && touched.installmentsDefault ? (
                                                         <span className="invalid-feedback">{errors.installmentsDefault}</span>
@@ -997,7 +997,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.installmentsMin)}
-                                                        className={errors.installmentsMin && touched.installmentsMin ? "is-invalid" : null}
+                                                        className={errors.installmentsMin && touched.installmentsMin ? "is-invalid" : ""}
                                                         name="installmentsMin" required />
                                                     {errors.installmentsMin && touched.installmentsMin ? (
                                                         <span className="invalid-feedback">{errors.installmentsMin}</span>
@@ -1011,7 +1011,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.installmentsMax)}
-                                                        className={errors.installmentsMax && touched.installmentsMax ? "is-invalid" : null}
+                                                        className={errors.installmentsMax && touched.installmentsMax ? "is-invalid" : ""}
                                                         name="installmentsMax" required />
                                                     {errors.installmentsMax && touched.installmentsMax ? (
                                                         <span className="invalid-feedback">{errors.installmentsMax}</span>
@@ -1023,7 +1023,7 @@ class EditLoanProduct extends React.Component {
                                                         type="text"
                                                         onChange={handleChange}
                                                         value={numberWithCommas(values.collectPrincipalEveryRepayments)}
-                                                        className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid" : null}
+                                                        className={errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? "is-invalid" : ""}
                                                         name="collectPrincipalEveryRepayments" required />
                                                         <small>Repayments</small>
                                                     {errors.collectPrincipalEveryRepayments && touched.collectPrincipalEveryRepayments ? (
@@ -1081,7 +1081,7 @@ class EditLoanProduct extends React.Component {
                                                     // }}
                                                     onChange={(selected) => setFieldValue('portfolioControlAccountId', selected.value)}
                                                     onBlur={() => setFieldTouched('portfolioControlAccountId', true)}
-                                                    className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : null}
+                                                    className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : ""}
 
                                                     noOptionsMessage={() => "No accounts available"}
                                                     name="portfolioControlAccountId"
@@ -1111,7 +1111,7 @@ class EditLoanProduct extends React.Component {
                                                     // }}
                                                     onChange={(selected) => setFieldValue('transactionSourceAccountId', selected.value)}
                                                     onBlur={() => setFieldTouched('transactionSourceAccountId', true)}
-                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage={() => "No accounts available"}
 
                                                     name="transactionSourceAccountId"
@@ -1141,7 +1141,7 @@ class EditLoanProduct extends React.Component {
                                                     // }}
                                                     onChange={(selected) => setFieldValue('writeOffExpenseAccountId', selected.value)}
                                                     onBlur={() => setFieldTouched('writeOffExpenseAccountId', true)}
-                                                    className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : null}
+                                                    className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage={() => "No accounts available"}
 
                                                     name="writeOffExpenseAccountId"
@@ -1172,7 +1172,7 @@ class EditLoanProduct extends React.Component {
                                                       // }}
                                                       onChange={(selected) => setFieldValue('interestReceivableAccountId', selected.value)}
                                                       onBlur={() => setFieldTouched('interestReceivableAccountId', true)}
-                                                      className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : null}
+                                                      className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : ""}
                                                       noOptionsMessage={() => "No accounts available"}
 
                                                       name="interestReceivableAccountId"
@@ -1202,7 +1202,7 @@ class EditLoanProduct extends React.Component {
                                                       // }}
                                                       onChange={(selected) => setFieldValue('feeReceivableAccountId', selected.value)}
                                                       onBlur={() => setFieldTouched('feeReceivableAccountId', true)}
-                                                      className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : null}
+                                                      className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : ""}
                                                       noOptionsMessage={() => "No accounts available"}
 
                                                       name="feeReceivableAccountId"
@@ -1232,7 +1232,7 @@ class EditLoanProduct extends React.Component {
                                                       // }}
                                                       onChange={(selected) => setFieldValue('penaltyReceivableAccountId', selected.value)}
                                                       onBlur={() => setFieldTouched('penaltyReceivableAccountId', true)}
-                                                      className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : null}
+                                                      className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : ""}
                                                       noOptionsMessage={() => "No accounts available"}
 
                                                       name="penaltyReceivableAccountId"
@@ -1264,7 +1264,7 @@ class EditLoanProduct extends React.Component {
                                                     // }}
                                                     onChange={(selected) => setFieldValue('feeIncomeAccountId', selected.value)}
                                                     onBlur={() => setFieldTouched('feeIncomeAccountId', true)}
-                                                    className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                    className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage={() => "No accounts available"}
 
                                                     name="feeIncomeAccountId"
@@ -1294,7 +1294,7 @@ class EditLoanProduct extends React.Component {
                                                     // }}
                                                     onChange={(selected) => setFieldValue('interestIncomeAccountId', selected.value)}
                                                     onBlur={() => setFieldTouched('interestIncomeAccountId', true)}
-                                                    className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : null}
+                                                    className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage={() => "No accounts available"}
 
                                                     name="interestIncomeAccountId"
@@ -1324,7 +1324,7 @@ class EditLoanProduct extends React.Component {
                                                     // }}
                                                     onChange={(selected) => setFieldValue('penaltyIncomeAccountId', selected.value)}
                                                     onBlur={() => setFieldTouched('penaltyIncomeAccountId', true)}
-                                                    className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : null}
+                                                    className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage={() => "No accounts available"}
 
                                                     name="penaltyIncomeAccountId"

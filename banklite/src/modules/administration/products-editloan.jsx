@@ -249,7 +249,7 @@ class EditLoanProduct extends React.Component {
                                         type="text"
                                         onChange={handleChange}
                                         value={values.productName}
-                                        className={errors.productName && touched.productName ? "is-invalid" : null}
+                                        className={errors.productName && touched.productName ? "is-invalid" : ""}
                                         name="productName" required />
                                     {errors.productName && touched.productName ? (
                                         <span className="invalid-feedback">{errors.productName}</span>
@@ -261,7 +261,7 @@ class EditLoanProduct extends React.Component {
                                         type="text"
                                         onChange={handleChange}
                                         value={noWhiteSpaces(values.key)}
-                                        className={errors.key && touched.key ? "is-invalid" : null}
+                                        className={errors.key && touched.key ? "is-invalid" : ""}
                                         name="key" required />
                                     {errors.key && touched.key ? (
                                         <span className="invalid-feedback">{errors.key}</span>
@@ -281,7 +281,7 @@ class EditLoanProduct extends React.Component {
                                             errors.loanProductType = null
                                             values.loanProductType = selectedProductType.value
                                         }}
-                                        className={errors.loanProductType && touched.loanProductType ? "is-invalid" : null}
+                                        className={errors.loanProductType && touched.loanProductType ? "is-invalid" : ""}
                                         
                                         
                                         name="loanProductType"
@@ -324,7 +324,7 @@ class EditLoanProduct extends React.Component {
                                             <Form.Control as="textarea" rows="3"
                                                 onChange={handleChange}
                                                 value={values.description}
-                                                className={errors.description && touched.description ? "is-invalid" : null}
+                                                className={errors.description && touched.description ? "is-invalid" : ""}
                                                 name="description"  />
                                             {errors.description && touched.description ? (
                                                 <span className="invalid-feedback">{errors.description}</span>
@@ -351,7 +351,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.portfolioControlAccountId = null
                                                         values.portfolioControlAccountId = selectedPortfolioAcct.value
                                                     }}
-                                                    className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : null}
+                                                    className={errors.portfolioControlAccountId && touched.portfolioControlAccountId ? "is-invalid" : ""}
                                                     
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     name="portfolioControlAccountId"
@@ -370,7 +370,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.transactionSourceAccountId = null
                                                         values.transactionSourceAccountId = selectedTxtSourceAcct.value
                                                     }}
-                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     
                                                     name="transactionSourceAccountId"
@@ -391,7 +391,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.writeOffExpenseAccountId = null
                                                         values.writeOffExpenseAccountId = selectedWriteOffExpenseAcct.value
                                                     }}
-                                                    className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : null}
+                                                    className={errors.writeOffExpenseAccountId && touched.writeOffExpenseAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     
                                                     name="writeOffExpenseAccountId"
@@ -410,7 +410,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.interestReceivableAccountId = null
                                                         values.interestReceivableAccountId = selectedInterestReceivableAcct.value
                                                     }}
-                                                    className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : null}
+                                                    className={errors.interestReceivableAccountId && touched.interestReceivableAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     
                                                     name="interestReceivableAccountId"
@@ -431,7 +431,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.feeReceivableAccountId = null
                                                         values.feeReceivableAccountId = selectedFeeReceivableAcct.value
                                                     }}
-                                                    className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : null}
+                                                    className={errors.feeReceivableAccountId && touched.feeReceivableAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     
                                                     name="feeReceivableAccountId"
@@ -450,7 +450,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.penaltyReceivableAccountId = null
                                                         values.penaltyReceivableAccountId = selectedPenaltyReceivableAcct.value
                                                     }}
-                                                    className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : null}
+                                                    className={errors.penaltyReceivableAccountId && touched.penaltyReceivableAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     
                                                     name="penaltyReceivableAccountId"
@@ -471,7 +471,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.feeIncomeAccountId = null
                                                         values.feeIncomeAccountId = selectedFeeIncomeAcct.value
                                                     }}
-                                                    className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                    className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     
                                                     name="feeIncomeAccountId"
@@ -490,7 +490,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.interestIncomeAccountId = null
                                                         values.interestIncomeAccountId = selectedInterestIncomeAcct.value
                                                     }}
-                                                    className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : null}
+                                                    className={errors.interestIncomeAccountId && touched.interestIncomeAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     
                                                     name="interestIncomeAccountId"
@@ -511,7 +511,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.penaltyIncomeAccountId = null
                                                         values.penaltyIncomeAccountId = selectedPenaltyIncomeAcct.value
                                                     }}
-                                                    className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : null}
+                                                    className={errors.penaltyIncomeAccountId && touched.penaltyIncomeAccountId ? "is-invalid" : ""}
                                                     noOptionsMessage ={() => "No accounts available"}
                                                     
                                                     name="penaltyIncomeAccountId"
@@ -539,7 +539,7 @@ class EditLoanProduct extends React.Component {
                                                         errors.methodology = null
                                                         values.methodology = selectedMethodology.value
                                                     }}
-                                                    className={errors.methodology && touched.methodology ? "is-invalid" : null}
+                                                    className={errors.methodology && touched.methodology ? "is-invalid" : ""}
                                                     
                                                     
                                                     name="methodology"

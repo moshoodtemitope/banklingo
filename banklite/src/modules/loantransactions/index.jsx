@@ -255,10 +255,11 @@ class LoanTransactions extends React.Component {
                 <thead>
                   <tr>
                     <th>Account Holder</th>
-                    <th>Loan Account Number</th>
+                    <th>Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Transaction ID</th>
+                    <th>State</th>
                     <th>UserName</th>
                     <th>Narration</th>
                     <th>Transaction Date</th>
@@ -379,11 +380,12 @@ class LoanTransactions extends React.Component {
                 <thead>
                   <tr>
                     <th>Account Holder</th>
-                    <th>Loan Account Number</th>
+                    <th>Account Number</th>
                     <th>Type</th>
                     <th>Transaction Amount</th>
                     <th>Currency</th>
                     <th>Transaction ID</th>
+                    <th>State</th>
                     <th>UserName</th>
                     <th>Narration</th>
                     <th>Transaction Date</th>
@@ -421,6 +423,7 @@ class LoanTransactions extends React.Component {
                           <td>{eachTransaction.currencyCode}</td>
                           <td>{eachTransaction.userName}</td>
                           <td>{eachTransaction.transactionKey}</td>
+                          <td>{eachTransaction.transactionStateDescription}</td>
                           <td>{eachTransaction.remarks}</td>
                           <td>{eachTransaction.transactionDate}</td>
                           <td>
@@ -580,10 +583,11 @@ class LoanTransactions extends React.Component {
                   <thead>
                     <tr>
                       <th>Account Holder</th>
-                      <th>Loan Account Number</th>
+                      <th>Account Number</th>
                       <th>Type</th>
                       <th>Transaction Amount</th>
                       <th>Transaction ID</th>
+                      <th>State</th>
                       <th>UserName</th>
                       <th>Narration</th>
                       <th>Transaction Date</th>
@@ -620,6 +624,7 @@ class LoanTransactions extends React.Component {
                                 )}
                               </td>
                               <td>{eachTransaction.transactionKey}</td>
+                              <td>{eachTransaction.transactionStateDescription}</td>
                               <td>{eachTransaction.userName}</td>
                               <td>{eachTransaction.remarks}</td>
                               {/* <td></td> */}
@@ -783,10 +788,11 @@ class LoanTransactions extends React.Component {
                   <thead>
                     <tr>
                       <th>Account Holder</th>
-                      <th>Loan Account Number</th>
+                      <th>Account Number</th>
                       <th>Type</th>
                       <th>Transaction Amount</th>
                       <th>Transaction ID</th>
+                      <th>State</th>
                       <th>UserName</th>
                       <th>Narration</th>
                       <th>Transaction Date</th>
@@ -795,6 +801,7 @@ class LoanTransactions extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>

@@ -54,7 +54,10 @@ export const ActivateUserModal = ({
         )}
       </Modal.Header>
       <Modal.Body>
-        <div className="text-center ">Are you sure you want to proceed?</div>
+        {requestProcessor.request_status ===
+          authConstants.ACTIVATE_DEACTIVATE_USER_RESET && (
+          <div className="text-center ">Are you sure you want to proceed?</div>
+        )}
         {requestProcessor.request_status ===
           authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE && (
           <div className="text-center errortxt">
@@ -80,6 +83,34 @@ export const ActivateUserModal = ({
           </div>
         )}
       </Modal.Body>
+
+      <Modal.Footer>
+        <Button variant="light" onClick={toggleHandler}>
+          {requestProcessor.request_status !==
+            authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS && "Cancel"}
+          {requestProcessor.request_status ===
+            authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS && "Okay"}
+        </Button>
+        {requestProcessor.request_status !==
+          authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS && (
+          <Button
+            onClick={proceedHandler}
+            variant="success"
+            type="submit"
+            disabled={
+              requestProcessor.request_status ===
+                authConstants.ACTIVATE_DEACTIVATE_USER_SUCCESS ||
+              requestProcessor.request_status ===
+                authConstants.ACTIVATE_DEACTIVATE_USER_FAILURE
+            }
+          >
+            {requestProcessor.request_status ===
+            authConstants.ACTIVATE_DEACTIVATE_USER_PENDING
+              ? "Please wait..."
+              : `Proceed`}
+          </Button>
+        )}
+      </Modal.Footer>
 
       <Modal.Footer>
         <Button variant="light" onClick={toggleHandler}>

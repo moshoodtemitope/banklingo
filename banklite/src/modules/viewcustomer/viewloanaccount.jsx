@@ -49,6 +49,7 @@ import { ChangeLoanStateModal } from "./components/loan/change-loan-state-compon
 import { LoanStateConstants, LoanSubStateConstants } from "../../redux/actions/clients/client-states-constants";
 import { DisburseLoanModal } from "./components/loan/disburse-loan-component";
 import { RepayLoanModal } from "./components/loan/repay-loan-component";
+import { ApplyFeeModal } from "./components/loan/apply-fee-component";
 
 import ReactDOM from 'react-dom';
 class ViewLoanAccount extends React.Component {
@@ -95,6 +96,7 @@ class ViewLoanAccount extends React.Component {
       showPayOffLoan: false,
       showWriteOffLoan: false,
       showRepaymentModal: false,
+      showApplyFeeModal:false,
 
       txtnEndDate: "",
       txtnStartDate: "",
@@ -3074,6 +3076,11 @@ class ViewLoanAccount extends React.Component {
   handleCloseRepaymentModal = () =>
     this.setState({ showRepaymentModal: false });
 
+
+  handleShowApplyFeeModal = () => this.setState({ showApplyFeeModal: true });
+  handleCloseApplyFeeModal = () =>
+    this.setState({ showApplyFeeModal: false });
+
   
   
   
@@ -3266,7 +3273,7 @@ class ViewLoanAccount extends React.Component {
   //         //                                                 setFieldValue('txtChannelEncodedKey', selected.value)
   //         //                                             }}
   //         //                                             onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
-  //         //                                             className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+  //         //                                             className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : ""}
   //         //                                             name="txtChannelEncodedKey"
   //         //                                         />
   //         //                                         {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
@@ -3756,7 +3763,7 @@ class ViewLoanAccount extends React.Component {
   //                                                                 setFieldValue('txtChannelEncodedKey', selected.value)
   //                                                             }}
   //                                                             onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
-  //                                                             className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+  //                                                             className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : ""}
   //                                                             name="txtChannelEncodedKey"
   //                                                         />
   //                                                         {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
@@ -3928,7 +3935,7 @@ class ViewLoanAccount extends React.Component {
   //                                                                 setFieldValue('txtChannelEncodedKey', selected.value)
   //                                                             }}
   //                                                             onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
-  //                                                             className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : null}
+  //                                                             className={errors.txtChannelEncodedKey && touched.txtChannelEncodedKey ? "is-invalid" : ""}
   //                                                             name="txtChannelEncodedKey"
   //                                                         />
   //                                                         {errors.txtChannelEncodedKey || (errors.txtChannelEncodedKey && touched.txtChannelEncodedKey) ? (
@@ -4269,6 +4276,23 @@ this.permissions={
               </Button>
             </li>
           )}
+          <li>
+            <Button
+              size="sm"
+              onClick={() => {
+                this.setState({
+                  newState: "Apply Fee",
+                  newStateUpdate: "applyfee",
+                  ctaText: "Apply Fee",
+                  showDisburseLoanForm: false,
+                });
+                this.handleShowApplyFeeModal();
+
+              }}
+            >
+              Apply Fee
+            </Button>
+          </li>
           {visibility.showSetIncomplete && (
             <li>
               <Button
@@ -4599,6 +4623,24 @@ this.permissions={
             showRepaymentModal={this.state.showRepaymentModal}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
           />
+          <ApplyFeeModal
+            {...this.props}
+            loanEncodedKey= {this.loanEncodedKey}
+            loanDetails={
+              getAClientLoanAccountRequest.request_data.response.data
+            }
+            fetchSchedules = {this.getCustomerLoanSchedule}
+            newStateUpdate={this.state.newStateUpdate}
+            newState={this.state.newState}
+            ctaText={this.state.ctaText}
+            closeModal={this.handleCloseApplyFeeModal}
+            handleNewLoanState={this.handleNewLoanState}
+            
+            // changeLoanState={this.state.changeLoanState}
+            showApplyFeeModal={this.state.showApplyFeeModal}
+            getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
+          />
+          
 
           <DisburseLoanModal
             {...this.props}

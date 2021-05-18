@@ -131,6 +131,10 @@ const depositsReducers = combineReducers({
   searchCustomerAccountReducer: deposits.searchCustomerAccountReducer,
   searchForAccountsWithCustomerKeyReducer:
     deposits.searchForAccountsWithCustomerKeyReducer,
+  getChequesReducer:
+    deposits.getChequesReducer,
+  updateAChequeReducer:
+    deposits.updateAChequeReducer,
 });
 
 const loansReducers = combineReducers({

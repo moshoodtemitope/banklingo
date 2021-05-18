@@ -44,10 +44,18 @@ class NewDepositAccount extends React.Component {
 
         this.selectedDepositProductDetails="";
     }
+    _isMounted = false;
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
+    componentDidMount() {
+       this._isMounted=true;
+  
+       this.loadInitialData();
 
-    componentDidMount(){
-        this.loadInitialData();
+  
     }
+   
 
     loadInitialData=()=>{
         let {PageSize, CurrentPage}= this.state;
@@ -125,7 +133,7 @@ class NewDepositAccount extends React.Component {
             .then(productDetails=>{
                 
                 this.selectedDepositProductDetails = this.props.getSingleDepositProductsReducer.request_data.response.data;
-                this.setState({selectedDepositProductDetails: this.selectedDepositProductDetails, currencyCode: this.selectedDepositProductDetails.currencyCode})
+              if(this._isMounted)  this.setState({selectedDepositProductDetails: this.selectedDepositProductDetails, currencyCode: this.selectedDepositProductDetails.currencyCode})
             })
     }
 
@@ -263,13 +271,18 @@ class NewDepositAccount extends React.Component {
                                     notes:  Yup.string()
                                         .min(3, 'Valid response required'),
                                 });
+                                let currentClientEncodedKey= this.props.match.params.clientId;
+                                if(customerFetchedData!==undefined){
+                                    currentClientEncodedKey=customerFetchedData.encodedKey;
+                                }
+
                                 return(
                                     <Formik
                                     initialValues={{
                                         // productEncodedKey :'',
                                         // productDisplayName:  allLoanProductsList[0].label,
                                         // interestRate:this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault!==null ? this.selectedLoanProductDetails.loanProductInterestSetting.interestRateDefault : '',
-                                        clientEncodedKey:(customerFetchedData!==undefined && this.props.match.params.clientId!==undefined)?customerFetchedData.encodedKey :'',
+                                        clientEncodedKey:currentClientEncodedKey,
                                         depositProductEncodedKey: this.selectedDepositProductDetails?  allDepositProductsList!==null?allDepositProductsList[0].value:null : '',
                                         // depositProductName:allDepositProductsList[0].label,
                                         notes:'',
@@ -407,7 +420,7 @@ else
                                                                 }}
                                                                 placeholder="Search Customer"
                                                                 onBlur={()=> setFieldTouched('clientEncodedKey', true)}
-                                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
+                                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : ""}
                                                                 
                                                                 
                                                                 name="clientEncodedKey"
@@ -456,7 +469,7 @@ else
                                                                 this.getADepositProduct(selected.value)
                                                             }}
                                                             onBlur={()=> setFieldTouched('depositProductEncodedKey', true)}
-                                                            className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : null}
+                                                            className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : ""}
                                                             
                                                             
                                                             name="depositProductEncodedKey"
@@ -606,7 +619,7 @@ else
                                                                 <Form.Control as="textarea" rows="3"
                                                                     onChange={handleChange}
                                                                     value={values.notes}
-                                                                    className={errors.notes && touched.notes ? "is-invalid" : null}
+                                                                    className={errors.notes && touched.notes ? "is-invalid" : ""}
                                                                     name="notes" 
                                                                     required  />
                                                                     {errors.notes && touched.notes ? (
@@ -701,10 +714,7 @@ else
                                         <div className="middle-content">
                                             <div className="full-pageforms w-60">
                                                 {this.renderCreateDepositAccount()}
-                                                {/* <div className="footer-with-cta toleft">
-                                                    <Button variant="secondary" className="grayed-out">Rearrange</Button>
-                                                    <Button >Add Channel</Button>
-                                                </div> */}
+                                                
                                             </div>
                                         </div>
                                     </div>

@@ -416,7 +416,7 @@ class ManageCustomerWhitelist extends React.Component {
                                                 defaultOptions={defaultOptions}
                                                 name="clientEncodedKey"
                                                 isDisabled={this.state.updateType !== "edit"}
-                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
+                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : ""}
                                                 // onChange={(e)=> {
                                                 //     setFieldValue("clientEncodedKey", )
                                                 //     this.handleSelectedCustomer(e.target.value)

@@ -768,7 +768,7 @@ export class MakeTransferModal extends React.Component {
                                                                 setFieldValue('chosenAccountNum', selected.value)
                                                             }}
                                                             onBlur={()=> setFieldTouched('chosenAccountNum', true)}
-                                                            className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+                                                            className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : ""}
                                                             name="chosenAccountNum"
                                                         />
                                                         {errors.chosenAccountNum && touched.chosenAccountNum ? (
