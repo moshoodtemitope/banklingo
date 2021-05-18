@@ -39,10 +39,13 @@ class EditAClient extends React.Component {
     super(props);
     this.state = {
       user: JSON.parse(localStorage.getItem('lingoAuth')),
+      selectedOfficer:'',
+      selectedBranch:''
     };
   }
 
   componentDidMount() {
+    this.props.dispatch(clientsActions.updateAClient("CLEAR"))
     this.getAClient();
     this.getAllUsers();
     // console.log('------',moment(new Date));
@@ -93,7 +96,7 @@ class EditAClient extends React.Component {
         .max(50, 'Max limit reached'),
       custType: Yup.string().min(1, 'Valid response required'),
       clientBranchEncodedKey: Yup.string().required('Required'),
-      accountOfficerEncodedKey: Yup.string().required('Required'),
+      accountOfficerEncodedKey: Yup.string().required('Required').nullable(),
       BVN: Yup.string()
       // .required('Required')
       ,
@@ -217,6 +220,7 @@ class EditAClient extends React.Component {
           allUserDataList.push({ label: eachUser.name, value: eachUser.key });
         });
 
+        //get the selected officer
         defaultAccountOfficer = allUserDataList.filter(
           (eachOfficer) =>
             eachOfficer.value === allCustomerData.accountOfficerEncodedKey
@@ -306,10 +310,8 @@ class EditAClient extends React.Component {
                 : '',
               clientBranchEncodedKey: allCustomerData.branchEncodedKey
                 ? allCustomerData.branchEncodedKey
-                : null,
-              accountOfficerEncodedKey: allCustomerData.accountOfficerEncodedKey
-                ? allCustomerData.accountOfficerEncodedKey
-                : null,
+                : '',
+              accountOfficerEncodedKey: allCustomerData.accountOfficerEncodedKey??'',
 
               employerName:
                 allCustomerData.employeeInfo.employerName !== null
@@ -355,10 +357,12 @@ class EditAClient extends React.Component {
                 allCustomerData.employeeInfo.workStatus !== null
                   ? allCustomerData.employeeInfo.workStatus
                   : '',
+                  clientEncodedKey:allCustomerData.clientEncodedKey,
             }}
             validationSchema={updateACustomerValidationSchema}
             onSubmit={(values, { resetForm }) => {
               let updateCustomerPayload = {
+                encodedKey:''+allCustomerData.encodedKey,// this.props.match.params.encodedkey,
                 clientTypeId: values.custType,
                 firstName: values.FName,
                 middleName: values.MName,
@@ -387,11 +391,12 @@ class EditAClient extends React.Component {
                   ? new Date(allCustomerData.dateOfBirth)
                   : null,
                 notes: values.notes || null,
-                encodedKey: this.props.match.params.encodedkey,
-                clientBranchEncodedKey: values.clientBranchEncodedKey,
-                accountOfficerEncodedKey: values.accountOfficerEncodedKey,
+               
+                clientBranchEncodedKey: values.clientBranchEncodedKey??'',
+                accountOfficerEncodedKey: values.accountOfficerEncodedKey??'',
               };
 
+              console.log(updateCustomerPayload);
               this.handleUpdateCustomer(updateCustomerPayload).then(() => {
                 // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
                 //     resetForm();
@@ -412,7 +417,11 @@ class EditAClient extends React.Component {
               touched,
               isValid,
               errors,
-            }) => (
+            }) =>{ 
+              
+              console.log(errors);
+              
+              return (
               <Form
                 noValidate
                 onSubmit={handleSubmit}
@@ -489,7 +498,7 @@ class EditAClient extends React.Component {
                                                                 errors.custType = null
                                                                 values.custType = selectedCustType.value
                                                             }}
-                                                            className={errors.custType && touched.custType ? "is-invalid" : null}
+                                                            className={errors.custType && touched.custType ? "is-invalid" : ""}
                                                             // value={values.accountUsage}
                                                             name="custType"
                                                             // value={values.currencyCode}
@@ -502,7 +511,7 @@ class EditAClient extends React.Component {
                 </Form.Row>
                 <Form.Row>
                   <Col>
-                    <Form.Label className='block-level'>BVN</Form.Label>
+                    <Form.Label className='block-level'>Biometric ID</Form.Label>
                     <Form.Control
                       type='text'
                       name='BVN'
@@ -611,14 +620,14 @@ class EditAClient extends React.Component {
                       }}
                       onChange={(selectedBranch) => {
                         this.setState({ selectedBranch });
-                        errors.clientBranchEncodedKey = null;
+                      //  errors.clientBranchEncodedKey = null;
                         values.clientBranchEncodedKey = selectedBranch.value;
                       }}
                       className={
                         errors.clientBranchEncodedKey &&
                         touched.clientBranchEncodedKey
                           ? 'is-invalid'
-                          : null
+                          : ''
                       }
                       // value={values.accountUsage}
                       name='clientBranchEncodedKey'
@@ -639,24 +648,28 @@ class EditAClient extends React.Component {
                     </Form.Label>
                     <Select
                       options={allUserDataList}
+
+                   //   {...this.props}
+                     // value={allUserDataList.filter(option => option.value === defaultAccountOfficer.key)}
                       defaultValue={{
-                        label: defaultAccountOfficer
-                          ? defaultAccountOfficer.label
-                          : null,
-                        value: defaultAccountOfficer
-                          ? defaultAccountOfficer.key
-                          : null,
+                        label: defaultAccountOfficer.label,
+                        value: defaultAccountOfficer.key,
                       }}
                       onChange={(selectedOfficer) => {
+                     
                         this.setState({ selectedOfficer });
-                        errors.accountOfficerEncodedKey = null;
+                        console.log(selectedOfficer);
+                      //  errors.accountOfficerEncodedKey = null;
                         values.accountOfficerEncodedKey = selectedOfficer.value;
+                    
+                      
                       }}
+
                       className={
                         errors.accountOfficerEncodedKey &&
                         touched.accountOfficerEncodedKey
                           ? 'is-invalid'
-                          : null
+                          : ''
                       }
                       // value={values.accountUsage}
                       name='accountOfficerEncodedKey'
@@ -669,7 +682,7 @@ class EditAClient extends React.Component {
                       <span className='invalid-feedback'>
                         {errors.accountOfficerEncodedKey}
                       </span>
-                    ) : null}
+                    ) : ''}
                   </Col>
                 </Form.Row>
                 <Accordion defaultActiveKey='0'>
@@ -1353,8 +1366,10 @@ class EditAClient extends React.Component {
                 )}
               </Form>
             )}
+                  }
           </Formik>
         );
+        
       } else {
         return (
           <div className='loading-content card'>

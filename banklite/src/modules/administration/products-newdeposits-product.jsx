@@ -362,7 +362,7 @@ class NewDepositsProduct extends React.Component {
                                                 type="text"
                                                 onChange={handleChange}
                                                 value={values.productName}
-                                                className={errors.productName && touched.productName ? "is-invalid" : null}
+                                                className={errors.productName && touched.productName ? "is-invalid" : ""}
                                                 name="productName" required />
                                             {errors.productName && touched.productName ? (
                                                 <span className="invalid-feedback">{errors.productName}</span>
@@ -374,7 +374,7 @@ class NewDepositsProduct extends React.Component {
                                                 type="text"
                                                 onChange={handleChange}
                                                 value={noWhiteSpaces(values.key)}
-                                                className={errors.key && touched.key ? "is-invalid" : null}
+                                                className={errors.key && touched.key ? "is-invalid" : ""}
                                                 name="key" required />
                                             {errors.key && touched.key ? (
                                                 <span className="invalid-feedback">{errors.key}</span>
@@ -400,7 +400,7 @@ class NewDepositsProduct extends React.Component {
                                                     this.setState({ typeDesc: selected.desc})
                                                 }}
                                                 onBlur={()=> setFieldTouched('depositAccountType', true)}
-                                                className={errors.depositAccountType && touched.depositAccountType ? "is-invalid" : null}
+                                                className={errors.depositAccountType && touched.depositAccountType ? "is-invalid" : ""}
                                                 
                                                 
                                                 name="depositAccountType"
@@ -440,7 +440,7 @@ class NewDepositsProduct extends React.Component {
                                                     <Form.Control as="textarea" rows="3"
                                                         onChange={handleChange}
                                                         value={values.description}
-                                                        className={errors.description && touched.description ? "is-invalid" : null}
+                                                        className={errors.description && touched.description ? "is-invalid" : ""}
                                                         name="description"  />
                                                     {errors.description && touched.description ? (
                                                         <span className="invalid-feedback">{errors.description}</span>
@@ -467,7 +467,7 @@ class NewDepositsProduct extends React.Component {
                                                             // }}
                                                             onChange={(selected) => setFieldValue('currencyCode', selected.value)}
                                                             onBlur={()=> setFieldTouched('currencyCode', true)}
-                                                            className={errors.currencyCode && touched.currencyCode ? "is-invalid" : null}
+                                                            className={errors.currencyCode && touched.currencyCode ? "is-invalid" : ""}
 
 
                                                             name="currencyCode"
@@ -518,7 +518,7 @@ class NewDepositsProduct extends React.Component {
                                                                         // }}
                                                                         onChange={(selected) => setFieldValue('interestRateTerms', selected.value)}
                                                                         onBlur={()=> setFieldTouched('interestRateTerms', true)}
-                                                                        className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : null}
+                                                                        className={errors.interestRateTerms && touched.interestRateTerms ? "is-invalid" : ""}
                                                                         // noOptionsMessage ={() => "No accounts available"}
                                                                         
                                                                         name="interestRateTerms"
@@ -554,7 +554,7 @@ class NewDepositsProduct extends React.Component {
                                                                         // }}
                                                                         onChange={(selected) => setFieldValue('interestBalanceCalculation', selected.value)}
                                                                         onBlur={()=> setFieldTouched('interestBalanceCalculation', true)}
-                                                                        className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : null}
+                                                                        className={errors.interestBalanceCalculation && touched.interestBalanceCalculation ? "is-invalid" : ""}
                                                                         // noOptionsMessage ={() => "No accounts available"}
                                                                         
                                                                         name="interestBalanceCalculation"
@@ -620,7 +620,7 @@ class NewDepositsProduct extends React.Component {
                                                                         options={whenInterestIsPaidList}
                                                                         onChange={(selected) => setFieldValue('whenInterestIsPaid', selected.value)}
                                                                         onBlur={()=> setFieldTouched('whenInterestIsPaid', true)}
-                                                                        className={errors.whenInterestIsPaid && touched.whenInterestIsPaid ? "is-invalid" : null}
+                                                                        className={errors.whenInterestIsPaid && touched.whenInterestIsPaid ? "is-invalid" : ""}
                                                                         name="whenInterestIsPaid"
                                                                         
                                                                         
@@ -652,7 +652,7 @@ class NewDepositsProduct extends React.Component {
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={numberWithCommas(values.defaultOpeningBalance)}
-                                                            className={errors.defaultOpeningBalance && touched.defaultOpeningBalance ? "is-invalid" : null}
+                                                            className={errors.defaultOpeningBalance && touched.defaultOpeningBalance ? "is-invalid" : ""}
                                                             name="defaultOpeningBalance"  />
                                                         {errors.defaultOpeningBalance && touched.defaultOpeningBalance ? (
                                                             <span className="invalid-feedback">{errors.defaultOpeningBalance}</span>
@@ -664,7 +664,7 @@ class NewDepositsProduct extends React.Component {
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={numberWithCommas(values.minimumOpeningBalance)}
-                                                            className={errors.minimumOpeningBalance && touched.minimumOpeningBalance ? "is-invalid" : null}
+                                                            className={errors.minimumOpeningBalance && touched.minimumOpeningBalance ? "is-invalid" : ""}
                                                             name="minimumOpeningBalance"  />
                                                         {errors.minimumOpeningBalance && touched.minimumOpeningBalance ? (
                                                             <span className="invalid-feedback">{errors.minimumOpeningBalance}</span>
@@ -678,7 +678,7 @@ class NewDepositsProduct extends React.Component {
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={numberWithCommas(values.maxmimumOpeningBalance)}
-                                                            className={errors.maxmimumOpeningBalance && touched.maxmimumOpeningBalance ? "is-invalid" : null}
+                                                            className={errors.maxmimumOpeningBalance && touched.maxmimumOpeningBalance ? "is-invalid" : ""}
                                                             name="maxmimumOpeningBalance"  />
                                                         {errors.maxmimumOpeningBalance && touched.maxmimumOpeningBalance ? (
                                                             <span className="invalid-feedback">{errors.maxmimumOpeningBalance}</span>
@@ -708,7 +708,7 @@ class NewDepositsProduct extends React.Component {
                                                                 // }}
                                                                 onChange={(selected) => setFieldValue('term', selected.value)}
                                                                 onBlur={()=> setFieldTouched('term', true)}
-                                                                className={errors.term && touched.term ? "is-invalid" : null}
+                                                                className={errors.term && touched.term ? "is-invalid" : ""}
                                                                 
                                                                 
                                                                 name="term"
@@ -719,7 +719,7 @@ class NewDepositsProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.term)}
-                                                                className={errors.term && touched.term ? "is-invalid" : null}
+                                                                className={errors.term && touched.term ? "is-invalid" : ""}
                                                                 name="term"  />
                                                             {errors.term && touched.term ? (
                                                                 <span className="invalid-feedback">{errors.term}</span>
@@ -731,7 +731,7 @@ class NewDepositsProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.maxmimumTermLength)}
-                                                                className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : null}
+                                                                className={errors.maxmimumTermLength && touched.maxmimumTermLength ? "is-invalid" : ""}
                                                                 name="maxmimumTermLength"  />
                                                             {errors.maxmimumTermLength && touched.maxmimumTermLength ? (
                                                                 <span className="invalid-feedback">{errors.maxmimumTermLength}</span>
@@ -745,7 +745,7 @@ class NewDepositsProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.defaultTermLength)}
-                                                                className={errors.defaultTermLength && touched.defaultTermLength ? "is-invalid" : null}
+                                                                className={errors.defaultTermLength && touched.defaultTermLength ? "is-invalid" : ""}
                                                                 name="defaultTermLength"  />
                                                             {errors.defaultTermLength && touched.defaultTermLength ? (
                                                                 <span className="invalid-feedback">{errors.defaultTermLength}</span>
@@ -758,7 +758,7 @@ class NewDepositsProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.minimumTermLength)}
-                                                                className={errors.minimumTermLength && touched.minimumTermLength ? "is-invalid" : null}
+                                                                className={errors.minimumTermLength && touched.minimumTermLength ? "is-invalid" : ""}
                                                                 name="minimumTermLength"  />
                                                             {errors.minimumTermLength && touched.minimumTermLength ? (
                                                                 <span className="invalid-feedback">{errors.minimumTermLength}</span>
@@ -796,7 +796,7 @@ class NewDepositsProduct extends React.Component {
                                                             type="text"
                                                             onChange={handleChange}
                                                             value={allowNumbersOnly(values.dormancyAfterXDays)}
-                                                            className={errors.dormancyAfterXDays && touched.dormancyAfterXDays ? "is-invalid" : null}
+                                                            className={errors.dormancyAfterXDays && touched.dormancyAfterXDays ? "is-invalid" : ""}
                                                             name="dormancyAfterXDays"  />
                                                          <span>days</span>
                                                         {errors.dormancyAfterXDays && touched.dormancyAfterXDays ? (
@@ -831,7 +831,7 @@ class NewDepositsProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.maximumWithdrawalAmount)}
-                                                                className={errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? "is-invalid" : null}
+                                                                className={errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? "is-invalid" : ""}
                                                                 name="maximumWithdrawalAmount"  />
                                                             {errors.maximumWithdrawalAmount && touched.maximumWithdrawalAmount ? (
                                                                 <span className="invalid-feedback">{errors.maximumWithdrawalAmount}</span>
@@ -843,7 +843,7 @@ class NewDepositsProduct extends React.Component {
                                                                 type="text"
                                                                 onChange={handleChange}
                                                                 value={numberWithCommas(values.recommendedDepositAmount)}
-                                                                className={errors.recommendedDepositAmount && touched.recommendedDepositAmount ? "is-invalid" : null}
+                                                                className={errors.recommendedDepositAmount && touched.recommendedDepositAmount ? "is-invalid" : ""}
                                                                 name="recommendedDepositAmount" />
                                                             {errors.recommendedDepositAmount && touched.recommendedDepositAmount ? (
                                                                 <span className="invalid-feedback">{errors.recommendedDepositAmount}</span>
@@ -880,7 +880,7 @@ class NewDepositsProduct extends React.Component {
                                                             // }}
                                                             onChange={(selected) => setFieldValue('methodology', selected.value)}
                                                             onBlur={()=> setFieldTouched('methodology', true)}
-                                                            className={errors.methodology && touched.methodology ? "is-invalid" : null}
+                                                            className={errors.methodology && touched.methodology ? "is-invalid" : ""}
                                                             
                                                             
                                                             name="methodology"
@@ -903,7 +903,7 @@ class NewDepositsProduct extends React.Component {
                                                                     options={transactionSourceAccount}
                                                                     onChange={(selected) => setFieldValue('transactionSourceAccountId', selected.value)}
                                                                     onBlur={()=> setFieldTouched('transactionSourceAccountId', true)}
-                                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : null}
+                                                                    className={errors.transactionSourceAccountId && touched.transactionSourceAccountId ? "is-invalid" : ""}
                                                                     noOptionsMessage ={() => "No accounts available"}
                                                                     
                                                                     name="transactionSourceAccountId"
@@ -927,7 +927,7 @@ class NewDepositsProduct extends React.Component {
                                                                 // }}
                                                                 onChange={(selected) => setFieldValue('savingsControlAccountId', selected.value)}
                                                                 onBlur={()=> setFieldTouched('savingsControlAccountId', true)}
-                                                                className={errors.savingsControlAccountId && touched.savingsControlAccountId ? "is-invalid" : null}
+                                                                className={errors.savingsControlAccountId && touched.savingsControlAccountId ? "is-invalid" : ""}
                                                                 
                                                                 noOptionsMessage ={() => "No accounts available"}
                                                                 name="savingsControlAccountId"
@@ -951,7 +951,7 @@ class NewDepositsProduct extends React.Component {
                                                                 // }}
                                                                 onChange={(selected) => setFieldValue('interestExpenseAccountId', selected.value)}
                                                                 onBlur={()=> setFieldTouched('interestExpenseAccountId', true)}
-                                                                className={errors.interestExpenseAccountId && touched.interestExpenseAccountId ? "is-invalid" : null}
+                                                                className={errors.interestExpenseAccountId && touched.interestExpenseAccountId ? "is-invalid" : ""}
                                                                 noOptionsMessage ={() => "No accounts available"}
                                                                 
                                                                 name="interestExpenseAccountId"
@@ -976,7 +976,7 @@ class NewDepositsProduct extends React.Component {
                                                                     // }}
                                                                     onChange={(selected) => setFieldValue('interestPayableAccountId', selected.value)}
                                                                     onBlur={()=> setFieldTouched('interestPayableAccountId', true)}
-                                                                    className={errors.interestPayableAccountId && touched.interestPayableAccountId ? "is-invalid" : null}
+                                                                    className={errors.interestPayableAccountId && touched.interestPayableAccountId ? "is-invalid" : ""}
                                                                     noOptionsMessage ={() => "No accounts available"}
                                                                     
                                                                     name="interestPayableAccountId"
@@ -1001,7 +1001,7 @@ class NewDepositsProduct extends React.Component {
                                                                 // }}
                                                                 onChange={(selected) => setFieldValue('feeIncomeAccountId', selected.value)}
                                                                 onBlur={()=> setFieldTouched('feeIncomeAccountId', true)}
-                                                                className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : null}
+                                                                className={errors.feeIncomeAccountId && touched.feeIncomeAccountId ? "is-invalid" : ""}
                                                                 noOptionsMessage ={() => "No accounts available"}
                                                                 
                                                                 name="feeIncomeAccountId"
@@ -1026,7 +1026,7 @@ class NewDepositsProduct extends React.Component {
                                                                         // }}
                                                                         onChange={(selected) => setFieldValue('interestAccruedMethod', selected.value)}
                                                                         onBlur={()=> setFieldTouched('interestAccruedMethod', true)}
-                                                                        className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : null}
+                                                                        className={errors.interestAccruedMethod && touched.interestAccruedMethod ? "is-invalid" : ""}
                                                                         name="interestAccruedMethod"
                                                                         
                                                                         

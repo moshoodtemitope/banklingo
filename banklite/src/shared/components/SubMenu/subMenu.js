@@ -10,7 +10,7 @@ const SubMenu = ({links}) => {
       <div className='content-container'>
         <ul className='nav'>
           {Array.isArray(links) && links.map(link => (
-            <li>
+            <li key={link.label}>
               <NavLink  exact={!!link.exact} to={link.url} activeClassName='activeNavLink'>
                 {link.label}
               </NavLink>

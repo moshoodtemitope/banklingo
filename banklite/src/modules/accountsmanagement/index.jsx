@@ -923,7 +923,7 @@ class AccountManagement extends React.Component {
                                                         setFieldValue('accountType', selectedAccType.value);
                                                     }}
                                                     onBlur={() => setFieldTouched('accountType', true)}
-                                                    className={errors.accountType && touched.accountType ? "is-invalid" : null}
+                                                    className={errors.accountType && touched.accountType ? "is-invalid" : ""}
                                                     // value={values.accountUsage}
                                                     name="accountType"
                                                     // value={values.currencyCode}
@@ -946,7 +946,7 @@ class AccountManagement extends React.Component {
                                                         setFieldValue('accountUsage', selectedUsageOption.value);
                                                     }}
                                                     onBlur={() => setFieldTouched('accountUsage', true)}
-                                                    className={errors.accountUsage && touched.accountUsage ? "is-invalid" : null}
+                                                    className={errors.accountUsage && touched.accountUsage ? "is-invalid" : ""}
                                                     
                                                     
                                                     name="accountUsage"
@@ -1171,7 +1171,7 @@ class AccountManagement extends React.Component {
                                                             values.accountType = selectedAccType.value
                                                         }}
                                                         isDisabled={true}
-                                                        className={errors.accountType && touched.accountType ? "is-invalid" : null}
+                                                        className={errors.accountType && touched.accountType ? "is-invalid" : ""}
                                                         defaultValue ={{label:selectGlAcc.accountTypeDescription, value: selectGlAcc.accountTypeId}}
                                                         name="accountType"
                                                         required
@@ -1192,7 +1192,7 @@ class AccountManagement extends React.Component {
                                                             values.accountUsage = selectedUsageOption.value
                                                         }}
                                                         isDisabled={true}
-                                                        className={errors.accountUsage && touched.accountUsage ? "is-invalid" : null}
+                                                        className={errors.accountUsage && touched.accountUsage ? "is-invalid" : ""}
                                                         defaultValue ={{label:selectGlAcc.accountUsageDescription, value: selectGlAcc.accountUsageId}}
                                                         
                                                         name="accountUsage"

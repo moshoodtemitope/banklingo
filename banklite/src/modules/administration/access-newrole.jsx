@@ -33,7 +33,7 @@ class CreateNewRole extends React.Component {
     }
 
     componentDidMount() {
-
+        this.props.dispatch(administrationActions.addARole("CLEAR"));
         this.getAllPermissions();
     }
 
@@ -163,7 +163,7 @@ class CreateNewRole extends React.Component {
                                                     <input 
                                                         type="checkbox" 
                                                         id="roleIsAdministrator" 
-                                                        checked={values.roleIsAdministrator? values.roleIsAdministrator:null}
+                                                        checked={values.roleIsAdministrator? values.roleIsAdministrator:false}
                                                         name="roleIsAdministrator"
                                                         onChange={handleChange} 
                                                         value={values.roleIsAdministrator} 
@@ -185,7 +185,7 @@ class CreateNewRole extends React.Component {
                                                     <input 
                                                         type="checkbox" 
                                                         id="isAccountOfficer" 
-                                                        checked={values.isAccountOfficer? values.isAccountOfficer:null}
+                                                        checked={values.isAccountOfficer? values.isAccountOfficer:false}
                                                         name="isAccountOfficer"
                                                         onChange={handleChange} 
                                                         value={values.isAccountOfficer}  />
@@ -198,7 +198,7 @@ class CreateNewRole extends React.Component {
                                                     <input 
                                                         type="checkbox" 
                                                         id="roleHasPortalAccessRight" 
-                                                        checked={values.roleHasPortalAccessRight? values.roleHasPortalAccessRight:null}
+                                                        checked={values.roleHasPortalAccessRight? values.roleHasPortalAccessRight:false}
                                                         name="roleHasPortalAccessRight"
                                                         onChange={handleChange} 
                                                         value={values.roleHasPortalAccessRight}  />
@@ -208,7 +208,7 @@ class CreateNewRole extends React.Component {
                                                     <input 
                                                         type="checkbox" 
                                                         id="roleHasApiAccessRight" 
-                                                        checked={values.roleHasApiAccessRight? values.roleHasApiAccessRight:null}
+                                                        checked={values.roleHasApiAccessRight? values.roleHasApiAccessRight:false}
                                                         name="roleHasApiAccessRight"
                                                         onChange={handleChange} 
                                                         value={values.roleHasApiAccessRight}  />
@@ -309,7 +309,17 @@ class CreateNewRole extends React.Component {
                                 </Accordion.Collapse>
                             </Accordion>
 
-
+                            {createARoleRequest.request_status === administrationConstants.CREATE_A_ROLE_SUCCESS && 
+                                <Alert variant="success">
+                                    {createARoleRequest.request_data.response.data.message}
+                                </Alert>
+                            }
+                            {createARoleRequest.request_status === administrationConstants.CREATE_A_ROLE_FAILURE && 
+                                <Alert variant="danger">
+                                    {createARoleRequest.request_data.error}
+                            
+                                </Alert>
+                            }
                             <div className="footer-with-cta toleft">
                                 {/* <Button variant="secondary" className="grayed-out">Cancel</Button> */}
                                 {/* <NavLink to={'/administration/access'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
@@ -323,17 +333,7 @@ class CreateNewRole extends React.Component {
                                     disabled={createARoleRequest.is_request_processing} 
                                     className="mr-20">{createARoleRequest.is_request_processing?'Please wait...': 'Create Role'}</Button>
                             </div>
-                            {createARoleRequest.request_status === administrationConstants.CREATE_A_ROLE_SUCCESS && 
-                                <Alert variant="success">
-                                    {createARoleRequest.request_data.response.data.message}
-                                </Alert>
-                            }
-                            {createARoleRequest.request_status === administrationConstants.CREATE_A_ROLE_FAILURE && 
-                                <Alert variant="danger">
-                                    {createARoleRequest.request_data.error}
-                            
-                                </Alert>
-                            }
+                           
                         </Form>
                         )}
             </Formik>

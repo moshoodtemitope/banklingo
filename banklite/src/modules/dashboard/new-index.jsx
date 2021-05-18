@@ -61,9 +61,16 @@ console.log('dashboard load');
             this.allUSerPermissions.push(eachPermission.permissionCode)
         })
     }
-
+    _isMounted = false;
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
     componentDidMount() {
-        this.loadInitialData();
+       this. _isMounted=true;
+  
+       this.loadInitialData();
+
+  
     }
 
     loadInitialData = () => {
@@ -74,7 +81,7 @@ console.log('dashboard load');
                     if(this.props.fetchLoggedonTillsReducer.request_status===dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS){
                         let allLoggedOnTills = this.props.fetchLoggedonTillsReducer.request_data.response.data.result;
                         if(allLoggedOnTills.length>=1){
-                            this.setState({selectedTillData:allLoggedOnTills[0], preloadedTillData:true, selectedTill:allLoggedOnTills[0].tillId })
+                             if (this._isMounted) this.setState({selectedTillData:allLoggedOnTills[0], preloadedTillData:true, selectedTill:allLoggedOnTills[0].tillId })
                         }
                     }
                 })
@@ -311,58 +318,58 @@ console.log('dashboard load');
 
     showOpenTill = ()=> {
         this.props.dispatch(dashboardActions.openATill("CLEAR"))
-        this.setState({showNewTill: true})
+         if (this._isMounted) this.setState({showNewTill: true})
     }
 
     closeAddCashToTill = ()=> {
-        this.setState({addCashToTill: false})
+         if (this._isMounted) this.setState({addCashToTill: false})
     }
 
     showAddRemoveCashToTill = (tillAction, tillActionData,)=> {
         this.props.dispatch(dashboardActions.addRemoveCashToTill("CLEAR"))
-        this.setState({tillAction, addCashToTill: true, tillActionData })
+         if (this._isMounted) this.setState({tillAction, addCashToTill: true, tillActionData })
     }
 
     hideCloseTill = ()=> {
-        this.setState({closeUndoCloseTill: false})
+         if (this._isMounted) this.setState({closeUndoCloseTill: false})
     }
 
     showCloseTill = (tillAction, tillActionData)=> {
         this.props.dispatch(dashboardActions.closeUndoCloseToTill("CLEAR"))
-        this.setState({tillAction, closeUndoCloseTill: true, tillActionData })
+         if (this._isMounted) this.setState({tillAction, closeUndoCloseTill: true, tillActionData })
     }
 
     hideViewTill = ()=> {
-        this.setState({closeViewTill: false})
+         if (this._isMounted) this.setState({closeViewTill: false})
     }
 
     showViewTill = (tillToView, allTills)=> {
         let tillsFiltered;
         
-        this.setState({ closeViewTill: true, tillToView, allTills })
+         if (this._isMounted) this.setState({ closeViewTill: true, tillToView, allTills })
     }
 
     hideViewCutomer = ()=> {
-        this.setState({closeViewCustomer: false})
+         if (this._isMounted) this.setState({closeViewCustomer: false})
     }
 
     showViewCustomer = ()=> {
             
-        this.setState({ closeViewCustomer: true, })
+         if (this._isMounted) this.setState({ closeViewCustomer: true, })
     }
 
     hideViewAccount = ()=> {
-        this.setState({closeViewAccount: false})
+         if (this._isMounted) this.setState({closeViewAccount: false})
     }
 
     showViewAccount = ()=> {
         
         
-        this.setState({ closeViewAccount: true })
+         if (this._isMounted) this.setState({ closeViewAccount: true })
     }
 
     closeOpenTill = ()=> {
-        this.setState({showNewTill: false})
+         if (this._isMounted) this.setState({showNewTill: false})
     }
 
     
@@ -382,6 +389,10 @@ console.log('dashboard load');
        
         await dispatch(dashboardActions.addRemoveCashToTill(requestPayload, action));
     }     
+
+ isEmptyOrSpaces(str){
+        return str === null || str.match(/^ *$/) !== null;
+    }
 
     renderOpenTillWrap = ()=>{
         if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_SUCCESS){
@@ -463,29 +474,17 @@ console.log('dashboard load');
                                 }}
                                 validationSchema={validationSchema}
                                 onSubmit={(values, { resetForm }) => {
-                                    // if(uploadedData && invalidType===false){
-                                    //     let savedData = {
-                                    //         batchName: values.batchName,
-                                    //         cardProgramBinEncodedKey: values.cardProgramBinEncodedKey,
-                                    //         batchDescription: values.batchDescription,
-                                    //         uploadedData
-                                    //     }
-                                    //     history.push("/batches/new/details", {savedData})
-                                    // }
-
-                                    
+                                 
                                     let requestPayload = {
                                         userEncodedKey: values.userEncodedKey,
-                                        maximumBalance: values.maximumBalance!==""? parseFloat(values.maximumBalance.replace(/,/g, '')): null,
-                                        mimimumbalance: values.mimimumbalance!==""? parseFloat(values.mimimumbalance.replace(/,/g, '')) : null,
+                                        maximumBalance: values.maximumBalance==="" ||  values.maximumBalance===null? null:parseFloat(values.maximumBalance.replace(/,/g, '')),
+                                        mimimumbalance: values.mimimumbalance===""  || values.mimimumbalance===null? null:parseFloat(values.mimimumbalance.replace(/,/g, '')),
                                         openingBalance: parseFloat(values.openingAmount.replace(/,/g, '')),
                                         tillBalanceConstraintType: values.tillBalanceConstraintType,
                                         currencyCode: values.currencyCode
                                     }
 
-                                //    console.log("till datata", requestPayload);
-                                    
-
+                                
                                     this.handleOpenTill(requestPayload)
                                         .then(()=>{
                                             if(this.props.openATillReducer.request_status ===dashboardConstants.OPEN_A_TILL_SUCCESS){
@@ -513,7 +512,7 @@ console.log('dashboard load');
                                     errors, }) =>{
                                         
                                         
-                                        console.log('model validations '+errors);
+                                        console.log(errors);
                                         
                                         
                                         return (
@@ -537,7 +536,7 @@ console.log('dashboard load');
                                                             values.userEncodedKey = selectedOption.value
                                                         }
                                                     }}
-                                                    className={errors.userEncodedKey && touched.userEncodedKey ? "is-invalid" : null}
+                                                    className={errors.userEncodedKey && touched.userEncodedKey ? "is-invalid" : ""}
                                                     name="userEncodedKey"
                                                     required
                                                 />
@@ -562,7 +561,7 @@ console.log('dashboard load');
                                                             values.currencyCode = selectedOption.value
                                                         }
                                                     }}
-                                                    className={errors.currencyCode && touched.currencyCode ? "is-invalid" : null}
+                                                    className={errors.currencyCode && touched.currencyCode ? "is-invalid" : ""}
                                                     name="currencyCode"
                                                     required
                                                 />
@@ -582,7 +581,7 @@ console.log('dashboard load');
                                                 name="openingAmount"
                                                 value={numberWithCommas(values.openingAmount)??""}
                                                 onChange={handleChange}
-                                                className={errors.openingAmount && touched.openingAmount ? "is-invalid" : null}
+                                                className={errors.openingAmount && touched.openingAmount ? "is-invalid" : ""}
                                                 required />
 
                                             {errors.openingAmount && touched.openingAmount ? (
@@ -596,7 +595,7 @@ console.log('dashboard load');
                                                 name="maximumBalance"
                                                 value={numberWithCommas(values.maximumBalance)??""}
                                                 onChange={handleChange}
-                                                className={errors.maximumBalance && touched.maximumBalance ? "is-invalid" : null}
+                                                className={errors.maximumBalance && touched.maximumBalance ? "is-invalid" : ""}
                                                 required />
 
                                             {errors.maximumBalance && touched.maximumBalance ? (
@@ -610,7 +609,7 @@ console.log('dashboard load');
                                                 name="mimimumbalance"
                                                 value={numberWithCommas(values.mimimumbalance)??""}
                                                 onChange={handleChange}
-                                                className={errors.mimimumbalance && touched.mimimumbalance ? "is-invalid" : null}
+                                                className={errors.mimimumbalance && touched.mimimumbalance ? "is-invalid" : ""}
                                                 required />
 
                                             {errors.mimimumbalance && touched.mimimumbalance ? (
@@ -632,7 +631,7 @@ console.log('dashboard load');
                                                             values.tillBalanceConstraintType = selectedOption.value
                                                         }
                                                     }}
-                                                    className={errors.tillBalanceConstraintType && touched.tillBalanceConstraintType ? "is-invalid" : null}
+                                                    className={errors.tillBalanceConstraintType && touched.tillBalanceConstraintType ? "is-invalid" : ""}
                                                     name="tillBalanceConstraintType"
                                                     required
                                                 />
@@ -813,7 +812,7 @@ console.log('dashboard load');
                                                     name="amount"
                                                     value={numberWithCommas(values.amount)}
                                                     onChange={handleChange}
-                                                    className={errors.amount && touched.amount ? "is-invalid" : null}
+                                                    className={errors.amount && touched.amount ? "is-invalid" : ""}
                                                     required />
 
                                                 {errors.amount && touched.amount ? (
@@ -2052,7 +2051,9 @@ console.log('dashboard load');
                             values,
                             touched,
                             isValid,
-                            errors, }) => (
+                            errors, }) => 
+                            {
+                            return (
                             <Form noValidate
                                 onSubmit={handleSubmit}>
                                 
@@ -2134,7 +2135,7 @@ console.log('dashboard load');
                                                             loadOptions={this.initiateAccountSearch}
                                                             placeholder="Search Accounts"
                                                             name="chosenAccountNum"
-                                                            className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+                                                            className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : ""}
                                                             onChange={(selectedOption) => {
                                                                 setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
                                                                 // console.log("calleded", selectedOption)
@@ -2188,7 +2189,7 @@ console.log('dashboard load');
                                                             }
                                                         }}
                                                         noOptionsMessage={() => 'Account must be selected'}
-                                                        className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
+                                                        className={errors.txtnType && touched.txtnType ? "is-invalid" : ""}
                                                         name="txtnType"
                                                         required
                                                     />
@@ -2206,7 +2207,7 @@ console.log('dashboard load');
                                                 name="amount"
                                                 value={numberWithCommas(values.amount)}
                                                 onChange={handleChange}
-                                                className={errors.amount && touched.amount ? "is-invalid" : null}
+                                                className={errors.amount && touched.amount ? "is-invalid" : ""}
                                                 required />
 
                                             {errors.amount && touched.amount ? (
@@ -2219,7 +2220,7 @@ console.log('dashboard load');
                                                 name="referenceID"
                                                 value={values.referenceID}
                                                 onChange={handleChange}
-                                                className={errors.referenceID && touched.referenceID ? "is-invalid" : null}
+                                                className={errors.referenceID && touched.referenceID ? "is-invalid" : ""}
                                                 required />
 
                                             {errors.referenceID && touched.referenceID ? (
@@ -2322,7 +2323,7 @@ console.log('dashboard load');
                                                             loadOptions={this.initiateAccountSearch}
                                                             placeholder="Search Accounts"
                                                             name="chosenAccountNum"
-                                                            className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : null}
+                                                            className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : ""}
                                                             onChange={(selectedOption) => {
                                                                
                                                                 setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
@@ -2378,7 +2379,7 @@ console.log('dashboard load');
                                                                 values.txtnType = selectedTxtn.value
                                                             }
                                                         }}
-                                                        className={errors.txtnType && touched.txtnType ? "is-invalid" : null}
+                                                        className={errors.txtnType && touched.txtnType ? "is-invalid" : ""}
                                                         name="txtnType"
                                                         required
                                                     />
@@ -2397,7 +2398,7 @@ console.log('dashboard load');
                                                     name="amount"
                                                     value={numberWithCommas(values.amount)}
                                                     onChange={handleChange}
-                                                    className={errors.amount && touched.amount ? "is-invalid" : null}
+                                                    className={errors.amount && touched.amount ? "is-invalid" : ""}
                                                     required />
 
                                                 {errors.amount && touched.amount ? (
@@ -2412,7 +2413,7 @@ console.log('dashboard load');
                                                     name="chequeNo"
                                                     value={values.chequeNo}
                                                     onChange={handleChange}
-                                                    className={errors.chequeNo && touched.chequeNo ? "is-invalid" : null}
+                                                    className={errors.chequeNo && touched.chequeNo ? "is-invalid" : ""}
                                                     required />
 
                                                 {errors.chequeNo && touched.chequeNo ? (
@@ -2427,7 +2428,7 @@ console.log('dashboard load');
                                                     name="referenceID"
                                                     value={values.referenceID}
                                                     onChange={handleChange}
-                                                    className={errors.referenceID && touched.referenceID ? "is-invalid" : null}
+                                                    className={errors.referenceID && touched.referenceID ? "is-invalid" : ""}
                                                     required />
 
                                                 {errors.referenceID && touched.referenceID ? (
@@ -2486,6 +2487,7 @@ console.log('dashboard load');
                                 }
                             </Form>
                         )}
+                            }
                     </Formik>
                 </div>
             </div>

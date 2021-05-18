@@ -231,7 +231,7 @@ class ViewADisbursmentBatch extends React.Component {
                                                     name="actionComments"
                                                     onChange={handleChange}
                                                     value={values.actionComments}
-                                                    className={errors.actionComments && touched.actionComments ? "is-invalid" : null} />
+                                                    className={errors.actionComments && touched.actionComments ? "is-invalid" : ""} />
 
                                                 {errors.actionComments && touched.actionComments ? (
                                                     <span className="invalid-feedback">{errors.actionComments}</span>
@@ -322,7 +322,7 @@ class ViewADisbursmentBatch extends React.Component {
                                     onChange={(e)=>this.setState({securityCode: e.target.value})}
                                     placeholder="Enter your security code"
                                     value={allowNumbersOnly(securityCode)}
-                                    // className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                                    // className={errors.securityCode && touched.securityCode ? "is-invalid" : ""}
                                     required />
                                 
                                 
@@ -337,7 +337,7 @@ class ViewADisbursmentBatch extends React.Component {
                                     onChange={(e)=>this.setState({securityCode: e.target.value})}
                                     placeholder="Enter your security code"
                                     value={allowNumbersOnly(securityCode)}
-                                    // className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                                    // className={errors.securityCode && touched.securityCode ? "is-invalid" : ""}
                                     required />
                                 
                                 
@@ -527,7 +527,7 @@ class ViewADisbursmentBatch extends React.Component {
                                     onChange={(e)=>this.setState({securityCode: e.target.value})}
                                     placeholder="Enter your security code"
                                     value={allowNumbersOnly(securityCode)}
-                                    // className={errors.securityCode && touched.securityCode ? "is-invalid" : null}
+                                    // className={errors.securityCode && touched.securityCode ? "is-invalid" : ""}
                                     required />
                                 
                                 

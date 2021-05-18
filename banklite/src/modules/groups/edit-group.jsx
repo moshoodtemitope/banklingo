@@ -50,7 +50,9 @@ class EditAGroup extends React.Component {
   }
 
   componentDidMount() {
+    this.props.dispatch(clientsActions.updateAClient('CLEAR'));
     this.getDetailsOfClient();
+
     this.getAllUsers();
     // console.log('------',moment(new Date));
   }
@@ -279,7 +281,7 @@ class EditAGroup extends React.Component {
                           errors.roleChosen = null
                           values.roleChosen = selectedRole.value
                         }}
-                        className={errors.roleChosen && touched.roleChosen ? "is-invalid" : null}
+                        className={errors.roleChosen && touched.roleChosen ? "is-invalid" : ""}
                         name="roleChosen"
                         required
                       />
@@ -460,6 +462,7 @@ class EditAGroup extends React.Component {
 
 
       if (Object.keys(allCustomerData).length >= 1) {
+
         return (
           <Formik
             initialValues={{
@@ -548,7 +551,13 @@ class EditAGroup extends React.Component {
               touched,
               isValid,
               errors,
-            }) => (
+            }) => {
+              
+              
+              console.log(errors);
+              return (
+
+              
               <Form
                 noValidate
                 onSubmit={handleSubmit}
@@ -627,7 +636,7 @@ class EditAGroup extends React.Component {
                                                                 errors.custType = null
                                                                 values.custType = selectedCustType.value
                                                             }}
-                                                            className={errors.custType && touched.custType ? "is-invalid" : null}
+                                                            className={errors.custType && touched.custType ? "is-invalid" : ""}
                                                             // value={values.accountUsage}
                                                             name="custType"
                                                             // value={values.currencyCode}
@@ -725,7 +734,7 @@ class EditAGroup extends React.Component {
                                 errors.roleChosen = null
                                 values.roleChosen = selectedRole.value
                               }}
-                              className={errors.roleChosen && touched.roleChosen ? "is-invalid" : null}
+                              className={errors.roleChosen && touched.roleChosen ? "is-invalid" : ""}
                               name="roleChosen"
                               required
                             />
@@ -771,9 +780,10 @@ class EditAGroup extends React.Component {
                             }}
                             onChange={(selectedBranch) => {
                               this.setState({ selectedBranch });
-                              errors.clientBranchEncodedKey = null;
+                              // errors.clientBranchEncodedKey = null;
                               values.clientBranchEncodedKey = selectedBranch.value;
                             }}
+                            placeholder={'Select Branch'}
                             className={
                               errors.clientBranchEncodedKey &&
                                 touched.clientBranchEncodedKey
@@ -809,9 +819,10 @@ class EditAGroup extends React.Component {
                             }}
                             onChange={(selectedOfficer) => {
                               this.setState({ selectedOfficer });
-                              errors.accountOfficerEncodedKey = null;
+                              // errors.accountOfficerEncodedKey = null;
                               values.accountOfficerEncodedKey = selectedOfficer.value;
                             }}
+                            placeholder={'Account Officer'}
                             className={
                               errors.accountOfficerEncodedKey &&
                                 touched.accountOfficerEncodedKey
@@ -1118,6 +1129,7 @@ class EditAGroup extends React.Component {
                 </div>
               </Form>
             )}
+                    }
           </Formik>
         );
       } else {

@@ -120,7 +120,7 @@ class ChangePin extends React.Component {
                                         onChange={handleChange}
                                         value={values.currentPIN}
                                         required
-                                        className={errors.currentPIN && touched.currentPIN ? "is-invalid" : null}
+                                        className={errors.currentPIN && touched.currentPIN ? "is-invalid" : ""}
                                     />
                                     {errors.currentPIN && touched.currentPIN ? (
                                         <span className="invalid-feedback">{errors.currentPIN}</span>
@@ -136,7 +136,7 @@ class ChangePin extends React.Component {
                                         onChange={handleChange}
                                         value={values.newPIN}
                                         required
-                                        className={errors.newPIN && touched.newPIN ? "is-invalid" : null}
+                                        className={errors.newPIN && touched.newPIN ? "is-invalid" : ""}
                                     />
                                     {errors.newPIN && touched.newPIN ? (
                                         <span className="invalid-feedback">{errors.newPIN}</span>
@@ -152,7 +152,7 @@ class ChangePin extends React.Component {
                                         onChange={handleChange}
                                         value={values.confirmNewPIN}
                                         required
-                                        className={errors.confirmNewPIN && touched.confirmNewPIN ? "is-invalid" : null}
+                                        className={errors.confirmNewPIN && touched.confirmNewPIN ? "is-invalid" : ""}
                                     />
                                     {errors.confirmNewPIN && touched.confirmNewPIN ? (
                                         <span className="invalid-feedback">{errors.confirmNewPIN}</span>

@@ -59,11 +59,11 @@ class NewClient extends React.Component {
 
   createCustomerValidationSchema = Yup.object().shape({
     FName: Yup.string()
-      .min(1, 'Valid Response required')
+      .min(1, 'Enter valid name')
       .max(50, 'Max limit reached')
       .required('Required'),
     LName: Yup.string()
-      .min(1, 'Valid response required')
+      .min(1, 'Enter valid last name')
       .max(50, 'Max limit reached')
       .required('Required'),
     clientBranchEncodedKey: Yup.string().required('Required'),
@@ -77,27 +77,27 @@ class NewClient extends React.Component {
     gender: Yup.string().required('Required'),
     dateOfBirth: Yup.date().required('Required'),
     MName: Yup.string()
-      .min(1, 'Valid response required')
+      .min(1, 'Enter middle name')
       .max(50, 'Max limit reached'),
     // custType:  Yup.string()
     //     .min(1, 'Valid response required'),
     addressLine1: Yup.string()
-      .min(2, 'Valid response required')
+      .min(2, 'Valid details required')
       .max(70, 'Max limit reached'),
     addressLine2: Yup.string()
-      .min(2, 'Valid response required')
+      .min(2, 'Valid details required')
       .max(70, 'Max limit reached'),
     addressCity: Yup.string()
-      .min(2, 'Valid response required')
+      .min(2, 'Valid details required')
       .max(40, 'Max limit reached'),
     addressState: Yup.string()
-      .min(2, 'Valid response required')
+      .min(2, 'Valid details required')
       .max(40, 'Max limit reached'),
     addressCountry: Yup.string()
-      .min(2, 'Valid response required')
+      .min(2, 'Valid details required')
       .max(35, 'Max limit reached'),
     zipCode: Yup.string()
-      .min(2, 'Valid response required')
+      .min(2, 'Valid details required')
       .max(10, 'Max limit reached'),
 
     employerName: Yup.string()
@@ -447,10 +447,10 @@ class NewClient extends React.Component {
                                                             options={allCustomerTypesData}
                                                             onChange={(selectedCustType) => {
                                                                 this.setState({ selectedCustType });
-                                                                errors.custType = null
+                                                              //  errors.custType = null
                                                                 values.custType = selectedCustType.value
                                                             }}
-                                                            className={errors.custType && touched.custType ? "is-invalid" : null}
+                                                            className={errors.custType && touched.custType ? "is-invalid" : ""}
                                                             // value={values.accountUsage}
                                                             name="custType"
                                                             // value={values.currencyCode}
@@ -489,7 +489,7 @@ class NewClient extends React.Component {
                     options={genderList}
                     onChange={(selectedGender) => {
                       this.setState({ selectedGender });
-                      errors.gender = null;
+                      //errors.gender = null;
                       values.gender = selectedGender.value;
                     }}
                     name='gender'
@@ -574,7 +574,7 @@ class NewClient extends React.Component {
                     options={selecBranchList}
                     onChange={(selectedBranch) => {
                       this.setState({ selectedBranch });
-                      errors.clientBranchEncodedKey = null;
+                    //  errors.clientBranchEncodedKey = null;
                       values.clientBranchEncodedKey = selectedBranch.value;
                     }}
                     className={
@@ -604,7 +604,7 @@ class NewClient extends React.Component {
                     options={allUserDataList}
                     onChange={(selectedOfficer) => {
                       this.setState({ selectedOfficer });
-                      errors.accountOfficerEncodedKey = null;
+                    //  errors.accountOfficerEncodedKey = null;
                       values.accountOfficerEncodedKey = selectedOfficer.value;
                     }}
                     className={

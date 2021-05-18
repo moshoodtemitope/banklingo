@@ -275,7 +275,7 @@ class CreateNewTask extends React.Component {
                                                 value={values.summary}
                                                 onChange={handleChange}
                                                 placeholder="Summary"
-                                                className={errors.summary && touched.summary ? "is-invalid" : null}
+                                                className={errors.summary && touched.summary ? "is-invalid" : ""}
                                                 required />
 
                                             {errors.summary && touched.summary ? (
@@ -336,7 +336,7 @@ class CreateNewTask extends React.Component {
                                                     disabled ={true}
                                                     onChange={handleChange}
                                                     placeholder=""
-                                                    className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
+                                                    className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : ""}
                                                     required />
 
                                                 

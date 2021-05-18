@@ -276,7 +276,7 @@ class ViewCustomerTasks extends React.Component {
                                                                 setFieldTouched('assignedToUserName', true)
                                                             }
                                                         }
-                                                        className={errors.assignedToUserName && touched.assignedToUserName ? "is-invalid" : null}
+                                                        className={errors.assignedToUserName && touched.assignedToUserName ? "is-invalid" : ""}
                                                         // value={values.accountUsage}
                                                         name="assignedToUserName"
                                                         // value={values.currencyCode}
@@ -317,7 +317,7 @@ class ViewCustomerTasks extends React.Component {
                                                     as="textarea" rows="3"
                                                     onChange={handleChange}
                                                     value={values.Notes}
-                                                    className={errors.Notes && touched.Notes ? "is-invalid" : null}
+                                                    className={errors.Notes && touched.Notes ? "is-invalid" : ""}
                                                     name="Notes" 
                                                     required  />
                                                     {errors.Notes && touched.Notes ? (

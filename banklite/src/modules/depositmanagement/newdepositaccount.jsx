@@ -44,10 +44,18 @@ class NewDepositAccount extends React.Component {
 
         this.selectedDepositProductDetails="";
     }
+    _isMounted = false;
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
+    componentDidMount() {
+       this._isMounted=true;
+  
+       this.loadInitialData();
 
-    componentDidMount(){
-        this.loadInitialData();
+  
     }
+   
 
     loadInitialData=()=>{
         let {PageSize, CurrentPage}= this.state;
@@ -125,7 +133,7 @@ class NewDepositAccount extends React.Component {
             .then(productDetails=>{
                 
                 this.selectedDepositProductDetails = this.props.getSingleDepositProductsReducer.request_data.response.data;
-                this.setState({selectedDepositProductDetails: this.selectedDepositProductDetails, currencyCode: this.selectedDepositProductDetails.currencyCode})
+              if(this._isMounted)  this.setState({selectedDepositProductDetails: this.selectedDepositProductDetails, currencyCode: this.selectedDepositProductDetails.currencyCode})
             })
     }
 
@@ -412,7 +420,7 @@ else
                                                                 }}
                                                                 placeholder="Search Customer"
                                                                 onBlur={()=> setFieldTouched('clientEncodedKey', true)}
-                                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : null}
+                                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid" : ""}
                                                                 
                                                                 
                                                                 name="clientEncodedKey"
@@ -461,7 +469,7 @@ else
                                                                 this.getADepositProduct(selected.value)
                                                             }}
                                                             onBlur={()=> setFieldTouched('depositProductEncodedKey', true)}
-                                                            className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : null}
+                                                            className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : ""}
                                                             
                                                             
                                                             name="depositProductEncodedKey"
@@ -611,7 +619,7 @@ else
                                                                 <Form.Control as="textarea" rows="3"
                                                                     onChange={handleChange}
                                                                     value={values.notes}
-                                                                    className={errors.notes && touched.notes ? "is-invalid" : null}
+                                                                    className={errors.notes && touched.notes ? "is-invalid" : ""}
                                                                     name="notes" 
                                                                     required  />
                                                                     {errors.notes && touched.notes ? (
