@@ -2184,7 +2184,7 @@ console.log('dashboard load');
                                                         onChange={(selectedTxtn) => {
                                                             this.setState({ selectedTxtn });
                                                             if (selectedTxtn) {
-                                                                errors.txtnType = null
+                                                                // errors.txtnType = null
                                                                 values.txtnType = selectedTxtn.value
                                                             }
                                                         }}
@@ -2215,7 +2215,7 @@ console.log('dashboard load');
                                             ) : null}
                                         </Form.Group>
                                         <Form.Group className="mr-10">
-                                            <Form.Label className="block-level">Reference ID</Form.Label>
+                                            <Form.Label className="block-level">Reference ID(Slip No)</Form.Label>
                                             <Form.Control type="text"
                                                 name="referenceID"
                                                 value={values.referenceID}
@@ -2335,6 +2335,10 @@ console.log('dashboard load');
                                                                 if(values.clientEncodedKey===""){
                                                                     setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
                                                                     this.handleSelectedAccount(selectedOption)
+                                                                }else{
+
+
+                                                                    
                                                                 }
 
                                                                 // this.getSearchOptionForCustomerLabel(selectedOption)

@@ -132,12 +132,12 @@ class EditAClient extends React.Component {
       officialEmail: Yup.string()
         .when('workStatus', {
           is: '1',
-          then: Yup.string().required('Required'),
+          then: Yup.string(),
         }),
       monthlySalary: Yup.string()
         .when('workStatus', {
           is: '1',
-          then: Yup.string().required('Required'),
+          then: Yup.string().nullable(),
         }),
       employeeSector: Yup.string()
         .when('workStatus', {
@@ -328,7 +328,7 @@ class EditAClient extends React.Component {
                       allCustomerData.employeeInfo.monthlySalary,
                       true
                     )
-                  : '',
+                  : null,
               employeeSector:
                 allCustomerData.employeeInfo.employeeSector !== null
                   ? allCustomerData.employeeInfo.employeeSector
@@ -955,7 +955,7 @@ class EditAClient extends React.Component {
                             </Col>
                             <Col>
                               <Form.Label className='block-level'>
-                                Monthly Salary
+                                Monthly Salary(Net Pay)
                               </Form.Label>
                               <Form.Control
                                 type='text'
@@ -1079,7 +1079,7 @@ class EditAClient extends React.Component {
                           <Form.Row>
                             <Col>
                               <Form.Label className='block-level'>
-                                Employer Address State
+                                Employer Address (Region)
                               </Form.Label>
                               <Form.Control
                                 type='text'
@@ -1102,7 +1102,7 @@ class EditAClient extends React.Component {
                             </Col>
                             <Col>
                               <Form.Label className='block-level'>
-                                Employer Address City
+                                Employer Address(City)
                               </Form.Label>
                               <Form.Control
                                 type='text'

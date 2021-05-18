@@ -113,12 +113,12 @@ class NewClient extends React.Component {
     officialEmail: Yup.string()
       .when('workStatus', {
         is: '1',
-        then: Yup.string().required('Required'),
+        then: Yup.string(),
       }),
     monthlySalary: Yup.string()
       .when('workStatus', {
         is: '1',
-        then: Yup.string().required('Required'),
+        then: Yup.string().nullable(),
       }),
     employeeSector: Yup.string()
       .when('workStatus', {
@@ -273,7 +273,7 @@ class NewClient extends React.Component {
             employerName: '',
             employmentDate: '',
             officialEmail: '',
-            monthlySalary: '',
+            monthlySalary: null,
             employeeSector: '',
             employeeSubSector: '',
             payDay: '',
@@ -1019,7 +1019,7 @@ class NewClient extends React.Component {
                         <Form.Row>
                           <Col>
                             <Form.Label className='block-level'>
-                              Employer Address State
+                              Employer Address(State)
                             </Form.Label>
                             <Form.Control
                               type='text'
@@ -1042,7 +1042,7 @@ class NewClient extends React.Component {
                           </Col>
                           <Col>
                             <Form.Label className='block-level'>
-                              Employer Address City
+                              Employer Address(City)
                             </Form.Label>
                             <Form.Control
                               type='text'
