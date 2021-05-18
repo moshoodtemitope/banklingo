@@ -296,9 +296,13 @@ fetchForDataState=()=> {
 
 
  let allUSerPermissions = [];
- this.userPermissions.map((eachPermission) => {
-   allUSerPermissions.push(eachPermission.permissionCode);
- });
+
+ if(this.userPermissions!=null){
+  this.userPermissions.map((eachPermission) => {
+    allUSerPermissions.push(eachPermission.permissionCode);
+  });
+ 
+ }
 
   switch(adminGetUsersRequest.request_status){
   case(administrationConstants.GET_USERS_SUCCESS):
@@ -310,7 +314,7 @@ fetchForDataState=()=> {
  let allUsersData= adminGetUsersRequest?.request_data?.response?.data;
 
       return (<tbody>
-        {allUsersData.result.map((eachUser, index) => {
+        {allUsersData?.result?.map((eachUser, index) => {
           return (
             <Fragment key={index}>
               <tr>
@@ -464,9 +468,12 @@ fetchPageList() {
     ShowDeactivated,
   } = this.state;
   let allUSerPermissions = [];
-  this.userPermissions.map((eachPermission) => {
-    allUSerPermissions.push(eachPermission.permissionCode);
-  });
+  if(this.userPermissions!==null){
+    this.userPermissions.map((eachPermission) => {
+      allUSerPermissions.push(eachPermission.permissionCode);
+    });
+  }
+ 
 
 
   let allUsersData = adminGetUsersRequest.request_data?.response?.data;
