@@ -94,9 +94,13 @@ class AccessRoles extends React.Component {
 
         let saveRequestData= GetRolesRequest.request_data!==undefined?GetRolesRequest.request_data.tempData:null;
         let allUSerPermissions =[];
-        this.userPermissions.map(eachPermission=>{
-            allUSerPermissions.push(eachPermission.permissionCode)
-        })
+
+        if(this.userPermissions!==null){
+            this.userPermissions.map(eachPermission=>{
+                allUSerPermissions.push(eachPermission.permissionCode)
+            })
+        }
+        
 
         switch (GetRolesRequest.request_status){
             
@@ -278,7 +282,7 @@ class AccessRoles extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            rolesDataData.result.map((eachRole, index) => {
+                                            rolesDataData.result?.map((eachRole, index) => {
                                                 return (
                                                     <Fragment key={index}>
                                                         <tr>
