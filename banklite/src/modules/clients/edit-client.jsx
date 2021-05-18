@@ -124,51 +124,51 @@ class EditAClient extends React.Component {
           is: '1',
           then: Yup.string().required('Required'),
         }),
-      employmentDate: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().required("Required"),
-        }),
-      officialEmail: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string(),
-        }),
-      monthlySalary: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().nullable(),
-        }),
-      employeeSector: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().required('Required'),
-        }),
-      employeeSubSector: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().required('Required'),
-        }),
-      payDay: Yup.number()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.number().required('Required'),
-        }),
-      employerAddress: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().required('Required'),
-        }),
-      employerAddressState: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().required('Required'),
-        }),
-      employerAddressCity: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().required('Required'),
-        }),
+      // employmentDate: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string().required("Required"),
+      //   }),
+      // officialEmail: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string(),
+      //   }),
+      // monthlySalary: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string().nullable(),
+      //   }),
+      // employeeSector: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string().required('Required'),
+      //   }),
+      // employeeSubSector: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string().required('Required'),
+      //   }),
+      // payDay: Yup.number()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.number().required('Required'),
+      //   }),
+      // employerAddress: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string().required('Required'),
+      //   }),
+      // employerAddressState: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string().required('Required'),
+      //   }),
+      // employerAddressCity: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string().required('Required'),
+      //   }),
 
       contactMobile: Yup.string()
         .min(8, 'Valid response required')
@@ -323,7 +323,7 @@ class EditAClient extends React.Component {
                   ? allCustomerData.employeeInfo.officialEmail
                   : '',
               monthlySalary:
-                allCustomerData.employeeInfo.monthlySalary !== null
+                (allCustomerData.employeeInfo.monthlySalary !== null && allCustomerData.employeeInfo.monthlySalary !== '')
                   ? numberWithCommas(
                       allCustomerData.employeeInfo.monthlySalary,
                       true
@@ -384,6 +384,19 @@ class EditAClient extends React.Component {
                   nextofKinHomeAddress: values.nextOfKinAddress,
                   nextOfKinMobileNumber: values.nextOfKinMobile,
                   relationship: values.nextOfKinRelationship,
+                },
+                employmentInformation:values.workStatus !== '1'? null:  {
+                  workStatus: parseInt(values.workStatus),
+                  employerName: values.employerName,
+                  employmentDate:(values.employmentDate === "" || values.employmentDate === null)? null:values.employmentDate?.toISOString(),
+                  officialEmail: values.officialEmail,
+                  monthlySalary:(values.monthlySalary === "" || values.monthlySalary === null)? null:parseFloat(values.monthlySalary.replace(/,/g, '')),
+                  employeeSector: values.employeeSector,
+                  employeeSubSector: values.employeeSubSector,
+                  payDay:(values.payDay === "")? null:parseInt(values.payDay),
+                  employerAddress: values.employerAddress,
+                  employerAddressCity: values.employerAddressCity,
+                  employerAddressState: values.employerAddressState,
                 },
                 bvn: values.BVN,
                 gender: values.gender ? values.gender : '',
@@ -961,14 +974,14 @@ class EditAClient extends React.Component {
                                 type='text'
                                 name='monthlySalary'
                                 onChange={handleChange}
-                                value={numberWithCommas(
+                                value={values.monthlySalary??numberWithCommas(
                                   values.monthlySalary,
                                   true
                                 )}
                                 className={
                                   errors.monthlySalary && touched.monthlySalary
                                     ? 'is-invalid'
-                                    : null
+                                    : ''
                                 }
                               />
                               {errors.monthlySalary && touched.monthlySalary ? (
