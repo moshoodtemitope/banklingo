@@ -45,7 +45,7 @@ class EditAClient extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(clientsActions.updateAClient("CLEAR"))
+    // this.props.dispatch(clientsActions.updateAClient("CLEAR"))
     this.getAClient();
     this.getAllUsers();
     // console.log('------',moment(new Date));
@@ -96,7 +96,7 @@ class EditAClient extends React.Component {
         .max(50, 'Max limit reached'),
       custType: Yup.string().min(1, 'Valid response required'),
       clientBranchEncodedKey: Yup.string().required('Required'),
-      accountOfficerEncodedKey: Yup.string().required('Required').nullable(),
+      accountOfficerEncodedKey: Yup.string().required('Required'),
       BVN: Yup.string()
       // .required('Required')
       ,
@@ -124,21 +124,21 @@ class EditAClient extends React.Component {
           is: '1',
           then: Yup.string().required('Required'),
         }),
-      // employmentDate: Yup.string()
-      //   .when('workStatus', {
-      //     is: '1',
-      //     then: Yup.string().required("Required"),
-      //   }),
+      employmentDate: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().nullable(),
+        }),
       // officialEmail: Yup.string()
       //   .when('workStatus', {
       //     is: '1',
       //     then: Yup.string(),
       //   }),
-      // monthlySalary: Yup.string()
-      //   .when('workStatus', {
-      //     is: '1',
-      //     then: Yup.string().nullable(),
-      //   }),
+      monthlySalary: Yup.string()
+        .when('workStatus', {
+          is: '1',
+          then: Yup.string().nullable(),
+        }),
       // employeeSector: Yup.string()
       //   .when('workStatus', {
       //     is: '1',
@@ -323,12 +323,12 @@ class EditAClient extends React.Component {
                   ? allCustomerData.employeeInfo.officialEmail
                   : '',
               monthlySalary:
-                (allCustomerData.employeeInfo.monthlySalary !== null && allCustomerData.employeeInfo.monthlySalary !== '')
+                (allCustomerData.employeeInfo.monthlySalary !== null)
                   ? numberWithCommas(
-                      allCustomerData.employeeInfo.monthlySalary,
+                      allCustomerData.employeeInfo.monthlySalary??0,
                       true
                     )
-                  : null,
+                  : '',
               employeeSector:
                 allCustomerData.employeeInfo.employeeSector !== null
                   ? allCustomerData.employeeInfo.employeeSector
@@ -409,14 +409,15 @@ class EditAClient extends React.Component {
                 accountOfficerEncodedKey: values.accountOfficerEncodedKey??'',
               };
 
-              console.log(updateCustomerPayload);
+              // console.log(updateCustomerPayload);
               this.handleUpdateCustomer(updateCustomerPayload).then(() => {
-                // if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
-                //     resetForm();
-                // }
-                // setTimeout(() => {
-                //     this.props.dispatch(clientsActions.updateAClient("CLEAR"))
-                // }, 3000);
+                if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
+                    resetForm();
+                    setTimeout(() => {
+                      this.props.dispatch(clientsActions.updateAClient("CLEAR"))
+                  }, 3000);
+                }
+               
               });
             }}
           >
@@ -662,8 +663,8 @@ class EditAClient extends React.Component {
                     <Select
                       options={allUserDataList}
                       defaultValue={{
-                        label: defaultAccountOfficer?.label??'',
-                        value: defaultAccountOfficer?.key??'',
+                        label: defaultAccountOfficer.label,
+                        value: defaultAccountOfficer.key,
                       }}
                       onChange={(selectedOfficer) => {
                      
