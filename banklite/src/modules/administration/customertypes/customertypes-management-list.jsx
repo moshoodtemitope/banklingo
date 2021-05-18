@@ -360,7 +360,7 @@ fetchErrorState(){
                                                     
                                                     this.props.dispatch(customerTypeActions.updateCustomerType("CLEAR"))
                                                     
-                                                }, 2000);
+                                                }, 3000);
                                                  
                                             }else{
                                                 setTimeout(() => {

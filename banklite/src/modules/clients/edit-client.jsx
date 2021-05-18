@@ -39,8 +39,8 @@ class EditAClient extends React.Component {
     super(props);
     this.state = {
       user: JSON.parse(localStorage.getItem('lingoAuth')),
-      selectedOfficer:'',
-      selectedBranch:''
+      // selectedOfficer:'',
+      // selectedBranch:''
     };
   }
 
@@ -632,7 +632,7 @@ class EditAClient extends React.Component {
                         value: allCustomerData.branchEncodedKey,
                       }}
                       onChange={(selectedBranch) => {
-                        this.setState({ selectedBranch });
+                      //  this.setState({ selectedBranch });
                       //  errors.clientBranchEncodedKey = null;
                         values.clientBranchEncodedKey = selectedBranch.value;
                       }}
@@ -661,21 +661,15 @@ class EditAClient extends React.Component {
                     </Form.Label>
                     <Select
                       options={allUserDataList}
-
-                   //   {...this.props}
-                     // value={allUserDataList.filter(option => option.value === defaultAccountOfficer.key)}
                       defaultValue={{
-                        label: defaultAccountOfficer.label,
-                        value: defaultAccountOfficer.key,
+                        label: defaultAccountOfficer?.label??'',
+                        value: defaultAccountOfficer?.key??'',
                       }}
                       onChange={(selectedOfficer) => {
                      
-                        this.setState({ selectedOfficer });
-                        console.log(selectedOfficer);
-                      //  errors.accountOfficerEncodedKey = null;
+                    //    this.setState({ selectedOfficer });
+                     
                         values.accountOfficerEncodedKey = selectedOfficer.value;
-                    
-                      
                       }}
 
                       className={
@@ -684,9 +678,7 @@ class EditAClient extends React.Component {
                           ? 'is-invalid'
                           : ''
                       }
-                      // value={values.accountUsage}
                       name='accountOfficerEncodedKey'
-                      // value={values.currencyCode}
                       required
                     />
 
