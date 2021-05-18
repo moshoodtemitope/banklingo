@@ -38,6 +38,7 @@ export class DisburseLoanModal extends React.Component {
 
 
     componentDidMount() {
+        this.props.dispatch(loanActions.changeLoanState("CLEAR"))
         // this.loadInitialCustomerData();
     }
 
