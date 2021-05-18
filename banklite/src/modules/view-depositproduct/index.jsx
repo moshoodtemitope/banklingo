@@ -22,10 +22,7 @@ class ViewDepositProduct extends React.Component {
       CurrentPage: 1,
     };
   }
-  loadInitialUserData = () => {
-    let { PageSize, CurrentPage } = this.state;
-    let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-  };
+
   renderPage = () => {
     let getSingleDepositProductRequest = this.props
       .getSingleDepositProductsReducer;

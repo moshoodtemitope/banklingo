@@ -13,8 +13,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import TableComponent from "../../shared/elements/table";
 import TablePagination from "../../shared/elements/table/pagination";
-// import  SidebarElement from '../../shared/elements/sidebar'
-
 import { productActions } from "../../redux/actions/products/products.action";
 import { productsConstants } from "../../redux/actiontypes/products/products.constants";
 import "./administration.scss";
@@ -61,19 +59,12 @@ class ProductDeposits extends React.Component {
     } else {
       dispatch(productActions.getDepositProducts(params));
     }
-
-    // dispatch(productActions.getDepositProducts(params));
   };
 
   loadNextPage = (nextPage, tempData) => {
     const { dispatch } = this.props;
     let { PageSize } = this.state;
-
-    // this.setState({PageSize: sizeOfPage});
-
-    let params = `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}`;
-    // this.getTransactionChannels(params);
-
+    let params = `PageSize=${PageSize}&CurrentPage=${nextPage}`;
     if (tempData) {
       dispatch(productActions.getDepositProducts(params, tempData));
     } else {
@@ -82,16 +73,11 @@ class ProductDeposits extends React.Component {
   };
 
   setShowDetails = (FullDetails, tempData) => {
-    // console.log('----here', PageSize.target.value);
     const { dispatch } = this.props;
     let showDetails = FullDetails.target.checked,
       { CurrentPage, PageSize } = this.state;
-
     this.setState({ FullDetails: showDetails });
-
     let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
-    // this.getDepositProducts(params);
-
     if (tempData) {
       dispatch(productActions.getDepositProducts(params, tempData));
     } else {
@@ -171,10 +157,6 @@ class ProductDeposits extends React.Component {
               </tbody>
             </TableComponent>
             <div className="loading-text">Please wait... </div>
-            {/* <div className="footer-with-cta toleft">
-                                <NavLink to={'/administration/products/newloan-product'} className="btn btn-primary">New Deposit Product</NavLink>
-
-                            </div> */}
           </div>
         );
       } else {
@@ -304,7 +286,6 @@ class ProductDeposits extends React.Component {
                     onChange={(e) =>
                       this.setPagesize(e, allDepositProductsData.result)
                     }
-                    // onChange={this.setPagesize}
                     value={this.state.PageSize}
                     className="countdropdown form-control form-control-sm"
                   >
@@ -386,8 +367,6 @@ class ProductDeposits extends React.Component {
                                 >
                                   Edit
                                 </NavLink>
-                                {/* <Dropdown.Item eventKey="1">Deactivate</Dropdown.Item>
-                                                                    <Dropdown.Item eventKey="1">Edit</Dropdown.Item> */}
                               </DropdownButton>
                             </td>
                           </tr>

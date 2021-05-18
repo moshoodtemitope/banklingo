@@ -3644,16 +3644,10 @@ class ViewSavingsAccount extends React.Component {
       getAClientDepositAccountRequest = this.props
         .getAClientDepositAccountReducer,
       getClientDepositsRequest = this.props.getClientDepositsReducer;
-    // getSettlementAccountRequest = this.props.getSettlementReducer;
-
     let allUSerPermissions = [];
-    this.userPermissions.map((eachPermission) => {
-      allUSerPermissions.push(eachPermission.permissionCode);
-    });
+    this.userPermissions.map((eachPermission) => {});
 
     if (
-      // getSettlementAccountRequest.request_status ===
-      //   loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_PENDING &&
       getAClientRequest.request_status ===
         clientsConstants.GET_A_CLIENT_SUCCESS &&
       getClientLoansRequest.request_status ===
@@ -3667,8 +3661,6 @@ class ViewSavingsAccount extends React.Component {
     }
 
     if (
-      // getSettlementAccountRequest.request_status ===
-      //   loanAndDepositsConstants.GET_SETTLEMENT_ACCOUNT_SUCCESS &&
       getAClientDepositAccountRequest.request_status ===
         loanAndDepositsConstants.GET_A_DEPOSIT_ACCOUNT_DETAILS_SUCCESS &&
       getClientLoansRequest.request_status ===

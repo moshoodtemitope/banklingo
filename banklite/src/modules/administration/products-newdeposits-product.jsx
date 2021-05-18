@@ -1,35 +1,26 @@
 import * as React from "react";
-// import {Router} from "react-router";
 import { connect } from "react-redux";
 import { Fragment } from "react";
 import AdminNav from "./_menu";
-
 import { NavLink } from "react-router-dom";
 import InnerPageContainer from "../../shared/templates/authed-pagecontainer";
-// import Form from 'react-bootstrap/Form'
 import Accordion from "react-bootstrap/Accordion";
 import Col from "react-bootstrap/Col";
 import Select from "react-select";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
-
 import { Formik } from "formik";
 import * as Yup from "yup";
-
 import { acoountingActions } from "../../redux/actions/accounting/accounting.action";
 import { accountingConstants } from "../../redux/actiontypes/accounting/accounting.constants";
-
 import { numberWithCommas, allowNumbersOnly } from "../../shared/utils";
 import Alert from "react-bootstrap/Alert";
 import { productActions } from "../../redux/actions/products/products.action";
 import { productsConstants } from "../../redux/actiontypes/products/products.constants";
-
 import { administrationActions } from "../../redux/actions/administration/administration.action";
 import { administrationConstants } from "../../redux/actiontypes/administration/administration.constants";
-
 import { noWhiteSpaces } from "../../shared/utils";
-
 import "./administration.scss";
 class NewDepositsProduct extends React.Component {
   constructor(props) {
@@ -72,7 +63,6 @@ class NewDepositsProduct extends React.Component {
     let createDepositProductRequest = this.props.createDepositProductReducer,
       getAllGLAccountsRequest = this.props.getAllGLAccountsReducer,
       getAllCurrencies = this.props.adminGetAllCurrencies;
-
     let depositProductValidationSchema = Yup.object().shape({
       key: Yup.string().min(1, "Response required").required("Required"),
       productName: Yup.string()
