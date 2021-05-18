@@ -2004,6 +2004,7 @@ console.log('dashboard load');
                             if (values.txtnType === 2) {
                                 requestPayload.referenceID = values.referenceID
                                 requestPayload.remarks = values.remarks
+                                requestPayload.accountNumber = selectOtherCustomerAccount.searchKey
                             }
 
                             if (values.txtnType === 3) {
