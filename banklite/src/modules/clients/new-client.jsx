@@ -1,42 +1,46 @@
-import * as React from 'react';
+import * as React from "react";
 // import {Router} from "react-router";
 
-import { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import InnerPageContainer from '../../shared/templates/authed-pagecontainer';
+import { Fragment } from "react";
+import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
+import InnerPageContainer from "../../shared/templates/authed-pagecontainer";
 // import Form from 'react-bootstrap/Form'
-import Accordion from 'react-bootstrap/Accordion';
-import Col from 'react-bootstrap/Col';
+import Accordion from "react-bootstrap/Accordion";
+import Col from "react-bootstrap/Col";
 
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import { Formik } from "formik";
+import * as Yup from "yup";
 
-import DatePicker from '../../_helpers/datepickerfield';
-import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from "../../_helpers/datepickerfield";
+import "react-datepicker/dist/react-datepicker.css";
 
-import Select from 'react-select';
+import Select from "react-select";
 
-import { clientsActions } from '../../redux/actions/clients/clients.action';
-import { clientsConstants } from '../../redux/actiontypes/clients/clients.constants';
+import { clientsActions } from "../../redux/actions/clients/clients.action";
+import { clientsConstants } from "../../redux/actiontypes/clients/clients.constants";
 
-import { allowNumbersOnly, numberWithCommas } from '../../shared/utils';
+import { allowNumbersOnly, numberWithCommas } from "../../shared/utils";
 
-import { administrationActions } from '../../redux/actions/administration/administration.action';
-import { administrationConstants } from '../../redux/actiontypes/administration/administration.constants';
-import {customerTypeActions,customerTypeConstants} from '../../redux/actions/administration/customer-types-management.actions';
-import Alert from 'react-bootstrap/Alert';
+import { administrationActions } from "../../redux/actions/administration/administration.action";
+import { administrationConstants } from "../../redux/actiontypes/administration/administration.constants";
+import {
+  customerTypeActions,
+  customerTypeConstants,
+} from "../../redux/actions/administration/customer-types-management.actions";
+import { TypeConstant } from "../../redux/actions/clients/client-states-constants";
+import Alert from "react-bootstrap/Alert";
 
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import './clients.scss';
-import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import "./clients.scss";
+import DatePickerFieldType from "../../_helpers/DatePickerFieldType";
 class NewClient extends React.Component {
   constructor(props) {
     super(props);
     // console.log('Lopncsc');
     this.state = {
-      user: JSON.parse(localStorage.getItem('lingoAuth')),
+      user: JSON.parse(localStorage.getItem("lingoAuth")),
     };
   }
 
@@ -53,9 +57,10 @@ class NewClient extends React.Component {
   handleCreateNewCustomer = async (createNewCustomerpayload) => {
     const { dispatch } = this.props;
 
-    await dispatch(clientsActions.createClient(createNewCustomerpayload, "individual"));
+    await dispatch(
+      clientsActions.createClient(createNewCustomerpayload, "individual")
+    );
   };
-
 
   createCustomerValidationSchema = Yup.object().shape({
     FName: Yup.string()
@@ -157,23 +162,23 @@ class NewClient extends React.Component {
 
     contactMobile: Yup.string()
       .required()
-      .matches(/^[0-9]+$/, 'Must be only digits')
-      .min(8, 'Must be between 8 and 11 digits')
-      .max(15, 'Must be between 8 and 11 digits'),
+      .matches(/^[0-9]+$/, "Must be only digits")
+      .min(8, "Must be between 8 and 11 digits")
+      .max(15, "Must be between 8 and 11 digits"),
     contactEmail: Yup.string()
-      .min(8, 'Valid response required')
-      .max(50, 'Max limit reached'),
+      .min(8, "Valid response required")
+      .max(50, "Max limit reached"),
     nextOfKinFullName: Yup.string()
-      .min(2, 'Valid response required')
-      .max(50, 'Max limit reached'),
+      .min(2, "Valid response required")
+      .max(50, "Max limit reached"),
     nextOfKinAddress: Yup.string()
-      .min(2, 'Valid response required')
-      .max(50, 'Max limit reached'),
+      .min(2, "Valid response required")
+      .max(50, "Max limit reached"),
     nextOfKinMobile: Yup.string()
       .required("Required")
-      .matches(/^[0-9]+$/, 'Must be only digits')
-      .min(8, 'Must be between 8 and 11 digits')
-      .max(15, 'Must be between 8 and 11 digits'),
+      .matches(/^[0-9]+$/, "Must be only digits")
+      .min(8, "Must be between 8 and 11 digits")
+      .max(15, "Must be between 8 and 11 digits"),
     nextOfKinRelationship: Yup.string(),
     // .min(11, 'Valid response required')
     // .max(16, 'Max limit reached'),
@@ -197,12 +202,12 @@ class NewClient extends React.Component {
 
     const genderList = [
       {
-        label: 'Male',
-        value: 'Male',
+        label: "Male",
+        value: "Male",
       },
       {
-        label: 'Female',
-        value: 'Female',
+        label: "Female",
+        value: "Female",
       },
     ];
 
@@ -213,8 +218,8 @@ class NewClient extends React.Component {
         customerTypeConstants.GET_ALL_CUSTOMERTYPES_PENDING
     ) {
       return (
-        <div className='loading-content card'>
-          <div className='loading-text'>Please wait... </div>
+        <div className="loading-content card">
+          <div className="loading-text">Please wait... </div>
         </div>
       );
     }
@@ -223,18 +228,31 @@ class NewClient extends React.Component {
       getAllUsersRequest.request_status ===
         administrationConstants.GET_ALL_USERS_SUCCESS &&
       adminGetCustomerTypesRequest.request_status ===
-      customerTypeConstants.GET_ALL_CUSTOMERTYPES_SUCCESS
+        customerTypeConstants.GET_ALL_CUSTOMERTYPES_SUCCESS
     ) {
       let allCustomerTypesData =
           adminGetCustomerTypesRequest.request_data.response,
         allUsersData = getAllUsersRequest.request_data.response.data,
         allUserDataList = [],
-        allCustomerTypesList;
+        allCustomerTypesList = [];
 
-      // console.log("+++++",allCustomerTypesData);
+      // console.log("+++++", allCustomerTypesData);
       let selectedCustype = allCustomerTypesData.filter(
-        (CustType) => CustType.encodedKey === this.props.match?.params?.custTypeid
+        (CustType) =>
+          CustType.encodedKey === this.props.match?.params?.custTypeid
       )[0];
+
+      allCustomerTypesData
+        .filter(
+          (clientClass) =>
+            clientClass.clientClassification === TypeConstant.INDIVIDUAL_CLIENT
+        )
+        .map((eachData) => {
+          allCustomerTypesList.push({
+            label: eachData.name,
+            value: eachData.encodedKey,
+          });
+        });
 
       let daysWrap = [];
 
@@ -329,7 +347,7 @@ class NewClient extends React.Component {
               bvn: values.BVN?.toString(),
               gender: values.gender,
               dateOfBirth:
-                values.dateOfBirth !== ''
+                values.dateOfBirth !== ""
                   ? values.dateOfBirth.toISOString()
                   : null,
               notes: values.notes,
@@ -347,7 +365,7 @@ class NewClient extends React.Component {
               }
 
               setTimeout(() => {
-                this.props.dispatch(clientsActions.createClient('CLEAR'));
+                this.props.dispatch(clientsActions.createClient("CLEAR"));
               }, 3000);
             });
           }}
@@ -366,126 +384,126 @@ class NewClient extends React.Component {
             <Form
               noValidate
               onSubmit={handleSubmit}
-              className='form-content card'
+              className="form-content card"
             >
               {selectedCustype && (
-                <div className='form-heading'>
+                <div className="form-heading">
                   <h3>Create {selectedCustype.name}</h3>
                 </div>
               )}
               <Form.Row>
                 <Col>
-                  <Form.Label className='block-level'>First Name</Form.Label>
+                  <Form.Label className="block-level">First Name</Form.Label>
                   <Form.Control
-                    type='text'
-                    name='FName'
+                    type="text"
+                    name="FName"
                     onChange={handleChange}
                     value={values.FName}
                     className={
-                      errors.FName && touched.FName ? 'is-invalid' : null
+                      errors.FName && touched.FName ? "is-invalid" : null
                     }
                     required
                   />
                   {errors.FName && touched.FName ? (
-                    <span className='invalid-feedback'>{errors.FName}</span>
+                    <span className="invalid-feedback">{errors.FName}</span>
                   ) : null}
                 </Col>
                 <Col>
-                  <Form.Label className='block-level'>Last Name</Form.Label>
+                  <Form.Label className="block-level">Last Name</Form.Label>
                   <Form.Control
-                    type='text'
-                    name='LName'
+                    type="text"
+                    name="LName"
                     onChange={handleChange}
                     value={values.LName}
                     className={
-                      errors.LName && touched.LName ? 'is-invalid' : null
+                      errors.LName && touched.LName ? "is-invalid" : null
                     }
                     required
                   />
                   {errors.LName && touched.LName ? (
-                    <span className='invalid-feedback'>{errors.LName}</span>
+                    <span className="invalid-feedback">{errors.LName}</span>
                   ) : null}
                 </Col>
               </Form.Row>
               <Form.Row>
                 <Col>
-                  <Form.Label className='block-level'>Middle Name</Form.Label>
+                  <Form.Label className="block-level">Middle Name</Form.Label>
                   <Form.Control
-                    type='text'
-                    name='MName'
+                    type="text"
+                    name="MName"
                     onChange={handleChange}
                     value={values.MName}
                     className={
                       errors.MName && touched.MName
-                        ? 'is-invalid h-38px'
-                        : 'h-38px'
+                        ? "is-invalid h-38px"
+                        : "h-38px"
                     }
                     required
                   />
+
                   {errors.MName && touched.MName ? (
-                    <span className='invalid-feedback'>{errors.MName}</span>
+                    <span className="invalid-feedback">{errors.MName}</span>
                   ) : null}
                 </Col>
                 <Col>
-                  <Form.Label className='block-level'>Customer Type</Form.Label>
-                  {selectedCustype && (
-                    <span className='form-text'>{selectedCustype.name}</span>
-                  )}
-                   {!selectedCustype && (<Select
+                  <Form.Label className="block-level">Customer Type</Form.Label>
+                  {/* {selectedCustype && (
+                    <span className="form-text">{selectedCustype.name}</span>
+                  )} */}
+                  <Select
+                    options={allCustomerTypesList}
+                    onChange={(selectedCustType) => {
+                      this.setState({ selectedCustType });
+                      values.custType = selectedCustType.value;
+                    }}
+                    className={
+                      errors.custType && touched.custType ? "is-invalid" : ""
+                    }
+                    name="custType"
+                    required
+                  />
 
-                                                            options={allCustomerTypesData}
-                                                            onChange={(selectedCustType) => {
-                                                                this.setState({ selectedCustType });
-                                                              //  errors.custType = null
-                                                                values.custType = selectedCustType.value
-                                                            }}
-                                                            className={errors.custType && touched.custType ? "is-invalid" : ""}
-                                                            // value={values.accountUsage}
-                                                            name="custType"
-                                                            // value={values.currencyCode}
-                                                            required
-                                                        />)}
-                                                    
-                                                        {errors.custType && touched.custType ? (
-                                                                <span className="invalid-feedback">{errors.custType}</span>
-                                                        ) : null}
+                  {errors.custType && touched.custType ? (
+                    <span className="invalid-feedback">{errors.custType}</span>
+                  ) : null}
                 </Col>
               </Form.Row>
               <Form.Row>
                 <Col>
-                  <Form.Label className='block-level'>Biometric ID</Form.Label>
+                  <Form.Label className="block-level">Biometric ID</Form.Label>
                   <Form.Control
-                    type='number'
-                    name='BVN'
+                  placeholder="(Optional)"
+                    type="number"
+                    name="BVN"
                     onChange={handleChange}
                     value={values.BVN}
-                    className={errors.BVN && touched.BVN ? 'is-invalid' : null}
+                    className={errors.BVN && touched.BVN ? "is-invalid" : null}
                     required
                   />
                   {errors.BVN && touched.BVN ? (
-                    <span className='invalid-feedback'>{errors.BVN}</span>
+                    <span className="invalid-feedback">{errors.BVN}</span>
                   ) : null}
                 </Col>
                 <Col></Col>
               </Form.Row>
               <Form.Row>
                 <Col>
-                  <Form.Label htmlFor='gender' className='block-level'>
+                  <Form.Label htmlFor="gender" className="block-level">
                     Gender
                   </Form.Label>
                   <Select
-                    id='gender'
+                    id="gender"
                     options={genderList}
                     onChange={(selectedGender) => {
                       this.setState({ selectedGender });
                       //errors.gender = null;
                       values.gender = selectedGender.value;
                     }}
-                    name='gender'
+                    name="gender"
                     //value={values.gender}
                     //className="countdropdown form-control form-control-sm"
                     className={
-                      errors.gender && touched.gender ? 'is-invalid' : null
+                      errors.gender && touched.gender ? "is-invalid" : null
                     }
                     required
                   />
@@ -508,46 +526,46 @@ class NewClient extends React.Component {
                                                         value={values.gender}
                                                           /> */}
                   {errors.gender && touched.gender ? (
-                    <span className='invalid-feedback'>{errors.gender}</span>
+                    <span className="invalid-feedback">{errors.gender}</span>
                   ) : null}
                 </Col>
                 <Col>
                   <Form.Group
-                    controlId='debitLocation'
+                    controlId="debitLocation"
                     className={
                       errors.dateOfBirth && touched.dateOfBirth
-                        ? 'has-invaliderror fullwidthdate'
-                        : 'fullwidthdate'
+                        ? "has-invaliderror fullwidthdate"
+                        : "fullwidthdate"
                     }
                   >
-                    <Form.Label className='block-level'>
+                    <Form.Label className="block-level">
                       Date of Birth
                     </Form.Label>
                     <DatePicker
-                      placeholderText='Choose date'
-                      autoComplete='new-password'
+                      placeholderText="Choose date"
+                      autoComplete="new-password"
                       // onChange={this.handleDatePicker}
                       // onChangeRaw={(e) => this.handleDateChange(e)}
                       dateFormat={window.dateformat}
                       peekNextMonth
                       showMonthDropdown
                       showYearDropdown
-                      dropdownMode='select'
-                      name='dateOfBirth'
+                      dropdownMode="select"
+                      name="dateOfBirth"
                       value={values.dateOfBirth}
                       onChange={setFieldValue}
                       maxDate={new Date()}
                       className={
                         errors.dateOfBirth && touched.dateOfBirth
-                          ? 'is-invalid form-control form-control-sm h-38px'
-                          : 'form-control form-control-sm h-38px'
+                          ? "is-invalid form-control form-control-sm h-38px"
+                          : "form-control form-control-sm h-38px"
                       }
                       customInput={
-                        <DatePickerFieldType placeHolder='Choose date' />
+                        <DatePickerFieldType placeHolder="Choose date" />
                       }
                     />
                     {errors.dateOfBirth && touched.dateOfBirth ? (
-                      <span className='invalid-feedback'>
+                      <span className="invalid-feedback">
                         {errors.dateOfBirth}
                       </span>
                     ) : null}
@@ -556,7 +574,7 @@ class NewClient extends React.Component {
               </Form.Row>
               <Form.Row>
                 <Col>
-                  <Form.Label className='block-level'>
+                  <Form.Label className="block-level">
                     Customer branch
                   </Form.Label>
                   <Select
@@ -569,24 +587,24 @@ class NewClient extends React.Component {
                     className={
                       errors.clientBranchEncodedKey &&
                       touched.clientBranchEncodedKey
-                        ? 'is-invalid'
+                        ? "is-invalid"
                         : null
                     }
                     // value={values.accountUsage}
-                    name='clientBranchEncodedKey'
+                    name="clientBranchEncodedKey"
                     // value={values.currencyCode}
                     required
                   />
 
                   {errors.clientBranchEncodedKey &&
                   touched.clientBranchEncodedKey ? (
-                    <span className='invalid-feedback'>
+                    <span className="invalid-feedback">
                       {errors.clientBranchEncodedKey}
                     </span>
                   ) : null}
                 </Col>
                 <Col>
-                  <Form.Label className='block-level'>
+                  <Form.Label className="block-level">
                     Account officer
                   </Form.Label>
                   <Select
@@ -599,73 +617,73 @@ class NewClient extends React.Component {
                     className={
                       errors.accountOfficerEncodedKey &&
                       touched.accountOfficerEncodedKey
-                        ? 'is-invalid'
+                        ? "is-invalid"
                         : null
                     }
                     // value={values.accountUsage}
-                    name='accountOfficerEncodedKey'
+                    name="accountOfficerEncodedKey"
                     // value={values.currencyCode}
                     required
                   />
 
                   {errors.accountOfficerEncodedKey &&
                   touched.accountOfficerEncodedKey ? (
-                    <span className='invalid-feedback'>
+                    <span className="invalid-feedback">
                       {errors.accountOfficerEncodedKey}
                     </span>
                   ) : null}
                 </Col>
               </Form.Row>
-              <Accordion defaultActiveKey='0'>
+              <Accordion defaultActiveKey="0">
                 <Accordion.Toggle
-                  className='accordion-headingLink'
+                  className="accordion-headingLink"
                   as={Button}
-                  variant='link'
-                  eventKey='0'
+                  variant="link"
+                  eventKey="0"
                 >
                   Address
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey='0'>
-                  <div className='each-formsection'>
+                <Accordion.Collapse eventKey="0">
+                  <div className="each-formsection">
                     <Form.Row>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Street Address - Line 1
                         </Form.Label>
                         <Form.Control
-                          type='text'
-                          name='addressLine1'
+                          type="text"
+                          name="addressLine1"
                           onChange={handleChange}
                           value={values.addressLine1}
                           className={
                             errors.addressLine1 && touched.addressLine1
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.addressLine1 && touched.addressLine1 ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.addressLine1}
                           </span>
                         ) : null}
                       </Col>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Street Address - Line 2
                         </Form.Label>
                         <Form.Control
-                          type='text'
-                          name='addressLine2'
+                          type="text"
+                          name="addressLine2"
                           onChange={handleChange}
                           value={values.addressLine2}
                           className={
                             errors.addressLine2 && touched.addressLine2
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.addressLine2 && touched.addressLine2 ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.addressLine2}
                           </span>
                         ) : null}
@@ -673,41 +691,41 @@ class NewClient extends React.Component {
                     </Form.Row>
                     <Form.Row>
                       <Col>
-                        <Form.Label className='block-level'>City</Form.Label>
+                        <Form.Label className="block-level">City</Form.Label>
                         <Form.Control
-                          type='text'
-                          name='addressCity'
+                          type="text"
+                          name="addressCity"
                           onChange={handleChange}
                           value={values.addressCity}
                           className={
                             errors.addressCity && touched.addressCity
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.addressCity && touched.addressCity ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.addressCity}
                           </span>
                         ) : null}
                       </Col>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           State/Province/Region
                         </Form.Label>
                         <Form.Control
-                          type='text'
-                          name='addressState'
+                          type="text"
+                          name="addressState"
                           onChange={handleChange}
                           value={values.addressState}
                           className={
                             errors.addressState && touched.addressState
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.addressState && touched.addressState ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.addressState}
                           </span>
                         ) : null}
@@ -715,41 +733,41 @@ class NewClient extends React.Component {
                     </Form.Row>
                     <Form.Row>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Zip Postal Code
                         </Form.Label>
                         <Form.Control
-                          type='text'
-                          name='zipCode'
+                          type="text"
+                          name="zipCode"
                           onChange={handleChange}
                           value={values.zipCode}
                           className={
                             errors.zipCode && touched.zipCode
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.zipCode && touched.zipCode ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.zipCode}
                           </span>
                         ) : null}
                       </Col>
                       <Col>
-                        <Form.Label className='block-level'>Country</Form.Label>
+                        <Form.Label className="block-level">Country</Form.Label>
                         <Form.Control
-                          type='text'
-                          name='addressCountry'
+                          type="text"
+                          name="addressCountry"
                           onChange={handleChange}
                           value={values.addressCountry}
                           className={
                             errors.addressCountry && touched.addressCountry
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.addressCountry && touched.addressCountry ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.addressCountry}
                           </span>
                         ) : null}
@@ -758,107 +776,107 @@ class NewClient extends React.Component {
                   </div>
                 </Accordion.Collapse>
               </Accordion>
-              <Accordion defaultActiveKey='0'>
+              <Accordion defaultActiveKey="0">
                 <Accordion.Toggle
-                  className='accordion-headingLink'
+                  className="accordion-headingLink"
                   as={Button}
-                  variant='link'
-                  eventKey='0'
+                  variant="link"
+                  eventKey="0"
                 >
                   Employment Information
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey='0'>
-                  <div className='each-formsection'>
+                <Accordion.Collapse eventKey="0">
+                  <div className="each-formsection">
                     <Form.Row>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Employed?
                         </Form.Label>
                         <select
                           onChange={handleChange}
-                          name='workStatus'
+                          name="workStatus"
                           value={values.workStatus}
                           className={
                             errors.workStatus && touched.workStatus
-                              ? 'is-invalid countdropdown form-control form-control-sm'
-                              : 'countdropdown form-control form-control-sm'
+                              ? "is-invalid countdropdown form-control form-control-sm"
+                              : "countdropdown form-control form-control-sm"
                           }
                         >
-                          <option value=''>Select</option>
-                          <option value='1'>Yes</option>
-                          <option value='2'>No</option>
+                          <option value="">Select</option>
+                          <option value="1">Yes</option>
+                          <option value="2">No</option>
                         </select>
                         {errors.workStatus && touched.workStatus ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.workStatus}
                           </span>
                         ) : null}
                       </Col>
                       <Col></Col>
                     </Form.Row>
-                    {values.workStatus === '1' && (
+                    {values.workStatus === "1" && (
                       <div>
                         <Form.Row>
                           <Col>
-                            <Form.Label className='block-level'>
+                            <Form.Label className="block-level">
                               Employer name
                             </Form.Label>
                             <Form.Control
-                              type='text'
-                              name='employerName'
+                              type="text"
+                              name="employerName"
                               onChange={handleChange}
                               value={values.employerName}
                               className={
                                 errors.employerName && touched.employerName
-                                  ? 'is-invalid'
+                                  ? "is-invalid"
                                   : null
                               }
                             />
                             {errors.employerName && touched.employerName ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.employerName}
                               </span>
                             ) : null}
                           </Col>
                           <Col>
                             <Form.Group
-                              controlId='debitLocation'
+                              controlId="debitLocation"
                               className={
                                 errors.employmentDate && touched.employmentDate
-                                  ? 'has-invaliderror fullwidthdate'
-                                  : 'fullwidthdate'
+                                  ? "has-invaliderror fullwidthdate"
+                                  : "fullwidthdate"
                               }
                             >
-                              <Form.Label className='block-level'>
+                              <Form.Label className="block-level">
                                 Employment Date
                               </Form.Label>
                               <DatePicker
-                                placeholderText='Choose  date'
-                                autoComplete='new-password'
+                                placeholderText="Choose  date"
+                                autoComplete="new-password"
                                 // onChange={this.handleDatePicker}
                                 // onChangeRaw={(e) => this.handleDateChange(e)}
                                 dateFormat={window.dateformat}
                                 peekNextMonth
                                 showMonthDropdown
                                 showYearDropdown
-                                dropdownMode='select'
-                                name='employmentDate'
+                                dropdownMode="select"
+                                name="employmentDate"
                                 value={values.employmentDate}
                                 onChange={setFieldValue}
                                 maxDate={new Date()}
                                 className={
                                   errors.employmentDate &&
                                   touched.employmentDate
-                                    ? 'is-invalid form-control form-control-sm h-38px'
-                                    : 'form-control form-control-sm h-38px'
+                                    ? "is-invalid form-control form-control-sm h-38px"
+                                    : "form-control form-control-sm h-38px"
                                 }
                                 customInput={
-                                  <DatePickerFieldType placeHolder='Choose date' />
+                                  <DatePickerFieldType placeHolder="Choose date" />
                                 }
                               />
                               {errors.employmentDate &&
                               touched.employmentDate ? (
-                                <span className='invalid-feedback'>
+                                <span className="invalid-feedback">
                                   {errors.employmentDate}
                                 </span>
                               ) : null}
@@ -867,47 +885,46 @@ class NewClient extends React.Component {
                         </Form.Row>
                         <Form.Row>
                           <Col>
-                            <Form.Label className='block-level'>
+                            <Form.Label className="block-level">
                               Pay Day
                             </Form.Label>
                             <select
-                              id='toshow'
+                              id="toshow"
                               onChange={handleChange}
-                              name='payDay'
+                              name="payDay"
                               value={values.payDay}
                               className={
-                                errors.payDay &&
-                                touched.payDay
-                                  ? 'is-invalid form-control form-control-sm'
-                                  : 'countdropdown form-control form-control-sm'
+                                errors.payDay && touched.payDay
+                                  ? "is-invalid form-control form-control-sm"
+                                  : "countdropdown form-control form-control-sm"
                               }
                             >
-                              <option value=''>Select</option>
+                              <option value="">Select</option>
                               {daysWrap}
                             </select>
                             {errors.payDay && touched.payDay ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.payDay}
                               </span>
                             ) : null}
                           </Col>
                           <Col>
-                            <Form.Label className='block-level'>
-                              Monthly Salary(Net Pay){' '}
+                            <Form.Label className="block-level">
+                              Monthly Salary(Net Pay){" "}
                             </Form.Label>
                             <Form.Control
-                              type='text'
-                              name='monthlySalary'
+                              type="text"
+                              name="monthlySalary"
                               onChange={handleChange}
                               value={numberWithCommas(values.monthlySalary)}
                               className={
                                 errors.monthlySalary && touched.monthlySalary
-                                  ? 'is-invalid'
+                                  ? "is-invalid"
                                   : null
                               }
                             />
                             {errors.monthlySalary && touched.monthlySalary ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.monthlySalary}
                               </span>
                             ) : null}
@@ -915,45 +932,45 @@ class NewClient extends React.Component {
                         </Form.Row>
                         <Form.Row>
                           <Col>
-                            <Form.Label className='block-level'>
+                            <Form.Label className="block-level">
                               Employee Sector
                             </Form.Label>
                             <Form.Control
-                              type='text'
-                              name='employeeSector'
+                              type="text"
+                              name="employeeSector"
                               onChange={handleChange}
                               value={values.employeeSector}
                               className={
                                 errors.employeeSector && touched.employeeSector
-                                  ? 'is-invalid'
+                                  ? "is-invalid"
                                   : null
                               }
                             />
                             {errors.employeeSector && touched.employeeSector ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.employeeSector}
                               </span>
                             ) : null}
                           </Col>
                           <Col>
-                            <Form.Label className='block-level'>
+                            <Form.Label className="block-level">
                               Employee SubSector
                             </Form.Label>
                             <Form.Control
-                              type='text'
-                              name='employeeSubSector'
+                              type="text"
+                              name="employeeSubSector"
                               onChange={handleChange}
                               value={values.employeeSubSector}
                               className={
                                 errors.employeeSubSector &&
                                 touched.employeeSubSector
-                                  ? 'is-invalid'
+                                  ? "is-invalid"
                                   : null
                               }
                             />
                             {errors.employeeSubSector &&
                             touched.employeeSubSector ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.employeeSubSector}
                               </span>
                             ) : null}
@@ -961,45 +978,45 @@ class NewClient extends React.Component {
                         </Form.Row>
                         <Form.Row>
                           <Col>
-                            <Form.Label className='block-level'>
+                            <Form.Label className="block-level">
                               Official Email
                             </Form.Label>
                             <Form.Control
-                              type='text'
-                              name='officialEmail'
+                              type="text"
+                              name="officialEmail"
                               onChange={handleChange}
                               value={values.officialEmail??''}
                               className={
                                 errors.officialEmail && touched.officialEmail
-                                  ? 'is-invalid'
+                                  ? "is-invalid"
                                   : null
                               }
                             />
                             {errors.officialEmail && touched.officialEmail ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.officialEmail}
                               </span>
                             ) : null}
                           </Col>
                           <Col>
-                            <Form.Label className='block-level'>
+                            <Form.Label className="block-level">
                               Employer Address
                             </Form.Label>
                             <Form.Control
-                              type='text'
-                              name='employerAddress'
+                              type="text"
+                              name="employerAddress"
                               onChange={handleChange}
                               value={values.employerAddress}
                               className={
                                 errors.employerAddress &&
                                 touched.employerAddress
-                                  ? 'is-invalid'
+                                  ? "is-invalid"
                                   : null
                               }
                             />
                             {errors.employerAddress &&
                             touched.employerAddress ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.employerAddress}
                               </span>
                             ) : null}
@@ -1011,20 +1028,20 @@ class NewClient extends React.Component {
                               Employer Address(State)
                             </Form.Label>
                             <Form.Control
-                              type='text'
-                              name='employerAddressState'
+                              type="text"
+                              name="employerAddressState"
                               onChange={handleChange}
                               value={values.employerAddressState}
                               className={
                                 errors.employerAddressState &&
                                 touched.employerAddressState
-                                  ? 'is-invalid'
+                                  ? "is-invalid"
                                   : null
                               }
                             />
                             {errors.employerAddressState &&
                             touched.employerAddressState ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.employerAddressState}
                               </span>
                             ) : null}
@@ -1034,20 +1051,20 @@ class NewClient extends React.Component {
                               Employer Address(City)
                             </Form.Label>
                             <Form.Control
-                              type='text'
-                              name='employerAddressCity'
+                              type="text"
+                              name="employerAddressCity"
                               onChange={handleChange}
                               value={values.employerAddressCity}
                               className={
                                 errors.employerAddressCity &&
                                 touched.employerAddressCity
-                                  ? 'is-invalid'
+                                  ? "is-invalid"
                                   : null
                               }
                             />
                             {errors.employerAddressCity &&
                             touched.employerAddressCity ? (
-                              <span className='invalid-feedback'>
+                              <span className="invalid-feedback">
                                 {errors.employerAddressCity}
                               </span>
                             ) : null}
@@ -1058,56 +1075,56 @@ class NewClient extends React.Component {
                   </div>
                 </Accordion.Collapse>
               </Accordion>
-              <Accordion defaultActiveKey='0'>
+              <Accordion defaultActiveKey="0">
                 <Accordion.Toggle
-                  className='accordion-headingLink'
+                  className="accordion-headingLink"
                   as={Button}
-                  variant='link'
-                  eventKey='0'
+                  variant="link"
+                  eventKey="0"
                 >
                   Contact
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey='0'>
-                  <div className='each-formsection'>
+                <Accordion.Collapse eventKey="0">
+                  <div className="each-formsection">
                     <Form.Row>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Phone Number
                         </Form.Label>
                         <Form.Control
-                          type='number'
-                          name='contactMobile'
+                          type="number"
+                          name="contactMobile"
                           onChange={handleChange}
                           value={values.contactMobile}
                           className={
                             errors.contactMobile && touched.contactMobile
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.contactMobile && touched.contactMobile ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.contactMobile}
                           </span>
                         ) : null}
                       </Col>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Email Address
                         </Form.Label>
                         <Form.Control
-                          type='text'
-                          name='contactEmail'
+                          type="text"
+                          name="contactEmail"
                           onChange={handleChange}
                           value={values.contactEmail}
                           className={
                             errors.contactEmail && touched.contactEmail
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.contactEmail && touched.contactEmail ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.contactEmail}
                           </span>
                         ) : null}
@@ -1116,58 +1133,58 @@ class NewClient extends React.Component {
                   </div>
                 </Accordion.Collapse>
               </Accordion>
-              <Accordion defaultActiveKey='0'>
+              <Accordion defaultActiveKey="0">
                 <Accordion.Toggle
-                  className='accordion-headingLink'
+                  className="accordion-headingLink"
                   as={Button}
-                  variant='link'
-                  eventKey='0'
+                  variant="link"
+                  eventKey="0"
                 >
                   Next of Kin
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey='0'>
-                  <div className='each-formsection'>
+                <Accordion.Collapse eventKey="0">
+                  <div className="each-formsection">
                     <Form.Row>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Next of Kin Fullname
                         </Form.Label>
                         <Form.Control
-                          type='text'
-                          name='nextOfKinFullName'
+                          type="text"
+                          name="nextOfKinFullName"
                           onChange={handleChange}
                           value={values.nextOfKinFullName}
                           className={
                             errors.nextOfKinFullName &&
                             touched.nextOfKinFullName
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.nextOfKinFullName &&
                         touched.nextOfKinFullName ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.nextOfKinFullName}
                           </span>
                         ) : null}
                       </Col>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Next of Kin Home Address
                         </Form.Label>
                         <Form.Control
-                          type='text'
-                          name='nextOfKinAddress'
+                          type="text"
+                          name="nextOfKinAddress"
                           onChange={handleChange}
                           value={values.nextOfKinAddress}
                           className={
                             errors.nextOfKinAddress && touched.nextOfKinAddress
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.nextOfKinAddress && touched.nextOfKinAddress ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.nextOfKinAddress}
                           </span>
                         ) : null}
@@ -1175,45 +1192,45 @@ class NewClient extends React.Component {
                     </Form.Row>
                     <Form.Row>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Next of Kin Phone Number
                         </Form.Label>
                         <Form.Control
-                          type='number'
-                          name='nextOfKinMobile'
+                          type="number"
+                          name="nextOfKinMobile"
                           onChange={handleChange}
                           value={values.nextOfKinMobile}
                           className={
                             errors.nextOfKinMobile && touched.nextOfKinMobile
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.nextOfKinMobile && touched.nextOfKinMobile ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.nextOfKinMobile}
                           </span>
                         ) : null}
                       </Col>
                       <Col>
-                        <Form.Label className='block-level'>
+                        <Form.Label className="block-level">
                           Next of Kin Relationship
                         </Form.Label>
                         <Form.Control
-                          type='text'
-                          name='nextOfKinRelationship'
+                          type="text"
+                          name="nextOfKinRelationship"
                           onChange={handleChange}
                           value={values.nextOfKinRelationship}
                           className={
                             errors.nextOfKinRelationship &&
                             touched.nextOfKinRelationship
-                              ? 'is-invalid'
+                              ? "is-invalid"
                               : null
                           }
                         />
                         {errors.nextOfKinRelationship &&
                         touched.nextOfKinRelationship ? (
-                          <span className='invalid-feedback'>
+                          <span className="invalid-feedback">
                             {errors.nextOfKinRelationship}
                           </span>
                         ) : null}
@@ -1222,71 +1239,71 @@ class NewClient extends React.Component {
                   </div>
                 </Accordion.Collapse>
               </Accordion>
-              <Accordion defaultActiveKey='0'>
+              <Accordion defaultActiveKey="0">
                 <Accordion.Toggle
-                  className='accordion-headingLink'
+                  className="accordion-headingLink"
                   as={Button}
-                  variant='link'
-                  eventKey='0'
+                  variant="link"
+                  eventKey="0"
                 >
                   Notes
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey='0'>
-                  <div className='each-formsection'>
+                <Accordion.Collapse eventKey="0">
+                  <div className="each-formsection">
                     <Form.Group>
-                      <Form.Label className='block-level'>Notes</Form.Label>
+                      <Form.Label className="block-level">Notes</Form.Label>
                       <Form.Control
-                        as='textarea'
-                        rows='3'
+                        as="textarea"
+                        rows="3"
                         onChange={handleChange}
-                        name='notes'
+                        name="notes"
                         value={values.notes}
                         className={
                           errors.notes && touched.notes
-                            ? 'is-invalid form-control form-control-sm'
+                            ? "is-invalid form-control form-control-sm"
                             : null
                         }
                       />
 
                       {errors.notes && touched.notes ? (
-                        <span className='invalid-feedback'>{errors.notes}</span>
+                        <span className="invalid-feedback">{errors.notes}</span>
                       ) : null}
                     </Form.Group>
                   </div>
                 </Accordion.Collapse>
               </Accordion>
 
-              <div className='footer-with-cta toleft'>
+              <div className="footer-with-cta toleft">
                 {/* <Button variant="light" className="btn btn-light">
                                                     Cancel</Button> */}
                 {/* <NavLink to={'/clients'} className="btn btn-secondary grayed-out">Cancel</NavLink> */}
                 <Button
-                  variant='light'
-                  className='btn btn-secondary grayed-out'
+                  variant="light"
+                  className="btn btn-secondary grayed-out"
                   onClick={() => this.props.history.goBack()}
                 >
                   Cancel
                 </Button>
                 <Button
-                  variant='success'
-                  type='submit'
+                  variant="success"
+                  type="submit"
                   disabled={createAClientRequest.is_request_processing}
-                  className='ml-20'
+                  className="ml-20"
                 >
                   {createAClientRequest.is_request_processing
-                    ? 'Please wait...'
-                    : 'Create Client'}
+                    ? "Please wait..."
+                    : "Create Client"}
                 </Button>
               </div>
               {createAClientRequest.request_status ===
                 clientsConstants.CREATE_A_CLIENT_SUCCESS && (
-                <Alert variant='success'>
+                <Alert variant="success">
                   {createAClientRequest.request_data.response.data.message}
                 </Alert>
               )}
               {createAClientRequest.request_status ===
                 clientsConstants.CREATE_A_CLIENT_FAILURE && (
-                <Alert variant='danger'>
+                <Alert variant="danger">
                   {createAClientRequest.request_data.error}
                 </Alert>
               )}
@@ -1308,7 +1325,7 @@ class NewClient extends React.Component {
       administrationConstants.GET_ALL_USERS_FAILURE
     ) {
       return (
-        <div className='loading-content card'>
+        <div className="loading-content card">
           <div>{getAllUsersRequest.request_data.error}</div>
         </div>
       );
@@ -1319,7 +1336,7 @@ class NewClient extends React.Component {
       customerTypeConstants.GET_ALL_CUSTOMERTYPES_FAILURE
     ) {
       return (
-        <div className='loading-content card'>
+        <div className="loading-content card">
           <div>{adminGetCustomerTypesRequest.request_data.error}</div>
         </div>
       );

@@ -145,6 +145,7 @@ export const handleError = (error) => {
 
 
 export const getDateFromISO =(date, returnTime) =>{
+    if(date===null) return "";
     let toUse = new Date(date),
         year = toUse.getFullYear(),
         month = toUse.getMonth()+1,

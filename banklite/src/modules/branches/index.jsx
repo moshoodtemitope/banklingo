@@ -106,7 +106,7 @@ class BranchesManagement extends React.Component
         
             switch (adminGetAllBranchesRequest.request_status){
                 case (branchConstants.GET_ALL_BRANCHES_PENDING):
-                    if((saveRequestData===undefined) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
+                    if((saveRequestData?.result==null) || (saveRequestData!==undefined && saveRequestData.result.length<1)){
                         return (
                             <div className="loading-content"> 
                                 <div className="heading-with-cta">
@@ -222,8 +222,8 @@ class BranchesManagement extends React.Component
                 
                 case(branchConstants.GET_ALL_BRANCHES_SUCCESS):
                     let allBranchesData = adminGetAllBranchesRequest.request_data.response.data;
-                    if(allBranchesData!==undefined){
-                        if(allBranchesData.result.length>=1){
+                    if(allBranchesData!==undefined && allBranchesData.result!==null){
+                        if(allBranchesData.result?.length>=1){
                             return(
                                 <div>
                                     <div className="heading-with-cta">
