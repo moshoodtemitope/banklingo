@@ -566,6 +566,8 @@ class EditAGroup extends React.Component {
                 let updateCustomerPayload = {
                   clientTypeId: values.custType,
                   groupName: values.groupName,
+                  businessNumber: values.businessNumber,
+                  taxId:values.taxId,
                   address: {
                     addressLine1: values.addressLine1,
                     addressLine2: values.addressLine2,
@@ -664,7 +666,8 @@ class EditAGroup extends React.Component {
                       <Form.Label className="block-level">
                         Group Type
                       </Form.Label>
-                      <Select
+                      <span className='form-text'>{selectedCustype?.name}</span>
+                      {/* <Select
                         options={allCustomerTypesList}
                         defaultValue={{
                           label: allCustomerData.name,
@@ -687,7 +690,7 @@ class EditAGroup extends React.Component {
                         <span className="invalid-feedback">
                           {errors.custType}
                         </span>
-                      ) : null}
+                      ) : null} */}
                     </Col>
                    
                   </Form.Row>
