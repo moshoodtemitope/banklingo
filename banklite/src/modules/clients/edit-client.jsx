@@ -47,8 +47,8 @@ class EditAClient extends React.Component {
 
   componentDidMount() {
     // this.props.dispatch(clientsActions.updateAClient("CLEAR"))
-    this.getAClient();
-    this.getAllUsers();
+     this.getAClient();
+     this.getAllUsers();
     // console.log('------',moment(new Date));
   }
 
@@ -125,21 +125,21 @@ class EditAClient extends React.Component {
           is: '1',
           then: Yup.string().required('Required'),
         }),
-      employmentDate: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().nullable(),
-        }),
+      // employmentDate: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string(),
+      //   }),
       // officialEmail: Yup.string()
       //   .when('workStatus', {
       //     is: '1',
       //     then: Yup.string(),
       //   }),
-      monthlySalary: Yup.string()
-        .when('workStatus', {
-          is: '1',
-          then: Yup.string().nullable(),
-        }),
+      // monthlySalary: Yup.string()
+      //   .when('workStatus', {
+      //     is: '1',
+      //     then: Yup.string(),
+      //   }),
       // employeeSector: Yup.string()
       //   .when('workStatus', {
       //     is: '1',
@@ -194,8 +194,8 @@ class EditAClient extends React.Component {
     });
 
     if (
-      getAllUsersRequest.request_status ===
-        administrationConstants.GET_ALL_USERS_PENDING ||
+      // getAllUsersRequest.request_status ===
+      //   administrationConstants.GET_ALL_USERS_PENDING ||
       getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_PENDING
     ) {
       return (
@@ -205,28 +205,33 @@ class EditAClient extends React.Component {
       );
     }
 
+ let   allUserDataList = [],allCustomerData=null,defaultAccountOfficer=[];
     if (
       getAllUsersRequest.request_status ===
-        administrationConstants.GET_ALL_USERS_SUCCESS &&
-      getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_SUCCESS
+        administrationConstants.GET_ALL_USERS_SUCCESS 
     ) {
-      let allCustomerData = getAClientRequest.request_data.response.data;
-      let allUsersData = getAllUsersRequest.request_data.response.data,
-        allUserDataList = [],
-        allCustomerTypesList;
-      let defaultAccountOfficer;
 
+      let allUsersData = getAllUsersRequest.request_data.response.data;
       if (allUsersData.length >= 1) {
         allUsersData.map((eachUser, id) => {
           allUserDataList.push({ label: eachUser.name, value: eachUser.key });
         });
+    }
 
+
+    if (getAClientRequest.request_status === clientsConstants.GET_A_CLIENT_SUCCESS
+    ) {
+       allCustomerData = getAClientRequest.request_data.response.data;
+  
+   
         //get the selected officer
         defaultAccountOfficer = allUserDataList.filter(
           (eachOfficer) =>
             eachOfficer.value === allCustomerData.accountOfficerEncodedKey
         )[0];
       }
+
+      else return null;
 
       let daysWrap = [];
       for (var i = 1; i <= 31; i++) {
@@ -310,25 +315,17 @@ class EditAClient extends React.Component {
               accountOfficerEncodedKey: allCustomerData.accountOfficerEncodedKey??"",
 
               employerName:allCustomerData.employeeInfo?.employerName??"",
-              employmentDate: (allCustomerData.employeeInfo && allCustomerData.employeeInfo.employerName) || undefined,
-              officialEmail: allCustomerData.employeeInfo?.officialEmail??"",
-              monthlySalary:
-               
-              (allCustomerData.employeeInfo.monthlySalary !== null && allCustomerData.employeeInfo.monthlySalary !== "")
-                  ? numberWithCommas(
-                      allCustomerData.employeeInfo.monthlySalary??0,
+              employmentDate: allCustomerData.employeeInfo?.employmentDate,
+              monthlySalary:numberWithCommas(
+                      allCustomerData.employeeInfo?.monthlySalary,
                       true
-                    )
-                  : "",
+                    ),
               employeeSector:
                 allCustomerData.employeeInfo?.employeeSector?? "",
               employeeSubSector:
                 allCustomerData.employeeInfo?.employeeSubSector??"",
 
-              payDay:
-                allCustomerData.employeeInfo.payDay !== null
-                  ? numberWithCommas(allCustomerData.employeeInfo.payDay, true)
-                  : "",
+              payDay: numberWithCommas(allCustomerData.employeeInfo.payDay, true),
               employerAddress: allCustomerData.employeeInfo?.employerAddress??"",
               employerAddressState: allCustomerData.employeeInfo?.employerAddressState??"",
               employerAddressCity: allCustomerData.employeeInfo?.employerAddressCity??"",
@@ -339,9 +336,11 @@ class EditAClient extends React.Component {
 
             
             validationSchema={updateACustomerValidationSchema}
+
+
             onSubmit={(values, { resetForm }) => {
               let updateCustomerPayload = {
-                encodedKey:""+allCustomerData.encodedKey,// this.props.match.params.encodedkey,
+                encodedKey: this.props.match.params.encodedkey,
                 clientTypeId: values.custType,
                 firstName: values.FName,
                 middleName: values.MName,
@@ -391,7 +390,7 @@ class EditAClient extends React.Component {
               // console.log(updateCustomerPayload);
               this.handleUpdateCustomer(updateCustomerPayload).then(() => {
                 if (this.props.updateAClient.request_status === clientsConstants.UPDATE_A_CLIENT_SUCCESS) {
-                    resetForm();
+                   // resetForm();
                     setTimeout(() => {
                       this.props.dispatch(clientsActions.updateAClient("CLEAR"))
                   }, 3000);
@@ -400,6 +399,8 @@ class EditAClient extends React.Component {
               });
             }}
           >
+
+
             {({
               handleSubmit,
               handleChange,
@@ -412,7 +413,7 @@ class EditAClient extends React.Component {
               errors,
             }) =>{ 
               
-              //console.log(errors);
+              console.log(errors);
               
               return (
               <Form
@@ -886,6 +887,8 @@ class EditAClient extends React.Component {
                                 <Form.Label className='block-level'>
                                   Employment Date
                                 </Form.Label>
+
+                                {/* The following date picker has issues */}
                                 <DatePicker
                                   placeholderText='Choose date'
                                   dateFormat={window.dateformat}
