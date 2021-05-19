@@ -7,6 +7,7 @@ import DatePickerFieldType from './DatePickerFieldType';
 export const DatePickerField = ({ ...props }) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
+  
   return (
     <DatePicker
       className='picker'
