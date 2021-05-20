@@ -1516,11 +1516,11 @@ console.log('dashboard load');
                         if(this.props.fetchManadateReducer.request_status === dashboardConstants.FETCH_MANDATE_SUCCESS){
                             this.setState({showMandateLink: true, 
                                             mandateInfo:this.props.fetchManadateReducer.request_data,
-                                            selectedCustomer: {
-                                                                clientEncodedKey: this.props.fetchManadateReducer.request_data.response.data.clientEncodedKey,
-                                                                clientName: `${this.props.fetchManadateReducer.request_data.response.data.firstName} ${this.props.fetchManadateReducer.request_data.response.data.lastName}`
+                                            // selectedCustomer: {
+                                            //                     clientEncodedKey: this.props.fetchManadateReducer.request_data.response.data.clientEncodedKey,
+                                            //                     clientName: `${this.props.fetchManadateReducer.request_data.response.data.firstName} ${this.props.fetchManadateReducer.request_data.response.data.lastName}`
                                                                 
-                                                                }
+                                            //                     }
                                         })
                         }
                     })
@@ -2553,7 +2553,7 @@ console.log('dashboard load');
                                         </div>
                                         <div className="each-indicator">
                                             <div>
-                                                <h4>{this.props.fetchLoggedonTillsReducer.request_data.response2.data.result.length}</h4>
+                                                <h4>{this.props.fetchLoggedonTillsReducer.request_data.response2?.data?.result?.length}</h4>
                                                 <div className="indicator-txt">Transactions</div>
                                             </div>
                                         </div>
