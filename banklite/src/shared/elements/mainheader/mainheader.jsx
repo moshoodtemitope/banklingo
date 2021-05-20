@@ -12,6 +12,7 @@ import FormControl from 'react-bootstrap/FormControl'
 import {NavLink} from 'react-router-dom';
 import { history } from '../../../_helpers/history';
 import {authActions} from '../../../redux/actions/auth/auth.action';
+import { TypeConstant } from "../../../redux/actions/clients/client-states-constants";
 
 import AsyncSelect from 'react-select/async';
 
@@ -167,7 +168,15 @@ class MainHeader extends React.Component{
                                 className="headingmenu-dropdown"
                                 >
                                     {
-                                        allCustomerTypesData.map((eachType, id)=>{
+
+                                        
+
+
+                                        
+                                        allCustomerTypesData.filter(
+                                            (clientClass) =>
+                                              clientClass.clientClassification === TypeConstant.INDIVIDUAL_CLIENT
+                                          ).map((eachType, id)=>{
                                             // allCustomerTypes.push({label: eachType.name, value:eachType.id});
                                             let custType = eachType.name.split(' ').join('');
                                             if(allUSerPermissions.indexOf("bnk_create_client") > -1){

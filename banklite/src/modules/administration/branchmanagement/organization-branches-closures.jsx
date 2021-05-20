@@ -36,7 +36,7 @@ class OrganizationBranchesClosures extends React.Component {
             FullDetails: false,
             CurrentPage:1,
             CurrentSelectedPage:1,
-            BranchClosureStatus:0,
+            BranchClosureStatus:1,
             isAnyBranch: false,
             showUpdatePop: false,
         }
@@ -294,9 +294,10 @@ class OrganizationBranchesClosures extends React.Component {
                                                     onChange={(e)=>this.setClosureStatus(e, allBranchesData.result)}
                                                     value={this.state.BranchClosureStatus}
                                                 >
-                                                    <option value="0">All</option>
+                                                   
                                                     <option value="1">Open</option>
                                                     <option value="2">Closed</option>
+                                                    <option value="0">All</option>
                                                 </select>
                                                 
                                             </div>
@@ -376,12 +377,12 @@ class OrganizationBranchesClosures extends React.Component {
                                                                                     this.handleShowUpdatePop(eachBranch, "Close")
                                                                                 }}>Close</Dropdown.Item>
                                                                         }
-                                                                        {(BranchClosureStatus ===0 && eachBranch.branchClosureStatus===2) && 
+                                                                        {/* {(BranchClosureStatus ===0 && eachBranch.branchClosureStatus===2) && 
                                                                             <Dropdown.Item eventKey="1"
                                                                                 onClick={()=>{
                                                                                     this.handleShowUpdatePop(eachBranch, "Open")
                                                                                 }}>Open</Dropdown.Item>
-                                                                        }
+                                                                        } */}
                                                                         {BranchClosureStatus ===1 && 
                                                                             <Dropdown.Item eventKey="1"
                                                                                 onClick={()=>{
@@ -545,6 +546,8 @@ class OrganizationBranchesClosures extends React.Component {
         }
         return (
             <Modal
+
+            backdrop="static"
                 show={showUpdatePop}
                 onHide={this.handleCloseUpdatePop}
                 size='lg'

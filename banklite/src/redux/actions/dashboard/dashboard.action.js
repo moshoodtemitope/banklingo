@@ -489,8 +489,8 @@ function fetchLoggedonTills(params) {
 
 }
 
-function fetchAllTills(params) {
-    let requestPayload = `?includeClosed=true&pageSize=1000&currentPage=1`;
+function fetchAllTills(includeClosed) {
+    let requestPayload = `?includeClosed=${includeClosed}&pageSize=1000&currentPage=1`;
     
     return dispatch => {
         let consume2 = ApiService.request(`${routes.TELLER_MANAGEMENT}/fetchtills${requestPayload}`, "GET", null);

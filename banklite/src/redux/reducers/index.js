@@ -291,11 +291,19 @@ const productReducers = combineReducers({
   getFullLoanProductsReducer: products.getFullLoanProductsReducer,
   getSingleLoanProductsReducer: products.getSingleLoanProductsReducer,
   updateLoanProductReducer: products.updateLoanProductReducer,
+  getSingleLoanFeeReducer: products.getSingleLoanFeeReducer,
+  createLoanFeeReducer: products.createLoanFeeReducer,
   getDepositProductsReducer: products.getDepositProductsReducer,
   getAllDepositProductsReducer: products.getAllDepositProductsReducer,
   getSingleDepositProductsReducer: products.getSingleDepositProductsReducer,
+  getDepositFeeReducer: products.getDepositFeeReducer,
   createDepositProductReducer: products.createDepositProductReducer,
+  createDepositFeeReducer: products.createDepositFeeReducer,
+  deleteDepositFeeReducer: products.deleteDepositFeeReducer,
+  updateLoanFeeReducer: products.updateLoanFeeReducer,
+  deleteLoanFeeReducer: products.deleteLoanFeeReducer,
   updateDepositProductReducer: products.updateDepositProductReducer,
+  updateDepositProductFeeReducer: products.updateDepositProductFeeReducer,
 });
 
 const appReducer = combineReducers({

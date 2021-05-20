@@ -41,6 +41,7 @@ class DashboardLanding extends React.Component {
             selectedOption:null,
             selectedCustomer:"",
             showNewTill:false,
+            includeClosed:false,
             addCashToTill:false,
             selectedTill: "",
             selectedTillData: false,
@@ -85,6 +86,8 @@ console.log('dashboard load');
                         }
                     }
                 })
+
+
         if(
             this.allUSerPermissions.indexOf("bnk_till_supervisor_add_cash") > -1 ||
             this.allUSerPermissions.indexOf("bnk_till_supervisor_view") > -1 ||
@@ -115,7 +118,7 @@ console.log('dashboard load');
         
        
         // dispatch(dashboardActions.postATransaction("CLEAR"));
-        dispatch(dashboardActions.fetchAllTills());
+        dispatch(dashboardActions.fetchAllTills(this.state.includeClosed??false));
     }
 
     getDashboardActivities = ()=>{
@@ -136,8 +139,6 @@ console.log('dashboard load');
                 return (
                     <div className="loading-content">
                         <div className="loading-text">Please wait... </div>
-                        
-                        
                     </div>
                 )
 
@@ -2581,43 +2582,22 @@ console.log('dashboard load');
         )
     }
 
-    renderManageTellers = ()=>{
+    renderManageTellersPending = ()=>{
         if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_PENDING){
             return (
-                <div className="each-card mt-20">
-                    <div className="each-card-heading">
-                        <h4>Teller Management</h4>
-                        {/* <div className="card-actions at-end">
-                            <div className="each-cardaction" onClick={this.showOpenTill}>
-                                <div className="cardaction-ico">
-                                    <img src={AddIco} alt="" />
-                                </div>
-                                <div className="cardaction-txt">Open Till</div>
-                            </div>
-                        </div> */}
-                    </div>
                     <div className="each-card-content">
                         <div className="loading-text">Please wait...</div>
                     </div>
-                </div>
+               
             )
-        }
-        if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_SUCCESS){
-            return (
-                <div className="each-card mt-20">
-                    <div className="each-card-heading">
+        }else return null;
 
-                        <h4>Teller Management</h4>
-                        <div className="card-actions at-end">
-                            <div className="each-cardaction" onClick={this.showOpenTill}>
-                                <div className="cardaction-ico">
-                                    <img src={AddIco} alt="" />
-                                </div>
-                                <div className="cardaction-txt">Open Till</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="each-card-content">
+    }
+
+    renderManageTellersSuccess = ()=>{
+
+        if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_SUCCESS){
+        return ( <div className="each-card-content">
                         <div className="all-indicators forteller">
                             <div className="each-indicator">
                                 <div>
@@ -2708,33 +2688,43 @@ console.log('dashboard load');
     
                         </div>
                     </div>
-    
-                </div>
-            )
+        )
+                        }
+                        else return null;
+
+    }
+
+    renderManageTellersFailure = ()=>{
+        if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_FAILURE){
+return (<div className="each-card-content">
+        <Alert variant="danger">
+            {this.props.fetchAllTillsReducer.request_data.error}
+        </Alert>
+    </div>);
         }
 
-        if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_FAILURE){
+    }
+    renderManageTellers = ()=>{
+      
             return (
                 <div className="each-card mt-20">
                     <div className="each-card-heading">
                         <h4>Teller Management</h4>
-                        {/* <div className="card-actions at-end">
-                            <div className="each-cardaction" onClick={this.showOpenTill}>
-                                <div className="cardaction-ico">
-                                    <img src={AddIco} alt="" />
-                                </div>
-                                <div className="cardaction-txt">Open Till</div>
-                            </div>
-                        </div> */}
+                        <div className="table-helper mb-10">
+                                        <input type="checkbox" name="" 
+                                             onChange={(e)=>{this.setState({includeClosed:e.target.checked},()=>{this.fetchAllTills();});}}
+                                           
+                                            checked={this.state.includeClosed??false}
+                                            id="showFullDetails" />
+                                        <label htmlFor="showFullDetails">Include closed Till?</label>
+                                    </div>
                     </div>
-                    <div className="each-card-content">
-                        <Alert variant="danger">
-                            {this.props.fetchAllTillsReducer.request_data.error}
-                        </Alert>
-                    </div>
+                   {this.renderManageTellersPending()}
+                   {this.renderManageTellersSuccess()}
+                   {this.renderManageTellersFailure()}
                 </div>
             )
-        }
+        
         
     }
 

@@ -30,7 +30,13 @@ class UserManagement extends React.Component {
     componentDidMount(){
         this.loadInitialData();
     }
-
+    loadNextPage = (nextPage, tempData) => {
+        //next Page and tempData are properties of the TablePagination
+        const { dispatch } = this.props;
+    
+        this.setState({ CurrentPage: nextPage },()=>{  this.loadInitialData();});
+       // this.retrieveFromApi(tempData);
+      };
     loadInitialData=()=>{
         let {PageSize, CurrentPage}= this.state;
         let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
@@ -229,6 +235,15 @@ class UserManagement extends React.Component {
                                                     <option value="200">200</option>
                                                 </select>
                                                 <TablePagination
+              totalPages={allUsersData?.totalPages ?? 0}
+              currPage={allUsersData?.currentPage ?? 0}
+              currRecordsCount={allUsersData?.result.length ?? 0}
+              totalRows={allUsersData?.totalRows ?? 0}
+              tempData={allUsersData?.result ?? 0}
+              pagesCountToshow={4}
+              refreshFunc={this.loadNextPage}
+            />
+                                                {/* <TablePagination
                                                     totalPages={allUsersData.totalPages}
                                                     currPage={allUsersData.currentPage}
                                                     currRecordsCount={allUsersData.result.length}
@@ -236,7 +251,7 @@ class UserManagement extends React.Component {
                                                     tempData={allUsersData.result}
                                                     pagesCountToshow={4}
                                                     refreshFunc={this.loadNextPage}
-                                                />
+                                                /> */}
                                             </div>
                                         </div>
                                         <TableComponent classnames="striped bordered hover">
