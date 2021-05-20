@@ -528,7 +528,7 @@ class OrganizationBranchesClosures extends React.Component {
             allBranchList = [];
 
             branchData.map((branch, id) => {
-                allBranchList.push({ label: branch.name, value: branch.branchEncodedKey });
+                allBranchList.push({ label: branch.name, value: branch.encodedKey });
             });
 
         let checkValidationSchema;
@@ -559,6 +559,7 @@ class OrganizationBranchesClosures extends React.Component {
                     <Formik
                         initialValues={{
                             closureDate: '',
+                            branchEncodedKey:''
                         }}
                         // validationSchema={checkValidationSchema}
                         onSubmit={(values, { resetForm }) => {
@@ -578,7 +579,7 @@ class OrganizationBranchesClosures extends React.Component {
                             };
 
                             
-
+                            if(dateChosen && requestPayload.branchEncodedKey)
                             this.updateABranchStatus(requestPayload).then(() => {
                                 if (
                                     this.props.openABranchReducer.request_status ===
@@ -615,7 +616,7 @@ class OrganizationBranchesClosures extends React.Component {
                                                 options={allBranchList}
                                                 onChange={(selectedBranch) => {
                                                     this.setState({ selectedBranch });
-                                                    // console.log("ahajdsd",selectedBranch);
+                                                    console.log("ahajdsd",selectedBranch);
                                                     setFieldValue("branchEncodedKey", selectedBranch.value)
                                                     errors.branchEncodedKey = null;
                                                     values.branchEncodedKey = selectedBranch.value;
