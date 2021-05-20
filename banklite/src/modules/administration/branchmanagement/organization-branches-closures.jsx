@@ -674,13 +674,9 @@ class OrganizationBranchesClosures extends React.Component {
               dateChosen.setHours(dateChosen.getHours() + 1);
 
               let requestPayload = {
-                // branchEncodedKey: values.branchEncodedKey,
-                branchEncodedKey: values.branchEncodedKey
-                  ? values.branchEncodedKey
-                  : branchToUpdate.branchEncodedKey,
+                branchEncodedKey: values.branchEncodedKey ? values.branchEncodedKey: branchToUpdate.branchEncodedKey,
                 closureDate: dateChosen.toISOString(),
-                // closureDate: values.closureDate.toISOString(),
-                note: values.note,
+                note: values.note
               };
 
               this.updateABranchStatus(requestPayload).then(() => {

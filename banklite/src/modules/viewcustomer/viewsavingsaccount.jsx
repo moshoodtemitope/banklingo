@@ -3648,7 +3648,12 @@ class ViewSavingsAccount extends React.Component {
         .getAClientDepositAccountReducer,
       getClientDepositsRequest = this.props.getClientDepositsReducer;
     let allUSerPermissions = [];
-    this.userPermissions.map((eachPermission) => {});
+
+    this.userPermissions.map((eachPermission) => {
+
+      allUSerPermissions.push(eachPermission.permissionCode);
+
+    });
 
     if (
       getAClientRequest.request_status ===

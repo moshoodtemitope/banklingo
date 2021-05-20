@@ -429,6 +429,7 @@ class NewGroupClient extends React.Component {
         (CustType) =>
           CustType.encodedKey === this.props.match?.params?.custTypeid
       )[0];
+
       allCustomerTypesData
         .filter(
           (clientClass) =>
@@ -594,7 +595,7 @@ class NewGroupClient extends React.Component {
                     onChange={(selectedCustType) => {
                       this.setState({ selectedCustType });
 
-                      errors.custType = null;
+                   //   errors.custType = null;
                       values.custType = selectedCustType.value;
                     }}
                     className={
