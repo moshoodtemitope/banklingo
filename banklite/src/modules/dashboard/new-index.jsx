@@ -28,8 +28,8 @@ import { getDateFromISO, numberWithCommas } from '../../shared/utils';
 import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
 import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 
-import "./dashboard.scss";
-import { Form } from "react-bootstrap";
+import "./dashboard.scss"; 
+import { Badge, Form } from "react-bootstrap";
 class DashboardLanding extends React.Component {
     constructor(props) {
         super(props);
@@ -54,7 +54,6 @@ class DashboardLanding extends React.Component {
         this.selectRef2 = null;
         this.selectRef3 = null;
         this.selectRef4 = null;
-        console.log('dashboard load');
         this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
 
         this.allUSerPermissions = [];
@@ -395,9 +394,56 @@ class DashboardLanding extends React.Component {
         return str === null || str.match(/^ *$/) !== null;
     }
 
-    renderOpenTillWrap = () => {
-        if (this.props.fetchAllTillsReducer.request_status === dashboardConstants.GET_ALL_TILLS_SUCCESS) {
-            let
+
+
+
+//     renderAccountSearch=()=>{
+
+//         return (  <div><Form
+//             className='one-liner'
+//             onSubmit={(e) => {}}
+
+//           >
+//               {/* this.searchTxtn(e, saveRequestData) */}
+//             <Form.Group
+//               controlId='filterDropdown'
+//               className='no-margins pr-10'
+//             >
+//               <Form.Control as='select' size='sm'>
+//                 {/* <option>No Filter</option> */}
+//                 <option>Deposit Account</option>
+//                 <option>Loan Account</option>
+//               </Form.Control>
+//             </Form.Group>
+
+//             <Form.Group className='table-filters'>
+             
+//               <input
+//                 type='text'
+//                 className='form-control-sm search-table form-control'
+//                 placeholder='Search text'
+//                 value={this.state.SearchText}
+//                 onChange={(e) => {
+//                   this.setState({ SearchText: e.target.value.trim() });
+//                 }}
+//               />
+//               {/* {errors.startDate && touched.startDate ? (
+// <span className="invalid-feedback">{errors.startDate}</span>
+// ) : null} */}
+//             </Form.Group>
+//             <Button
+//               className='no-margins'
+//               variant='primary'
+//               type='submit'
+//             >
+//               Filter
+//             </Button>
+//           </Form></div>);
+//     }
+
+    renderOpenTillWrap = ()=>{
+        if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_SUCCESS){
+            let 
                 validationSchema = Yup.object().shape({
                     userEncodedKey: Yup.string()
                         .required('Required'),
@@ -696,8 +742,9 @@ class DashboardLanding extends React.Component {
         }
     }
 
-    renderAddRemoveCashToTillWrap = (tillData, action) => {
-        let
+
+    renderAddRemoveCashToTillWrap = (tillData, action)=>{
+        let 
             validationSchema = Yup.object().shape({
                 // tillId: Yup.string()
                 //     .required('Required'),
@@ -1101,11 +1148,12 @@ class DashboardLanding extends React.Component {
     renderViewCustomerWrap = () => {
         let { mandateInfo } = this.state,
             customerDetails = mandateInfo.response.data,
+
             customerBvnPassport = mandateInfo.response3.data,
             manadateData = mandateInfo.response2.data;
-
-        console.log("now here", mandateInfo)
-        return (
+console.log(customerDetails);
+                
+        return(
             <div className="slidein-wrap">
                 <div className="slide-wrap-overlay"></div>
                 <div className="slidein-form" ref={this.setWrapperRef}>
@@ -1152,6 +1200,12 @@ class DashboardLanding extends React.Component {
                                 </Button> */}
                             </div>
                         </div>
+
+                        <div className="each-detail">
+                            <div className="detail-title">Full name</div>
+                            <div className="detail-value">{customerDetails.groupName}</div>
+                        </div>
+
                         <div className="each-detail">
                             <div className="detail-title">First name</div>
                             <div className="detail-value">{customerDetails.firstName}</div>
@@ -1579,15 +1633,14 @@ class DashboardLanding extends React.Component {
     }
 
 
-
-    handleSelectedCustomer = (inputValue) => {
-
-
+    handleSelectedCustomer =(customer)=>{
+        
+        
         // console.log("customer is", inputValue);
-        this.loadCustomerAccounts(inputValue.clientEncodedKey, true);
+        this.loadCustomerAccounts(customer.clientEncodedKey, true);
         this.setState({
-            selectedCustomer: inputValue,
-            selectACustomerAccount: inputValue,
+            selectedCustomer: customer,
+            selectACustomerAccount: customer,
             // firstChosenTransferCriteria:"customer",
             selectOtherCustomerAccount: ""
         });
@@ -1617,8 +1670,46 @@ class DashboardLanding extends React.Component {
         return "No Customers found"
     }
 
-    renderTillTransactions = () => {
-        let fetchTillTransactionsRequest = this.props.fetchTillTransactionsReducer
+    renderSuccessTillTransactions = ()=>{
+        if(this.props.fetchTillTransactionsReducer.request_status !==dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS){
+        
+            return null;
+        }
+
+        return (<div className="log-info">
+        <table className="table txtn-log">
+
+            <tbody>
+                {
+                    this.props.fetchTillTransactionsReducer?.request_data?.response?.data?.result.map((eachData, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>{eachData.dateCreated}</td>
+                                <td>{eachData.userName}</td>
+                                <td>{eachData.typeDescription}</td>
+                                <td>{eachData.tillId}</td>
+                                <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
+                            </tr>
+                        )
+                    })
+                }
+            </tbody>
+        </table>
+    </div>);
+    }
+
+
+    renderFailedTillTransactions = ()=>{
+    }
+    renderPendingTillTransactions = ()=>{
+        return (  <div className="log-info">
+                                    
+        <div className="loading-text">Please wait...</div>
+    
+    </div>);
+    }
+    renderTillTransactions = ()=>{
+        let fetchTillTransactionsRequest =  this.props.fetchTillTransactionsReducer
 
         if (this.state.selectedTillData && !this.state.preloadedTillData) {
             //  console.log("heere");
@@ -1889,7 +1980,8 @@ class DashboardLanding extends React.Component {
         }
     }
 
-    renderPostTransaction = () => {
+
+    renderPostTransaction = ()=>{
         let {
             selectedCustomer,
             defaultAccountOptions,
@@ -2000,7 +2092,7 @@ class DashboardLanding extends React.Component {
                             referenceID: '',
                             chequeNo: ''
                         }}
-                        // validationSchema={validationSchema}
+                        validationSchema={validationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
                             // console.log("txtnType", values.txtnType)
@@ -2112,49 +2204,52 @@ class DashboardLanding extends React.Component {
                                             <div>Cheque Transaction</div>
                                         </div>
                                     </div>
-                                    {txtOption === "cash" &&
-                                        <div>
-                                            <Form.Group>
-                                                <div className="withasync">
-                                                    <Form.Label className="block-level">Client</Form.Label>
+                                
+                                {txtOption==="cash" &&
+                                    <div>
+                                        <Form.Group>
+                                            <div className="withasync">
+                                                <Form.Label className="block-level">Client </Form.Label>
+                                                <div>
+
+                                            
                                                     <div>
-                                                        <div>
-                                                            <AsyncSelect
-                                                                cacheOptions
-                                                                value={selectedCustomer}
-                                                                // getOptionLabel={e => e.clientName}
-                                                                getOptionLabel={this.getSearchOptionForCustomerLabel}
-                                                                getOptionValue={this.getSearchForCustomerOptionValue}
-                                                                // getOptionValue={e => e.clientEncodedKey}
-                                                                noOptionsMessage={this.noOptionsForCustomerMessage}
-                                                                loadOptions={this.loadSearchResults}
-                                                                defaultOptions={defaultOptions}
-                                                                name="clientEncodedKey"
-                                                                placeholder="Search Client Name"
-                                                                className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
-                                                                onChange={(e) => {
 
-                                                                    setFieldValue("clientEncodedKey", e.clientEncodedKey)
-                                                                    this.handleSelectedCustomer(e)
+                                                        <AsyncSelect
+                                                            cacheOptions
+                                                            value={selectedCustomer}
+                                                            // getOptionLabel={e => e.clientName}
+                                                            getOptionLabel={this.getSearchOptionForCustomerLabel}
+                                                            getOptionValue={this.getSearchForCustomerOptionValue}
+                                                            // getOptionValue={e => e.clientEncodedKey}
+                                                            noOptionsMessage={this.noOptionsForCustomerMessage}
+                                                            loadOptions={this.loadSearchResults}
+                                                            defaultOptions={defaultOptions}
+                                                            name="clientEncodedKey"
+                                                            placeholder="Search Client Name"
+                                                            className={errors.clientEncodedKey && touched.clientEncodedKey ? "is-invalid custom" : null}
+                                                            onChange={(e) => {
 
-                                                                }}
-                                                                // onChange={this.handleSelectedCustomer}
-                                                                // onChange={(selectedCustomer) => {
-                                                                //     this.setState({ selectedCustomer });
-                                                                //     errors.clientEncodedKey = null
-                                                                //     values.clientEncodedKey = selectedCustomer.value
-                                                                //     setFieldValue('clientEncodedKey', selectedCustomer.value);
-                                                                // }}
-                                                                onInputChange={this.handleSearchCustomerChange}
-                                                            />
+                                                                setFieldValue("clientEncodedKey", e.clientEncodedKey)
+                                                                this.handleSelectedCustomer(e)
+
+                                                            }}
+                                                            // onChange={this.handleSelectedCustomer}
+                                                            // onChange={(selectedCustomer) => {
+                                                            //     this.setState({ selectedCustomer });
+                                                            //     errors.clientEncodedKey = null
+                                                            //     values.clientEncodedKey = selectedCustomer.value
+                                                            //     setFieldValue('clientEncodedKey', selectedCustomer.value);
+                                                            // }}
+                                                            onInputChange={this.handleSearchCustomerChange}
+                                                        />
 
 
-                                                            {errors.clientEncodedKey && touched.clientEncodedKey ? (
-                                                                <span className="invalid-feedback">{errors.clientEncodedKey}</span>
-                                                            ) : null}
-                                                        </div>
-                                                        {this.state.showMandateLink && <span onClick={() => this.showViewCustomer(this.selectedCustomer)}>View Client</span>}
+                                                        {errors.clientEncodedKey && touched.clientEncodedKey ? (
+                                                            <span className="invalid-feedback">{errors.clientEncodedKey}</span>
+                                                        ) : null}
                                                     </div>
+                                                </div>
                                                 </div>
                                             </Form.Group>
                                             <Form.Group>
@@ -2205,8 +2300,11 @@ class DashboardLanding extends React.Component {
                                                     </div>
                                                 </div>
 
-                                            </Form.Group>
-                                            {/* {this.state.selectedOption && */}
+                                        </Form.Group>
+
+
+                                        
+                                        {/* {this.state.selectedOption && */}
                                             <Form.Group>
                                                 <Form.Label className="block-level">Transaction</Form.Label>
 
@@ -2740,25 +2838,49 @@ class DashboardLanding extends React.Component {
         }
 
     }
-    renderManageTellers = () => {
+    renderManageTellers = ()=>{
+      
+            return (
+                <div className="each-card mt-20">
+                    <div className="each-card-heading">
+                        <h4>Teller Management</h4>
 
-        return (
-            <div className="each-card mt-20">
-                <div className="each-card-heading">
-                    <h4>Teller Management</h4>
-                    <div className="table-helper mb-10">
-                        <input type="checkbox" name=""
-                            onChange={(e) => { this.setState({ includeClosed: e.target.checked }, () => { this.fetchAllTills(); }); }}
+                        <div className="card-actions at-end">
+                            <div className="each-cardaction" onClick={this.showOpenTill}>
+                                <div className="cardaction-ico">
+                                    <img src={AddIco} alt="" />
+                                </div>
+                                <div className="cardaction-txt">Open Till</div>
+                            </div>
+                        </div>
 
-                            checked={this.state.includeClosed ?? false}
-                            id="showFullDetails" />
-                        <label htmlFor="showFullDetails">Include closed Till?</label>
+                                    
+                                   
                     </div>
+
+                    <div className="each-card-heading">
+                    <h4> </h4>
+                    
+                    <div className="table-helper mb-10">
+                                        <input type="checkbox" name="" 
+                                             onChange={(e)=>{this.setState({includeClosed:e.target.checked},()=>{this.fetchAllTills();});}}
+                                           
+                                            checked={this.state.includeClosed??false}
+                                            id="showFullDetails" />
+                                        <label htmlFor="showFullDetails">Include closed Till?</label>
+                                    </div>
+                    
+</div>
+             
+                    {/* {this.renderAccountSearch()} */}
+                   {this.renderManageTellersPending()}
+                   {this.renderManageTellersSuccess()}
+                   {this.renderManageTellersFailure()}
                 </div>
-                {this.renderManageTellersPending()}
-                {this.renderManageTellersSuccess()}
-                {this.renderManageTellersFailure()}
-            </div>
+                // {this.renderManageTellersPending()}
+                // {this.renderManageTellersSuccess()}
+                // {this.renderManageTellersFailure()}
+            // </div>
         )
 
 
@@ -2787,20 +2909,33 @@ class DashboardLanding extends React.Component {
                 allMyTills.push(eachtill.tillId)
             })
 
-
-
-
-
-            return (
-                <div >
-                    {allMyTills.length >= 1 &&
-                        <div className="each-card">
-                            <div className="each-card-heading">
-                                <h4>Tellering</h4>
-                                <div className="tellerid-wrap">
-                                    {this.state.selectedTill &&
-                                        <div className="selected-id">
-                                            {this.state.selectedTill}
+                                            {allMyTills.length>=1 &&
+                                                <div className="select-tillid">
+                                                    <select id="tildId"
+                                                        onChange={(e)=>{
+                                                            let selectedTillData = allLoggedOnTills.filter(eachTill=>eachTill.tillId===e.target.value)[0];
+                                                            // console.log("zelect is", selectedTillData)
+                                                            this.fetchTillTransactions(e.target.value);
+                                                            this.setState({selectedTill: e.target.value, selectedTillData, preloadedTillData: false})
+                                                        }}
+                                                        name="selectedTill"
+                                                       // defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
+                                                        value={this.state.selectedTill}
+                                                    
+                                                        
+                                                        className="countdropdown form-control form-control-sm">
+                                                            
+                                                            {allMyTills.map((eachTill, index)=>{
+                                                                
+                                                                return(
+                                                                        <option  key={index} value={eachTill}>{eachTill}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        
+                                                    </select>
+                                                </div>
+                                            }
                                         </div>
                                     }
 
@@ -2920,25 +3055,30 @@ class DashboardLanding extends React.Component {
                                     <div className="indicator-txt">Loans Awaiting Approval</div>
                                 </div>
                             </div>
-                            <div className="each-indicator">
+
+                            {/* ToDO: This should be per currency */}
+                            {/* <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.totalDeposits, true)}</h4>
-                                    <div className="indicator-txt">Total deposit</div>
+                                    <div className="indicator-txt">Total deposit <Badge variant="primary"></Badge></div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.totalLoanPortfolio, true)}</h4>
-                                    <div className="indicator-txt">Gross loan portfolio</div>
+                                    <div className="indicator-txt">Gross loan portfolio </div>
                                 </div>
+                                
                             </div>
-                            <div className="each-indicator">
+
+                              {/* ToDO: This should be per currency */}
+                            {/* <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.activeSavings, true)}</h4>
                                     <div className="indicator-txt">Active Savings</div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.parAbove30Days)}</h4>
@@ -3089,6 +3229,8 @@ class DashboardLanding extends React.Component {
                     />
                 </div>
                 <div className="dashboard-section">
+               
+              
                     {this.renderTellerManagement()}
                 </div>
 
@@ -3140,29 +3282,6 @@ class DashboardLanding extends React.Component {
                             {this.state.closeViewAccount && this.renderViewAccountWrap(this.state.selectedCustomer)}
                             <div className="content-container">
                                 {this.renderDashboardWrap()}
-                                {/* <div className="row">
-                                    <div className="col-sm-12">
-                                        <div className="middle-content">
-                                            <div className="row">
-                                                <div className="col-sm-8">
-                                                    <div className="dashboardstats">
-                                                        <div className="all-stats-wrap">
-                                                            {this.renderDashboardStats()}
-                                                           
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-sm-4">
-                                                    <div className="activities-items">
-                                                        <h6>Latest Activity </h6>
-                                                        {this.renderLoggedInUserActivities()}
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> */}
                             </div>
                         </div>
                     </div>
