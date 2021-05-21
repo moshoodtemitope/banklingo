@@ -153,6 +153,7 @@ export class SetLockAmountModal extends React.Component {
                     </Form.Label>
                     <Form.Control
                       type="textarea"
+                      placeholder="(Optional)"
                       autoComplete="off"
                       onChange={handleChange}
                       value={values.blockReference}

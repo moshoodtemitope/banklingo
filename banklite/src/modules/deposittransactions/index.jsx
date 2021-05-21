@@ -69,6 +69,7 @@ class DepositTransactions extends React.Component {
     if (startDate !== '') {
       startDate = startDate.toISOString();
     }
+    
     let paramters = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     const { dispatch } = this.props;
 
@@ -88,6 +89,14 @@ class DepositTransactions extends React.Component {
       } = this.state;
 
     this.setState({ PageSize: sizeOfPage });
+    
+    // if (endDate !== "") {
+      endDate = endDate?.toISOString();
+    // }
+    // if (startDate !== "") {
+      startDate = startDate?.toISOString();
+    // }
+
 
     let params = `FullDetails=${FullDetails}&PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     if (tempData) {
@@ -96,7 +105,7 @@ class DepositTransactions extends React.Component {
       dispatch(depositActions.getDepositTransaction(params));
     }
   };
-
+ 
   setShowDetails = (FullDetails, tempData) => {
     const { dispatch } = this.props;
     let showDetails = FullDetails.target.checked,
@@ -110,6 +119,14 @@ class DepositTransactions extends React.Component {
       } = this.state;
 
     this.setState({ FullDetails: showDetails });
+    
+    // if (endDate !== "") {
+      endDate = endDate?.toISOString();
+    // }
+    // if (startDate !== "") {
+      startDate = startDate?.toISOString();
+    // }
+
 
     let params = `FullDetails=${showDetails}&PageSize=${PageSize}&CurrentPage=${CurrentPage}&CurrentSelectedPage=${CurrentSelectedPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     if (tempData) {
@@ -125,7 +142,7 @@ class DepositTransactions extends React.Component {
   handleStartDatePicker = (startDate) => {
     startDate.setHours(startDate.getHours() + 1);
 
-    this.setState({ startDate }, () => {
+    this.setState({ startDate, startDateText: startDate.toISOString() }, () => {
       if (this.state.endDate !== '') {
         //this.getHistory();
       }
@@ -135,12 +152,13 @@ class DepositTransactions extends React.Component {
   handleEndDatePicker = (endDate) => {
     endDate.setHours(endDate.getHours() + 1);
 
-    this.setState({ endDate }, () => {
+    this.setState({ endDate, endDateText: endDate.toISOString() }, () => {
       if (this.state.startDate !== '') {
         //this.getHistory();
       }
     });
   };
+
 
   loadNextPage = (nextPage, tempData) => {
     const { dispatch } = this.props;
@@ -152,6 +170,15 @@ class DepositTransactions extends React.Component {
       startDate,
       SearchText,
     } = this.state;
+
+
+    
+    if (endDate !== "") {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== "") {
+      startDate = startDate.toISOString();
+    }
 
     // this.setState({PageSize: sizeOfPage});
 
@@ -189,6 +216,9 @@ class DepositTransactions extends React.Component {
       if (startDate !== '') {
         startDate = startDate.toISOString();
       }
+      console.log(startDate);
+      console.log(endDate);
+
       let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&BranchId=${BranchId}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
       if (tempData) {
@@ -338,7 +368,7 @@ class DepositTransactions extends React.Component {
                   </Form.Group>
 
                   <Form.Group className='table-filters'>
-                    <DatePicker
+                  <DatePicker
                       autoComplete='new-off'
                       onChangeRaw={this.handleDateChangeRaw}
                       onChange={this.handleStartDatePicker}
@@ -352,14 +382,14 @@ class DepositTransactions extends React.Component {
                       autoComplete='new-password'
                       maxDate={new Date()}
                       // className="form-control form-control-sm h-38px"
-                      className='form-control form-control-sm '
+                      className='form-control form-control-sm'
                       customInput={
                         <DatePickerFieldType placeHolder='Start date' />
                       }
                     />
                     <DatePicker
                       autoComplete='new-off'
-                      placeholderText='End  date'
+                      placeholderText='End date'
                       onChangeRaw={this.handleDateChangeRaw}
                       onChange={this.handleEndDatePicker}
                       selected={this.state.endDate}
@@ -526,43 +556,43 @@ class DepositTransactions extends React.Component {
                     </Form.Group>
 
                     <Form.Group className='table-filters'>
-                      <DatePicker
-                        autoComplete='new-off'
-                        onChangeRaw={this.handleDateChangeRaw}
-                        onChange={this.handleStartDatePicker}
-                        selected={this.state.startDate}
-                        dateFormat={window.dateformat}
-                        peekNextMonth
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode='select'
-                        placeholderText='Start date'
-                        autoComplete='new-password'
-                        maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
-                        className='form-control form-control-sm '
-                        customInput={
-                          <DatePickerFieldType placeHolder='Start date' />
-                        }
-                      />
-                      <DatePicker
-                        autoComplete='new-off'
-                        placeholderText='End  date'
-                        onChangeRaw={this.handleDateChangeRaw}
-                        onChange={this.handleEndDatePicker}
-                        selected={this.state.endDate}
-                        dateFormat={window.dateformat}
-                        peekNextMonth
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode='select'
-                        maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
-                        className='form-control form-control-sm'
-                        customInput={
-                          <DatePickerFieldType placeHolder='End date' />
-                        }
-                      />
+                    <DatePicker
+                      autoComplete='new-off'
+                      onChangeRaw={this.handleDateChangeRaw}
+                      onChange={this.handleStartDatePicker}
+                      selected={this.state.startDate}
+                      dateFormat={window.dateformat}
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode='select'
+                      placeholderText='Start date'
+                      autoComplete='new-password'
+                      maxDate={new Date()}
+                      // className="form-control form-control-sm h-38px"
+                      className='form-control form-control-sm'
+                      customInput={
+                        <DatePickerFieldType placeHolder='Start date' />
+                      }
+                    />
+                    <DatePicker
+                      autoComplete='new-off'
+                      placeholderText='End date'
+                      onChangeRaw={this.handleDateChangeRaw}
+                      onChange={this.handleEndDatePicker}
+                      selected={this.state.endDate}
+                      dateFormat={window.dateformat}
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode='select'
+                      maxDate={new Date()}
+                      // className="form-control form-control-sm h-38px"
+                      className='form-control form-control-sm'
+                      customInput={
+                        <DatePickerFieldType placeHolder='End date' />
+                      }
+                    />
                       <input
                         type='text'
                         className='form-control-sm search-table form-control'
@@ -759,43 +789,43 @@ class DepositTransactions extends React.Component {
                     </Form.Group>
 
                     <Form.Group className='table-filters'>
-                      <DatePicker
-                        autoComplete='new-off'
-                        onChangeRaw={this.handleDateChangeRaw}
-                        onChange={this.handleStartDatePicker}
-                        selected={this.state.startDate}
-                        dateFormat={window.dateformat}
-                        peekNextMonth
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode='select'
-                        placeholderText='Start date'
-                        autoComplete='new-password'
-                        maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
-                        className='form-control form-control-sm'
-                        customInput={
-                          <DatePickerFieldType placeHolder='Start date' />
-                        }
-                      />
-                      <DatePicker
-                        autoComplete='new-off'
-                        placeholderText='End  date'
-                        onChangeRaw={this.handleDateChangeRaw}
-                        onChange={this.handleEndDatePicker}
-                        selected={this.state.endDate}
-                        dateFormat={window.dateformat}
-                        peekNextMonth
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode='select'
-                        maxDate={new Date()}
-                        // className="form-control form-control-sm h-38px"
-                        className='form-control form-control-sm'
-                        customInput={
-                          <DatePickerFieldType placeHolder='End date' />
-                        }
-                      />
+                    <DatePicker
+                      autoComplete='new-off'
+                      onChangeRaw={this.handleDateChangeRaw}
+                      onChange={this.handleStartDatePicker}
+                      selected={this.state.startDate}
+                      dateFormat={window.dateformat}
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode='select'
+                      placeholderText='Start date'
+                      autoComplete='new-password'
+                      maxDate={new Date()}
+                      // className="form-control form-control-sm h-38px"
+                      className='form-control form-control-sm'
+                      customInput={
+                        <DatePickerFieldType placeHolder='Start date' />
+                      }
+                    />
+                    <DatePicker
+                      autoComplete='new-off'
+                      placeholderText='End date'
+                      onChangeRaw={this.handleDateChangeRaw}
+                      onChange={this.handleEndDatePicker}
+                      selected={this.state.endDate}
+                      dateFormat={window.dateformat}
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode='select'
+                      maxDate={new Date()}
+                      // className="form-control form-control-sm h-38px"
+                      className='form-control form-control-sm'
+                      customInput={
+                        <DatePickerFieldType placeHolder='End date' />
+                      }
+                    />
                       <input
                         type='text'
                         className='form-control-sm search-table form-control'

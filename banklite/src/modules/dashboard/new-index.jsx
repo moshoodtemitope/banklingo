@@ -29,7 +29,7 @@ import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action
 import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 
 import "./dashboard.scss"; 
-import { Form } from "react-bootstrap";
+import { Badge, Form } from "react-bootstrap";
 class DashboardLanding extends React.Component {
     constructor(props) {
         super(props);
@@ -395,6 +395,9 @@ console.log('dashboard load');
         return str === null || str.match(/^ *$/) !== null;
     }
 
+
+
+
     renderOpenTillWrap = ()=>{
         if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_SUCCESS){
             let 
@@ -694,6 +697,7 @@ console.log('dashboard load');
             )
         }
     }
+
 
     renderAddRemoveCashToTillWrap = (tillData, action)=>{
         let 
@@ -1100,9 +1104,10 @@ console.log('dashboard load');
     renderViewCustomerWrap = ( )=>{
         let {mandateInfo} = this.state,
             customerDetails = mandateInfo.response.data,
+
             customerBvnPassport = mandateInfo.response3.data,
             manadateData = mandateInfo.response2.data;
-
+console.log(customerDetails);
                 
         return(
             <div className="slidein-wrap">
@@ -1151,6 +1156,12 @@ console.log('dashboard load');
                                 </Button> */}
                             </div>
                         </div>
+
+                        <div className="each-detail">
+                            <div className="detail-title">Full naame</div>
+                            <div className="detail-value">{customerDetails.groupName}</div>
+                        </div>
+
                         <div className="each-detail">
                             <div className="detail-title">First name</div>
                             <div className="detail-value">{customerDetails.firstName}</div>
@@ -1544,14 +1555,14 @@ console.log('dashboard load');
 
     
 
-    handleSelectedCustomer =(inputValue)=>{
+    handleSelectedCustomer =(customer)=>{
         
         
         // console.log("customer is", inputValue);
-        this.loadCustomerAccounts(inputValue.clientEncodedKey, true);
+        this.loadCustomerAccounts(customer.clientEncodedKey, true);
         this.setState({
-            selectedCustomer: inputValue,
-            selectACustomerAccount: inputValue,
+            selectedCustomer: customer,
+            selectACustomerAccount: customer,
             // firstChosenTransferCriteria:"customer",
             selectOtherCustomerAccount:""
         });
@@ -1853,6 +1864,7 @@ console.log('dashboard load');
         }
     }
 
+
     renderPostTransaction = ()=>{
         let {
             selectedCustomer,
@@ -1964,7 +1976,7 @@ console.log('dashboard load');
                             referenceID:'',
                             chequeNo:''
                         }}
-                        // validationSchema={validationSchema}
+                        validationSchema={validationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
                             // console.log("txtnType", values.txtnType)
@@ -2081,9 +2093,10 @@ console.log('dashboard load');
                                     <div>
                                         <Form.Group>
                                             <div className="withasync">
-                                                <Form.Label className="block-level">Client</Form.Label>
+                                                <Form.Label className="block-level">Client </Form.Label>
                                                 <div>
                                                     <div>
+
                                                         <AsyncSelect
                                                             cacheOptions
                                                             value={selectedCustomer}
@@ -2778,7 +2791,7 @@ return (<div className="each-card-content">
                                                             this.setState({selectedTill: e.target.value, selectedTillData, preloadedTillData: false})
                                                         }}
                                                         name="selectedTill"
-                                                        defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
+                                                       // defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
                                                         value={this.state.selectedTill}
                                                     
                                                         
@@ -2884,25 +2897,30 @@ return (<div className="each-card-content">
                                     <div className="indicator-txt">Loans Awaiting Approval</div>
                                 </div>
                             </div>
-                            <div className="each-indicator">
+
+                            {/* ToDO: This should be per currency */}
+                            {/* <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.totalDeposits, true)}</h4>
-                                    <div className="indicator-txt">Total deposit</div>
+                                    <div className="indicator-txt">Total deposit <Badge variant="primary"></Badge></div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.totalLoanPortfolio, true)}</h4>
-                                    <div className="indicator-txt">Gross loan portfolio</div>
+                                    <div className="indicator-txt">Gross loan portfolio </div>
                                 </div>
+                                
                             </div>
-                            <div className="each-indicator">
+
+                              {/* ToDO: This should be per currency */}
+                            {/* <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.activeSavings, true)}</h4>
                                     <div className="indicator-txt">Active Savings</div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.parAbove30Days)}</h4>
