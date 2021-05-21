@@ -29,7 +29,7 @@ import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action
 import { dashboardConstants } from '../../redux/actiontypes/dashboard/dashboard.constants'
 
 import "./dashboard.scss"; 
-import { Form } from "react-bootstrap";
+import { Badge, Form } from "react-bootstrap";
 class DashboardLanding extends React.Component {
     constructor(props) {
         super(props);
@@ -54,7 +54,6 @@ class DashboardLanding extends React.Component {
         this.selectRef2 = null;
         this.selectRef3 = null;
         this.selectRef4 = null;
-console.log('dashboard load');
         this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
 
         this.allUSerPermissions = [];
@@ -395,6 +394,53 @@ console.log('dashboard load');
         return str === null || str.match(/^ *$/) !== null;
     }
 
+
+
+
+//     renderAccountSearch=()=>{
+
+//         return (  <div><Form
+//             className='one-liner'
+//             onSubmit={(e) => {}}
+
+//           >
+//               {/* this.searchTxtn(e, saveRequestData) */}
+//             <Form.Group
+//               controlId='filterDropdown'
+//               className='no-margins pr-10'
+//             >
+//               <Form.Control as='select' size='sm'>
+//                 {/* <option>No Filter</option> */}
+//                 <option>Deposit Account</option>
+//                 <option>Loan Account</option>
+//               </Form.Control>
+//             </Form.Group>
+
+//             <Form.Group className='table-filters'>
+             
+//               <input
+//                 type='text'
+//                 className='form-control-sm search-table form-control'
+//                 placeholder='Search text'
+//                 value={this.state.SearchText}
+//                 onChange={(e) => {
+//                   this.setState({ SearchText: e.target.value.trim() });
+//                 }}
+//               />
+//               {/* {errors.startDate && touched.startDate ? (
+// <span className="invalid-feedback">{errors.startDate}</span>
+// ) : null} */}
+//             </Form.Group>
+//             <Button
+//               className='no-margins'
+//               variant='primary'
+//               type='submit'
+//             >
+//               Filter
+//             </Button>
+//           </Form></div>);
+//     }
+
     renderOpenTillWrap = ()=>{
         if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_SUCCESS){
             let 
@@ -694,6 +740,7 @@ console.log('dashboard load');
             )
         }
     }
+
 
     renderAddRemoveCashToTillWrap = (tillData, action)=>{
         let 
@@ -1100,9 +1147,10 @@ console.log('dashboard load');
     renderViewCustomerWrap = ( )=>{
         let {mandateInfo} = this.state,
             customerDetails = mandateInfo.response.data,
+
             customerBvnPassport = mandateInfo.response3.data,
             manadateData = mandateInfo.response2.data;
-
+console.log(customerDetails);
                 
         return(
             <div className="slidein-wrap">
@@ -1151,6 +1199,12 @@ console.log('dashboard load');
                                 </Button> */}
                             </div>
                         </div>
+
+                        <div className="each-detail">
+                            <div className="detail-title">Full name</div>
+                            <div className="detail-value">{customerDetails.groupName}</div>
+                        </div>
+
                         <div className="each-detail">
                             <div className="detail-title">First name</div>
                             <div className="detail-value">{customerDetails.firstName}</div>
@@ -1544,14 +1598,14 @@ console.log('dashboard load');
 
     
 
-    handleSelectedCustomer =(inputValue)=>{
+    handleSelectedCustomer =(customer)=>{
         
         
         // console.log("customer is", inputValue);
-        this.loadCustomerAccounts(inputValue.clientEncodedKey, true);
+        this.loadCustomerAccounts(customer.clientEncodedKey, true);
         this.setState({
-            selectedCustomer: inputValue,
-            selectACustomerAccount: inputValue,
+            selectedCustomer: customer,
+            selectACustomerAccount: customer,
             // firstChosenTransferCriteria:"customer",
             selectOtherCustomerAccount:""
         });
@@ -1581,6 +1635,44 @@ console.log('dashboard load');
         return "No Customers found"
     }
 
+    renderSuccessTillTransactions = ()=>{
+        if(this.props.fetchTillTransactionsReducer.request_status !==dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS){
+        
+            return null;
+        }
+
+        return (<div className="log-info">
+        <table className="table txtn-log">
+
+            <tbody>
+                {
+                    this.props.fetchTillTransactionsReducer?.request_data?.response?.data?.result.map((eachData, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>{eachData.dateCreated}</td>
+                                <td>{eachData.userName}</td>
+                                <td>{eachData.typeDescription}</td>
+                                <td>{eachData.tillId}</td>
+                                <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
+                            </tr>
+                        )
+                    })
+                }
+            </tbody>
+        </table>
+    </div>);
+    }
+
+
+    renderFailedTillTransactions = ()=>{
+    }
+    renderPendingTillTransactions = ()=>{
+        return (  <div className="log-info">
+                                    
+        <div className="loading-text">Please wait...</div>
+    
+    </div>);
+    }
     renderTillTransactions = ()=>{
         let fetchTillTransactionsRequest =  this.props.fetchTillTransactionsReducer
 
@@ -1853,6 +1945,7 @@ console.log('dashboard load');
         }
     }
 
+
     renderPostTransaction = ()=>{
         let {
             selectedCustomer,
@@ -1964,7 +2057,7 @@ console.log('dashboard load');
                             referenceID:'',
                             chequeNo:''
                         }}
-                        // validationSchema={validationSchema}
+                        validationSchema={validationSchema}
                         onSubmit={(values, { resetForm }) => {
                             // same shape as initial values
                             // console.log("txtnType", values.txtnType)
@@ -2081,9 +2174,12 @@ console.log('dashboard load');
                                     <div>
                                         <Form.Group>
                                             <div className="withasync">
-                                                <Form.Label className="block-level">Client</Form.Label>
+                                                <Form.Label className="block-level">Client </Form.Label>
                                                 <div>
+
+                                            
                                                     <div>
+
                                                         <AsyncSelect
                                                             cacheOptions
                                                             value={selectedCustomer}
@@ -2171,6 +2267,9 @@ console.log('dashboard load');
                                             </div>
 
                                         </Form.Group>
+
+
+                                        
                                         {/* {this.state.selectedOption && */}
                                             <Form.Group>
                                                 <Form.Label className="block-level">Transaction</Form.Label>
@@ -2710,7 +2809,24 @@ return (<div className="each-card-content">
                 <div className="each-card mt-20">
                     <div className="each-card-heading">
                         <h4>Teller Management</h4>
-                        <div className="table-helper mb-10">
+
+                        <div className="card-actions at-end">
+                            <div className="each-cardaction" onClick={this.showOpenTill}>
+                                <div className="cardaction-ico">
+                                    <img src={AddIco} alt="" />
+                                </div>
+                                <div className="cardaction-txt">Open Till</div>
+                            </div>
+                        </div>
+
+                                    
+                                   
+                    </div>
+
+                    <div className="each-card-heading">
+                    <h4> </h4>
+                    
+                    <div className="table-helper mb-10">
                                         <input type="checkbox" name="" 
                                              onChange={(e)=>{this.setState({includeClosed:e.target.checked},()=>{this.fetchAllTills();});}}
                                            
@@ -2718,7 +2834,10 @@ return (<div className="each-card-content">
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Include closed Till?</label>
                                     </div>
-                    </div>
+                    
+</div>
+             
+                    {/* {this.renderAccountSearch()} */}
                    {this.renderManageTellersPending()}
                    {this.renderManageTellersSuccess()}
                    {this.renderManageTellersFailure()}
@@ -2778,7 +2897,7 @@ return (<div className="each-card-content">
                                                             this.setState({selectedTill: e.target.value, selectedTillData, preloadedTillData: false})
                                                         }}
                                                         name="selectedTill"
-                                                        defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
+                                                       // defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
                                                         value={this.state.selectedTill}
                                                     
                                                         
@@ -2884,25 +3003,30 @@ return (<div className="each-card-content">
                                     <div className="indicator-txt">Loans Awaiting Approval</div>
                                 </div>
                             </div>
-                            <div className="each-indicator">
+
+                            {/* ToDO: This should be per currency */}
+                            {/* <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.totalDeposits, true)}</h4>
-                                    <div className="indicator-txt">Total deposit</div>
+                                    <div className="indicator-txt">Total deposit <Badge variant="primary"></Badge></div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.totalLoanPortfolio, true)}</h4>
-                                    <div className="indicator-txt">Gross loan portfolio</div>
+                                    <div className="indicator-txt">Gross loan portfolio </div>
                                 </div>
+                                
                             </div>
-                            <div className="each-indicator">
+
+                              {/* ToDO: This should be per currency */}
+                            {/* <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.activeSavings, true)}</h4>
                                     <div className="indicator-txt">Active Savings</div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="each-indicator">
                                 <div>
                                     <h4>{numberWithCommas(dashboardData.parAbove30Days)}</h4>
@@ -3053,6 +3177,8 @@ return (<div className="each-card-content">
                     />
                 </div>
                 <div className="dashboard-section">
+               
+              
                     {this.renderTellerManagement()}
                 </div>
                 
@@ -3104,29 +3230,6 @@ return (<div className="each-card-content">
                         {this.state.closeViewAccount && this.renderViewAccountWrap(this.state.selectedCustomer)}
                             <div className="content-container">
                                 {this.renderDashboardWrap()}
-                                {/* <div className="row">
-                                    <div className="col-sm-12">
-                                        <div className="middle-content">
-                                            <div className="row">
-                                                <div className="col-sm-8">
-                                                    <div className="dashboardstats">
-                                                        <div className="all-stats-wrap">
-                                                            {this.renderDashboardStats()}
-                                                           
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-sm-4">
-                                                    <div className="activities-items">
-                                                        <h6>Latest Activity </h6>
-                                                        {this.renderLoggedInUserActivities()}
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> */}
                             </div>
                         </div>
                     </div>
