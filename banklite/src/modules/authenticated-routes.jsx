@@ -1119,32 +1119,6 @@ class AuthenticatedRoutes extends React.Component {
               component={BranchListManagement}
             />
 
-<<<<<<< HEAD
-                        {/* <PrivateRoute accessRequired="bnk_view_branches" exact path='/administration' {...this.props} authed={this.props.user} component={AdminManagement} />  */}
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general' {...this.props} authed={this.props.user} component={GeneralOrganization} />
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/risk-levels' {...this.props} authed={this.props.user} component={RiskLevels} />
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/notifications' {...this.props} authed={this.props.user} component={Notifications} />
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/transaction' {...this.props} authed={this.props.user} component={TransactionServices} />
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/interbranch-accounting' {...this.props} authed={this.props.user} component={InterbranchGlAccounting} />
-
-
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/currency' {...this.props} authed={this.props.user} component={GeneralCurrency} />
-                        <PrivateRoute accessRequired="bnk_manage_transaction_channels" exact path='/administration/general/txt-channels' {...this.props} authed={this.props.user} component={GeneralTxtChannels} />
-                        <PrivateRoute accessRequired="bnk_manage_transaction_channels" exact path='/administration/general/new-txt-channels' {...this.props} authed={this.props.user} component={NewTxtChannels} />
-                        <PrivateRoute accessRequired="bnk_manage_customer_types" exact path='/administration/general/customer-types' {...this.props} authed={this.props.user} component={CustomerTypesAdministration} />
-                        <PrivateRoute accessRequired="bnk_manage_internal_control" exact path='/administration/general/control' {...this.props} authed={this.props.user} component={GeneralInternalControl} />
-                        {/* <PrivateRoute accessRequired="bnk_view_branches" exact path='/administration/general/branding' {...this.props} authed={this.props.user} component={GeneralBranding} />  */}
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/uploaddata' {...this.props} authed={this.props.user} component={UploadData} />
-
-                        {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization' {...this.props} authed={this.props.user} component={OrganizationBranches} /> */}
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization' {...this.props} authed={this.props.user} component={BranchListManagement} />
-                       
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/newbranch' {...this.props} authed={this.props.user} component={NewBranch} />
-                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/editbranch/:encodedkey' {...this.props} authed={this.props.user} component={EditBranch} />
-                        <PrivateRoute accessRequired="bnk_manage_branch_closure" exact path='/branch-closures' {...this.props} authed={this.props.user} component={OrganizationBranchesClosures} />
-                        {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures' {...this.props} authed={this.props.user} component={OrganizationBranchesClosures} /> */}
-                        {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures/open' {...this.props} authed={this.props.user} component={OrganizationBranchesOpen} />
-=======
             <PrivateRoute
               accessRequired="bnk_manage_organisation"
               exact
@@ -1171,7 +1145,6 @@ class AuthenticatedRoutes extends React.Component {
             />
             {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures' {...this.props} authed={this.props.user} component={OrganizationBranchesClosures} /> */}
             {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures/open' {...this.props} authed={this.props.user} component={OrganizationBranchesOpen} />
->>>>>>> 03e1de781b186a574a10b9d6117f43ea6dda3fea
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/branch-closures/closed' {...this.props} authed={this.props.user} component={OrganizationBranchesClosed} /> */}
             {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/centers' {...this.props} authed={this.props.user} component={OrganizationCenters} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/organization/new-centers' {...this.props} authed={this.props.user} component={NewCenter} />  */}

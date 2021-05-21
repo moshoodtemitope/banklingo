@@ -191,10 +191,10 @@ function searchForCustomer(params) {
 
 }
 
-function fetchManadate(params) {
+function fetchManadate(params, isaccountInfo) {
     if(params!=="CLEAR"){
         return dispatch => {
-
+            console.log("hahaha laiko", isaccountInfo)
             let consume = ApiService.request(routes.HIT_CLIENTS+`/${params}`, "GET", null);
             dispatch(request(consume));
             return consume
@@ -208,7 +208,28 @@ function fetchManadate(params) {
                             dispatch(request(consume3));
                             return consume3
                                 .then(response3 => {
-                                    dispatch(success(response,response2,response3));
+                                    // dispatch(success(response, response2, response3));
+                                    if (isaccountInfo) {
+                                        let consume4;
+                                        if (isaccountInfo.searchItemType === 3) {
+                                            consume4 = ApiService.request(routes.HIT_DEPOSITS + `/${isaccountInfo.searchItemEncodedKey}`, "GET", null);
+                                        }
+
+                                        if (isaccountInfo.searchItemType === 2) {
+                                            consume4 = ApiService.request(routes.HIT_LOAN + `/loandetails/${isaccountInfo.searchItemEncodedKey}`, "GET", null);
+                                        }
+
+                                        dispatch(request(consume4));
+                                        return consume4
+                                            .then(response4 => {
+                                                dispatch(success(response, response2, response3, response4));
+                                            }).catch(error => {
+
+                                                dispatch(failure(handleRequestErrors(error)));
+                                            });
+                                    }else{
+                                        dispatch(success(response, response2, response3));
+                                    }
                                 }).catch(error => {
 
                                     dispatch(failure(handleRequestErrors(error)));
@@ -234,7 +255,7 @@ function fetchManadate(params) {
 
 
     function request(user) { return { type: dashboardConstants.FETCH_MANDATE_PENDING, user } }
-    function success(response,response2,response3) { return { type: dashboardConstants.FETCH_MANDATE_SUCCESS, response,response2,response3 } }
+    function success(response,response2,response3, response4) { return { type: dashboardConstants.FETCH_MANDATE_SUCCESS, response,response2,response3, response4 } }
     function failure(error) { return { type: dashboardConstants.FETCH_MANDATE_FAILURE, error } }
     function clear() { return { type: dashboardConstants.FETCH_MANDATE_RESET, clear_data:""} }
 
