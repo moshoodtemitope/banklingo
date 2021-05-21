@@ -54,7 +54,6 @@ class DashboardLanding extends React.Component {
         this.selectRef2 = null;
         this.selectRef3 = null;
         this.selectRef4 = null;
-console.log('dashboard load');
         this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
 
         this.allUSerPermissions = [];
@@ -397,6 +396,50 @@ console.log('dashboard load');
 
 
 
+
+//     renderAccountSearch=()=>{
+
+//         return (  <div><Form
+//             className='one-liner'
+//             onSubmit={(e) => {}}
+
+//           >
+//               {/* this.searchTxtn(e, saveRequestData) */}
+//             <Form.Group
+//               controlId='filterDropdown'
+//               className='no-margins pr-10'
+//             >
+//               <Form.Control as='select' size='sm'>
+//                 {/* <option>No Filter</option> */}
+//                 <option>Deposit Account</option>
+//                 <option>Loan Account</option>
+//               </Form.Control>
+//             </Form.Group>
+
+//             <Form.Group className='table-filters'>
+             
+//               <input
+//                 type='text'
+//                 className='form-control-sm search-table form-control'
+//                 placeholder='Search text'
+//                 value={this.state.SearchText}
+//                 onChange={(e) => {
+//                   this.setState({ SearchText: e.target.value.trim() });
+//                 }}
+//               />
+//               {/* {errors.startDate && touched.startDate ? (
+// <span className="invalid-feedback">{errors.startDate}</span>
+// ) : null} */}
+//             </Form.Group>
+//             <Button
+//               className='no-margins'
+//               variant='primary'
+//               type='submit'
+//             >
+//               Filter
+//             </Button>
+//           </Form></div>);
+//     }
 
     renderOpenTillWrap = ()=>{
         if(this.props.fetchAllTillsReducer.request_status===dashboardConstants.GET_ALL_TILLS_SUCCESS){
@@ -1158,7 +1201,7 @@ console.log(customerDetails);
                         </div>
 
                         <div className="each-detail">
-                            <div className="detail-title">Full naame</div>
+                            <div className="detail-title">Full name</div>
                             <div className="detail-value">{customerDetails.groupName}</div>
                         </div>
 
@@ -1592,6 +1635,44 @@ console.log(customerDetails);
         return "No Customers found"
     }
 
+    renderSuccessTillTransactions = ()=>{
+        if(this.props.fetchTillTransactionsReducer.request_status !==dashboardConstants.GET_TILL_TRANSACTIONS_SUCCESS){
+        
+            return null;
+        }
+
+        return (<div className="log-info">
+        <table className="table txtn-log">
+
+            <tbody>
+                {
+                    this.props.fetchTillTransactionsReducer?.request_data?.response?.data?.result.map((eachData, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>{eachData.dateCreated}</td>
+                                <td>{eachData.userName}</td>
+                                <td>{eachData.typeDescription}</td>
+                                <td>{eachData.tillId}</td>
+                                <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
+                            </tr>
+                        )
+                    })
+                }
+            </tbody>
+        </table>
+    </div>);
+    }
+
+
+    renderFailedTillTransactions = ()=>{
+    }
+    renderPendingTillTransactions = ()=>{
+        return (  <div className="log-info">
+                                    
+        <div className="loading-text">Please wait...</div>
+    
+    </div>);
+    }
     renderTillTransactions = ()=>{
         let fetchTillTransactionsRequest =  this.props.fetchTillTransactionsReducer
 
@@ -2095,6 +2176,8 @@ console.log(customerDetails);
                                             <div className="withasync">
                                                 <Form.Label className="block-level">Client </Form.Label>
                                                 <div>
+
+                                            
                                                     <div>
 
                                                         <AsyncSelect
@@ -2184,6 +2267,9 @@ console.log(customerDetails);
                                             </div>
 
                                         </Form.Group>
+
+
+                                        
                                         {/* {this.state.selectedOption && */}
                                             <Form.Group>
                                                 <Form.Label className="block-level">Transaction</Form.Label>
@@ -2723,7 +2809,24 @@ return (<div className="each-card-content">
                 <div className="each-card mt-20">
                     <div className="each-card-heading">
                         <h4>Teller Management</h4>
-                        <div className="table-helper mb-10">
+
+                        <div className="card-actions at-end">
+                            <div className="each-cardaction" onClick={this.showOpenTill}>
+                                <div className="cardaction-ico">
+                                    <img src={AddIco} alt="" />
+                                </div>
+                                <div className="cardaction-txt">Open Till</div>
+                            </div>
+                        </div>
+
+                                    
+                                   
+                    </div>
+
+                    <div className="each-card-heading">
+                    <h4> </h4>
+                    
+                    <div className="table-helper mb-10">
                                         <input type="checkbox" name="" 
                                              onChange={(e)=>{this.setState({includeClosed:e.target.checked},()=>{this.fetchAllTills();});}}
                                            
@@ -2731,7 +2834,10 @@ return (<div className="each-card-content">
                                             id="showFullDetails" />
                                         <label htmlFor="showFullDetails">Include closed Till?</label>
                                     </div>
-                    </div>
+                    
+</div>
+             
+                    {/* {this.renderAccountSearch()} */}
                    {this.renderManageTellersPending()}
                    {this.renderManageTellersSuccess()}
                    {this.renderManageTellersFailure()}
@@ -3071,6 +3177,8 @@ return (<div className="each-card-content">
                     />
                 </div>
                 <div className="dashboard-section">
+               
+              
                     {this.renderTellerManagement()}
                 </div>
                 
@@ -3122,29 +3230,6 @@ return (<div className="each-card-content">
                         {this.state.closeViewAccount && this.renderViewAccountWrap(this.state.selectedCustomer)}
                             <div className="content-container">
                                 {this.renderDashboardWrap()}
-                                {/* <div className="row">
-                                    <div className="col-sm-12">
-                                        <div className="middle-content">
-                                            <div className="row">
-                                                <div className="col-sm-8">
-                                                    <div className="dashboardstats">
-                                                        <div className="all-stats-wrap">
-                                                            {this.renderDashboardStats()}
-                                                           
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-sm-4">
-                                                    <div className="activities-items">
-                                                        <h6>Latest Activity </h6>
-                                                        {this.renderLoggedInUserActivities()}
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> */}
                             </div>
                         </div>
                     </div>
