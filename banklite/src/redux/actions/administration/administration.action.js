@@ -20,7 +20,10 @@ export const administrationActions = {
     getAllPermissions,
     getOrganizationDetails,
     updateOrganizationDetails,
-  
+    
+    getInterBranchTransferList,
+    interbranchGlActions,
+
     getTransactionChannels,
     addTransactionChannel,
     updateTransactionChannel,
@@ -303,6 +306,96 @@ function success(response) { return { type: administrationConstants.GET_ORGANIZA
 function failure(error) { return { type: administrationConstants.GET_ORGANIZATION_DETAILS_FAILURE, error } }
 
 }
+
+function getInterBranchTransferList() {
+
+    return dispatch => {
+
+        let consume = ApiService.request(`${routes.GET_BRANCHES}/allowedbranches`, "GET", null);
+        dispatch(request(consume));
+        return consume
+            .then(response => {
+                let consume2 = ApiService.request(routes.INTER_BRANCH_GL, "GET", null);
+                dispatch(request(consume2));
+                return consume2
+                    .then(response2 => {
+                        let consume3 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
+                        dispatch(request(consume3));
+                        return consume3
+                            .then(response3 => {
+                                let consume4 = ApiService.request(routes.ALL_GLACCOUNTS, "GET", null);
+                                dispatch(request(consume4));
+                                return consume4
+                                    .then(response4 => {
+                                        dispatch(success(response, response2, response3, response4));
+                                    }).catch(error => {
+
+                                        dispatch(failure(handleRequestErrors(error)));
+                                    });
+                            }).catch(error => {
+
+                                dispatch(failure(handleRequestErrors(error)));
+                            });
+
+                    }).catch(error => {
+
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+
+            }).catch(error => {
+
+                dispatch(failure(handleRequestErrors(error)));
+            });
+
+    }
+
+
+    function request(user) { return { type: administrationConstants.GET_ALL_INTER_BRANCH_GL_PENDING, user } }
+    function success(response, response2, response3, response4) { return { type: administrationConstants.GET_ALL_INTER_BRANCH_GL_SUCCESS, response, response2, response3, response4 } }
+    function failure(error) { return { type: administrationConstants.GET_ALL_INTER_BRANCH_GL_FAILURE, error } }
+
+}
+
+function interbranchGlActions   (requestPayload, action){
+    if(requestPayload!=="CLEAR"){
+        return dispatch =>{
+            let consume;
+
+            console.log("laala", requestPayload)
+            if(action==="create"){
+                consume = ApiService.request(`${routes.INTER_BRANCH_GL}/addinterbranch`, "POST", requestPayload);
+            }
+
+            if(action==="remove"){
+                consume = ApiService.request(`${routes.INTER_BRANCH_GL}/removeinterbranchcontrol`, "POST", requestPayload);
+            }
+            
+            dispatch(request(consume));
+            return consume
+                .then(response =>{
+                    dispatch(success(response));
+                }).catch(error =>{
+                    
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+            
+        }
+        
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+    function request(user) { return { type: administrationConstants.INTER_BRANCHGL_ACTION_PENDING, user } }
+    function success(response) { return { type: administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS, response } }
+    function failure(error) { return { type: administrationConstants.INTER_BRANCHGL_ACTION_FAILURE, error } }
+    function clear() { return { type: administrationConstants.INTER_BRANCHGL_ACTION_RESET, clear_data:""} }
+
+}
+
 
 function updateOrganizationDetails   (updateOrgPayload){
     if(updateOrgPayload!=="CLEAR"){

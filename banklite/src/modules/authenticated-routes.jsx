@@ -65,40 +65,46 @@ import LoanPAR from "./loan-PAR";
 import DepositTransactionsManagement from "./deposittransactions/deposit-transaction-account";
 import LoanTransactionsManagement from "./loantransactions/loan-account-transactions";
 // import DepositTransactions from './deposittransactions'
-import DepositTransactionAccount from "./deposittransactions/deposit-transaction-account";
-import Activties from "./activities";
-import BranchesManagement from "./branches";
-import UserManagement from "./usermanagement";
+import DepositTransactionAccount from './deposittransactions/deposit-transaction-account'
+import Activties from './activities'
+import BranchesManagement from './branches'
+import UserManagement from './usermanagement'
 
-import CommunicationsManagement from "./communications";
-import EmailCommunications from "./communications/emails";
-import SMSCommunications from "./communications/sms";
-import WebhooksCommunications from "./communications/webhooks";
 
-import AccountManagement from "./accountsmanagement";
-import TrialBalanceBasic from "./accountsmanagement/trial-balance-basic";
-import TrialBalance from "./accountsmanagement/trial-balance";
-import JournalEntries from "./accountsmanagement/journal-entries";
-import ProfitAndLoss from "./accountsmanagement/profit-loss";
-import BalanceSheet from "./accountsmanagement/balance-sheet";
+import CommunicationsManagement from './communications'
+import EmailCommunications from './communications/emails'
+import SMSCommunications from './communications/sms'
+import WebhooksCommunications from './communications/webhooks'
 
-import AdminManagement from "./administration";
+import AccountManagement from './accountsmanagement'
+import TrialBalanceBasic from './accountsmanagement/trial-balance-basic'
+import TrialBalance from './accountsmanagement/trial-balance'
+import JournalEntries from './accountsmanagement/journal-entries'
+import ProfitAndLoss from './accountsmanagement/profit-loss'
+import BalanceSheet from './accountsmanagement/balance-sheet'
 
-import UploadData from "./administration/uploaddata";
 
-import GeneralOrganization from "./administration/general-organization";
-import RiskLevels from "./administration/general-risks-levels";
-import Notifications from "./administration/general-notifications";
-import TransactionServices from "./administration/general-transaction-services";
+import AdminManagement from './administration'
 
-import ManageCustomerWhitelist from "./platform/customer-whitelist";
-import ManageCompanyInfo from "./platform/company-info";
-import ManageEmployeeInfo from "./platform/employee-info";
-import ManageBankInfo from "./platform/bank-info";
+import UploadData from './administration/uploaddata'
 
-import GeneralCurrency from "./administration/general-currency";
-import GeneralTxtChannels from "./administration/general-txtchannels";
-import NewTxtChannels from "./administration/general-txtchannels-new";
+import GeneralOrganization from './administration/general-organization'
+import RiskLevels from './administration/general-risks-levels'
+import Notifications from './administration/general-notifications'
+import TransactionServices from './administration/general-transaction-services'
+import InterbranchGlAccounting from './administration/general-interbranch-accounting'
+
+
+import ManageCustomerWhitelist from './platform/customer-whitelist'
+import ManageCompanyInfo from './platform/company-info'
+import ManageEmployeeInfo from './platform/employee-info'
+import ManageBankInfo from './platform/bank-info'
+
+
+
+import GeneralCurrency from './administration/general-currency'
+import GeneralTxtChannels from './administration/general-txtchannels'
+import NewTxtChannels from './administration/general-txtchannels-new'
 //import GeneralCustomerTypes from './administration/customertypes/general-customertypes'
 import CustomerTypesAdministration from "./administration/customertypes/customertypes-management-list";
 import GeneralInternalControl from "./administration/general-internalcontrol";
