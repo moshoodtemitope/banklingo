@@ -95,6 +95,7 @@ import GeneralOrganization from './administration/general-organization'
 import RiskLevels from './administration/general-risks-levels'
 import Notifications from './administration/general-notifications'
 import TransactionServices from './administration/general-transaction-services'
+import InterbranchGlAccounting from './administration/general-interbranch-accounting'
 
 
 import ManageCustomerWhitelist from './platform/customer-whitelist'
@@ -422,6 +423,7 @@ class AuthenticatedRoutes extends React.Component {
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/risk-levels' {...this.props} authed={this.props.user} component={RiskLevels} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/notifications' {...this.props} authed={this.props.user} component={Notifications} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/transaction' {...this.props} authed={this.props.user} component={TransactionServices} />
+                        <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/interbranch-accounting' {...this.props} authed={this.props.user} component={InterbranchGlAccounting} />
 
 
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/administration/general/currency' {...this.props} authed={this.props.user} component={GeneralCurrency} />

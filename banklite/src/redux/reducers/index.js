@@ -87,6 +87,8 @@ const administrationReducers = combineReducers({
   getBranchesClosedReducer: administration.getBranchesClosedReducer,
   openABranchReducer: administration.openABranchReducer,
   closeABranchReducer: administration.closeABranchReducer,
+  getInterBranchTransferListReducer: administration.getInterBranchTransferListReducer,
+  interbranchGlActionsReducer: administration.interbranchGlActionsReducer,
 });
 
 const accountingReducers = combineReducers({
