@@ -84,6 +84,11 @@ export const LockAmountStateConstants = {
   LOCKED: 0,
 };
 
+export const TypeConstant = {
+  INDIVIDUAL_CLIENT: 0,
+  GROUP_CLIENT: 1,
+};
+
 // public enum DepositAccountTypeEnum
 // {
 //     All = 0,

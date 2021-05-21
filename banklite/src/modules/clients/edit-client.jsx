@@ -319,7 +319,7 @@ class EditAClient extends React.Component {
               monthlySalary:numberWithCommas(
                       allCustomerData.employeeInfo?.monthlySalary,
                       true
-                    ),
+                    )??"",
               employeeSector:
                 allCustomerData.employeeInfo?.employeeSector?? "",
               employeeSubSector:
@@ -507,6 +507,7 @@ class EditAClient extends React.Component {
                   <Col>
                     <Form.Label className='block-level'>Biometric ID</Form.Label>
                     <Form.Control
+                    placeholder="(Optional)"
                       type='text'
                       name='BVN'
                       onChange={handleChange}
@@ -601,7 +602,20 @@ class EditAClient extends React.Component {
                     </Form.Group>
                   </Col>
                 </Form.Row>
-                <Form.Row>
+                
+
+                <Accordion defaultActiveKey='0'>
+                  <Accordion.Toggle
+                    className='accordion-headingLink'
+                    as={Button}
+                    variant='link'
+                    eventKey='0'
+                  >
+                    Association
+                  </Accordion.Toggle>
+                  <Accordion.Collapse eventKey='0'>
+                    <div className='each-formsection'>
+                    <Form.Row>
                   <Col>
                     <Form.Label className='block-level'>
                       Customer branch
@@ -671,6 +685,10 @@ class EditAClient extends React.Component {
                     ) : ""}
                   </Col>
                 </Form.Row>
+                    </div>
+                  </Accordion.Collapse>
+                </Accordion>
+                
                 <Accordion defaultActiveKey='0'>
                   <Accordion.Toggle
                     className='accordion-headingLink'

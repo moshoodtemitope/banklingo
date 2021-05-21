@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import  TableComponent from '../../../shared/elements/table'
 import "../customerprofile.scss"; 
+import { ClientClassificationConstants } from "../../../redux/actions/clients/client-states-constants";
 
 
 export class GeneralInfomationSection extends React.Component {
@@ -80,6 +81,21 @@ export class GeneralInfomationSection extends React.Component {
                 <tr>
                     <td>Customer State</td>
                     <td>{customerDetails?.clientStateDescription}</td>
+                </tr>
+            }
+
+{(customerDetails.clientClassification===ClientClassificationConstants.GROUP) &&
+                <tr>
+                    <td>Registration Number</td>
+                    <td>{customerDetails?.businessNumber??"Not Specified"}</td>
+                </tr>
+            }
+
+            
+{(customerDetails.clientClassification===ClientClassificationConstants.GROUP) &&
+                <tr>
+                    <td>Tax Id</td>
+                    <td>{customerDetails?.taxId??"Not Specified"}</td>
                 </tr>
             }
 

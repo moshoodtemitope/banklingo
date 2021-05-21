@@ -10,7 +10,7 @@ import  InnerPageContainer from '../../shared/templates/authed-pagecontainer'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
-
+import Accordion from 'react-bootstrap/Accordion'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -351,6 +351,42 @@ class GeneralInternalControl extends React.Component {
                                             </Col>
             
                                         </Form.Row>
+
+                                        
+                                        <Form.Row>
+                                            <Col>
+                                            
+                                            <Accordion defaultActiveKey="0">
+                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                    Duplicates Check                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <div className="each-formsection">
+                                        <Form.Group>
+                                            {/* <Col> */}
+                                            <div className="heading-with-cta toright compact">
+                                <div className="eachitem">
+                                    <input type="checkbox" name="" id="opening-balance" />
+                                    <label htmlFor="opening-balance">Unique Mobile Number</label>
+                                </div>
+                                <div className="eachitem">
+                                    <input type="checkbox" name="" id="net-change" />
+                                    <label htmlFor="net-change">Unique Email</label>
+                                </div>
+                                <div className="eachitem">
+                                    <input type="checkbox" name="" id="closing-balance" />
+                                    <label htmlFor="closing-balance">Unique (Email and Mobile)</label>
+                                </div>
+                            </div>
+                                            {/* </Col> */}
+                                             
+                                        </Form.Group>
+                                    </div>
+                                </Accordion.Collapse>
+                            </Accordion>
+
+                                            </Col>
+                                        </Form.Row>
+
                                         <div className="form-ctas horizontal">
                                             <Button variant="success" className="mr-20px" type="submit"
                                                 disabled={adminInternalControlRequest.is_request_processing}    
