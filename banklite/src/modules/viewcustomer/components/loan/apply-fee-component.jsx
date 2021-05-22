@@ -325,15 +325,20 @@ export class ApplyFeeModal extends React.Component {
                             scheduleFeeApplicationModels: this.scheduleFeeApplicationModels.length>=1?this.scheduleFeeApplicationModels: null
                             
                         }
-
+                        this.totalFeeUpdated = 0;
                         this.scheduleFeeApplicationModels.map(eachFee=>{
                             this.totalFeeUpdated  += eachFee.feeAmount
                         })
-                        
 
-                        this.setState({
-                            totalFeeError: changeLoanStatePayload.feeAmount !== this.totalFeeUpdated
-                        })
+                        console.log("here now", this.totalFeeUpdated)
+                        
+                        if(this.totalFeeUpdated > 0){
+                            this.setState({
+                                totalFeeError: changeLoanStatePayload.feeAmount !== this.totalFeeUpdated
+                            })
+                        }else{
+                            this.totalFeeUpdated =parseFloat(values.feeAmount.replace(/,/g, ''))
+                        }
 
                        
 
