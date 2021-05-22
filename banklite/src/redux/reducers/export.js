@@ -60,6 +60,8 @@ import {
   createARiskLevel,
   updateARiskLevel,
   fetchAllTasksReducer,
+  getInterBranchTransferListReducer,
+  interbranchGlActionsReducer
 } from "./administration/administration.reducer";
 
 import {
@@ -323,6 +325,8 @@ export const administration = {
   createARiskLevel,
   updateARiskLevel,
   fetchAllTasksReducer,
+  getInterBranchTransferListReducer,
+  interbranchGlActionsReducer
 };
 
 export const accounting = {

@@ -61,6 +61,9 @@ export const routes = {
   UPDATE_ORGANIZATION_DETAILS:
     BASEURL + "/api/Administration/updateorganization",
 
+
+    INTER_BRANCH_GL: BASEURL + "/api/Interbranch",
+
   ADD_CURRENCY: BASEURL + "/api/Administration/currency",
   UPDATE_CURRENCY: BASEURL + "/api/Administration/updatecurrency",
   GET_ALL_CURRENCIES: BASEURL + "/api/Administration/currencies",

@@ -1790,3 +1790,63 @@ export function fetchAllTasksReducer(state=[], action) {
             return { ...state }
     }
 }
+
+
+export function getInterBranchTransferListReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.GET_ALL_INTER_BRANCH_GL_PENDING:
+            return {
+                request_status: administrationConstants.GET_ALL_INTER_BRANCH_GL_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_INTER_BRANCH_GL_SUCCESS:
+            return {
+                request_status: administrationConstants.GET_ALL_INTER_BRANCH_GL_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.GET_ALL_INTER_BRANCH_GL_FAILURE:
+            return {
+                request_status: administrationConstants.GET_ALL_INTER_BRANCH_GL_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+
+        default:
+            return { ...state }
+    }
+}
+
+export function interbranchGlActionsReducer(state=[], action) {
+    switch (action.type) {
+        case administrationConstants.INTER_BRANCHGL_ACTION_PENDING:
+            return {
+                request_status: administrationConstants.INTER_BRANCHGL_ACTION_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS:
+            return {
+                request_status: administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.INTER_BRANCHGL_ACTION_FAILURE:
+            return {
+                request_status: administrationConstants.INTER_BRANCHGL_ACTION_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case administrationConstants.INTER_BRANCHGL_ACTION_RESET:
+            return {
+                request_status: administrationConstants.INTER_BRANCHGL_ACTION_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+
+}
