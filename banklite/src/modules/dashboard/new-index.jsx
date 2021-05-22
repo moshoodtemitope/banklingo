@@ -1151,7 +1151,7 @@ class DashboardLanding extends React.Component {
 
             customerBvnPassport = mandateInfo.response3.data,
             manadateData = mandateInfo.response2.data;
-console.log(customerDetails);
+// console.log(customerDetails);
                 
         return(
             <div className="slidein-wrap">
@@ -1200,11 +1200,12 @@ console.log(customerDetails);
                                 </Button> */}
                             </div>
                         </div>
-
-                        <div className="each-detail">
-                            <div className="detail-title">Full name</div>
-                            <div className="detail-value">{customerDetails.groupName}</div>
-                        </div>
+                        {customerDetails.groupName &&
+                            <div className="each-detail">
+                                <div className="detail-title">Full name</div>
+                                <div className="detail-value">{customerDetails.groupName}</div>
+                            </div>
+                        }
 
                         <div className="each-detail">
                             <div className="detail-title">First name</div>
@@ -1248,13 +1249,26 @@ console.log(customerDetails);
                                 
                             </div>
                         }
-                        <div className="each-detail">
+                        {/* <div className="each-detail">
                             <div className="detail-title">Account Balance</div>
                             <div className="detail-value">{numberWithCommas(customerDetails.totalBalance, true)}</div>
-                        </div>
+                        </div> */}
                         <div className="each-detail">
                             <div className="detail-title">Date Registered</div>
-                            <div className="detail-value">{customerDetails.createdDate}</div>
+                            {
+                                (mandateInfo.response4.data.dateCreated) &&
+                                <div className="detail-value">
+                                    {mandateInfo.response4.data.dateCreated.indexOf("T")==-1
+                                    ? 
+                                    mandateInfo.response4.data.dateCreated
+                                    : getDateFromISO(mandateInfo.response4.data.dateCreated)}
+                                </div>
+                            }
+                            {/* {
+                                (mandateInfo.response4.data.totalBalance) &&
+                                <div className="detail-value">{numberWithCommas(mandateInfo.response4.data.totalBalance, true)}</div>
+                            } */}
+                            {/* <div className="detail-value">{customerDetails.createdDate}</div> */}
                         </div>
                         <div className="each-detail">
                             <div className="detail-title">Phone number</div>
@@ -1479,7 +1493,7 @@ console.log(customerDetails);
     initiateAccountSearch = (inputValue) => {
         this.setState({
             defaultAccountOptions: "",
-            selectOtherCustomerAccount: "",
+            selectOtherCustomerAccount: null,
             // firstChosenTransferCriteria:"accounts",
             isCustommerAccountsFetchedWithKey: ""
         });
@@ -1536,7 +1550,7 @@ console.log(customerDetails);
 
 
                     searchResults = searchResults.filter(eachResult => eachResult.searchItemType === 0);
-                    console.log("search items", searchResults);
+                    // console.log("search items", searchResults);
                     this.setState({ defaultOptions: searchResults })
 
 
@@ -1571,6 +1585,9 @@ console.log(customerDetails);
 
     loadCustomerAccounts = (selectedClientEncodedKey, isCustomer, isaccountInfo) => {
         let searchForAccountsWithCustomerKeyRequest = this.props.searchForAccountsWithCustomerKeyReducer;
+       
+
+       
         if (isCustomer) {
             this.getAccountsOfSelectedCustomer(selectedClientEncodedKey)
                 .then(
@@ -1597,23 +1614,34 @@ console.log(customerDetails);
                 )
         }
 
-        // console.log("ja ji ja", )
+       
+        if(this.state.selectOtherCustomerAccount){
+            this.fetchMandateOfSelectedCustomer(selectedClientEncodedKey, isaccountInfo)
+                .then(() => {
+                    if (this.props.fetchManadateReducer.request_status === dashboardConstants.FETCH_MANDATE_SUCCESS) {
+                            let clientData = this.props.fetchManadateReducer.request_data.response.data,
+                                optionData = {
+                                    clientName: `${clientData.firstName} ${clientData.lastName} ${clientData.middleName||""}`,
+                                    clientEncodedKey: clientData.clientEncodedKey
+                                };
 
-        this.fetchMandateOfSelectedCustomer(selectedClientEncodedKey, isaccountInfo)
-            .then(() => {
-                if (this.props.fetchManadateReducer.request_status === dashboardConstants.FETCH_MANDATE_SUCCESS) {
-                    this.setState({
-                        showMandateLink: true,
-                        mandateInfo: this.props.fetchManadateReducer.request_data,
-                        // selectedCustomer: {
-                        //                     clientEncodedKey: this.props.fetchManadateReducer.request_data.response.data.clientEncodedKey,
-                        //                     clientName: `${this.props.fetchManadateReducer.request_data.response.data.firstName} ${this.props.fetchManadateReducer.request_data.response.data.lastName}`
 
-                        //                     }
-                    })
-                }
-            })
+                        this.getSearchOptionForCustomerLabel(optionData)
+                        this.getSearchForCustomerOptionValue(optionData)
+                        this.setState({
+                            loadingMandate: false,
+                            showMandateLink: true,
+                            mandateInfo: this.props.fetchManadateReducer.request_data,
+                            selectedCustomer: optionData
+                            // selectedCustomer: {
+                            //                     clientEncodedKey: this.props.fetchManadateReducer.request_data.response.data.clientEncodedKey,
+                            //                     clientName: `${this.props.fetchManadateReducer.request_data.response.data.firstName} ${this.props.fetchManadateReducer.request_data.response.data.lastName}`
 
+                            //                     }
+                        })
+                    }
+                })
+        }
     }
 
     getAccountsOfSelectedCustomer = async (selectedClientEncodedKey) => {
@@ -1637,27 +1665,34 @@ console.log(customerDetails);
         
         
         // console.log("customer is", inputValue);
-        this.loadCustomerAccounts(customer.clientEncodedKey, true);
         this.setState({
             selectedCustomer: customer,
             selectACustomerAccount: customer,
             // firstChosenTransferCriteria:"customer",
-            selectOtherCustomerAccount: ""
-        });
+            showMandateLink:false,
+            selectOtherCustomerAccount: null,
+            defaultAccountOptions:null
+        },()=> this.loadCustomerAccounts(customer.clientEncodedKey, true));
+        
+        
 
     }
 
     handleSelectedAccount = (inputValue) => {
 
 
-        console.log("ikeee is", inputValue);
+        // console.log("ikeee is", inputValue);
+        this.setState({loadingMandate:true})
         this.loadCustomerAccounts(inputValue.clientEncodedKey, false, inputValue);
 
 
     }
 
     getSearchForCustomerOptionValue = (option) => option.clientEncodedKey;
-    getSearchOptionForCustomerLabel = (option) => option.clientName || option.searchText;
+    getSearchOptionForCustomerLabel = (option) => {
+        
+      return  option.clientName || option.searchText
+    };
 
     getSearchForAccountOptionValue = (option) => option.searchItemEncodedKey; // maps the result 'id' as the 'value'
     getSearchOptionForAccountLabel = (option) => `${option.searchText} ${option.searchKey}`; // maps the result 'name' as the 'label'
@@ -2231,6 +2266,7 @@ console.log(customerDetails);
                                                             onChange={(e) => {
 
                                                                 setFieldValue("clientEncodedKey", e.clientEncodedKey)
+                                                                // this.setState({showMandateLink:false})
                                                                 this.handleSelectedCustomer(e)
 
                                                             }}
@@ -2241,7 +2277,7 @@ console.log(customerDetails);
                                                             //     values.clientEncodedKey = selectedCustomer.value
                                                             //     setFieldValue('clientEncodedKey', selectedCustomer.value);
                                                             // }}
-                                                            onInputChange={this.handleSearchCustomerChange}
+                                                            // onInputChange={this.handleSearchCustomerChange}
                                                         />
 
 
@@ -2270,24 +2306,30 @@ console.log(customerDetails);
                                                                 className={errors.chosenAccountNum && touched.chosenAccountNum ? "is-invalid" : ""}
                                                                 onChange={(selectedOption) => {
                                                                     setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
-                                                                    // console.log("calleded", selectedOption)
+                                                                    console.log("calleded", selectedOption)
 
-                                                                    if (values.clientEncodedKey === "") {
-                                                                        setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
-                                                                        this.handleSelectedAccount(selectedOption)
-                                                                    }
+                                                                    this.setState({
+                                                                        selectedOption,
+                                                                        // selectedCustomer: selectedOption,
+                                                                        showMandateLink:false,
+                                                                        selectOtherCustomerAccount: selectedOption,
+
+                                                                    }, ()=>{
+                                                                        // if (values.clientEncodedKey === "") {
+                                                                            // console.log("was here")
+                                                                            setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
+                                                                            this.handleSelectedAccount(selectedOption)
+                                                                        // }
+                                                                    });
+
+                                                                    
 
                                                                     // this.getSearchOptionForCustomerLabel(selectedOption)
                                                                     // this.getSearchForCustomerOptionValue(selectedOption)
                                                                     // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
 
 
-                                                                    this.setState({
-                                                                        selectedOption,
-                                                                        selectedCustomer: selectedOption,
-                                                                        selectOtherCustomerAccount: selectedOption,
-
-                                                                    });
+                                                                    
 
                                                                 }} />
 
@@ -2295,6 +2337,8 @@ console.log(customerDetails);
                                                                 <span className="invalid-feedback">{errors.chosenAccountNum}</span>
                                                             ) : null}
                                                         </div>
+
+                                                        {(this.state.loadingMandate) && <span>Loading...</span>}
                                                         {(this.state.showMandateLink && values.chosenAccountNum !== "") && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
                                                         {/* {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>} */}
                                                     </div>
@@ -2421,6 +2465,7 @@ console.log(customerDetails);
                                                                 onChange={(e) => {
 
                                                                     setFieldValue("clientEncodedKey", e.clientEncodedKey)
+                                                                    this.setState({showMandateLink:false})
                                                                     this.handleSelectedCustomer(e)
 
                                                                 }}
@@ -2431,7 +2476,7 @@ console.log(customerDetails);
                                                                 //     values.clientEncodedKey = selectedCustomer.value
                                                                 //     setFieldValue('clientEncodedKey', selectedCustomer.value);
                                                                 // }}
-                                                                onInputChange={this.handleSearchCustomerChange}
+                                                                // onInputChange={this.handleSearchCustomerChange}
                                                             />
 
 
@@ -2464,29 +2509,28 @@ console.log(customerDetails);
                                                                     setFieldValue('chosenAccountNum', selectedOption.searchItemEncodedKey);
                                                                     errors.chosenAccountNum = null;
                                                                     touched.chosenAccountNum = null;
-                                                                    // console.log("calleded", selectedOption)
-                                                                    // setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
-                                                                    // this.handleSelectedAccount(selectedOption)
-                                                                    if (values.clientEncodedKey === "") {
-                                                                        setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
-                                                                        this.handleSelectedAccount(selectedOption)
-                                                                    } else {
 
+                                                                    this.setState({
+                                                                        selectedOption,
+                                                                        selectedCustomer: selectedOption,
+                                                                        showMandateLink:false,
+                                                                        selectOtherCustomerAccount: selectedOption,
 
-
-                                                                    }
+                                                                    }, ()=>{
+                                                                        // if (values.clientEncodedKey === "") {
+                                                                            setFieldValue("clientEncodedKey", selectedOption.clientEncodedKey)
+                                                                            this.handleSelectedAccount(selectedOption)
+                                                                        // } 
+                                                                    });
+                                                                    
+                                                                    
 
                                                                     // this.getSearchOptionForCustomerLabel(selectedOption)
                                                                     // this.getSearchForCustomerOptionValue(selectedOption)
                                                                     // if (this.state.isCustommerAccountsFetchedWithKey !== true) {
 
 
-                                                                    this.setState({
-                                                                        selectedOption,
-                                                                        selectedCustomer: selectedOption,
-                                                                        selectOtherCustomerAccount: selectedOption,
-
-                                                                    });
+                                                                    
 
                                                                 }} />
 
@@ -2494,6 +2538,7 @@ console.log(customerDetails);
                                                                 <span className="invalid-feedback">{errors.chosenAccountNum}</span>
                                                             ) : null}
                                                         </div>
+                                                        {(this.state.loadingMandate) && <span>Loading...</span>}
                                                         {(this.state.showMandateLink && values.chosenAccountNum !== "") && <span onClick={() => { this.showViewCustomer() }}>View Account</span>}
                                                         {/* {this.state.selectedOption && <span onClick={() => { this.showViewAccount(this.state.selectedCustomer) }}>View Account</span>} */}
                                                     </div>
@@ -2909,33 +2954,16 @@ console.log(customerDetails);
                 allMyTills.push(eachtill.tillId)
             })
 
-                                            {allMyTills.length>=1 &&
-                                                <div className="select-tillid">
-                                                    <select id="tildId"
-                                                        onChange={(e)=>{
-                                                            let selectedTillData = allLoggedOnTills.filter(eachTill=>eachTill.tillId===e.target.value)[0];
-                                                            // console.log("zelect is", selectedTillData)
-                                                            this.fetchTillTransactions(e.target.value);
-                                                            this.setState({selectedTill: e.target.value, selectedTillData, preloadedTillData: false})
-                                                        }}
-                                                        name="selectedTill"
-                                                       // defaultValue={allMyTills.length>=1 ? allMyTills[0] : null}
-                                                        value={this.state.selectedTill}
-                                                    
-                                                        
-                                                        className="countdropdown form-control form-control-sm">
-                                                            
-                                                            {allMyTills.map((eachTill, index)=>{
-                                                                
-                                                                return(
-                                                                        <option  key={index} value={eachTill}>{eachTill}</option>
-                                                                    )
-                                                                })
-                                                            }
-                                                        
-                                                    </select>
-                                                </div>
-                                            }
+            return (
+                <div >
+                    {allMyTills.length >= 1 &&
+                        <div className="each-card">
+                            <div className="each-card-heading">
+                                <h4>Tellering</h4>
+                                <div className="tellerid-wrap">
+                                    {this.state.selectedTill &&
+                                        <div className="selected-id">
+                                            {this.state.selectedTill}
                                         </div>
                                     }
 
