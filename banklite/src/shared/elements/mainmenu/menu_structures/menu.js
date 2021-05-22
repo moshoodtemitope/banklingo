@@ -604,6 +604,12 @@ export const adminGeneralMenuList = [
     menuRoute: "/administration/general/txt-channels",
   },
   {
+    permissionName: "Manage Transaction Channels",
+    mainMenu: "InterBranch Accounting",
+    permissionCode: "bnk_manage_transaction_channels",
+    menuRoute: "/administration/general/interbranch-accounting",
+  },
+  {
     permissionName: "Manage Customer Types",
     mainMenu: "Customer Types",
     permissionCode: "bnk_manage_customer_types",
