@@ -1413,7 +1413,7 @@ class DashboardLanding extends React.Component {
 
     renderViewAccountWrap = (accountToView) => {
 
-        console.log("here now", this.props.fetchManadateReducer.request_data);
+        
         return (
             <div className="slidein-wrap">
                 <div className="slide-wrap-overlay"></div>

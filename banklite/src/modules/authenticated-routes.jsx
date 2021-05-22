@@ -1011,6 +1011,14 @@ class AuthenticatedRoutes extends React.Component {
               authed={this.props.user}
               component={ManageBankInfo}
             />
+            <PrivateRoute
+              accessRequired="bnk_manage_organisation"
+              exact
+              path="/administration/general/interbranch-accounting"
+              {...this.props}
+              authed={this.props.user}
+              component={InterbranchGlAccounting}
+            />
 
             {/* <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/platform/payroll-info' {...this.props} authed={this.props.user} component={Notifications} />
                         <PrivateRoute accessRequired="bnk_manage_organisation" exact path='/platform/bank-info' {...this.props} authed={this.props.user} component={TransactionServices} /> */}
