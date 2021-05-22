@@ -2809,7 +2809,7 @@ return (<div className="each-card-content">
                 <div className="each-card mt-20">
                     <div className="each-card-heading">
                         <h4>Teller Management</h4>
-
+{/* <!-- --> */}
                         <div className="card-actions at-end">
                             <div className="each-cardaction" onClick={this.showOpenTill}>
                                 <div className="cardaction-ico">
