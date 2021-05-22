@@ -2168,19 +2168,22 @@ class DashboardLanding extends React.Component {
                             if (values.txtnType === 2) {
                                 requestPayload.referenceID = values.referenceID
                                 requestPayload.remarks = values.remarks
-                                requestPayload.accountNumber = selectOtherCustomerAccount.searchKey
+                                requestPayload.accountNumber = this.state.mandateInfo.response4.data.accountNumber
+                                // requestPayload.accountNumber = selectOtherCustomerAccount.searchKey
                             }
 
                             if (values.txtnType === 3) {
                                 requestPayload.transactionReference = values.referenceID
                                 requestPayload.referenceID = values.referenceID
                                 requestPayload.notes = values.remarks
+                                requestPayload.accountNumber = this.state.mandateInfo.response4.data.accountNumber
                             }
 
                             if (values.txtnType === 4 || values.txtnType === 5) {
                                 delete requestPayload.accountEncodedKey;
                                 requestPayload.chequeNo = values.referenceID
-                                requestPayload.accountNumber = selectOtherCustomerAccount.searchKey
+                                requestPayload.accountNumber = this.state.mandateInfo.response4.data.accountNumber
+                                // requestPayload.accountNumber = selectOtherCustomerAccount.searchKey
                                 requestPayload.remarks = values.remarks
                                 requestPayload.referenceID = values.referenceID
                             }
@@ -2189,15 +2192,18 @@ class DashboardLanding extends React.Component {
 
                             if (values.txtnType === 6) {
                                 requestPayload = {
-                                    accountNumber: selectOtherCustomerAccount.searchKey,
+                                    accountNumber: this.state.mandateInfo.response4.data.accountNumber,
+                                    // accountNumber: selectOtherCustomerAccount.searchKey,
                                     externalReferenceId: values.referenceID
                                 }
                             }
+                            // console.log("txtn type", values.txtnType, this.state.mandateInfo)
 
                             this.postNewTransaction(requestPayload, transactionAction)
                                 .then(() => {
                                     if (this.props.postATransactionReducer.request_status === dashboardConstants.POST_TRANSACTION_SUCCESS) {
-                                        resetForm()
+                                        resetForm();
+                                        this.selectRef.select.clearValue();
                                         this.setState({ selectOtherCustomerAccount: null, selectedCustomer: null, showMandateLink: false })
                                         this.fetchTillTransactions(this.state.selectedTillData.tillId)
                                     }
@@ -2424,7 +2430,7 @@ class DashboardLanding extends React.Component {
                                                 <div className="footer-with-cta">
                                                     <Button
                                                         type="submit"
-                                                        disabled={postATransactionRequest.is_request_processing}
+                                                        disabled={postATransactionRequest.is_request_processing || this.props.fetchManadateReducer.is_request_processing}
                                                     >
 
                                                         {postATransactionRequest.is_request_processing ? "Please wait..." : "Post transaction"}
@@ -2640,7 +2646,7 @@ class DashboardLanding extends React.Component {
                                                 <div className="footer-with-cta">
                                                     <Button
                                                         type="submit"
-                                                        disabled={postATransactionRequest.is_request_processing}
+                                                        disabled={postATransactionRequest.is_request_processing || this.props.fetchManadateReducer.is_request_processing}
                                                     >
 
                                                         {postATransactionRequest.is_request_processing ? "Please wait..." : "Post transaction"}
