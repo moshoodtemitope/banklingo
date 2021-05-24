@@ -50,10 +50,10 @@ class DashboardLanding extends React.Component {
             txtOption:"cash"
         }
 
-        this.selectRef = null;
-        this.selectRef2 = null;
-        this.selectRef3 = null;
-        this.selectRef4 = null;
+        this.transactionTypeRef = null;
+        this.tellerSelectRef = null;
+        this.tellerCurrenciesRef = null;
+        this.constraintTypeRef = null;
         this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
 
         this.allUSerPermissions = [];
@@ -535,9 +535,9 @@ class DashboardLanding extends React.Component {
                                     this.handleOpenTill(requestPayload)
                                         .then(()=>{
                                             if(this.props.openATillReducer.request_status ===dashboardConstants.OPEN_A_TILL_SUCCESS){
-                                                this.selectRef2.select.clearValue();
-                                                this.selectRef3.select.clearValue();
-                                                this.selectRef4.select.clearValue();
+                                                this.tellerSelectRef.select.clearValue();
+                                                this.tellerCurrenciesRef.select.clearValue();
+                                                this.constraintTypeRef.select.clearValue();
                                                 resetForm()
                                                 this.getDashboardData();
                                             }
@@ -574,7 +574,7 @@ class DashboardLanding extends React.Component {
                                                 <Select
                                                     options={allTellers}
                                                     ref={ref => {
-                                                        this.selectRef2 = ref;
+                                                        this.tellerSelectRef = ref;
                                                     }}
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
@@ -599,7 +599,7 @@ class DashboardLanding extends React.Component {
                                                 <Select
                                                     options={allCurrencies}
                                                     ref={ref => {
-                                                        this.selectRef3 = ref;
+                                                        this.tellerCurrenciesRef = ref;
                                                     }}
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
@@ -669,7 +669,7 @@ class DashboardLanding extends React.Component {
                                                 <Select
                                                     options={allOptions}
                                                     ref={ref => {
-                                                        this.selectRef4 = ref;
+                                                        this.constraintTypeRef = ref;
                                                     }}
                                                     onChange={(selectedOption) => {
                                                         this.setState({ selectedOption });
@@ -2279,7 +2279,7 @@ console.log(customerDetails);
                                                         options={ allTxtn}
                                                         // options={this.state.selectedOption ? allTxtn : []}
                                                         ref={ref => {
-                                                            this.selectRef = ref;
+                                                            this.transactionTypeRef = ref;
                                                         }}
 
                                                         onChange={(selectedTxtn) => {
@@ -2303,7 +2303,7 @@ console.log(customerDetails);
                                             </Form.Group>
                                         {/* } */}
                                         <Form.Group className="mr-10">
-                                            <Form.Label className="block-level">Amount</Form.Label>
+                                            <Form.Label className="block-level">Amount <Badge variant="primary"> {this.state.selectedTillData?.currencyCode} </Badge> </Form.Label>
                                             <Form.Control type="text"
                                                 name="amount"
                                                 value={numberWithCommas(values.amount)}
@@ -2354,7 +2354,7 @@ console.log(customerDetails);
                                                 <Button variant="secondary"
                                                     disabled={postATransactionRequest.is_request_processing}
                                                     onClick={() => {
-                                                        this.selectRef.select.clearValue();
+                                                        this.transactionTypeRef.select.clearValue();
                                                         this.setState({ selectOtherCustomerAccount: null, selectedTxtn: null, selectedCustomer: null, showMandateLink: false })
                                                         resetForm()
                                                     }}>
@@ -2474,7 +2474,7 @@ console.log(customerDetails);
                                                     <Select
                                                         options={allTxtn}
                                                         ref={ref => {
-                                                            this.selectRef = ref;
+                                                            this.transactionTypeRef = ref;
                                                         }}
 
                                                         onChange={(selectedTxtn) => {
@@ -2498,7 +2498,7 @@ console.log(customerDetails);
                                         {/* } */}
                                         {/* {(values.txtnType !== "" && values.txtnType !== 6  ) && */}
                                             <Form.Group className="mr-10">
-                                                <Form.Label className="block-level">Amount</Form.Label>
+                                                <Form.Label className="block-level">Amount <Badge variant="primary"> {this.state.selectedTillData?.currencyCode} </Badge> </Form.Label>
                                                 <Form.Control type="text"
                                                     name="amount"
                                                     value={numberWithCommas(values.amount)}
@@ -2569,7 +2569,7 @@ console.log(customerDetails);
                                                 <Button variant="secondary"
                                                     disabled={postATransactionRequest.is_request_processing}
                                                     onClick={() => {
-                                                        this.selectRef.select.clearValue();
+                                                        this.transactionTypeRef.select.clearValue();
                                                         this.setState({ selectOtherCustomerAccount: null, selectedTxtn: null, selectedCustomer: null, showMandateLink: false })
                                                         resetForm()
                                                     }}>
@@ -2880,7 +2880,7 @@ return (<div className="each-card-content">
                                         <div className="tellerid-wrap">
                                             {this.state.selectedTill && 
                                                 <div className="selected-id">
-                                                    {this.state.selectedTillData?.tillId}  {this.state.selectedTillData?.currencyCode} 
+                                                    {this.state.selectedTillData?.tillId}<Badge variant="primary"> {this.state.selectedTillData?.currencyCode} </Badge> 
                                                 </div>
                                             }
 
