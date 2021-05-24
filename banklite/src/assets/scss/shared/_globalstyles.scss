@@ -1237,3 +1237,60 @@ button.togglestyle{
 //         mbo
 //     }
 // }
+
+.add-new-btn{
+    font-size: 19px;
+    background: #78B943;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+    opacity: 0.8;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ctas-flexed {
+    display: flex;
+    margin-bottom: 1rem;
+    >div:first-of-type{
+        margin-right: 10px;
+    }
+}
+.removed-btn{
+    font-size: 19px;
+    background: #EC7063;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+    opacity: 0.8;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover{
+        background: #E74C3C;
+    }
+}
+.config-wrap{
+    span{
+        font-weight: bold;
+    }
+}
+.flexed-withbtn{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    >div:first-of-type{
+        flex-basis: 90%;
+        padding-right: 10px;
+    }
+}
