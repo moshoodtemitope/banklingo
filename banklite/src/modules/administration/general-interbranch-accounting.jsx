@@ -13,6 +13,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Select from 'react-select';
 import Col from 'react-bootstrap/Col'
+import Modal from "react-bootstrap/Modal";
 import AdminNav from './_menu'
 import GeneralNav from './menus/_general-menu'
 import {administrationActions} from '../../redux/actions/administration/administration.action';
@@ -33,15 +34,11 @@ class InterbranchGlAccounting extends React.Component {
     }
 
     componentDidMount(){
-        this.getOrganizationDetails();
+        
         this.getInterBranchGLs()
     }
 
-    getOrganizationDetails = ()=>{
-        const {dispatch} = this.props;
-
-        dispatch(administrationActions.getOrganizationDetails());
-    }
+    
 
     
 
@@ -50,6 +47,84 @@ class InterbranchGlAccounting extends React.Component {
     }
     hideNew =()=>{
         this.setState({showNewConfig: false})
+    }
+
+    handleClose = () => this.setState({showRemoveConfig:false});
+    
+    handleShow = (configToRemove) => this.setState({showRemoveConfig:true,configToRemove});
+
+    confirmRemoveConfig = (configToRemove)=>{
+        let requestTracker = this.props.interbranchGlActionsReducer,
+            {showRemoveConfig}= this.state;
+        console.log("kikiki", configToRemove);
+        return(
+            <Modal show={showRemoveConfig} onHide={this.handleClose} size="lg" centered="true" dialogClassName="modal-40w withcentered-heading" animation={true}>
+                <Modal.Header>
+                    <Modal.Title>Remove Configuration</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+
+                    <div className="text-center ">Are you sure you want to remove Interbranch GL Transfer configuration for
+                        <div className="config-wrap"> 
+                            <span>{configToRemove.sourceBranchName} branch(source) </span>to 
+                            <span> {configToRemove.destinationBranchName} branch(destination) ?</span></div>
+                    
+                    </div>
+                    {requestTracker.request_status === administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS &&
+                        <Alert variant="success">
+                            {requestTracker.request_data.response.data.message}
+                        </Alert>
+                    }
+                    {requestTracker.request_status === administrationConstants.INTER_BRANCHGL_ACTION_FAILURE &&
+                        <Alert variant="danger">
+                            {requestTracker.request_data.error}
+                        </Alert>
+                    }
+                    {this.props.interbranchGlActionsReducer.request_status !== administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS &&
+                        <div className="footer-with-cta toleft">
+                            <Button variant="secondary" className="grayed-out" onClick={this.handleClose}>Cancel</Button>
+                            <Button
+                                type="button"
+                                onClick={()=>{
+                                    let payload = {
+                                        interBranchControlId:configToRemove.id
+                                    }
+                                    this.processInterbranchGlActions(payload, "remove")
+                                    .then(
+                                        () => {
+                                            // resetForm();
+                                            if(this.props.interbranchGlActionsReducer.request_status === administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS){
+                                                setTimeout(() => {
+                                                    // this.getOrganizationDetails();
+                                                    this.setState({showRemoveConfig:false})
+                                                    this.props.dispatch(administrationActions.interbranchGlActions("CLEAR"))
+                                                    this.props.dispatch(administrationActions.getInterBranchTransferList())
+                                                }, 5000);
+                                            }
+
+                                        })
+                                }}
+                                disabled={requestTracker.is_request_processing}>
+                                {requestTracker.is_request_processing ? "Please wait..." : "Remove"}
+                            </Button>
+                        </div>
+                    }
+
+                    {this.props.interbranchGlActionsReducer.request_status === administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS &&
+                        <div className="footer-with-cta toleft">
+                            <Button 
+                                 
+                                onClick={()=>{
+                                    this.setState({showRemoveConfig:false})
+                                    this.props.dispatch(administrationActions.interbranchGlActions("CLEAR"))
+                                    this.props.dispatch(administrationActions.getInterBranchTransferList())
+                                }}>Okay</Button>
+                        </div>
+                    }
+
+                </Modal.Body>
+            </Modal>
+        )
     }
 
 
@@ -65,127 +140,205 @@ class InterbranchGlAccounting extends React.Component {
         await dispatch(administrationActions.interbranchGlActions(payload, action));
     }
 
+    renderAllInterBranch =(getInterBranchTransferListRequest)=>{
+        let 
+                    allConfigs = getInterBranchTransferListRequest.request_data.response2.data.result,
+                    allBranches = getInterBranchTransferListRequest.request_data.response.data,
+                    allCurrencies = getInterBranchTransferListRequest.request_data.response3.data,
+                    allGLAccounts = getInterBranchTransferListRequest.request_data.response4.data,
+                    branchList=[{label:"", value:""}],
+                    glList=[{label:"", value:""}],
+                    currencyList=[{label:"", value:""}];
+
+                    allBranches.map((eachData)=>{
+                        branchList.push({
+                            label:eachData.name,
+                            value:eachData.id
+                        })
+                    })
+                    allCurrencies.map((eachData)=>{
+                        currencyList.push({
+                            label:`${eachData.name}(${eachData.symbol})`,
+                            value:eachData.code
+                        })
+                    })
+                    allGLAccounts.map((eachData)=>{
+                        glList.push({
+                            label:`${eachData.accountDescription}`,
+                            value:eachData.id
+                        })
+                    })
+
+                    let allBranchesOptionData = allBranches.filter(eachData=>eachData.encodedKey==="0000-0000-0000-0000"||eachData.name==="All Branches")[0];
+                    
+
+            return(
+                <div className="all-interbranch">
+                    {allConfigs.map((eachInterbranch, index)=>{
+                        
+                        
+                        // console.log("eachInterbranch", eachInterbranch)
+                        return (
+                            <Form.Row className="vertical-center" key={index}>
+                                <Col>
+                                    {(eachInterbranch.sourceBranchId!==-30) &&
+                                        <Form.Group>
+                                            {/* <Form.Label className="block-level">Preset</Form.Label> */}
+                                            <Select
+                                                options={[]}
+                                                defaultValue={{
+                                                    label:eachInterbranch.sourceBranchName,
+                                                    value:eachInterbranch.sourceBranchId
+                                                }}
+                                                isDisabled={true}
+                                                onChange={() => {
+                                                    
+                                                }}
+                                            />
+                                            
+                                        </Form.Group>
+                                    }
+                                    {(eachInterbranch.sourceBranchId===-30) &&
+                                        <Form.Group>
+                                            <Form.Label className="block-level bolden">{allBranchesOptionData.name}</Form.Label>
+                                        </Form.Group>
+                                    }
+                                </Col>
+                                <Col>
+                                    {(eachInterbranch.destinationBranchId!==-30) &&
+                                        <Form.Group>
+                                            {/* <Form.Label className="block-level">Preset</Form.Label> */}
+                                            <Select
+                                                defaultValue={{
+                                                    label:eachInterbranch.destinationBranchName,
+                                                    value:eachInterbranch.destinationBranchId
+                                                }}
+                                                isDisabled={true}
+                                                options={[]}
+                                                onChange={() => {
+                                                }}
+                                            />
+                                            
+                                        </Form.Group>
+                                    }
+                                    {(eachInterbranch.destinationBranchId===-30) &&
+                                        <Form.Group>
+                                            <Form.Label className="block-level bolden">{allBranchesOptionData.name}</Form.Label>
+                                        </Form.Group>
+                                    }
+                                </Col>
+                                <Col>
+                                    <Form.Group>
+                                        {/* <Form.Label className="block-level">Preset</Form.Label> */}
+                                        <Select
+                                            defaultValue={{
+                                                label:eachInterbranch.currencyName,
+                                                value:eachInterbranch.currencyCode
+                                            }}
+                                            isDisabled={true}
+                                            options={[]}
+                                            onChange={() => {
+                                            }}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col>
+                                    <Form.Group className="">
+                                        {/* <Form.Label className="block-level">Preset</Form.Label> */}
+                                        <Select
+                                            defaultValue={{
+                                                label:eachInterbranch.glAccount,
+                                                value:eachInterbranch.glAccountId
+                                            }}
+                                            options={[]}
+                                            isDisabled={true}
+                                            onChange={() => {
+                                            }}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col>
+                                    <div className="ctas-flexed">
+                                        <div className="removed-btn" onClick={()=>this.handleShow(eachInterbranch)} >-</div>
+                                        <div className="add-new-btn" onClick={this.showNew}> +</div>
+                                    </div>
+                                </Col>
+                            </Form.Row>
+                        )
+                        
+
+                       
+
+                    })}
+                </div>
+            )
+    }
+
     renderInterBranchTrasferGlDetails =()=>{
         let getInterBranchTransferListRequest = this.props.getInterBranchTransferListReducer;
         
         switch (getInterBranchTransferListRequest.request_status){
             case (administrationConstants.GET_ALL_INTER_BRANCH_GL_PENDING):
                 return (
-                    <div className="loading-content"> 
-                        <div className="loading-text">Please wait... </div>
+                    <div
+                        className="form-content w-65 card">
+
+                        <div className="normal-heading">Inter-Branch Transfer GL Account Rules</div>
+
+                        <div className="loading-content">
+                            <div className="loading-text">Please wait... </div>
+                        </div>
+
                     </div>
+                    
                 )
 
             case(administrationConstants.GET_ALL_INTER_BRANCH_GL_SUCCESS):
-                let organizationDetails = getInterBranchTransferListRequest.request_data.response.data,
-                    interbranchGLs = getInterBranchTransferListRequest.request_data.response2.data,
-                    adminUpdateOrganizationDetailsRequest = this.props.adminUpdateOrganizationDetails,
-                orgDetailsValidationSchema = Yup.object().shape({
-                    institutionName: Yup.string()
-                      .min(2, 'Min of two characters')
-                      .max(50, 'Max Limit reached')
-                      .required('Please provide name'),
-                   
-                });
-                    if(interbranchGLs!==""){
+                let 
+                    allConfigs = getInterBranchTransferListRequest.request_data.response2.data,
+                    allBranches = getInterBranchTransferListRequest.request_data.response.data,
+                    allCurrencies = getInterBranchTransferListRequest.request_data.response3.data,
+                    allGLAccounts = getInterBranchTransferListRequest.request_data.response4.data,
+                    branchList=[{label:"", value:""}],
+                    glList=[{label:"", value:""}],
+                    currencyList=[{label:"", value:""}];
+
+                    allBranches.map((eachData)=>{
+                        branchList.push({
+                            label:eachData.name,
+                            value:eachData.id
+                        })
+                    })
+                    allCurrencies.map((eachData)=>{
+                        currencyList.push({
+                            label:`${eachData.name}(${eachData.symbol})`,
+                            value:eachData.code
+                        })
+                    })
+                    allGLAccounts.map((eachData)=>{
+                        glList.push({
+                            label:`${eachData.accountDescription}`,
+                            value:eachData.id
+                        })
+                    })
+               
+                    if(allConfigs!=="" && allConfigs.result.length>=1){
+                        let allInterBranchGls = allConfigs.result;
+                        // console.log("lalala", allInterBranchGls);
                         return(
                             <div>
                                
-                                <Formik
-                                    initialValues={{
-                                        
-                                    }}
-                                    validationSchema={orgDetailsValidationSchema}
-                                    onSubmit={(values, { resetForm }) => {
-                                        let updateOrgPayload = {
-                                            email: values.institutionEmail,
-                                            organizationName: values.institutionName,
-                                            streetAddress: values.streetAddress,
-                                            city: values.institutionCity,
-                                            state: values.institutionState,
-                                            country: values.institutionCountry,
-                                            localDateFormat: values.institutionDateFormat,
-                                            localDateTimeFormat: values.institutionDateTimeFormat,
-                                        };
+                                <div
+                                    className="form-content w-65 card">
 
-                                        this.updateOrgDetails(updateOrgPayload)
-                                            .then(
-                                                () => {
-                                                    // resetForm();
-                                                    setTimeout(() => {
-                                                        // this.getOrganizationDetails();
-                                                        this.props.dispatch(administrationActions.updateOrganizationDetails("CLEAR"))
-                                                    }, 3000);
+                                        <div className="normal-heading">Inter-Branch Transfer GL Account Rules</div>
 
-                                                }
-                                            )
+                                        {this.renderAllInterBranch(getInterBranchTransferListRequest)}
 
-                                    }}
-                                >
-                                    {({ handleSubmit,
-                                        handleChange,
-                                        handleBlur,
-                                        resetForm,
-                                        values,
-                                        touched,
-                                        isValid,
-                                        errors, }) => (
-                                        <Form
-                                            className="form-content w-60 card"
-                                            noValidate
-                                            onSubmit={handleSubmit}>
+                                        {this.state.showNewConfig && this.renderNewInterBranchTransferGl()}
+                                        {this.state.showRemoveConfig && this.confirmRemoveConfig(this.state.configToRemove) }
+                                </div>  
 
-                                             <div className="normal-heading">Inter-Branch Transfer GL Account Rules</div>
-
-                                             <Form.Row>
-                                                <Col>
-                                                    
-                                                </Col>
-                                                 <Col>
-                                                 </Col>
-                                                 <Col>
-                                                 </Col>
-                                             </Form.Row>
-
-                                            <Form.Group controlId="institutionName">
-                                                <Form.Label className="block-level">Institution Name</Form.Label>
-                                                <Form.Control
-                                                    name="institutionName"
-                                                    onChange={handleChange}
-                                                    value={values.institutionName}
-                                                    className={errors.institutionName && touched.institutionName ? "is-invalid" : null}
-                                                    type="text" />
-
-                                                {errors.institutionName && touched.institutionName ? (
-                                                    <span className="invalid-feedback">{errors.institutionName}</span>
-                                                ) : null}
-                                            </Form.Group>
-                                            
-                                           
-                                            
-                                            <div className="form-ctas horizontal">
-                                                <Button variant="success"
-                                                    className="mr-20px"
-                                                    type="submit"
-                                                    disabled={adminUpdateOrganizationDetailsRequest.is_request_processing}>
-                                                    {adminUpdateOrganizationDetailsRequest.is_request_processing ? "Please wait..." : "Update"}
-                                                </Button>
-                                                {/* <Button variant="light" type="button"> Cancel</Button> */}
-                                            </div>
-                                            {adminUpdateOrganizationDetailsRequest.request_status === administrationConstants.UPDATE_ORGANIZATION_DETAILS_SUCCESS &&
-                                                <Alert variant="success">
-                                                    {adminUpdateOrganizationDetailsRequest.request_data.response.data.message}
-                                                </Alert>
-                                            }
-                                            {adminUpdateOrganizationDetailsRequest.request_status === administrationConstants.UPDATE_ORGANIZATION_DETAILS_FAILURE &&
-                                                <Alert variant="danger">
-                                                    {adminUpdateOrganizationDetailsRequest.request_data.error}
-                                                </Alert>
-                                            }
-                                        </Form>
-
-                                    )}
-                                </Formik>
 
                             </div>
                         )
@@ -209,9 +362,17 @@ class InterbranchGlAccounting extends React.Component {
 
             case (administrationConstants.GET_ALL_INTER_BRANCH_GL_FAILURE):
                 return (
-                    <div className="loading-content errormsg"> 
-                        <div>{getInterBranchTransferListRequest.request_data.error}</div>
+                    <div
+                        className="form-content w-65 card">
+
+                        <div className="normal-heading">Inter-Branch Transfer GL Account Rules</div>
+
+                        <div className="loading-content errormsg">
+                            <div>{getInterBranchTransferListRequest.request_data.error}</div>
+                        </div>
+
                     </div>
+                    
                 )
             default :
             return null;
@@ -229,7 +390,7 @@ class InterbranchGlAccounting extends React.Component {
                     requestTracker = this.props.interbranchGlActionsReducer,
                     branchList=[{label:"", value:""}],
                     glList=[{label:"", value:""}],
-                    currencyList=[{label:"", value:""}],
+                    currencyList=[{label:"All Currencies", value:"000"}],
                     validationSchema = Yup.object().shape({
                         firstBranchId: Yup.string()
                             .required('Required'),
@@ -280,7 +441,7 @@ class InterbranchGlAccounting extends React.Component {
                                         currencyCode: values.currencyCode,
                                         glAccountId: parseInt(values.glAccountId)
                                     };
-                                    console.log("here", interbranchPayload);
+                                    // console.log("here", interbranchPayload);
 
                                     // return false;
 
@@ -295,7 +456,7 @@ class InterbranchGlAccounting extends React.Component {
                                                         this.setState({showNewConfig:false})
                                                         this.props.dispatch(administrationActions.interbranchGlActions("CLEAR"))
                                                         this.props.dispatch(administrationActions.getInterBranchTransferList())
-                                                    }, 3000);
+                                                    }, 5000);
                                                 }
 
                                             }
@@ -314,119 +475,125 @@ class InterbranchGlAccounting extends React.Component {
                                 isValid,
                                 errors, }) => (
                                 <Form
-                                    className="form-content w-60 card no-mb"
+                                    // className="form-content w-65 card no-mb"
+                                    className="mt-20"
                                     noValidate
                                     onSubmit={handleSubmit}>
+                                    {this.props.interbranchGlActionsReducer.request_status !== administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS &&
+                                        <div>
+                                            <div className="normal-heading">Add new Inter-Branch Transfer GL Account Rules</div>
 
-                                     <div className="normal-heading">Inter-Branch Transfer GL Account Rules</div>
+                                            <Form.Row className="vertical-center">
+                                                <Col>
+                                                    {(allConfigs !== "" && allConfigs.result.length >= 1) &&
+                                                        <Form.Group>
+                                                            {/* <Form.Label className="block-level">Preset</Form.Label> */}
+                                                            <Select
+                                                                options={branchList}
+                                                                onChange={(selectedBranch1) => {
+                                                                    this.setState({ selectedBranch1 });
+                                                                    errors.firstBranchId = ""
+                                                                    values.firstBranchId = selectedBranch1.value
+                                                                }}
+                                                                className={errors.firstBranchId && touched.firstBranchId ? "is-invalid" : null}
 
-                                     <Form.Row className="vertical-center">
-                                        <Col>
-                                            {allConfigs !=="" &&
-                                                <Form.Group>
-                                                    {/* <Form.Label className="block-level">Preset</Form.Label> */}
-                                                    <Select
-                                                        options={branchList}
-                                                        onChange={(selectedBranch1) => {
-                                                            this.setState({ selectedBranch1 });
-                                                            errors.firstBranchId = ""
-                                                            values.firstBranchId = selectedBranch1.value
-                                                        }}
-                                                        className={errors.firstBranchId && touched.firstBranchId ? "is-invalid" : null}
-                                                        
-                                                        name="firstBranchId"
-                                                        required
-                                                    />
-                                                    {errors.firstBranchId && touched.firstBranchId ? (
-                                                        <span className="invalid-feedback">{errors.firstBranchId}</span>
-                                                    ) : null}
-                                                </Form.Group>
-                                            }
-                                             {allConfigs ==="" &&
-                                                <Form.Label className="block-level bolden">{allBranchesOptionData.name}</Form.Label>
-                                             }
-                                        </Col>
-                                        <Col>
-                                            {allConfigs !== "" &&
-                                                <Form.Group>
-                                                    {/* <Form.Label className="block-level">Preset</Form.Label> */}
-                                                    <Select
-                                                        options={branchList}
-                                                        onChange={(selectedBranch2) => {
-                                                            this.setState({ selectedBranch2 });
-                                                            errors.secondBranchId = ""
-                                                            values.secondBranchId = selectedBranch2.value
-                                                        }}
-                                                        className={errors.secondBranchId && touched.secondBranchId ? "is-invalid" : null}
+                                                                name="firstBranchId"
+                                                                required
+                                                            />
+                                                            {errors.firstBranchId && touched.firstBranchId ? (
+                                                                <span className="invalid-feedback">{errors.firstBranchId}</span>
+                                                            ) : null}
+                                                        </Form.Group>
+                                                    }
+                                                    {(allConfigs === "" || (allConfigs !== "" && allConfigs.result.length < 1)) &&
+                                                        <Form.Label className="block-level bolden">{allBranchesOptionData.name}</Form.Label>
+                                                    }
+                                                </Col>
+                                                <Col>
+                                                    {allConfigs !== "" &&
+                                                        <Form.Group>
+                                                            {/* <Form.Label className="block-level">Preset</Form.Label> */}
+                                                            <Select
+                                                                options={branchList}
+                                                                onChange={(selectedBranch2) => {
+                                                                    this.setState({ selectedBranch2 });
+                                                                    errors.secondBranchId = ""
+                                                                    values.secondBranchId = selectedBranch2.value
+                                                                }}
+                                                                className={errors.secondBranchId && touched.secondBranchId ? "is-invalid" : null}
 
-                                                        name="secondBranchId"
-                                                        required
-                                                    />
-                                                    {errors.secondBranchId && touched.secondBranchId ? (
-                                                        <span className="invalid-feedback">{errors.secondBranchId}</span>
-                                                    ) : null}
-                                                </Form.Group>
-                                            }
-                                            {allConfigs ==="" &&
-                                                <Form.Label className="block-level bolden">{allBranchesOptionData.name}</Form.Label>
-                                             }
-                                        </Col>
-                                        <Col>
-                                            <Form.Group>
-                                                {/* <Form.Label className="block-level">Preset</Form.Label> */}
-                                                <Select
-                                                    options={currencyList}
-                                                    onChange={(selectedCurrency) => {
-                                                        this.setState({ selectedCurrency });
-                                                        errors.currencyCode = ""
-                                                        values.currencyCode = selectedCurrency.value
-                                                    }}
-                                                    className={errors.currencyCode && touched.currencyCode ? "is-invalid" : null}
+                                                                name="secondBranchId"
+                                                                required
+                                                            />
+                                                            {errors.secondBranchId && touched.secondBranchId ? (
+                                                                <span className="invalid-feedback">{errors.secondBranchId}</span>
+                                                            ) : null}
+                                                        </Form.Group>
+                                                    }
+                                                    {allConfigs === "" &&
+                                                        <Form.Label className="block-level bolden">{allBranchesOptionData.name}</Form.Label>
+                                                    }
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group>
+                                                        {/* <Form.Label className="block-level">Preset</Form.Label> */}
+                                                        <Select
+                                                            options={currencyList}
+                                                            onChange={(selectedCurrency) => {
+                                                                this.setState({ selectedCurrency });
+                                                                errors.currencyCode = ""
+                                                                values.currencyCode = selectedCurrency.value
+                                                            }}
+                                                            className={errors.currencyCode && touched.currencyCode ? "is-invalid" : null}
 
-                                                    name="currencyCode"
-                                                    required
-                                                />
-                                                {errors.currencyCode && touched.currencyCode ? (
-                                                    <span className="invalid-feedback">{errors.currencyCode}</span>
-                                                ) : null}
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <Form.Group>
-                                                {/* <Form.Label className="block-level">Preset</Form.Label> */}
-                                                <Select
-                                                    options={glList}
-                                                    onChange={(selectedGl) => {
-                                                        
-                                                        this.setState({ selectedGl });
-                                                        errors.glAccountId = ""
-                                                        values.glAccountId = selectedGl.value
-                                                    }}
-                                                    className={errors.glAccountId && touched.glAccountId ? "is-invalid" : null}
+                                                            name="currencyCode"
+                                                            required
+                                                        />
+                                                        {errors.currencyCode && touched.currencyCode ? (
+                                                            <span className="invalid-feedback">{errors.currencyCode}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group>
+                                                        {/* <Form.Label className="block-level">Preset</Form.Label> */}
+                                                        <Select
+                                                            options={glList}
+                                                            onChange={(selectedGl) => {
 
-                                                    name="glAccountId"
-                                                    required
-                                                />
-                                                {errors.glAccountId && touched.glAccountId ? (
-                                                    <span className="invalid-feedback">{errors.glAccountId}</span>
-                                                ) : null}
-                                            </Form.Group>
-                                        </Col>
-                                     </Form.Row>
+                                                                this.setState({ selectedGl });
+                                                                errors.glAccountId = ""
+                                                                values.glAccountId = selectedGl.value
+                                                            }}
+                                                            className={errors.glAccountId && touched.glAccountId ? "is-invalid" : null}
 
-                                    
-                                    
-                                   
-                                    
-                                    <div className="form-ctas horizontal">
-                                        <Button variant="success"
-                                            className="mr-20px"
-                                            type="submit"
-                                            disabled={requestTracker.is_request_processing}>
-                                            {requestTracker.is_request_processing ? "Please wait..." : "Save"}
-                                        </Button>
-                                        {/* <Button variant="light" type="button"> Cancel</Button> */}
-                                    </div>
+                                                            name="glAccountId"
+                                                            required
+                                                        />
+                                                        {errors.glAccountId && touched.glAccountId ? (
+                                                            <span className="invalid-feedback">{errors.glAccountId}</span>
+                                                        ) : null}
+                                                    </Form.Group>
+                                                </Col>
+                                            </Form.Row>
+
+
+
+
+
+
+
+                                            <div className="form-ctas horizontal">
+                                                <Button variant="success"
+                                                    className="mr-20px"
+                                                    type="submit"
+                                                    disabled={requestTracker.is_request_processing}>
+                                                    {requestTracker.is_request_processing ? "Please wait..." : "Save"}
+                                                </Button>
+                                                {/* <Button variant="light" type="button"> Cancel</Button> */}
+                                            </div>
+                                        </div>
+                                    }
                                     {requestTracker.request_status === administrationConstants.INTER_BRANCHGL_ACTION_SUCCESS &&
                                         <Alert variant="success">
                                             {requestTracker.request_data.response.data.message}
@@ -494,7 +661,7 @@ class InterbranchGlAccounting extends React.Component {
                                         <div className="col-sm-12">
                                             <div className="middle-content">
                                                 {this.renderInterBranchTrasferGlDetails()}
-                                                {this.state.showNewConfig && this.renderNewInterBranchTransferGl()}
+                                                
                                             </div>
                                         </div>
                                     </div>
