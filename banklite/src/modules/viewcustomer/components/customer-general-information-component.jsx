@@ -65,6 +65,13 @@ export class GeneralInfomationSection extends React.Component {
                     <td>{customerTypeVal?.name}</td>
                 </tr>
             }
+
+{customerTypeVal && customerTypeVal.name &&
+                <tr>
+                    <td>Branch Name</td>
+                    <td>{customerTypeVal?.branchName}</td>
+                </tr>
+            }
             {customerDetails.createdDate &&
                 <tr>
                     <td>Created</td>
