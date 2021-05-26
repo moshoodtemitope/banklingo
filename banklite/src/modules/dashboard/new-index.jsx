@@ -2103,6 +2103,7 @@ console.log(customerDetails);
 
                             if (values.txtnType === 3) {
                                 requestPayload.transactionReference = values.referenceID
+                                requestPayload.accountNumber = selectOtherCustomerAccount.searchKey//
                                 requestPayload.referenceID = values.referenceID
                                 requestPayload.notes = values.remarks
                             }
@@ -2110,7 +2111,7 @@ console.log(customerDetails);
                             if (values.txtnType === 4 || values.txtnType === 5) {
                                 delete requestPayload.accountEncodedKey;
                                 requestPayload.chequeNo = values.referenceID
-                                requestPayload.accountNumber = selectOtherCustomerAccount.searchKey
+                                requestPayload.accountNumber = selectOtherCustomerAccount.searchKey//
                                 requestPayload.remarks = values.remarks
                                 requestPayload.referenceID = values.referenceID
                             }
