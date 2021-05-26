@@ -263,6 +263,7 @@ class DepositManagement extends React.Component {
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
           </tbody>
         );
@@ -366,6 +367,7 @@ class DepositManagement extends React.Component {
                         )}
                       </td>
                       <td>{eachDeposit.accountStateDescription}</td>
+                      <td>{eachDeposit.branchName}</td>
                       <td>{eachDeposit.dateCreated}</td>
                       <td>
                         {numberWithCommas(
@@ -528,6 +530,7 @@ class DepositManagement extends React.Component {
               <th>Currency</th>
               <th>Deposit Balance</th>
               <th>Account State</th>
+              <th>Branch</th>
               <th>Date Created</th>
               <th>Available Balance</th>
             </tr>
