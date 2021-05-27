@@ -1627,7 +1627,7 @@ class DashboardLanding extends React.Component {
                     if (this.props.fetchManadateReducer.request_status === dashboardConstants.FETCH_MANDATE_SUCCESS) {
                             let clientData = this.props.fetchManadateReducer.request_data.response.data,
                                 optionData = {
-                                    clientName: `${clientData.firstName} ${clientData.lastName} ${clientData.middleName||""}`,
+                                    clientName:`${clientData.groupName}`, //`${clientData.firstName} ${clientData.lastName} ${clientData.middleName||""}`,
                                     clientEncodedKey: clientData.clientEncodedKey
                                 };
 
