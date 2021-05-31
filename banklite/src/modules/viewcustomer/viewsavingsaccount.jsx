@@ -2792,6 +2792,14 @@ class ViewSavingsAccount extends React.Component {
                     {depositAccountData.isOnPND ? "On PND" : "Not on PND"}
                   </td>
                 </tr>
+
+                <tr>
+                                    <td>Branch Name</td>
+                                    <td>
+                                        {depositAccountData.branchName}
+                                    </td>
+                                </tr>
+                                
                 <tr>
                   <td>Currency</td>
                   <td>{depositAccountData?.currencyCode ?? "" + " "} </td>

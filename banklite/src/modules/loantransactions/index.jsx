@@ -46,8 +46,14 @@ class LoanTransactions extends React.Component {
   }
 
   loadInitialData = () => {
-    let { PageSize, CurrentPage } = this.state;
-    let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}`;
+    let { PageSize, CurrentPage, SearchText, endDate, startDate } = this.state;
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
+    let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     this.getLoanTransactions(params);
   };
 
@@ -302,7 +308,7 @@ class LoanTransactions extends React.Component {
                   </Form.Group>
 
                   <Form.Group className='table-filters'>
-                    <DatePicker
+                  <DatePicker
                       autoComplete='new-off'
                       onChangeRaw={this.handleDateChangeRaw}
                       onChange={this.handleStartDatePicker}

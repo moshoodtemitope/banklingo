@@ -2285,6 +2285,16 @@ class ViewClosedSavingsAccount extends React.Component {
                                         {depositAccountData.productTypeDescription}
                                     </td>
                                 </tr>
+                                
+
+                                <tr>
+                                    <td>Branch Name</td>
+                                    <td>
+                                        {depositAccountData.branchName}
+                                    </td>
+                                </tr>
+                                
+
                                 {/* <tr>
                                     <td>Assigned to Branch</td>
                                     <td></td>

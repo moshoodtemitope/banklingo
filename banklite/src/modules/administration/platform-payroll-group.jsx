@@ -175,7 +175,7 @@ class PlatformPayrollGroup extends React.Component {
         animation={true}
       >
         <Modal.Header>
-          <Modal.Title>Add New</Modal.Title>
+          <Modal.Title>Add New Payroll Group</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Formik
@@ -406,7 +406,7 @@ class PlatformPayrollGroup extends React.Component {
       description: Yup.string().required('Required'),
       groupCode: Yup.string().required('Required'),
       employeeNumberLabel: Yup.string().required('Required'),
-      employeeNumberCode: Yup.string().required('Required'),
+      // employeeNumberCode: Yup.string().required('Required'),
       groupName: Yup.string().required('Required'),
     });
 
@@ -421,7 +421,7 @@ class PlatformPayrollGroup extends React.Component {
       >
         <Modal.Header>
           {this.state.updateType === 'edit' && (
-            <Modal.Title>Edit Group</Modal.Title>
+            <Modal.Title>Edit Group - {recordToUpdate?.groupName}</Modal.Title>
           )}
           {this.state.updateType === 'activate' && (
             <Modal.Title>Confirm Activation</Modal.Title>
@@ -436,7 +436,7 @@ class PlatformPayrollGroup extends React.Component {
               description: recordToUpdate.description,
               groupCode: recordToUpdate.groupCode,
               employeeNumberLabel: recordToUpdate.employeeNumberLabel,
-              employeeNumberCode: '',
+              // employeeNumberCode: '',
               groupName: recordToUpdate.groupName,
             }}
             validationSchema={checkValidationSchema}
@@ -449,7 +449,7 @@ class PlatformPayrollGroup extends React.Component {
                   description: values.description,
                   groupCode: values.groupCode,
                   employeeNumberLabel: values.employeeNumberLabel,
-                  employeeNumberCode: values.employeeNumberCode,
+                  employeeNumberCode: 'NOT REQUIRED',
                   groupName: values.groupName,
                   objectState: recordToUpdate.objectState,
                 };
@@ -614,7 +614,7 @@ class PlatformPayrollGroup extends React.Component {
                       ) : null}
                     </Col>
                     <Col>
-                      <Form.Label className='block-level'>
+                      {/* <Form.Label className='block-level'>
                         Employee Number Code{' '}
                       </Form.Label>
                       <Form.Control
@@ -637,7 +637,7 @@ class PlatformPayrollGroup extends React.Component {
                         <span className='invalid-feedback'>
                           {errors.employeeNumberCode}
                         </span>
-                      ) : null}
+                      ) : null} */}
                     </Col>
                   </Form.Row>
                   <Form.Group>
