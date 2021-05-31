@@ -361,7 +361,7 @@ function interbranchGlActions   (requestPayload, action){
         return dispatch =>{
             let consume;
 
-            console.log("laala", requestPayload)
+            
             if(action==="create"){
                 consume = ApiService.request(`${routes.INTER_BRANCH_GL}/addinterbranch`, "POST", requestPayload);
             }
