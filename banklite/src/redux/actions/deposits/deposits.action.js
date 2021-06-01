@@ -790,6 +790,11 @@ function changeDepositState(newDepositStatePayload, newState) {
         }
       }
 
+      if(newState==="repayloanwithdeposit"){
+        url = routes.HIT_LOAN_STATE + `/repayloanwithdeposit`;
+      }
+
+
       let consume = ApiService.request(url, "POST", newDepositStatePayload);
 
       dispatch(request(consume));

@@ -3092,11 +3092,11 @@ class ViewLoanAccount extends React.Component {
 
 
 
-  handleNewLoanState = async (changeLoanStatePayload, newStateUpdate) => {
+  handleNewLoanState = async (changeLoanStatePayload, newStateUpdate, txtType) => {
     const { dispatch } = this.props;
 
     await dispatch(
-      loanActions.changeLoanState(changeLoanStatePayload, newStateUpdate)
+      loanActions.changeLoanState(changeLoanStatePayload, newStateUpdate, txtType)
     );
   };
 
@@ -4652,7 +4652,9 @@ this.permissions={
             newState={this.state.newState}
             ctaText={this.state.ctaText}
             closeModal={this.handleCloseDisbursementModal}
+            // closeModal={this.handleLoanChangeStateClose}
             handleNewLoanState={this.handleNewLoanState}
+            savingsWallets = {getClientDepositsRequest}
             showDisbursementModal={this.state.showDisbursementModal}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
           />

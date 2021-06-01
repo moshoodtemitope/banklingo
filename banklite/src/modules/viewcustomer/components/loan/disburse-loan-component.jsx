@@ -24,6 +24,7 @@ import { numberWithCommas, getDateFromISO} from '../../../../shared/utils';
 import { administrationConstants } from "../../../../redux/actiontypes/administration/administration.constants";
 import { loanAndDepositsConstants } from "../../../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants";
 import { loanActions } from "../../../../redux/actions/loans/loans.action";
+import { compose } from "redux";
 
 export class DisburseLoanModal extends React.Component {
     constructor(props) {
@@ -32,6 +33,7 @@ export class DisburseLoanModal extends React.Component {
         this.state={
            // showModal:false,
         }
+        
         
     }
 
@@ -52,6 +54,8 @@ export class DisburseLoanModal extends React.Component {
     let getAClientLoanAccountRequest = this.props.getAClientLoanAccountReducer,
         adminGetTransactionChannelsRequest = this.props.adminGetTransactionChannels,
         allChannels = [],
+        allWallets = [],
+        walletsList = [],
         channelsList;
     // this.props.dispatch(loanActions.changeLoanState("CLEAR"));
 
@@ -60,9 +64,21 @@ export class DisburseLoanModal extends React.Component {
         channelsList = adminGetTransactionChannelsRequest.request_data.response.data.result;
 
         channelsList.map((channel) => {
-            allChannels.push({ label: channel.name, value: channel.encodedKey });
+            allChannels.push({ label: `Channel - ${channel.name}`, value: channel.encodedKey, type:"disburseloan" });
         })
     }
+
+    if (this.props.savingsWallets.request_status === loanAndDepositsConstants.GET_CLIENTDEPOSITS_SUCCESS
+        && this.props.savingsWallets.request_data.response.data.result.length >= 1) {
+            allWallets = this.props.savingsWallets.request_data.response.data.result;
+
+        allWallets.map((account) => {
+            if(account.accountState===3 || account.accountState===5){
+                allChannels.push({ label: `Wallet - ${account.accountHolderName} ${account.accountNumber}`, value: account.encodedKey, type:"disburseloantoaccount" });
+            }
+        })
+    }
+    // allChannels.push()
 
    
     let changeLoanStateValidationSchema   = Yup.object().shape({
@@ -115,15 +131,25 @@ export class DisburseLoanModal extends React.Component {
                         let changeLoanStatePayload = {
                             accountEncodedKey: this.props.loanEncodedKey,
                             notes: values.notes,
-                            channelEncodedKey: values.txtChannelEncodedKey,
+                            // channelEncodedKey: values.txtChannelEncodedKey,
                             isBackDated: values.allowBackDate,
                             backDateValueDate: values.backDateChosen !== "" ? values.backDateChosen.toISOString() : null,
                             isBookingDate: values.showBookingDate,
                             bookingDate: values.bookingDateChosen !== "" ? values.bookingDateChosen.toISOString() : null,
                         }
+
+                        if(this.state.selectedAccType.type==="disburseloan"){
+                            if(changeLoanStatePayload.depositAccountEncodedKey) delete changeLoanStatePayload.depositAccountEncodedKey
+                            changeLoanStatePayload.channelEncodedKey= values.txtChannelEncodedKey;
+                        }
+                        if(this.state.selectedAccType.type==="disburseloantoaccount"){
+                            if(changeLoanStatePayload.channelEncodedKey) delete changeLoanStatePayload.channelEncodedKey
+                            changeLoanStatePayload.depositAccountEncodedKey= values.txtChannelEncodedKey;
+                        }
                   
               
-                    this.props.handleNewLoanState(changeLoanStatePayload, this.props.newStateUpdate)
+                    this.props.handleNewLoanState(changeLoanStatePayload, this.state.selectedAccType.type)
+                    // this.props.handleNewLoanState(changeLoanStatePayload, this.props.newStateUpdate, this.state.selectedAccType.type)
                         .then(
                             () => {
 
@@ -133,7 +159,8 @@ export class DisburseLoanModal extends React.Component {
 
                                     setTimeout(() => {
                                         this.props.dispatch(loanActions.changeLoanState("CLEAR"))
-                                        this.props.handleLoanChangeStateClose();
+                                        this.props.closeModal();
+                                        // this.props.handleLoanChangeStateClose();
                                         this.props.getCustomerLoanAccountDetails(this.props.loanEncodedKey);
                                     }, 3000);
                                 }
@@ -194,6 +221,8 @@ export class DisburseLoanModal extends React.Component {
                                                                 options={allChannels}
 
                                                                 onChange={(selected) => {
+                                                                    
+                                                                    this.setState({selectedAccType: selected})
                                                                     setFieldValue('txtChannelEncodedKey', selected.value)
                                                                 }}
                                                                 onBlur={() => setFieldTouched('txtChannelEncodedKey', true)}
@@ -211,6 +240,8 @@ export class DisburseLoanModal extends React.Component {
                                                 
                                                 </Form.Group>
                                             </Col>
+                                        </Form.Row>
+                                        <Form.Row>
                                             <Col className="date-wrap">
                                                 <Form.Group className="table-helper m-b-5">
                                                     <input type="checkbox"
@@ -280,6 +311,8 @@ export class DisburseLoanModal extends React.Component {
                                                     </Form.Group>
                                                 }
                                             </Col>
+                                        </Form.Row>
+                                        <Form.Row>
                                             <Col className="date-wrap">
                                                 <Form.Group className="table-helper m-b-5">
                                                     <input type="checkbox"
