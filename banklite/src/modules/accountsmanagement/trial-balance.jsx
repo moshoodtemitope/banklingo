@@ -51,7 +51,7 @@ class TrialBalance extends React.Component {
             isOpeningBalance: false,
             isNetChange: false,
             isClosingBalance: false,
-            includeZeroBalance: true,
+            includeZeroBalance: false,
         }
 
         
@@ -496,9 +496,9 @@ class TrialBalance extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Opening Balance</th>
                                         <th>Branch Name</th>
                                         <th>Currency</th>
+                                        <th>Opening Balance</th>
                                         <th>Debits</th>
                                         <th>Credits</th>
                                         <th>Net Change</th>
@@ -635,10 +635,9 @@ class TrialBalance extends React.Component {
                                         <tr>
                                             <th>GL Code</th>
                                             <th>Account Name</th>
-                                            <th>Opening Balance</th>
-                                            <th>Opening Balance</th>
                                             <th>Branch Name</th>
                                             <th>Currency</th>
+                                            <th>Opening Balance</th>
                                             <th>Debits</th>
                                             <th>Credits</th>
                                             <th>Net Change</th>
@@ -669,9 +668,9 @@ class TrialBalance extends React.Component {
                                                     <tr key={`key-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td>{eachResult.accountName}</td>
-                                                        <td>{numberWithCommas(eachResult.openingBalance,true, true)}</td>
                                                         <td>{eachResult.branchName}</td>
                                                         <td>{eachResult.currencyCode}</td>
+                                                        <td>{numberWithCommas(eachResult.openingBalance,true, true)}</td>
                                                         <td>{numberWithCommas(eachResult.debits,true, true)}</td>
                                                         <td>{numberWithCommas(eachResult.credits,true, true)}</td>
                                                         <td>{eachResult.isNetInBracket === false ? numberWithCommas(eachResult.netChange,true, true) : `(${numberWithCommas(eachResult.netChange,true, true)})`}</td>
@@ -685,9 +684,9 @@ class TrialBalance extends React.Component {
                                         <tr className="totalrow netrow">
                                             <td></td>
                                             <td>Totals</td>
+                                            <td></td>
+                                            <td></td>
                                             <td>{numberWithCommas(openingBalanceTotal,true, true)}</td>
-                                            <td></td>
-                                            <td></td>
                                             <td>{numberWithCommas(debitTotal,true, true)}</td>
                                             <td>{numberWithCommas(creditTotal,true, true)}</td>
                                             <td>{numberWithCommas(netChangeTotal,true, true)}</td>
@@ -708,10 +707,10 @@ class TrialBalance extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
-                                        <th>Opening Balance</th>
-                                        <th>Opening Balance</th>
                                         <th>Branch Name</th>
                                         <th>Currency</th>
+                                        <th>Opening Balance</th>
+                                        <th>Opening Balance</th>
                                         <th>Branch Name</th>
                                         <th>Debits</th>
                                         <th>Credits</th>
