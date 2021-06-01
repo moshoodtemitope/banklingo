@@ -47,7 +47,7 @@ class TrialBalanceBasic extends React.Component {
             invalidDate:false,
             isPrintable:false,
             selectedCurrency: "000",
-            includeZeroBalance: true,
+            includeZeroBalance: false,
         }
 
         
@@ -622,8 +622,8 @@ class TrialBalanceBasic extends React.Component {
                                                     <tr key={`key-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td colSpan="2">{eachResult.accountName}</td>
-                                                        <td colSpan="2">{eachResult.branchName}</td>
-                                                        <td colSpan="2">{eachResult.currencyCode}</td>
+                                                        <td>{eachResult.branchName}</td>
+                                                        <td>{eachResult.currencyCode}</td>
                                                         <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit,true, true)}</td>
                                                         <td colSpan="2">{numberWithCommas(eachResult.trialBalanceCredit,true, true)}</td>
                                                         
