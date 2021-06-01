@@ -816,6 +816,7 @@ class JournalEntries extends React.Component {
               this.props.getJournalEntries.request_data.response !== undefined
                 ? this.props.getJournalEntries.request_data.response.data
                 : null;
+         this.currencyListTemp =      this.props.getJournalEntries.request_data.response4.data;
         this.getJournalEntries(saveRequestData, tabCurrency);
     }
   }
@@ -827,77 +828,81 @@ class JournalEntries extends React.Component {
       getJournalEntriesRequest.request_data !== undefined
         ? getJournalEntriesRequest.request_data.tempData
         : null;
+    
 
     switch (getJournalEntriesRequest.request_status) {
       case accountingConstants.GET_JOURNAL_ENTRY_PENDING:
         if (saveRequestData === undefined) {
           return (
-            <div className='loading-content'>
-              <div className='heading-with-cta'>
-                <Form className='one-liner'>
-                  <Form.Group
-                    controlId='filterDropdown'
-                    className='no-margins pr-10'
-                  >
-                    <Form.Control as='select' size='sm'>
-                      <option>No Filter</option>
-                      <option>Add New Filter</option>
-                      <option>Custom Filter</option>
-                    </Form.Control>
-                  </Form.Group>
-                  <Button
-                    className='no-margins'
-                    variant='primary'
-                    type='submit'
-                  >
-                    Filter
+            <div>
+              {this.currencyListTemp && this.renderSubTabs(this.currencyListTemp)}
+              <div className='loading-content'>
+                <div className='heading-with-cta'>
+                  <Form className='one-liner'>
+                    <Form.Group
+                      controlId='filterDropdown'
+                      className='no-margins pr-10'
+                    >
+                      <Form.Control as='select' size='sm'>
+                        <option>No Filter</option>
+                        <option>Add New Filter</option>
+                        <option>Custom Filter</option>
+                      </Form.Control>
+                    </Form.Group>
+                    <Button
+                      className='no-margins'
+                      variant='primary'
+                      type='submit'
+                    >
+                      Filter
                   </Button>
-                </Form>
+                  </Form>
 
-                <div className='pagination-wrap'>
-                  <label htmlFor='toshow'>Show</label>
-                  <select
-                    id='toshow'
-                    onChange={null}
-                    value={this.state.PageSize}
-                    className='countdropdown form-control form-control-sm'
-                  >
-                    <option value='10'>10</option>
-                    <option value='25'>25</option>
-                    <option value='50'>50</option>
-                    <option value='200'>200</option>
-                  </select>
+                  <div className='pagination-wrap'>
+                    <label htmlFor='toshow'>Show</label>
+                    <select
+                      id='toshow'
+                      onChange={null}
+                      value={this.state.PageSize}
+                      className='countdropdown form-control form-control-sm'
+                    >
+                      <option value='10'>10</option>
+                      <option value='25'>25</option>
+                      <option value='50'>50</option>
+                      <option value='200'>200</option>
+                    </select>
+                  </div>
                 </div>
+                <TableComponent classnames='striped bordered hover'>
+                  <thead>
+                    <tr>
+                      <th>Entry Id</th>
+                      <th>Transaction Id</th>
+                      <th>Branch Name</th>
+                      <th>Booking Date (Entry Date)</th>
+                      <th>GL Account Name</th>
+                      <th>Currency Code</th>
+                      <th>GL Code</th>
+                      <th>Debit Amount </th>
+                      <th>Credit Amount </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </TableComponent>
+                <div className='loading-text'>Please wait... </div>
               </div>
-              <TableComponent classnames='striped bordered hover'>
-                <thead>
-                  <tr>
-                    <th>Entry Id</th>
-                    <th>Transaction Id</th>
-                    <th>Branch Name</th>
-                    <th>Booking Date (Entry Date)</th>
-                    <th>GL Account Name</th>
-                    <th>Currency Code</th>
-                    <th>GL Code</th>
-                    <th>Debit Amount </th>
-                    <th>Credit Amount </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </TableComponent>
-              <div className='loading-text'>Please wait... </div>
             </div>
           );
         } else {
@@ -905,6 +910,8 @@ class JournalEntries extends React.Component {
             saveRequestData.result !== undefined
               ? saveRequestData.result
               : saveRequestData;
+
+              console.log("currencyListTemp", this.currencyListTemp)
           return (
             <div>
               {createJournalEntryRequest.request_status ===
@@ -913,6 +920,7 @@ class JournalEntries extends React.Component {
                   {createJournalEntryRequest.request_data.response.data.message}
                 </Alert>
               )}
+              {this.currencyListTemp && this.renderSubTabs(this.currencyListTemp)}
 
               <div className='heading-with-cta'>
                 <Form

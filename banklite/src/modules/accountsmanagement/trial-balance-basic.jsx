@@ -45,7 +45,8 @@ class TrialBalanceBasic extends React.Component {
             endDate:'',
             branchId:'',
             invalidDate:false,
-            isPrintable:false
+            isPrintable:false,
+            selectedCurrency: "000"
         }
 
         
@@ -59,7 +60,7 @@ class TrialBalanceBasic extends React.Component {
         const {dispatch} = this.props;
         
 
-        dispatch(branchActions.fetchBranchesList());
+        dispatch(branchActions.fetchBranchesList(true, true));
 
         // dispatch(acoountingActions.getTrialBalance("CLEAR"));
         
@@ -150,6 +151,36 @@ class TrialBalanceBasic extends React.Component {
     makePrintable =()=>{
         this.setState({isPrintable:true});
     }
+
+    selectACurrency = (selectedCurrency)=>{
+        
+        if(!this.props.getTrialBalanceReducer.is_request_processing){
+            
+            this.setState({selectedCurrency})
+        }
+    }
+
+    renderSubTabs =(allTabData)=>{
+        let {selectedCurrency} = this.state;
+        
+        // this.setState({selectedCurrency: allTabData[0].code})
+        return(
+            <div className='subMenu'>
+                <div className='content-container'>
+                    <ul className='nav'>
+                        <li>
+                            <div onClick={()=>this.selectACurrency("000")} className={this.state.selectedCurrency==="000"?"eachtab-option active-tab-option": "eachtab-option"}>All Currencies</div>
+                        </li>
+                        {Array.isArray(allTabData) && allTabData.map((eachData, index) => (
+                            <li key={eachData.name}>
+                                <div onClick={()=>this.selectACurrency(eachData.code)} className={this.state.selectedCurrency===eachData.code?"eachtab-option active-tab-option": "eachtab-option"}>{eachData.name}({eachData.code})</div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        )
+    }
     renderOptions = ()=>{
         let getTrialBalanceRequest = this.props.getTrialBalanceReducer,
             fetchBranchesListRequest = this.props.fetchBranchesListReducer;
@@ -175,13 +206,14 @@ class TrialBalanceBasic extends React.Component {
                 let branchList = fetchBranchesListRequest.request_data.response.data;
                 if(branchList.length>=1){
                     let branchData = [];
-
+                    let currencyList = fetchBranchesListRequest.request_data.response2.data;
                     branchList.map((eachBranch, index)=>{
                         branchData.push({value:eachBranch.id, label:eachBranch.name})
                     })
                     return (
                         <div>
-                            <div className="heading-actions">
+                             {this.renderSubTabs(currencyList)}
+                            <div className="heading-actions mt-20">
                                 <Formik
                                     initialValues={{
                                         branchId: '',
@@ -216,6 +248,7 @@ class TrialBalanceBasic extends React.Component {
                                                     // StartDate: null,
                                                     // StartDate: this.state.startDate.toISOString(),
                                                     EndDate: this.state.endDate.toISOString(),
+                                                    CurrencyCode: this.state.selectedCurrency,
                                                     // EndDate: values.endDate.toISOString(),
                                                 }
 

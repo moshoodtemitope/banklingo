@@ -647,7 +647,7 @@ function getTrialBalanceBasic(payload, tempData) {
 
     url =
       routes.HIT_TRIAL_BALANCE +
-      `?BranchId=${payload.branchId}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+      `?BranchId=${payload.branchId}&CurrencyCode=${payload.CurrencyCode}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
     // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${payload.branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
     // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
 
