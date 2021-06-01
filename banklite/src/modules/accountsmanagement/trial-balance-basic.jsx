@@ -46,7 +46,8 @@ class TrialBalanceBasic extends React.Component {
             branchId:'',
             invalidDate:false,
             isPrintable:false,
-            selectedCurrency: "000"
+            selectedCurrency: "000",
+            includeZeroBalance: true,
         }
 
         
@@ -105,11 +106,11 @@ class TrialBalanceBasic extends React.Component {
         //         PageSize:parseInt(PageSize),
         //         CurrentPage:parseInt(CurrentPage),
         //     }
-
+            let payloadToSend = `?BranchId=${payload.branchId}&CurrencyCode=${payload.CurrencyCode}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1&IncludeZeroBalance=${payload.IncludeZeroBalance}`;
             if(tempData){
-                dispatch(acoountingActions.getTrialBalanceBasic(payload, tempData));
+                dispatch(acoountingActions.getTrialBalanceBasic(payloadToSend, tempData));
             }else{
-                dispatch(acoountingActions.getTrialBalanceBasic(payload));
+                dispatch(acoountingActions.getTrialBalanceBasic(payloadToSend));
             }
         // }else{
         //     return false;
@@ -161,7 +162,7 @@ class TrialBalanceBasic extends React.Component {
     }
 
     renderSubTabs =(allTabData)=>{
-        let {selectedCurrency} = this.state;
+        // let {selectedCurrency} = this.state;
         
         // this.setState({selectedCurrency: allTabData[0].code})
         return(
@@ -169,7 +170,7 @@ class TrialBalanceBasic extends React.Component {
                 <div className='content-container'>
                     <ul className='nav'>
                         <li>
-                            <div onClick={()=>this.selectACurrency("000")} className={this.state.selectedCurrency==="000"?"eachtab-option active-tab-option": "eachtab-option"}>All Currencies</div>
+                            <div onClick={()=>this.selectACurrency("000")} className={this.state.selectedCurrency==="000"?"eachtab-option active-tab-option": "eachtab-option"}>Consolidated</div>
                         </li>
                         {Array.isArray(allTabData) && allTabData.map((eachData, index) => (
                             <li key={eachData.name}>
@@ -183,8 +184,8 @@ class TrialBalanceBasic extends React.Component {
     }
     renderOptions = ()=>{
         let getTrialBalanceRequest = this.props.getTrialBalanceReducer,
-            fetchBranchesListRequest = this.props.fetchBranchesListReducer;
-        
+            fetchBranchesListRequest = this.props.fetchBranchesListReducer,
+            {includeZeroBalance}= this.state;
 
         switch (fetchBranchesListRequest.request_status){
             case (branchConstants.FETCH_BRANCHES_LIST_PENDING):
@@ -249,6 +250,7 @@ class TrialBalanceBasic extends React.Component {
                                                     // StartDate: this.state.startDate.toISOString(),
                                                     EndDate: this.state.endDate.toISOString(),
                                                     CurrencyCode: this.state.selectedCurrency,
+                                                    IncludeZeroBalance: this.state.includeZeroBalance
                                                     // EndDate: values.endDate.toISOString(),
                                                 }
 
@@ -410,20 +412,20 @@ class TrialBalanceBasic extends React.Component {
                                     </div>
                                 }
                             </div>
-                            {/* <div className="heading-with-cta toright compact">
+                            <div className="heading-with-cta toright compact">
                                 <div className="eachitem">
-                                    <input type="checkbox" name="" id="opening-balance" />
-                                    <label htmlFor="opening-balance">Opening Balance</label>
+                                    <input 
+                                        type="checkbox" 
+                                        name="" 
+                                        onChange={()=>{}}
+                                        checked={includeZeroBalance}
+                                        onChange={()=>{
+                                            this.setState({includeZeroBalance: !includeZeroBalance})
+                                        }}
+                                        id="zero-balance" />
+                                    <label htmlFor="closing-balance">Include Zero Balance</label>
                                 </div>
-                                <div className="eachitem">
-                                    <input type="checkbox" name="" id="net-change" />
-                                    <label htmlFor="net-change">Net Change</label>
-                                </div>
-                                <div className="eachitem">
-                                    <input type="checkbox" name="" id="closing-balance" />
-                                    <label htmlFor="closing-balance">Closing Balance</label>
-                                </div>
-                            </div> */}
+                            </div>
                         </div>
                     )
                     
@@ -464,12 +466,16 @@ class TrialBalanceBasic extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
+                                        <th>Branch Name</th>
+                                        <th>Currency</th>
                                         <th>Debit</th>
                                         <th>Credit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -494,6 +500,8 @@ class TrialBalanceBasic extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th colSpan="2">Account Name</th>
+                                        <th>Branch Name</th>
+                                        <th>Currency</th>
                                         <th colSpan="2">Debit</th>
                                         <th colSpan="2">Credit</th>
                                     </tr>
@@ -522,6 +530,8 @@ class TrialBalanceBasic extends React.Component {
                                                 <tr key={`key-${index}`}>
                                                     <td>{eachResult.glCode}</td>
                                                     <td colSpan="2">{eachResult.accountName}</td>
+                                                    <td>{eachResult.branchName}</td>
+                                                    <td>{eachResult.currencyCode}</td>
                                                     <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit, true, true)}</td>
                                                     <td colSpan="2">{numberWithCommas(eachResult.trialBalanceCredit, true, true)}</td>
                                                 </tr>
@@ -531,6 +541,8 @@ class TrialBalanceBasic extends React.Component {
                                     <tr className="totalrow netrow">
                                         <td></td>
                                         <td colSpan="2">Totals</td>
+                                        <td></td>
+                                        <td></td>
                                         {/* <td>{numberWithCommas(openingBalanceTotal, true, true)}</td> */}
                                         <td colSpan="2">{numberWithCommas(debitTotal,true, true)}</td>
                                         <td colSpan="2">{numberWithCommas(creditTotal,true, true)}</td>
@@ -580,6 +592,8 @@ class TrialBalanceBasic extends React.Component {
                                         <tr>
                                             <th>GL Code</th>
                                             <th colSpan="2">Account Name</th>
+                                            <th>Branch Name</th>
+                                            <th>Currency</th>
                                             <th colSpan="2">Debit</th>
                                             <th colSpan="2">Credit</th>
                                         </tr>
@@ -608,6 +622,8 @@ class TrialBalanceBasic extends React.Component {
                                                     <tr key={`key-${index}`}>
                                                         <td>{eachResult.glCode}</td>
                                                         <td colSpan="2">{eachResult.accountName}</td>
+                                                        <td colSpan="2">{eachResult.branchName}</td>
+                                                        <td colSpan="2">{eachResult.currencyCode}</td>
                                                         <td colSpan="2">{numberWithCommas(eachResult.trialBalanceDebit,true, true)}</td>
                                                         <td colSpan="2">{numberWithCommas(eachResult.trialBalanceCredit,true, true)}</td>
                                                         
@@ -620,6 +636,8 @@ class TrialBalanceBasic extends React.Component {
                                         <tr className="totalrow netrow">
                                             <td></td>
                                             <td colSpan="2">Totals</td>
+                                            <td></td>
+                                            <td></td>
                                             {/* <td>{numberWithCommas(openingBalanceTotal,true, true)}</td> */}
                                             <td colSpan="2">{numberWithCommas(debitTotal,true, true)}</td>
                                             <td colSpan="2">{numberWithCommas(creditTotal,true, true)}</td>
@@ -641,12 +659,16 @@ class TrialBalanceBasic extends React.Component {
                                     <tr>
                                         <th>GL Code</th>
                                         <th>Account Name</th>
+                                        <th>Branch Name</th>
+                                        <th>Currency</th>
                                         <th>Debit</th>
                                         <th>Credit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

@@ -47,7 +47,11 @@ class TrialBalance extends React.Component {
             branchId:'',
             invalidDate:false,
             isPrintable:false,
-            selectedCurrency: "000"
+            selectedCurrency: "000",
+            isOpeningBalance: false,
+            isNetChange: false,
+            isClosingBalance: false,
+            includeZeroBalance: true,
         }
 
         
@@ -107,10 +111,12 @@ class TrialBalance extends React.Component {
         //         CurrentPage:parseInt(CurrentPage),
         //     }
 
+            let payloadToSend = `?BranchId=${payload.branchId}&CurrencyCode=${payload.CurrencyCode}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1&IncludeZeroBalance=${payload.IncludeZeroBalance}`;
+                
             if(tempData){
-                dispatch(acoountingActions.getTrialBalance(payload, tempData));
+                dispatch(acoountingActions.getTrialBalance(payloadToSend, tempData));
             }else{
-                dispatch(acoountingActions.getTrialBalance(payload));
+                dispatch(acoountingActions.getTrialBalance(payloadToSend));
             }
         // }else{
         //     return false;
@@ -162,7 +168,7 @@ class TrialBalance extends React.Component {
                 <div className='content-container'>
                     <ul className='nav'>
                         <li>
-                            <div onClick={()=>this.selectACurrency("000")} className={this.state.selectedCurrency==="000"?"eachtab-option active-tab-option": "eachtab-option"}>All Currencies</div>
+                            <div onClick={()=>this.selectACurrency("000")} className={this.state.selectedCurrency==="000"?"eachtab-option active-tab-option": "eachtab-option"}>Consolidated</div>
                         </li>
                         {Array.isArray(allTabData) && allTabData.map((eachData, index) => (
                             <li key={eachData.name}>
@@ -180,7 +186,8 @@ class TrialBalance extends React.Component {
     }
     renderOptions = ()=>{
         let getTrialBalanceRequest = this.props.getTrialBalanceReducer,
-            fetchBranchesListRequest = this.props.fetchBranchesListReducer;
+            fetchBranchesListRequest = this.props.fetchBranchesListReducer,
+            {isOpeningBalance,isNetChange,isClosingBalance, includeZeroBalance}= this.state;
         
 
         switch (fetchBranchesListRequest.request_status){
@@ -246,6 +253,8 @@ class TrialBalance extends React.Component {
                                                         StartDate: this.state.startDate.toISOString(),
                                                         EndDate: this.state.endDate.toISOString(),
                                                         CurrencyCode: this.state.selectedCurrency,
+                                                        CurrencyCode: this.state.selectedCurrency,
+                                                        IncludeZeroBalance: this.state.includeZeroBalance
                                                         // EndDate: values.endDate.toISOString(),
                                                     }
 
@@ -408,16 +417,42 @@ class TrialBalance extends React.Component {
                                 </div>
                                 <div className="heading-with-cta toright compact">
                                     <div className="eachitem">
-                                        <input type="checkbox" name="" id="opening-balance" />
+                                        <input 
+                                            type="checkbox" 
+                                            name="" 
+                                            checked={isOpeningBalance}
+                                            onChange={()=>{}}
+                                            id="opening-balance" />
                                         <label htmlFor="opening-balance">Opening Balance</label>
                                     </div>
                                     <div className="eachitem">
-                                        <input type="checkbox" name="" id="net-change" />
+                                        <input 
+                                            type="checkbox" 
+                                            checked={isNetChange}
+                                            onChange={()=>{}}
+                                            name="" id="net-change" />
                                         <label htmlFor="net-change">Net Change</label>
                                     </div>
                                     <div className="eachitem">
-                                        <input type="checkbox" name="" id="closing-balance" />
+                                        <input 
+                                            type="checkbox" 
+                                            name="" 
+                                            onChange={()=>{}}
+                                            checked={isClosingBalance}
+                                            id="closing-balance" />
                                         <label htmlFor="closing-balance">Closing Balance</label>
+                                    </div>
+                                    <div className="eachitem">
+                                        <input 
+                                            type="checkbox" 
+                                            name="" 
+                                            onChange={()=>{}}
+                                            checked={includeZeroBalance}
+                                            onChange={()=>{
+                                                this.setState({includeZeroBalance: !includeZeroBalance})
+                                            }}
+                                            id="zero-balance" />
+                                        <label htmlFor="closing-balance">Include Zero Balance</label>
                                     </div>
                                 </div>
                             </div>
@@ -551,6 +586,8 @@ class TrialBalance extends React.Component {
                                         <td></td>
                                         <td>Totals</td>
                                         <td>{numberWithCommas(openingBalanceTotal, true, true)}</td>
+                                        <td></td>
+                                        <td></td>
                                         <td>{numberWithCommas(debitTotal,true, true)}</td>
                                         <td>{numberWithCommas(creditTotal,true, true)}</td>
                                         <td>{numberWithCommas(netChangeTotal,true, true)}</td>
@@ -649,6 +686,8 @@ class TrialBalance extends React.Component {
                                             <td></td>
                                             <td>Totals</td>
                                             <td>{numberWithCommas(openingBalanceTotal,true, true)}</td>
+                                            <td></td>
+                                            <td></td>
                                             <td>{numberWithCommas(debitTotal,true, true)}</td>
                                             <td>{numberWithCommas(creditTotal,true, true)}</td>
                                             <td>{numberWithCommas(netChangeTotal,true, true)}</td>

@@ -599,8 +599,8 @@ function getTrialBalance(payload, tempData) {
     // branchId = parseInt(JSON.parse(localStorage.getItem('lingoAuth').BranchId)
 
     url =
-      routes.HIT_TRIAL_BALANCE +
-      `?BranchId=${payload.branchId}&CurrencyCode=${payload.CurrencyCode}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+      routes.HIT_TRIAL_BALANCE +`${payload}`;
+      // `?BranchId=${payload.branchId}&CurrencyCode=${payload.CurrencyCode}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
     // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
 
     let consume = ApiService.request(url, "GET", null);
@@ -646,8 +646,8 @@ function getTrialBalanceBasic(payload, tempData) {
     // branchId = parseInt(JSON.parse(localStorage.getItem('lingoAuth').BranchId)
 
     url =
-      routes.HIT_TRIAL_BALANCE +
-      `?BranchId=${payload.branchId}&CurrencyCode=${payload.CurrencyCode}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
+      routes.HIT_TRIAL_BALANCE +`${payload}`;
+      // `?BranchId=${payload.branchId}&CurrencyCode=${payload.CurrencyCode}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
     // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${payload.branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}&PageSize=50&CurrentPage=1`;
     // url = routes.HIT_TRIAL_BALANCE+`?BranchId=${branchId}&StartDate=${payload.StartDate}&EndDate=${payload.EndDate}`;
 

@@ -881,8 +881,8 @@ class JournalEntries extends React.Component {
                       <th>Branch Name</th>
                       <th>Booking Date (Entry Date)</th>
                       <th>GL Account Name</th>
-                      <th>Currency Code</th>
                       <th>GL Code</th>
+                      <th>Currency Code</th>
                       <th>Debit Amount </th>
                       <th>Credit Amount </th>
                     </tr>
@@ -1009,8 +1009,8 @@ class JournalEntries extends React.Component {
                     <th>Branch Name</th>
                     <th>Booking Date (Entry Date)</th>
                     <th>GL Account Name</th>
-                    <th>Currency Code</th>
                     <th>GL Code</th>
+                    <th>Currency Code</th>
                     <th>Debit Amount </th>
                     <th>Credit Amount </th>
                   </tr>
@@ -1031,8 +1031,8 @@ class JournalEntries extends React.Component {
                         <td>{eachJournal.branchName}</td>
                         <td>{eachJournal.bookingDate}</td>
                         <td>{eachJournal.accountName}</td>
-                        <td>{eachJournal.currencyCode}</td>
                         <td>{eachJournal.glCode}</td>
+                        <td>{eachJournal.currencyCode}</td>
                         <td>
                           {numberWithCommas(
                             eachJournal.debitAmount,
@@ -1193,8 +1193,8 @@ class JournalEntries extends React.Component {
                       <th>Branch Name</th>
                       <th>Booking Date (Entry Date)</th>
                       <th>GL Account Name</th>
-                      <th>Currency Code</th>
                       <th>GL Code</th>
+                      <th>Currency Code</th>
                       <th>Debit Amount</th>
                       <th>Credit Amount</th>
                     </tr>
@@ -1216,8 +1216,8 @@ class JournalEntries extends React.Component {
                           <td>{eachJournal.branchName}</td>
                           <td>{eachJournal.bookingDate}</td>
                           <td>{eachJournal.accountName}</td>
-                          <td>{eachJournal.currencyCode}</td>
                           <td>{eachJournal.glCode}</td>
+                          <td>{eachJournal.currencyCode}</td>
                           <td>
                             {numberWithCommas(
                               eachJournal.debitAmount,
@@ -1329,8 +1329,8 @@ class JournalEntries extends React.Component {
                       <th>Branch Name</th>
                       <th>Booking Date (Entry Date)</th>
                       <th>GL Account Name</th>
-                      <th>Currency Code</th>
                       <th>GL Code</th>
+                      <th>Currency Code</th>
                       <th>Debit Amount </th>
                       <th>Credit Amount </th>
                     </tr>
