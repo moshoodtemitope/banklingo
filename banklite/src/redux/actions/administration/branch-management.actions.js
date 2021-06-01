@@ -290,7 +290,7 @@ function closeABranch  (branchPayload){
 
 }
 
-function fetchBranchesList  (params){
+function fetchBranchesList  (requiresCurrency){
   
   return dispatch =>{
       
@@ -298,7 +298,21 @@ function fetchBranchesList  (params){
       dispatch(request(consume));
       return consume
           .then(response =>{
-              dispatch(success(response));
+              if(!requiresCurrency){
+                dispatch(success(response));
+              }else{
+                let consume2 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
+                dispatch(request(consume2));
+                return consume2
+                    .then(response2 =>{
+                        dispatch(success(response, response2));
+                        
+                    }).catch(error =>{
+                        
+                        dispatch(failure(handleRequestErrors(error)));
+                    });
+              }
+              
           }).catch(error =>{
               
               dispatch(failure(handleRequestErrors(error)));
@@ -308,7 +322,7 @@ function fetchBranchesList  (params){
   
 
   function request(user) { return { type: branchConstants.FETCH_BRANCHES_LIST_PENDING, user } }
-  function success(response) { return { type: branchConstants.FETCH_BRANCHES_LIST_SUCCESS, response } }
+  function success(response, response2) { return { type: branchConstants.FETCH_BRANCHES_LIST_SUCCESS, response, response2 } }
   function failure(error) { return { type: branchConstants.FETCH_BRANCHES_LIST_FAILURE, error } }
 
 }

@@ -12,6 +12,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Modal from "react-bootstrap/Modal";
 import * as Yup from "yup";
 import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from '../../../../_helpers/datepickerfield'
 import Alert from "react-bootstrap/Alert";
 import { Formik } from "formik";
 // import  TableComponent from '../../../shared/elements/table'
@@ -244,10 +245,10 @@ export class MakeTransferModal extends React.Component {
           this.props.searchCustomerAccountReducer.request_status ===
           loanAndDepositsConstants.SEARCH_CUSTOMER_ACCOUNT_SUCCESS
         ) {
-          console.log(
-            "serch rsulrs",
-            this.props.searchCustomerAccountReducer.request_data.response.data
-          );
+          // console.log(
+          //   "serch rsulrs",
+          //   this.props.searchCustomerAccountReducer.request_data.response.data
+          // );
           searchResultsData = this.props.searchCustomerAccountReducer
             .request_data.response.data;
 
@@ -305,6 +306,7 @@ export class MakeTransferModal extends React.Component {
           allAccountOfCurrentCustomer.push({
             label: `${eachLoanAccount.productName} - ${eachLoanAccount.accountNumber}`,
             value: eachLoanAccount.encodedKey,
+            type:"repayloanwithdeposit"
           });
         }
       });
@@ -321,6 +323,7 @@ export class MakeTransferModal extends React.Component {
           allAccountOfCurrentCustomer.push({
             label: `${eachDepositAccount.productName} - ${eachDepositAccount.accountNumber}`,
             value: eachDepositAccount.encodedKey,
+            type:"transfer"
           });
         }
       });
@@ -465,7 +468,8 @@ export class MakeTransferModal extends React.Component {
           }}
           validationSchema={changeDepositStateValidationSchema}
           onSubmit={(values, { resetForm }) => {
-            let changeDepositStatePayload = {
+            let changeDepositStatePayload;
+            changeDepositStatePayload = {
               accountEncodedKey: this.props.depositEncodedKey,
               notes: values.notes,
               amount: parseFloat(values.amountToTransfer.replace(/,/g, "")),
@@ -488,8 +492,32 @@ export class MakeTransferModal extends React.Component {
                 selectOtherCustomerAccount.searchItemEncodedKey;
             }
 
+            let changeLoanStatePayload = {
+              accountEncodedKey: values.currentCustomerChosenAccount,
+              depositAccountEncodedKey: this.props.depositEncodedKey,
+              notes: values.notes,
+              amount: parseFloat(values.amountToTransfer.replace(/,/g, "")),
+              isBackDated: values.allowBackDate,
+              backDateValueDate: values.backDateChosen !== "" ? values.backDateChosen.toISOString() : null,
+              isBookingDate: values.showBookingDate,
+              bookingDate: values.bookingDateChosen !== "" ? values.bookingDateChosen.toISOString() : null,
+            }
+
+
+            let payloadToSend;
+
+            if(this.state.transactionType==="repayloanwithdeposit"){
+              payloadToSend = changeLoanStatePayload
+            }else{
+              payloadToSend = changeDepositStatePayload;
+            }
+            
+
+            // console.log("payloadToSend", payloadToSend)
+            
+            // return false;
             this.props
-              .handleNewDepositState(changeDepositStatePayload, "transfer")
+              .handleNewDepositState(payloadToSend, this.state.transactionType)
               .then(() => {
                 if (
                   this.props.changeDepositStateReducer.request_status ===
@@ -564,6 +592,11 @@ export class MakeTransferModal extends React.Component {
                             defaultAccountOptions: "",
                             selectACustomerAccount: "",
                           });
+                          if(e.target.value==="anothercustomer"){
+                            this.setState({transactionType:"transfer"})
+                          }
+
+                          
                         }}
                       >
                         <option value="currentcustomer">
@@ -583,6 +616,8 @@ export class MakeTransferModal extends React.Component {
                         <Select
                           options={allAccountOfCurrentCustomer}
                           onChange={(selected) => {
+                            this.setState({transactionType:selected.type})
+                            // console.log("accountinfo", selected)
                             setFieldValue(
                               "currentCustomerChosenAccount",
                               selected.value
@@ -804,6 +839,76 @@ export class MakeTransferModal extends React.Component {
                     </Col>
                     <Col></Col>
                   </Form.Row>
+                  {this.state.transactionType === "repayloanwithdeposit" &&
+                    <Form.Row className="mb-10">
+                      <Col className="date-wrap">
+                        <Form.Group className="table-helper m-b-5">
+                          <input type="checkbox"
+                            name="allowBackDate"
+                            onChange={handleChange}
+                            checked={values.allowBackDate ? values.allowBackDate : null}
+                            value={values.allowBackDate}
+                            id="allowBackDate" />
+                          <label htmlFor="allowBackDate">Backdate</label>
+                        </Form.Group>
+                        {values.allowBackDate === true &&
+                          <Form.Group className="mb-0 date-wrap">
+                            <DatePicker
+                              placeholderText="Choose  date"
+                              autoComplete="new-password"
+                              dateFormat={window.dateformat}
+                              className="form-control form-control-sm"
+                              peekNextMonth
+                              showMonthDropdown
+                              name="backDateChosen"
+                              value={values.backDateChosen}
+                              onChange={setFieldValue}
+                              showYearDropdown
+                              dropdownMode="select"
+                              maxDate={new Date()}
+                              className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
+                            />
+                            {errors.backDateChosen && touched.backDateChosen ? (
+                              <span className="invalid-feedback">{errors.backDateChosen}</span>
+                            ) : null}
+                          </Form.Group>
+                        }
+                      </Col>
+                      <Col className="date-wrap">
+                        <Form.Group className="table-helper m-b-5">
+                          <input type="checkbox"
+                            name="showBookingDate"
+                            onChange={handleChange}
+                            checked={values.showBookingDate ? values.showBookingDate : null}
+                            value={values.showBookingDate}
+                            id="showBookingDate" />
+                          <label htmlFor="showBookingDate">Booking Date</label>
+                        </Form.Group>
+                        {values.showBookingDate === true &&
+                          <Form.Group className="mb-0 date-wrap">
+                            <DatePicker
+                              placeholderText="Choose  date"
+                              autoComplete="new-password"
+                              dateFormat={window.dateformat}
+                              className="form-control form-control-sm"
+                              peekNextMonth
+                              showMonthDropdown
+                              name="bookingDateChosen"
+                              value={values.bookingDateChosen}
+                              onChange={setFieldValue}
+                              showYearDropdown
+                              dropdownMode="select"
+                              // minDate={new Date()}
+                              className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
+                            />
+                            {errors.bookingDateChosen && touched.bookingDateChosen ? (
+                              <span className="invalid-feedback">{errors.bookingDateChosen}</span>
+                            ) : null}
+                          </Form.Group>
+                        }
+                      </Col>
+                    </Form.Row>
+                  }
                   <Form.Group>
                     <Form.Label className="block-level">Notes</Form.Label>
                     <Form.Control
@@ -866,7 +971,7 @@ export class MakeTransferModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log("gafafa");
+  // console.log("gafafa");
   return {
     // adminGetTransactionChannels : state.administrationReducers.adminGetTransactionChannelsReducer,
     // getAClientReducer: state.clientsReducers.getAClientReducer,

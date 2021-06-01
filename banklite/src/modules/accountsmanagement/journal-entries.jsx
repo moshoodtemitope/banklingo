@@ -39,6 +39,7 @@ class JournalEntries extends React.Component {
       endDate: '',
       startDate: '',
       SearchText: '',
+      tabCurrency: "000"
     };
   }
 
@@ -46,7 +47,7 @@ class JournalEntries extends React.Component {
     this.getJournalEntries();
   }
 
-  getJournalEntries = (tempData) => {
+  getJournalEntries = (tempData, tabCurrency) => {
     const { dispatch } = this.props;
     let {
         CurrentPage,
@@ -56,7 +57,7 @@ class JournalEntries extends React.Component {
         SearchText,
       } = this.state;
 
-    let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+    let params = `PageSize=${PageSize}&CurrencyCode=${tabCurrency||this.state.tabCurrency}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
     if (tempData) {
       dispatch(acoountingActions.getJournalEntries(params, tempData));
     } else {
@@ -66,14 +67,14 @@ class JournalEntries extends React.Component {
 
   exportJournalEntries = (tempData) => {
     const { dispatch } = this.props;
-    let { CurrentPage, PageSize, startDate, endDate, SearchText } = this.state;
+    let { CurrentPage, PageSize, startDate, endDate, SearchText, tabCurrency } = this.state;
     if (endDate !== '') {
       endDate = endDate.toISOString();
     }
     if (startDate !== '') {
       startDate = startDate.toISOString();
     }
-    let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+    let params = `PageSize=${PageSize}&CurrencyCode=${tabCurrency}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
     dispatch(acoountingActions.exportJournalEntries(params));
   };
@@ -104,10 +105,10 @@ class JournalEntries extends React.Component {
 
   setPagesize = (PageSize, tempData) => {
     let sizeOfPage = PageSize.target.value,
-      { CurrentPage, startDate, endDate, SearchText } = this.state;
+      { CurrentPage, startDate, endDate, SearchText,  tabCurrency } = this.state;
     this.setState({ PageSize: sizeOfPage });
 
-    let params = `PageSize=${sizeOfPage}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+    let params = `PageSize=${sizeOfPage}&CurrencyCode=${tabCurrency}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
     const { dispatch } = this.props;
     if (tempData) {
@@ -119,9 +120,9 @@ class JournalEntries extends React.Component {
 
   loadNextPage = (nextPage, tempData) => {
     const { dispatch } = this.props;
-    let { startDate, endDate, SearchText } = this.state;
+    let { startDate, endDate, SearchText, tabCurrency } = this.state;
 
-    let params = `PageSize=${this.state.PageSize}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+    let params = `PageSize=${this.state.PageSize}&CurrencyCode=${tabCurrency}&CurrentPage=${nextPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
     if (tempData) {
       dispatch(acoountingActions.getJournalEntries(params, tempData));
@@ -133,7 +134,7 @@ class JournalEntries extends React.Component {
   searchTxtn = (e, tempData) => {
     e.preventDefault();
     const { dispatch } = this.props;
-    let { PageSize, CurrentPage, SearchText, endDate, startDate } = this.state;
+    let { PageSize, CurrentPage, SearchText, endDate, startDate, tabCurrency } = this.state;
 
     if (SearchText !== '' || endDate !== '' || startDate !== '') {
       if (endDate !== '') {
@@ -142,7 +143,7 @@ class JournalEntries extends React.Component {
       if (startDate !== '') {
         startDate = startDate.toISOString();
       }
-      let params = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+      let params = `PageSize=${PageSize}&CurrencyCode=${tabCurrency}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
 
       if (tempData) {
         dispatch(acoountingActions.getJournalEntries(params, tempData));
@@ -786,6 +787,38 @@ class JournalEntries extends React.Component {
     );
   };
 
+  renderSubTabs =(allTabData)=>{
+    let {tabCurrency} = this.state;
+    console.log("allTabData", allTabData)
+    // this.setState({selectedCurrency: allTabData[0].code})
+    return(
+        <div className='subMenu'>
+            <div className='content-container'>
+                <ul className='nav'>
+                    <li>
+                        <div onClick={()=>this.selectACurrency("000")} className={this.state.tabCurrency==="000"?"eachtab-option active-tab-option": "eachtab-option"}>All Currencies</div>
+                    </li>
+                    {Array.isArray(allTabData) && allTabData.map((eachData, index) => (
+                        <li key={eachData.name}>
+                            <div onClick={()=>this.selectACurrency(eachData.code)} className={this.state.tabCurrency===eachData.code?"eachtab-option active-tab-option": "eachtab-option"}>{eachData.name}({eachData.code})</div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    )
+}
+  selectACurrency = (tabCurrency)=>{
+    if(this.props.getJournalEntries.is_request_processing===false){
+        this.setState({tabCurrency})
+        let saveRequestData =
+              this.props.getJournalEntries.request_data !== undefined &&
+              this.props.getJournalEntries.request_data.response !== undefined
+                ? this.props.getJournalEntries.request_data.response.data
+                : null;
+        this.getJournalEntries(saveRequestData, tabCurrency);
+    }
+  }
   renderAllJournals = () => {
     let getJournalEntriesRequest = this.props.getJournalEntries,
       createJournalEntryRequest = this.props.createJournalEntry;
@@ -841,8 +874,10 @@ class JournalEntries extends React.Component {
                   <tr>
                     <th>Entry Id</th>
                     <th>Transaction Id</th>
+                    <th>Branch Name</th>
                     <th>Booking Date (Entry Date)</th>
                     <th>GL Account Name</th>
+                    <th>Currency Code</th>
                     <th>GL Code</th>
                     <th>Debit Amount </th>
                     <th>Credit Amount </th>
@@ -850,6 +885,8 @@ class JournalEntries extends React.Component {
                 </thead>
                 <tbody>
                   <tr>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -961,8 +998,10 @@ class JournalEntries extends React.Component {
                   <tr>
                     <th>Entry Id</th>
                     <th>Transaction Id</th>
+                    <th>Branch Name</th>
                     <th>Booking Date (Entry Date)</th>
                     <th>GL Account Name</th>
+                    <th>Currency Code</th>
                     <th>GL Code</th>
                     <th>Debit Amount </th>
                     <th>Credit Amount </th>
@@ -981,8 +1020,10 @@ class JournalEntries extends React.Component {
                       >
                         <td>{eachJournal.id}</td>
                         <td>{eachJournal.transactionReference}</td>
+                        <td>{eachJournal.branchName}</td>
                         <td>{eachJournal.bookingDate}</td>
                         <td>{eachJournal.accountName}</td>
+                        <td>{eachJournal.currencyCode}</td>
                         <td>{eachJournal.glCode}</td>
                         <td>
                           {numberWithCommas(
@@ -1009,12 +1050,15 @@ class JournalEntries extends React.Component {
 
       case accountingConstants.GET_JOURNAL_ENTRY_SUCCESS:
         let JournalEntriesData =
-          getJournalEntriesRequest.request_data.response.data;
+              getJournalEntriesRequest.request_data.response.data,
+            curenciesData =
+              getJournalEntriesRequest.request_data.response4.data;
 
         if (JournalEntriesData !== undefined) {
           if (JournalEntriesData.result.length >= 1) {
             return (
               <div>
+                {this.renderSubTabs(curenciesData)}
                 <div className='heading-with-cta toleft'>
                   <Button
                     onClick={this.state.show === false ? this.handleShow : null}
@@ -1138,6 +1182,7 @@ class JournalEntries extends React.Component {
                     <tr>
                       <th>Entry Id</th>
                       <th>Transaction Id</th>
+                      <th>Branch Name</th>
                       <th>Booking Date (Entry Date)</th>
                       <th>GL Account Name</th>
                       <th>Currency Code</th>
@@ -1160,6 +1205,7 @@ class JournalEntries extends React.Component {
                         >
                           <td>{eachJournal.id}</td>
                           <td>{eachJournal.transactionReference}</td>
+                          <td>{eachJournal.branchName}</td>
                           <td>{eachJournal.bookingDate}</td>
                           <td>{eachJournal.accountName}</td>
                           <td>{eachJournal.currencyCode}</td>
@@ -1188,6 +1234,7 @@ class JournalEntries extends React.Component {
           } else {
             return (
               <div className='no-records'>
+                {this.renderSubTabs(curenciesData)}
                 <div className='heading-with-cta'>
                   <Form
                     className='one-liner'
@@ -1271,8 +1318,10 @@ class JournalEntries extends React.Component {
                     <tr>
                       <th>Entry Id</th>
                       <th>Transaction Id</th>
+                      <th>Branch Name</th>
                       <th>Booking Date (Entry Date)</th>
                       <th>GL Account Name</th>
+                      <th>Currency Code</th>
                       <th>GL Code</th>
                       <th>Debit Amount </th>
                       <th>Credit Amount </th>
@@ -1280,6 +1329,8 @@ class JournalEntries extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
+                      <td></td>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>

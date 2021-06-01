@@ -1294,3 +1294,19 @@ button.togglestyle{
         padding-right: 10px;
     }
 }
+.eachtab-option {
+    display: block;
+    font-size: 12px;
+    padding: 10px;
+    background-color: white;
+    color: #6E7297;
+    text-decoration: none;
+    cursor: pointer;
+    &:not(.active-tab-option):hover{
+        border-bottom: 2px solid #5D6D7E;
+    }
+    &.active-tab-option{
+        font-weight: bold;
+        border-bottom: 2px solid #25e577;
+    }
+}
