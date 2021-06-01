@@ -290,11 +290,16 @@ function closeABranch  (branchPayload){
 
 }
 
-function fetchBranchesList  (requiresCurrency){
+function fetchBranchesList  (requiresCurrency, forFiltering){
   
   return dispatch =>{
       
-      let consume = ApiService.request(routes.GET_BRANCHES+'/all', "GET", null);
+      let consume;
+      if(!forFiltering){
+        consume = ApiService.request(routes.GET_BRANCHES+'/all', "GET", null);
+      }else{
+        consume = ApiService.request(routes.GET_BRANCHES+'/allowedbranches', "GET", null);
+      }
       dispatch(request(consume));
       return consume
           .then(response =>{

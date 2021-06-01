@@ -61,9 +61,9 @@ class TrialBalance extends React.Component {
         const {dispatch} = this.props;
         
         // dispatch(branchActions.fetchBranchesList("CLEAR"));
-        dispatch(branchActions.fetchBranchesList(true));
+        dispatch(branchActions.fetchBranchesList(true, true));
 
-        dispatch(acoountingActions.getTrialBalance("CLEAR"));
+        // dispatch(acoountingActions.getTrialBalance("CLEAR"));
         
     }
 
@@ -147,7 +147,7 @@ class TrialBalance extends React.Component {
 
     selectACurrency = (selectedCurrency)=>{
         
-        if(this.props.getTrialBalanceReducer.is_request_processing===false){
+        if(!this.props.getTrialBalanceReducer.is_request_processing){
             
             this.setState({selectedCurrency})
         }
