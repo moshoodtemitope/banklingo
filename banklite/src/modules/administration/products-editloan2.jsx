@@ -486,6 +486,15 @@ class EditLoanProduct extends React.Component {
                                         ) : null}
                                     </Col>
                                     <Col>
+                                        <Form.Label className="block-level">Currency</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            disabled={true}
+                                            className="h-38px"
+                                            onChange={()=>{}}
+                                            value={loanProductDetails.currencyCode}
+                                             />
+                                        
                                     </Col>
                                 </Form.Row>
 
@@ -534,7 +543,7 @@ class EditLoanProduct extends React.Component {
                                         <div className="each-formsection">
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Default Loan Amount</Form.Label>
+                                                    <Form.Label className="block-level">Default Loan Amount ({loanProductDetails.currencyCode}) </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
@@ -546,7 +555,7 @@ class EditLoanProduct extends React.Component {
                                                     ) : null}
                                                 </Col>
                                                 <Col>
-                                                    <Form.Label className="block-level">Minimum Loan Amount</Form.Label>
+                                                    <Form.Label className="block-level">Minimum Loan Amount ({loanProductDetails.currencyCode})</Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
@@ -560,7 +569,7 @@ class EditLoanProduct extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Maximum Loan Amount</Form.Label>
+                                                    <Form.Label className="block-level">Maximum Loan Amount ({loanProductDetails.currencyCode})</Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}

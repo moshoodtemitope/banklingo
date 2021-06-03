@@ -475,7 +475,7 @@ class NewLoanProduct extends React.Component {
                                         <div className="each-formsection">
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Default Loan Amount</Form.Label>
+                                                    <Form.Label className="block-level">Default Loan Amount  {values.currency!==""?`(${values.currency})`: ""} </Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
@@ -487,7 +487,7 @@ class NewLoanProduct extends React.Component {
                                                     ) : null}
                                                 </Col>
                                                 <Col>
-                                                    <Form.Label className="block-level">Minimum Loan Amount</Form.Label>
+                                                    <Form.Label className="block-level">Minimum Loan Amount {values.currency!==""?`(${values.currency})`: ""}</Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}
@@ -501,7 +501,7 @@ class NewLoanProduct extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Col>
-                                                    <Form.Label className="block-level">Maximum Loan Amount</Form.Label>
+                                                    <Form.Label className="block-level">Maximum Loan Amount {values.currency!==""?`(${values.currency})`: ""}</Form.Label>
                                                     <Form.Control
                                                         type="text"
                                                         onChange={handleChange}

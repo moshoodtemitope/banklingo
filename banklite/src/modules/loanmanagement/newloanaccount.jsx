@@ -425,7 +425,7 @@ class NewLoanAccount extends React.Component {
       adminGetAllBranchesRequest = this.props.adminGetAllBranches,
       adminGetTransactionChannelsRequest = this.props
         .adminGetTransactionChannels,
-      { selectedLoanProductDetails, currencyCode } = this.state;
+      { selectedLoanProductDetails, currencyCode, selectedProduct } = this.state;
 
     if (
       getAllLoanProductsRequest.request_status ===
@@ -531,6 +531,7 @@ class NewLoanAccount extends React.Component {
                 allLoanProducts.map((product, id) => {
                   allLoanProductsList.push({
                     label: product.productName,
+                    currencyCode: product.currencyCode,
                     value: product.productEncodedKey,
                   });
                 });
@@ -635,6 +636,7 @@ class NewLoanAccount extends React.Component {
                         .productName,
                       notes: '',
                       loanAmount: '',
+                      initialCurrency:  allLoanProductsList[0].currencyCode,
                       loanAmountMin: this.selectedLoanProductDetails
                         ? this.selectedLoanProductDetails.loanAmountSetting
                             .loanAmountMinimun !== null
@@ -979,6 +981,7 @@ class NewLoanAccount extends React.Component {
                                 //     loanAmount:""
                                 // });
                                 // setFieldValue('loanAmount', "")
+                                this.setState({selectedProduct: selected})
                                 setFieldValue(
                                   'productEncodedKey',
                                   selected.value
@@ -1076,7 +1079,7 @@ class NewLoanAccount extends React.Component {
                                 <Col>
                                   <Form.Label className='block-level'>
                                     Loan Amount{' '}
-                                    {currencyCode ? `(${currencyCode})` : ''}
+                                    {currencyCode ? `(${currencyCode})` : `(${values.initialCurrency})`}
                                   </Form.Label>
                                   <Form.Control
                                     type='text'
@@ -1141,7 +1144,7 @@ class NewLoanAccount extends React.Component {
                                           .loanAmountSetting
                                           .loanAmountMinimun !== null && (
                                           <span>
-                                            Min: {currencyCode}
+                                            Min: {currencyCode ? `(${currencyCode})` : `(${values.initialCurrency})`}
                                             {numberWithCommas(
                                               this.selectedLoanProductDetails
                                                 .loanAmountSetting
@@ -1154,7 +1157,7 @@ class NewLoanAccount extends React.Component {
                                           .loanAmountMaximum !== null && (
                                           <span>
                                             {' '}
-                                            Max: {currencyCode}
+                                            Max: {currencyCode ? `(${currencyCode})` : `(${values.initialCurrency})`}
                                             {numberWithCommas(
                                               this.selectedLoanProductDetails
                                                 .loanAmountSetting
@@ -1183,9 +1186,9 @@ class NewLoanAccount extends React.Component {
                                 </Col>
                                 <Col>
                                   <Form.Label className='block-level'>
-                                    Interest Rate{' '}
+                                    Interest Rate 
                                     {values.interestRateTermsText !== ''
-                                      ? `{(${
+                                      ? `(${
                                           values.interestRateTermsText ===
                                           '% per x days'
                                             ? '% per day'
@@ -1561,7 +1564,7 @@ class NewLoanAccount extends React.Component {
                               <Form.Row>
                                 <Col sm={6}>
                                   <Form.Label className='block-level'>
-                                    Maximum withdrawal amount
+                                    Maximum withdrawal amount {currencyCode ? `(${currencyCode})` : `(${values.initialCurrency})`}
                                   </Form.Label>
                                   <Form.Control
                                     type='text'
