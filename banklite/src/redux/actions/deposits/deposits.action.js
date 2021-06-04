@@ -238,16 +238,41 @@ function getDepositTransaction(params, tempData) {
   }
 }
 
-function exportDepositTransaction(params, tempData) {
+function exportDepositTransaction(params, tempData, isIndividual, isPDF, encodedKey) {
   return (dispatch) => {
-    let consume = ApiService.request(
-      routes.HIT_DEPOSITS_TRANSACTIONS + `/deposittransactionsexport?${params}`,
-      "GET",
-      "",
-      "",
-      "",
-      "blob"
-    );
+    let consume;
+
+    if(!isIndividual){
+      consume = ApiService.request(
+        routes.HIT_DEPOSITS_TRANSACTIONS + `/deposittransactionsexport?${params}`,
+        "GET",
+        "",
+        "",
+        "",
+        "blob"
+      )
+    }else{
+      if(!isPDF){
+        consume = ApiService.request(
+          routes.HIT_DEPOSITS_TRANSACTIONS + `/accountexport/${encodedKey}?${params}`,
+          "GET",
+          "",
+          "",
+          "",
+          "blob"
+        )
+      }else{
+        consume = ApiService.request(
+          routes.HIT_DEPOSITS_TRANSACTIONS + `/accountexporttopdf/${encodedKey}?${params}`,
+          "GET",
+          "",
+          "",
+          "",
+          "blob"
+        )
+
+      }
+    }
     dispatch(request(consume, tempData));
     return consume
       .then((response) => {
@@ -266,7 +291,7 @@ function exportDepositTransaction(params, tempData) {
         const link = document.createElement("a");
         link.href = url;
         if (filename === undefined) {
-          link.setAttribute("download", "deposit-transactions.xlsx");
+          link.setAttribute("download", (!isPDF)?"deposit-transactions.xlsx":"deposit-transactions.pdf");
         }
 
         if (filename !== undefined) {

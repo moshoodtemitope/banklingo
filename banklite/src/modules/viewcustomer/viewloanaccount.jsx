@@ -50,6 +50,7 @@ import { LoanStateConstants, LoanSubStateConstants } from "../../redux/actions/c
 import { DisburseLoanModal } from "./components/loan/disburse-loan-component";
 import { RepayLoanModal } from "./components/loan/repay-loan-component";
 import { ApplyFeeModal } from "./components/loan/apply-fee-component";
+import { LinkSettlementAccount } from "./components/loan/link-settlements";
 
 import ReactDOM from 'react-dom';
 class ViewLoanAccount extends React.Component {
@@ -3081,6 +3082,10 @@ class ViewLoanAccount extends React.Component {
   handleCloseApplyFeeModal = () =>
     this.setState({ showApplyFeeModal: false });
 
+  handleShowSettlementSettings = () => this.setState({ showSettlementSettings: true });
+  handleCloseSettlementSettings = () =>
+    this.setState({ showSettlementSettings: false });
+
   
   
   
@@ -4236,6 +4241,47 @@ this.permissions={
           return this.visibility;
   };
 
+  renderSettlementAccountData = (settlementAccountData) => {
+    let linkedSettlementProductAccountNumber =settlementAccountData.linkedSettlementProductAccountNumber;
+  
+      if (
+        linkedSettlementProductAccountNumber===""
+      ) {
+        return (
+          <div className="each-overview">
+            <h6> Settlement Account </h6>
+            <div className="loading-text">No account linked yet </div>
+          </div>
+        );
+      } 
+
+
+      if (
+        linkedSettlementProductAccountNumber!==""
+      ) {
+        return (
+          <div className="each-overview">
+            <h6> Settlement Account </h6>
+            <TableComponent classnames="striped bordered hover">
+              <thead>
+                <tr>
+                  <th>Account Number</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{linkedSettlementProductAccountNumber} </td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </TableComponent>
+          </div>
+        );
+      } 
+  
+  };
+
   renderLoanCtas = (loanDetails) => {
    
    let visibility= this.enforceVisibility(loanDetails);
@@ -4293,6 +4339,17 @@ this.permissions={
               Apply Fee
             </Button>
           </li>
+          {/* <li>
+            <Button
+              size="sm"
+              onClick={() => {
+                this.handleShowSettlementSettings();
+
+              }}
+            >
+              Set Settlement account
+            </Button>
+          </li> */}
           {visibility.showSetIncomplete && (
             <li>
               <Button
@@ -4640,6 +4697,23 @@ this.permissions={
             showApplyFeeModal={this.state.showApplyFeeModal}
             getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
           />
+          {this.state.showSettlementSettings &&
+            <LinkSettlementAccount
+              {...this.props}
+              loanEncodedKey= {this.loanEncodedKey}
+              loanDetails={
+                getAClientLoanAccountRequest.request_data.response.data
+              }
+              newStateUpdate={this.state.newStateUpdate}
+              savingsWallets = {this.props.getClientDepositsReducer}
+              closeModal={this.handleCloseSettlementSettings}
+              handleNewLoanState={this.handleNewLoanState}
+              
+              // changeLoanState={this.state.changeLoanState}
+              showLinkSettlementModal={this.state.showSettlementSettings}
+              getCustomerLoanAccountDetails={this.getCustomerLoanAccountDetails}
+            />
+          }
           
 
           <DisburseLoanModal
@@ -4763,6 +4837,11 @@ this.permissions={
                       {this.renderLoanAccountDetails(
                         getAClientLoanAccountRequest.request_data.response.data
                       )}
+
+                      {this.renderSettlementAccountData(
+                        getAClientLoanAccountRequest.request_data.response.data
+                      )}
+                      
                     </Tab.Pane>
                     <Tab.Pane eventKey="schedule" mountOnEnter={true}>
                       {this.renderLoanSchedule()}

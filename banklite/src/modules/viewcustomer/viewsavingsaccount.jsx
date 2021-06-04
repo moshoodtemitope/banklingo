@@ -338,7 +338,28 @@ class ViewSavingsAccount extends React.Component {
       );
     }
   };
+  exportDepositTransactions = (pdf) => {
+    let {
+        PageSize,
+        CurrentPage,
+        startDate,
+        endDate,
+        SearchText,
+        FullDetails,
+        CurrentSelectedPage
+      } = this.state;
 
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
+    let paramters = `PageSize=${PageSize}&CurrentPage=${CurrentPage}&StartDate=${startDate}&endDate=${endDate}&SearchText=${SearchText}`;
+    const { dispatch } = this.props;
+
+    dispatch(depositActions.exportDepositTransaction(paramters, null, true, pdf,this.depositEncodedKey ));
+  };
   setTransactionRequestNextPage = (nextPage, tempData) => {
     const { dispatch } = this.props;
 
@@ -1655,6 +1676,34 @@ class ViewSavingsAccount extends React.Component {
                 <Button className="no-margins" variant="primary" type="submit">
                   Filter
                 </Button>
+                <div className='actions-wrap'>
+                  <Button
+                    onClick={()=>this.exportDepositTransactions(false)}
+                    className='action-icon'
+                    variant='outline-secondary'
+                    type='button'
+                  >
+                    <img
+                      alt='download excel'
+                      src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg=='
+                      width='16'
+                      height='16'
+                    />
+                  </Button>
+                  <Button
+                        onClick={()=>this.exportDepositTransactions(true)}
+                        className='action-icon'
+                        variant='outline-secondary'
+                        type='button'
+                      >
+                        <img
+                          alt='download pdf'
+                          src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAAW7AAAFuwHJqm8tAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAexQTFRF////4ldM4ldM4ldM4ldMyEM3yEM4yEQ4yEQ4yEQ4yEQ54ldMyEQ5yEQ5yEU44ldMyEU4yEU4yUU4ykQ4ykQ5ykU5ykU5ykU5ykU5ykY6ykY6ykY6zEc6zEc7zEc7zEc74ldM4ldMtTYptzcruToswj8zwkA0y0c6zEY7zkk921JH4ldM4lhN41pQ41tQ41xR41xS411S415T419U42BV5GBW5GJX5GJY5GNZ5GVb5WZc5Wdd5Whe5Wlf5Wth5mxi5m1k5m9l5m9m53Vs6Hhv6Hty6Hxz6X116X516YF56YJ66oR86oV964iB642G7I6H7JGK7JKK7ZeQ7ZmS7pqU7puU7p2W7p2X7p6Y7p+Z76Gb76Kc8Kag8Kei8Kul8aum8ayn8a2n8a+q8bCr8bGr8rGs8rKt8rOu8rWw8rax8rey87ey87iz87m087q187q287y39L259MC89MK+9cXB9cbC9sjF9snF9srG9srH9svI9szI9s3K9s7K987L99DM99DN99HO+NbT+NnW+drY+dvY+d3a+d/d+uHf+uPh+uXj++bk++fl++jm++nn++no++rp++vp/Ovq/O3r/O3s/O7t/O/t/O/u/PDv/PHw/fLx/fTz/fT0/fX0/vr6/vv7/vz7//z8//7+////v4mUtQAAACJ0Uk5TAAEmcICwsLGys7OztLW1tba4uLi5uru8vb6/wMDBwsPm9vQJaUIAAAMOSURBVHja7dvpU9NAGAfgpq1nVbwVz3ZVFFYURRGtJ8UT79taxZMiKsUDUDyq4o2iqLViQaH5R82uJGmamjSd3ew48/4+dd/Z6fvMbo72w3o8OfH6A0HMIOM8JUXyhTCboPEl9S/DrIJKEvgwQwCa4Li/N8QUgCY6BfgxWwCa5BAQYA1wKggyB6DJjgCYPQBNEQ1wJOACQFNFA9A00QA0XTSgaAE3AJohGoBmigagWaIBaLZoAJojGlCEgDMAzRUNsBVwB6B5ogE2AhcAaL5ogKXAFQAqFw1A5ZIbgOUWggWSC4AKVIKAJWClFQAtlLgDqpZZChZJvAG40hKAFku8AXiFcwFbAK603oUlEm8ArlpVYXU3LuUOsAsAAAAAAAAAAAAAAAD+L8D2ttQwSV/XxYha23ylf4jkSzJ+fHeNPjccTw//zZMIM0C7rGX02liz63JO0mfXqHMTevUZM0Aqt9nbdbT2TTbk1Rbz3EFmgF+GXq0FarL8ud409x5TwPtoNNr6iXxvdq/W6GlPz4vMWLuEPvddJ8npGqYAuqEbXpNWLRqgjnzadilLXY3a3GbWd4EGwCdIq+dGAMZNdBVernYBUD9Crvl8AI7STWhyCzBoAqz9SkbnXQCc1O5vAwDHyegOf0DdG9Loqhlwhox6uQL6YrFYgq50dp8ZcIiMMmq966iSCGOAnnZsBhyksmrD3IecAB9rCwBOkdGHvLm7eACyNzfiAoAWMuo2zs2GmQJGlRfswKPLjQaUCqimz+hmA2CkjcdtmLcqKoA+IOUjav3ufiVbsXuAPT/o23eTCw+iQoBw9DddgGPYfYDyOk6qv0ySWAAgJ0M7OALSypd25tUyxv4P1GuOXA5R1oDb2g7reZzb/vthrd6hDBtYA3beT91Yn1cL3+qnP75/9nacO1Cr1xu6By7APyMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACUBgu72D3I98llEAlwPvRYRP9djv/YJebkefLaPj+/Rb9uUSXwPv9utv+9fpyxYHf+3vP8CfsP+/wEtLRb0bq9JTwAAAABJRU5ErkJggg=='
+                          width='16'
+                          height='16'
+                        />
+                      </Button>
+                </div>
               </Form>
               <div className="pagination-wrap">
                 <label htmlFor="toshow">Show</label>

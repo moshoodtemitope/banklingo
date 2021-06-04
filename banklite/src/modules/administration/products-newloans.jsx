@@ -144,8 +144,8 @@ class NewLoanProduct extends React.Component {
 
 
                 let allDepositProducts = getAllDepositProductsRequest.request_data.response.data,
-                    allCurrencies = getAllDepositProductsRequest.request_data.response3.data,
-                    allDepositProductsList      =[
+                    allCurrencies = getAllDepositProductsRequest.request_data.response3.data;
+                    this.allDepositProductsList      =[
                         {
                             label: "ANY",
                             value: "ANY"
@@ -153,7 +153,7 @@ class NewLoanProduct extends React.Component {
                     ];
                 
                 allDepositProducts.map((product, id)=>{
-                    allDepositProductsList.push({label: product.productName, value:product.productEncodedKey});
+                    this.allDepositProductsList.push({label: product.productName, value:product.productEncodedKey, currencyCode: product.currencyCode});
                 })
                     
 
@@ -226,7 +226,7 @@ class NewLoanProduct extends React.Component {
                                 installmentsMax:null,
                                 collectPrincipalEveryRepayments:'',
                                 isEnableLinking:false,
-                                depositProductEncodedKey:allDepositProductsList!==null?allDepositProductsList[0].value:null,
+                                depositProductEncodedKey:this.allDepositProductsList!==null?this.allDepositProductsList[0].value:null,
                                 settlementOptions:0, 
                                 autoSetSettlementAccountOnCreation:false,
                                 autoCreateSettlementAccount: false
@@ -409,7 +409,14 @@ class NewLoanProduct extends React.Component {
 
                                             <select id="currency"
                                                 name="currency"
-                                                onChange={handleChange}
+                                                onChange={(e)=>{
+                                                    setFieldValue("currency", e.target.value);
+                                                    console.log("currency is", e.target.value)
+                                                    
+                                                    this.allDepositFilteredProductsList = this.allDepositProductsList.filter(eachItem=>eachItem.currencyCode===e.target.value);
+                                                    console.log("this.allDepositProductsList is", this.allDepositFilteredProductsList)
+                                                }}
+                                                // onChange={handleChange}
                                                 value={values.currency}
                                                 className={errors.currency && touched.currency ? "is-invalid countdropdown form-control form-control-sm h-38px" : "countdropdown form-control form-control-sm h-38px"}
                                                 >
@@ -696,100 +703,102 @@ class NewLoanProduct extends React.Component {
                                         </div>
                                     </Accordion.Collapse>
                                 </Accordion>
-                                <Accordion defaultActiveKey="0">
-                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                        Product Links
-                                    </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="0">
-                                        <div className="each-formsection">
-                                            <Form.Row>
-                                                <Col>
-                                                    <div className="checkbox-wrap">
-                                                        <input type="checkbox"
-                                                            id="isEnableLinking"
-                                                            checked={values.isEnableLinking ? values.isEnableLinking : null}
-                                                            name="isEnableLinking"
-                                                            onChange={handleChange}
-                                                            value={values.isEnableLinking} />
-                                                        <label htmlFor="isEnableLinking">Enable Linking</label>
+                                {values.currency!=="" &&
+                                    <Accordion defaultActiveKey="0">
+                                        <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                            Product Links
+                                        </Accordion.Toggle>
+                                        <Accordion.Collapse eventKey="0">
+                                            <div className="each-formsection">
+                                                <Form.Row>
+                                                    <Col>
+                                                        <div className="checkbox-wrap">
+                                                            <input type="checkbox"
+                                                                id="isEnableLinking"
+                                                                checked={values.isEnableLinking ? values.isEnableLinking : null}
+                                                                name="isEnableLinking"
+                                                                onChange={handleChange}
+                                                                value={values.isEnableLinking} />
+                                                            <label htmlFor="isEnableLinking">Enable Linking</label>
+                                                        </div>
+                                                    </Col>
+                                                </Form.Row>
+                                                {values.isEnableLinking===true &&
+                                                    <div>
+                                                        <Form.Row>
+                                                            <Col>
+                                                                <Form.Label className="block-level">Linked Deposit Product</Form.Label>
+                                                                <Select
+                                                                    options={this.allDepositFilteredProductsList}
+                                                                    defaultValue ={{label:this.allDepositFilteredProductsList!==null && this.allDepositFilteredProductsList.length>=1 ?this.allDepositFilteredProductsList[0].label:null, 
+                                                                        value:this.allDepositFilteredProductsList!==null && this.allDepositFilteredProductsList.length>=1? this.allDepositFilteredProductsList[0].value:null}}
+                                                                    onChange={(selectedDepositProduct) => {
+                                                                        setFieldValue('depositProductEncodedKey', selectedDepositProduct.value)
+                                                                    }}
+                                                                    className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : ""}
+
+
+                                                                    name="depositProductEncodedKey"
+
+                                                                    required
+                                                                />
+                                                                {errors.depositProductEncodedKey && touched.depositProductEncodedKey ? (
+                                                                    <span className="invalid-feedback">{errors.depositProductEncodedKey}</span>
+                                                                ) : null}
+                                                            </Col>
+                                                            <Col>
+                                                                <Form.Label className="block-level">Deposit Account Options</Form.Label>
+                                                                <div className="checkbox-wrap">
+                                                                    <input type="checkbox"
+                                                                        id="autoSetSettlementAccountOnCreation"
+                                                                        checked={values.autoSetSettlementAccountOnCreation ? values.autoSetSettlementAccountOnCreation : null}
+                                                                        name="autoSetSettlementAccountOnCreation"
+                                                                        onChange={handleChange}
+                                                                        value={values.autoSetSettlementAccountOnCreation} />
+                                                                    <label htmlFor="autoSetSettlementAccountOnCreation">Auto-Set Settlement Accounts on Creation</label>
+                                                                </div>
+                                                                <div className="checkbox-wrap">
+                                                                    <input type="checkbox"
+                                                                        id="autoCreateSettlementAccount"
+                                                                        checked={values.autoCreateSettlementAccount ? values.autoCreateSettlementAccount : null}
+                                                                        name="autoCreateSettlementAccount"
+                                                                        onChange={handleChange}
+                                                                        value={values.autoCreateSettlementAccount} />
+                                                                    <label htmlFor="autoCreateSettlementAccount">Auto-Create Settlement Account</label>
+                                                                </div>
+                                                                
+                                                            </Col>
+                                                        </Form.Row>
+                                                        <Form.Row>
+                                                            <Col>
+                                                            <Form.Label className="block-level">Settlement Options</Form.Label>
+                                                                <Select
+                                                                    options={settlementOptionsList}
+                                                                    onChange={(selectedsettlementOption) => {
+                                                                        
+                                                                        setFieldValue('settlementOptions', selectedsettlementOption.value)
+                                                                    }}
+                                                                    defaultValue={{label:settlementOptionsList[0].label, value: settlementOptionsList[0].value}}
+                                                                    className={errors.settlementOptions && touched.settlementOptions ? "is-invalid" : ""}
+
+
+                                                                    name="settlementOptions"
+
+                                                                    required
+                                                                />
+                                                                {errors.settlementOptions && touched.settlementOptions ? (
+                                                                    <span className="invalid-feedback">{errors.settlementOptions}</span>
+                                                                ) : null}
+                                                            </Col>
+                                                            <Col>
+                                                            </Col>
+                                                        </Form.Row>
                                                     </div>
-                                                </Col>
-                                            </Form.Row>
-                                            {values.isEnableLinking===true &&
-                                                <div>
-                                                    <Form.Row>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Linked Deposit Product</Form.Label>
-                                                            <Select
-                                                                options={allDepositProductsList}
-                                                                defaultValue ={{label:allDepositProductsList!==null?allDepositProductsList[0].label:null, 
-                                                                    value:allDepositProductsList!==null? allDepositProductsList[0].value:null}}
-                                                                onChange={(selectedDepositProduct) => {
-                                                                    setFieldValue('depositProductEncodedKey', selectedDepositProduct.value)
-                                                                }}
-                                                                className={errors.depositProductEncodedKey && touched.depositProductEncodedKey ? "is-invalid" : ""}
-
-
-                                                                name="depositProductEncodedKey"
-
-                                                                required
-                                                            />
-                                                            {errors.depositProductEncodedKey && touched.depositProductEncodedKey ? (
-                                                                <span className="invalid-feedback">{errors.depositProductEncodedKey}</span>
-                                                            ) : null}
-                                                        </Col>
-                                                        <Col>
-                                                            <Form.Label className="block-level">Deposit Account Options</Form.Label>
-                                                            <div className="checkbox-wrap">
-                                                                <input type="checkbox"
-                                                                    id="autoSetSettlementAccountOnCreation"
-                                                                    checked={values.autoSetSettlementAccountOnCreation ? values.autoSetSettlementAccountOnCreation : null}
-                                                                    name="autoSetSettlementAccountOnCreation"
-                                                                    onChange={handleChange}
-                                                                    value={values.autoSetSettlementAccountOnCreation} />
-                                                                <label htmlFor="autoSetSettlementAccountOnCreation">Auto-Set Settlement Accounts on Creation</label>
-                                                            </div>
-                                                            <div className="checkbox-wrap">
-                                                                <input type="checkbox"
-                                                                    id="autoCreateSettlementAccount"
-                                                                    checked={values.autoCreateSettlementAccount ? values.autoCreateSettlementAccount : null}
-                                                                    name="autoCreateSettlementAccount"
-                                                                    onChange={handleChange}
-                                                                    value={values.autoCreateSettlementAccount} />
-                                                                <label htmlFor="autoCreateSettlementAccount">Auto-Create Settlement Account</label>
-                                                            </div>
-                                                            
-                                                        </Col>
-                                                    </Form.Row>
-                                                    <Form.Row>
-                                                        <Col>
-                                                        <Form.Label className="block-level">Settlement Options</Form.Label>
-                                                            <Select
-                                                                options={settlementOptionsList}
-                                                                onChange={(selectedsettlementOption) => {
-                                                                    
-                                                                    setFieldValue('settlementOptions', selectedsettlementOption.value)
-                                                                }}
-                                                                defaultValue={{label:settlementOptionsList[0].label, value: settlementOptionsList[0].value}}
-                                                                className={errors.settlementOptions && touched.settlementOptions ? "is-invalid" : ""}
-
-
-                                                                name="settlementOptions"
-
-                                                                required
-                                                            />
-                                                            {errors.settlementOptions && touched.settlementOptions ? (
-                                                                <span className="invalid-feedback">{errors.settlementOptions}</span>
-                                                            ) : null}
-                                                        </Col>
-                                                        <Col>
-                                                        </Col>
-                                                    </Form.Row>
-                                                </div>
-                                            }
-                                        </div>
-                                    </Accordion.Collapse>
-                                </Accordion>
+                                                }
+                                            </div>
+                                        </Accordion.Collapse>
+                                    </Accordion>
+                                }
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
                                         Repayment Scheduling
