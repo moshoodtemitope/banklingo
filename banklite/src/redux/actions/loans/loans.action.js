@@ -1132,9 +1132,19 @@ function changeLoanState   (newLoanStatePayload, newState){
     if(newLoanStatePayload!=="CLEAR"){
         return dispatch =>{
             let 
-            url = routes.HIT_LOAN_STATE+`/${newState}`,
+               url;
+                if(newState!=="linksettlement" && newState!=="unlinksettlement"){
+                    url = routes.HIT_LOAN_STATE+`/${newState}`
+                }
+
+                if(newState==="linksettlement"){
+                    url = routes.HIT_LOAN+`/linksettlementaccountwithloan`
+                }
+                if(newState==="unlinksettlement"){
+                    url = routes.HIT_LOAN+`/unlinksettlementaccountfromloan`
+                }
                 
-            consume = ApiService.request(url, "POST", newLoanStatePayload);
+            let consume = ApiService.request(url, "POST", newLoanStatePayload);
 
             dispatch(request(consume));
             return consume

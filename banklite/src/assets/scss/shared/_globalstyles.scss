@@ -1238,6 +1238,19 @@ button.togglestyle{
 //     }
 // }
 
+span.unlink-cta {
+    font-weight: 500;
+    text-decoration: underline;
+    margin-left: 10px;
+    font-size: 10px;
+    color: #78B943;
+    cursor: pointer;
+    &:hover{
+        font-weight: 700;
+    }
+}
+
+
 .add-new-btn{
     font-size: 19px;
     background: #78B943;

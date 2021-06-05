@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { Fragment } from "react";
 import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import InnerPageContainer from "../../shared/templates/authed-pagecontainer";
 import CustomerHeading from "./customerheader";
 // import Tabs from 'react-bootstrap/Tabs'
@@ -2115,6 +2115,39 @@ class ViewLoanAccount extends React.Component {
                   <td>{getDateFromISO(loanAccountData.firstRepaymentDate)}</td>
                 </tr>
                 <tr>
+                  <td>Interest rate terms</td>
+                  <td>{loanAccountData.interestRateTerms}</td>
+                </tr>
+                <tr>
+                  <td>Collect Principal</td>
+                  <td>{loanAccountData.collectPrincipal}</td>
+                </tr>
+                <tr>
+                  <td>Is Interst Paid</td>
+                  <td>{loanAccountData.isInterestPaid}</td>
+                </tr>
+                <tr>
+                  <td>Arrears Calculated from</td>
+                  <td>{loanAccountData.arrearsDaysCalculatedFrom}</td>
+                </tr>
+                <tr>
+                  <td>Interest Balance Calculation</td>
+                  <td>{loanAccountData.interestBalanceCalculation}</td>
+                </tr>
+                <tr>
+                  <td>Repayment Period</td>
+                  <td>{loanAccountData.repaymentPeriod}</td>
+                </tr>
+                <tr>
+                  <td>Settlement Account</td>
+                  <td>
+                    <Link to={`/customer/${this.props.match.params.id}/savingsaccount/${loanAccountData.linkedSettlementProductEncodedKey}`}>
+                      {loanAccountData?.linkedSettlementProductAccountNumber }
+                    </Link>
+                  </td>
+                </tr>
+                
+                <tr>
                   <td>Date Created</td>
                   <td>{loanAccountData.dateCreated}</td>
                 </tr>
@@ -3082,7 +3115,10 @@ class ViewLoanAccount extends React.Component {
   handleCloseApplyFeeModal = () =>
     this.setState({ showApplyFeeModal: false });
 
-  handleShowSettlementSettings = () => this.setState({ showSettlementSettings: true });
+  handleShowSettlementSettings = () => {
+    this.handleNewLoanState("CLEAR")
+    this.setState({ showSettlementSettings: true })
+  };
   handleCloseSettlementSettings = () =>
     this.setState({ showSettlementSettings: false });
 
@@ -4241,46 +4277,8 @@ this.permissions={
           return this.visibility;
   };
 
-  renderSettlementAccountData = (settlementAccountData) => {
-    let linkedSettlementProductAccountNumber =settlementAccountData.linkedSettlementProductAccountNumber;
+ 
   
-      if (
-        linkedSettlementProductAccountNumber===""
-      ) {
-        return (
-          <div className="each-overview">
-            <h6> Settlement Account </h6>
-            <div className="loading-text">No account linked yet </div>
-          </div>
-        );
-      } 
-
-
-      if (
-        linkedSettlementProductAccountNumber!==""
-      ) {
-        return (
-          <div className="each-overview">
-            <h6> Settlement Account </h6>
-            <TableComponent classnames="striped bordered hover">
-              <thead>
-                <tr>
-                  <th>Account Number</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{linkedSettlementProductAccountNumber} </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </TableComponent>
-          </div>
-        );
-      } 
-  
-  };
 
   renderLoanCtas = (loanDetails) => {
    
@@ -4339,7 +4337,7 @@ this.permissions={
               Apply Fee
             </Button>
           </li>
-          {/* <li>
+          <li>
             <Button
               size="sm"
               onClick={() => {
@@ -4349,7 +4347,7 @@ this.permissions={
             >
               Set Settlement account
             </Button>
-          </li> */}
+          </li>
           {visibility.showSetIncomplete && (
             <li>
               <Button
@@ -4704,6 +4702,7 @@ this.permissions={
               loanDetails={
                 getAClientLoanAccountRequest.request_data.response.data
               }
+              getCustomerLoanAccountDetails = {this.getCustomerLoanAccountDetails}
               newStateUpdate={this.state.newStateUpdate}
               savingsWallets = {this.props.getClientDepositsReducer}
               closeModal={this.handleCloseSettlementSettings}
@@ -4838,9 +4837,7 @@ this.permissions={
                         getAClientLoanAccountRequest.request_data.response.data
                       )}
 
-                      {this.renderSettlementAccountData(
-                        getAClientLoanAccountRequest.request_data.response.data
-                      )}
+                      
                       
                     </Tab.Pane>
                     <Tab.Pane eventKey="schedule" mountOnEnter={true}>
