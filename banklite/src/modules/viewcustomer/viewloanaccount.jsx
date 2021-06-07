@@ -2123,7 +2123,7 @@ class ViewLoanAccount extends React.Component {
                   <td>{loanAccountData.collectPrincipal}</td>
                 </tr>
                 <tr>
-                  <td>Is Interst Paid</td>
+                  <td>Is Interest Paid</td>
                   <td>{loanAccountData.isInterestPaid}</td>
                 </tr>
                 <tr>
@@ -2189,6 +2189,20 @@ class ViewLoanAccount extends React.Component {
                     </td>
                   )}
                   {!loanAccountData.interestRate && <td>N/A</td>}
+                </tr>
+                <tr>
+                  <td>Interest Expected</td>
+                  {loanAccountData.interestExpected && (
+                    <td>
+                      {numberWithCommas(
+                        loanAccountData.interestExpected,
+                        true,
+                        true
+                      )}
+                     {' '} {loanAccountData.currencyCode}
+                    </td>
+                  )}
+                  {!loanAccountData.interestExpected && <td>N/A</td>}
                 </tr>
                 <tr>
                   <td>Interest Paid</td>

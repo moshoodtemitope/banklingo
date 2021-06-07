@@ -499,7 +499,10 @@ class NewLoanAccount extends React.Component {
                   allowedBranches = user.AllowedBranches,
                   allowedBranchesList = [],
                   customerFetched = getAClientRequest,
-                  customerFetchedData;
+                  customerFetchedData,
+                  isInteretRateLimitSimilar = "",
+                  isInstallmentLimitSimilar="";
+                  
 
                 allLoanProducts = allLoanProducts.filter(
                   (product) => product.loanProductType === 0
@@ -582,6 +585,41 @@ class NewLoanAccount extends React.Component {
                     )[0]
                   : null;
 
+
+                if (this.selectedLoanProductDetails.repaymentReschedulingModel !==null &&
+                    this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin !== null &&
+                    this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin !== '' && 
+                    this.selectedLoanProductDetails.repaymentReschedulingModel !==null &&
+                    this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax !== null &&
+                    this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax !== '') {
+
+                      if(this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMax === 
+                        this.selectedLoanProductDetails.repaymentReschedulingModel.installmentsMin){
+                          isInstallmentLimitSimilar =  true
+                      }else{
+                          isInstallmentLimitSimilar = false
+                      }
+
+                }
+
+                if (this.selectedLoanProductDetails.loanProductInterestSetting !==null &&
+                  this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin !== null &&
+                  this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin !== '' && 
+                  this.selectedLoanProductDetails.loanProductInterestSetting !==null &&
+                  this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax !== null &&
+                  this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax !== '') {
+
+                    if(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax === 
+                      this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin){
+                        isInteretRateLimitSimilar =  true
+                    }else{
+                        isInteretRateLimitSimilar = false
+                    }
+
+              }
+
+                
+
                 let loanAccountValidationSchema = Yup.object().shape({
                   clientEncodedKey: Yup.string()
                     .min(1, 'Response required')
@@ -609,12 +647,12 @@ class NewLoanAccount extends React.Component {
                   interestRate: Yup.string()
                     .min(1, 'Enter valid interest rate')
                     .required('Required'),
-                  accountOfficerEncodedKey: Yup.string()
-                    .min(1, 'Select account officer')
-                    .required('Required'),
-                  accountOfficerBranchEncodedKey: Yup.string()
-                    .min(1, 'Select account officer branch')
-                    .required('Required'),
+                  // accountOfficerEncodedKey: Yup.string()
+                  //   .min(1, 'Select account officer')
+                  //   .required('Required'),
+                  // accountOfficerBranchEncodedKey: Yup.string()
+                  //   .min(1, 'Select account officer branch')
+                  //   .required('Required'),
                   associatedBranchEncodedKey: Yup.string()
                     .min(1, 'Select associated branch')
                     .required('Required'),
@@ -811,16 +849,17 @@ class NewLoanAccount extends React.Component {
                                 values.maximumWithdrawalAmount.replace(/,/g, '')
                               )
                             : null,
-                        accountOfficerDetailsModel: {
-                          accountOfficerEncodedKey:
-                            values.accountOfficerEncodedKey !== ''
-                              ? values.accountOfficerEncodedKey
-                              : null,
-                          accountOfficerBranchEncodedKey:
-                            values.accountOfficerBranchEncodedKey !== ''
-                              ? values.accountOfficerBranchEncodedKey
-                              : null,
-                        },
+                        // accountOfficerDetailsModel: {
+                        //   accountOfficerEncodedKey:
+                        //     values.accountOfficerEncodedKey !== ''
+                        //       ? values.accountOfficerEncodedKey
+                        //       : null,
+                        //   accountOfficerBranchEncodedKey:
+                        //     values.accountOfficerBranchEncodedKey !== ''
+                        //       ? values.accountOfficerBranchEncodedKey
+                        //       : null,
+                        // },
+                        accountOfficerDetailsModel:null,
                         loanDisbursmentDetails: {
                           disbursementChannelEncodedKey:
                             values.disbursementChannelEncodedKey !== ''
@@ -1200,6 +1239,7 @@ class NewLoanAccount extends React.Component {
                                     type='text'
                                     autoComplete='off'
                                     // onChange={handleChange}
+                                    readOnly={isInteretRateLimitSimilar}
                                     onChange={(e) => {
                                       this.loanSchedulePayload.interestRate = parseFloat(
                                         e.target.value.replace(/,/g, '')
@@ -1348,7 +1388,9 @@ class NewLoanAccount extends React.Component {
                                 </Col>
                                 <Col>
                                   <Form.Label className='block-level'>
-                                    Over (Installments)
+                                     Installments/Tenor {`(${this.selectedLoanProductDetails
+                                          .repaymentReschedulingModel
+                                          .repaymentPeriodDescription})`}
                                   </Form.Label>
                                   <Form.Control
                                     type='text'
@@ -1379,26 +1421,31 @@ class NewLoanAccount extends React.Component {
                                     }
                                     value={values.installmentsDefault}
                                     name='installmentsDefault'
+                                    readOnly={
+                                        isInstallmentLimitSimilar}
                                     disabled={
-                                      this.selectedLoanProductDetails !==
-                                        null &&
-                                      this.selectedLoanProductDetails
-                                        .repaymentReschedulingModel !== null &&
-                                      this.selectedLoanProductDetails
-                                        .repaymentReschedulingModel !==
-                                        undefined &&
-                                      (this.selectedLoanProductDetails
-                                        .repaymentReschedulingModel
-                                        .installmentsMin === null ||
+                                      (
+                                          (this.selectedLoanProductDetails !==
+                                          null &&
                                         this.selectedLoanProductDetails
-                                          .repaymentReschedulingModel
-                                          .installmentsMin === '' ||
+                                          .repaymentReschedulingModel !== null &&
                                         this.selectedLoanProductDetails
+                                          .repaymentReschedulingModel !==
+                                          undefined &&
+                                        (this.selectedLoanProductDetails
                                           .repaymentReschedulingModel
-                                          .installmentsMax ||
-                                        this.selectedLoanProductDetails
-                                          .repaymentReschedulingModel
-                                          .installmentsMax === '')
+                                          .installmentsMin === null ||
+                                          this.selectedLoanProductDetails
+                                            .repaymentReschedulingModel
+                                            .installmentsMin === '' ||
+                                          this.selectedLoanProductDetails
+                                            .repaymentReschedulingModel
+                                            .installmentsMax ||
+                                          this.selectedLoanProductDetails
+                                            .repaymentReschedulingModel
+                                            .installmentsMax === '') ||
+                                            isInstallmentLimitSimilar===false
+                                        ))
                                         ? false
                                         : true
                                     }
@@ -1427,6 +1474,10 @@ class NewLoanAccount extends React.Component {
                                                   .repaymentReschedulingModel
                                                   .installmentsMin
                                               )}
+                                              {`(${this.selectedLoanProductDetails
+                                                  .repaymentReschedulingModel
+                                                  .repaymentPeriodDescription})`
+                                              }
                                             </span>
                                           )}
                                         {this.selectedLoanProductDetails
@@ -1446,6 +1497,10 @@ class NewLoanAccount extends React.Component {
                                                   .repaymentReschedulingModel
                                                   .installmentsMax
                                               )}
+                                              {`(${this.selectedLoanProductDetails
+                                                  .repaymentReschedulingModel
+                                                  .repaymentPeriodDescription})`
+                                              }
                                             </span>
                                           )}
 
@@ -1808,7 +1863,7 @@ class NewLoanAccount extends React.Component {
                           </Accordion.Collapse>
                         </Accordion>
 
-                        <Accordion defaultActiveKey='0'>
+                        {/* <Accordion defaultActiveKey='0'>
                           <Accordion.Toggle
                             className='accordion-headingLink'
                             as={Button}
@@ -1824,7 +1879,7 @@ class NewLoanAccount extends React.Component {
                                   <Form.Label className='block-level'>
                                     Loan Officer
                                   </Form.Label>
-                                  {/* select dropdown search of acount officers */}
+                                  
                                   <Select
                                     options={allAccountOfficersList}
                                     onChange={(selected) => {
@@ -1839,11 +1894,6 @@ class NewLoanAccount extends React.Component {
                                         true
                                       )
                                     }
-                                    // onChange={(selectedLoanProduct) => {
-                                    //     this.setState({ selectedLoanProduct });
-                                    //     errors.productEncodedKey = null
-                                    //     values.productEncodedKey = selectedLoanProduct.value
-                                    // }}
                                     className={
                                       errors.accountOfficerEncodedKey &&
                                       touched.accountOfficerEncodedKey
@@ -1878,11 +1928,7 @@ class NewLoanAccount extends React.Component {
                                         true
                                       )
                                     }
-                                    // onChange={(selectedLoanProduct) => {
-                                    //     this.setState({ selectedLoanProduct });
-                                    //     errors.productEncodedKey = null
-                                    //     values.productEncodedKey = selectedLoanProduct.value
-                                    // }}
+                                    
                                     className={
                                       errors.accountOfficerBranchEncodedKey &&
                                       touched.accountOfficerBranchEncodedKey
@@ -1902,7 +1948,7 @@ class NewLoanAccount extends React.Component {
                               </Form.Row>
                             </div>
                           </Accordion.Collapse>
-                        </Accordion>
+                        </Accordion> */}
                         <Accordion defaultActiveKey='0'>
                           <Accordion.Toggle
                             className='accordion-headingLink'

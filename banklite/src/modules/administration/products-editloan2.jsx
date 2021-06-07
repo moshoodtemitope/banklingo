@@ -214,7 +214,7 @@ class EditLoanProduct extends React.Component {
 
                     let productTypeReturned = allProductTypes.filter(eachItem=>eachItem.value===loanProductDetails.loanProductType)[0]||null;
                     let interestRateTermReturned = interestRateTermsOptions.filter(eachItem=>eachItem.value===loanProductDetails.loanProductInterestSetting.interestRateTerms)[0]||null;
-                    let interestBalanceCalculationReturned = interestBalanceCalculationOptions.filter(eachItem=>eachItem.value===loanProductDetails.loanProductInterestSetting.interestBalanceCalculation)[0]||null;
+                    let interestBalanceCalculationReturned = interestBalanceCalculationOptions.filter(eachItem=>eachItem.value===loanProductDetails.repaymentReschedulingModel.interestBalanceCalculation)[0]||null;
                     let repaymentPeriodReturned = repaymentPeriodOptions.filter(eachItem=>eachItem.value===loanProductDetails.repaymentReschedulingModel.repaymentPeriod)[0]||null;
                     let arrearsDaysCalculationReturned = arrearsDaysCalculation.filter(eachItem=>eachItem.value===loanProductDetails.arrearsSetting.arrearsDaysCalculatedFrom)[0]||null;
 
@@ -270,9 +270,9 @@ class EditLoanProduct extends React.Component {
                                 interestPaid:(loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestPaid!==null)
                                                     ?loanProductDetails.loanProductInterestSetting.interestPaid:false,
                                 interestRateTerms:(loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestRateTerms!==null)
-                                                        ?loanProductDetails.loanProductInterestSetting.interestRateTerms:0,
-                                interestBalanceCalculation: (loanProductDetails.loanProductInterestSetting!==undefined && loanProductDetails.loanProductInterestSetting!==null && loanProductDetails.loanProductInterestSetting.interestBalanceCalculation!==null)
-                                                                ?loanProductDetails.loanProductInterestSetting.interestBalanceCalculation:0,
+                                                        ?loanProductDetails.loanProductInterestSetting.interestRateTerms:null,
+                                interestBalanceCalculation: (loanProductDetails.repaymentReschedulingModel!==undefined && loanProductDetails.repaymentReschedulingModel!==null && loanProductDetails.repaymentReschedulingModel.interestBalanceCalculation!==null)
+                                                                ?loanProductDetails.repaymentReschedulingModel.interestBalanceCalculation:null,
                                 interestRateDefault: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateDefault
                                                         ? loanProductDetails.loanProductInterestSetting.interestRateDefault : null,
                                 interestRateMin: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateMin
@@ -339,7 +339,7 @@ class EditLoanProduct extends React.Component {
                                     loanProductInterestSetting: {
                                         interestPaid: values.interestPaid|| null,
                                         interestRateTerms:  parseInt(values.interestRateTerms) || null,
-                                        interestBalanceCalculation:values.interestBalanceCalculation? parseInt(values.interestBalanceCalculation) : null,
+                                        // interestBalanceCalculation:values.interestBalanceCalculation? parseInt(values.interestBalanceCalculation) : null,
                                         interestRateDefault:values.interestRateDefault? parseFloat(values.interestRateDefault.toString().replace(/,/g, '')):null,
                                         interestRateMin:values.interestRateMin?  parseFloat(values.interestRateMin.toString().replace(/,/g, '')): null,
                                         interestRateMax:values.interestRateMax? parseFloat(values.interestRateMax.toString().replace(/,/g, '')):null,
