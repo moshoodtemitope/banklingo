@@ -4299,7 +4299,7 @@ this.permissions={
    let visibility= this.enforceVisibility(loanDetails);
 
 //    console.log(JSON.stringify(visibility));
-//    console.log(JSON.stringify(this.permissions));
+
  
     return (
       //ShowEdit

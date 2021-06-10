@@ -76,7 +76,7 @@ class NewLoanAccount extends React.Component {
 
   componentDidMount() {
     this.loadInitialData();
-    // console.log("prossss", this.props);
+   
   }
 
   loadInitialData = () => {
