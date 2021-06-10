@@ -302,7 +302,7 @@ export class DisburseLoanModal extends React.Component {
                                                             onChange={setFieldValue}
                                                             showYearDropdown
                                                             dropdownMode="select"
-                                                            minDate={new Date()}
+                                                            maxDate={new Date()}
                                                             className={errors.backDateChosen && touched.backDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control h-38px form-control-sm"}
                                                         />
                                                         {errors.backDateChosen && touched.backDateChosen ? (
@@ -337,7 +337,7 @@ export class DisburseLoanModal extends React.Component {
                                                             onChange={setFieldValue}
                                                             showYearDropdown
                                                             dropdownMode="select"
-                                                            minDate={new Date()}
+                                                            maxDate={new Date()}
                                                             className={errors.bookingDateChosen && touched.bookingDateChosen ? "is-invalid form-control form-control-sm h-38px" : "form-control form-control-sm h-38px"}
                                                         />
                                                         {errors.bookingDateChosen && touched.bookingDateChosen ? (
