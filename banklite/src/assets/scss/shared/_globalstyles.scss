@@ -625,10 +625,10 @@ label.upload-photo>div{
     .uploadlabel{
         display: block !important;
     }
-    .footer-with-cta .btn-primary,
-        .footer-with-cta .btn-primary:hover,
-        .footer-with-cta .btn-primary:active,
-        .footer-with-cta .btn-primary:not(:disabled):not(.disabled):active{
+    .footer-with-cta .btn-primary,.btn-primary,
+        .footer-with-cta .btn-primary:hover,.btn-primary:hover
+        .footer-with-cta .btn-primary:active,.btn-primary:active
+        .footer-with-cta .btn-primary:not(:disabled):not(.disabled):active,.btn-primary:not(:disabled):not(.disabled):active{
             background: $brand-color !important;
             border-radius: 2px !important;
             font-size: 13px !important;
@@ -862,6 +862,11 @@ button.accordion-headingLink.btn.btn-link {
         background-color: #34495E;
         border-color: #34495E;
     }
+}
+.help-info {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 10px 0;
 }
 .module-title .heading-ctas .btn-primary a{
     color: #34495E !important;

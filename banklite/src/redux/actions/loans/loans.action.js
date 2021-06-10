@@ -1,6 +1,6 @@
 import { ApiService } from "../../../services/apiService";
 import { routes } from "../../../services/urls";
-// import { history } from './../../../_helpers/history';
+import { history } from './../../../_helpers/history';
 import {loanAndDepositsConstants} from '../../actiontypes/LoanAndDeposits/loananddeposits.constants'
 import { handleRequestErrors } from "../../../shared/utils";
 
@@ -831,6 +831,7 @@ function createLoanAccount(loanDetailsPayload,loanType) {
             return consume
                 .then(response => {
                     dispatch(success(response));
+                    history.push(`/customer/${response.data.result.clientEncodedKey}/loanaccount/${response.data.result.encodedKey}`);
                 }).catch(error => {
 
                     dispatch(failure(handleRequestErrors(error)));

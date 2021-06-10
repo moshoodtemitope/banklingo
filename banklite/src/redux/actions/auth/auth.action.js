@@ -276,6 +276,11 @@ function ChangePassword(changePasswordPayload) {
       return consume
         .then((response) => {
           dispatch(success(response));
+          setTimeout(() => {
+            this.Logout();
+          }, 3000);
+          
+         
         })
         .catch((error) => {
           dispatch(failure(handleRequestErrors(error)));

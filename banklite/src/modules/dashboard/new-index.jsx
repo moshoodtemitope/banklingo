@@ -16,6 +16,7 @@ import ActivitiesBox from '../../shared/elements/activities'
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import CreateNewTask from '../../shared/components/new-task'
+import PrintTransaction from '../../shared/components/print-txt'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button'
@@ -1960,6 +1961,7 @@ class DashboardLanding extends React.Component {
                                                         <td>{eachData.typeDescription}</td>
                                                         <td>{eachData.tillId}</td>
                                                         <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
+                                                        {/* <td><span className="view-ctatext" onClick={()=>this.showPrint(eachData)}>Print</span></td> */}
                                                         {/* <td>
                                                                 <div className="actions-drop">
                                                                     <DropdownButton
@@ -3288,14 +3290,23 @@ class DashboardLanding extends React.Component {
     }
 
     handleShowNewTask = () => {
-        // if(this.props.writeOffALoanReducer.is_request_processing===false){
-        // this.props.dispatch(loanActions.writeOffALoan("CLEAR"));
+        
         this.setState({ displayNewTask: true })
-        // }
+        
     };
     handleCloseNewTask = () => {
-        // this.props.dispatch(dashboardActions.reverseATransaction("CLEAR"));
+        
         this.setState({ displayNewTask: false })
+    };
+
+    showPrint = (selectedToPrint) => {
+        
+        this.setState({ showPrintTxt: true, selectedToPrint })
+        
+    };
+    closePrintTxt = () => {
+       
+        this.setState({ showPrintTxt: false })
     };
 
     render() {
@@ -3320,6 +3331,7 @@ class DashboardLanding extends React.Component {
                         {/* <div className="module-content "> */}
                         <div className="module-content grayed-bg">
                             <CreateNewTask source="dashboard" closeNewTask={this.handleCloseNewTask} showNewTask={this.state.displayNewTask} />
+                            <PrintTransaction transactionDetails={this.state.selectedToPrint} closePrint = {this.closePrintTxt} showPrint = {this.state.showPrintTxt} />
                             {this.state.showNewTill && this.renderOpenTillWrap()}
                             {this.state.addCashToTill && this.renderAddRemoveCashToTillWrap(this.state.tillActionData, this.state.tillAction)}
                             {this.state.closeUndoCloseTill && this.renderCloseUndoCloseTillWrap(this.state.tillActionData, this.state.tillAction)}

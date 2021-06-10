@@ -130,6 +130,10 @@ class EditLoanProduct extends React.Component {
                 { value: 2, label: 'Declining Balance' },
                 { value: 3, label: 'Declining Balance Equal Installments' }
             ],
+            howIsInterestDeductedOptions=[
+                { value: 0, label: 'Default' },
+                { value: 1, label: 'Upfront' },
+            ],
             repaymentPeriodOptions=[
                 { value: 1, label: 'Years' },
                 { value: 2, label: 'Months' },
@@ -215,6 +219,7 @@ class EditLoanProduct extends React.Component {
                     let productTypeReturned = allProductTypes.filter(eachItem=>eachItem.value===loanProductDetails.loanProductType)[0]||null;
                     let interestRateTermReturned = interestRateTermsOptions.filter(eachItem=>eachItem.value===loanProductDetails.loanProductInterestSetting.interestRateTerms)[0]||null;
                     let interestBalanceCalculationReturned = interestBalanceCalculationOptions.filter(eachItem=>eachItem.value===loanProductDetails.repaymentReschedulingModel.interestBalanceCalculation)[0]||null;
+                    let howIsInterestDeductedOptionsReturned = howIsInterestDeductedOptions.filter(eachItem=>eachItem.value===loanProductDetails.loanProductInterestSetting.howIsInterestDeducted)[0]||null;
                     let repaymentPeriodReturned = repaymentPeriodOptions.filter(eachItem=>eachItem.value===loanProductDetails.repaymentReschedulingModel.repaymentPeriod)[0]||null;
                     let arrearsDaysCalculationReturned = arrearsDaysCalculation.filter(eachItem=>eachItem.value===loanProductDetails.arrearsSetting.arrearsDaysCalculatedFrom)[0]||null;
 
@@ -275,6 +280,8 @@ class EditLoanProduct extends React.Component {
                                                                 ?loanProductDetails.repaymentReschedulingModel.interestBalanceCalculation:null,
                                 interestRateDefault: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateDefault
                                                         ? loanProductDetails.loanProductInterestSetting.interestRateDefault : null,
+                                howIsInterestDeducted: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.howIsInterestDeducted
+                                                        ? loanProductDetails.loanProductInterestSetting.howIsInterestDeducted : null,
                                 interestRateMin: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateMin
                                                     ? loanProductDetails.loanProductInterestSetting.interestRateMin : null,
                                 interestRateMax: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateMax
@@ -311,7 +318,7 @@ class EditLoanProduct extends React.Component {
                             validationSchema={loanProductValidationSchema}
                             onSubmit={(values, { resetForm }) => {
 
-                                console.log("sdsds",values.interestRateDefault);
+                                // console.log("sdsds",values.howIsInterestDeducted);
                               
                                 let updateLoanProductPayload = {
                                     key: values.key,
@@ -343,6 +350,7 @@ class EditLoanProduct extends React.Component {
                                         interestRateDefault:values.interestRateDefault? parseFloat(values.interestRateDefault.toString().replace(/,/g, '')):null,
                                         interestRateMin:values.interestRateMin?  parseFloat(values.interestRateMin.toString().replace(/,/g, '')): null,
                                         interestRateMax:values.interestRateMax? parseFloat(values.interestRateMax.toString().replace(/,/g, '')):null,
+                                        howIsInterestDeducted:values.howIsInterestDeducted!==null ?values.howIsInterestDeducted: null,
                                       },
                                     loanAmountSetting: {
                                         loanAmountDefault: values.defaultLoanAmount? parseFloat(values.defaultLoanAmount.toString().replace(/,/g, '')):null,
@@ -769,6 +777,31 @@ class EditLoanProduct extends React.Component {
                                                             ) : null}
                                                         </Col>
                                                         <Col>
+                                                            <Form.Label className="block-level">How is the Interest deducted?</Form.Label>
+
+                                                            <Select
+                                                                options={howIsInterestDeductedOptions}
+                                                                defaultValue={{
+                                                                    label: howIsInterestDeductedOptionsReturned !== null ? howIsInterestDeductedOptionsReturned.label : null,
+                                                                    value: howIsInterestDeductedOptionsReturned !== null ? howIsInterestDeductedOptionsReturned.value : null
+                                                                }}
+                                                                // onChange={(selectedInterestRateTermsOptions) => {
+                                                                //     this.setState({ selectedInterestRateTermsOptions });
+                                                                //     errors.interestRateTerms = null
+                                                                //     values.interestRateTerms = selectedInterestRateTermsOptions.value
+                                                                // }}
+                                                                onChange={(selected) =>{console.log("selected.value", selected.value); setFieldValue('howIsInterestDeducted', selected.value)}}
+                                                                onBlur={() => setFieldTouched('howIsInterestDeducted', true)}
+                                                                className={errors.howIsInterestDeducted && touched.howIsInterestDeducted ? "is-invalid" : ""}
+
+
+                                                                name="howIsInterestDeducted"
+
+                                                                required
+                                                            />
+                                                            {errors.howIsInterestDeducted && touched.howIsInterestDeducted ? (
+                                                                <span className="invalid-feedback">{errors.howIsInterestDeducted}</span>
+                                                            ) : null}
                                                         </Col>
                                                     </Form.Row>
                                                 </div>

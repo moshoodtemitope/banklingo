@@ -794,6 +794,15 @@ class NewLoanAccount extends React.Component {
                           ? this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculationDescription.toString()
                           : ''
                         : '',
+                        howIsInterestDeducted: this.selectedLoanProductDetails
+                        ? this.selectedLoanProductDetails
+                            .loanProductInterestSetting !== null &&
+                          this.selectedLoanProductDetails
+                            .loanProductInterestSetting
+                            .howIsInterestDeductedDescription !== null
+                          ? this.selectedLoanProductDetails.loanProductInterestSetting.howIsInterestDeductedDescription
+                          : ''
+                        : '',
                       arearsTolerancePeriodInDaysDefault: this
                         .selectedLoanProductDetails
                         ? this.selectedLoanProductDetails.arrearsSetting !==
@@ -1637,6 +1646,24 @@ class NewLoanAccount extends React.Component {
                                     name='maximumWithdrawalAmount'
                                     required
                                   />
+                                </Col>
+                                <Col sm={6}>
+                                  <Form.Label className='block-level'>
+                                  How is the Interest deducted?
+                                  </Form.Label>
+                                  <span className='form-text'>
+                                    {values.howIsInterestDeducted !== null &&
+                                      values.howIsInterestDeducted !== '' && (
+                                        <span>
+                                          {values.howIsInterestDeducted}
+                                        </span>
+                                      )}
+
+                                    {(values.howIsInterestDeducted === null ||
+                                      values.howIsInterestDeducted === '') && (
+                                        <span>N/A</span>
+                                      )}
+                                  </span>
                                 </Col>
                               </Form.Row>
                             </div>

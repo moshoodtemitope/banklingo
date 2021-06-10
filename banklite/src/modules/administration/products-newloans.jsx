@@ -113,6 +113,10 @@ class NewLoanProduct extends React.Component {
                 { value: '2', label: 'Declining Balance' },
                 { value: '3', label: 'Declining Balance Equal Installments' }
             ],
+            howIsInterestDeductedOptions=[
+                { value: 0, label: 'Default' },
+                { value: 1, label: 'Upfront' },
+            ],
             repaymentPeriodOptions=[
                 { value: '1', label: 'Years' },
                 { value: '2', label: 'Months' },
@@ -211,6 +215,7 @@ class NewLoanProduct extends React.Component {
                                 isActive: true,
                                 interestPaid:true,
                                 interestRateTerms:null,
+                                howIsInterestDeducted:null,
                                 interestBalanceCalculation:null,
                                 interestRateDefault:null,
                                 interestRateMin:null,
@@ -266,6 +271,7 @@ class NewLoanProduct extends React.Component {
                                         interestRateDefault:values.interestRateDefault!==null? parseFloat(values.interestRateDefault.replace(/,/g, '')): null,
                                         interestRateMin: values.interestRateMin!==null ? parseFloat(values.interestRateMin.replace(/,/g, '')) : null,
                                         interestRateMax: values.interestRateMax!==null ? parseFloat(values.interestRateMax.replace(/,/g, '')) : null,
+                                        howIsInterestDeducted : values.howIsInterestDeducted!==null ? parseInt(values.howIsInterestDeducted) : null,
                                       },
                                     loanAmountSetting: {
                                         loanAmountDefault:values.defaultLoanAmount!==null ? parseFloat(values.defaultLoanAmount.replace(/,/g, '')) : null,
@@ -411,10 +417,10 @@ class NewLoanProduct extends React.Component {
                                                 name="currency"
                                                 onChange={(e)=>{
                                                     setFieldValue("currency", e.target.value);
-                                                    console.log("currency is", e.target.value)
+                                                    // console.log("currency is", e.target.value)
                                                     
                                                     this.allDepositFilteredProductsList = this.allDepositProductsList.filter(eachItem=>eachItem.currencyCode===e.target.value);
-                                                    console.log("this.allDepositProductsList is", this.allDepositFilteredProductsList)
+                                                    // console.log("this.allDepositProductsList is", this.allDepositFilteredProductsList)
                                                 }}
                                                 // onChange={handleChange}
                                                 value={values.currency}
@@ -696,6 +702,24 @@ class NewLoanProduct extends React.Component {
                                                             ) : null}
                                                         </Col>
                                                         <Col>
+                                                            <Form.Label className="block-level">How is the Interest deducted?</Form.Label>
+
+                                                            <Select
+                                                                options={howIsInterestDeductedOptions}
+                                                                onChange={(selectedInterestDeductionOption) => {
+
+                                                                    setFieldValue('howIsInterestDeducted', selectedInterestDeductionOption.value)
+                                                                }}
+                                                                className={errors.howIsInterestDeducted && touched.howIsInterestDeducted ? "is-invalid" : ""}
+
+
+                                                                name="interestRateTerms"
+
+                                                                required
+                                                            />
+                                                            {errors.howIsInterestDeducted && touched.howIsInterestDeducted ? (
+                                                                <span className="invalid-feedback">{errors.howIsInterestDeducted}</span>
+                                                            ) : null}
                                                         </Col>
                                                     </Form.Row>
                                                 </div>

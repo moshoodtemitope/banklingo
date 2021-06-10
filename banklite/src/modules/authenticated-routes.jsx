@@ -196,57 +196,70 @@ function PrivateRoute({
   if (authed && Object.keys(authed).length >= 1) {
     //Authorization is required to access route
     let userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
+    let lingoAuth = JSON.parse(localStorage.getItem("lingoAuth"));
     if (userPermissions) {
       let allUSerPermissions = []; //all permission codes
       userPermissions.map((eachPermission) => {
         allUSerPermissions.push(eachPermission.permissionCode);
       });
+      if (!lingoAuth.forcePasswordChange) {
+        if (accessRequired && allUSerPermissions.indexOf(accessRequired) > -1) {
+          return (
+            <Route
+              {...rest}
+              render={(props) =>
+                authed && Object.keys(authed).length >= 1 ? (
+                  <Component {...rest} {...props} />
+                ) : (
+                  <Redirect
+                    to={{ pathname: "/", state: { from: props.location } }}
+                  />
+                )
+              }
+            />
+          );
+        }
 
-      if (accessRequired && allUSerPermissions.indexOf(accessRequired) > -1) {
-        return (
-          <Route
-            {...rest}
-            render={(props) =>
-              authed && Object.keys(authed).length >= 1 ? (
-                <Component {...rest} {...props} />
-              ) : (
+        if (accessRequired && allUSerPermissions.indexOf(accessRequired) === -1) {
+          return (
+            <Route
+              {...rest}
+              render={(props) => (
                 <Redirect
-                  to={{ pathname: "/", state: { from: props.location } }}
+                  to={{
+                    pathname: "/forbidden-access",
+                    state: { from: props.location },
+                  }}
                 />
-              )
-            }
-          />
-        );
-      }
-
-      if (accessRequired && allUSerPermissions.indexOf(accessRequired) === -1) {
+              )}
+            />
+          );
+        }
+        if (!accessRequired) {
+          return (
+            <Route
+              {...rest}
+              render={(props) =>
+                authed && Object.keys(authed).length >= 1 ? (
+                  <Component {...rest} {...props} />
+                ) : (
+                  <Redirect
+                    to={{ pathname: "/", state: { from: props.location } }}
+                  />
+                )
+              }
+            />
+          );
+        }
+      }else{
         return (
           <Route
             {...rest}
             render={(props) => (
-              <Redirect
-                to={{
-                  pathname: "/forbidden-access",
-                  state: { from: props.location },
-                }}
+              <ChangePassword
+                {...rest} {...props}
               />
             )}
-          />
-        );
-      }
-      if (!accessRequired) {
-        return (
-          <Route
-            {...rest}
-            render={(props) =>
-              authed && Object.keys(authed).length >= 1 ? (
-                <Component {...rest} {...props} />
-              ) : (
-                <Redirect
-                  to={{ pathname: "/", state: { from: props.location } }}
-                />
-              )
-            }
           />
         );
       }

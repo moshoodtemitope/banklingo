@@ -156,17 +156,22 @@ class ChangePassword extends React.Component {
                                     ) : null}
                                 
                             </Form.Group>
-                        <div className="form-ctas horizontal">
-                            <Button 
-                                variant="success" 
-                                className="mr-20px" 
-                                type="submit"
-                                disabled={changePasswordRequest.is_request_processing}
-                            > 
-                                {changePasswordRequest.is_request_processing?"Please wait...": "Save New Password"}
-                            </Button>
-                           
-                        </div>
+                            <div className="help-info">
+                                You will be required to log in after Password Change
+                            </div>
+                            {changePasswordRequest.request_status !== authConstants.CHANGE_PASSWORD_SUCCESS &&
+                                <div className="form-ctas horizontal">
+                                    <Button 
+                                        variant="success" 
+                                        className="mr-20px" 
+                                        type="submit"
+                                        disabled={changePasswordRequest.is_request_processing}
+                                    > 
+                                        {changePasswordRequest.is_request_processing?"Please wait...": "Save New Password"}
+                                    </Button>
+                                
+                                </div>
+                        }
                         {changePasswordRequest.request_status === authConstants.CHANGE_PASSWORD_SUCCESS && 
                             <Alert variant="success">
                                 {changePasswordRequest.request_data.response.data.message}
