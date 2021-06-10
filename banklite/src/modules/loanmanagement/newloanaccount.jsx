@@ -889,8 +889,8 @@ class NewLoanAccount extends React.Component {
 
                       accountType = 'fixed';
 
-                      // console.log("----", loanAccountPayload);
-                      // return false;
+                      console.log("----", loanAccountPayload);
+                      return false;
 
                       this.createLoanAccount(
                         loanAccountPayload,
@@ -1774,6 +1774,7 @@ class NewLoanAccount extends React.Component {
                                           isscheduleError: false,
                                         });
                                       }
+                                      
                                       setFieldValue(
                                         'firstRepaymentDate',
                                         e.target.value
@@ -1782,7 +1783,7 @@ class NewLoanAccount extends React.Component {
                                     // onChange={setFieldValue}
                                     showYearDropdown
                                     dropdownMode='select'
-                                    minDate={new Date()}
+                                    // minDate={new Date()}
                                     className={
                                       errors.firstRepaymentDate &&
                                       touched.firstRepaymentDate
