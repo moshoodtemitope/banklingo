@@ -8,15 +8,20 @@ export const DatePickerField = ({ ...props }) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
   
+  const handleDateChangeRaw = (e) => {
+    e.preventDefault();
+  };
   return (
     <DatePicker
       className='picker'
       {...field}
       {...props}
       autoComplete='off'
+      onChangeRaw={handleDateChangeRaw}
       dateFormat={window.dateformat}
       selected={(field.value && new Date(field.value)) || null}
       onChange={(val) => {
+        val.setHours(val.getHours() + 1);
         setFieldValue(field.name, val);
       }}
       customInput={<DatePickerFieldType />}

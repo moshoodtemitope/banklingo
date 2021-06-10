@@ -8,6 +8,7 @@ import { NavLink } from 'react-router-dom';
 import InnerPageContainer from '../../shared/templates/authed-pagecontainer';
 // import Form from 'react-bootstrap/Form'
 import DatePicker from '../../_helpers/datepickerfield';
+// import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 
 import TableComponent from '../../shared/elements/table';
@@ -1758,7 +1759,11 @@ class NewLoanAccount extends React.Component {
                                   <DatePicker
                                     placeholderText='Choose  date'
                                     autoComplete='new-password'
-                                    dateFormat={window.dateformat}
+                                    // onChangeRaw={this.handleDateChangeRaw}
+                                    // onChange={this.handleStartDatePicker}
+                                    // selected={this.state.startDate}
+                                    // dateFormat={window.dateformat}
+                                    // dateFormat={window.dateformat}
                                     className='form-control form-control-sm'
                                     peekNextMonth
                                     showMonthDropdown
