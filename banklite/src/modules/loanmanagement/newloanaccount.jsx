@@ -520,7 +520,7 @@ class NewLoanAccount extends React.Component {
 
                 allCustomers.map((customer, id) => {
                   allCustomersList.push({
-                    label: customer.clientName,
+                    label: `${customer.clientName} (${customer.clientCode})`,
                     value: customer.clientEncodedKey,
                   });
                 });
@@ -549,7 +549,7 @@ class NewLoanAccount extends React.Component {
 
                 allAccountOfficers.map((officer, id) => {
                   allAccountOfficersList.push({
-                    label: officer.name,
+                    label: officer.displayName,
                     value: officer.key,
                   });
                 });
