@@ -859,16 +859,17 @@ class NewLoanAccount extends React.Component {
                                 values.maximumWithdrawalAmount.replace(/,/g, '')
                               )
                             : null,
-                        // accountOfficerDetailsModel: {
-                        //   accountOfficerEncodedKey:
-                        //     values.accountOfficerEncodedKey !== ''
-                        //       ? values.accountOfficerEncodedKey
-                        //       : null,
-                        //   accountOfficerBranchEncodedKey:
-                        //     values.accountOfficerBranchEncodedKey !== ''
-                        //       ? values.accountOfficerBranchEncodedKey
-                        //       : null,
-                        // },
+                        accountOfficerDetailsModel: {
+                          accountOfficerEncodedKey:
+                            values.accountOfficerEncodedKey !== ''
+                              ? values.accountOfficerEncodedKey
+                              : null,
+                              accountOfficerBranchEncodedKey: values.associatedBranchEncodedKey
+                          // accountOfficerBranchEncodedKey:
+                          //   values.accountOfficerBranchEncodedKey !== ''
+                          //     ? values.accountOfficerBranchEncodedKey
+                          //     : null,
+                        },
                         accountOfficerDetailsModel:null,
                         loanDisbursmentDetails: {
                           disbursementChannelEncodedKey:
@@ -890,8 +891,8 @@ class NewLoanAccount extends React.Component {
 
                       accountType = 'fixed';
 
-                      console.log("----", loanAccountPayload);
-                      return false;
+                      // console.log("----", loanAccountPayload);
+                      // return false;
 
                       this.createLoanAccount(
                         loanAccountPayload,
@@ -1896,7 +1897,7 @@ class NewLoanAccount extends React.Component {
                           </Accordion.Collapse>
                         </Accordion>
 
-                        {/* <Accordion defaultActiveKey='0'>
+                        <Accordion defaultActiveKey='0'>
                           <Accordion.Toggle
                             className='accordion-headingLink'
                             as={Button}
@@ -1944,7 +1945,7 @@ class NewLoanAccount extends React.Component {
                                   ) : null}
                                 </Col>
                                 <Col>
-                                  <Form.Label className='block-level'>
+                                  {/* <Form.Label className='block-level'>
                                     Loan Officer Branch
                                   </Form.Label>
                                   <Select
@@ -1976,12 +1977,12 @@ class NewLoanAccount extends React.Component {
                                     <span className='invalid-feedback'>
                                       {errors.accountOfficerBranchEncodedKey}
                                     </span>
-                                  ) : null}
+                                  ) : null} */}
                                 </Col>
                               </Form.Row>
                             </div>
                           </Accordion.Collapse>
-                        </Accordion> */}
+                        </Accordion>
                         <Accordion defaultActiveKey='0'>
                           <Accordion.Toggle
                             className='accordion-headingLink'
