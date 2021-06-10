@@ -549,7 +549,7 @@ class NewLoanAccount extends React.Component {
 
                 allAccountOfficers.map((officer, id) => {
                   allAccountOfficersList.push({
-                    label: officer.displayName,
+                    label: `${officer.displayName} (${officer.name})`,
                     value: officer.key,
                   });
                 });
