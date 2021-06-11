@@ -134,7 +134,13 @@ class ManageEmployeeInfo extends React.Component {
       this.props.createEmployeeInfo.request_status ===
       platformConstants.ADD_A_PAYROLLINFO_SUCCESS
     ) {
-      this.loadInitialData();
+      let fetchAllEmployeeInfoRequest = this.props.fetchAllEmployeeInfo;
+      let allFetchedData =
+        fetchAllEmployeeInfoRequest.request_data.response.data;
+      const { dispatch } = this.props;
+      let params = `PageSize=${this.state.PageSize}&CurrentPage=${this.state.CurrentPage}`;
+      dispatch(platformActions.fetchAllEmployeeInfo(params, allFetchedData.result));
+      // this.loadInitialData();
     }
   };
 
@@ -152,7 +158,15 @@ class ManageEmployeeInfo extends React.Component {
       this.props.updateEmployeeInfo.request_status ===
       platformConstants.UPDATE_A_PAYROLLINFO_SUCCESS
     ) {
-      this.loadInitialData();
+
+      let fetchAllEmployeeInfoRequest = this.props.fetchAllEmployeeInfo;
+      let allFetchedData =
+        fetchAllEmployeeInfoRequest.request_data.response.data;
+      const { dispatch } = this.props;
+      let params = `PageSize=${this.state.PageSize}&CurrentPage=${this.state.CurrentPage}`;
+      dispatch(platformActions.fetchAllEmployeeInfo(params, allFetchedData.result));
+
+      // this.loadInitialData();
     }
   };
 
@@ -250,7 +264,7 @@ class ManageEmployeeInfo extends React.Component {
                   platformConstants.ADD_A_PAYROLLINFO_SUCCESS
                 ) {
                   resetForm();
-                  this.loadInitialData();
+                  // this.loadInitialData();
                 }
               });
             }}
@@ -572,17 +586,19 @@ class ManageEmployeeInfo extends React.Component {
     // let getAllCurrencies =  this.props.adminGetAllCurrencies;
     let allPayGroupList = [],
       filteredData;
-    allPayGroups.map((eachAccount, index) => {
-      allPayGroupList.push({
-        value: eachAccount.id,
-        label: eachAccount.accountDescription,
+      allPayGroups.map((eachData, index) => {
+        allPayGroupList.push({
+          value: eachData.groupCode,
+          label: eachData.groupName,
+        });
       });
-    });
 
     filteredData = allPayGroupList.filter(
       (eachData) =>
-        eachData.value === recordToUpdate.serviceCommisionGLAcccountId
+        eachData.label === recordToUpdate.payrollGroupName
     )[0];
+
+    
     // let getAllCurrencies =  this.props.adminGetAllCurrencies;
     let allBanksList = [],
       allbanks = fetchAllEmployeeInfoRequest.request_data.response3.data;
@@ -633,7 +649,7 @@ class ManageEmployeeInfo extends React.Component {
               bankName: recordToUpdate.bankCode,
               department: recordToUpdate.department,
               employeeNumber: recordToUpdate.employeeNumber,
-              employmentDate: '',
+              employmentDate: recordToUpdate.employmentDate,
               firstName: recordToUpdate.firstName,
               lastName: recordToUpdate.lastName,
               middleName: recordToUpdate.middleName,
@@ -641,7 +657,7 @@ class ManageEmployeeInfo extends React.Component {
             // validationSchema={checkValidationSchema}
             onSubmit={(values, { resetForm }) => {
               // same shape as initial values
-
+              console.log("values.employmentDate", values.employmentDate)
               let requestPayload;
               if (this.state.updateType === 'edit') {
                 let requestPayload = {
@@ -654,12 +670,17 @@ class ManageEmployeeInfo extends React.Component {
                       : recordToUpdate.bankName,
                     department: values.department,
                     employeeNumber: values.employeeNumber,
-                    employmentDate: values.employmentDate.toISOString(),
+                    // employmentDate: values.employmentDate.toISOString(),
                     firstName: values.firstName,
                     lastName: values.lastName,
                     middleName: values.middleName,
                   },
                 };
+                if(values.employmentDate.indexOf("-")>-1 && values.employmentDate.indexOf("T")>-1){
+                  requestPayload.employeeInformation.employmentDate = values.employmentDate
+                }else{
+                  requestPayload.employeeInformation.employmentDate = values.employmentDate.toISOString()
+                }
               }
 
               this.updateARecord(
@@ -696,6 +717,8 @@ class ManageEmployeeInfo extends React.Component {
                         Paygroup Code
                       </Form.Label>
                       <Select
+                      defaultValue ={{label:filteredData!==null?filteredData.label:null,
+                        value:filteredData!==null? filteredData.value:null}}
                         options={allPayGroupList}
                         onChange={(selectedAccount) => {
                           this.setState({ selectedAccount });
@@ -916,6 +939,7 @@ class ManageEmployeeInfo extends React.Component {
                           placeholderText='Choose  date'
                           autoComplete='new-password'
                           autoComplete='new-password'
+                          selected={values.employmentDate}
                           // onChange={this.handleDatePicker}
                           // onChangeRaw={(e) => this.handleDateChange(e)}
                           dateFormat={window.dateformat}
@@ -925,7 +949,7 @@ class ManageEmployeeInfo extends React.Component {
                           showYearDropdown
                           dropdownMode='select'
                           name='employmentDate'
-                          value={values.employmentDate}
+                          value={new Date(values.employmentDate)}
                           onChange={setFieldValue}
                           maxDate={new Date()}
                           className={
@@ -1044,6 +1068,7 @@ class ManageEmployeeInfo extends React.Component {
                 <thead>
                   <tr>
                     <th>Employee Full name</th>
+                    <th>Employee Payroll Group</th>
                     <th>Employee number</th>
                     <th>Employment date</th>
                     <th>Department</th>
@@ -1054,6 +1079,7 @@ class ManageEmployeeInfo extends React.Component {
                 </thead>
                 <tbody>
                   <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -1162,6 +1188,7 @@ class ManageEmployeeInfo extends React.Component {
                 <thead>
                   <tr>
                     <th>Employee Full name</th>
+                    <th>Employee Payroll Group</th>
                     <th>Employee number</th>
                     <th>Employment date</th>
                     <th>Department</th>
@@ -1180,6 +1207,7 @@ class ManageEmployeeInfo extends React.Component {
                             {eachItem.firstName} {eachItem.lastName}{' '}
                             {eachItem.middleName}
                           </td>
+                          <td>{eachItem.payrollGroupName}</td>
                           <td>{eachItem.employeeNumber}</td>
                           <td>{getDateFromISO(eachItem.employmentDate)}</td>
                           <td>{eachItem.department}</td>
@@ -1375,6 +1403,7 @@ class ManageEmployeeInfo extends React.Component {
                   <thead>
                     <tr>
                       <th>Employee Full name</th>
+                      <th>Employee Payroll Group</th>
                       <th>Employee number</th>
                       <th>Employment date</th>
                       <th>Department</th>
@@ -1393,6 +1422,7 @@ class ManageEmployeeInfo extends React.Component {
                               {eachItem.firstName} {eachItem.lastName}{' '}
                               {eachItem.middleName}
                             </td>
+                            <td>{eachItem.payrollGroupName}</td>
                             <td>{eachItem.employeeNumber}</td>
                             <td>{getDateFromISO(eachItem.employmentDate)}</td>
                             <td>{eachItem.department}</td>
@@ -1555,6 +1585,7 @@ class ManageEmployeeInfo extends React.Component {
                   <thead>
                     <tr>
                       <th>Employee Full name</th>
+                      <th>Employee Payroll Group</th>
                       <th>Employee number</th>
                       <th>Employment date</th>
                       <th>Department</th>
@@ -1565,6 +1596,7 @@ class ManageEmployeeInfo extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>

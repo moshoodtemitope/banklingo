@@ -55,7 +55,7 @@ class EditAClient extends React.Component {
   getAClient = () => {
     const { dispatch } = this.props;
 
-    dispatch(clientsActions.getAClient(this.props.match.params.encodedkey));
+    dispatch(clientsActions.getAClient(this.props.match.params.encodedkey, null, true));
   };
 
   getAllUsers = () => {
@@ -102,20 +102,16 @@ class EditAClient extends React.Component {
       // .required('Required')
       ,
       addressLine1: Yup.string()
-        .min(2, 'Valid response required')
-        .max(70, 'Max limit reached'),
+        .min(2, 'Valid response required'),
       addressLine2: Yup.string()
-        .min(2, 'Valid response required')
-        .max(70, 'Max limit reached'),
+        .min(2, 'Valid response required'),
       addressCity: Yup.string()
         .min(2, 'Valid response required')
         .max(40, 'Max limit reached'),
       addressState: Yup.string()
-        .min(2, 'Valid response required')
-        .max(40, 'Max limit reached'),
+        .min(2, 'Valid response required'),
       addressCountry: Yup.string()
-        .min(2, 'Valid response required')
-        .max(35, 'Max limit reached'),
+        .min(2, 'Valid response required'),
       zipCode: Yup.string()
         .min(2, 'Valid response required')
         .max(10, 'Max limit reached'),
@@ -579,10 +575,11 @@ class EditAClient extends React.Component {
                         dateFormat={window.dateformat}
                         peekNextMonth
                         showMonthDropdown
+                        selected={values.dateOfBirth}
                         showYearDropdown
                         dropdownMode='select'
                         name='dateOfBirth'
-                        value={values.dateOfBirth}
+                        value={new Date(values.dateOfBirth)}
                         onChange={setFieldValue}
                         maxDate={new Date()}
                         className={
