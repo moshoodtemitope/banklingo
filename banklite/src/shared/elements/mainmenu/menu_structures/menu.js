@@ -188,7 +188,7 @@ export const menuList = [
       },
       {
         subMenuLabel: "Deposits",
-        subMenuRoute: "/reports/deposits/",
+        subMenuRoute: "/reports/deposits/performance",
       },
       {
         subMenuLabel: "Accounting",

@@ -177,7 +177,7 @@ export const REPORTS_MENU_LINKS = [
   },
   {
     label: 'Deposits',
-    url: '/reports/deposits/',
+    url: '/reports/deposits/performance',
     exact: false,
   },
   {
