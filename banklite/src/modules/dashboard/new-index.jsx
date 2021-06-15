@@ -1942,7 +1942,7 @@ class DashboardLanding extends React.Component {
                                             <th>Transaction</th>
                                             <th>ID</th>
                                             <th>Amount</th>
-                                            {/* <th>Action</th> */}
+                                            <th>Action</th>
                                             {/* <th></th> */}
                                         </tr>
                                     </thead>
@@ -1961,7 +1961,7 @@ class DashboardLanding extends React.Component {
                                                         <td>{eachData.typeDescription}</td>
                                                         <td>{eachData.tillId}</td>
                                                         <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
-                                                        {/* <td><span className="view-ctatext" onClick={()=>this.showPrint(eachData)}>Print</span></td> */}
+                                                        <td><span className="view-ctatext" onClick={()=>this.showPrint(eachData)}>Print</span></td>
                                                         {/* <td>
                                                                 <div className="actions-drop">
                                                                     <DropdownButton

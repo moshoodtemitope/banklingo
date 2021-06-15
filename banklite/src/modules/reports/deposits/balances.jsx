@@ -5,21 +5,21 @@ import { Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { NavLink } from 'react-router-dom';
-import InnerPageContainer from '../../shared/templates/authed-pagecontainer';
-import TableComponent from '../../shared/elements/table';
-import TablePagination from '../../shared/elements/table/pagination';
+import InnerPageContainer from '../../../shared/templates/authed-pagecontainer';
+import TableComponent from '../../../shared/elements/table';
+import TablePagination from '../../../shared/elements/table/pagination';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { numberWithCommas, getDateFromISO } from '../../shared/utils';
-import { loanActions } from '../../redux/actions/loans/loans.action';
-import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants';
-import './styles.scss';
-import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
-import SubMenu from '../../shared/components/SubMenu';
-import { LOAN_REPORTS_MENU_LINKS, REPORTS_MENU_LINKS } from '../../shared/config';
-class LoanPAR extends React.Component {
+import { numberWithCommas, getDateFromISO } from '../../../shared/utils';
+import { loanActions } from '../../../redux/actions/loans/loans.action';
+import { loanAndDepositsConstants } from '../../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants';
+import '../styles.scss';
+import DatePickerFieldType from '../../../_helpers/DatePickerFieldType';
+import SubMenu from '../../../shared/components/SubMenu';
+import { DEPOSITS_REPORTS_MENU_LINKS, REPORTS_MENU_LINKS } from '../../../shared/config';
+class DepositBalancesReports extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,7 +39,7 @@ class LoanPAR extends React.Component {
   }
 
   componentDidMount() {
-    this.loadInitialData();
+    // this.loadInitialData();
   }
 
   loadInitialData = () => {
@@ -1036,7 +1036,7 @@ class LoanPAR extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className=''>
-                        <h2>Loans PAR</h2>
+                        <h2>Deposit Balances</h2>
                       </div>
                     </div>
                   </div>
@@ -1044,14 +1044,14 @@ class LoanPAR extends React.Component {
               </div>
               <SubMenu links={REPORTS_MENU_LINKS} />
               <div className='secondLevelMenu'>
-                <SubMenu links={LOAN_REPORTS_MENU_LINKS} />
+                <SubMenu links={DEPOSITS_REPORTS_MENU_LINKS} />
               </div>
               <div className='module-content'>
                 <div className='content-container'>
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className='middle-content'>
-                        {this.renderLoansPAR()}
+                        {/* {this.renderLoansPAR()} */}
                       </div>
                     </div>
                   </div>
@@ -1069,4 +1069,4 @@ function mapStateToProps(state) {
     getLoanPARRequest: state.loansReducers.getLoanPARReducer,
   };
 }
-export default connect(mapStateToProps)(LoanPAR);
+export default connect(mapStateToProps)(DepositBalancesReports);

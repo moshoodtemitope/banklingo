@@ -60,7 +60,25 @@ import DepositClient from "./depositmanagement/deposit-client";
 import NewDepositAccount from "./depositmanagement/newdepositaccount";
 
 import AllLoanSchedules from "./all-loan-schedules";
-import LoanPAR from "./loan-PAR";
+import LoanPAR from "./reports/loan-PAR";
+import ClientReports from "./reports/clients-and-groups";
+import GroupClientReports from "./reports/clients-and-groups/group-clients";
+import DepositOfficerPerformanceReports from "./reports/deposits/performances";
+import DepositBalancesReports from "./reports/deposits/balances";
+import DepositAccountReports from "./reports/deposits";
+import DepositStatementsReports from "./reports/deposits/statements";
+import JournalReports from "./reports/accounting";
+import TrialBalanceAnalysisReports from "./reports/accounting/trial-analysis";
+import TrialBalanceReports from "./reports/accounting/trial-balance";
+import TellerReports from "./reports/users/tellers";
+import AccountOfficerUserReports from "./reports/users/account-officers";
+import UserReports from "./reports/users";
+import TellerTransactionsReports from "./reports/transactions";
+import DepositTransactionsReports from "./reports/transactions/deposit-transactions";
+import LoanTransactionsReports from "./reports/transactions/loan-transactions";
+
+
+// import LoanPAR from "./loan-PAR";
 
 import DepositTransactionsManagement from "./deposittransactions/deposit-transaction-account";
 import LoanTransactionsManagement from "./loantransactions/loan-account-transactions";
@@ -847,6 +865,140 @@ class AuthenticatedRoutes extends React.Component {
               {...this.props}
               authed={this.props.user}
               component={LoanPAR}
+            />
+            
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/clients"
+              {...this.props}
+              authed={this.props.user}
+              component={ClientReports}
+            />
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/clients/groups"
+              {...this.props}
+              authed={this.props.user}
+              component={GroupClientReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/deposits/performance"
+              {...this.props}
+              authed={this.props.user}
+              component={DepositOfficerPerformanceReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/deposits/balances"
+              {...this.props}
+              authed={this.props.user}
+              component={DepositBalancesReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/deposits"
+              {...this.props}
+              authed={this.props.user}
+              component={DepositAccountReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/deposits/statements"
+              {...this.props}
+              authed={this.props.user}
+              component={DepositStatementsReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/accounting"
+              {...this.props}
+              authed={this.props.user}
+              component={JournalReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/accounting/trial-balance-analysis"
+              {...this.props}
+              authed={this.props.user}
+              component={TrialBalanceAnalysisReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/accounting/trial-balance"
+              {...this.props}
+              authed={this.props.user}
+              component={TrialBalanceReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/users"
+              {...this.props}
+              authed={this.props.user}
+              component={UserReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/users/officers"
+              {...this.props}
+              authed={this.props.user}
+              component={AccountOfficerUserReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/users/tellers"
+              {...this.props}
+              authed={this.props.user}
+              component={TellerReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/transactions/tellers"
+              {...this.props}
+              authed={this.props.user}
+              component={TellerTransactionsReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/transactions/deposit"
+              {...this.props}
+              authed={this.props.user}
+              component={DepositTransactionsReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/transactions/loans"
+              {...this.props}
+              authed={this.props.user}
+              component={LoanTransactionsReports}
             />
 
             <PrivateRoute

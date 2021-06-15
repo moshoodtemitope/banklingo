@@ -238,7 +238,7 @@ function getDepositTransaction(params, tempData) {
   }
 }
 
-function exportDepositTransaction(params, tempData, isIndividual, isPDF, encodedKey) {
+function exportDepositTransaction(params, tempData, isIndividual, isPDF, encodedKey,isPrint) {
   return (dispatch) => {
     let consume;
 
@@ -299,9 +299,11 @@ function exportDepositTransaction(params, tempData, isIndividual, isPDF, encoded
         }
 
         document.body.appendChild(link);
-        link.click();
-        link.remove();
-        dispatch(success(response));
+        if(!isPrint){
+          link.click();
+          link.remove();
+        }
+        dispatch(success(response, url));
       })
       .catch((error) => {
         dispatch(failure(handleRequestErrors(error)));
@@ -325,10 +327,11 @@ function exportDepositTransaction(params, tempData, isIndividual, isPDF, encoded
   }
 
   // function request(user) { return { type: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_PENDING, user } }
-  function success(response) {
+  function success(response, url) {
     return {
       type: loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_SUCCESS,
       response,
+      url: isPrint?url: null
     };
   }
   function failure(error) {

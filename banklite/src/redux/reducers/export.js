@@ -213,6 +213,7 @@ import {
   fetchLoggedonTillsReducer,
   fetchAllTillsReducer,
   fetchManadateReducer,
+  getAReportReducer,
 } from "./dashboard/dashboard.reducer";
 
 import {
@@ -406,6 +407,7 @@ export const dashboard = {
   fetchLoggedonTillsReducer,
   fetchAllTillsReducer,
   fetchManadateReducer,
+  getAReportReducer
 };
 
 export const platform = {

@@ -82,6 +82,25 @@ function getAllCustomerTypes() {
           userInfo.custTypes = response.data;
           localStorage.setItem("lingoAuth", JSON.stringify(userInfo));
           dispatch(success(response));
+
+
+          if (userInfo.groupTypes === null || userInfo.groupTypes === undefined) {
+            let consume2 = ApiService.request(
+              routes.HIT_CUSTOMER_TYPES + `/customertypes?ClientClassification=1&PageSize=1000&CurrentPage=1`,
+              "GET",
+              null
+            );
+            dispatch(request(consume2));
+            return consume2
+              .then((response2) => {
+                userInfo.groupTypes = response2.data.result;
+                localStorage.setItem("lingoAuth", JSON.stringify(userInfo));
+                dispatch(success(response));
+              })
+              .catch((error) => {
+                dispatch(failure(handleRequestErrors(error)));
+              });
+          }
         })
         .catch((error) => {
           dispatch(failure(handleRequestErrors(error)));

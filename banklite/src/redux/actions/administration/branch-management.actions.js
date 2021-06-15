@@ -70,22 +70,30 @@ export const branchConstants = {
   
 }
 
-function getAllBranches(params, tempData, isAll) {
+function getAllBranches(params, tempData, isAll, showAllowable) {
   return (dispatch) => {
 
-    let consume
-    if(!isAll){
+    let consume;
+    if(showAllowable){
         consume = ApiService.request(
-            routes.GET_BRANCHES + "?" + params,
+            routes.GET_BRANCHES + "/allowedbranches",
             "GET",
             null
         );
     }else{
-        consume = ApiService.request(
-            `${routes.GET_BRANCHES}/all`,
-            "GET",
-            null
-        );
+        if(!isAll){
+            consume = ApiService.request(
+                routes.GET_BRANCHES + "?" + params,
+                "GET",
+                null
+            );
+        }else{
+            consume = ApiService.request(
+                `${routes.GET_BRANCHES}/all`,
+                "GET",
+                null
+            );
+        }
     }
     //quickly return to caller
     dispatch(request(consume, tempData));

@@ -17,7 +17,7 @@ class TransactionDetails extends React.Component {
     }
     
     render(){
-        console.log("transactionDetails", this.props.transactionDetails);
+        console.log("updatedTransactionDetails", this.props.updated);
         return(
             <Fragment>
                 <div className="slide-in-heading">
@@ -31,6 +31,7 @@ class TransactionDetails extends React.Component {
                             <div className="detail-value">{this.props.transactionDetails.entryType}</div>
                         </div>
                     }
+                    
                     {this.props.transactionDetails.typeDescription &&
                         <div className="each-detail">
                             <div className="detail-title">Transaction Description</div>

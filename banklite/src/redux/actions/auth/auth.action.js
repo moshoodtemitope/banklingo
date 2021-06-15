@@ -90,11 +90,12 @@ function Login(loginPayload) {
                 if (response2.data.length >= 1) {
                   user.BranchId = response2.data[0].id;
                   user.BranchName = response2.data[0].name;
+                  user.selectedBranchKey = response2.data[0].key;
                 }
                 // localStorage.setItem('lingoAuth', JSON.stringify(user));
 
                 let consume3 = ApiService.request(
-                  `${routes.ADD_BRANCH}/allowedbranches?ExcludeAllBranches=true`,
+                  `${routes.ADD_BRANCH}/allowedbranches?ExcludeAllBranches=false`,
                   "GET",
                   null
                 );

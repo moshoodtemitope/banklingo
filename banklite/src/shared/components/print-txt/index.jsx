@@ -12,7 +12,9 @@ import "./index.scss";
 class PrintTransaction extends React.Component {
     constructor(props) {
         super(props);
-        
+        this.state={
+            transactionDetails:""
+        }
         
         
 
@@ -27,7 +29,20 @@ class PrintTransaction extends React.Component {
 
    
  
+    handleBeforeGetContent = () => {
+        console.log("here", this.props.transactionDetails)
+        return new Promise((resolve, reject) => {
+          this.setState({ transactionDetails: this.props.transactionDetails }, () => resolve());
+        });
+    }
 
+    setComponentRef = (ref: TransactionDetails) => {
+        this.componentRef = ref;
+      }
+    
+      reactToPrintContent = () => {
+        return this.componentRef;
+      }
    
 
     renderDetails = () => {
@@ -49,8 +64,9 @@ class PrintTransaction extends React.Component {
 
 
 
-                            <TransactionDetails transactionDetails = {this.props.transactionDetails} ref={el => (this.componentRef = el)}/>
-
+                            <TransactionDetails updated={this.state.transactionDetails} transactionDetails = {this.props.transactionDetails} ref={this.setComponentRef}/>
+                            {/* <TransactionDetails transactionDetails = {this.props.transactionDetails} ref={el => (this.componentRef = el)}/> */}
+                            {/* <Viewer fileUrl="/path/to/document.pdf" /> */}
 
                             
                             <div className="mt-50">
@@ -58,7 +74,10 @@ class PrintTransaction extends React.Component {
                                     <Button variant="secondary" onClick={this.props.closePrint} >Close</Button>
 
 
-                                    <ReactToPrint content={() => this.componentRef}>
+                                    <ReactToPrint
+                                        onBeforeGetContent = {this.handleBeforeGetContent}
+                                        // content={() => this.componentRef}>
+                                            content={this.reactToPrintContent}>
                                         <PrintContextConsumer>
                                             {({ handlePrint }) => (
 

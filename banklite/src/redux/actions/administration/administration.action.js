@@ -535,11 +535,20 @@ function updateARole  (updateRolePayload){
     function clear() { return { type: administrationConstants.UPDATE_A_ROLE_RESET, clear_data:""} }
 }
 
-function getRoles  (getRolesPayload, tempData){
+function getRoles  (getRolesPayload, tempData, isAll){
     
     return dispatch =>{
-        let {PageSize, CurrentPage}= getRolesPayload;
-        let consume = ApiService.request(routes.HIT_ROLE+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+        let PageSize, CurrentPage;
+        if(!isAll){
+            PageSize= getRolesPayload.PageSize;
+            CurrentPage=getRolesPayload.CurrentPage;
+        }
+        let consume;
+        if(!isAll){
+            consume = ApiService.request(routes.HIT_ROLE+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}`, "GET", null);
+        }else{
+            consume = ApiService.request(routes.HIT_ROLE+'/all', "GET", null);
+        }
         dispatch(request(consume, tempData));
         return consume
             .then(response =>{
@@ -800,7 +809,7 @@ function updateCurrency  (updateCurrencyPayload){
 
 }
 
-function getAllCurrencies  (tempData){
+function getAllCurrencies  (tempData, isOnlyCurrencies){
     
         return dispatch =>{
             let consume = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
@@ -808,24 +817,28 @@ function getAllCurrencies  (tempData){
             return consume
                 .then(response =>{
                     // dispatch(success(response));
-                    let consume2 = ApiService.request(routes.GET_EXCHANGE_RATE, "GET", null);
-                    dispatch(request(consume2,tempData));
-                    return consume2
-                        .then(response2 =>{
-                            // dispatch(success(response2));
-                            let consume3 = ApiService.request(routes.GET_CONVERSION_TABLE, "GET", null);
-                            dispatch(request(consume3,tempData));
-                            return consume3
-                                .then(response3 =>{
-                                    dispatch(success(response, response2, response3));
-                                }).catch(error =>{
-                                    
-                                    dispatch(failure(handleRequestErrors(error)));
-                                });
-                        }).catch(error =>{
-                            
-                            dispatch(failure(handleRequestErrors(error)));
-                        });
+                    if (!isOnlyCurrencies) {
+                        let consume2 = ApiService.request(routes.GET_EXCHANGE_RATE, "GET", null);
+                        dispatch(request(consume2, tempData));
+                        return consume2
+                            .then(response2 => {
+                                // dispatch(success(response2));
+                                let consume3 = ApiService.request(routes.GET_CONVERSION_TABLE, "GET", null);
+                                dispatch(request(consume3, tempData));
+                                return consume3
+                                    .then(response3 => {
+                                        dispatch(success(response, response2, response3));
+                                    }).catch(error => {
+
+                                        dispatch(failure(handleRequestErrors(error)));
+                                    });
+                            }).catch(error => {
+
+                                dispatch(failure(handleRequestErrors(error)));
+                            });
+                    }else{
+                        dispatch(success(response));
+                    }
                 }).catch(error =>{
                     
                     dispatch(failure(handleRequestErrors(error)));

@@ -87,10 +87,12 @@ class MainHeader extends React.Component{
             user.BranchId = e.target.value;
             // localStorage.setItem('lingoAuth', JSON.stringify(user));
             let selectedBranch = user.AllowableBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].name;
+            let selectedBranchKey = user.AllowableBranches.filter(branch=>branch.id===parseInt(e.target.value))[0].encodedKey;
             user.BranchName = selectedBranch;
+            user.selectedBranchKey = selectedBranchKey;
             localStorage.setItem('lingoAuth', JSON.stringify(user));
         this.setState({showDropdown: false, 
-                        activeBranch: selectedBranch
+                        activeBranch: selectedBranch,
                     })
             window.location.reload();
     }

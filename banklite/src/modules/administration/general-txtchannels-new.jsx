@@ -87,7 +87,7 @@ class NewTxtChannels extends React.Component {
                     glAccountsList= getAllGLAccountsRequest.request_data.response.data;
 
                     glAccountsList.map((channel, id)=>{
-                        allGlAccounts.push({label: channel.accountDescription, value:channel.accountTypeId});
+                        allGlAccounts.push({label: channel.accountDescription, value:channel.id});
                     })
                     return (
                         <Formik

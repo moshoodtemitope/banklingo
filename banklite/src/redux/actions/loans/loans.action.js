@@ -856,18 +856,26 @@ function createLoanAccount(loanDetailsPayload,loanType) {
 
 function getLoanSchedulePreview(params) {
     // console.log("sdsds", params);
-    return dispatch => {
+    if(params!=="CLEAR"){
+        return dispatch => {
 
-        let consume = ApiService.request(routes.HIT_LOAN + `/previewschedules`, "POST", params);
-        dispatch(request(consume));
-        return consume
-            .then(response => {
-                dispatch(success(response));
-            }).catch(error => {
+            let consume = ApiService.request(routes.HIT_LOAN + `/previewschedules`, "POST", params);
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    dispatch(success(response));
+                }).catch(error => {
 
-                dispatch(failure(handleRequestErrors(error)));
-            });
+                    dispatch(failure(handleRequestErrors(error)));
+                });
 
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
     }
 
 
@@ -875,7 +883,7 @@ function getLoanSchedulePreview(params) {
     function request(user) { return { type: loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_PENDING, user } }
     function success(response) { return { type: loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_SUCCESS, response } }
     function failure(error) { return { type: loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_FAILURE, error } }
-
+    function clear() { return { type: loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_RESET, clear_data:""} }
 }
 
 function getAClientLoanAccount(accountEncodedKey) {

@@ -164,14 +164,72 @@ export const DEPOSIT_MODULE_MENU_LINKS = [
 ];
 
 export const REPORTS_MENU_LINKS = [
+  
+  {
+    label: 'Clients/Groups',
+    url: '/reports/clients/',
+    exact: false,
+  },
   {
     label: 'Loans',
     url: '/reports/loans/',
     exact: false,
   },
+  {
+    label: 'Deposits',
+    url: '/reports/deposits/',
+    exact: false,
+  },
+  {
+    label: 'Accounting',
+    url: '/reports/accounting/',
+    exact: false,
+  },
+  {
+    label: 'Users',
+    url: '/reports/users/',
+    exact: false,
+  },
+  {
+    label: 'Transactions',
+    url: '/reports/transactions/tellers',
+    exact: false,
+  },
 ];
 
+export const CLIENTS_REPORTS_MENU_LINKS = [
+  {
+    label: 'Clients',
+    url: '/reports/clients/',
+    exact: true,
+  },
+  {
+    label: 'Groups',
+    url: '/reports/clients/groups',
+    exact: false,
+  },
+];
 export const LOAN_REPORTS_MENU_LINKS = [
+  // {
+  //   label: 'Loan Accounts',
+  //   url: '/reports/loans/accounts',
+  //   exact: true,
+  // },
+  // {
+  //   label: 'Account Statement',
+  //   url: '/reports/loans/statments',
+  //   exact: true,
+  // },
+  // {
+  //   label: 'Loan Balances',
+  //   url: '/reports/loans/balances',
+  //   exact: true,
+  // },
+  // {
+  //   label: 'Account Officer Performance',
+  //   url: '/reports/loans/officer-performance',
+  //   exact: true,
+  // },
   {
     label: 'Loan Schedules',
     url: '/reports/loans/',
@@ -182,4 +240,82 @@ export const LOAN_REPORTS_MENU_LINKS = [
     url: '/reports/loans/loans-par',
     exact: false,
   },
+  
+  
+];
+export const DEPOSITS_REPORTS_MENU_LINKS = [
+  // {
+  //   label: 'Deposit Accounts',
+  //   url: '/reports/deposits/',
+  //   exact: true,
+  // },
+  // {
+  //   label: 'Account Statements',
+  //   url: '/reports/deposits/statements',
+  //   exact: true,
+  // },
+  // {
+  //   label: 'Deposit Balances',
+  //   url: '/reports/deposits/balances',
+  //   exact: true,
+  // },
+  {
+    label: 'Account Officer Performance',
+    url: '/reports/deposits/performance',
+    exact: true,
+  },
+];
+
+export const ACCOUNTING_REPORTS_MENU_LINKS = [
+  {
+    label: 'Journal',
+    url: '/reports/accounting',
+    exact: true,
+  },
+  {
+    label: 'Trial Balance (Analysis)',
+    url: '/reports/accounting/trial-balance-analysis',
+    exact: true,
+  },
+  {
+    label: 'Trial Balance',
+    url: '/reports/accounting/trial-balance',
+    exact: true,
+  }
+];
+
+export const USERS_REPORTS_MENU_LINKS = [
+  {
+    label: 'All Users',
+    url: '/reports/users',
+    exact: true,
+  },
+  {
+    label: 'Account Officers',
+    url: '/reports/users/officers',
+    exact: true,
+  },
+  {
+    label: 'Tellers',
+    url: '/reports/users/tellers',
+    exact: true,
+  }
+];
+
+export const TRANSACTION_REPORTS_MENU_LINKS = [
+  {
+    label: 'Teller Transactions',
+    url: '/reports/transactions/tellers',
+    exact: true,
+  },
+  {
+    label: 'Deposit Transactions',
+    url: '/reports/transactions/deposit',
+    exact: true,
+  },
+  {
+    label: 'Loan Transactions',
+    url: '/reports/transactions/loans',
+    exact: true,
+  }
 ];

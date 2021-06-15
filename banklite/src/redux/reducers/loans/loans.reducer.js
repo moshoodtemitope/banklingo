@@ -573,6 +573,12 @@ export function getLoanSchedulePreviewReducer(state=[], action) {
                 is_request_processing: false,
                 request_data: action
             };
+        case loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_RESET:
+            return {
+                request_status: loanAndDepositsConstants.PREVIEW_LOAN_SCHEDULE_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
 
         default:
             return { ...state }

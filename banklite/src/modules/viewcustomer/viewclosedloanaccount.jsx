@@ -1572,7 +1572,7 @@ class ViewClosedLoanAccount extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Account Officer</td>
-                                    <td>{loanAccountData.accountOfficerName}</td>
+                                    <td>{loanAccountData.accountOfficer}</td>
                                 </tr>
                                 <tr>
                                     <td>Currency</td>

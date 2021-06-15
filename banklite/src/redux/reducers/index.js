@@ -206,6 +206,7 @@ const dashboardReducers = combineReducers({
   fetchLoggedonTillsReducer: dashboard.fetchLoggedonTillsReducer,
   fetchAllTillsReducer: dashboard.fetchAllTillsReducer,
   fetchManadateReducer: dashboard.fetchManadateReducer,
+  getAReportReducer: dashboard.getAReportReducer,
 });
 
 const platformReducers = combineReducers({

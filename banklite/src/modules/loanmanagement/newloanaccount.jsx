@@ -53,7 +53,7 @@ class NewLoanAccount extends React.Component {
     this.providedInstallments = '';
     this.state = {
       user: JSON.parse(localStorage.getItem('lingoAuth')),
-      PageSize: 1000,
+      PageSize: 5000,
       CurrentPage: 1,
       scheduleErrorMsg: '',
       isscheduleError: '',
@@ -85,7 +85,7 @@ class NewLoanAccount extends React.Component {
     this.getAllLoanProducts(params);
     this.getFullLoanProducts();
 
-    
+    this.getLoanSchedulePreview("CLEAR")
     this.getAllClients(params);
     
     this.getTransactionChannels(params);
@@ -870,7 +870,7 @@ class NewLoanAccount extends React.Component {
                           //     ? values.accountOfficerBranchEncodedKey
                           //     : null,
                         },
-                        accountOfficerDetailsModel:null,
+                        // accountOfficerDetailsModel:null,
                         loanDisbursmentDetails: {
                           disbursementChannelEncodedKey:
                             values.disbursementChannelEncodedKey !== ''
@@ -958,6 +958,7 @@ class NewLoanAccount extends React.Component {
                               <Select
                                 options={allCustomersList}
                                 onChange={(selected) => {
+                                  this.setState({clientEncodedKey:selected.value })
                                   setFieldValue(
                                     'clientEncodedKey',
                                     selected.value
@@ -1827,7 +1828,8 @@ class NewLoanAccount extends React.Component {
                                 this.renderSchedulePreview(
                                   getLoanSchedulePreviewRequest.request_data
                                     .response.data.result
-                                )}
+                                )
+                              }
 
                               <Button
                                 size='sm'
@@ -1837,11 +1839,18 @@ class NewLoanAccount extends React.Component {
                                   getLoanSchedulePreviewRequest.is_request_processing
                                 }
                                 onClick={() => {
+                                  
                                   if (values.interestRate !== '') {
                                     this.loanSchedulePayload.interestRate = parseFloat(
                                       values.interestRate
                                         .toString()
                                         .replace(/,/g, '')
+                                    );
+                                  }
+                                  if(this.state.clientEncodedKey){
+                                    setFieldValue(
+                                      'clientEncodedKey',
+                                      this.state.clientEncodedKey
                                     );
                                   }
 
@@ -1869,6 +1878,7 @@ class NewLoanAccount extends React.Component {
                                           )
                                         : '';
                                   }
+                                  
 
                                   this.getSchedulePreview();
                                 }}

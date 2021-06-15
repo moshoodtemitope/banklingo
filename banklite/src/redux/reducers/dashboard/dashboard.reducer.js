@@ -433,3 +433,35 @@ export function fetchManadateReducer(state=[], action) {
     }
 }
 
+export function getAReportReducer(state=[], action) {
+    switch (action.type) {
+        case dashboardConstants.GET_A_REPORT_PENDING:
+            return {
+                request_status: dashboardConstants.GET_A_REPORT_PENDING,
+                is_request_processing: true,
+                request_data: action
+            };
+        case dashboardConstants.GET_A_REPORT_SUCCESS:
+            return {
+                request_status: dashboardConstants.GET_A_REPORT_SUCCESS,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.GET_A_REPORT_FAILURE:
+            return {
+                request_status: dashboardConstants.GET_A_REPORT_FAILURE,
+                is_request_processing: false,
+                request_data: action
+            };
+        case dashboardConstants.GET_A_REPORT_RESET:
+            return {
+                request_status: dashboardConstants.GET_A_REPORT_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
+
+        default:
+            return { ...state }
+    }
+}
+

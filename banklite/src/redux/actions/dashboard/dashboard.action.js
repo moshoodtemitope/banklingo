@@ -18,7 +18,10 @@ export const dashboardActions = {
     fetchTillTransactions,
     fetchLoggedonTills,
     fetchAllTills,
-    fetchManadate
+    fetchManadate,
+    
+    // getReportFilters,
+    getAReport
 }
 
 
@@ -552,5 +555,116 @@ function fetchAllTills(includeClosed) {
     function success(response2,  response4,response5) { return { type: dashboardConstants.GET_ALL_TILLS_SUCCESS,  response2,  response4,response5 } }
     function failure(error) { return { type: dashboardConstants.GET_ALL_TILLS_FAILURE, error } }
     // function clear() { return { type: dashboardConstants.GET_ALL_TILLS_RESET, clear_data:""} }
+
+}
+
+// function getReportFilters(params) {
+
+//     return dispatch => {
+
+//         let consume = ApiService.request(routes.HIT_ACTIVITIES+`/?${params}`, "GET", null);
+//         dispatch(request(consume, tempData));
+//         return consume
+//             .then(response => {
+//                 dispatch(success(response));
+//             }).catch(error => {
+
+//                 dispatch(failure(handleRequestErrors(error)));
+//             });
+
+//     }
+
+//     function request(user, tempData) { 
+//         if(tempData===undefined){
+//             return { type: dashboardConstants.GET_ACTIVITIES_DATA_PENDING, user } 
+//         }
+//         if(tempData!==undefined){
+//             return { type: dashboardConstants.GET_ACTIVITIES_DATA_PENDING, user, tempData } 
+//         }
+//     }
+
+
+//     // function request(user) { return { type: dashboardConstants.GET_ACTIVITIES_DATA_PENDING, user } }
+//     function success(response) { return { type: dashboardConstants.GET_ACTIVITIES_DATA_SUCCESS, response } }
+//     function failure(error) { return { type: dashboardConstants.GET_ACTIVITIES_DATA_FAILURE, error } }
+
+// }
+
+
+function getAReport(params, reportType, ExportFileType) {
+    
+    if(params!=="CLEAR"){
+        return dispatch => {
+
+            let consume = ApiService.request(`${routes.ALL_REPORTS}/${reportType}?${params}`, 
+            "GET",
+            "",
+            "",
+            "",
+            "blob");
+            dispatch(request(consume));
+            return consume
+                .then((response) => {
+                    let disposition = response.headers["content-disposition"],
+                    filename;
+            
+                    if (disposition && disposition.indexOf("attachment") !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, "");
+                    }
+                    }
+            
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement("a");
+                    link.href = url;
+                    if (filename === undefined) {
+                        let nameOfDownload;
+
+                        if(ExportFileType===0){
+                            nameOfDownload = `${reportType}.xlsx`
+                        }
+                        if(ExportFileType===1){
+                            nameOfDownload = `${reportType}.pdf`
+                        }
+                    link.setAttribute("download", nameOfDownload);
+                    }
+            
+                    if (filename !== undefined) {
+                        link.setAttribute("download", filename);
+                    }
+                    if(ExportFileType===0){
+            
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                    }
+            
+                    dispatch(success(response, url));
+                })
+                .catch((error) => {
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
+        
+        dispatch(clear());
+        
+    }
+
+
+
+    function request(user) { return { type: dashboardConstants.GET_A_REPORT_PENDING, user } }
+    function success(response, url) { return { 
+        type: dashboardConstants.GET_A_REPORT_SUCCESS, 
+        response ,
+        url: ExportFileType===1?url: null
+    } }
+    function failure(error) { return { type: dashboardConstants.GET_A_REPORT_FAILURE, error } }
+    function clear() { return { type: dashboardConstants.GET_A_REPORT_RESET, clear_data:""} }
 
 }

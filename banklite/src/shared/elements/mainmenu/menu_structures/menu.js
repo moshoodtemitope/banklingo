@@ -179,8 +179,28 @@ export const menuList = [
     hasSubMenu: true,
     subMenus: [
       {
+        subMenuLabel: "Clients/Groups",
+        subMenuRoute: "/reports/clients/",
+      },
+      {
         subMenuLabel: "Loans",
         subMenuRoute: "/reports/loans/",
+      },
+      {
+        subMenuLabel: "Deposits",
+        subMenuRoute: "/reports/deposits/",
+      },
+      {
+        subMenuLabel: "Accounting",
+        subMenuRoute: "/reports/accounting/",
+      },
+      {
+        subMenuLabel: "Users",
+        subMenuRoute: "/reports/users/",
+      },
+      {
+        subMenuLabel: "Transactions",
+        subMenuRoute: "/reports/transactions/tellers",
       },
     ],
   },
