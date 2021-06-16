@@ -56,7 +56,7 @@ class LoanBalancesReports extends React.Component {
 
       let params = `PageSize=3000&CurrentPage=1`;
 
-      dispatch(administrationActions.getAllUsers(2));
+      dispatch(administrationActions.getAllUsers(1));
       dispatch(administrationActions.getAllCurrencies(null, true));
       dispatch(productActions.getAllLoanProducts(params));
       this.exportReport("CLEAR")
