@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 
 import { NavLink } from 'react-router-dom';
 import InnerPageContainer from '../../../shared/templates/authed-pagecontainer';
-
+import TableComponent from '../../../shared/elements/table';
+import TablePagination from '../../../shared/elements/table/pagination';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import DatePicker from 'react-datepicker';
@@ -22,11 +23,12 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 
 import PrintReport from '../../../shared/components/print-report';
 
+
 import '../styles.scss';
 import DatePickerFieldType from '../../../_helpers/DatePickerFieldType';
 import SubMenu from '../../../shared/components/SubMenu';
-import { DEPOSITS_REPORTS_MENU_LINKS, REPORTS_MENU_LINKS } from '../../../shared/config';
-class DepositAccountReports extends React.Component {
+import { LOAN_REPORTS_MENU_LINKS, REPORTS_MENU_LINKS } from '../../../shared/config';
+class LoanOfficerPerformanceReports extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,12 +40,12 @@ class DepositAccountReports extends React.Component {
       endDate: '',
       startDate: '',
       
-      includeZeroBalance:true,
       CurrencyCode:'000',
       ProductEncodedKey:'000',
-      DepositState:'0',
-      reportType:"deposits",
-      AccountOfficerEncodedKey:'000'
+      LoanState:'0',
+      
+      
+      reportType:"loanaccountofficer",
     };
   }
 
@@ -54,18 +56,17 @@ class DepositAccountReports extends React.Component {
   loadInitialData = () => {
     const { dispatch } = this.props;
 
-      let params = `PageSize=3000&CurrentPage=1`;
-
-      dispatch(administrationActions.getAllUsers(1));
+      let params = `PageSize=3000&CurrentPage=1`
+      
       dispatch(administrationActions.getAllCurrencies(null, true));
-      dispatch(productActions.getAllDepositProducts());
+      dispatch(productActions.getAllLoanProducts(params));
       this.exportReport("CLEAR")
   };
 
  
 
   exportReport = (ExportFileType) => {
-    let { DepositState, reportType,endDate, startDate,  CurrencyCode, ProductEncodedKey, AccountOfficerEncodedKey, includeZeroBalance} = this.state;
+    let { LoanState, reportType,endDate, startDate,  CurrencyCode,   ProductEncodedKey} = this.state;
     this.setState({ExportFileType})
 
     if (endDate !== '') {
@@ -75,7 +76,7 @@ class DepositAccountReports extends React.Component {
       startDate = startDate.toISOString();
     }
     
-    let paramters = `CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&AccountOfficerEncodedKey=${AccountOfficerEncodedKey}&IncludeZeroBalance=${includeZeroBalance}&DepositState=${DepositState}&ProductEncodedKey=${ProductEncodedKey}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&LoanState=${LoanState}&ProductEncodedKey=${ProductEncodedKey}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -117,44 +118,13 @@ class DepositAccountReports extends React.Component {
 
 
   renderReportsFilter = ()=>{
-    let {includeZeroBalance} = this.state,
-        getAccountOfficerRequest =  this.props.getAllUsersReducer.request_data.response.data,
+    let getAReportRequest = this.props.getAReportReducer,
+        {includeZeroBalance} = this.state,
         getAllCurrenciesRequest =  this.props.getAllCurrencies.request_data.response.data,
-        productRequest =  this.props.getAllDepositProductsReducer.request_data.response.data;
+        productRequest =  this.props.getAllLoanProductsReducer.request_data.response.data;
         
     return (
       <>
-        <div className='actions-wrap flexed-right'>
-          <Button
-            onClick={() => this.exportReport(0)}
-            className='action-icon'
-            variant='outline-secondary'
-            disabled={this.props.getAReportReducer.is_request_processing}
-            type='button'
-          >
-            <img
-              alt='Download excel'
-              src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg=='
-              width='16'
-              height='16'
-            />
-          </Button>
-          <Button
-            onClick={() => this.exportReport(1)}
-            className='action-icon'
-            variant='outline-secondary'
-            disabled={this.props.getAReportReducer.is_request_processing}
-            type='button'
-          >
-            <img
-              alt=''
-              title="Print"
-              src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADZSURBVDiNxdK9SsMxFAXwXz9ABbHO4uJsxW7i2s0HcBZ38XFcfQBHn8GhLurQsVsXl1pLF8GvIflDiIl064FAcnJyc8+9l3WjVeF7aCfnb7yXhJ0Ct4lr/GAvrisc4WGVrLZwlnHHuMFGLm7nRAUvuC/p0xrs4AKvOBUspOjgOepuscgD7At+HytZHGCATzxhCt2C8BLLSpBtjFOiVIMFZgV+ptDKtI0fGAr+dzEROtI8PkE/Whjhi/ognQtFbO6b/V0uLFlo4RBzvMU1j9yfD1cdZf4Z5/XiF5T/Jkm8LA5TAAAAAElFTkSuQmCC'
-              width='16'
-              height='16'
-            />
-          </Button>
-        </div>
       <div className='heading-with-cta'>
         <Form
           className='one-liner'
@@ -210,9 +180,9 @@ class DepositAccountReports extends React.Component {
               <select
                 id='toshow'
                 onChange={(e) =>
-                  this.setState({ DepositState: e.target.value })
+                  this.setState({ LoanState: e.target.value })
                 }
-                value={this.state.DepositState}
+                value={this.state.LoanState}
                 className='countdropdown form-control form-control-sm'
               >
                 
@@ -220,7 +190,6 @@ class DepositAccountReports extends React.Component {
                 {/* <option value='1'>Partial Application</option> */}
                 <option value='2'>Pending Approval</option>
                 <option value='3'>Approved</option>
-                {/* <option value='4'>Rejected</option> */}
                 <option value='5'>Active</option>
                 {/* <option value='6'>In Arears</option> */}
                 <option value='7'>Closed</option>
@@ -235,7 +204,7 @@ class DepositAccountReports extends React.Component {
 
             </Form.Group>
             <Form.Group>
-              <label htmlFor='toshow' className="mr-10">Deposit Product</label>
+              <label htmlFor='toshow' className="mr-10">Loan Product</label>
               <select
                 id='toshow'
                 onChange={(e) =>
@@ -249,31 +218,7 @@ class DepositAccountReports extends React.Component {
                 {
                   productRequest.map((eachData, index) => {
                     return (
-                      <option key={index} value={eachData.productEncodedKey}>{eachData.productName}</option>
-                    )
-                  })
-                }
-
-              </select>
-
-
-            </Form.Group>
-            <Form.Group>
-              <label htmlFor='toshow' className="mr-10">Account Officers</label>
-              <select
-                id='toshow'
-                onChange={(e) =>
-                  this.setState({ AccountOfficerEncodedKey: e.target.value })
-                }
-                value={this.state.AccountOfficerEncodedKey}
-                className='countdropdown form-control form-control-sm'
-              >
-                
-                <option value='000'>All</option>
-                {
-                  getAccountOfficerRequest.map((eachData, index) => {
-                    return (
-                      <option key={index} value={eachData.key}>{eachData.displayName} ({eachData.name})</option>
+                      <option key={index} value={eachData.loanProductEncodedKey}>{eachData.loanProductName}</option>
                     )
                   })
                 }
@@ -309,23 +254,39 @@ class DepositAccountReports extends React.Component {
           
           
           
-          
+          <div className='actions-wrap'>
+            <Button
+              onClick={()=>this.exportReport(0)}
+              className='action-icon'
+              variant='outline-secondary'
+              disabled={this.props.getAReportReducer.is_request_processing}
+              type='button'
+            >
+              <img
+                alt='Download excel'
+                src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7klEQVR42mNgwA4YteuNVPRqDEN0a43SGPABhXoHDp1qQxO9WuMU/TqjKXq1hkf0ao0+AfF/GMZrANCGZ8iKseHX7z82YMNv3n9KYCCkGYTfvP+IExNlwKR90/6vOLUWrAFEw9goBnj0+vwPnhIGZodMCf9/6MZh0gyImBb9/+WHV/9jZsb/v/vi3v+K1dWkGQDCIE0/f/38v/z4CtK9AMK92/v/P3/3/P+Fhxf/mzdZk2YAyOkgzc5dbv9XnVzzf+elXaQZ4Dsh8H/4tCgw27De9H/JinLSvUBRNJKdkChOyhRnJkLZWb/WMAOfQgAYYCIPufpLHwAAAABJRU5ErkJggg=='
+                width='16'
+                height='16'
+              />
+            </Button>
+            <Button
+              onClick={()=>this.exportReport(1)}
+              className='action-icon'
+              variant='outline-secondary'
+              disabled={this.props.getAReportReducer.is_request_processing}
+              type='button'
+            >
+              <img
+                alt=''
+                title="Print"
+                src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADZSURBVDiNxdK9SsMxFAXwXz9ABbHO4uJsxW7i2s0HcBZ38XFcfQBHn8GhLurQsVsXl1pLF8GvIflDiIl064FAcnJyc8+9l3WjVeF7aCfnb7yXhJ0Ct4lr/GAvrisc4WGVrLZwlnHHuMFGLm7nRAUvuC/p0xrs4AKvOBUspOjgOepuscgD7At+HytZHGCATzxhCt2C8BLLSpBtjFOiVIMFZgV+ptDKtI0fGAr+dzEROtI8PkE/Whjhi/ognQtFbO6b/V0uLFlo4RBzvMU1j9yfD1cdZf4Z5/XiF5T/Jkm8LA5TAAAAAElFTkSuQmCC'
+                width='16'
+                height='16'
+              />
+            </Button>
+          </div>
         </Form>
       </div>
-        <div className="heading-with-cta toright compact">
-          <div className="eachitem">
-            <input
-              type="checkbox"
-              name=""
-              onChange={() => { }}
-              checked={includeZeroBalance}
-              onChange={() => {
-                this.setState({ includeZeroBalance: !includeZeroBalance })
-              }}
-              id="zero-balance" />
-            <label htmlFor="closing-balance">Include Zero Balance</label>
-          </div>
-        </div>
       
         {this.props.getAReportReducer.request_status === dashboardConstants.GET_A_REPORT_FAILURE &&
 
@@ -349,15 +310,14 @@ class DepositAccountReports extends React.Component {
   }
 
   renderReportsWrap = () => {
-    let 
+    let getAReportRequest = this.props.getAReportReducer,
         getAllCurrenciesRequest =  this.props.getAllCurrencies,
-        productRequest = this.props.getAllDepositProductsReducer,
-        getAccountOfficersRequest =  this.props.getAllUsersReducer;
+        productRequest = this.props.getAllLoanProductsReducer,
+        getAllBranchesRequest = this.props.getAllBranchesReducer;
 
         
     if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_PENDING
-        || productRequest.request_status === productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING
-        || getAccountOfficersRequest.request_status===administrationConstants.GET_ALL_USERS_PENDING){
+        || productRequest.request_status === productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING){
         
           return (
             <div className='loading-content'>
@@ -366,7 +326,7 @@ class DepositAccountReports extends React.Component {
           )
     }
 
-    if(productRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_FAILURE){
+    if(productRequest.request_status===productsConstants.GET_ALL_LOAN_PRODUCTS_FAILURE){
       
         return (
           <div className='loading-content errormsg'>
@@ -386,8 +346,7 @@ class DepositAccountReports extends React.Component {
    
 
     if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS
-        && productRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS
-        && getAccountOfficersRequest.request_status===administrationConstants.GET_ALL_USERS_SUCCESS){
+        && productRequest.request_status===productsConstants.GET_ALL_LOAN_PRODUCTS_SUCCESS){
         
         
          return this.renderReportsFilter();
@@ -410,7 +369,7 @@ class DepositAccountReports extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className=''>
-                        <h2>Deposit Accounts</h2>
+                        <h2>Account Officer Performance</h2>
                       </div>
                     </div>
                   </div>
@@ -418,7 +377,7 @@ class DepositAccountReports extends React.Component {
               </div>
               <SubMenu links={REPORTS_MENU_LINKS} />
               <div className='secondLevelMenu'>
-                <SubMenu links={DEPOSITS_REPORTS_MENU_LINKS} />
+                <SubMenu links={LOAN_REPORTS_MENU_LINKS} />
               </div>
               <div className='module-content'>
                 <div className='content-container'>
@@ -442,8 +401,7 @@ function mapStateToProps(state) {
   return {
     getAReportReducer: state.dashboardReducers.getAReportReducer,
     getAllCurrencies: state.administrationReducers.adminGetAllCurrenciesReducer,
-    getAllUsersReducer: state.administrationReducers.adminGetAllUsersReducer,
-    getAllDepositProductsReducer: state.productReducers.getAllDepositProductsReducer,
+    getAllLoanProductsReducer: state.productReducers.getAllLoanProductsReducer,
   };
 }
-export default connect(mapStateToProps)(DepositAccountReports);
+export default connect(mapStateToProps)(LoanOfficerPerformanceReports);

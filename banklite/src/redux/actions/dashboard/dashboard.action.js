@@ -601,7 +601,8 @@ function getAReport(params, reportType, ExportFileType) {
             "",
             "",
             "",
-            "blob");
+            "blob"
+            );
             dispatch(request(consume));
             return consume
                 .then((response) => {
@@ -644,7 +645,35 @@ function getAReport(params, reportType, ExportFileType) {
                     dispatch(success(response, url));
                 })
                 .catch((error) => {
-                    dispatch(failure(handleRequestErrors(error)));
+                    
+                    if (
+                        error.request && 
+                        error.request.responseType === 'blob' &&
+                        error.response && error.response.data instanceof Blob &&
+                        error.response.data.type &&
+                        error.response.data.type.toLowerCase().indexOf('json') != -1
+                    ) {
+                        new Promise((resolve, reject) => {
+                            let reader = new FileReader();
+                            reader.onload = () => {
+                                error.response.data = JSON.parse(reader.result);
+                                dispatch(failure(error.response.data.message));
+                                resolve(Promise.reject(error));
+                            };
+
+                            reader.onerror = () => {
+                                reject(error);
+                            };
+
+                            reader.readAsText(error.response.data);
+                        })
+                        .then(err => {
+                            // here your response comes
+                            console.log(err.response.data)
+                        })
+                    }else{
+                        dispatch(failure(handleRequestErrors(error)));
+                    }
                 });
 
         }

@@ -61,6 +61,11 @@ import NewDepositAccount from "./depositmanagement/newdepositaccount";
 
 import AllLoanSchedules from "./all-loan-schedules";
 import LoanPAR from "./reports/loan-PAR";
+import LoanOfficerPerformanceReports from './reports/loans/performances'
+import LoanStatementsReports from './reports/loans/statements'
+import LoanBalancesReports from './reports/loans/balances'
+import LoanAccountsReports from "./reports/loans";
+
 import ClientReports from "./reports/clients-and-groups";
 import GroupClientReports from "./reports/clients-and-groups/group-clients";
 import DepositOfficerPerformanceReports from "./reports/deposits/performances";
@@ -76,6 +81,7 @@ import UserReports from "./reports/users";
 import TellerTransactionsReports from "./reports/transactions";
 import DepositTransactionsReports from "./reports/transactions/deposit-transactions";
 import LoanTransactionsReports from "./reports/transactions/loan-transactions";
+
 
 
 // import LoanPAR from "./loan-PAR";
@@ -866,6 +872,41 @@ class AuthenticatedRoutes extends React.Component {
               authed={this.props.user}
               component={LoanPAR}
             />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/loans/officer-performance"
+              {...this.props}
+              authed={this.props.user}
+              component={LoanOfficerPerformanceReports}
+            />
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/loans/statements"
+              {...this.props}
+              authed={this.props.user}
+              component={LoanStatementsReports}
+            />
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/loans/balances"
+              {...this.props}
+              authed={this.props.user}
+              component={LoanBalancesReports}
+            />
+
+            <PrivateRoute
+              // accessRequired="bnk_view_all_loan_schedules"
+              exact
+              path="/reports/loans/accounts"
+              {...this.props}
+              authed={this.props.user}
+              component={LoanAccountsReports}
+            />
+            
             
             <PrivateRoute
               // accessRequired="bnk_view_all_loan_schedules"

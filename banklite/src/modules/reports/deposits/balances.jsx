@@ -44,6 +44,7 @@ class DepositBalancesReports extends React.Component {
       ProductEncodedKey:'000',
       DepositState:'0',
       reportType:"depositbalance",
+      AccountOfficerEncodedKey:'000'
     };
   }
 
@@ -54,7 +55,7 @@ class DepositBalancesReports extends React.Component {
   loadInitialData = () => {
     const { dispatch } = this.props;
 
-      
+      dispatch(administrationActions.getAllUsers(1));
       dispatch(administrationActions.getAllCurrencies(null, true));
       dispatch(productActions.getAllDepositProducts());
       this.exportReport("CLEAR")
@@ -63,7 +64,7 @@ class DepositBalancesReports extends React.Component {
  
 
   exportReport = (ExportFileType) => {
-    let { DepositState, reportType,endDate, startDate,  CurrencyCode,  includeZeroBalance, ProductEncodedKey} = this.state;
+    let { DepositState, reportType,endDate, startDate,  CurrencyCode,  includeZeroBalance, ProductEncodedKey, AccountOfficerEncodedKey} = this.state;
     this.setState({ExportFileType})
 
     if (endDate !== '') {
@@ -73,7 +74,7 @@ class DepositBalancesReports extends React.Component {
       startDate = startDate.toISOString();
     }
     
-    let paramters = `CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&DepositState=${DepositState}&IncludeZeroBalance=${includeZeroBalance}&ProductEncodedKey=${ProductEncodedKey}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&DepositState=${DepositState}&AccountOfficerEncodedKey=${AccountOfficerEncodedKey}&IncludeZeroBalance=${includeZeroBalance}&ProductEncodedKey=${ProductEncodedKey}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -117,6 +118,7 @@ class DepositBalancesReports extends React.Component {
   renderReportsFilter = ()=>{
     let getAReportRequest = this.props.getAReportReducer,
         {includeZeroBalance} = this.state,
+        getAccountOfficerRequest =  this.props.getAllUsersReducer.request_data.response.data,
         getAllCurrenciesRequest =  this.props.getAllCurrencies.request_data.response.data,
         productRequest =  this.props.getAllDepositProductsReducer.request_data.response.data;
         
@@ -226,6 +228,30 @@ class DepositBalancesReports extends React.Component {
 
             </Form.Group>
             <Form.Group>
+              <label htmlFor='toshow' className="mr-10">Account Officers</label>
+              <select
+                id='toshow'
+                onChange={(e) =>
+                  this.setState({ AccountOfficerEncodedKey: e.target.value })
+                }
+                value={this.state.AccountOfficerEncodedKey}
+                className='countdropdown form-control form-control-sm'
+              >
+                
+                <option value='000'>All</option>
+                {
+                  getAccountOfficerRequest.map((eachData, index) => {
+                    return (
+                      <option key={index} value={eachData.key}>{eachData.displayName} ({eachData.name})</option>
+                    )
+                  })
+                }
+
+              </select>
+
+
+            </Form.Group>
+            <Form.Group>
               <label htmlFor='toshow' className="mr-10">Currency</label>
               <select
                 id='toshow'
@@ -285,7 +311,7 @@ class DepositBalancesReports extends React.Component {
           </div>
         </Form>
       </div>
-      <div className="heading-with-cta toright compact">
+        <div className="heading-with-cta toright compact">
           <div className="eachitem">
             <input
               type="checkbox"
@@ -321,14 +347,15 @@ class DepositBalancesReports extends React.Component {
   }
 
   renderReportsWrap = () => {
-    let getAReportRequest = this.props.getAReportReducer,
+    let 
         getAllCurrenciesRequest =  this.props.getAllCurrencies,
         productRequest = this.props.getAllDepositProductsReducer,
-        getAllBranchesRequest = this.props.getAllBranchesReducer;
+        getAccountOfficersRequest =  this.props.getAllUsersReducer;
 
         
     if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_PENDING
-        || productRequest.request_status === productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING){
+        || productRequest.request_status === productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING
+        || getAccountOfficersRequest.request_status===administrationConstants.GET_ALL_USERS_PENDING){
         
           return (
             <div className='loading-content'>
@@ -357,7 +384,8 @@ class DepositBalancesReports extends React.Component {
    
 
     if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS
-        && productRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS){
+        && productRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS
+        && getAccountOfficersRequest.request_status===administrationConstants.GET_ALL_USERS_SUCCESS){
         
         
          return this.renderReportsFilter();
@@ -412,6 +440,7 @@ function mapStateToProps(state) {
   return {
     getAReportReducer: state.dashboardReducers.getAReportReducer,
     getAllCurrencies: state.administrationReducers.adminGetAllCurrenciesReducer,
+    getAllUsersReducer: state.administrationReducers.adminGetAllUsersReducer,
     getAllDepositProductsReducer: state.productReducers.getAllDepositProductsReducer,
   };
 }

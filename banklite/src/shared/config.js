@@ -210,21 +210,21 @@ export const CLIENTS_REPORTS_MENU_LINKS = [
   },
 ];
 export const LOAN_REPORTS_MENU_LINKS = [
-  // {
-  //   label: 'Loan Accounts',
-  //   url: '/reports/loans/accounts',
-  //   exact: true,
-  // },
-  // {
-  //   label: 'Account Statement',
-  //   url: '/reports/loans/statments',
-  //   exact: true,
-  // },
-  // {
-  //   label: 'Loan Balances',
-  //   url: '/reports/loans/balances',
-  //   exact: true,
-  // },
+  {
+    label: 'Loan Accounts',
+    url: '/reports/loans/accounts',
+    exact: true,
+  },
+  {
+    label: 'Account Statement',
+    url: '/reports/loans/statements',
+    exact: true,
+  },
+  {
+    label: 'Loan Balances',
+    url: '/reports/loans/balances',
+    exact: true,
+  },
   {
     label: 'Account Officer Performance',
     url: '/reports/loans/officer-performance',
@@ -244,11 +244,11 @@ export const LOAN_REPORTS_MENU_LINKS = [
   
 ];
 export const DEPOSITS_REPORTS_MENU_LINKS = [
-  // {
-  //   label: 'Deposit Accounts',
-  //   url: '/reports/deposits/',
-  //   exact: true,
-  // },
+  {
+    label: 'Deposit Accounts',
+    url: '/reports/deposits/',
+    exact: true,
+  },
   {
     label: 'Account Statements',
     url: '/reports/deposits/statements',

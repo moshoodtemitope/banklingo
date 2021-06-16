@@ -12,23 +12,23 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { numberWithCommas, getDateFromISO } from '../../../shared/utils';
+
 
 import { dashboardActions } from '../../../redux/actions/dashboard/dashboard.action';
-import { administrationActions } from '../../../redux/actions/administration/administration.action';
-import { administrationConstants } from '../../../redux/actiontypes/administration/administration.constants';
+
 import {dashboardConstants} from '../../../redux/actiontypes/dashboard/dashboard.constants'
-import { branchActions, branchConstants } from '../../../redux/actions/administration/branch-management.actions';
+
 import '@react-pdf-viewer/core/lib/styles/index.css';
 
 import PrintReport from '../../../shared/components/print-report';
 // Import styles
 import '@react-pdf-viewer/print/lib/styles/index.css';
+
 import '../styles.scss';
 import DatePickerFieldType from '../../../_helpers/DatePickerFieldType';
 import SubMenu from '../../../shared/components/SubMenu';
-import { TRANSACTION_REPORTS_MENU_LINKS, REPORTS_MENU_LINKS } from '../../../shared/config';
-class TellerTransactionsReports extends React.Component {
+import { LOAN_REPORTS_MENU_LINKS, REPORTS_MENU_LINKS } from '../../../shared/config';
+class LoanStatementsReports extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,50 +39,39 @@ class TellerTransactionsReports extends React.Component {
       CurrentSelectedPage: 1,
       endDate: '',
       startDate: '',
-      SearchText: '',
-
-      TellerEncodedKey:'000',
-      reportType:"tellertransaction",
-      selectedBranchKey:JSON.parse(localStorage.getItem('lingoAuth')).selectedBranchKey,
+      
+      reportType:"loanaccountstatement",
     };
   }
 
   componentDidMount() {
-    this.loadInitialData();
+    this.exportReport("CLEAR")
   }
 
   
-  loadInitialData = () => {
-    const { dispatch } = this.props;
 
-      dispatch(administrationActions.getAllUsers(3));
-      dispatch(administrationActions.getAllCurrencies(null, true));
-      
-      
-      dispatch(branchActions.getAllBranches(null,null, null, true));
-      this.exportReport("CLEAR")
-  };
-
-
+ 
 
   exportReport = (ExportFileType) => {
-    let {  selectedBranchKey, reportType,endDate, startDate,  CurrencyCode, TellerEncodedKey } = this.state;
+    let {  reportType,endDate, startDate, AccountNumber } = this.state;
     this.setState({ExportFileType})
-    
+
     if (endDate !== '') {
       endDate = endDate.toISOString();
     }
     if (startDate !== '') {
       startDate = startDate.toISOString();
     }
-
-    let paramters = `BranchEncodedKey=${selectedBranchKey}&CurrencyCode=${CurrencyCode}&TellerEncodedKey=${TellerEncodedKey}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    
+    let paramters = `AccountNumber=${AccountNumber}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
   };
 
-  
+ 
+
+ 
 
   handleDateChangeRaw = (e) => {
     e.preventDefault();
@@ -107,17 +96,16 @@ class TellerTransactionsReports extends React.Component {
     });
   };
 
+
   renderReportPrint = (url)=>{
     return(
       <PrintReport fileUrl={url} />
     )
   }
-  
+
+
   renderReportsFilter = ()=>{
-    let getAReportRequest = this.props.getAReportReducer,
-        getAllCurrenciesRequest =  this.props.getAllCurrencies.request_data.response.data,
-        getAllTellersRequest =  this.props.getAllUsersReducer.request_data.response.data,
-        getAllBranchesRequest = this.props.getAllBranchesReducer.request_data.response.data;
+    
         
     return (
       <>
@@ -125,8 +113,19 @@ class TellerTransactionsReports extends React.Component {
         <Form
           className='one-liner'
         >
+          <Form.Group>
+          <label htmlFor='toshow' className="mr-10">Account Number</label>
+          <input
+              type='text'
+              className='form-control-sm search-table form-control'
+              placeholder='Account Number'
+              value={this.state.AccountNumber}
+              onChange={(e) => {
+                this.setState({ AccountNumber: e.target.value.trim() });
+              }}
+            />
+          </Form.Group>
          
-          
             <Form.Group className=''>
               <label htmlFor='toshow' className="block-label">Start Date</label>
               <DatePicker
@@ -171,55 +170,8 @@ class TellerTransactionsReports extends React.Component {
               />
               
             </Form.Group>
-            <Form.Group>
-              <label htmlFor='toshow' className="mr-10">Tellers</label>
-              <select
-                id='toshow'
-                onChange={(e) =>
-                  this.setState({ TellerEncodedKey: e.target.value })
-                }
-                value={this.state.TellerEncodedKey}
-                className='countdropdown form-control form-control-sm'
-              >
-                
-                <option value='000'>All</option>
-                {
-                  getAllTellersRequest.map((eachData, index) => {
-                    return (
-                      <option key={index} value={eachData.key}>{eachData.displayName} ({eachData.name})</option>
-                    )
-                  })
-                }
-
-              </select>
-
-
-            </Form.Group>
-            <Form.Group>
-              <label htmlFor='toshow' className="mr-10">Currency</label>
-              <select
-                id='toshow'
-                onChange={(e) =>
-                  this.setState({ CurrencyCode: e.target.value })
-                }
-                value={this.state.CurrencyCode}
-                className='countdropdown form-control form-control-sm'
-              >
-                
-                <option value='000'>All</option>
-                {
-                  getAllCurrenciesRequest.map((eachData, index) => {
-                    return (
-                      <option key={index} value={eachData.code}>{eachData.name} ({eachData.code})</option>
-                    )
-                  })
-                }
-
-              </select>
-
-
-            </Form.Group>
           
+         
           
           
           <div className='actions-wrap'>
@@ -277,68 +229,8 @@ class TellerTransactionsReports extends React.Component {
   }
 
   renderReportsWrap = () => {
-    let getAReportRequest = this.props.getAReportReducer,
-        getAllCurrenciesRequest =  this.props.getAllCurrencies,
-        getAllTellersRequest =  this.props.getAllUsersReducer,
-        getAllBranchesRequest = this.props.getAllBranchesReducer;
-
-        
-    if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_PENDING
-        || getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_PENDING
-          || getAllTellersRequest.request_status===administrationConstants.GET_ALL_USERS_PENDING){
-        
-          return (
-            <div className='loading-content'>
-              <div className='loading-text'>Please wait... </div>
-            </div>
-          )
-    }
-
-   
-    if (getAllTellersRequest.request_status === administrationConstants.GET_ALL_USERS_FAILURE) {
-
-      return (
-        <div className='loading-content errormsg'>
-          <div>{getAllTellersRequest.request_data.error}</div>
-        </div>
-      )
-    }
-    if (getAllCurrenciesRequest.request_status === administrationConstants.GET_ALLCURRENCIES_FAILURE) {
-
-      return (
-        <div className='loading-content errormsg'>
-          <div>{getAllCurrenciesRequest.request_data.error}</div>
-        </div>
-      )
-    }
-
-    if(getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_FAILURE){
-      
-      return (
-        <div className='loading-content errormsg'>
-          <div>{getAllBranchesRequest.request_data.error}</div>
-        </div>
-      )
-    }
-
-    if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS
-      && getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_SUCCESS
-        && getAllTellersRequest.request_status===administrationConstants.GET_ALL_USERS_SUCCESS){
-        
-        
-         return this.renderReportsFilter();
-    }
-
-    
-
-
-    
+    return this.renderReportsFilter();
   }
-  
-
- 
-
- 
 
   render() {
     return (
@@ -351,7 +243,7 @@ class TellerTransactionsReports extends React.Component {
                   <div className='row'>
                     <div className='col-sm-12'>
                       <div className=''>
-                        <h2>Teller Transactions</h2>
+                        <h2>Account Statements</h2>
                       </div>
                     </div>
                   </div>
@@ -359,7 +251,7 @@ class TellerTransactionsReports extends React.Component {
               </div>
               <SubMenu links={REPORTS_MENU_LINKS} />
               <div className='secondLevelMenu'>
-                <SubMenu links={TRANSACTION_REPORTS_MENU_LINKS} />
+                <SubMenu links={LOAN_REPORTS_MENU_LINKS} />
               </div>
               <div className='module-content'>
                 <div className='content-container'>
@@ -382,10 +274,8 @@ class TellerTransactionsReports extends React.Component {
 function mapStateToProps(state) {
   return {
     getAReportReducer: state.dashboardReducers.getAReportReducer,
-    
+    getRolesReducer: state.administrationReducers.adminGetAllRolesReducer,
     getAllBranchesReducer: state.administrationReducers.adminGetAllBranchesReducer,
-    getAllUsersReducer: state.administrationReducers.adminGetAllUsersReducer,
-    getAllCurrencies: state.administrationReducers.adminGetAllCurrenciesReducer,
   };
 }
-export default connect(mapStateToProps)(TellerTransactionsReports);
+export default connect(mapStateToProps)(LoanStatementsReports);

@@ -126,6 +126,25 @@ select, select.form-control{
 .center-aligned{
     align-items: center;
 }
+.action-icon{
+    padding: 3px 5px !important;
+    border-color: rgba(93, 109, 126, 0.5) !important;
+    margin-top: 0 !important;
+    
+    &:hover{
+        background: unset !important;
+        border-color: rgba(93, 109, 126, 1) !important;
+    }
+}
+.actions-wrap{
+    &.flexed-right{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .action-icon{
+        margin-left: 10px;
+    }
+}
 .heading-with-cta, .footer-with-cta {
     display: flex;
     justify-content: space-between;
@@ -137,15 +156,7 @@ select, select.form-control{
         margin-left: 6px;
         font-size: 13px;
     }
-    .action-icon{
-        padding: 1px 4px;
-        border-color: rgba(93, 109, 126, 0.5);
-        margin-top: 0 !important;
-        &:hover{
-            background: unset;
-            border-color: rgba(93, 109, 126, 1);
-        }
-    }
+    
     .section-title{
         margin-bottom: 0;
     }
