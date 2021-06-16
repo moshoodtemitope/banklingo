@@ -39,11 +39,11 @@ class DepositOfficerPerformanceReports extends React.Component {
       CurrentSelectedPage: 1,
       endDate: '',
       startDate: '',
-      SearchText: '',
-
-      showAmountExpected: true,
-      showAmountPaid: false,
-      showAmountDue: true,
+      
+      CurrencyCode:'000',
+      ProductEncodedKey:'000',
+      DepositState:'0',
+      
       includeZeroBalance: false,
       reportType:"depositaccountofficer",
     };
@@ -59,7 +59,7 @@ class DepositOfficerPerformanceReports extends React.Component {
       
       dispatch(administrationActions.getAllCurrencies(null, true));
       dispatch(productActions.getAllDepositProducts());
-      
+      this.exportReport("CLEAR")
   };
 
  
@@ -67,8 +67,15 @@ class DepositOfficerPerformanceReports extends React.Component {
   exportReport = (ExportFileType) => {
     let { DepositState, reportType,endDate, startDate,  CurrencyCode,  includeZeroBalance, ProductEncodedKey} = this.state;
     this.setState({ExportFileType})
+
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
     
-    let paramters = `CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&DepositState=${DepositState}&IncludeZeroBalance=${includeZeroBalance}&ProductEncodedKey=${ProductEncodedKey}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}`;
+    let paramters = `CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&DepositState=${DepositState}&IncludeZeroBalance=${includeZeroBalance}&ProductEncodedKey=${ProductEncodedKey}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -177,7 +184,7 @@ class DepositOfficerPerformanceReports extends React.Component {
                 value={this.state.DepositState}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='0'>All</option>
                 {/* <option value='1'>Partial Application</option> */}
                 <option value='2'>Pending Approval</option>
@@ -206,7 +213,7 @@ class DepositOfficerPerformanceReports extends React.Component {
                 value={this.state.ProductEncodedKey}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='000'>All</option>
                 {
                   productRequest.map((eachData, index) => {
@@ -230,7 +237,7 @@ class DepositOfficerPerformanceReports extends React.Component {
                 value={this.state.CurrencyCode}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='000'>All</option>
                 {
                   getAllCurrenciesRequest.map((eachData, index) => {

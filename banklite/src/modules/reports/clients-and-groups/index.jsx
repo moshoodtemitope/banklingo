@@ -42,9 +42,8 @@ class ClientReports extends React.Component {
       startDate: '',
       SearchText: '',
 
-      showAmountExpected: true,
-      showAmountPaid: false,
-      showAmountDue: true,
+      ClientTypeId:'-30',
+      ClientState:'0',
       reportType:"clients",
       custTypes:JSON.parse(localStorage.getItem('lingoAuth')).custTypes,
       selectedBranchKey:JSON.parse(localStorage.getItem('lingoAuth')).selectedBranchKey,
@@ -52,7 +51,7 @@ class ClientReports extends React.Component {
   }
 
   componentDidMount() {
-    
+    this.exportReport("CLEAR")
   }
 
   
@@ -62,8 +61,15 @@ class ClientReports extends React.Component {
   exportReport = (ExportFileType) => {
     let {  selectedBranchKey, reportType,endDate, startDate, ClientTypeId, ClientState } = this.state;
     this.setState({ExportFileType})
+
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
     
-    let paramters = `BranchEncodedKey=${selectedBranchKey}&ClientTypeId=${ClientTypeId}&ClientState=${ClientState}&ExportFileType=${ExportFileType}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}`;
+    let paramters = `BranchEncodedKey=${selectedBranchKey}&ClientTypeId=${ClientTypeId}&ClientState=${ClientState}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -169,7 +175,7 @@ class ClientReports extends React.Component {
                 value={this.state.ClientTypeId}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='-30'>All</option>
                 {
                   custTypes.map((eachData, index) => {
@@ -193,7 +199,7 @@ class ClientReports extends React.Component {
                 value={this.state.ClientState}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='0'>All</option>
                 <option value='1'>Active</option>
                 <option value='3'>Pending Approval</option>

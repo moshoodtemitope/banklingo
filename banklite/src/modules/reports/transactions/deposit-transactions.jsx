@@ -42,10 +42,9 @@ class DepositTransactionsReports extends React.Component {
       startDate: '',
       SearchText: '',
 
-      showAmountExpected: true,
-      showAmountPaid: false,
-      showAmountDue: true,
+      UserRoleId:'-30',
       includeZeroBalance: false,
+      BranchId:JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
 
       reportType:"deposittransaction",
     };
@@ -60,6 +59,7 @@ class DepositTransactionsReports extends React.Component {
 
       dispatch(administrationActions.getAllRoles());
       dispatch(branchActions.getAllBranches(null,null, null, true));
+      this.exportReport("CLEAR")
   };
 
  
@@ -95,7 +95,7 @@ class DepositTransactionsReports extends React.Component {
         >
           
 
-          <Form.Group className='table-filters'>
+          {/* <Form.Group className='table-filters'>
             <label htmlFor='toshow' className="mr-10">Branch</label>
             <select
               id='toshow'
@@ -105,7 +105,7 @@ class DepositTransactionsReports extends React.Component {
               value={this.state.BranchId}
               className='countdropdown form-control form-control-sm'
             >
-              <option value=''>Select</option>
+              
               <option value='-30'>All</option>
               {
                 getAllBranchesRequest.map((eachData, index)=>{
@@ -115,13 +115,11 @@ class DepositTransactionsReports extends React.Component {
                 })
               }
               
-              {/* <option value='25'>25</option>
-              <option value='50'>50</option>
-              <option value='200'>200</option> */}
+              
             </select>
 
 
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group className='table-filters'>
             <label htmlFor='toshow' className="mr-10">Role</label>
             <select
@@ -132,7 +130,7 @@ class DepositTransactionsReports extends React.Component {
               value={this.state.UserRoleId}
               className='countdropdown form-control form-control-sm'
             >
-              <option value=''>Select</option>
+              
               <option value='-30'>All</option>
               {
                 getRolesRequest.map((eachData, index)=>{

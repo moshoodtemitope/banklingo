@@ -40,9 +40,7 @@ class UserReports extends React.Component {
       startDate: '',
       SearchText: '',
 
-      showAmountExpected: true,
-      showAmountPaid: false,
-      showAmountDue: true,
+      UserRoleId:'-30',
 
       reportType:"users",
     };
@@ -57,6 +55,7 @@ class UserReports extends React.Component {
 
       dispatch(administrationActions.getAllRoles());
       dispatch(branchActions.getAllBranches(null,null, null, true));
+      this.exportReport("CLEAR")
   };
 
   exportReport = (ExportFileType) => {
@@ -100,7 +99,7 @@ class UserReports extends React.Component {
               value={this.state.BranchId}
               className='countdropdown form-control form-control-sm'
             >
-              <option value=''>Select</option>
+              
               <option value='-30'>All</option>
               {
                 getAllBranchesRequest.map((eachData, index)=>{
@@ -127,7 +126,7 @@ class UserReports extends React.Component {
               value={this.state.UserRoleId}
               className='countdropdown form-control form-control-sm'
             >
-              <option value=''>Select</option>
+              
               <option value='-30'>All</option>
               {
                 getRolesRequest.map((eachData, index)=>{

@@ -40,6 +40,7 @@ class TrialBalanceReports extends React.Component {
       CurrentSelectedPage: 1,
       endDate: '',
       BalanceDate: '',
+      CurrencyCode:'000',
       reportType:"trialbalance",
       BranchId:JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
     };
@@ -55,17 +56,22 @@ class TrialBalanceReports extends React.Component {
       
       dispatch(administrationActions.getAllCurrencies(null, true));
       
-      
+      this.exportReport("CLEAR")
       
   };
 
  
 
   exportReport = (ExportFileType) => {
-    let {  BranchId, reportType,endDate, BalanceDate,  CurrencyCode } = this.state;
+    let {  BranchId, reportType, BalanceDate,  CurrencyCode } = this.state;
     this.setState({ExportFileType})
     
-    let paramters = `BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&BalanceDate=${BalanceDate.toISOString()}`;
+    if (BalanceDate !== '') {
+      BalanceDate = BalanceDate.toISOString();
+    }
+    
+
+    let paramters = `BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&BalanceDate=${BalanceDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -146,7 +152,7 @@ class TrialBalanceReports extends React.Component {
                 value={this.state.CurrencyCode}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='000'>All</option>
                 {
                   getAllCurrenciesRequest.map((eachData, index) => {

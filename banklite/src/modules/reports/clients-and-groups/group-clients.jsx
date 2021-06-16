@@ -45,20 +45,29 @@ class GroupClientReports extends React.Component {
       showAmountPaid: false,
       showAmountDue: true,
       reportType:"groups",
+      ClientTypeId:'-30',
+      ClientState:'0',
       custTypes:JSON.parse(localStorage.getItem('lingoAuth')).groupTypes,
       selectedBranchKey:JSON.parse(localStorage.getItem('lingoAuth')).selectedBranchKey,
     };
   }
 
   componentDidMount() {
-    
+    this.exportReport("CLEAR")
   }
 
   exportReport = (ExportFileType) => {
     let {  selectedBranchKey, reportType,endDate, startDate, ClientTypeId, ClientState } = this.state;
     this.setState({ExportFileType})
+
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
     
-    let paramters = `BranchEncodedKey=${selectedBranchKey}&GroupTypeId=${ClientTypeId}&ClientState=${ClientState}&ExportFileType=${ExportFileType}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}`;
+    let paramters = `BranchEncodedKey=${selectedBranchKey}&GroupTypeId=${ClientTypeId}&ClientState=${ClientState}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -164,7 +173,7 @@ class GroupClientReports extends React.Component {
                 value={this.state.ClientTypeId}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='-30'>All</option>
                 {
                   custTypes.map((eachData, index) => {
@@ -188,7 +197,7 @@ class GroupClientReports extends React.Component {
                 value={this.state.ClientState}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='0'>All</option>
                 <option value='1'>Active</option>
                 <option value='3'>Pending Approval</option>

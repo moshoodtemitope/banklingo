@@ -593,7 +593,7 @@ function fetchAllTills(includeClosed) {
 
 function getAReport(params, reportType, ExportFileType) {
     
-    if(params!=="CLEAR"){
+    if(ExportFileType!=="CLEAR"){
         return dispatch => {
 
             let consume = ApiService.request(`${routes.ALL_REPORTS}/${reportType}?${params}`, 

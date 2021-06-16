@@ -45,9 +45,9 @@ class LoanTransactionsReports extends React.Component {
       startDate: '',
       SearchText: '',
 
-      showAmountExpected: true,
-      showAmountPaid: false,
-      showAmountDue: true,
+      CurrencyCode:'000',
+      ProductId:'000',
+      selectedBranchKey:JSON.parse(localStorage.getItem('lingoAuth')).selectedBranchKey,
       reportType:"loantransaction",
     };
   }
@@ -64,15 +64,23 @@ class LoanTransactionsReports extends React.Component {
       dispatch(productActions.getAllLoanProducts());
       
       dispatch(branchActions.getAllBranches(null,null, null, true));
+      this.exportReport("CLEAR")
   };
 
  
 
   exportReport = (ExportFileType) => {
-    let { UserRoleId, BranchEncodedKey, reportType,endDate, startDate, AccountNumber, CurrencyCode, ProductId } = this.state;
+    let {  selectedBranchKey, reportType,endDate, startDate, AccountNumber, CurrencyCode, ProductId } = this.state;
     this.setState({ExportFileType})
+
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
     
-    let paramters = `BranchEncodedKey=${BranchEncodedKey}&AccountNumber=${AccountNumber}&ProductId=${ProductId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}`;
+    let paramters = `BranchEncodedKey=${selectedBranchKey}&AccountNumber=${AccountNumber}&ProductId=${ProductId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -147,7 +155,7 @@ class LoanTransactionsReports extends React.Component {
                 value={this.state.ProductId}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='000'>All</option>
                 {
                   productRequest.map((eachData, index) => {
@@ -215,7 +223,7 @@ class LoanTransactionsReports extends React.Component {
                 value={this.state.CurrencyCode}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='000'>All</option>
                 {
                   getAllCurrenciesRequest.map((eachData, index) => {
@@ -229,30 +237,7 @@ class LoanTransactionsReports extends React.Component {
 
 
             </Form.Group>
-          <Form.Group>
-            <label htmlFor='toshow' className="mr-10">Branch</label>
-            <select
-              id='toshow'
-              onChange={(e) =>
-                this.setState({BranchEncodedKey: e.target.value})
-              }
-              value={this.state.BranchEncodedKey}
-              className='countdropdown form-control form-control-sm'
-            >
-              <option value=''>Select</option>
-              <option value='0000-0000-0000-0000'>All</option>
-              {
-                getAllBranchesRequest.map((eachData, index)=>{
-                  return(
-                    <option key={index} value={eachData.encodedKey}>{eachData.name}</option>
-                  )
-                })
-              }
-              
-            </select>
-
-
-          </Form.Group>
+         
           
           
           <div className='actions-wrap'>

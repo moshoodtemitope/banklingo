@@ -42,7 +42,7 @@ class JournalReports extends React.Component {
       startDate: '',
       SearchText: '',
 
-      
+      CurrencyCode:'000',
       reportType:"journal",
       BranchId:JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
     };
@@ -58,7 +58,7 @@ class JournalReports extends React.Component {
       
       dispatch(administrationActions.getAllCurrencies(null, true));
       
-      
+      this.exportReport("CLEAR")
       
   };
 
@@ -67,8 +67,15 @@ class JournalReports extends React.Component {
   exportReport = (ExportFileType) => {
     let {  BranchId, reportType,endDate, startDate,  CurrencyCode } = this.state;
     this.setState({ExportFileType})
+
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
     
-    let paramters = `BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate.toISOString()}&EndDate=${endDate.toISOString()}`;
+    let paramters = `BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -174,7 +181,7 @@ class JournalReports extends React.Component {
                 value={this.state.CurrencyCode}
                 className='countdropdown form-control form-control-sm'
               >
-                <option value=''>Select</option>
+                
                 <option value='000'>All</option>
                 {
                   getAllCurrenciesRequest.map((eachData, index) => {
