@@ -48,7 +48,8 @@ class DashboardLanding extends React.Component {
             selectedTillData: false,
             preloadedTillData: false,
             selectedTxtn: null,
-            txtOption: "cash"
+            txtOption: "cash",
+            reportType:"transactionreceipt",
         }
 
         this.selectRef = null;
@@ -96,6 +97,18 @@ class DashboardLanding extends React.Component {
             this.fetchAllTills();
         }
     }
+
+    exportReport = (TransactionId) => {
+        let {reportType } = this.state;
+        // this.setState({ExportFileType})
+    
+        
+        
+        let paramters = `TransactionId=${TransactionId}&ExportFileType=1`;
+        const { dispatch } = this.props;
+    
+        dispatch(dashboardActions.getAReport(paramters, reportType, 1));
+      };
 
     getDashboardData = () => {
         const { dispatch } = this.props;
@@ -3300,6 +3313,8 @@ class DashboardLanding extends React.Component {
     };
 
     showPrint = (selectedToPrint) => {
+
+        this.exportReport(selectedToPrint.transactionId)
         
         this.setState({ showPrintTxt: true, selectedToPrint })
         

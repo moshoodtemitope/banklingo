@@ -66,7 +66,7 @@ class DepositStatementsReports extends React.Component {
       startDate = startDate.toISOString();
     }
     
-    let paramters = `&AccountNumber=${AccountNumber}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `AccountNumber=${AccountNumber}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
