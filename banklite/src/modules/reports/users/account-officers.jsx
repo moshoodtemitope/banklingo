@@ -51,8 +51,8 @@ class AccountOfficerUserReports extends React.Component {
   loadInitialData = () => {
     const { dispatch } = this.props;
 
-      dispatch(administrationActions.getAllRoles());
-      dispatch(branchActions.getAllBranches(null,null, null, true));
+      // dispatch(administrationActions.getAllRoles());
+      // dispatch(branchActions.getAllBranches(null,null, null, true));
       this.exportReport("CLEAR")
   };
 
@@ -60,7 +60,8 @@ class AccountOfficerUserReports extends React.Component {
     let { UserRoleId, BranchId, reportType } = this.state;
 
     this.setState({ExportFileType})
-    let paramters = `UserRoleId=${UserRoleId}&BranchId=${BranchId}&ExportFileType=${ExportFileType}`;
+    let paramters = `ExportFileType=${ExportFileType}`;
+    // let paramters = `UserRoleId=${UserRoleId}&BranchId=${BranchId}&ExportFileType=${ExportFileType}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -75,9 +76,9 @@ class AccountOfficerUserReports extends React.Component {
   }
 
   renderReportsFilter = ()=>{
-    let getAReportRequest = this.props.getAReportReducer,
-        getRolesRequest =  this.props.getRolesReducer.request_data.response.data,
-        getAllBranchesRequest = this.props.getAllBranchesReducer.request_data.response.data;
+    // let getAReportRequest = this.props.getAReportReducer,
+    //     getRolesRequest =  this.props.getRolesReducer.request_data.response.data,
+    //     getAllBranchesRequest = this.props.getAllBranchesReducer.request_data.response.data;
         
     return (
       <>
@@ -87,7 +88,7 @@ class AccountOfficerUserReports extends React.Component {
         >
           
 
-          <Form.Group className='table-filters'>
+          {/* <Form.Group className='table-filters'>
             <label htmlFor='toshow' className="mr-10">Branch</label>
             <select
               id='toshow'
@@ -107,14 +108,12 @@ class AccountOfficerUserReports extends React.Component {
                 })
               }
               
-              {/* <option value='25'>25</option>
-              <option value='50'>50</option>
-              <option value='200'>200</option> */}
+            
             </select>
 
 
-          </Form.Group>
-          <Form.Group className='table-filters'>
+          </Form.Group> */}
+          {/* <Form.Group className='table-filters'>
             <label htmlFor='toshow' className="mr-10">Role</label>
             <select
               id='toshow'
@@ -134,13 +133,11 @@ class AccountOfficerUserReports extends React.Component {
                 })
               }
               
-              {/* <option value='25'>25</option>
-              <option value='50'>50</option>
-              <option value='200'>200</option> */}
+              
             </select>
 
 
-          </Form.Group>
+          </Form.Group> */}
           
           <div className='actions-wrap'>
             <Button
@@ -200,44 +197,44 @@ class AccountOfficerUserReports extends React.Component {
 
 
   renderReportsWrap = () => {
-    let getAReportRequest = this.props.getAReportReducer,
-        getRolesRequest =  this.props.getRolesReducer,
-        getAllBranchesRequest = this.props.getAllBranchesReducer;
+    // let getAReportRequest = this.props.getAReportReducer,
+    //     getRolesRequest =  this.props.getRolesReducer,
+    //     getAllBranchesRequest = this.props.getAllBranchesReducer;
 
-    if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_PENDING
-        || getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_PENDING){
+    // if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_PENDING
+    //     || getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_PENDING){
         
-          return (
-            <div className='loading-content'>
-              <div className='loading-text'>Please wait... </div>
-            </div>
-          )
-    }
+    //       return (
+    //         <div className='loading-content'>
+    //           <div className='loading-text'>Please wait... </div>
+    //         </div>
+    //       )
+    // }
 
-    if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_FAILURE){
+    // if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_FAILURE){
       
-        return (
-          <div className='loading-content errormsg'>
-            <div>{getRolesRequest.request_data.error}</div>
-          </div>
-        )
-    }
+    //     return (
+    //       <div className='loading-content errormsg'>
+    //         <div>{getRolesRequest.request_data.error}</div>
+    //       </div>
+    //     )
+    // }
 
-    if(getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_FAILURE){
+    // if(getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_FAILURE){
       
-      return (
-        <div className='loading-content errormsg'>
-          <div>{getAllBranchesRequest.request_data.error}</div>
-        </div>
-      )
-    }
+    //   return (
+    //     <div className='loading-content errormsg'>
+    //       <div>{getAllBranchesRequest.request_data.error}</div>
+    //     </div>
+    //   )
+    // }
 
-    if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_SUCCESS
-      && getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_SUCCESS){
+    // if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_SUCCESS
+    //   && getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_SUCCESS){
         
         
          return this.renderReportsFilter();
-    }
+    // }
 
     
 

@@ -43,6 +43,7 @@ class JournalReports extends React.Component {
       SearchText: '',
 
       CurrencyCode:'000',
+      GLCode:"",
       reportType:"journal",
       BranchId:JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
     };
@@ -65,7 +66,7 @@ class JournalReports extends React.Component {
  
 
   exportReport = (ExportFileType) => {
-    let {  BranchId, reportType,endDate, startDate,  CurrencyCode,TransactionId } = this.state;
+    let {  BranchId, reportType,endDate, startDate,  CurrencyCode,TransactionId, GLCode } = this.state;
     this.setState({ExportFileType})
 
     if (endDate !== '') {
@@ -75,7 +76,7 @@ class JournalReports extends React.Component {
       startDate = startDate.toISOString();
     }
     
-    let paramters = `TransactionId=${TransactionId}&BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `TransactionId=${TransactionId}&GLCode=${GLCode}&BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
@@ -126,6 +127,18 @@ class JournalReports extends React.Component {
         <Form
           className='one-liner'
         >
+            <Form.Group>
+              <label htmlFor='toshow' className="mr-10">GL Code</label>
+              <input
+                type='text'
+                className='form-control-sm search-table form-control'
+                placeholder='GL Code'
+                value={this.state.GLCode}
+                onChange={(e) => {
+                  this.setState({GLCode: e.target.value.trim()});
+                }}
+              />
+            </Form.Group>
             <Form.Group>
               <label htmlFor='toshow' className="mr-10">Transaction ID</label>
               <input

@@ -15,10 +15,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 
 import { dashboardActions } from '../../../redux/actions/dashboard/dashboard.action';
+import { productsConstants } from '../../../redux/actiontypes/products/products.constants';
+import { productActions } from '../../../redux/actions/products/products.action';
 import { administrationActions } from '../../../redux/actions/administration/administration.action';
 import { administrationConstants } from '../../../redux/actiontypes/administration/administration.constants';
 import {dashboardConstants} from '../../../redux/actiontypes/dashboard/dashboard.constants'
-import { branchActions, branchConstants } from '../../../redux/actions/administration/branch-management.actions';
+
 import '@react-pdf-viewer/core/lib/styles/index.css';
 
 import PrintReport from '../../../shared/components/print-report';
@@ -44,8 +46,9 @@ class DepositTransactionsReports extends React.Component {
 
       UserRoleId:'-30',
       includeZeroBalance: false,
-      BranchId:JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
-
+      selectedBranchKey:JSON.parse(localStorage.getItem('lingoAuth')).selectedBranchKey,
+      CurrencyCode:'000',
+      ProductEncodedKey:'000',
       reportType:"deposittransaction",
     };
   }
@@ -57,21 +60,46 @@ class DepositTransactionsReports extends React.Component {
   loadInitialData = () => {
     const { dispatch } = this.props;
 
-      dispatch(administrationActions.getAllRoles());
-      dispatch(branchActions.getAllBranches(null,null, null, true));
+      // dispatch(administrationActions.getAllRoles());
+      // dispatch(branchActions.getAllBranches(null,null, null, true));
+      dispatch(administrationActions.getAllCurrencies(null, true));
+      dispatch(productActions.getAllDepositProducts());
       this.exportReport("CLEAR")
   };
 
  
 
   exportReport = (ExportFileType) => {
-    let { UserRoleId, BranchId, reportType, IncludeZeroBalance } = this.state;
+    let {  reportType, selectedBranchKey, endDate, startDate, AccountNumber, CurrencyCode, ProductEncodedKey} = this.state;
 
     this.setState({ExportFileType})
-    let paramters = `UserRoleId=${UserRoleId}&BranchId=${BranchId}&ExportFileType=${ExportFileType}&IncludeZeroBalance=${IncludeZeroBalance}`;
+    let paramters = `BranchEncodedKey=${selectedBranchKey}&AccountNumber=${AccountNumber}&CurrencyCode=${CurrencyCode}&ProductEncodedKey=${ProductEncodedKey}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));
+  };
+
+  handleDateChangeRaw = (e) => {
+    e.preventDefault();
+  };
+  handleStartDatePicker = (startDate) => {
+    startDate.setHours(startDate.getHours() + 1);
+
+    this.setState({ startDate }, () => {
+      if (this.state.endDate !== '') {
+        //this.getHistory();
+      }
+    });
+  };
+
+  handleEndDatePicker = (endDate) => {
+    endDate.setHours(endDate.getHours() + 1);
+
+    this.setState({ endDate }, () => {
+      if (this.state.startDate !== '') {
+        //this.getHistory();
+      }
+    });
   };
 
   renderReportPrint = (url)=>{
@@ -83,9 +111,8 @@ class DepositTransactionsReports extends React.Component {
 
   renderReportsFilter = ()=>{
     let getAReportRequest = this.props.getAReportReducer,
-        {includeZeroBalance} = this.state,
-        getRolesRequest =  this.props.getRolesReducer.request_data.response.data,
-        getAllBranchesRequest = this.props.getAllBranchesReducer.request_data.response.data;
+        getAllCurrenciesRequest =  this.props.getAllCurrencies.request_data.response.data,
+        productRequest =  this.props.getAllDepositProductsReducer.request_data.response.data;
         
     return (
       <>
@@ -94,59 +121,111 @@ class DepositTransactionsReports extends React.Component {
           className='one-liner'
         >
           
-
-          {/* <Form.Group className='table-filters'>
-            <label htmlFor='toshow' className="mr-10">Branch</label>
-            <select
-              id='toshow'
-              onChange={(e) =>
-                this.setState({BranchId: e.target.value})
-              }
-              value={this.state.BranchId}
-              className='countdropdown form-control form-control-sm'
-            >
-              
-              <option value='-30'>All</option>
-              {
-                getAllBranchesRequest.map((eachData, index)=>{
-                  return(
-                    <option key={index} value={eachData.id}>{eachData.name}</option>
-                  )
-                })
-              }
-              
-              
-            </select>
-
-
-          </Form.Group> */}
-          <Form.Group className='table-filters'>
-            <label htmlFor='toshow' className="mr-10">Role</label>
-            <select
-              id='toshow'
-              onChange={(e) =>
-                this.setState({UserRoleId: e.target.value})
-              }
-              value={this.state.UserRoleId}
-              className='countdropdown form-control form-control-sm'
-            >
-              
-              <option value='-30'>All</option>
-              {
-                getRolesRequest.map((eachData, index)=>{
-                  return(
-                    <option key={index} value={eachData.roleId}>{eachData.name}</option>
-                  )
-                })
-              }
-              
-              {/* <option value='25'>25</option>
-              <option value='50'>50</option>
-              <option value='200'>200</option> */}
-            </select>
-
-
+          <Form.Group>
+          <label htmlFor='toshow' className="mr-10">Account Number</label>
+          <input
+              type='text'
+              className='form-control-sm search-table form-control'
+              placeholder='Account Number'
+              value={this.state.AccountNumber}
+              onChange={(e) => {
+                this.setState({ AccountNumber: e.target.value.trim() });
+              }}
+            />
           </Form.Group>
+          <Form.Group className=''>
+              <label htmlFor='toshow' className="block-label">Start Date</label>
+              <DatePicker
+                autoComplete='new-off'
+                onChangeRaw={this.handleDateChangeRaw}
+                onChange={this.handleStartDatePicker}
+                selected={this.state.startDate}
+                dateFormat={window.dateformat}
+                peekNextMonth
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode='select'
+                placeholderText='Start date'
+                autoComplete='new-password'
+                maxDate={new Date()}
+                // className="form-control form-control-sm h-38px"
+                className='form-control form-control-sm '
+                customInput={
+                  <DatePickerFieldType placeHolder='Start date' />
+                }
+              />
+            </Form.Group>
+            <Form.Group className=''>
+              <label htmlFor='toshow' className="block-label">End Date</label>
+              <DatePicker
+                autoComplete='new-off'
+                placeholderText='End  date'
+                onChangeRaw={this.handleDateChangeRaw}
+                onChange={this.handleEndDatePicker}
+                selected={this.state.endDate}
+                dateFormat={window.dateformat}
+                peekNextMonth
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode='select'
+                maxDate={new Date()}
+                // className="form-control form-control-sm h-38px"
+                className='form-control form-control-sm'
+                customInput={
+                  <DatePickerFieldType placeHolder='End date' />
+                }
+              />
+              
+            </Form.Group>
+
+            <Form.Group>
+              <label htmlFor='toshow' className="mr-10">Deposit Product</label>
+              <select
+                id='toshow'
+                onChange={(e) =>
+                  this.setState({ ProductEncodedKey: e.target.value })
+                }
+                value={this.state.ProductEncodedKey}
+                className='countdropdown form-control form-control-sm'
+              >
+                
+                <option value='000'>All</option>
+                {
+                  productRequest.map((eachData, index) => {
+                    return (
+                      <option key={index} value={eachData.productEncodedKey}>{eachData.productName}</option>
+                    )
+                  })
+                }
+
+              </select>
+
+
+            </Form.Group>
+            <Form.Group>
+              <label htmlFor='toshow' className="mr-10">Currency</label>
+              <select
+                id='toshow'
+                onChange={(e) =>
+                  this.setState({ CurrencyCode: e.target.value })
+                }
+                value={this.state.CurrencyCode}
+                className='countdropdown form-control form-control-sm'
+              >
+                
+                <option value='000'>All</option>
+                {
+                  getAllCurrenciesRequest.map((eachData, index) => {
+                    return (
+                      <option key={index} value={eachData.code}>{eachData.name} ({eachData.code})</option>
+                    )
+                  })
+                }
+
+              </select>
+
+
+            </Form.Group>
           
           <div className='actions-wrap'>
             <Button
@@ -181,20 +260,7 @@ class DepositTransactionsReports extends React.Component {
           </div>
         </Form>
       </div>
-        <div className="heading-with-cta toright compact">
-          <div className="eachitem">
-            <input
-              type="checkbox"
-              name=""
-              onChange={() => { }}
-              checked={includeZeroBalance}
-              onChange={() => {
-                this.setState({ includeZeroBalance: !includeZeroBalance })
-              }}
-              id="zero-balance" />
-            <label htmlFor="closing-balance">Include Zero Balance</label>
-          </div>
-        </div>
+        
         {this.props.getAReportReducer.request_status === dashboardConstants.GET_A_REPORT_FAILURE &&
 
 
@@ -220,13 +286,12 @@ class DepositTransactionsReports extends React.Component {
 
 
   renderReportsWrap = () => {
-    let getAReportRequest = this.props.getAReportReducer,
-        getRolesRequest =  this.props.getRolesReducer,
-        getAllBranchesRequest = this.props.getAllBranchesReducer;
+    let getAllCurrenciesRequest =  this.props.getAllCurrencies,
+        productRequest = this.props.getAllDepositProductsReducer;
 
         
-    if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_PENDING
-        || getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_PENDING){
+    if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_PENDING
+      || productRequest.request_status === productsConstants.GET_ALL_DEPOSIT_PRODUCTS_PENDING){
         
           return (
             <div className='loading-content'>
@@ -235,26 +300,25 @@ class DepositTransactionsReports extends React.Component {
           )
     }
 
-    if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_FAILURE){
-      
-        return (
-          <div className='loading-content errormsg'>
-            <div>{getRolesRequest.request_data.error}</div>
-          </div>
-        )
-    }
-
-    if(getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_FAILURE){
+    if(productRequest.request_status===productsConstants.GET_ALL_DEPOSIT_PRODUCTS_FAILURE){
       
       return (
         <div className='loading-content errormsg'>
-          <div>{getAllBranchesRequest.request_data.error}</div>
+          <div>{productRequest.request_data.error}</div>
+        </div>
+      )
+    }
+    if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_FAILURE){
+      
+      return (
+        <div className='loading-content errormsg'>
+          <div>{getAllCurrenciesRequest.request_data.error}</div>
         </div>
       )
     }
 
-    if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_SUCCESS
-      && getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_SUCCESS){
+    if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS
+      && productRequest.request_status === productsConstants.GET_ALL_DEPOSIT_PRODUCTS_SUCCESS){
         
         
          return this.renderReportsFilter();
@@ -308,8 +372,8 @@ class DepositTransactionsReports extends React.Component {
 function mapStateToProps(state) {
   return {
     getAReportReducer: state.dashboardReducers.getAReportReducer,
-    getRolesReducer: state.administrationReducers.adminGetAllRolesReducer,
-    getAllBranchesReducer: state.administrationReducers.adminGetAllBranchesReducer,
+    getAllCurrencies: state.administrationReducers.adminGetAllCurrenciesReducer,
+    getAllDepositProductsReducer: state.productReducers.getAllDepositProductsReducer,
   };
 }
 export default connect(mapStateToProps)(DepositTransactionsReports);

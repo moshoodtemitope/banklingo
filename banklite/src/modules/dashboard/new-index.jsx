@@ -49,7 +49,7 @@ class DashboardLanding extends React.Component {
             preloadedTillData: false,
             selectedTxtn: null,
             txtOption: "cash",
-            reportType:"transactionreceipt",
+            reportType:"transactionvoucher",
         }
 
         this.selectRef = null;

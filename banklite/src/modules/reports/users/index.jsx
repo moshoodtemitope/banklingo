@@ -43,6 +43,7 @@ class UserReports extends React.Component {
       UserRoleId:'-30',
 
       reportType:"users",
+      BranchId:JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
     };
   }
 
@@ -54,7 +55,7 @@ class UserReports extends React.Component {
     const { dispatch } = this.props;
 
       dispatch(administrationActions.getAllRoles());
-      dispatch(branchActions.getAllBranches(null,null, null, true));
+      // dispatch(branchActions.getAllBranches(null,null, null, true));
       this.exportReport("CLEAR")
   };
 
@@ -78,8 +79,7 @@ class UserReports extends React.Component {
 
   renderReportsFilter = ()=>{
     let getAReportRequest = this.props.getAReportReducer,
-        getRolesRequest =  this.props.getRolesReducer.request_data.response.data,
-        getAllBranchesRequest = this.props.getAllBranchesReducer.request_data.response.data;
+        getRolesRequest =  this.props.getRolesReducer.request_data.response.data;
         
     return (
       <>
@@ -89,33 +89,7 @@ class UserReports extends React.Component {
         >
           
 
-          <Form.Group className='table-filters'>
-            <label htmlFor='toshow' className="mr-10">Branch</label>
-            <select
-              id='toshow'
-              onChange={(e) =>
-                this.setState({BranchId: e.target.value})
-              }
-              value={this.state.BranchId}
-              className='countdropdown form-control form-control-sm'
-            >
-              
-              <option value='-30'>All</option>
-              {
-                getAllBranchesRequest.map((eachData, index)=>{
-                  return(
-                    <option key={index} value={eachData.id}>{eachData.name}</option>
-                  )
-                })
-              }
-              
-              {/* <option value='25'>25</option>
-              <option value='50'>50</option>
-              <option value='200'>200</option> */}
-            </select>
-
-
-          </Form.Group>
+          
           <Form.Group className='table-filters'>
             <label htmlFor='toshow' className="mr-10">Role</label>
             <select
@@ -203,11 +177,10 @@ class UserReports extends React.Component {
 
   renderReportsWrap = () => {
     let getAReportRequest = this.props.getAReportReducer,
-        getRolesRequest =  this.props.getRolesReducer,
-        getAllBranchesRequest = this.props.getAllBranchesReducer;
+        getRolesRequest =  this.props.getRolesReducer;
 
     if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_PENDING
-        || getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_PENDING){
+        ){
         
           return (
             <div className='loading-content'>
@@ -225,17 +198,9 @@ class UserReports extends React.Component {
         )
     }
 
-    if(getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_FAILURE){
-      
-      return (
-        <div className='loading-content errormsg'>
-          <div>{getAllBranchesRequest.request_data.error}</div>
-        </div>
-      )
-    }
+   
 
-    if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_SUCCESS
-      && getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_SUCCESS){
+    if(getRolesRequest.request_status===administrationConstants.GET_ALL_ROLES_SUCCESS){
         
         
          return this.renderReportsFilter();
@@ -290,7 +255,7 @@ function mapStateToProps(state) {
   return {
     getAReportReducer: state.dashboardReducers.getAReportReducer,
     getRolesReducer: state.administrationReducers.adminGetAllRolesReducer,
-    getAllBranchesReducer: state.administrationReducers.adminGetAllBranchesReducer,
+    
   };
 }
 export default connect(mapStateToProps)(UserReports);

@@ -59,11 +59,11 @@ class LoanTransactionsReports extends React.Component {
   loadInitialData = () => {
     const { dispatch } = this.props;
 
-      dispatch(administrationActions.getAllRoles());
+      
       dispatch(administrationActions.getAllCurrencies(null, true));
       dispatch(productActions.getAllLoanProducts());
       
-      dispatch(branchActions.getAllBranches(null,null, null, true));
+      // dispatch(branchActions.getAllBranches(null,null, null, true));
       this.exportReport("CLEAR")
   };
 
@@ -302,7 +302,7 @@ class LoanTransactionsReports extends React.Component {
 
         
     if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_PENDING
-        || getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_PENDING
+        // || getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_PENDING
         || productRequest.request_status === productsConstants.GET_ALL_LOAN_PRODUCTS_PENDING){
         
           return (
@@ -329,17 +329,17 @@ class LoanTransactionsReports extends React.Component {
       )
   }
 
-    if(getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_FAILURE){
+    // if(getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_FAILURE){
       
-      return (
-        <div className='loading-content errormsg'>
-          <div>{getAllBranchesRequest.request_data.error}</div>
-        </div>
-      )
-    }
+    //   return (
+    //     <div className='loading-content errormsg'>
+    //       <div>{getAllBranchesRequest.request_data.error}</div>
+    //     </div>
+    //   )
+    // }
 
     if(getAllCurrenciesRequest.request_status===administrationConstants.GET_ALLCURRENCIES_SUCCESS
-      && getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_SUCCESS
+      // && getAllBranchesRequest.request_status===branchConstants.GET_ALL_BRANCHES_SUCCESS
         && productRequest.request_status===productsConstants.GET_ALL_LOAN_PRODUCTS_SUCCESS){
         
         
