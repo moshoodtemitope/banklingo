@@ -42,7 +42,7 @@ class TellerReports extends React.Component {
       SearchText: '',
 
       UserRoleId:'-30',
-      reportType:"users",
+      reportType:"tellers",
     };
   }
 

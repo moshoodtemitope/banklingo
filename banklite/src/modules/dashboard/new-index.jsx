@@ -1974,8 +1974,8 @@ class DashboardLanding extends React.Component {
                                                         <td>{eachData.typeDescription}</td>
                                                         <td>{eachData.tillId}</td>
                                                         <td>{numberWithCommas(eachData.transactionAmount, true)}</td>
-                                                        <td><span className="view-ctatext" onClick={()=>this.showPrint(eachData)}>Print</span></td>
-                                                        {/* <td>
+                                                        {/* <td><span className="view-ctatext" onClick={()=>this.showPrint(eachData)}>Print</span></td> */}
+                                                        <td>
                                                                 <div className="actions-drop">
                                                                     <DropdownButton
                                                                         size="sm"
@@ -1987,15 +1987,13 @@ class DashboardLanding extends React.Component {
                                                                         
 
                                                                         <Dropdown.Item eventKey="2"
-                                                                            onClick={()=>{
-                                                                                this.showViewTill(eachData.tillId, this.state.selectedTillData)
-                                                                            }}
-                                                                        > <span>View Till</span> </Dropdown.Item>
+                                                                            onClick={()=>this.showPrint(eachData)}
+                                                                        > Print </Dropdown.Item>
 
 
                                                                     </DropdownButton>
                                                                 </div>
-                                                            </td> */}
+                                                            </td>
                                                     </tr>
                                                 )
                                             })

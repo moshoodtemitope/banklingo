@@ -44,6 +44,7 @@ class JournalReports extends React.Component {
 
       CurrencyCode:'000',
       GLCode:"",
+      TransactionId:"",
       reportType:"journal",
       BranchId:JSON.parse(localStorage.getItem('lingoAuth')).BranchId,
     };
@@ -76,7 +77,8 @@ class JournalReports extends React.Component {
       startDate = startDate.toISOString();
     }
     
-    let paramters = `TransactionId=${TransactionId}&GLCode=${GLCode}&BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    // let paramters = `TransactionId=${TransactionId}&GLCode=${GLCode}&BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `TransactionId=${TransactionId}&GLCode=${GLCode}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));

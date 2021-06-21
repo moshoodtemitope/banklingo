@@ -71,7 +71,8 @@ class TrialBalanceReports extends React.Component {
     }
     
 
-    let paramters = `BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&BalanceDate=${BalanceDate}`;
+    let paramters = `CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&BalanceDate=${BalanceDate}`;
+    // let paramters = `BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&BalanceDate=${BalanceDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));

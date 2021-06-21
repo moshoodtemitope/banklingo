@@ -29,6 +29,7 @@ export const branchConstants = {
   FETCH_BRANCHES_LIST_SUCCESS : 'FETCH_BRANCHES_LIST_SUCCESS',
   FETCH_BRANCHES_LIST_PENDING : 'FETCH_BRANCHES_LIST_PENDING',
   FETCH_BRANCHES_LIST_FAILURE : 'FETCH_BRANCHES_LIST_FAILURE',
+  FETCH_BRANCHES_LIST_RESET: 'FETCH_BRANCHES_LIST_RESET',
 
   GET_A_BRANCH_SUCCESS : 'GET_A_BRANCH_SUCCESS',
   GET_A_BRANCH_PENDING : 'GET_A_BRANCH_PENDING',
@@ -299,44 +300,53 @@ function closeABranch  (branchPayload){
 }
 
 function fetchBranchesList  (requiresCurrency, forFiltering){
-  
-  return dispatch =>{
+    if (requiresCurrency !== "CLEAR") {
+        return dispatch => {
+
+            let consume;
+            if (!forFiltering) {
+                consume = ApiService.request(routes.GET_BRANCHES + '/all', "GET", null);
+            } else {
+                consume = ApiService.request(routes.GET_BRANCHES + '/allowedbranches', "GET", null);
+            }
+            dispatch(request(consume));
+            return consume
+                .then(response => {
+                    if (requiresCurrency !== true) {
+                        console.log("here now")
+                        dispatch(success(response));
+                    } else {
+                        let consume2 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
+                        dispatch(request(consume2));
+                        return consume2
+                            .then(response2 => {
+                                dispatch(success(response, response2));
+
+                            }).catch(error => {
+
+                                dispatch(failure(handleRequestErrors(error)));
+                            });
+                    }
+
+                }).catch(error => {
+
+                    dispatch(failure(handleRequestErrors(error)));
+                });
+
+        }
+    }
+
+    return dispatch =>{
       
-      let consume;
-      if(!forFiltering){
-        consume = ApiService.request(routes.GET_BRANCHES+'/all', "GET", null);
-      }else{
-        consume = ApiService.request(routes.GET_BRANCHES+'/allowedbranches', "GET", null);
-      }
-      dispatch(request(consume));
-      return consume
-          .then(response =>{
-              if(!requiresCurrency){
-                dispatch(success(response));
-              }else{
-                let consume2 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
-                dispatch(request(consume2));
-                return consume2
-                    .then(response2 =>{
-                        dispatch(success(response, response2));
-                        
-                    }).catch(error =>{
-                        
-                        dispatch(failure(handleRequestErrors(error)));
-                    });
-              }
-              
-          }).catch(error =>{
-              
-              dispatch(failure(handleRequestErrors(error)));
-          });
-      
-  }
+        dispatch(clear());
+        
+    }
   
 
   function request(user) { return { type: branchConstants.FETCH_BRANCHES_LIST_PENDING, user } }
   function success(response, response2) { return { type: branchConstants.FETCH_BRANCHES_LIST_SUCCESS, response, response2 } }
   function failure(error) { return { type: branchConstants.FETCH_BRANCHES_LIST_FAILURE, error } }
+  function clear() { return { type: branchConstants.FETCH_BRANCHES_LIST_RESET, clear_data:""} }
 
 }
 

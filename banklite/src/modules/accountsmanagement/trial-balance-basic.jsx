@@ -54,13 +54,19 @@ class TrialBalanceBasic extends React.Component {
     }
 
     componentDidMount(){
-        this.fetchBranchesList();
+        // this.fetchBranchesList();
+        {((this.props.fetchBranchesListReducer.request_data 
+            && !this.props.fetchBranchesListReducer.request_data.response2)
+            || (!this.props.fetchBranchesListReducer.request_data)) &&
+            this.fetchBranchesList()
+        }
     }
 
     fetchBranchesList = (tempData) =>{
         const {dispatch} = this.props;
         
-
+        
+        dispatch(branchActions.fetchBranchesList("CLEAR"));
         dispatch(branchActions.fetchBranchesList(true, true));
 
         // dispatch(acoountingActions.getTrialBalance("CLEAR"));
@@ -745,7 +751,10 @@ class TrialBalanceBasic extends React.Component {
                                                     {/* <h3 className="section-title">Trial Balance</h3> */}
                                                     {/* <Button>New Journal Entry</Button> */}
                                                 </div>
-                                                {this.renderOptions()}
+                                                {(this.props.fetchBranchesListReducer.request_data && this.props.fetchBranchesListReducer.request_data.response2) &&
+                                                    this.renderOptions()
+                                                }
+                                                
 
                                                 {invalidDate && 
                                                     <Alert variant="danger">

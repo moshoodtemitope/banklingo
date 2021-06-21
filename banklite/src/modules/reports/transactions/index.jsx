@@ -66,7 +66,7 @@ class TellerTransactionsReports extends React.Component {
 
 
   exportReport = (ExportFileType) => {
-    let {  selectedBranchKey, reportType,endDate, startDate,  CurrencyCode, TellerEncodedKey } = this.state;
+    let {   reportType,endDate, startDate,  CurrencyCode, TellerEncodedKey } = this.state;
     this.setState({ExportFileType})
     
     if (endDate !== '') {
@@ -76,7 +76,7 @@ class TellerTransactionsReports extends React.Component {
       startDate = startDate.toISOString();
     }
 
-    let paramters = `BranchEncodedKey=${selectedBranchKey}&CurrencyCode=${CurrencyCode}&TellerEncodedKey=${TellerEncodedKey}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `CurrencyCode=${CurrencyCode}&TellerEncodedKey=${TellerEncodedKey}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));

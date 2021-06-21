@@ -74,7 +74,8 @@ class TrialBalanceAnalysisReports extends React.Component {
       startDate = startDate.toISOString();
     }
     
-    let paramters = `BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    // let paramters = `BranchId=${BranchId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));

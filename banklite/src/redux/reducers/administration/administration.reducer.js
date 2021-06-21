@@ -1046,6 +1046,12 @@ export function fetchBranchesListReducer(state=[], action) {
                 is_request_processing: false,
                 request_data: action
             };
+        case branchConstants.FETCH_BRANCHES_LIST_RESET:
+            return {
+                request_status: branchConstants.FETCH_BRANCHES_LIST_RESET,
+                is_request_processing: false,
+                request_data: {}
+            };
 
         default:
             return { ...state }

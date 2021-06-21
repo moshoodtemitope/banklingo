@@ -42,7 +42,7 @@ class DepositStatementsReports extends React.Component {
       CurrentSelectedPage: 1,
       endDate: '',
       startDate: '',
-      
+      AccountNumber:"",
       reportType:"depositaccountstatement",
     };
   }

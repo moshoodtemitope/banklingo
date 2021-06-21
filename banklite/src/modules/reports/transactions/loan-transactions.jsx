@@ -46,6 +46,7 @@ class LoanTransactionsReports extends React.Component {
       SearchText: '',
 
       CurrencyCode:'000',
+      AccountNumber: "",
       ProductId:'000',
       selectedBranchKey:JSON.parse(localStorage.getItem('lingoAuth')).selectedBranchKey,
       reportType:"loantransaction",
@@ -80,7 +81,7 @@ class LoanTransactionsReports extends React.Component {
       startDate = startDate.toISOString();
     }
     
-    let paramters = `BranchEncodedKey=${selectedBranchKey}&AccountNumber=${AccountNumber}&ProductId=${ProductId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `AccountNumber=${AccountNumber}&ProductId=${ProductId}&CurrencyCode=${CurrencyCode}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));

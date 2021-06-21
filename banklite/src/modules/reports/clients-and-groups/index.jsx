@@ -59,7 +59,7 @@ class ClientReports extends React.Component {
  
 
   exportReport = (ExportFileType) => {
-    let {  selectedBranchKey, reportType,endDate, startDate, ClientTypeId, ClientState } = this.state;
+    let {   reportType,endDate, startDate, ClientTypeId, ClientState } = this.state;
     this.setState({ExportFileType})
 
     if (endDate !== '') {
@@ -69,7 +69,7 @@ class ClientReports extends React.Component {
       startDate = startDate.toISOString();
     }
     
-    let paramters = `BranchEncodedKey=${selectedBranchKey}&ClientTypeId=${ClientTypeId}&ClientState=${ClientState}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `ClientTypeId=${ClientTypeId}&ClientState=${ClientState}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));

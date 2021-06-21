@@ -45,6 +45,7 @@ class DepositTransactionsReports extends React.Component {
       SearchText: '',
 
       UserRoleId:'-30',
+      AccountNumber: "",
       includeZeroBalance: false,
       selectedBranchKey:JSON.parse(localStorage.getItem('lingoAuth')).selectedBranchKey,
       CurrencyCode:'000',
@@ -70,10 +71,10 @@ class DepositTransactionsReports extends React.Component {
  
 
   exportReport = (ExportFileType) => {
-    let {  reportType, selectedBranchKey, endDate, startDate, AccountNumber, CurrencyCode, ProductEncodedKey} = this.state;
+    let {  reportType,  endDate, startDate, AccountNumber, CurrencyCode, ProductEncodedKey} = this.state;
 
     this.setState({ExportFileType})
-    let paramters = `BranchEncodedKey=${selectedBranchKey}&AccountNumber=${AccountNumber}&CurrencyCode=${CurrencyCode}&ProductEncodedKey=${ProductEncodedKey}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
+    let paramters = `AccountNumber=${AccountNumber}&CurrencyCode=${CurrencyCode}&ProductEncodedKey=${ProductEncodedKey}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));

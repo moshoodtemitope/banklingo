@@ -63,7 +63,8 @@ class UserReports extends React.Component {
     let { UserRoleId, BranchId, reportType } = this.state;
 
     this.setState({ExportFileType})
-    let paramters = `UserRoleId=${UserRoleId}&BranchId=${BranchId}&ExportFileType=${ExportFileType}`;
+    let paramters = `UserRoleId=${UserRoleId}&ExportFileType=${ExportFileType}`;
+    // let paramters = `UserRoleId=${UserRoleId}&BranchId=${BranchId}&ExportFileType=${ExportFileType}`;
     const { dispatch } = this.props;
 
     dispatch(dashboardActions.getAReport(paramters, reportType, ExportFileType));

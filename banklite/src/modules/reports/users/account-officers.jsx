@@ -40,7 +40,7 @@ class AccountOfficerUserReports extends React.Component {
       SearchText: '',
 
       UserRoleId:'-30',
-      reportType:"users",
+      reportType:"accountofficers",
     };
   }
 
