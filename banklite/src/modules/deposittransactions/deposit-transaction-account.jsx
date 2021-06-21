@@ -17,6 +17,7 @@ import ReverseTransaction from '../../shared/components/reverse-txt';
 import ViewATransaction from '../../shared/components/view-txt';
 import Button from 'react-bootstrap/Button'
 import DatePicker from 'react-datepicker';
+import PrintTransaction from '../../shared/components/print-txt'
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
 import { depositActions } from '../../redux/actions/deposits/deposits.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
@@ -41,7 +42,8 @@ class DepositTransactionsManagement extends React.Component {
         startDate:'',
         endDate:'',
         CurrentPage: 1,
-        CurrentSelectedPage: 1
+        CurrentSelectedPage: 1,
+        reportType:"transactionvoucher",
     };
     return this.state;
   }
@@ -119,6 +121,31 @@ handleViewTxtnShow = (transactionDetails, txtxType, txtKey) => {
 //     this.retrieveFromApi(tempData);
 //   });
 // }
+
+exportReport = (TransactionId) => {
+  let {reportType } = this.state;
+  // this.setState({ExportFileType})
+
+  
+  
+  let paramters = `TransactionId=${ TransactionId}&ExportFileType=1`;
+  const { dispatch } = this.props;
+
+  dispatch(dashboardActions.getAReport(paramters, reportType, 1));
+};
+
+showPrint = (selectedToPrint) => {
+
+  this.exportReport(selectedToPrint.key)
+  
+  this.setState({ showPrintTxt: true, selectedToPrint })
+  
+};
+
+closePrintTxt = () => {
+     
+  this.setState({ showPrintTxt: false })
+};
 
 retrieveFromApi = (tempData)=>{
 
@@ -364,6 +391,9 @@ fetchForBusyState(){
                         >
                           Reverse transaction
                         </Dropdown.Item>
+                        <Dropdown.Item eventKey="2"
+                                    onClick={()=>this.showPrint(eachTransaction)}
+                                > Print Voucher </Dropdown.Item>
                       </DropdownButton>
                     </td>
                   </tr>
@@ -519,7 +549,7 @@ fetchPageList() {
         </div> */}
         
 
-        <TableComponent classnames="striped bordered hover">
+        <TableComponent overflow={true} classnames="striped bordered hover">
         <thead>
                   <tr>
                     <th>Account Holder</th>
@@ -573,6 +603,7 @@ fetchPageList() {
               ViewTxtnBox={this.state.ViewTxtnBox}
               transactionMode='Deposit'
             />
+            <PrintTransaction transactionDetails={this.state.selectedToPrint} closePrint = {this.closePrintTxt} showPrint = {this.state.showPrintTxt} />
                         <div className="module-heading">
                             <div className="module-title">
                                 <div className="content-container">

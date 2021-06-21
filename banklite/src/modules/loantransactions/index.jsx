@@ -19,10 +19,13 @@ import TableComponent from '../../shared/elements/table';
 import TablePagination from '../../shared/elements/table/pagination';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import PrintTransaction from '../../shared/components/print-txt'
 import { numberWithCommas, getDateFromISO } from '../../shared/utils';
 import { loanActions } from '../../redux/actions/loans/loans.action';
 import { dashboardActions } from '../../redux/actions/dashboard/dashboard.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants';
+
+
 import './loantransactions.scss';
 import DatePickerFieldType from '../../_helpers/DatePickerFieldType';
 class LoanTransactions extends React.Component {
@@ -141,6 +144,31 @@ class LoanTransactions extends React.Component {
         //this.getHistory();
       }
     });
+  };
+
+  exportReport = (TransactionId) => {
+    let {reportType } = this.state;
+    // this.setState({ExportFileType})
+
+    
+    
+    let paramters = `TransactionId=${transactionKey}&ExportFileType=1`;
+    const { dispatch } = this.props;
+
+    dispatch(dashboardActions.getAReport(paramters, reportType, 1));
+  };
+
+  showPrint = (selectedToPrint) => {
+
+    this.exportReport(selectedToPrint.transactionId)
+    
+    this.setState({ showPrintTxt: true, selectedToPrint })
+    
+  };
+
+  closePrintTxt = () => {
+       
+    this.setState({ showPrintTxt: false })
   };
 
   searchTxtn = (e, tempData) => {
@@ -444,6 +472,9 @@ class LoanTransactions extends React.Component {
                               <Dropdown.Item eventKey='1'>
                                 Reverse transaction
                               </Dropdown.Item>
+                              <Dropdown.Item eventKey="2"
+                                    onClick={()=>this.showPrint(eachData)}
+                                > Print Voucher </Dropdown.Item>
                             </DropdownButton>
                           </td>
                         </tr>
@@ -668,6 +699,9 @@ class LoanTransactions extends React.Component {
                                   >
                                     Reverse transaction
                                   </Dropdown.Item>
+                                  <Dropdown.Item eventKey="2"
+                                    onClick={()=>this.showPrint(eachData)}
+                                > Print Voucher </Dropdown.Item>
                                 </DropdownButton>
                               </td>
                             </tr>
@@ -860,6 +894,7 @@ class LoanTransactions extends React.Component {
               ViewTxtnBox={this.state.ViewTxtnBox}
               transactionMode='Loan'
             />
+            <PrintTransaction transactionDetails={this.state.selectedToPrint} closePrint = {this.closePrintTxt} showPrint = {this.state.showPrintTxt} />
             <div className='module-heading'>
               <div className='module-title'>
                 <div className='content-container'>

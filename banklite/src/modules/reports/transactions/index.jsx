@@ -55,7 +55,7 @@ class TellerTransactionsReports extends React.Component {
   loadInitialData = () => {
     const { dispatch } = this.props;
 
-      dispatch(administrationActions.getAllUsers(3));
+      dispatch(administrationActions.getAllUsers(2));
       dispatch(administrationActions.getAllCurrencies(null, true));
       
       

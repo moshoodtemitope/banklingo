@@ -74,6 +74,13 @@ class DepositTransactionsReports extends React.Component {
     let {  reportType,  endDate, startDate, AccountNumber, CurrencyCode, ProductEncodedKey} = this.state;
 
     this.setState({ExportFileType})
+    if (endDate !== '') {
+      endDate = endDate.toISOString();
+    }
+    if (startDate !== '') {
+      startDate = startDate.toISOString();
+    }
+    
     let paramters = `AccountNumber=${AccountNumber}&CurrencyCode=${CurrencyCode}&ProductEncodedKey=${ProductEncodedKey}&ExportFileType=${ExportFileType}&StartDate=${startDate}&EndDate=${endDate}`;
     const { dispatch } = this.props;
 

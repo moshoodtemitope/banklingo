@@ -41,7 +41,7 @@ import { administrationActions } from "../../redux/actions/administration/admini
 import { administrationConstants } from "../../redux/actiontypes/administration/administration.constants";
 
 import Alert from "react-bootstrap/Alert";
-
+import PrintTransaction from '../../shared/components/print-txt'
 import { loanAndDepositsConstants } from "../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants";
 import { LoanPayOffModal } from "./components/loan/pay-off-component";
 import { WriteOffLoanModal } from "./components/loan/writeoff-loan-component";
@@ -101,6 +101,7 @@ class ViewLoanAccount extends React.Component {
 
       txtnEndDate: "",
       txtnStartDate: "",
+      reportType:"transactionvoucher",
     };
 
     this.userPermissions = JSON.parse(localStorage.getItem("x-u-perm"));
@@ -1754,7 +1755,7 @@ class ViewLoanAccount extends React.Component {
                 </select>
               </div>
             </div>
-            <TableComponent classnames="striped hover">
+            <TableComponent overflow={true} classnames="striped hover">
               <thead>
                 <tr>
                   <th>Client Name</th>
@@ -1797,6 +1798,9 @@ class ViewLoanAccount extends React.Component {
                           <Dropdown.Item eventKey="1">
                             Reverse transaction
                           </Dropdown.Item>
+                          <Dropdown.Item eventKey="2"
+                                onClick={()=>this.showPrint(eachTxt)}
+                            > Print Voucher </Dropdown.Item>
                         </DropdownButton>
                       </td>
                     </tr>
@@ -1895,7 +1899,7 @@ class ViewLoanAccount extends React.Component {
                 />
               </div>
             </div>
-            <TableComponent classnames="striped bordered hover">
+            <TableComponent overflow={true} classnames="striped bordered hover">
               <thead>
                 <tr>
                   <th>Client Name</th>
@@ -1958,6 +1962,9 @@ class ViewLoanAccount extends React.Component {
                           >
                             Reverse transaction
                           </Dropdown.Item>
+                          <Dropdown.Item eventKey="2"
+                                onClick={()=>this.showPrint(eachTxt)}
+                            > Print Voucher </Dropdown.Item>
                         </DropdownButton>
                       </td>
                     </tr>
@@ -4194,6 +4201,31 @@ this.permissions={
   return this.permissions;
   };
 
+  exportReport = (TransactionId) => {
+    let {reportType } = this.state;
+    // this.setState({ExportFileType})
+
+    
+    
+    let paramters = `TransactionId=${ TransactionId}&ExportFileType=1`;
+    const { dispatch } = this.props;
+
+    dispatch(dashboardActions.getAReport(paramters, reportType, 1));
+  };
+
+  showPrint = (selectedToPrint) => {
+
+    this.exportReport(selectedToPrint.transactionKey)
+    
+    this.setState({ showPrintTxt: true, selectedToPrint })
+    
+  };
+
+  closePrintTxt = () => {
+       
+    this.setState({ showPrintTxt: false })
+  };
+
   enforceVisibility = (loanDetails) => {
     //ALL_LOANS:0,  ACTIVE:1, PENDING_APPROVAL:2, APPROVED:3, REJECTED:4, ACTIVE:5, IN_ARREARS:6, CLOSED:7,CLOSED_WRITTEN_OFF:8,CLOSED_WITHDRAWN:9
 //  All:-1, Pending_1stLevel_Approval:3,Pending_2ndLevel_Approval:4,Pending_Client_Acceptance:6
@@ -4875,6 +4907,7 @@ this.permissions={
                         ViewTxtnBox={this.state.ViewTxtnBox}
                         transactionMode="Loan"
                       />
+                      <PrintTransaction transactionDetails={this.state.selectedToPrint} closePrint = {this.closePrintTxt} showPrint = {this.state.showPrintTxt} />
                     </Tab.Pane>
 
                     <Tab.Pane eventKey="activity">

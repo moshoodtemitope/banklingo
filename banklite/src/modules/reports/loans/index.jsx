@@ -222,12 +222,8 @@ class LoanAccountsReports extends React.Component {
                 <option value='3'>Approved</option>
                 {/* <option value='4'>Rejected</option> */}
                 <option value='5'>Active</option>
-                {/* <option value='6'>In Arears</option> */}
+                <option value='6'>In Arears</option>
                 <option value='7'>Closed</option>
-                {/* <option value='8'>Closed Written Off</option> */}
-                <option value='9'>Dormant</option>
-                <option value='10'>Locked</option>
-                <option value='11'>Matured</option>
                 
 
               </select>

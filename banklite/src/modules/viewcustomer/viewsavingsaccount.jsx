@@ -34,7 +34,7 @@ import PrintReport from './components/print-report';
 // Import styles
 import '@react-pdf-viewer/print/lib/styles/index.css';
 
-
+import PrintTransaction from '../../shared/components/print-txt'
 import Alert from "react-bootstrap/Alert";
 
 import { depositActions } from "../../redux/actions/deposits/deposits.action";
@@ -143,6 +143,7 @@ class ViewSavingsAccount extends React.Component {
       showLockAmountModal: false,
       showUnlockAmountModal: false,
       showSeizeAmountModal: false,
+      reportType:"transactionvoucher",
     };
     //  {showBeginMaturityModal:false,showDepositFundModal:false,showMakeWithdrawalModal:false,showSetMaximumWithdrawalAmountModal:false,showRecommendedAmountModal:false,showTransferFundModal:false}
 
@@ -1577,7 +1578,7 @@ class ViewSavingsAccount extends React.Component {
                 </select>
               </div>
             </div>
-            <TableComponent classnames="striped bordered hover">
+            <TableComponent overflow={true} classnames="striped bordered hover">
               <thead>
                 <tr>
                   <th>Client Name</th>
@@ -1619,6 +1620,9 @@ class ViewSavingsAccount extends React.Component {
                           <Dropdown.Item eventKey="1">
                             Reverse transaction
                           </Dropdown.Item>
+                          <Dropdown.Item eventKey="2"
+                                onClick={()=>this.showPrint(eachTxt)}
+                            > Print Voucher </Dropdown.Item>
                         </DropdownButton>
                       </td>
                     </tr>
@@ -1761,7 +1765,7 @@ class ViewSavingsAccount extends React.Component {
                 />
               </div>
             </div>
-            {(this.props.exportDepositTransactionReducer.request_status 
+            {/* {(this.props.exportDepositTransactionReducer.request_status 
                 === loanAndDepositsConstants.EXPORT_DEPOSIT_TRANSACTION_SUCCESS
               && this.props.exportDepositTransactionReducer.request_data.url) && 
             //   <Worker 
@@ -1775,8 +1779,8 @@ class ViewSavingsAccount extends React.Component {
             //  </Worker>
              <PrintReport fileUrl={this.props.exportDepositTransactionReducer.request_data.url} />
               
-            }
-            <TableComponent classnames="striped bordered hover">
+            } */}
+            <TableComponent overflow={true} classnames="striped bordered hover">
               <thead>
                 <tr>
                   <th>Client Name</th>
@@ -1838,6 +1842,9 @@ class ViewSavingsAccount extends React.Component {
                           >
                             Reverse transaction
                           </Dropdown.Item>
+                          <Dropdown.Item eventKey="2"
+                                onClick={()=>this.showPrint(eachTxt)}
+                            > Print Voucher </Dropdown.Item>
                         </DropdownButton>
                       </td>
                     </tr>
@@ -3404,7 +3411,30 @@ class ViewSavingsAccount extends React.Component {
     };
     return this.permissions;
   };
+  exportReport = (TransactionId) => {
+    let {reportType } = this.state;
+    // this.setState({ExportFileType})
 
+    
+    
+    let paramters = `TransactionId=${ TransactionId}&ExportFileType=1`;
+    const { dispatch } = this.props;
+
+    dispatch(dashboardActions.getAReport(paramters, reportType, 1));
+  };
+
+  showPrint = (selectedToPrint) => {
+
+    this.exportReport(selectedToPrint.key)
+    
+    this.setState({ showPrintTxt: true, selectedToPrint })
+    
+  };
+
+  closePrintTxt = () => {
+       
+    this.setState({ showPrintTxt: false })
+  };
   enforceVisibility = (depositDetails) => {
     //  ALL:0, Partial_Application:1,Pending_Approval:2,  Approved:3,REJECTED:4, ACTIVE:5,IN_ARREARS:6,CLOSED:7,CLOSED_WRITTEN_OFF:8,DORMANT:9,LOCKED:10,MARTURED:11,
     if (depositDetails == null) return;
@@ -3868,6 +3898,7 @@ class ViewSavingsAccount extends React.Component {
               this.getCustomerDepositAccountDetails
             }
           />
+          <PrintTransaction transactionDetails={this.state.selectedToPrint} closePrint = {this.closePrintTxt} showPrint = {this.state.showPrintTxt} />
           <SetRecommendedAmountModal
             {...this.props}
             newStateUpdate={this.state.newStateUpdate}

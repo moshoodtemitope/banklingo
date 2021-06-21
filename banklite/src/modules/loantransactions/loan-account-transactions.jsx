@@ -21,7 +21,7 @@ import TablePagination from '../../shared/elements/table/pagination';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { numberWithCommas, getDateFromISO } from '../../shared/utils';
-
+import PrintTransaction from '../../shared/components/print-txt'
 import { loanActions } from '../../redux/actions/loans/loans.action';
 import { loanAndDepositsConstants } from '../../redux/actiontypes/LoanAndDeposits/loananddeposits.constants'
 import "./loantransactions.scss";
@@ -47,7 +47,8 @@ class LoanTransactionsManagement extends React.Component {
             CurrentPage: 1,
             startDate:'',
             endDate:'',
-            CurrentSelectedPage: 1
+            CurrentSelectedPage: 1,
+            reportType:"transactionvoucher",
         };
         return this.state;
       }
@@ -234,7 +235,30 @@ handleDateChangeRaw = (e) => {
       transactionKey: txtKey,
     });
   };
+  exportReport = (TransactionId) => {
+    let {reportType } = this.state;
+    // this.setState({ExportFileType})
 
+    
+    
+    let paramters = `TransactionId=${ TransactionId}&ExportFileType=1`;
+    const { dispatch } = this.props;
+
+    dispatch(dashboardActions.getAReport(paramters, reportType, 1));
+  };
+
+  showPrint = (selectedToPrint) => {
+
+    this.exportReport(selectedToPrint.transactionKey)
+    
+    this.setState({ showPrintTxt: true, selectedToPrint })
+    
+  };
+
+  closePrintTxt = () => {
+       
+    this.setState({ showPrintTxt: false })
+  };
 
 fetchForBusyState(){
    let getLoanTransactionsRequest = this.props.getLoanTransactions;
@@ -327,6 +351,9 @@ fetchForBusyState(){
                           >
                             Reverse transaction
                           </Dropdown.Item>
+                          <Dropdown.Item eventKey="2"
+                                    onClick={()=>this.showPrint(eachTransaction)}
+                                > Print Voucher </Dropdown.Item>
                         </DropdownButton>
                       </td>
                     </tr>
@@ -483,7 +510,7 @@ fetchPageList() {
                 </div>
                                 
 
-                                <TableComponent classnames="striped bordered hover">
+                                <TableComponent overflow={true} classnames="striped bordered hover">
                                     <thead>
                                         <tr>
                                             <th>Account Number</th>
@@ -535,6 +562,7 @@ fetchPageList() {
               ViewTxtnBox={this.state.ViewTxtnBox}
               transactionMode='Loan'
             />
+            <PrintTransaction transactionDetails={this.state.selectedToPrint} closePrint = {this.closePrintTxt} showPrint = {this.state.showPrintTxt} />
                         <div className="module-heading">
                             <div className="module-title">
                                 <div className="content-container">

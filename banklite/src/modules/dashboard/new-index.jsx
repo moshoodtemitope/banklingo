@@ -1988,7 +1988,7 @@ class DashboardLanding extends React.Component {
 
                                                                         <Dropdown.Item eventKey="2"
                                                                             onClick={()=>this.showPrint(eachData)}
-                                                                        > Print </Dropdown.Item>
+                                                                        > Print Voucher </Dropdown.Item>
 
 
                                                                     </DropdownButton>
