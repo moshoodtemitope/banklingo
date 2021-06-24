@@ -56,7 +56,7 @@ class CreateNewUser extends React.Component {
     getRoles = ()=>{
         const {dispatch} = this.props;
         
-        dispatch(administrationActions.getAllRoles(true));
+        dispatch(administrationActions.getAllRoles(true, true, true));
     }
 
     createUserRequest = async (payload)=>{
@@ -102,7 +102,7 @@ class CreateNewUser extends React.Component {
             if(filteredItemsToAdd.length===0){
                 // if(this.selectTxtnLimitsList.indexOf(itemToUpdate.value)===-1){
                 this.selectTxtnLimitsToAdd.push(itemToUpdate)
-                this.selectTxtnLimitsList.push({transactionAccessRightOptions:itemToUpdate.value, amount: parseFloat(itemToUpdate.amount.replace(/,/g, ''))})
+                this.selectTxtnLimitsList.push({transactionAccessRightOptions:itemToUpdate.value, amount: parseFloat(itemToUpdate.amount.replace(/,/g, '')), currencyCode: itemToUpdate.currencyCode})
                 this.setState({selectTxtnLimitsToAdd: this.selectTxtnLimitsToAdd})
             }
         }
@@ -132,11 +132,12 @@ class CreateNewUser extends React.Component {
     
     
 
-    renderCreateUserForm =(roles, branches)=>{
+    renderCreateUserForm =(roles, branches, currenciesList)=>{
         let adminCreateAUserRequest = this.props.adminCreateAUserReducer,
             {submitError} = this.state,
             allRoles =[],
             allBranches =[],
+            allCurrencies =[],
             createUserValidationSchema = Yup.object().shape({
                 firstName: Yup.string()
                     .min(2, 'Valid firstname required')
@@ -230,12 +231,16 @@ class CreateNewUser extends React.Component {
                 
             ]
 
-            roles.map((eachRole, index)=>{
+            roles.map((eachRole)=>{
                 allRoles.push({value:eachRole.roleId, label:eachRole.name})
             })
 
-            branches.map((eachBranch, index)=>{
+            branches.map((eachBranch)=>{
                 allBranches.push({value:eachBranch.encodedKey, id:eachBranch.id, label:eachBranch.name})
+            })
+
+            currenciesList.map((eachCurrency)=>{
+                allCurrencies.push({value:eachCurrency.code, id:eachCurrency.id, label:`${eachCurrency.name} (${eachCurrency.code})`})
             })
 
         return(
@@ -564,6 +569,35 @@ class CreateNewUser extends React.Component {
                                                         <span className="invalid-feedback">{errors.amountLimit}</span>
                                                     ) : null}
                                                 </div>
+                                                <div className="other-info-wrapper ml-20">
+
+                                                    <Form.Label className="block-level">Currency</Form.Label>
+
+
+                                                    <select id="currency"
+                                                        name="currency"
+                                                        onChange={(e) => {
+                                                            setFieldValue("currency", e.target.value);
+                                                        }}
+                                                        // onChange={handleChange}
+                                                        value={values.currency}
+                                                        className={errors.currency && touched.currency ? "is-invalid countdropdown form-control form-control-sm h-38px" : "countdropdown form-control form-control-sm h-38px"}
+                                                    >
+                                                        <option value="">Select</option>
+                                                        {
+                                                            allCurrencies.map((eachItem, index) => {
+                                                                return (
+                                                                    <option key={index} value={eachItem.value}>{eachItem.label}</option>
+                                                                )
+
+                                                            })
+                                                        }
+                                                    </select>
+                                                    {errors.currency && touched.currency ? (
+                                                        <span className="invalid-feedback">{errors.currency}</span>
+                                                    ) : null}
+
+                                                </div>
                                             </div>
                                             <div className="add-option-cta">
                                                 <Button variant="success" 
@@ -571,7 +605,12 @@ class CreateNewUser extends React.Component {
                                                     onClick={()=>{
                                                         if(this.state.limitToAdd && values.amountLimit!=="" && values.amountLimit!==undefined){
                                                             this.setState({amountLimitError: false})
-                                                            this.updateLimitsList({...this.state.limitToAdd,amount: values.amountLimit}, "add")
+                                                            this.updateLimitsList({...this.state.limitToAdd,
+                                                                                    amount: values.amountLimit,
+                                                                                    currencyCode: values.currency}, "add")
+                                                            
+                                                            setFieldValue("amountLimit", "")
+                                                            setFieldValue("currency", "")
                                                             this.selectRef.select.clearValue();
                                                         }else{
                                                             this.setState({amountLimitError: true})
@@ -593,7 +632,7 @@ class CreateNewUser extends React.Component {
                                                                 this.state.selectTxtnLimitsToAdd.map((eachItem, index) => {
                                                                     return (
                                                                         <div className="each-option-added" key={index}>
-                                                                            <div className="each-option-txt">{eachItem.label} (Limit:{eachItem.amount})</div>
+                                                                            <div className="each-option-txt">{eachItem.label} (Limit:{eachItem.amount} {eachItem.currencyCode})</div>
                                                                             <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}><img src={RemoveIco} alt=""/></div>
                                                                         </div>
                                                                     )
@@ -966,12 +1005,13 @@ class CreateNewUser extends React.Component {
                 
                 case(administrationConstants.GET_ALL_ROLES_SUCCESS):
                     let rolesDataData = getRolesRequest.request_data.response.data,
-                        branchesData = getRolesRequest.request_data.response2.data;
+                        branchesData = getRolesRequest.request_data.response2.data,
+                        currenciesData = getRolesRequest.request_data.response3.data;
                         if(rolesDataData!==undefined && branchesData!==undefined){
                             if(rolesDataData.length>=0){
                                 if(branchesData.length>=0){
                                     return(
-                                        this.renderCreateUserForm(rolesDataData, branchesData)
+                                        this.renderCreateUserForm(rolesDataData, branchesData, currenciesData)
                                     )
                                 }else{
                                     return(

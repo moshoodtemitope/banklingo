@@ -135,7 +135,7 @@ class EditUser extends React.Component {
             if(filteredItemsToAdd.length===0){
                 // if(this.selectTxtnLimitsList.indexOf(itemToUpdate.value)===-1){
                 this.selectTxtnLimitsToAdd.push(itemToUpdate)
-                this.selectTxtnLimitsList.push({transactionAccessRightOptions:itemToUpdate.value, amount: parseFloat(itemToUpdate.amount.replace(/,/g, ''))})
+                this.selectTxtnLimitsList.push({transactionAccessRightOptions:itemToUpdate.value, amount: parseFloat(itemToUpdate.amount.replace(/,/g, '')), currencyCode: itemToUpdate.currencyCode})
                 this.setState({selectTxtnLimitsToAdd: this.selectTxtnLimitsToAdd})
             }
         }
@@ -165,12 +165,13 @@ class EditUser extends React.Component {
         
     }
 
-    renderUpdateUserForm =(userData,roles, branches)=>{
+    renderUpdateUserForm =(userData,roles, branches, currenciesList)=>{
         
         let adminUpdateAUserRequest = this.props.adminUpdateAUserRequest,
             allRoles =[],
             {submitError} = this.state,
             allBranches =[],
+            allCurrencies =[],
             updateUserValidationSchema = Yup.object().shape({
                 firstName: Yup.string()
                     .min(2, 'Valid firstname required')
@@ -276,6 +277,10 @@ class EditUser extends React.Component {
 
             branches.map((eachBranch, index)=>{
                 allBranches.push({value:eachBranch.encodedKey, id:eachBranch.id, label:eachBranch.name})
+            })
+
+            currenciesList.map((eachCurrency)=>{
+                allCurrencies.push({value:eachCurrency.code, id:eachCurrency.id, label:`${eachCurrency.name} (${eachCurrency.code})`})
             })
 
             let currentRole = roles.filter(eachrole=>eachrole.roleId===userData.roleId)[0],
@@ -638,6 +643,35 @@ class EditUser extends React.Component {
                                                         <span className="invalid-feedback">{errors.amountLimit}</span>
                                                     ) : null} */}
                                                 </div>
+                                                <div className="other-info-wrapper ml-20">
+
+                                                    <Form.Label className="block-level">Currency</Form.Label>
+
+
+                                                    <select id="currency"
+                                                        name="currency"
+                                                        onChange={(e) => {
+                                                            setFieldValue("currency", e.target.value);
+                                                        }}
+                                                        // onChange={handleChange}
+                                                        value={values.currency}
+                                                        className={errors.currency && touched.currency ? "is-invalid countdropdown form-control form-control-sm h-38px" : "countdropdown form-control form-control-sm h-38px"}
+                                                    >
+                                                        <option value="">Select</option>
+                                                        {
+                                                            allCurrencies.map((eachItem, index) => {
+                                                                return (
+                                                                    <option key={index} value={eachItem.value}>{eachItem.label}</option>
+                                                                )
+
+                                                            })
+                                                        }
+                                                    </select>
+                                                    {errors.currency && touched.currency ? (
+                                                        <span className="invalid-feedback">{errors.currency}</span>
+                                                    ) : null}
+
+                                                </div>
                                             </div>
                                             <div className="add-option-cta">
                                                 <Button variant="success" 
@@ -647,8 +681,11 @@ class EditUser extends React.Component {
                                                         if(this.state.limitToAdd && values.amountLimit!=="" && values.amountLimit!==undefined){
                                                             this.setState({amountLimitError: false})
                                                             // errors.amountLimit = false;
-                                                            this.updateLimitsList({...this.state.limitToAdd,amount: values.amountLimit}, "add")
+                                                            this.updateLimitsList({...this.state.limitToAdd,
+                                                                                        amount: values.amountLimit,
+                                                                                        currencyCode: values.currency}, "add")
                                                             setFieldValue("amountLimit", "");
+                                                            setFieldValue("currency", "");
                                                             this.selectRef.select.clearValue();
                                                             
                                                         }else{
@@ -1071,12 +1108,13 @@ class EditUser extends React.Component {
                 case(administrationConstants.GET_A_USER_SUCCESS):
                     let userData = adminGetAUser.request_data.response.data,
                         rolesDataData = adminGetAUser.request_data.response2.data,
-                        branchesData = adminGetAUser.request_data.response3.data;
+                        branchesData = adminGetAUser.request_data.response3.data,
+                        currenciesData = getRolesRequest.request_data.response3.data;
                         if(rolesDataData!==undefined && branchesData!==undefined){
                             if(rolesDataData.length>=1){
                                 if(branchesData.length>=1){
                                     return(
-                                        this.renderUpdateUserForm(userData, rolesDataData, branchesData)
+                                        this.renderUpdateUserForm(userData, rolesDataData, branchesData, currenciesData)
                                     )
                                 }else{
                                     return(

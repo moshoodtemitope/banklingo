@@ -3438,6 +3438,12 @@ class ViewSavingsAccount extends React.Component {
   enforceVisibility = (depositDetails) => {
     //  ALL:0, Partial_Application:1,Pending_Approval:2,  Approved:3,REJECTED:4, ACTIVE:5,IN_ARREARS:6,CLOSED:7,CLOSED_WRITTEN_OFF:8,DORMANT:9,LOCKED:10,MARTURED:11,
     if (depositDetails == null) return;
+
+    let allUSerPermissions = [];
+    this.userPermissions.map((eachPermission) => {
+      allUSerPermissions.push(eachPermission.permissionCode);
+    });
+
     let showApprove =
       depositDetails.accountState === DepositStateConstants.Pending_Approval;
 
@@ -3449,18 +3455,20 @@ class ViewSavingsAccount extends React.Component {
       depositDetails.isMaturityDateSet === false &&
       depositDetails.productType === 2;
     let showMakeWithdrawal =
-      depositDetails.accountState === DepositStateConstants.ACTIVE;
+      depositDetails.accountState === DepositStateConstants.ACTIVE && allUSerPermissions.indexOf("bnk_deposit_post_withdrawal") > -1;
 
     let showTransfer =
-      depositDetails.accountState === DepositStateConstants.ACTIVE ||
-      depositDetails.accountState === DepositStateConstants.Approved;
+      ((depositDetails.accountState === DepositStateConstants.ACTIVE ||
+      depositDetails.accountState === DepositStateConstants.Approved)
+      && allUSerPermissions.indexOf("bnk_deposit_make_transfer") > -1);
     //    &&
     // (depositDetails.productType === 2 ||
     //   depositDetails.productType === 1 ||
     //   depositDetails.productType === 4)
     let showMakeDeposit =
-      depositDetails.accountState === DepositStateConstants.ACTIVE ||
-      depositDetails.accountState === DepositStateConstants.Approved;
+      ((depositDetails.accountState === DepositStateConstants.ACTIVE ||
+      depositDetails.accountState === DepositStateConstants.Approved)
+      && allUSerPermissions.indexOf("bnk_deposit_post_deposit") > -1);
     let showReject =
       depositDetails.accountState ===
         DepositStateConstants.Partial_Application ||
@@ -3487,10 +3495,10 @@ class ViewSavingsAccount extends React.Component {
   };
 
   renderDepositCtas = (depositDetails) => {
-    // let allUSerPermissions = [];
-    // this.userPermissions.map((eachPermission) => {
-    //   allUSerPermissions.push(eachPermission.permissionCode);
-    // });
+    let allUSerPermissions = [];
+    this.userPermissions.map((eachPermission) => {
+      allUSerPermissions.push(eachPermission.permissionCode);
+    });
 
     let visibility = this.enforceVisibility(depositDetails);
     //this.enforcePermissions();
@@ -3719,7 +3727,7 @@ class ViewSavingsAccount extends React.Component {
               >
                 Set Recommended Deposit
               </Dropdown.Item>
-              {depositDetails.accountStateDescription !== "Locked" ? (
+              {(depositDetails.accountStateDescription !== "Locked" && allUSerPermissions.indexOf("bnk_deposit_lock_account") > -1) &&
                 <Dropdown.Item
                   eventKey="7"
                   onClick={() => {
@@ -3733,7 +3741,8 @@ class ViewSavingsAccount extends React.Component {
                 >
                   Lock Account
                 </Dropdown.Item>
-              ) : (
+              }
+              {(depositDetails.accountStateDescription === "Locked" && allUSerPermissions.indexOf("bnk_deposit_lock_account") > -1) && 
                 <Dropdown.Item
                   eventKey="8"
                   onClick={() => {
@@ -3747,8 +3756,8 @@ class ViewSavingsAccount extends React.Component {
                 >
                   Unlock Account
                 </Dropdown.Item>
-              )}
-              {depositDetails.accountStateDescription === "Active" && (
+              }
+              {(depositDetails.accountStateDescription === "Active" && allUSerPermissions.indexOf("bnk_deposit_lock_amount") > -1) && (
                 <Dropdown.Item
                   eventKey="9"
                   onClick={() => {

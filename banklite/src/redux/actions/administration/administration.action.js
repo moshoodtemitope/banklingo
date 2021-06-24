@@ -617,7 +617,7 @@ function getARole  (id){
 
 }
 
-function getAllRoles  (withBranches){
+function getAllRoles  (withBranches, withCurrencies){
     
     return dispatch =>{
         let consume = ApiService.request(routes.HIT_ROLE+`/all`, "GET", null);
@@ -625,14 +625,28 @@ function getAllRoles  (withBranches){
         return consume
             .then(response =>{
                 if(withBranches===undefined||withBranches===null || withBranches===false){
-                    dispatch(success(response));
+                    dispatch(success(response, null, null));
                 }
                 if(withBranches===true){
                     let consume2 = ApiService.request(routes.GET_BRANCHES + `/all`, "GET", null);
                     dispatch(request(consume2));
                     return consume2
                         .then(response2 => {
-                            dispatch(success(response, response2));
+                            // dispatch(success(response, response2));
+                            if(withCurrencies===true){
+                                let consume3 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
+                                dispatch(request(consume3));
+                                return consume3
+                                    .then(response3 => {
+                                        dispatch(success(response, response2, response3));
+                                    })
+                                    .catch(error => {
+            
+                                        dispatch(failure(handleRequestErrors(error)));
+                                    });
+                            }else{
+                                dispatch(success(response, response2, null));
+                            }
                         })
                         .catch(error => {
 
@@ -648,12 +662,14 @@ function getAllRoles  (withBranches){
     
 
     function request(user) { return { type: administrationConstants.GET_ALL_ROLES_PENDING, user } }
-    function success(response, response2) { 
-                                if(!response2){
-                                    return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response } 
-                                }else{
-                                    return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response, response2 } 
-                                }
+    function success(response, response2, response3) { 
+                                    // if(!response2){
+                                    //     return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response } 
+                                    // }else{
+                                    //     return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response, response2 } 
+                                    // }
+
+                                    return { type: administrationConstants.GET_ALL_ROLES_SUCCESS, response, response2, response3 } 
                                     
                                 }
     function failure(error) { return { type: administrationConstants.GET_ALL_ROLES_FAILURE, error } }

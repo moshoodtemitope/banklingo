@@ -4177,6 +4177,12 @@ class ViewLoanAccount extends React.Component {
       let allowAplyRepayment=
       allUSerPermissions.indexOf("bnk_apply_loan_repayment") > -1;
 
+      let allowApplyFee=
+       allUSerPermissions.indexOf("bnk_apply_loan_fees") > -1;
+
+       let allowLoanSettlementUpdate=
+       allUSerPermissions.indexOf("bnk_manage_loan_update_settlement") > -1;
+
 
       
 
@@ -4195,7 +4201,9 @@ this.permissions={
     allowRefinanceLoan: allowRefinanceLoan,
     allowDisburseLoan:allowDisburseLoan,
     allowAplyRepayment:allowAplyRepayment,
-    allowRescheduleLoan:allowRescheduleLoan
+    allowRescheduleLoan:allowRescheduleLoan,
+    allowApplyFee:allowApplyFee,
+    allowLoanSettlementUpdate:allowLoanSettlementUpdate,
   };
 
   return this.permissions;
@@ -4366,6 +4374,7 @@ this.permissions={
               </Button>
             </li>
           )}
+          {this.permissions.allowApplyFee && 
           <li>
             <Button
               size="sm"
@@ -4383,6 +4392,8 @@ this.permissions={
               Apply Fee
             </Button>
           </li>
+          }
+          {this.permissions.allowLoanSettlementUpdate && 
           <li>
             <Button
               size="sm"
@@ -4394,6 +4405,7 @@ this.permissions={
               Set Settlement account
             </Button>
           </li>
+          }
           {visibility.showSetIncomplete && (
             <li>
               <Button
