@@ -65,10 +65,10 @@ class EditUser extends React.Component {
                     })
 
                     userData.transactionAccessRightModels.map((eachItem, index)=>{
-                        let itemToUpdate =  {label: eachItem.name, value: eachItem.transactionAccessRightOptions, amount:eachItem.amount.toString()}
+                        let itemToUpdate =  {label: eachItem.name, value: eachItem.transactionAccessRightOptions, amount:eachItem.amount.toString(), currencyCode:eachItem.currencyCode}
 
                         this.selectTxtnLimitsToAdd.push(itemToUpdate)
-                        this.selectTxtnLimitsList.push({transactionAccessRightOptions:eachItem.transactionAccessRightOptions, amount: eachItem.amount})
+                        this.selectTxtnLimitsList.push({transactionAccessRightOptions:eachItem.transactionAccessRightOptions, amount: eachItem.amount, currencyCode: eachItem.currencyCode})
                         
                         // this.selectBranchesToAdd.push({label:eachItem.branchName, value: eachItem.branchEncodedKey})
                         // this.selectBranchesList.push(eachItem.branchEncodedKey)
@@ -710,7 +710,7 @@ class EditUser extends React.Component {
                                                                 this.state.selectTxtnLimitsToAdd.map((eachItem, index) => {
                                                                     return (
                                                                         <div className="each-option-added" key={index}>
-                                                                            <div className="each-option-txt">{eachItem.label} (Limit:{numberWithCommas(eachItem.amount, true)})</div>
+                                                                            <div className="each-option-txt">{eachItem.label} (Limit:{numberWithCommas(eachItem.amount, true)} {eachItem.currencyCode})</div>
                                                                             <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}> <img src={RemoveIco} alt=""/></div>
                                                                         </div>
                                                                     )
@@ -1109,7 +1109,7 @@ class EditUser extends React.Component {
                     let userData = adminGetAUser.request_data.response.data,
                         rolesDataData = adminGetAUser.request_data.response2.data,
                         branchesData = adminGetAUser.request_data.response3.data,
-                        currenciesData = getRolesRequest.request_data.response3.data;
+                        currenciesData = adminGetAUser.request_data.response4.data;
                         if(rolesDataData!==undefined && branchesData!==undefined){
                             if(rolesDataData.length>=1){
                                 if(branchesData.length>=1){

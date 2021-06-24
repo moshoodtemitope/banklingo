@@ -129,7 +129,17 @@ function getAUser  (encodedKey, isEdit){
                                         dispatch(request(consume3));
                                         return consume3
                                             .then(response3 => {
-                                                dispatch(success(response, response2, response3));
+                                                // dispatch(success(response, response2, response3));
+                                                let consume4 = ApiService.request(routes.GET_ALL_CURRENCIES, "GET", null);
+                                                dispatch(request(consume4));
+                                                return consume4
+                                                    .then(response4 => {
+                                                        dispatch(success(response, response2, response3, response4));
+                                                    })
+                                                    .catch(error => {
+
+                                                        dispatch(failure(handleRequestErrors(error)));
+                                                    });
                                             })
                                             .catch(error => {
 
@@ -155,9 +165,9 @@ function getAUser  (encodedKey, isEdit){
     
 
 function request(user) { return { type: administrationConstants.GET_A_USER_PENDING, user } }
-function success(response, response2, response3) { 
+function success(response, response2, response3, response4) { 
             if(isEdit){
-                return { type: administrationConstants.GET_A_USER_SUCCESS, response,response2, response3 } 
+                return { type: administrationConstants.GET_A_USER_SUCCESS, response,response2, response3, response4 } 
             }else{
                 return { type: administrationConstants.GET_A_USER_SUCCESS, response } 
             }
