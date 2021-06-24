@@ -632,7 +632,7 @@ class CreateNewUser extends React.Component {
                                                                 this.state.selectTxtnLimitsToAdd.map((eachItem, index) => {
                                                                     return (
                                                                         <div className="each-option-added" key={index}>
-                                                                            <div className="each-option-txt">{eachItem.label} (Limit:{eachItem.amount} {eachItem.currencyCode})</div>
+                                                                            <div className="each-option-txt">{eachItem.label} (Limit:{numberWithCommas(eachItem.amount, true)} {eachItem.currencyCode})</div>
                                                                             <div className="remove-option-cta" onClick={() => this.updateLimitsList(eachItem, "remove")}><img src={RemoveIco} alt=""/></div>
                                                                         </div>
                                                                     )
