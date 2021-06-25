@@ -394,7 +394,7 @@ class InitiateDisbursement extends React.Component {
             }),
 
             transactionSourceList = [
-                { label: "BankOne", value: 1 },
+                // { label: "BankOne", value: 1 },
                 { label: "BankLingo", value: 2 }
             ],
 
@@ -654,7 +654,7 @@ class InitiateDisbursement extends React.Component {
             }),
             allBanksList = [],
             transactionSourceList = [
-                { label: "BankOne", value: 1 },
+                // { label: "BankOne", value: 1 },
                 { label: "BankLingo", value: 2 }
             ],
             dataToEdit = null,
@@ -1005,7 +1005,7 @@ class InitiateDisbursement extends React.Component {
             selectedTxtSourceCode = postDisbursementpayload.transactionSource,
             selectedDestinationBankCode = postDisbursementpayload.bankCode,
             transactionSourceList = [
-                { label: "BankOne", value: 1 },
+                // { label: "BankOne", value: 1 },
                 { label: "BankLingo", value: 2 }
             ],
             selectedTxtSourceText = transactionSourceList.filter(source => source.value == selectedTxtSourceCode)[0].label;
