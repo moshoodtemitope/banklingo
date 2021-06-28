@@ -205,7 +205,7 @@ export class DisburseLoanModal extends React.Component {
                                         <Form.Row>
                                             <Col>
                                                 <Form.Label className="block-level">Amount</Form.Label>
-                                                <h5>{getAClientLoanAccountRequest.request_data.response.data.loanAmount} {getAClientLoanAccountRequest.request_data.response.data.currencyCode}</h5>
+                                                <h5>{numberWithCommas(getAClientLoanAccountRequest.request_data.response.data.loanAmount, true)} {getAClientLoanAccountRequest.request_data.response.data.currencyCode}</h5>
                                             </Col>
                                             <Col>
 
