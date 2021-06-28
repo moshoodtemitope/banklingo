@@ -773,6 +773,15 @@ class EditALoanAccount extends React.Component {
                         .interestBalanceCalculation !== null
                         ? this.selectedLoanProductDetails.repaymentReschedulingModel.interestBalanceCalculation.toString()
                         : '',
+                    howIsInterestDeducted: this.selectedLoanProductDetails
+                      ? this.selectedLoanProductDetails
+                        .loanProductInterestSetting !== null &&
+                        this.selectedLoanProductDetails
+                          .loanProductInterestSetting
+                          .howIsInterestDeductedDescription !== null
+                        ? this.selectedLoanProductDetails.loanProductInterestSetting.howIsInterestDeductedDescription
+                        : 'N/A'
+                      : '',
                     interestCalcMethodText:
                       this.selectedLoanProductDetails
                         .repaymentReschedulingModel !== null &&
@@ -1156,7 +1165,7 @@ class EditALoanAccount extends React.Component {
                           </Accordion.Collapse>
                         </Accordion>
                       )}
-                      {(
+                      {(loanData.loanState === 1 ||
                         loanData.loanState === 2) && (
                         <Accordion defaultActiveKey='0'>
                           <Accordion.Toggle
@@ -1169,53 +1178,55 @@ class EditALoanAccount extends React.Component {
                           </Accordion.Toggle>
                           <Accordion.Collapse eventKey='0'>
                             <div className='each-formsection'>
-                              <Form.Row>
-                                <Col>
-                                  <Form.Label className='block-level'>
-                                    Current Oustanding Principal 
+                              {(loanData.loanState === 2) &&
+                                <Form.Row>
+                                  <Col>
+                                    <Form.Label className='block-level'>
+                                      Current Oustanding Principal
                                   </Form.Label>
-                                  <Form.Control
-                                    type='text'
-                                    autoComplete='off'
-                                    // onChange={handleChange}
-                                    onChange={(e) => {
-                                      this.loanSchedulePayload.interestRate = parseFloat(
-                                        e.target.value.replace(/,/g, '')
-                                      );
+                                    <Form.Control
+                                      type='text'
+                                      autoComplete='off'
+                                      // onChange={handleChange}
+                                      onChange={(e) => {
+                                        this.loanSchedulePayload.interestRate = parseFloat(
+                                          e.target.value.replace(/,/g, '')
+                                        );
 
-                                      if (e.target.value !== '') {
-                                        this.setState({
-                                          isscheduleError: false,
-                                        });
+                                        if (e.target.value !== '') {
+                                          this.setState({
+                                            isscheduleError: false,
+                                          });
+                                        }
+                                        setFieldValue(
+                                          'interestRate',
+                                          numberWithCommas(e.target.value)
+                                        );
+                                      }}
+                                      value={numberWithCommas(
+                                        values.interestRate
+                                      )}
+                                      className={
+                                        errors.interestRate &&
+                                          touched.interestRate
+                                          ? 'is-invalid h-38px'
+                                          : 'h-38px'
                                       }
-                                      setFieldValue(
-                                        'interestRate',
-                                        numberWithCommas(e.target.value)
-                                      );
-                                    }}
-                                    value={numberWithCommas(
-                                      values.interestRate
-                                    )}
-                                    className={
-                                      errors.interestRate &&
-                                      touched.interestRate
-                                        ? 'is-invalid h-38px'
-                                        : 'h-38px'
-                                    }
-                                    name='interestRate'
-                                    required
-                                  />
+                                      name='interestRate'
+                                      required
+                                    />
 
-                                  
-                                  {errors.interestRate &&
-                                  touched.interestRate ? (
-                                    <span className='invalid-feedback'>
-                                      {errors.interestRate}
-                                    </span>
-                                  ) : null}
-                                </Col>
-                                <Col></Col>
-                              </Form.Row>
+
+                                    {errors.interestRate &&
+                                      touched.interestRate ? (
+                                      <span className='invalid-feedback'>
+                                        {errors.interestRate}
+                                      </span>
+                                    ) : null}
+                                  </Col>
+                                  <Col></Col>
+                                </Form.Row>
+                              }
                               <Form.Row>
                                 <Col>
                                   <Form.Label className='block-level'>
@@ -1685,6 +1696,24 @@ class EditALoanAccount extends React.Component {
                                     name='maximumWithdrawalAmount'
                                     required
                                   />
+                                </Col>
+                                <Col sm={6}>
+                                  <Form.Label className='block-level'>
+                                  How is the Interest deducted?
+                                  </Form.Label>
+                                  <span className='form-text'>
+                                    {values.howIsInterestDeducted !== null &&
+                                      values.howIsInterestDeducted !== '' && (
+                                        <span>
+                                          {values.howIsInterestDeducted}
+                                        </span>
+                                      )}
+
+                                    {(values.howIsInterestDeducted === null ||
+                                      values.howIsInterestDeducted === '') && (
+                                        <span>N/A</span>
+                                      )}
+                                  </span>
                                 </Col>
                               </Form.Row>
                             </div>
