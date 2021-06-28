@@ -1032,8 +1032,7 @@ class EditALoanAccount extends React.Component {
                         </Col>
                         <Col></Col>
                       </Form.Row>
-                      {(loanData.loanState === 1 ||
-                        loanData.loanState === 2) && (
+                      {(loanData.loanState === 2) && (
                         <Accordion defaultActiveKey='0'>
                           <Accordion.Toggle
                             className='accordion-headingLink'
@@ -1067,35 +1066,9 @@ class EditALoanAccount extends React.Component {
                                         'loanAmount',
                                         numberWithCommas(e.target.value)
                                       );
-                                      // setFieldValue("loanAmount", parseFloat(numberWithCommas(e.target.value)));
-                                      // if((this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum!==null && this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum!==""
-                                      //     && parseFloat(e.target.value) > this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)
-                                      //     ||
-                                      //     this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==null && this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==""
-                                      //     && parseFloat(e.target.value) < this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun){
-
-                                      //     console.log("------", parseFloat(e.target.value));
-                                      //     touched.loanAmount = true
-                                      //     errors.loanAmount = "Amount is out of bounds"
-                                      // }else{
-                                      //     errors.loanAmount =""
-                                      // }
+                                      
                                     }}
-                                    onBlur={(e) => {
-                                      // if((this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum!==null && this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum!==""
-                                      //     && parseFloat(e.target.value.replace(/,/g, '')) > this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)
-                                      //     ||
-                                      //     this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==null && this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun!==""
-                                      //     && parseFloat(e.target.value.replace(/,/g, '')) < this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun){
-                                      //     console.log("++++", parseFloat(e.target.value.replace(/,/g, '')));
-                                      //     touched.loanAmount = true;
-                                      //     errors.loanAmount = "Amount is out of bounds";
-                                      // }else{
-                                      //     console.log("=======");
-                                      //     errors.loanAmount ="";
-                                      //     touched.loanAmount =null;
-                                      // }
-                                    }}
+                                   
                                     value={numberWithCommas(values.loanAmount)}
                                     className={
                                       errors.loanAmount && touched.loanAmount
@@ -1105,22 +1078,6 @@ class EditALoanAccount extends React.Component {
                                     name='loanAmount'
                                     required
                                   />
-                                  {/* <span className="input-helptext form-text">
-                                                                                    {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun !== null &&
-                                                                                        <span>Min: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun)}</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum !== null &&
-                                                                                        <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum)}</span>
-                                                                                    }
-
-                                                                                    {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMinimun === null &&
-                                                                                        <span>Min: N/A</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanAmountSetting.loanAmountMaximum === null &&
-                                                                                        <span>  Max: N/A</span>
-                                                                                    }
-
-                                                                                </span> */}
                                   {errors.loanAmount && touched.loanAmount ? (
                                     <span className='invalid-feedback'>
                                       {errors.loanAmount}
@@ -1163,22 +1120,6 @@ class EditALoanAccount extends React.Component {
                                     required
                                   />
 
-                                  {/* <span className="input-helptext form-text">
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin !== null &&
-                                                                                        <span >Min: {numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin)}%</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax !== null &&
-                                                                                        <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax)}%</span>
-                                                                                    }
-
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin === null &&
-                                                                                        <span>Min: N/A</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax === null &&
-                                                                                        <span>  Max: N/A</span>
-                                                                                    }
-
-                                                                                </span> */}
                                   {errors.interestRate &&
                                   touched.interestRate ? (
                                     <span className='invalid-feedback'>
@@ -1215,7 +1156,7 @@ class EditALoanAccount extends React.Component {
                           </Accordion.Collapse>
                         </Accordion>
                       )}
-                      {(loanData.loanState === 1 ||
+                      {(
                         loanData.loanState === 2) && (
                         <Accordion defaultActiveKey='0'>
                           <Accordion.Toggle
@@ -1265,22 +1206,7 @@ class EditALoanAccount extends React.Component {
                                     required
                                   />
 
-                                  {/* <span className="input-helptext form-text">
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin !== null &&
-                                                                                        <span >Min: {numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin)}%</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax !== null &&
-                                                                                        <span>  Max: {numberWithCommas(this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax)}%</span>
-                                                                                    }
-
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMin === null &&
-                                                                                        <span>Min: N/A</span>
-                                                                                    }
-                                                                                    {this.selectedLoanProductDetails.loanProductInterestSetting.interestRateMax === null &&
-                                                                                        <span>  Max: N/A</span>
-                                                                                    }
-
-                                                                                </span> */}
+                                  
                                   {errors.interestRate &&
                                   touched.interestRate ? (
                                     <span className='invalid-feedback'>
