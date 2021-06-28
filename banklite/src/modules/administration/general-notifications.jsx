@@ -552,13 +552,9 @@ class Notifications extends React.Component {
                       <Form.Control
                         type='text'
                         onChange={(e) => {
-                          if (this.state.updateType !== 'edit') {
-                            setFieldValue('name', recordToUpdate.name);
-                          } else {
-                            setFieldValue('name', e.target.value);
-                          }
+                          setFieldValue('name', recordToUpdate.name);
                         }}
-                        disabled={this.state.updateType !== 'edit'}
+                        disabled={true}
                         value={values.name}
                         className={
                           errors.name && touched.name
