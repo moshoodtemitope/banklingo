@@ -280,7 +280,7 @@ class EditLoanProduct extends React.Component {
                                                                 ?loanProductDetails.repaymentReschedulingModel.interestBalanceCalculation:null,
                                 interestRateDefault: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateDefault
                                                         ? loanProductDetails.loanProductInterestSetting.interestRateDefault : null,
-                                howIsInterestDeducted: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.howIsInterestDeducted
+                                howIsInterestDeducted: (loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.howIsInterestDeducted!==null)
                                                         ? loanProductDetails.loanProductInterestSetting.howIsInterestDeducted : null,
                                 interestRateMin: loanProductDetails.loanProductInterestSetting && loanProductDetails.loanProductInterestSetting.interestRateMin
                                                     ? loanProductDetails.loanProductInterestSetting.interestRateMin : null,
@@ -317,8 +317,9 @@ class EditLoanProduct extends React.Component {
 
                             validationSchema={loanProductValidationSchema}
                             onSubmit={(values, { resetForm }) => {
-
-                                // console.log("sdsds",values.howIsInterestDeducted);
+                                
+                                
+                                
                               
                                 let updateLoanProductPayload = {
                                     key: values.key,

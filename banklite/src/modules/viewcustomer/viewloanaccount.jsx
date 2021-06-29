@@ -4242,6 +4242,7 @@ this.permissions={
     
       loanDetails.loanState === LoanStateConstants.PARTIAL_APPLICATION ||
       loanDetails.loanState === LoanStateConstants.ACTIVE ||
+      loanDetails.loanState === LoanStateConstants.APPROVED ||
       loanDetails.loanState === LoanStateConstants.IN_ARREARS;
 
     let showApprove =

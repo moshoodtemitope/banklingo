@@ -78,15 +78,17 @@ class DashboardLanding extends React.Component {
     loadInitialData = () => {
         this.getDashboardData();
         this.getDashboardActivities();
-        this.getLoggedTills()
-            .then(() => {
-                if (this.props.fetchLoggedonTillsReducer.request_status === dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS) {
-                    let allLoggedOnTills = this.props.fetchLoggedonTillsReducer.request_data.response.data.result;
-                    if (allLoggedOnTills.length >= 1) {
-                        if (this._isMounted) this.setState({ selectedTillData: allLoggedOnTills[0], preloadedTillData: true, selectedTill: allLoggedOnTills[0].tillId })
+        if(this.allUSerPermissions.indexOf("rights_teller")){
+            this.getLoggedTills()
+                .then(() => {
+                    if (this.props.fetchLoggedonTillsReducer.request_status === dashboardConstants.GET_LOGGEDON_TILLS_SUCCESS) {
+                        let allLoggedOnTills = this.props.fetchLoggedonTillsReducer.request_data.response.data.result;
+                        if (allLoggedOnTills.length >= 1) {
+                            if (this._isMounted) this.setState({ selectedTillData: allLoggedOnTills[0], preloadedTillData: true, selectedTill: allLoggedOnTills[0].tillId })
+                        }
                     }
-                }
-            })
+                })
+        }
 
 
         if (
@@ -2992,11 +2994,11 @@ class DashboardLanding extends React.Component {
                                         </div>
                                     } */}
 
-{this.state.selectedTill && 
-                                                <div className="selected-id">
-                                                    {this.state.selectedTillData?.tillId}<Badge variant="primary"> {this.state.selectedTillData?.currencyCode} </Badge> 
-                                                </div>
-                                            }
+                                    {this.state.selectedTill &&
+                                        <div className="selected-id">
+                                            {this.state.selectedTillData?.tillId}<Badge variant="primary"> {this.state.selectedTillData?.currencyCode} </Badge>
+                                        </div>
+                                    }
 
                                     {allMyTills.length >= 1 &&
                                         <div className="select-tillid">
@@ -3062,7 +3064,7 @@ class DashboardLanding extends React.Component {
     renderTellerManagement = () => {
         return (
             <div>
-                {this.renderLoggedOnTillsAndTxtn()}
+                {this.allUSerPermissions.indexOf("rights_teller") > -1 && this.renderLoggedOnTillsAndTxtn()}
                 {(this.allUSerPermissions.indexOf("bnk_till_supervisor_add_cash") > -1 ||
                     this.allUSerPermissions.indexOf("bnk_till_supervisor_view") > -1 ||
                     this.allUSerPermissions.indexOf("bnk_till_supervisor_remove_cash") > -1 ||

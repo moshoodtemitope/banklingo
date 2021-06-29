@@ -61,13 +61,13 @@ class EditALoanAccount extends React.Component {
     };
     this.selectedLoanProductDetails = '';
     this.loanSchedulePayload = {
-      loanAmount: '',
-      interestRate: '',
-      installments: '',
-      firstRepaymentDate: null,
-      interestRateTerms: '',
-      interestBalanceCalculation: '',
-      productEncodedKey: '',
+      // loanAmount: '',
+      // interestRate: '',
+      // installments: '',
+      // firstRepaymentDate: null,
+      // interestRateTerms: '',
+      // interestBalanceCalculation: '',
+      // productEncodedKey: '',
     };
     this.loanSchedulePayloadError = {
       isError: true,
@@ -841,10 +841,11 @@ class EditALoanAccount extends React.Component {
                             values.accountOfficerEncodedKey !== ''
                               ? values.accountOfficerEncodedKey
                               : null,
-                          accountOfficerBranchEncodedKey:
-                            values.accountOfficerBranchEncodedKey !== ''
-                              ? values.accountOfficerBranchEncodedKey
-                              : null,
+                            accountOfficerBranchEncodedKey: values.associatedBranchEncodedKey,
+                          // accountOfficerBranchEncodedKey:
+                          //   values.accountOfficerBranchEncodedKey !== ''
+                          //     ? values.accountOfficerBranchEncodedKey
+                          //     : null,
                         },
                         loanDisbursmentDetails: {
                           disbursementChannelEncodedKey:
@@ -2033,7 +2034,7 @@ class EditALoanAccount extends React.Component {
                                   ) : null}
                                 </Col>
                                 <Col>
-                                  <Form.Label className='block-level'>
+                                  {/* <Form.Label className='block-level'>
                                     Loan Officer Branch
                                   </Form.Label>
                                   <Select
@@ -2050,11 +2051,7 @@ class EditALoanAccount extends React.Component {
                                         true
                                       )
                                     }
-                                    // onChange={(selectedLoanProduct) => {
-                                    //     this.setState({ selectedLoanProduct });
-                                    //     errors.productEncodedKey = null
-                                    //     values.productEncodedKey = selectedLoanProduct.value
-                                    // }}
+                                   
                                     className={
                                       errors.accountOfficerBranchEncodedKey &&
                                       touched.accountOfficerBranchEncodedKey
@@ -2069,7 +2066,7 @@ class EditALoanAccount extends React.Component {
                                     <span className='invalid-feedback'>
                                       {errors.accountOfficerBranchEncodedKey}
                                     </span>
-                                  ) : null}
+                                  ) : null} */}
                                 </Col>
                               </Form.Row>
                             </div>
