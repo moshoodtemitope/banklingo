@@ -129,6 +129,9 @@ class GeneralInternalControl extends React.Component {
                                 enforceIPRestriction:controlDetails.enforceIPRestriction,
                                 blockGeneralAccess:controlDetails.blockGeneralAccess,
                                 whiteListedIP:controlDetails.whiteListedIP,
+                                useLDAPAuthentication:controlDetails.useLDAPAuthentication,
+                                ldapPath:controlDetails.ldapPath,
+                                ldapDomain:controlDetails.ldapDomain,
                             }} 
             
                             validationSchema={this.internalControlValidationSchema}
@@ -148,6 +151,9 @@ class GeneralInternalControl extends React.Component {
                                     whiteListedIP: values.whiteListedIP,
                                     blockGeneralAccess: values.blockGeneralAccess,
                                     enforceIPRestriction: values.enforceIPRestriction,
+                                    useLDAPAuthentication: values.useLDAPAuthentication,
+                                    ldapPath: values.ldapPath,
+                                    ldapDomain: values.ldapDomain,
                                 }
             
                                 if(parseInt(values.maximumExposureToCustomer)===1){
@@ -412,7 +418,7 @@ class GeneralInternalControl extends React.Component {
                                                                             value={values.blockGeneralAccess}
                                                                             required
                                                                         />
-                                                                        <label htmlFor="user-access">Block User Access</label>
+                                                                        <label htmlFor="user-access">Block all users access (Only administrator will be able to login)</label>
                                                                     </div>
                                                                     <div className="eachitem">
                                                                         <input type="checkbox" name="enforceIPRestriction" id="eforce-ip" 
@@ -422,7 +428,7 @@ class GeneralInternalControl extends React.Component {
                                                                             required
                                                                         />
                                                                         <label htmlFor="eforce-ip">Enforce IP restrction</label>
-                                                                        {values.enforceIPRestriction &&
+                                                                        
                                                                         <Form.Row>
 
                                                                             <Col>
@@ -431,6 +437,7 @@ class GeneralInternalControl extends React.Component {
                                                                                     <Form.Control as="textarea" rows="3"
                                                                                         name="whiteListedIP"
                                                                                         onChange={handleChange}
+                                                                                        disabled={!values.enforceIPRestriction}
                                                                                         value={values.whiteListedIP}
                                                                                         className={errors.whiteListedIP && touched.whiteListedIP ? "is-invalid" : null}
                                                                                         
@@ -442,7 +449,72 @@ class GeneralInternalControl extends React.Component {
                                                                             </Col>
                                                                             <Col></Col>
                                                                         </Form.Row>
-                                                                        }
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </Form.Group>
+                                                        </div>
+                                                    </Accordion.Collapse>
+                                                </Accordion>
+                                            </Col>
+                                        </Form.Row>
+                                        <Form.Row>
+                                            <Col>
+                                                <Accordion defaultActiveKey="1">
+                                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                                        Active directory
+                                                    </Accordion.Toggle>
+                                                    <Accordion.Collapse eventKey="1">
+                                                        <div className="each-formsection">
+                                                            <Form.Group>
+                                                                <div className="heading-with-cta unset">
+                                                                    <div className="eachitem">
+                                                                        <input type="checkbox" name="useLDAPAuthentication" id="use-ldap" 
+                                                                            checked={values.useLDAPAuthentication}
+                                                                            onChange={handleChange} 
+                                                                            value={values.useLDAPAuthentication}
+                                                                            required
+                                                                        />
+                                                                        <label htmlFor="use-ldap">Use LDAP Authentication</label>
+                                                                        
+                                                                        <Form.Row>
+
+                                                                            <Col>
+                                                                                <Form.Group controlId="maximum-days">
+                                                                                    <Form.Label className="block-level">LDAP Path </Form.Label>
+                                                                                    <Form.Control type="text" size="sm" 
+                                                                                        name="ldapPath"
+                                                                                        onChange={handleChange}
+                                                                                        disabled={!values.useLDAPAuthentication}
+                                                                                        value={values.ldapPath}
+                                                                                        className={errors.ldapPath && touched.ldapPath ? "is-invalid" : null}
+                                                                                        
+                                                                                    />
+                                                                                </Form.Group>
+                                                                                {errors.ldapPath && touched.ldapPath ? (
+                                                                                    <span className="invalid-feedback">{errors.ldapPath}</span>
+                                                                                ) : null}
+
+                                                                            <Form.Group controlId="ldapDomain">
+                                                                                <Form.Label className="block-level">LDAP Domain </Form.Label>
+                                                                                <Form.Control type="text" size="sm"
+                                                                                    name="ldapDomain"
+                                                                                    onChange={handleChange}
+                                                                                    disabled={!values.useLDAPAuthentication}
+                                                                                    value={values.ldapDomain}
+                                                                                    className={errors.ldapDomain && touched.ldapDomain ? "is-invalid" : null}
+
+                                                                                />
+                                                                            </Form.Group>
+                                                                            {errors.ldapDomain && touched.ldapDomain ? (
+                                                                                <span className="invalid-feedback">{errors.ldapDomain}</span>
+                                                                            ) : null}
+                                                                            </Col>
+                                                                        <Col>
+                                                                            
+                                                                        </Col>
+                                                                        </Form.Row>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </Form.Group>

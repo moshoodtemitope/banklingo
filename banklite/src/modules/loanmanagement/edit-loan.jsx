@@ -583,6 +583,11 @@ class EditALoanAccount extends React.Component {
                 });
               });
 
+              let loanOfficerReturned = allAccountOfficersList.filter(eachOfficer=>eachOfficer.value===loanData.accountOfficerEncodedKey)[0];
+              let loanBranchReturned = allBranchesList.filter(eachBranch=>eachBranch.value===loanData.assignedBranchEncodedKey)[0];
+
+              
+
               allChannels.map((channel, id) => {
                 allChannelsList.push({
                   label: channel.name,
@@ -693,9 +698,9 @@ class EditALoanAccount extends React.Component {
                         : '',
                     installments: loanData.loanData,
                     maximumWithdrawalAmount: '',
-                    accountOfficerEncodedKey: '',
-                    accountOfficerBranchEncodedKey: '',
-                    associatedBranchEncodedKey: '',
+                    accountOfficerEncodedKey: loanOfficerReturned.value||"",
+                    accountOfficerBranchEncodedKey: loanBranchReturned.value||"",
+                    associatedBranchEncodedKey: loanBranchReturned.value||"",
                     repayedEvery:
                       this.selectedLoanProductDetails
                         .repaymentReschedulingModel !== null &&
@@ -1925,6 +1930,17 @@ class EditALoanAccount extends React.Component {
                                         .replace(/,/g, '')
                                     );
                                   }
+                                  
+                                  if(values.loanAmount!==""){
+                                    if(typeof values.loanAmount ==="string"){
+                                      this.loanSchedulePayload.loanAmount = parseFloat(
+                                        values.loanAmount.replace(/,/g, '')
+                                      );
+                                    }else{
+                                      this.loanSchedulePayload.loanAmount = values.loanAmount;
+                                    }
+                                    
+                                  }
 
                                   if (values.firstRepaymentDate !== '') {
                                     this.loanSchedulePayload.firstRepaymentDate = values.firstRepaymentDate.toISOString();
@@ -2000,6 +2016,10 @@ class EditALoanAccount extends React.Component {
                                   {/* select dropdown search of acount officers */}
                                   <Select
                                     options={allAccountOfficersList}
+                                    defaultValue={{
+                                      label: loanOfficerReturned? loanOfficerReturned.label: null,
+                                      value: loanOfficerReturned? loanOfficerReturned.value: null,
+                                    }}
                                     onChange={(selected) => {
                                       setFieldValue(
                                         'accountOfficerEncodedKey',
@@ -2092,6 +2112,10 @@ class EditALoanAccount extends React.Component {
 
                                 <Select
                                   options={allBranchesList}
+                                  defaultValue={{
+                                    label: loanBranchReturned? loanBranchReturned.label: null,
+                                    value: loanBranchReturned? loanBranchReturned.value: null,
+                                  }}
                                   onChange={(selected) => {
                                     setFieldValue(
                                       'associatedBranchEncodedKey',

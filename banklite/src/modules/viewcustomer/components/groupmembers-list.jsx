@@ -40,7 +40,7 @@ export class GroupMembersList extends React.Component {
                       <thead>
                           <tr>
                               <th>Group Member</th>
-                              <th>Account Number</th>
+                              <th>Client Id</th>
                               <th>Role</th>
                           </tr>
                       </thead>
