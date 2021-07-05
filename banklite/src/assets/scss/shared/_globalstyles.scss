@@ -156,7 +156,9 @@ select, select.form-control{
         margin-left: 6px;
         font-size: 13px;
     }
-    
+    &.unset{
+        display: block;
+    }
     .section-title{
         margin-bottom: 0;
     }

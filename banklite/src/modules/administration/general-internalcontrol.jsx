@@ -88,6 +88,13 @@ class GeneralInternalControl extends React.Component {
                     .matches(/^[1-9]\d*(\.\d{1,2})?$/, 'Invalid repsonse')
                     .required('Required')
             }),
+        whiteListedIP: Yup.string()
+            .when('enforceIPRestriction', {
+                is: (value) => value === true,
+                then: Yup.string()
+                    .required('Required')
+            }),
+            
       });
 
 
@@ -119,6 +126,9 @@ class GeneralInternalControl extends React.Component {
                                 creditArrangementInitialState: controlDetails.creditArrangementInitialState !== '' ? controlDetails.creditArrangementInitialState : '',
                                 separateUsersForApprovalsAndDisbursals: controlDetails.separateUsersForApprovalsAndDisbursals === 0 ? false : true,
                                 maximumExposureToCustomerAmount: controlDetails.maximumExposureToCustomerAmount !== '' ? controlDetails.maximumExposureToCustomerAmount : '',
+                                enforceIPRestriction:controlDetails.enforceIPRestriction,
+                                blockGeneralAccess:controlDetails.blockGeneralAccess,
+                                whiteListedIP:controlDetails.whiteListedIP,
                             }} 
             
                             validationSchema={this.internalControlValidationSchema}
@@ -134,7 +144,10 @@ class GeneralInternalControl extends React.Component {
                                     creditArrangementInitialState: parseInt(values.creditArrangementInitialState),
                                     separateUsersForApprovalsAndDisbursals: 
                                         values.separateUsersForApprovalsAndDisbursals===true ? 1: 0,
-                                    maximumExposureToCustomerAmount: parseFloat(values.maximumExposureToCustomerAmount.toString().replace(/,/g, ''))
+                                    maximumExposureToCustomerAmount: parseFloat(values.maximumExposureToCustomerAmount.toString().replace(/,/g, '')),
+                                    whiteListedIP: values.whiteListedIP,
+                                    blockGeneralAccess: values.blockGeneralAccess,
+                                    enforceIPRestriction: values.enforceIPRestriction,
                                 }
             
                                 if(parseInt(values.maximumExposureToCustomer)===1){
@@ -355,38 +368,89 @@ class GeneralInternalControl extends React.Component {
                                         
                                         <Form.Row>
                                             <Col>
-                                            
-                                            <Accordion defaultActiveKey="0">
-                                <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
-                                    Duplicates Check                                </Accordion.Toggle>
-                                <Accordion.Collapse eventKey="0">
-                                    <div className="each-formsection">
-                                        <Form.Group>
-                                            {/* <Col> */}
-                                            <div className="heading-with-cta toright compact">
-                                <div className="eachitem">
-                                    <input type="checkbox" name="" id="opening-balance" />
-                                    <label htmlFor="opening-balance">Unique Mobile Number</label>
-                                </div>
-                                <div className="eachitem">
-                                    <input type="checkbox" name="" id="net-change" />
-                                    <label htmlFor="net-change">Unique Email</label>
-                                </div>
-                                <div className="eachitem">
-                                    <input type="checkbox" name="" id="closing-balance" />
-                                    <label htmlFor="closing-balance">Unique (Email and Mobile)</label>
-                                </div>
-                            </div>
-                                            {/* </Col> */}
-                                             
-                                        </Form.Group>
-                                    </div>
-                                </Accordion.Collapse>
-                            </Accordion>
-
+                                                <Accordion defaultActiveKey="0">
+                                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                                        Duplicates Check
+                                                    </Accordion.Toggle>
+                                                    <Accordion.Collapse eventKey="0">
+                                                        <div className="each-formsection">
+                                                            <Form.Group>
+                                                                <div className="heading-with-cta toright compact">
+                                                                    <div className="eachitem">
+                                                                        <input type="checkbox" name="" id="opening-balance" />
+                                                                        <label htmlFor="opening-balance">Unique Mobile Number</label>
+                                                                    </div>
+                                                                    <div className="eachitem">
+                                                                        <input type="checkbox" name="" id="net-change" />
+                                                                        <label htmlFor="net-change">Unique Email</label>
+                                                                    </div>
+                                                                    <div className="eachitem">
+                                                                        <input type="checkbox" name="" id="closing-balance" />
+                                                                        <label htmlFor="closing-balance">Unique (Email and Mobile)</label>
+                                                                    </div>
+                                                                </div>
+                                                            </Form.Group>
+                                                        </div>
+                                                    </Accordion.Collapse>
+                                                </Accordion>
                                             </Col>
                                         </Form.Row>
+                                        <Form.Row>
+                                            <Col>
+                                                <Accordion defaultActiveKey="1">
+                                                    <Accordion.Toggle className="accordion-headingLink" as={Button} variant="link" eventKey="0">
+                                                        Accessibility
+                                                    </Accordion.Toggle>
+                                                    <Accordion.Collapse eventKey="1">
+                                                        <div className="each-formsection">
+                                                            <Form.Group>
+                                                                <div className="heading-with-cta unset">
+                                                                    <div className="eachitem mb-10">
+                                                                        <input type="checkbox" name="" id="user-access" 
+                                                                            checked={values.blockGeneralAccess}
+                                                                            onChange={handleChange} 
+                                                                            value={values.blockGeneralAccess}
+                                                                            required
+                                                                        />
+                                                                        <label htmlFor="user-access">Block User Access</label>
+                                                                    </div>
+                                                                    <div className="eachitem">
+                                                                        <input type="checkbox" name="enforceIPRestriction" id="eforce-ip" 
+                                                                            checked={values.enforceIPRestriction}
+                                                                            onChange={handleChange} 
+                                                                            value={values.enforceIPRestriction}
+                                                                            required
+                                                                        />
+                                                                        <label htmlFor="eforce-ip">Enforce IP restrction</label>
+                                                                        {values.enforceIPRestriction &&
+                                                                        <Form.Row>
 
+                                                                            <Col>
+                                                                                <Form.Group controlId="maximum-days">
+                                                                                    <Form.Label className="block-level">Enter list of IPs (separated by commas) </Form.Label>
+                                                                                    <Form.Control as="textarea" rows="3"
+                                                                                        name="whiteListedIP"
+                                                                                        onChange={handleChange}
+                                                                                        value={values.whiteListedIP}
+                                                                                        className={errors.whiteListedIP && touched.whiteListedIP ? "is-invalid" : null}
+                                                                                        
+                                                                                    />
+                                                                                </Form.Group>
+                                                                                {errors.whiteListedIP && touched.whiteListedIP ? (
+                                                                                    <span className="invalid-feedback">{errors.whiteListedIP}</span>
+                                                                                ) : null}
+                                                                            </Col>
+                                                                            <Col></Col>
+                                                                        </Form.Row>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </Form.Group>
+                                                        </div>
+                                                    </Accordion.Collapse>
+                                                </Accordion>
+                                            </Col>
+                                        </Form.Row>
                                         <div className="form-ctas horizontal">
                                             <Button variant="success" className="mr-20px" type="submit"
                                                 disabled={adminInternalControlRequest.is_request_processing}    
