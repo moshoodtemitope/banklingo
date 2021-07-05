@@ -19,6 +19,7 @@ import "./customerprofile.scss";
 import { numberWithCommas, getDateFromISO } from "../../shared/utils";
 
 import { CustomerAccountSummarySection } from "./components/customer-account-summary-component";
+import { GroupMembersList } from "./components/groupmembers-list";
 import { ContactInformationSection } from "./components/customer-contact-information-component";
 import { EmploymentInformationSection } from "./components/customer-employment-information-component";
 import { GeneralInfomationSection } from "./components/customer-general-information-component";
@@ -437,7 +438,14 @@ class ViewCustomer extends React.Component {
       let customerDetails = getAClientRequest.request_data.response.data;
       let passport = getAClientRequest.request_data.response.base64Image,
         manadateData = getAClientRequest.request_data.response.mandate,
-        passportStyle = "";
+        passportStyle = "",
+        groupMembers = "";
+
+        if(customerDetails.clientClassification===1){
+          groupMembers = getAClientRequest.request_data.response.groupMembers;
+        }
+
+        // console.log("groupMembers are", groupMembers);
 
       if (passport !== null) {
         passportStyle = {
@@ -467,6 +475,11 @@ class ViewCustomer extends React.Component {
                     customerLoanAccounts={customerLoanAccounts}
                     customerDepositAccounts={customerDepositAccounts}
                   />
+                  {customerDetails.clientClassification===1 &&
+                  <GroupMembersList
+                    groupMembers={groupMembers}
+                  />
+                  }
 
                   <div className="main-details mt-20">
                     <div className="overview-wrap profile-overview">
@@ -494,7 +507,7 @@ class ViewCustomer extends React.Component {
                 </div>
                 <div className="col-sm-4">
                   <div className="leftside-items">
-                    {customerDetails.clientClassification===0 &&
+                    {/* {customerDetails.clientClassification===0 && */}
                       <div className="each-card mb-20">
                         <div className="each-card-content">
                           <div className="mandate-imgs">
@@ -545,8 +558,8 @@ class ViewCustomer extends React.Component {
                           </div>
                         </div>
                       </div>
-                    }
-                    {customerDetails.clientClassification===0 &&
+                    {/* // } */}
+                    {/* {customerDetails.clientClassification===0 && */}
                       <div className="each-card mb-20">
                         <div className="each-card-content">
                           <div className="mandate-imgs">
@@ -571,7 +584,7 @@ class ViewCustomer extends React.Component {
                           </div>
                         </div>
                       </div>
-                    }
+                    {/* } */}
 
                     <ActivitiesBox
                       activityType="client"

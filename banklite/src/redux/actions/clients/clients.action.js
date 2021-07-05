@@ -298,7 +298,7 @@ function getAClient(encodedKey, isGroupAccount, ignoreMandate) {
         .then((response) => {
           // console.log("response is", response.data);
           if (!ignoreMandate) {
-            if (response.data.clientClassification === 0) {
+            // if (response.data.clientClassification === 0) {
               let consume2 = ApiService.request(
                 routes.HIT_CLIENTS + `/passport/${encodedKey}`,
                 "GET",
@@ -315,13 +315,37 @@ function getAClient(encodedKey, isGroupAccount, ignoreMandate) {
                   dispatch(request(consume3));
                   return consume3
                     .then((response3) => {
-                      dispatch(
-                        success({
-                          ...response,
-                          ...response2.data,
-                          mandate: response3.data,
-                        })
-                      );
+                        if (response.data.clientClassification === 1) {
+                          let consume4 = ApiService.request(
+                            routes.HIT_CLIENT_GROUP + `/${encodedKey}/groupmembers`,
+                            "GET",
+                            null
+                          );
+                          dispatch(request(consume4));
+                          return consume4
+                            .then((response4) => {
+                              dispatch(
+                                success({
+                                    ...response,
+                                    ...response2.data,
+                                    mandate: response3.data,
+                                    groupMembers: response4.data 
+                                })
+                              );
+                            })
+                            .catch((error) => {
+                              dispatch(failure(handleRequestErrors(error)));
+                            });
+                        }else{
+                          dispatch(
+                            success({
+                              ...response,
+                              ...response2.data,
+                              mandate: response3.data,
+                            })
+                          );
+                        }
+                      
                     })
                     .catch((error) => {
                       dispatch(success({ ...response, ...response2.data }));
@@ -334,26 +358,8 @@ function getAClient(encodedKey, isGroupAccount, ignoreMandate) {
                 .catch((error) => {
                   dispatch(failure(handleRequestErrors(error)));
                 });
-            }
-            if (response.data.clientClassification === 1) {
-              let consume3 = ApiService.request(
-                routes.HIT_CLIENT_GROUP + `/${encodedKey}/groupmembers`,
-                "GET",
-                null
-              );
-              dispatch(request(consume3));
-              return consume3
-                .then((response3) => {
-                  dispatch(
-                    success({ ...response, groupMembers: response3.data })
-                  );
-                })
-                .catch((error) => {
-                  // dispatch(success({...response }));
-
-                  dispatch(failure(handleRequestErrors(error)));
-                });
-            }
+            // }
+            
           }else{
             dispatch(success(response));
           }
