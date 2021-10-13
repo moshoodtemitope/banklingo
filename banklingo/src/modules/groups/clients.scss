@@ -1,0 +1,46 @@
+
+
+.all-items {
+    display: flex;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    .each-item-detail {
+        border: 1px solid #F2F3F4;
+        padding: 5px 10px;
+        border-radius: 18px;
+        margin-right: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #85929E;
+        margin-bottom: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        .remove-btn{
+            display: none;
+        }
+        &:hover{
+            background: #F2F4F4;
+            .remove-btn{
+                display: flex;
+            }
+        }
+        .remove-btn {
+            background: #78B943;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            color: #fff;
+            text-align: center;
+            // display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            opacity: 0.8;
+            font-weight: 600;
+        }
+    }
+}
+.each-role{
+    align-items: center;
+}

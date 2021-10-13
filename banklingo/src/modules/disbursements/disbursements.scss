@@ -1,0 +1,158 @@
+@import "../../assets/scss/shared/colors";
+@import "../../assets/scss/shared/globalstyles";
+.module-title {
+    padding: 20px 0;
+}
+.disbursment-options-wrap {
+    // display: flex;
+    width: 40%;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+.each-option {
+    text-align: center;
+    margin-bottom: 60px;
+    h3 {
+        font-size: 20px;
+    }
+}
+.option-msg {
+    margin-bottom: 15px;
+}
+button a, button a:hover, button a:focus{
+    color: #ffffff;
+    text-decoration: none;
+}
+#upload-batch{
+    display: none;
+}
+button.batch-cta{
+    float: right;
+}
+.overview-wrap{
+    .each-overview{
+        &:nth-of-type(2){
+            padding-right: 0;
+        }
+        &:not(:nth-of-type(2)){
+            padding-right: 18px;
+        }
+    }
+}
+.batch-data-wrap{
+    table{
+        tr th{
+            display: none;
+        }
+        tbody tr:first-of-type{
+            background: #ffffff;
+            // color: #F4F6F7;
+            font-weight: 600;
+            font-size: 14px;
+            td{
+                font-size: 14px;
+            }
+        }
+    }
+}
+.upload-a-batch{
+    width: 30%;
+    margin: 0 auto;
+    border: 1px dotted #AED6F1;
+    text-align: center;
+    padding: 100px;
+    label{
+        font-size: 20px;
+        color: #5DADE2;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    input{
+        display: none;
+    }
+}
+.ctas-wrap {
+    width: 100%;
+}
+.batch-actions{
+    input{
+        display: none;
+    }
+    margin-bottom: 20px;
+    label{
+        margin-bottom: 0;
+        margin-left: 25px;
+    }
+    .btn{
+        color: #fff !important;
+        background-color: #34495E !important;
+        border-color: #34495E !important;
+        padding-bottom: 4px !important;
+        padding-top: 4px !important;
+        font-size: 13px !important;
+    }
+}
+.back-cta {
+    margin-bottom: 15px;
+    text-align: left;
+    font-weight: 800;
+    &.centered{
+        text-align: center;
+    }
+    span.back-link {
+        font-size: 13px;
+        border-bottom: 1px solid;
+        color: #5499C7;
+    }
+    &:hover{
+        cursor: pointer;
+        font-weight: 800;
+    }
+}
+// .scroll-x{
+//     overflow-x: auto !important;
+// }
+.approvalctas{
+    button{
+        margin: 0 35px;
+    }
+}
+.dissburseInfo{
+    padding: 8px;
+    height: 100%;
+}
+span.txt-cta {
+    color: #34495E;
+    text-decoration: underline;
+    font-size: 13px;
+    cursor: pointer;
+    // &:hover{
+    //     font-weight: 600;
+    //     padding: 0;
+    //     margin: 0;
+    // }
+}
+
+.card.details-wrap {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    margin: 0;
+    border-radius: 0;
+    .form-heading{
+        display: flex;
+        justify-content: space-between;
+
+    }
+    .close-icon {
+        width: 31px;
+        opacity: 0.6;
+        &:hover{
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+    }
+}
